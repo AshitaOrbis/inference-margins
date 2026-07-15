@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final review — GPT-5.6 Pro on v2.1 · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/review-gptpro-final">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Final gate review — GPT-5.6 Pro on methodology v2.1, 2026-07-10</h1>
+<blockquote>
+<p>Run 32m01s · <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a517bcd-35f4-83e8-ad7d-8cb979c2634c">conversation</a>
+VERDICT: <strong>SHIP-WITH-FIXES</strong> — &quot;The model and its central conclusions have crossed the methodological threshold. The current deployment has not crossed the publication-integrity threshold.&quot;
+P0 closure score on the v2 commitments: 6 closed, 4 partial, 2 not closed. No new load-bearing arithmetic errors found in v2.1; all six §10 cards verified faithful to their archived dives. Twelve exact P0 edits specified (xAI lens sequence, remaining confidence-interval and DeepSeek-exclusivity language, provenance/artifact honesty incl. renaming model reviews away from &quot;independent external,&quot; tariff-scenario prominence + hero relabeling, the hard incompatibility gate, China/Ant convention placement, §2d/ownership reconciliation, tone completion on loaded quotations, GB200 changelog repair, permalink privacy text, 2027 recast as sensitivity) + 8 runtime smoke checks. Coherence advice: the caveat layers repeat and drift — cut §1 quote theater, §2d, most of §6 narration, the §8 anecdote pile, and per-card parameter inventories (the dossier owns the ledger).
+All P0 items were applied in v2.1.1 together with the council final-review gate (see the changelog); the full verbatim review is preserved in the linked conversation.</p>
+</blockquote>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>External review #2 — GPT-5.6 Pro · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/review-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-5.6 Pro pre-publication review — 2026-07-10</h1>
+<blockquote>
+<p>Run 43m49s · <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a51065d-d18c-83e8-9456-850b4e0c2288">conversation</a>
+Verdict: <strong>&quot;Do not publish the page unchanged.&quot;</strong> No transcription errors in the six §10 headline numbers — the blockers are definition errors, comparability errors, stale current facts, and caveats that became stronger claims when compressed into cards.
+Companion review: <code>reviews-2026-07-10-council-synthesis.md</code> (4-persona codex council, Opus synthesis — reached the same headline verdict independently and additionally reproduced app.js numerically, finding the preset-merge bug and calculator/§10 divergence).</p>
+</blockquote>
+<p>The full response is preserved in the ChatGPT conversation (link above). Key structure:</p>
+<h2>Faithfulness of §10 cards (all six numbers transferred correctly)</h2>
+<ul>
+<li>OpenAI: faithful; weaken 3.2–28.7T (effective-capacity, not literal weights) and date the 70% compute margin (Oct 2025 via Dec 2025 reporting).</li>
+<li>Google: faithful number; card makes derived $1.28/hr sound like a known internal cost; &quot;sub-90% only if everything is worse&quot; too strong.</li>
+<li>xAI: faithful only if the cost lens (full-cycle TCO) is displayed beside the headline; $5.27 is a bundled contract allocation.</li>
+<li>DeepSeek: number faithful; &quot;lowest estimated margin&quot; is FALSE (Zhipu 60% &lt; 69%); export-control cost effect cannot be signed; H800 rate bands inconsistent between card ($1.08–1.54) and §4 table ($1.47–2.06).</li>
+<li>Zhipu: number faithful; DeepInfra ceiling is conditional on its profitability; &quot;barely owns compute&quot; overstates filings.</li>
+<li>Moonshot: number faithful but it is an OUTPUT-TOKEN margin — §10&#39;s &quot;blended&quot; framing misclassifies it; &quot;healthiest Chinese margin&quot; invalid cross-metric.</li>
+</ul>
+<h2>Hard factual errors found</h2>
+<ol>
+<li><strong>Sonnet 5 current price is $2/$10 (intro through Aug 31, 2026)</strong>, not the modeled $3/$15 — material: 85–93% → ~78–90% at intro tariff. Tokenizer also produces ~30% more tokens than 4.6.</li>
+<li><strong>Rubin row stale/misclassified</strong>: current platform is Vera Rubin NVL72 — 288GB HBM4, 22 TB/s per GPU; the ~50 PF figure is SPARSE NVFP4 inference, not dense FP8/FP4.</li>
+<li><strong>B200/GB200 conflated</strong> in one row (4.5 vs 5 PF dense FP8; different configs) — split.</li>
+<li><strong>Trainium generations collapsed</strong> under one GA date; Rainier ~500k launch vs Anthropic&#39;s later &gt;1M Trainium2 across AWS.</li>
+<li><strong>&quot;three best public measurements&quot;</strong> heading vs six table rows.</li>
+<li><strong>H800 &quot;prefill&quot; anchor is cache-contaminated</strong>: the 73.7k input tok/s includes the 56.3% on-disk KV-cache-hit share — using it as fresh-prefill MFU while separately discounting cache reads double-counts the cache benefit.</li>
+<li>Validation anchors silently used as neutral defaults: H20 18% (anchor) vs 17% (neutral rec); Ascend 9.5% (optimized CloudMatrix) vs 7% (neutral rec).</li>
+</ol>
+<h2>Methodology/framing</h2>
+<ul>
+<li>Rename headline metric: <strong>&quot;list-price direct-serving contribution margin&quot;</strong> (not &quot;marginal gross margin&quot;); served vs billed tokens need an explicit overhead factor; MFU/interactivity/utilization may double-count penalties.</li>
+<li>&quot;80% CI&quot; → &quot;judgmental uncertainty range intended to contain roughly 80% of plausible modeled outcomes.&quot;</li>
+<li>§10 = provider-native case studies, NOT a ranking; remove highest/lowest language; optional separate normalized-workload comparison view.</li>
+<li>Evidence badge → 5-dimension profile (architecture / pricing / fleet economics / production throughput / financial perimeter).</li>
+<li>§5 blanket verdict conflicts with the page&#39;s own market-rate Opus result (~75–88%, median ~80%): condition the verdict on procurement.</li>
+<li>Subscription median/decile claims unsupported (tail-selection); ownership claims (&quot;DeepSeek owns / Anthropic doesn&#39;t&quot;) too categorical; &quot;only primary disclosure in existence&quot; indefensible; primary-source guarantee false as stated.</li>
+<li>Tone: remove the reproduced slur, &quot;fleecing,&quot; &quot;reply-guy,&quot; &quot;Drag things,&quot; &quot;famous money pit,&quot; &quot;profitably(?)&quot; — polemical register invites dismissal.</li>
+</ul>
+<h2>Its P0 list (12 items, with exact replacement wording in the archived response)</h2>
+<p>P0.1 rename+define metric · P0.2 Sonnet 5 correction · P0.3 rewrite §10 methodology intro + Moonshot relabel · P0.4 H800 input-calibration fix · P0.5 anchors-vs-defaults separation · P0.6 hardware-table basis repair (B200/GB200 split, Rubin update, INT8 label) · P0.7 conditional Anthropic verdict · P0.8 DeepSeek comparison rewrite (3.6×/9.1×/11.4×) · P0.9 restore provider-card caveats (per-card wording supplied) · P0.10 remove subscriber/ownership conclusions · P0.11 provenance + tone · P0.12 deterministic release tests (8 canonical presets).</p>
+<h2>Bottom line (quoted)</h2>
+<p>&quot;An expert critic could dismiss the entire product after finding only three errors: Moonshot labeled blended, H800 cache-hit traffic labeled prefill, and sparse Rubin NVFP4 presented under dense compute. That would be an avoidable outcome for research whose underlying annexes are substantially better than the current summary page makes them look.&quot;</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>X-sphere margin claims — Grok 4.5 sweep · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/grok-sweep-margin-claims">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><p>I&#39;ll search X extensively for TeorTaxes, Jukan, Zephyr, Musk&#39;s Opus claim, and related serving-cost threads.# X/Twitter research report: frontier inference margins &amp; Anthropic cost-to-serve</p>
+<blockquote>
+<p><strong>ERRATUM (2026-07-11, reception audit):</strong> this artifact is preserved as the Grok agent produced it, including its own research-layer characterizations. Two are corrected here rather than silently edited: (1) the Zephyr Jul 8 row&#39;s &quot;Frontier/Anthropic-style gross margins 90%–95%&quot; — the quoted post names NO comparison lab (xAI is the only named provider) and does not use the term &quot;unit margin&quot;; &quot;Anthropic-style&quot; was the sweep agent&#39;s inference. (2) Any quick-index labeling of that post as evidence about &quot;western serving margins&quot; inherits the same unsupported scope. The verbatim quotations themselves are unaffected.</p>
+</blockquote>
+<p><em>Search date: 2026-07-09. Every claim below is tied to a direct post URL, handle, date, and a verbatim quote. Numbers are not paraphrased.</em></p>
+<hr>
+<h2>1. @teortaxesTex — high inference margins + DeepSeek 545% / H800 economics</h2>
+<h3>Strongest posts with numbers (5)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>URL</th>
+<th>Author</th>
+<th>Date (UTC)</th>
+<th>Verbatim quote</th>
+<th>Numbers claimed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><a href="https://x.com/teortaxesTex/status/2071314837771014298">x.com/teortaxesTex/status/2071314837771014298</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-28</td>
+<td><code>&quot;…no, they can&#39;t have 90%+ margins? Right? Right?&quot; THEY CAN.</code></td>
+<td><strong>90%+</strong> margins (frontier/west labs context; reply to skepticism that western labs have “insane margins”)</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://x.com/teortaxesTex/status/2071315379004051513">x.com/teortaxesTex/status/2071315379004051513</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-28</td>
+<td><code>math for DeepSeek Serving Opus is at most $4/1Mt. Anthropic is not retarded They are fleecing you even on subscriptions, except maybe at 100% utilization</code></td>
+<td><strong>Serving Opus ≤ $4/1Mt</strong>; subscription “fleecing” except ~100% utilization</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://x.com/teortaxesTex/status/2070786814097440805">x.com/teortaxesTex/status/2070786814097440805</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-27</td>
+<td><code>No, they&#39;ll just increase the batch size, have the same speed, and drive margins from 90% to 95%. You&#39;re welcome</code></td>
+<td>Western providers: <strong>90% → 95%</strong> margins if they keep speed and raise batch size (reply about DeepSeek-driven throughput fixes)</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://x.com/teortaxesTex/status/2070833810145415518">x.com/teortaxesTex/status/2070833810145415518</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-27</td>
+<td><code>I see 70-90 tps right now, so let&#39;s say they&#39;re doing 1.4K t/s/gpu. That&#39;s 5M tokens/hour, or ≈$4,4 at $0.87/Mt. H100 *spot prices* are now $2.4/hr. DS has at least 50% margin.</code></td>
+<td><strong>70–90 tps</strong>; <strong>1.4K t/s/gpu</strong>; <strong>5M tokens/hour</strong>; <strong>≈$4.4</strong> at <strong>$0.87/Mt</strong>; H100 spot <strong>$2.4/hr</strong>; <strong>DS ≥50% margin</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://x.com/teortaxesTex/status/1906521148726100430">x.com/teortaxesTex/status/1906521148726100430</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-31</td>
+<td><code>if we exclude R&amp;D and look at inference alone, Anthropic and OpenAI are making like 80% margins.</code></td>
+<td>Inference-only: Anthropic &amp; OpenAI <strong>~80% margins</strong></td>
+</tr>
+</tbody></table>
+<h3>Related TeorTaxes posts (supporting / DeepSeek 545% reactions)</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/teortaxesTex/status/1895876441117769922">x.com/teortaxesTex/status/1895876441117769922</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-01</td>
+<td><code>Thanks. What is OpenAI&#39;s profit margin?</code> (quoting Adam: <em>“It’s an 84% profit margin. Impressive, but not 545%.”</em>)</td>
+<td>Contests reframing of DeepSeek’s <strong>545%</strong> as <strong>84%</strong>; asks OpenAI’s margin</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/1895876331495477615">x.com/teortaxesTex/status/1895876331495477615</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-01</td>
+<td><code>nice lesson in arithmetic Adam, but could you tell us your profit margin?</code></td>
+<td>Same thread</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/1895889315970044153">x.com/teortaxesTex/status/1895889315970044153</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-01</td>
+<td><code>very embarrassing error for o3-mini-high, it&#39;s larping hard here</code> (quoting o3-mini on <strong>$562,027/day</strong> revenue, <strong>$87,072/day</strong> cost, <strong>545%</strong> vs <strong>~84%</strong>)</td>
+<td>Critiques <strong>545% → 84%</strong> “correction” math</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/1896141536884396528">x.com/teortaxesTex/status/1896141536884396528</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-02</td>
+<td><code>What they technically mean is that they have a markup of 545%</code></td>
+<td>Clarifies <strong>545%</strong> as <strong>markup</strong>, not profit margin</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/2070832301005537627">x.com/teortaxesTex/status/2070832301005537627</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-27</td>
+<td><code>DeepSeek has disclosed their inference economics – for the first time since Open Source Week. Then, they were doing 14.8K generation on 8xH800 node (1,85K/GPU) at 20-22 tps. Whatever these GPUs are now, V4-Pro is *at least 3x cheaper to serve*. 2K/GPU needs &gt;60 tps.</code></td>
+<td>Open Source Week: <strong>14.8K gen / 8×H800</strong> (<strong>1.85K/GPU</strong>) at <strong>20–22 tps</strong>; V4-Pro <strong>≥3× cheaper to serve</strong>; <strong>2K/GPU needs &gt;60 tps</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/1901766584974155784">x.com/teortaxesTex/status/1901766584974155784</a></td>
+<td>@teortaxesTex</td>
+<td>2025-03-17</td>
+<td><code>DeepSeek has provided their inference figures. &gt; Each H800 node delivers an average throughput of ~73.7k tokens/s input … or ~14.8k tokens/s output … That&#39;s at 20ish t/s though</code></td>
+<td>Quotes DS: <strong>~73.7k in / ~14.8k out per H800 node</strong>; <strong>~20 t/s</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/2068833223228924229">x.com/teortaxesTex/status/2068833223228924229</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-21</td>
+<td><code>They do have 90% margins</code></td>
+<td><strong>90%</strong> margins (short reply; limited parent context in search)</td>
+</tr>
+</tbody></table>
+<h3>Primary DeepSeek disclosure (source TeorTaxes was reacting to)</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/deepseek_ai/status/1895688300574462431">x.com/deepseek_ai/status/1895688300574462431</a></td>
+<td>@deepseek_ai</td>
+<td>2025-03-01</td>
+<td><code>Day 6 of #OpenSourceWeek… 73.7k/14.8k input/output tokens per second per H800 node… Cost profit margin 545%</code></td>
+<td><strong>73.7k/14.8k t/s per H800 node</strong>; <strong>cost-profit margin 545%</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/Yuchenj_UW/status/1895690693617799449">x.com/Yuchenj_UW/status/1895690693617799449</a></td>
+<td>@Yuchenj_UW</td>
+<td>2025-03-01</td>
+<td><code>DeepSeek is able to get 73.7k tokens/s input and 14.8k tokens/s output throughput per H800 node! Their profit margin is 545%…</code></td>
+<td>Same figures, widely amplified</td>
+</tr>
+<tr>
+<td><a href="https://x.com/reach_vb/status/1895716781139853364">x.com/reach_vb/status/1895716781139853364</a></td>
+<td>@reach_vb</td>
+<td>2025-03-01</td>
+<td><code>Cost: $87,072 daily… Theoretical Revenue: $562,027 daily (545% margin)</code></td>
+<td><strong>$87,072/day cost</strong>; <strong>$562,027/day theoretical revenue</strong>; <strong>545%</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/Beth_Kindig/status/1895716781139853364">x.com/Beth_Kindig/status/1895716781139853364</a> is wrong ID — correct: <a href="https://x.com/Beth_Kindig/status/1895871653793427955">x.com/Beth_Kindig/status/1895871653793427955</a></td>
+<td>@Beth_Kindig</td>
+<td>2025-03-01</td>
+<td><code>DeepSeek revealed that its AI models have up to a 545% cost-profit ratio, with daily inference costs of ~$87,000… daily revenue of ~$562,000.</code></td>
+<td><strong>545%</strong> cost-profit; <strong>~$87k</strong> cost; <strong>~$562k</strong> revenue</td>
+</tr>
+</tbody></table>
+<p><strong>Note on TeorTaxes 90–95% claim:</strong> He repeatedly asserts <strong>90%+ / 90→95% / ~80% inference-only</strong> for Anthropic/OpenAI/western serving, with the sharpest numeric Opus cost claim being <strong>“Serving Opus is at most $4/1Mt”</strong> (2026-06-28). I did <strong>not</strong> find a single TeorTaxes post that says <em>exactly</em> “Anthropic marginal gross margin is 92%” as a firm audited figure—his language is “90%+”, “90% to 95%”, “like 80%”, and “THEY CAN.”</p>
+<hr>
+<h2>2. Jukan &amp; Zephyr — handles + similar margin/serving claims</h2>
+<h3>Handle corrections</h3>
+<table>
+<thead>
+<tr>
+<th>Your guess</th>
+<th>Status</th>
+<th>Correct account</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>@Jukanlosreve</td>
+<td><strong>Wrong</strong> for this person. <code>@AveryAdrial</code> uses display name “Jukanlosreve” but has ~54 followers and is not the AI/chips account.</td>
+<td><strong>@jukan05</strong> — “Jukan @ ICML” (high-follower AI/semiconductor poster; bio: <em>Tech otakus save the world | Not Investment Advice</em>)</td>
+</tr>
+<tr>
+<td>@zephyr_z9</td>
+<td><strong>Correct</strong></td>
+<td><strong>@zephyr_z9</strong> — “Zephyr”, ~161k followers; bio: <em>AI &amp; Chips | Not Investment Advice | DYOD</em></td>
+</tr>
+</tbody></table>
+<h3>Zephyr (@zephyr_z9) — direct margin / serving economics posts</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/zephyr_z9/status/2074917201589727588">x.com/zephyr_z9/status/2074917201589727588</a></td>
+<td>@zephyr_z9</td>
+<td>2026-07-08</td>
+<td><code>At least xAI isn&#39;t juicing up the gross margins to 90%-95% and scamming consumers Although the cached token could be cheaper</code></td>
+<td>Frontier/Anthropic-style <strong>gross margins 90%–95%</strong> (implicit contrast with xAI Grok 4.5 pricing)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2069832997218722140">x.com/zephyr_z9/status/2069832997218722140</a></td>
+<td>@zephyr_z9</td>
+<td>2026-06-24</td>
+<td><code>70% GM and 15%-20% FCF margin Damn Anthropic is printing cash now</code></td>
+<td>Anthropic: <strong>70% GM</strong>, <strong>15%–20% FCF margin</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2070726279540989971">x.com/zephyr_z9/status/2070726279540989971</a></td>
+<td>@zephyr_z9</td>
+<td>2026-06-27</td>
+<td><code>I think they will do over $110B in revenue next year at 75%-80% GM</code></td>
+<td><strong>&gt;$110B</strong> revenue next year; <strong>75%–80% GM</strong> (context in thread appears Anthropic/frontier — confirm parent if using)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2070727375386718259">x.com/zephyr_z9/status/2070727375386718259</a></td>
+<td>@zephyr_z9</td>
+<td>2026-06-27</td>
+<td><code>$50B-$60B this year over $110B next year 75%-80% GM</code></td>
+<td><strong>$50–60B</strong> this year; <strong>&gt;$110B</strong> next; <strong>75%–80% GM</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2048029866633895944">x.com/zephyr_z9/status/2048029866633895944</a></td>
+<td>@zephyr_z9</td>
+<td>2026-04-25</td>
+<td><code>I&#39;m pretty sure V4 Pro is cheaper to serve than They went from 90% margin to 50% margin</code></td>
+<td>DeepSeek V4-Pro promo: <strong>90% → 50%</strong> margin (quoting TeorTaxes breakeven pricing thread)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2071528823422959737">x.com/zephyr_z9/status/2071528823422959737</a></td>
+<td>@zephyr_z9</td>
+<td>2026-06-29</td>
+<td><code>The production cost of those 70M tokens are less than $15</code> (quoting ~$268–$286 list value for 65–70M tokens)</td>
+<td><strong>70M tokens</strong> production cost <strong>&lt;$15</strong> vs <strong>~$268–$286</strong> list</td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2074755502878470238">x.com/zephyr_z9/status/2074755502878470238</a></td>
+<td>@zephyr_z9</td>
+<td>2026-07-08</td>
+<td><code>Semianalysis is forecasting that Anthropic is processing 5Q tokens per month in June, which will grow to 13Q tokens by December</code></td>
+<td>Anthropic volume: <strong>5Q tokens/month (June)</strong> → <strong>13Q (December)</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2075107995508408728">x.com/zephyr_z9/status/2075107995508408728</a></td>
+<td>@zephyr_z9</td>
+<td>2026-07-09</td>
+<td><code>Nah Opus/Fable have the highest active parameters OAI is more sparse (still around 100B active range)</code></td>
+<td><strong>~100B active</strong> for OAI; Opus/Fable highest active params</td>
+</tr>
+<tr>
+<td><a href="https://x.com/zephyr_z9/status/2070267916013187449">x.com/zephyr_z9/status/2070267916013187449</a></td>
+<td>@zephyr_z9</td>
+<td>2026-06-25</td>
+<td><code>That&#39;s around 25 trillion Tokens… assuming, 12:1 input: output ratio and 90% caching on Opus So it&#39;s nearly around $72M and around $160M if no caching is assumed</code></td>
+<td>Distillation abuse estimate: <strong>25T tokens</strong>; <strong>12:1</strong> I/O; <strong>90% caching</strong>; <strong>~$72M</strong> / <strong>~$160M</strong> without cache</td>
+</tr>
+</tbody></table>
+<h3>Jukan (@jukan05) — hardware/serving economics (not 90–95% Anthropic API margins)</h3>
+<p><strong>I did not find posts from @jukan05 claiming Anthropic or frontier-lab <em>token inference</em> gross margins of 90–95%.</strong> His widely cited posts are about <strong>GPU/memory/cluster economics</strong> and Anthropic <strong>compute leasing</strong>, not unit-token COGS.</p>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/jukan05/status/2052957921563316619">x.com/jukan05/status/2052957921563316619</a></td>
+<td>@jukan05</td>
+<td>2026-05-09</td>
+<td><code>xAI deployed more than 220,000 NVIDIA GPUs… rented out at roughly $2.60 per GPU-hour… minting $5–6 billion in annual revenue… Anthropic… converts roughly $5B of spend into what it expects to be $15B of ARR</code> (long thread; also earlier note: <em>“xAI can recognize $6B of annual revenue… Anthropic… $5B of spend into… $15B of ARR”</em>)</td>
+<td><strong>220k+ GPUs</strong>; <strong>~$2.60/GPU-hr</strong>; <strong>$5–6B</strong> annual lease revenue; Anthropic <strong>~$5B spend → ~$15B ARR</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/jukan05/status/2071139712082022855">x.com/jukan05/status/2071139712082022855</a></td>
+<td>@jukan05</td>
+<td>2026-06-28</td>
+<td><code>Inference is now directly tied to money… GPUs are often underutilized in inference… For inference, adding more memory is far more valuable… Ultimately, the ROI of inference depends less on GPUs and more on memory… Inference is memory.</code></td>
+<td>Inference ROI = <strong>memory-bound</strong>, not GPU-count</td>
+</tr>
+<tr>
+<td><a href="https://x.com/jukan05/status/2073032040451366952">x.com/jukan05/status/2073032040451366952</a></td>
+<td>@jukan05</td>
+<td>2026-07-03</td>
+<td><code>Bernstein estimates that SK hynix’s DRAM gross margin in Q2 will reach 90.9%…</code></td>
+<td><strong>90.9%</strong> DRAM GM (not Anthropic)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/jukan05/status/2071745275325190339">x.com/jukan05/status/2071745275325190339</a></td>
+<td>@jukan05</td>
+<td>2026-06-29</td>
+<td><code>commodity DRAM operating margins already at 80% and gross margins above 90%</code></td>
+<td>DRAM <strong>OM 80%</strong>, <strong>GM &gt;90%</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Elon Musk — Claude Opus parameter “leak”</h2>
+<h3>Important correction to the prompt framing</h3>
+<p>The viral claim is <strong>not</strong> that Opus is <em>much smaller than expected</em>. Elon said <strong>current Grok is small</strong>, and <strong>Opus is ~10× Grok</strong>, which the timeline widely read as <strong>Opus ≈ 5T total parameters</strong> (large). The “surprise” was <strong>Grok being strong for 0.5T</strong>, not Opus being tiny.</p>
+<h3>Primary Elon post</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers / implication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/elonmusk/status/2042123561666855235">x.com/elonmusk/status/2042123561666855235</a></td>
+<td>@elonmusk</td>
+<td><strong>2026-04-09</strong></td>
+<td><code>0.5T total. Current Grok is half the size of Sonnet and 1/10th the size of Opus. Very strong model for its size.</code></td>
+<td>Grok <strong>0.5T total</strong>; Grok = <strong>½ Sonnet</strong>, <strong>1/10 Opus</strong> → community deduction: <strong>Sonnet ≈ 1T</strong>, <strong>Opus ≈ 5T</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Context:</strong> Reply in a thread about Grok 4.2 / training fleet sizes (parent discussion referenced Colossus models in training including multi-T variants). Not framed as xAI litigation discovery; it is a <strong>public tweet</strong> sizing Grok vs Anthropic models. No courtroom document link was attached in the post itself.</p>
+<h3>Notable reaction posts (size + cost implications)</h3>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/lifetimization/status/2042285703162397167">x.com/lifetimization/status/2042285703162397167</a></td>
+<td>@lifetimization</td>
+<td>2026-04-09</td>
+<td><code>lol Elon musk leaked Sonnet’s and Opus’s sizes: Sonnet: 1T Opus: 5T</code></td>
+<td><strong>Sonnet 1T</strong>, <strong>Opus 5T</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/mark_k/status/2042304980456030666">x.com/mark_k/status/2042304980456030666</a></td>
+<td>@mark_k</td>
+<td>2026-04-09</td>
+<td><code>Elon Musk has casually leaked the model sizes… Grok 4.20, which is 0.5T parameters. Now we can deduce: - Claude Sonnet = 1T - Claude Opus = 5T</code></td>
+<td>Same deduction</td>
+</tr>
+<tr>
+<td><a href="https://x.com/Mayhem4Markets/status/2042306488769683712">x.com/Mayhem4Markets/status/2042306488769683712</a></td>
+<td>@Mayhem4Markets</td>
+<td>2026-04-09</td>
+<td><code>how do you know the size of Sonnet and Opus? … Sonnet is a 1T parameter model and Opus is a 5T parameter model.</code></td>
+<td>Questions source; same <strong>1T / 5T</strong> read</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/2068980091724419280">x.com/teortaxesTex/status/2068980091724419280</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-22</td>
+<td><code>Seeing as Fable was served at like 90 t/s… it seems Fable had shockingly FEW active parameters for what it was.</code> (quoting his earlier: <em>If Mythos is above, say, 800B active…</em>)</td>
+<td><strong>~90 t/s</strong> serving; <strong>Mythos &gt;800B active</strong> as resignation threshold; <strong>few active params</strong> on Fable (active, not total)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/teortaxesTex/status/2071325290819641620">x.com/teortaxesTex/status/2071325290819641620</a></td>
+<td>@teortaxesTex</td>
+<td>2026-06-28</td>
+<td><code>Opus has at most 2-4x active params do some actual quantitative math for once, germoid</code></td>
+<td>Opus active params <strong>≤2–4×</strong> (relative to interlocutor’s baseline—not absolute B)</td>
+</tr>
+</tbody></table>
+<h3>What I did <strong>not</strong> find</h3>
+<ul>
+<li>No Elon post saying “Opus has only X00B parameters” / “Opus is small.”</li>
+<li>No widely indexed post in this search where Elon’s <strong>5T Opus</strong> leak was used to argue <strong>lower</strong> Anthropic cost-to-serve (5T total would push the other way; people arguing cheap Anthropic serving instead stress <strong>active params, MoE sparsity, throughput, caching</strong>, not total params).</li>
+<li>TeorTaxes’s “shockingly FEW <strong>active</strong> parameters” line is about <strong>Fable</strong>, not the Elon 0.5T Grok tweet.</li>
+</ul>
+<hr>
+<h2>4. Other widely-cited 2025–2026 X threads on Anthropic cost-to-serve / margins</h2>
+<table>
+<thead>
+<tr>
+<th>URL</th>
+<th>Author</th>
+<th>Date</th>
+<th>Verbatim quote</th>
+<th>Numbers claimed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://x.com/PodcastAlphaX/status/2072119494563262697">x.com/PodcastAlphaX/status/2072119494563262697</a></td>
+<td>@PodcastAlphaX</td>
+<td>2026-07-01</td>
+<td><code>Dylan Patel @dylan522p of SemiAnalysis: Anthropic&#39;s margin on an Opus 4.8 API token is north of 80%. … At 80%-plus, even doubling compute costs leaves Anthropic above 50% gross margin.</code></td>
+<td>Opus 4.8 API token margin <strong>&gt;80%</strong>; after 2× compute still <strong>&gt;50% GM</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/SemiAnalysis_/status/2037575752636301499">x.com/SemiAnalysis_/status/2037575752636301499</a></td>
+<td>@SemiAnalysis_</td>
+<td>2026-03-27</td>
+<td><code>Anthropic&#39;s gross margins were -94% in 2024. MiniMax was -25%.</code> … later: <code>we think Inference Provider Gross Margins should blend to ~60%.</code> … <code>Labs that understand the interactivity lever operate at 60%+ margins.</code></td>
+<td>Company GM <strong>−94% (2024)</strong> vs blended provider target <strong>~60% / 60%+</strong> (accounting GM ≠ unit inference margin)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/IvanaSpear/status/2075227080657129631">x.com/IvanaSpear/status/2075227080657129631</a></td>
+<td>@IvanaSpear</td>
+<td>2026-07-09</td>
+<td><code>Inference costs fell from ~$10.86 per million tokens in early 2024 to ~$0.25 today (roughly 40x) while revenue per token fell only ~9x. … Quarterly gross profit swings from -$55M to an estimated $453M, with 3Q26 profit crossing $1B. … Claude has reportedly been gross-margin positive since day one. … training costs fall from 400%+ of revenue to an estimated ~36% by year-end.</code></td>
+<td><strong>$10.86 → $0.25 /M tokens</strong> (~<strong>40×</strong>); rev/token <strong>~9×</strong> down; GP <strong>−$55M → ~$453M</strong>; <strong>3Q26 profit &gt;$1B</strong>; training <strong>400%+ → ~36% of revenue</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/kimmonismus/status/2014673235594641838">x.com/kimmonismus/status/2014673235594641838</a></td>
+<td>@kimmonismus</td>
+<td>2026-01-23</td>
+<td><code>Anthropic slashed its 2025 gross margin outlook to 40% as inference costs came in 23% higher than expected, even while revenue is projected to hit $4.5 billion</code></td>
+<td><strong>2025 GM outlook 40%</strong>; inference costs <strong>+23%</strong>; rev <strong>$4.5B</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/fleetingbits/status/2073528885149679622">x.com/fleetingbits/status/2073528885149679622</a></td>
+<td>@fleetingbits</td>
+<td>2026-07-04</td>
+<td><code>we know approximately what frontier lab inference margins are; it&#39;s like 40-50%; it&#39;s been reported a bunch of times. anthropic labels cloud provider commissions as a sales and marketing expense; so the gross margins are mostly inference compute costs</code></td>
+<td>Frontier inference margins <strong>~40–50%</strong> (counter to 90% narrative)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/rosyprosperity/status/2073086578616836598">x.com/rosyprosperity/status/2073086578616836598</a></td>
+<td>@rosyprosperity</td>
+<td>2026-07-03</td>
+<td><code>Anthropic is almost certainly running gross margins of over 90% on the frontier model inference.</code></td>
+<td><strong>&gt;90%</strong> GM on frontier model inference</td>
+</tr>
+<tr>
+<td><a href="https://x.com/SemiAnalysis_/status/2060043702450446552">x.com/SemiAnalysis_/status/2060043702450446552</a></td>
+<td>@SemiAnalysis_</td>
+<td>2026-05-28</td>
+<td><code>The most popular AI subscription will run you about $20/month… for a company like Anthropic how much does it cost the company to be servicing the user? … the same $20 subscription can range from insanely profitable to barely breaking even.</code></td>
+<td><strong>$20/mo</strong> sub; cost-to-serve depends on workload (no single $/M in this post text)</td>
+</tr>
+<tr>
+<td><a href="https://x.com/aakashgupta/status/2020272837907669179">x.com/aakashgupta/status/2020272837907669179</a></td>
+<td>@aakashgupta</td>
+<td>2026-02-07</td>
+<td><code>standard Opus 4.6 runs $5/$25 per million tokens. Fast mode runs $30/$150. A 6x premium. … capture full margin instead of sharing 30-40% with AWS and Google.</code></td>
+<td>List prices <strong>$5/$25</strong> vs Fast <strong>$30/$150</strong> (<strong>6×</strong>); cloud take <strong>30–40%</strong></td>
+</tr>
+<tr>
+<td><a href="https://x.com/deepseek_ai/status/1895688300574462431">x.com/deepseek_ai/status/1895688300574462431</a></td>
+<td>@deepseek_ai</td>
+<td>2025-03-01</td>
+<td>(see §1) Open Source Week inference system</td>
+<td>Benchmark open disclosure used as yardstick for all labs</td>
+</tr>
+</tbody></table>
+<h3>Narrative tension worth flagging (not resolving)</h3>
+<table>
+<thead>
+<tr>
+<th>Camp</th>
+<th>Representative claim</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>High unit / API margins</td>
+<td><strong>80–95%</strong> on frontier tokens / “juicing GM to 90–95%”</td>
+<td>TeorTaxes, Zephyr, Dylan Patel clip, @rosyprosperity</td>
+</tr>
+<tr>
+<td>Mid reported company GM</td>
+<td><strong>~40–70%</strong> company gross margin / <strong>40–50%</strong> “frontier lab inference margins”</td>
+<td>@kimmonismus (40% outlook), @fleetingbits (40–50%), Zephyr’s <strong>70% GM</strong> Anthropic cash-print post</td>
+</tr>
+<tr>
+<td>Historical company GM</td>
+<td><strong>−94%</strong> Anthropic GM in <strong>2024</strong></td>
+<td>SemiAnalysis Mar 2026 thread</td>
+</tr>
+</tbody></table>
+<p>These are <strong>different objects</strong> (unit token margin vs GAAP gross margin vs theoretical DeepSeek cost-profit ratio). Search results do not show consensus on one number.</p>
+<hr>
+<h2>Gaps (explicit non-findings)</h2>
+<ol>
+<li><strong>@Jukanlosreve</strong> is not the AI analyst account; use <strong>@jukan05</strong>.</li>
+<li><strong>@jukan05</strong> posts on Anthropic <strong>cluster lease / memory / DRAM</strong> economics were found; <strong>not</strong> a clear Jukan thread asserting <strong>90–95% Anthropic inference GM</strong>.</li>
+<li><strong>Elon did not claim Opus is small.</strong> He claimed Grok is <strong>0.5T</strong> and <strong>1/10 of Opus</strong> → public deduction <strong>Opus ~5T</strong>. No litigation-document “leak” of a <em>small</em> Opus param count turned up in this search.</li>
+<li>No primary post found with a fully sourced, end-to-end <strong>tokens/sec/GPU → $/M tokens COGS → margin</strong> table <em>for Anthropic Opus</em> with hardware SKUs and utilization assumptions comparable to DeepSeek’s Open Source Week disclosure. Closest numeric serving claims: TeorTaxes <strong>Opus ≤ $4/1Mt</strong>, SemiAnalysis/Dylan <strong>&gt;80%</strong> Opus 4.8 API margin, IvanaSPEAR <strong>$10.86 → $0.25 /M</strong> cost collapse.</li>
+</ol>
+<hr>
+<h3>Quick citation index (strongest single posts per theme)</h3>
+<ul>
+<li><strong>90%+ / 90→95% western serving margins:</strong> <a href="https://x.com/teortaxesTex/status/2071314837771014298">TeorTaxes 2026-06-28</a>, <a href="https://x.com/teortaxesTex/status/2070786814097440805">TeorTaxes 2026-06-27</a>, <a href="https://x.com/zephyr_z9/status/2074917201589727588">Zephyr 2026-07-08</a></li>
+<li><strong>Opus cost-to-serve ceiling:</strong> <a href="https://x.com/teortaxesTex/status/2071315379004051513">TeorTaxes “at most $4/1Mt”</a></li>
+<li><strong>DeepSeek 545% disclosure:</strong> <a href="https://x.com/deepseek_ai/status/1895688300574462431">DeepSeek official</a> + <a href="https://x.com/teortaxesTex/status/1896141536884396528">TeorTaxes markup clarification</a></li>
+<li><strong>Elon Opus size:</strong> <a href="https://x.com/elonmusk/status/2042123561666855235">Elon 2026-04-09</a> → <a href="https://x.com/lifetimization/status/2042285703162397167">1T/5T deduction</a></li>
+<li><strong>Dylan Patel &gt;80% Opus API margin:</strong> <a href="https://x.com/PodcastAlphaX/status/2072119494563262697">Podcast Alpha clip post</a></li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

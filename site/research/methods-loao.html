@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methods: leave-one-anchor-out validation · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/methods-loao">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Methods note: leave-one-anchor-out validation of the effective-MFU abstraction</h1>
+<blockquote>
+<p>Run 2026-07-10, as prescribed by the external review (the empiricist&#39;s &quot;load-bearing experiment&quot;).
+Code: <code>tests/loao.mjs</code> in the project tree. Predictions were fixed before comparison.</p>
+</blockquote>
+<h2>Question</h2>
+<p>The calculator compresses each accelerator&#39;s serving behavior into one scalar — an &quot;effective decode MFU&quot; against dense 8-bit FLOPS. Is that a <em>predictive</em> abstraction (one coefficient transfers across hardware), or an <em>interpolating</em> one (each platform needs its own fitted coefficient)?</p>
+<h2>Design</h2>
+<p>Fit a <strong>single global decode MFU</strong> using only the DeepSeek H800 production anchor (1,850 tok/s/GPU on a 37B-active model, 1.98 PF dense FP8 ⇒ <strong>6.91%</strong>). Predict every other platform&#39;s published decode measurement from its spec sheet and that one coefficient. Pass bar (set in advance by the review): central error ≤ ~25%.</p>
+<h2>Result</h2>
+<table>
+<thead>
+<tr>
+<th>Held-out platform</th>
+<th align="right">Predicted</th>
+<th align="right">Measured</th>
+<th align="right">Error</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H20 (Ant/SGLang production, &lt;50 ms tier)</td>
+<td align="right">277</td>
+<td align="right">675</td>
+<td align="right"><strong>−59%</strong></td>
+</tr>
+<tr>
+<td>GB200 (vLLM published)</td>
+<td align="right">4,672</td>
+<td align="right">10,100</td>
+<td align="right"><strong>−54%</strong></td>
+</tr>
+<tr>
+<td>Ascend 910C INT8 (CloudMatrix-Infer, optimized)</td>
+<td align="right">1,405</td>
+<td align="right">1,943</td>
+<td align="right">−28%</td>
+</tr>
+<tr>
+<td>Ascend 910C INT8 (neutral read: DeepSeek &quot;60% of H100&quot;)</td>
+<td align="right">1,405</td>
+<td align="right">1,303</td>
+<td align="right">+8%</td>
+</tr>
+</tbody></table>
+<p><strong>Mean |error| 37%, worst 59% — the abstraction FAILS the transfer test.</strong></p>
+<h2>Interpretation and consequences (adopted in methodology v2)</h2>
+<ol>
+<li>A scalar compute-MFU does not transfer across platforms, because decode is memory/interconnect-bound: the H20&#39;s tiny FLOPS denominator makes its fitted &quot;MFU&quot; (17%) 2.5× the H800&#39;s (7%) for the same physical workload. The coefficient absorbs bandwidth, batch regime, serving stack, and latency target — it is not a hardware constant.</li>
+<li>The calculator&#39;s per-platform MFU values are therefore <strong>anchor fits</strong> — each reproduces its own published measurement, and the page no longer describes this as &quot;calibration&quot; in the predictive sense. Reproducing the datum used to select a coefficient is an identity, not a validation.</li>
+<li><strong>Platforms without a published anchor carry materially lower confidence</strong>: TPU v7 Ironwood, Trainium 2/3, and the Rubin projection have no public serving measurement for a frontier MoE and their MFU values are analyst estimates. This is now stated in the calculator.</li>
+<li>The model&#39;s honest domain of validity: <strong>short-to-moderate context, throughput-oriented serving, interpolation near the anchored operating points</strong>. The published anchors are all ≤~50B-active models; the flagship scenarios assume 120–300B active — that size axis is the model&#39;s largest unanchored extrapolation. Context length, TTFT/TPOT targets, KV-cache lifecycle, and speculative-decoding acceptance are not modeled; the interactivity multipliers (1.0/0.70/0.35) are a coarse stand-in for a latency curve that published data (CloudMatrix: 1,943 → 538 tok/s from 50 ms → 15 ms TPOT) shows is steep.</li>
+</ol>
+<h2>What would upgrade the model</h2>
+<p>A roofline formulation (compute + HBM + interconnect terms with per-platform physical constants) fit jointly on all anchors with one shared efficiency residual — then re-run this experiment. Until that passes, cross-platform margin comparisons inherit anchor-fit uncertainty, and the per-provider ranges in §10 should be read accordingly.</p>
+<h2>Follow-up (2026-07-10, same day): the roofline attempt — a documented negative result</h2>
+<p>We commissioned the upgrade path named above: a decode roofline with compute, HBM and fabric terms, 1/batch weight amortization, explicit MTP handling, and <strong>one shared</strong> roof-utilization residual (no per-platform efficiency), fit on the H800 production anchor alone (η = 31.0%). Full derivation: <a href="consult-roofline.html">the roofline consultation</a>; runnable diagnostic: <a href="../tests/roofline-diagnostic.mjs">/tests/roofline-diagnostic.mjs</a>, deployed with the site.</p>
+<p><strong>Result:</strong> dramatically better than scalar MFU at throughput-oriented operating points — H20 −11/−16%, GB200 −2% (under an optimistic all-FP4 weight-traffic bound), Ascend@50ms −10%, and it reproduces the CloudMatrix paper&#39;s measured ~44% MTP latency increase — but it <strong>fails the whole-platform gate</strong>: Ascend&#39;s documented 15ms operating point misses by <strong>−39.8%</strong> (≈6–8pp of margin at typical operating points), and prefill transfers worse (worst −70.8%). The favorable numbers are also unstable to undisclosed metadata (H800 batch and MTP status alone swing the worst error between 31% and 57%).</p>
+<p><strong>More fundamentally, the preregistered experiment could not be executed as designed on public data</strong> (the fit is exactly-determined rather than validated): one fitted parameter against one training platform group violates the identifiability precondition (p &lt; n_train), and no genuinely untouched platform exists — every candidate already informed the model&#39;s design. <strong>Decision: the anchor-fit model stays; the roofline ships as an experimental diagnostic only.</strong> A valid future test needs ≥2 independent training platform groups, a genuinely new platform held out after model freeze, frozen checkpoint/batch/MTP/precision metadata, and a max-error gate over every held-out operating point.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

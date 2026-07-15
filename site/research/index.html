@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Research reports · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<h2>Research reports</h2>
+<p>The full, unedited research artifacts behind <a href="../index.html">Frontier Inference Margins</a>: one GPT-5.6 Pro deep dive per provider, hardware sweeps, and the X-post hunts. Bulky by design — they carry the citations.</p>
+<ul>
+  <li><a href="anthropic-gptpro.html">Anthropic — GPT-5.6 Pro independent consult</a> — The original 54-minute Pro research run behind report §6: Opus 92–94% / Sonnet 94–96% at strategic rates.</li>
+  <li><a href="openai-gptpro.html">OpenAI — GPT-5.6 Pro deep dive</a> — GPT-5.6 family serving economics: Azure/OCI/CoreWeave fleet, pricing, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="google-gptpro.html">Google (Gemini) — GPT-5.6 Pro deep dive</a> — TPU vertical integration, Ironwood internal TCO, Gemini pricing, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="deepseek-gptpro.html">DeepSeek — GPT-5.6 Pro deep dive</a> — V4/V4 Pro economics, post-disclosure margin evidence, China fleet reality, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="zhipu-gptpro.html">Zhipu / Z.ai (GLM) — GPT-5.6 Pro deep dive</a> — GLM-5.2 economics, HK IPO financial disclosures, domestic fleet, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="moonshot-gptpro.html">Moonshot (Kimi) — GPT-5.6 Pro deep dive</a> — K2.x economics, reseller price floors, fleet evidence, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="xai-gptpro.html">xAI (Grok) — GPT-5.6 Pro deep dive</a> — Grok 4.x economics on the owned Colossus fleet, pricing, margin verdict with a judgmental uncertainty range.</li>
+  <li><a href="chinese-accel-gptpro.html">Chinese accelerators — GPT-5.6 Pro deep dive</a> — Ascend 910C/950, H20/H800, CloudMatrix: specs, costs, throughput anchors, export-control state.</li>
+  <li><a href="chinese-accel-ascend-websweep.html">Huawei Ascend — web sweep</a> — Cross-check sweep: 910B/910C/950 specs, CloudMatrix 384 pricing, MFU anchors, who serves on Ascend.</li>
+  <li><a href="chinese-accel-h800-h20-websweep.html">H800 / H20 / export controls — web sweep</a> — Cross-check sweep: specs, China pricing, the 2025–26 export-control timeline, fleet reality, H20 throughput anchors.</li>
+  <li><a href="grok-sweep-margin-claims.html">X-sphere margin claims — Grok 4.5 sweep</a> — The primary-post hunt behind §1–2: TeorTaxes, Zephyr, Jukan, fleetingbits, DeepSeek disclosure threads.</li>
+  <li><a href="grok-sweep-glm-gb300.html">GLM-on-GB300 &amp; subscription plans — Grok 4.5 sweep</a> — The ncode/Noumena GB300 deployment posts and the Claude plan-tokenomics investigations.</li>
+  <li><a href="methods-loao.html">Methods: leave-one-anchor-out validation</a> — The falsification test behind methodology v2: a single scalar MFU fails to transfer across platforms (mean error 37%), and the roofline follow-up's negative result.</li>
+  <li><a href="review-council.html">External review #1 — four-persona council (Opus synthesis)</a> — Unedited adversarial pre-publication review: skeptic, architect, risk analyst, empiricist + synthesis. Drove methodology v2.</li>
+  <li><a href="review-gptpro.html">External review #2 — GPT-5.6 Pro</a> — Independent adversarial review with exact replacement wording; confirmed the six §10 numbers transferred faithfully. Drove methodology v2.</li>
+  <li><a href="consult-council-design.html">Design consultation — four-persona council (Opus synthesis)</a> — The typed-ontology, attribution-honesty and ship-list adjudications behind methodology v2.1's preset expansion.</li>
+  <li><a href="consult-preset-pack.html">Preset grounding pack — GPT-5.6 Pro</a> — First-party tariff verifications and locked parameter decisions for the v2.1 presets.</li>
+  <li><a href="consult-roofline.html">Roofline model consultation — GPT-5.6 Pro</a> — The negative result that keeps anchor fits: a physically-informed roofline fails the whole-platform gate and the preregistered test is formally unrunnable on public data.</li>
+  <li><a href="review-council-final.html">Final review — four-persona council on v2.1 (Opus synthesis)</a> — The NO-SHIP gate that produced v2.1.1: lens-range membership, xAI operating-point, attribution and permalink-identity repairs.</li>
+  <li><a href="review-gptpro-final.html">Final review — GPT-5.6 Pro on v2.1</a> — Independent final gate on the finished product.</li>
+  <li><a href="plan-review-v212-council.html">v2.1.2 plan review — four-persona council (Opus synthesis)</a> — Pre-implementation review of the traffic-mix/reception-audit plan: seven P0 conditions, the xAI 26.95/36.52 conflict proof, and two live attribution defects found.</li>
+  <li><a href="plan-review-v212-gptpro.html">v2.1.2 plan review — GPT-5.6 Pro</a> — Pre-implementation review: traffic-mix state contract, provenance rules for regenerated artifacts, and the redesign of named-person reception testing into corpus-bounded source audits.</li>
+  <li><a href="changelog.html">Changelog</a> — Dated revision history — what changed in each methodology revision and why.</li>
+  <li><a href="gptpro-consult-anthropic-verbatim.html">Anthropic consult — verbatim original (recovered)</a> — The complete 54-minute GPT-5.6 Pro response, original bytes recovered from the receiving session transcript, SHA-256-stamped.</li>
+  <li><a href="consult-roofline-verbatim.html">Roofline consultation — verbatim full derivation (recovered)</a> — The complete roofline derivation behind the adopted negative result — original bytes, SHA-256-stamped.</li>
+  <li><a href="grounding-ledger.html">Adopted grounding ledger (machine-generated)</a> — Every preset parameter with value, source and evidence label, generated from the deployed registry — the authoritative parameter record.</li>
+  <li><a href="consult-preset-pack-reaudit.html">Preset pack re-audit — GPT-5.6 Pro re-emission + delta</a> — Dated author-model re-emission of the expired 192-row pack, with a checked delta table against the adopted values (the ledger wins).</li>
+  <li><a href="reception-synthesis.html">Reception phase — synthesis &amp; resolution ledger</a> — Nine simulated-reader audits (five corpus-bounded source-faithfulness, four audience archetypes) against the frozen v2.1.2 preview: 16 P0s and ~26 P1s found, dispositioned finding-by-finding. A simulated-reader exercise, not validation.</li>
+  <li><a href="reception-corpus-manifest.html">Reception phase — corpus manifest</a> — The fixed source corpus behind the faithfulness audits, with its stated circularity limit.</li>
+</ul>
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

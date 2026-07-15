@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>xAI (Grok) — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/xai-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine's original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site's current terminology. The main report treats these as uncalibrated scenario ranges.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>xAI (Grok) — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 53m24s · model <code>gpt-5-6-pro</code> (Pro-verified, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508e7a-c710-83e8-a8d6-7856e52c283c">conversation</a>
+Verdict: <strong>Grok 4.5 marginal serving gross margin ≈ 67% central, 80% CI ≈ 10–85%</strong> at API list price under full-cycle owned TCO; ~92% under strict cash-marginal cost; ~29% at the Anthropic-contract opportunity cost. Zephyr&#39;s &quot;not juicing margins&quot; claim is definition-dependent.
+Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).</p>
+</blockquote>
+<hr>
+<p>Snapshot through <strong>close of July 9, 2026</strong>. Labels mean: <strong>DISCLOSED</strong> = xAI/SpaceXAI, an executive statement, or a regulatory filing; <strong>CREDIBLY REPORTED</strong> = reputable reporting based on internal documents or identified sources; <strong>COMMUNITY ESTIMATE</strong> = named independent public analysis; <strong>SPECULATION</strong> = my inference, assumption, or arithmetic model. Arithmetic from disclosed inputs is labeled <strong>SPECULATION — derived from DISCLOSED inputs</strong>.</p>
+<h2>1. MODELS: flagship + workhorse</h2>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Model</th>
+<th>Total parameters</th>
+<th>Active parameters per token</th>
+<th>Architecture</th>
+<th>Likely serving precision</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Flagship</td>
+<td><strong>Grok 4.5</strong></td>
+<td><strong>1.5T — DISCLOSED</strong> by Musk as the &quot;1.5T V9 foundation model&quot; underlying 4.5</td>
+<td><strong>~200B central; 100–500B 80% range — SPECULATION</strong></td>
+<td><strong>MoE — DISCLOSED</strong> by co-developer Cursor; expert count, routing width undisclosed</td>
+<td><strong>FP8 or another 8-bit weight format; BF16/FP8 activations — SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Workhorse</td>
+<td><strong>Grok 4.3 / Grok 4.20 family</strong></td>
+<td><strong>0.5T — DISCLOSED</strong> by Musk for &quot;current Grok&quot; on April 9; mapping to 4.20/4.3 medium confidence</td>
+<td><strong>~100B central; 80–220B 80% range — SPECULATION</strong></td>
+<td><strong>Probably MoE — SPECULATION</strong></td>
+<td><strong>FP8 weights, BF16/FP8 activations — SPECULATION</strong></td>
+</tr>
+</tbody></table>
+<h3>Flagship: Grok 4.5</h3>
+<p>Musk said Grok 4.5 was based on xAI&#39;s <strong>&quot;1.5T V9 foundation model&quot; — DISCLOSED</strong>. Cursor, which jointly trained the model, described Grok 4.5 as a <strong>mixture-of-experts model — DISCLOSED</strong>. <a href="https://x.com/elonmusk/status/2071184354756477041">Musk&#39;s statement</a> · <a href="https://cursor.com/blog/grok-4-5">Cursor&#39;s technical launch post</a></p>
+<p>The <strong>~200B active central — SPECULATION</strong> ≈ 13% of total. The <strong>100–500B range</strong> is broad because neither expert count nor experts-per-token is public. Historical prior: official Grok-2 config — <strong>8 routed experts, 2 selected, shared MoE block, 64 layers, BF16 — DISCLOSED</strong>; a community count against official weights finds <strong>269.5B total / 115.0B active = 42.7% active — COMMUNITY ESTIMATE</strong>. Applying that ratio to 4.5 would give ~640B active — plausible upper tail, too dense for the central. <a href="https://huggingface.co/xai-org/grok-2/blob/main/config.json">Grok-2 config</a> · <a href="https://huggingface.co/xai-org/grok-2/discussions/24">community count</a></p>
+<p>xAI says Grok 4.5 serves at <strong>80 output tokens/s — DISCLOSED</strong> (user-stream, not replica throughput), <strong>500k context — DISCLOSED</strong>, trained on <strong>tens of thousands of GB300s — DISCLOSED</strong>. <a href="https://x.ai/news/grok-4-5">Launch post</a></p>
+<h3>Workhorse: Grok 4.3 / 4.20</h3>
+<p>Musk&#39;s April 9 statement: <strong>0.5T total — DISCLOSED</strong> for &quot;current Grok&quot; (half of Sonnet, one-tenth of Opus). Current workhorse endpoints have <strong>1M context — DISCLOSED</strong>. <a href="https://x.com/elonmusk/status/2042123561666855235">Musk</a> · <a href="https://docs.x.ai/developers/pricing">pricing</a></p>
+<h3>Precision and replica footprint</h3>
+<p>No DISCLOSED production precision. Official Grok-2 serving recipe: <strong>FP8, TP8 — DISCLOSED</strong> (best prior). 1.5T weights = 0.75TB at 4-bit / 1.5TB at 8-bit before KV etc. Central case: <strong>8-GB300 replica (6–16 range) — SPECULATION</strong>.</p>
+<h2>2. FLEET &amp; PROCUREMENT</h2>
+<h3>Operationally controlled accelerator inventory</h3>
+<table>
+<thead>
+<tr>
+<th>Site / phase</th>
+<th>Mid-2026 inventory</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Colossus/C1 initial</td>
+<td>~100,000 H100</td>
+<td><strong>DISCLOSED</strong> (prospectus)</td>
+</tr>
+<tr>
+<td>C1 after expansion</td>
+<td>&gt;220,000 GPUs (H100/H200/GB200)</td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>H100 within current C1</td>
+<td>200,000 H100</td>
+<td><strong>DISCLOSED</strong> (Colossus page)</td>
+</tr>
+<tr>
+<td>Colossus II cluster 1</td>
+<td>~110,000 GB200 (210MW)</td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>Colossus II cluster 2</td>
+<td>~110,000 GB300 (220MW)</td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>Next C2 phase</td>
+<td>≥220,000 more GB300</td>
+<td><strong>DISCLOSED as planned</strong> (excluded)</td>
+</tr>
+<tr>
+<td><strong>Conservative installed floor</strong></td>
+<td><strong>&gt;440,000 accelerators</strong></td>
+<td><strong>SPECULATION — derived from DISCLOSED</strong></td>
+</tr>
+</tbody></table>
+<p><a href="https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf">SpaceXAI prospectus pp. 63–64</a> · <a href="https://x.ai/colossus">Colossus page</a> · <a href="https://x.ai/news/anthropic-compute-partnership">Anthropic compute announcement</a></p>
+<h3>&quot;Owned&quot; does not mean entirely purchased for cash</h3>
+<p>Three related-party Valor equipment leases carry aggregate undiscounted payments of <strong>$6.986B + $6.633B + $6.587B = $20.206B — DISCLOSED / derived</strong>. &quot;Owned fleet&quot; = controlled dedicated infrastructure, not unencumbered title.</p>
+<h3>Owned-fleet $/GPU-hour — three valid answers</h3>
+<table>
+<thead>
+<tr>
+<th>Cost lens</th>
+<th>Central</th>
+<th>80% range</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Strict short-run cash marginal</td>
+<td><strong>$0.60/hr</strong></td>
+<td>$0.30–0.90</td>
+<td>Power, cooling, maintenance, ops after sunk hardware</td>
+</tr>
+<tr>
+<td>Accounting serving TCO</td>
+<td><strong>$1.8/hr</strong></td>
+<td>$1.3–2.4</td>
+<td>+ straight-line depreciation</td>
+</tr>
+<tr>
+<td><strong>Economic full-cycle owned TCO</strong></td>
+<td><strong>$2.4/hr</strong></td>
+<td>$1.8–3.2</td>
+<td>Replacement capital, financing, obsolescence — central verdict input</td>
+</tr>
+<tr>
+<td>External opportunity value</td>
+<td><strong>$5.27/hr</strong></td>
+<td>—</td>
+<td>The Anthropic contract price</td>
+</tr>
+<tr>
+<td>Future Google contract value</td>
+<td><strong>$11.45/hr</strong></td>
+<td>—</td>
+<td>From October 2026</td>
+</tr>
+</tbody></table>
+<p>Capital anchor: AI capex <strong>$5.633B (2024) + $12.727B (2025) + $7.723B (Q1 2026) = $26.083B — DISCLOSED/derived</strong>; ~$65k all-in installed per accelerator-equivalent (SPECULATION), 5.5-yr server life, 10% capital charge, 85% allocatable hours → ~$1.8/hr capital + $0.6/hr cash ops = <strong>$2.4/hr</strong>.</p>
+<p>Power: enumerated phases imply <strong>1.75kW nameplate per accelerator — derived</strong>; prospectus reports <strong>1.0GW nameplate compute draw as of Mar 31, 2026 — DISCLOSED</strong>. Memphis 2026 GSA tariff: ~$0.060–0.065/kWh energy + $16.51–18.19/kW-mo demand — <strong>DISCLOSED</strong> → ~$0.22/hr grid power. <a href="https://www.mlgw.com/images/content/files/pdf_rates/businessrates26/GSA%20Jan26.pdf">MLGW tariff</a></p>
+<h3>Ownership versus leasing</h3>
+<p>Jukan&#39;s ~220k C1 GPUs at $2.60/hr ≈ <strong>$5.01B/yr — COMMUNITY ESTIMATE</strong> vs my full-cycle TCO $4.63B/yr — ownership advantage only ~8% at full cycle. The dramatic advantage exists only in the short-run cash view ($1.16B/yr).</p>
+<p><strong>The market comparison that matters</strong>: Anthropic pays <strong>$1.25B/month for ~325,000 GPUs + CPUs/storage/networking — DISCLOSED</strong> = <strong>$5.27/GPU-hr — derived</strong>. Google (from Oct 2026): <strong>$920M/month for ~110,000 GPUs — DISCLOSED</strong> = <strong>$11.45/GPU-hr — derived</strong>. These are reserved-capacity sale prices, not production cost — but they price xAI&#39;s opportunity cost. <a href="https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf">Prospectus</a> · <a href="https://www.sec.gov/Archives/edgar/data/1181412/000162828026041150/spacexagreementfwp.htm">Google agreement, SEC</a></p>
+<h3>Utilization evidence</h3>
+<p>Internal memo reportedly put training MFU at <strong>~11% (&quot;embarrassingly low&quot;), target 50% — CREDIBLY REPORTED</strong> (Business Insider) vs 35–45% typical. Training-stack evidence only — not inference occupancy. Commercial evidence of capacity monetization: 325k GPUs to Anthropic, tens of thousands to Cursor training. <a href="https://www.businessinsider.com/elon-musk-xai-compute-cursor-ai-model-training-2026-4">Business Insider</a></p>
+<h2>3. PRICING &amp; REALIZATION</h2>
+<h3>API list pricing as of July 9, 2026 (all DISCLOSED, $/Mtok)</h3>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Context</th>
+<th>Input</th>
+<th>Cached input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>grok-build-0.1</code></td>
+<td>256k</td>
+<td>$1.00</td>
+<td>$0.20</td>
+<td>$2.00</td>
+</tr>
+<tr>
+<td><strong><code>grok-4.5</code></strong></td>
+<td>500k</td>
+<td><strong>$2.00</strong></td>
+<td><strong>$0.50</strong></td>
+<td><strong>$6.00</strong></td>
+</tr>
+<tr>
+<td><code>grok-4.3</code></td>
+<td>1M</td>
+<td>$1.25</td>
+<td>$0.20</td>
+<td>$2.50</td>
+</tr>
+<tr>
+<td><code>grok-4.20-0309-reasoning</code></td>
+<td>1M</td>
+<td>$1.25</td>
+<td>$0.20</td>
+<td>$2.50</td>
+</tr>
+<tr>
+<td><code>grok-4.20-0309-non-reasoning</code></td>
+<td>1M</td>
+<td>$1.25</td>
+<td>$0.20</td>
+<td>$2.50</td>
+</tr>
+<tr>
+<td><code>grok-4.20-multi-agent-0309</code></td>
+<td>1M</td>
+<td>$1.25</td>
+<td>$0.20</td>
+<td>$2.50</td>
+</tr>
+</tbody></table>
+<p><a href="https://docs.x.ai/developers/pricing">Pricing</a>. Reasoning tokens bill at normal rate — DISCLOSED. Grok 4.3/4.20 get a <strong>20% batch discount — DISCLOSED</strong>; Grok 4.5 has <strong>no batch discount</strong>. Priority = 2×. Cursor sells a channel-specific &quot;fast&quot; 4.5 at $4/$18 — DISCLOSED by Cursor. <a href="https://cursor.com/blog/grok-4-5">Cursor</a></p>
+<h3>Consumer and subscription bundles</h3>
+<p>Grok Free $0; <strong>SuperGrok $30/mo — DISCLOSED</strong>; SuperGrok Lite ~$10 (CREDIBLY REPORTED); SuperGrok Heavy ~$300 (CREDIBLY REPORTED); <strong>X Premium+ $40/mo or $395/yr — DISCLOSED</strong>. <a href="https://x.ai/pricing">xAI pricing</a> · <a href="https://help.x.com/en/using-x/x-premium">X Premium</a></p>
+<h3>Realization and leakage</h3>
+<p><strong>117M MAU of Grok AI features (Mar 31, 2026) — DISCLOSED</strong>, up from 89M at year-end 2025; no paid-subscriber or token-volume disclosure ⇒ no defensible realized $/token. A $30 SuperGrok = only 5M Grok-4.5 output tokens at list — heavy users realize far below list.</p>
+<h2>4. COST/MARGIN EVIDENCE</h2>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Number</th>
+<th>Label</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Q1 2026 AI-segment revenue</td>
+<td><strong>$818M</strong></td>
+<td>DISCLOSED</td>
+<td>X ads, subscriptions, licensing, AI products, compute infra — not Grok API alone</td>
+</tr>
+<tr>
+<td>Q1 AI cost of revenue</td>
+<td><strong>$456M</strong></td>
+<td>DISCLOSED</td>
+<td>Infra, energy, bandwidth, depreciation, cloud, rev shares, ops</td>
+</tr>
+<tr>
+<td>Implied Q1 AI gross margin</td>
+<td><strong>44.3%</strong></td>
+<td>derived</td>
+<td>Segment accounting margin, not marginal serving margin</td>
+</tr>
+<tr>
+<td>Q1 AI R&amp;D</td>
+<td><strong>$2.379B</strong></td>
+<td>DISCLOSED</td>
+<td>Includes training infra + GPU depreciation</td>
+</tr>
+<tr>
+<td>Q1 AI operating loss</td>
+<td><strong>$2.469B</strong></td>
+<td>DISCLOSED</td>
+<td>Total investment, not per-token economics</td>
+</tr>
+<tr>
+<td>2025 AI revenue / op loss</td>
+<td><strong>$3.201B / −$6.355B</strong></td>
+<td>DISCLOSED</td>
+<td></td>
+</tr>
+<tr>
+<td>2025 / Q1 2026 AI capex</td>
+<td><strong>$12.727B / $7.723B</strong></td>
+<td>DISCLOSED</td>
+<td></td>
+</tr>
+<tr>
+<td>Jukan C1 rental equivalent</td>
+<td><strong>$2.60/GPU-hr</strong></td>
+<td>COMMUNITY ESTIMATE</td>
+<td>Modeled lease, not owned cost</td>
+</tr>
+<tr>
+<td>Reported training MFU</td>
+<td><strong>~11%</strong></td>
+<td>CREDIBLY REPORTED</td>
+<td>Training only</td>
+</tr>
+<tr>
+<td>Anthropic capacity price</td>
+<td><strong>~$5.27/GPU-hr</strong></td>
+<td>derived from DISCLOSED</td>
+<td>Opportunity cost of Grok serving</td>
+</tr>
+<tr>
+<td>Google future capacity price</td>
+<td><strong>~$11.45/GPU-hr</strong></td>
+<td>derived from DISCLOSED</td>
+<td>Future, not current</td>
+</tr>
+</tbody></table>
+<h2>5. VERDICT</h2>
+<p><strong>Central: Grok 4.5 marginal serving gross margin at API list ≈ 67% — SPECULATION. Subjective 80% CI: ~10% to 85% — SPECULATION.</strong></p>
+<h3>Central serving model</h3>
+<p>8-GPU GB300 replica; 80 tok/s user stream (DISCLOSED); 25 concurrent streams at saturation (SPECULATION) → 2,000 aggregate tok/s/replica → 0.004 GPU-sec/output token; $2.40/GPU-hr economic TCO → <strong>$2.67/M output cost</strong>; input $0.40/M uncached, $0.10/M cached.</p>
+<table>
+<thead>
+<tr>
+<th>Unit</th>
+<th>List revenue</th>
+<th>Central cost</th>
+<th>Central margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1M output</td>
+<td>$6.00</td>
+<td>$2.67</td>
+<td><strong>55.6%</strong></td>
+</tr>
+<tr>
+<td>1M uncached input</td>
+<td>$2.00</td>
+<td>$0.40</td>
+<td><strong>80.0%</strong></td>
+</tr>
+<tr>
+<td>1M cached input</td>
+<td>$0.50</td>
+<td>$0.10</td>
+<td><strong>80.0%</strong></td>
+</tr>
+<tr>
+<td>3M uncached in + 1M out</td>
+<td>$12.00</td>
+<td>$3.87</td>
+<td><strong>67.8%</strong></td>
+</tr>
+<tr>
+<td>Same with 50% input cached</td>
+<td>$9.75</td>
+<td>$3.42</td>
+<td><strong>65.0%</strong></td>
+</tr>
+</tbody></table>
+<h3>Why 90–95% can ALSO appear correct</h3>
+<p>At strict cash-marginal $0.60/hr (hardware sunk): ~$0.67/M output → <strong>~92% margin on the 3:1 workload</strong>. At the Anthropic-contract $5.27/hr opportunity value: ~$5.86/M output → <strong>2% output-only margin</strong>, ~29% blended — serving output-heavy traffic would barely beat selling the capacity wholesale.</p>
+<p><strong>Clean interpretation: Zephyr&#39;s &quot;priced closer to cost&quot; implication is directionally supportable under full-cycle economic TCO, but not under strict cash marginal cost.</strong> xAI is not obviously pricing at 90–95% full-cycle margin; it may nevertheless earn roughly that on the next token whenever spare, already-paid-for capacity is available.</p>
+<h3>Break-even batch check ($6/M output, 8-GPU replica)</h3>
+<table>
+<thead>
+<tr>
+<th>GPU valuation</th>
+<th>Break-even aggregate throughput</th>
+<th>Equivalent 80-TPS streams</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$0.60/hr cash</td>
+<td>204 tok/s</td>
+<td>2.6</td>
+</tr>
+<tr>
+<td>$2.40/hr TCO</td>
+<td>889 tok/s</td>
+<td>11.1</td>
+</tr>
+<tr>
+<td>$5.27/hr Anthropic value</td>
+<td>1,952 tok/s</td>
+<td>24.4</td>
+</tr>
+</tbody></table>
+<p>Central case (25 streams / 2,000 tok/s) is comfortably profitable against owned TCO but almost exactly break-even against the Anthropic capacity alternative.</p>
+<h3>The 80% interval, ranked</h3>
+<ol>
+<li><strong>Saturated aggregate decode throughput</strong> (667–5,333 tok/s per replica — ~8× cost swing).</li>
+<li><strong>Replica size, active params, precision</strong> (6–16 GPUs, 100–500B active).</li>
+<li><strong>Economic value of an xAI GPU-hour</strong> ($1.8–3.2 owned; up to $5.27 opportunity).</li>
+<li><strong>Workload shape</strong> (unknown).</li>
+<li><strong>Revenue realization</strong> (free tiers, subscriptions, Cursor bundles, enterprise).</li>
+<li><strong>Power and site ops</strong> ($0.3–0.9/hr cash).</li>
+</ol>
+<p>Monte-Carlo-style run: 10th/50th/90th percentile blended margins ≈ <strong>10% / 62% / 84%</strong>.</p>
+<h2>6. KNOWN KNOWNS</h2>
+<ul>
+<li><strong>Grok 4.5 is a 1.5T-foundation MoE — DISCLOSED</strong>; advertised at <strong>80 TPS — DISCLOSED</strong>; lists at <strong>$2/$0.50/$6 — DISCLOSED</strong>.</li>
+<li>Musk disclosed <strong>0.5T total for the then-current Grok</strong>; current workhorse endpoints list at <strong>$1.25/$0.20/$2.50 — DISCLOSED</strong>.</li>
+<li>xAI operationally controls <strong>&gt;440k installed GPUs — derived from DISCLOSED cluster counts</strong> (200k+ H100/H200/GB200 at C1; 110k GB200 + 110k GB300 at C2).</li>
+<li>AI capex <strong>$12.727B (2025) + $7.723B (Q1 2026) — DISCLOSED</strong>; Valor leases <strong>$20.206B aggregate — derived from DISCLOSED</strong>.</li>
+<li>Anthropic contracted <strong>~325k GPUs at $1.25B/month — DISCLOSED</strong> ≈ <strong>$5.27/GPU-hr — derived</strong>, well above the ~$2.4/hr owned TCO estimate.</li>
+<li>Q1 2026 AI segment: <strong>$818M revenue, $456M cost of revenue, −$2.469B operating — DISCLOSED</strong> ⇒ 44.3% segment GM (not Grok serving margin).</li>
+</ul>
+<h2>7. KNOWN UNKNOWNS</h2>
+<ul>
+<li><strong>Active parameters and routing topology</strong> (100B–several hundred B on a 1.5T MoE).</li>
+<li><strong>Production numerical format and replica footprint.</strong></li>
+<li><strong>Saturated aggregate throughput</strong> — 80 TPS is per stream; the largest uncertainty.</li>
+<li><strong>Inference capacity utilization/allocation</strong> across Grok, Anthropic, Google, Cursor, training, idle.</li>
+<li><strong>Average realized revenue per token</strong> (no API volume or subscriber-usage disclosure).</li>
+<li><strong>Actual workload distribution</strong> (I/O ratio, cache rate, long-context share, reasoning volume).</li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

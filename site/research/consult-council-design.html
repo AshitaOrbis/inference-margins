@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design consultation — four-persona council (Opus synthesis) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/consult-council-design">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Synthesis: inference-margins.pages.dev next revision</h1>
+<p>All four agents independently fetched the live page and its <code>engine.js</code>/<code>app.js</code>/research annex, and independently corroborated the same ground truth (10–11 model presets × 8 perspectives, the 37% mean / 59% worst LOAO failure that keeps the MFU model labeled an anchor-fit, OpenAI&#39;s 1.25× cache-write tariff, DeepSeek&#39;s disclosed 284B/13B). That cross-corroboration on the empirical base is itself a confidence signal — the disagreements below are about design, not facts.</p>
+<h2>1. Consensus</h2>
+<ol>
+<li><p><strong>Split the scenario ontology before adding any presets.</strong> The current &quot;perspectives&quot; dropdown collapses incommensurable object types — model facts, workloads, cost-accounting lenses, procurement classes, benchmark operating points, an inverse constraint, and an alternative methodology — into one axis. All four independently reached the same fix: typed layers (model / workload+SLA / cost-lens / replay-position). This is the load-bearing move; dossiers layered on the current ontology would <em>document</em> the conceptual mixing rather than fix it. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Attribution laundering is the single largest credibility risk.</strong> A quote anchors a <em>claim or outcome</em>, not a full parameter vector. When TeorTaxes says &quot;cost ≤ $4/Mtok,&quot; he did not choose your <code>util:70</code>, fleet cost, or <code>stackMult</code>. Every parameter must carry <code>support: direct | derived | assumption</code> and every position must carry <code>attributionType: quoted-position | reconstruction | calculator-synthesis</code>. Risk Analyst rates this Critical/High and makes it failure mode #1; the Skeptic&#39;s honest-boundary sentence (&quot;only the quoted ceiling is his direct claim; utilization/fleet/batching are this page&#39;s translation&quot;) creates more credibility than twenty evidence badges. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Dossier: one canonical value, never two copies.</strong> Duplicating <code>v</code> in the dossier guarantees drift. <code>[unanimous]</code> (direction of derivation is disputed — see D1).</p>
+</li>
+<li><p><strong>Evidence label ≠ confidence, and must come from a controlled enum.</strong> A single &quot;DISCLOSED&quot; badge collapses first-party marketing, regulatory filings, reproducible benchmarks, and a rival CEO&#39;s tweet. Separate <code>sourceClass</code> (provenance) from uncertainty/range (reliability). <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Drift tests must assert <em>effective/resolved</em> state, not just key coverage.</strong> Structural tests prove reproducibility, not source faithfulness. Required, per convergence across all four: bidirectional coverage over <code>set</code> <strong>and</strong> <code>dive</code> and <strong>nested blends</strong>; a per-pair <em>effective scenario ledger</em> showing each value&#39;s origin (model / workload / lens / override) and every <em>ignored</em> override; source-registry integrity (URL, class, date, locator); temporal-validity gating; permalink round-trip + migration fixtures; and — critically — a <strong>human semantic-review gate</strong>, because no test can prove a quote entails <code>util:70</code>. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Reject <code>reported-margin-implied</code> as a preset; ship it as a §7 inverse diagnostic with an explicit residual.</strong> The 40–44% figure (which the Empiricist correctly flags is <em>The Information</em>/PitchBook reporting, not an audited Anthropic disclosure) inverts to a manifold, not a point. As a preset it &quot;discovers&quot; high costs because it assumes them. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>§7 dollars-per-Mtok bridge = highest-value C-item</strong> — it repairs the non-additive percentage-bucket category error that triggered the last review — <strong>but it is not an accounting reconciliation</strong> without matching token/revenue denominators. Label it illustrative; name the residual &quot;unreconciled accounting perimeter,&quot; not &quot;other.&quot; <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Cache-write economics: real value, naive multiplier is a double-counting trap.</strong> Unanimous, and unusually detailed agreement: partition input into <code>uncached + write + read</code> with conservation; a 1.25× write tariff is the <em>total</em> write price (not base + another 1.25×); prefill compute is charged <strong>once</strong> per write; Google storage is <strong>token-hours × TTL</strong>, a separate line item, not a per-read multiplier; hit-rate cannot infer write share (need reads-per-write / retention); zero-write must reproduce v2 exactly. If the full lifecycle can&#39;t be modeled, <strong>keep the current explicit omission</strong> rather than shipping <code>cacheWriteMult</code> and declaring the accounting complete. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Permalinks: high value, but IDs-only silently drift.</strong> Freeze full effective numeric state + <code>schemaVersion</code> + <code>engineRevision</code> + <code>dataAsOf</code>; typed allowlist parser, no silent clamping, migration fixtures, round-trip tests, &quot;newer preset available&quot; banner rather than mutating old links. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Incompatibility: hard-gate impossible pairs, don&#39;t post-hoc warn.</strong> Three states (validated / exploratory / incompatible); suppress the headline for hard-incompatible pairs; preserve an Advanced &quot;force exploratory&quot; escape with a persistent warning. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Tornado chart = lowest-priority C-item, &quot;chart theater&quot; risk.</strong> Only after ranges are dossier-sourced; use sourced low/high not slider min/max; group correlated fleet variables; show $/Mtok beside margin; label &quot;one-way local sensitivity, not probability.&quot; <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Roofline: the 25%-average gate is directionally right but insufficient; do not let the rest of the revision depend on it.</strong> Unanimous requirements: preregister formula + metrics before looking at held-out data; hold out <strong>entire platforms/hardware families</strong>, not random rows; no per-platform free coefficient; stratify by prefill/decode and latency regime; report worst-case not just mean; measure in throughput <strong>and</strong> $/Mtok (margins near 100% compress large cost errors); keep anchor-fit as the fallback; run a fresh external review before replacing the deployed engine. <code>[unanimous]</code></p>
+</li>
+<li><p><strong>UI: one combined &quot;Scenario Provenance&quot; drawer, not a panel per dropdown.</strong> Replace the existing long preset-note (don&#39;t add beside it); side-drawer on desktop, bottom-sheet/full-screen on mobile; §10 cards become the <em>destination</em> for provider detail (&quot;load this scenario&quot; / &quot;open dossier&quot;) and stop duplicating parameter inventories; each surface owns exactly one job (tooltip=define param, dossier=why this scenario sets it, methods box=estimand/perimeter, §10=provider story). <code>[unanimous]</code></p>
+</li>
+<li><p><strong>The missing axis is not more model names — it&#39;s workload/SLA, cache-lifecycle, service-class, and cost-basis selectors.</strong> <code>[unanimous]</code></p>
+</li>
+<li><p><strong>Model/perspective verdicts with strong convergence:</strong></p>
+<ul>
+<li><strong>DeepSeek V4-Flash → SHIP</strong> (well-grounded 284B/13B + first-party pricing; fleet/throughput labeled low-confidence). <code>[unanimous]</code></li>
+<li><strong>Kimi K2.6 → do NOT add separately; fold into a &quot;Kimi 1T/32B lineage&quot; or version subselector</strong> (economically redundant with K2.7). <code>[unanimous]</code></li>
+<li><strong>GPT-5.6 Terra/Luna → not as point-estimate architecture presets;</strong> tariff-only / family-variant / range-first (price known, dominant cost driver unidentified → circularity if size is back-inferred from price). <code>[unanimous]</code></li>
+<li><strong>Gemini 3.5 Flash → pricing-only / range-first,</strong> clearly labeled fast-tier comparator, not in the normalized frontier table. <code>[unanimous]</code></li>
+<li><strong>Anthropic-strategic-partner → merge/rename the existing GPT-Pro/SemiAnalysis lens,</strong> don&#39;t add a near-duplicate that manufactures disagreement. <code>[unanimous]</code></li>
+<li><strong>xAI cash + opportunity → ship, xAI-scoped only;</strong> opportunity-cost&#39;s $5.27 is <em>bundled capacity value per nominal GPU-hour</em> (the Empiricist ties it to the SpaceX/xAI SEC filing: ~325k GPUs + infra at $1.25B/mo), <strong>not</strong> pure GPU opportunity cost and <strong>not</strong> production COGS. <code>[unanimous]</code></li>
+<li><strong>China public-cloud → dated procurement/cost-basis profile,</strong> scoped to compatible China hardware, bundled CPU/network/support normalized; not evidence of any provider&#39;s actual cost. <code>[unanimous]</code></li>
+<li><strong>Ant H20 tiers → benchmark/SLO operating-point replays</strong> (714 / 675 / 423 tok/s/GPU across tightening TPOT), not analyst perspectives; latency/SLO becomes first-class. <code>[unanimous]</code></li>
+<li><strong>Epoch → defer as a preset</strong> until the roofline actually implements the paper&#39;s constraints; at most a source for specific parameter priors. <code>[unanimous]</code></li>
+</ul>
+</li>
+<li><p><strong>The next external review&#39;s attack list is predictable</strong> — false attribution, model/workload conflation, circular inverse, cache double-count, tornado theater, roofline overfit, versionless URLs, dossier decoration, bridge pseudo-reconciliation, coverage theater. All four produced near-identical lists. Pre-empting these <em>is</em> the spec. <code>[unanimous]</code></p>
+</li>
+</ol>
+<h2>2. Disagreements</h2>
+<p><strong>D1 — Which object is canonical: <code>set</code> or the dossier?</strong></p>
+<ul>
+<li><strong>Set-canonical, dossier references it</strong> (Architect, Empiricist; Skeptic offers it as one of two acceptable options): &quot;Keep values in <code>set</code>; dossier metadata is keyed by JSON Pointer / <code>valueRef: &#39;set.active&#39;</code>; never a second copy.&quot; Rendering reads resolved state.</li>
+<li><strong>Dossier-canonical, <code>set</code> derived</strong> (Risk Analyst): &quot;Use the dossier as the canonical parameter source and derive <code>set</code> from it,&quot; so provenance and value can never separate at the source.</li>
+<li><strong>Adjudication — set-canonical wins, and the Risk Analyst&#39;s own second-order risk is why.</strong> The Risk Analyst flags that single-source dossier parameters &quot;make editorial source changes capable of changing runtime economics&quot; and require a numerical-review gate on every metadata edit. That failure mode is <em>created by</em> dossier-canonical: a citation copy-edit could silently move a margin. Set-canonical with a <code>valueRef</code> + a drift test asserting <code>valueRef</code> deep-equals live state gets the same anti-drift guarantee without coupling prose edits to economics. Weight the Architect/Empiricist side. (If the team nonetheless prefers dossier-canonical for single-source-of-truth cleanliness, the Risk Analyst&#39;s numerical-review-on-metadata-edit gate becomes mandatory, not optional.)</li>
+</ul>
+<p><strong>D2 — GLM-4.7: ship or hold?</strong></p>
+<ul>
+<li><strong>Ship</strong> (Skeptic-cautiously, Risk Analyst, Empiricist): 355B/32B + FP8 checkpoint + public pricing are first-party disclosed; strong workhorse comparator at an economically interesting price.</li>
+<li><strong>Hold</strong> (Architect): GLM-5.2 is already present; add 4.7 only if it owns a uniquely useful production anchor, else it&#39;s surface area.</li>
+<li><strong>Adjudication — ship, but only if it earns a distinct role.</strong> 3-of-4 with the strongest evidence grounding favor shipping, and the grounding is genuinely first-party (Empiricist confirmed both architecture and pricing at source). But the Architect&#39;s redundancy point is valid <em>conditionally</em>: if 4.7 resolves to nearly the same economics as the existing GLM-5.2 entry, it&#39;s another sibling with no new identification. Resolution: ship 4.7 <strong>only if</strong> its tariff/architecture produces a materially different price-floor point than 5.2; otherwise make it a version variant. This is the same &quot;distinct anchor or fold into lineage&quot; test everyone applied to Kimi.</li>
+</ul>
+<p><strong>D3 — Grok 4.3: ship-as-speculative or hold entirely?</strong></p>
+<ul>
+<li><strong>Ship, explicitly speculative</strong> (Skeptic, Risk Analyst, Empiricist): price/endpoint disclosed; Musk&#39;s 0.5T is a first-party <em>social</em> claim (Empiricist: a tweet, not an architecture report); ship with active parameters prominently unidentified and a wide range.</li>
+<li><strong>Hold</strong> (Architect): the page already carries Grok 4.5 with very weak active-param/throughput evidence; a second closed Grok adds surface, not identification.</li>
+<li><strong>Adjudication — Architect has the stronger case here, and it&#39;s the mirror image of D2.</strong> The three &quot;ship&quot; votes concede everything the Architect worries about (speculative size, wide range), which means the marginal information over the <em>existing</em> Grok 4.5 entry is near-zero while the surface-area and conclusion-shopping cost is real. Unless 4.3 replaces 4.5 rather than joining it, hold it. Note the asymmetry with D2: GLM-4.7 clears the &quot;distinct evidence-backed anchor&quot; bar; Grok 4.3 does not.</li>
+</ul>
+<p><strong>D4 — How strict is the roofline pass bar?</strong></p>
+<ul>
+<li><strong>Structural only</strong> (Skeptic): no single number; regime-level + worst-case evidence.</li>
+<li><strong>≤25% median/mean</strong> (Architect); <strong>≤25% grouped MAPE, ≤40% worst-platform</strong> (Empiricist); <strong>≤15% median, ≤25% p80, ≤50% max, ≤5pp downstream margin</strong> (Risk Analyst — the strictest).</li>
+<li><strong>Adjudication — irreducible until the bakeoff is designed, but the <em>shape</em> is settled: a mean/median threshold alone is insufficient; a worst-platform and a downstream-margin bound are mandatory.</strong> The specific numbers can&#39;t be adjudicated from the armchair — pick them at preregistration, before anyone sees held-out results (that ordering is the actual load-bearing constraint, and it&#39;s unanimous). The Empiricist&#39;s deeper point supersedes the threshold debate: <strong>the experiment may be unrunnable</strong> — if H800/H20/GB200/GB300/Ascend are all already known, no genuinely untouched holdout exists, and a compute+HBM+interconnect+residual model has enough degrees of freedom to fit a handful of platform groups mechanically. Require <code>parameter count &lt; number of independent platform groups</code> as a hard precondition.</li>
+</ul>
+<p><strong>Skeptic ↔ Architect reconciliation (the structural one).</strong> These two are supposed to be at odds, and the striking result is that they largely aren&#39;t: the Architect independently designed in every mitigation the Skeptic demands (ontology split, attribution honesty, single canonical value, cache conservation, versioned URLs, $/Mtok waterfall, roofline-in-parallel). <strong>The Architect&#39;s plan survives the Skeptic&#39;s strongest critique</strong> — &quot;the full bundle implemented literally triggers a category-error review&quot; (Skeptic&#39;s 80%) — precisely <em>because</em> it isn&#39;t the literal bundle; it&#39;s the bundle refactored onto typed layers first. The residual tension is <strong>scope in round one</strong>: the Architect&#39;s ship list is more expansive (V4-Flash + Gemini Flash + two xAI lenses + China + Ant simultaneously), while the Skeptic wants V4-Flash + GLM-4.7 <em>first</em>, everything else gated behind the ontology and range-first labeling. <strong>Where the Architect&#39;s plan must be modified:</strong> anything shipped with unidentified fleet/throughput (Terra, Luna, Gemini Flash, Grok) must render as a labeled <em>scenario</em>, never a provider <em>estimate</em> — a constraint the Architect states as a load-bearing assumption but is looser about in the ship list than the Skeptic tolerates. Adopt the Skeptic&#39;s sequencing (evidence-backed presets first, scenario-priors behind explicit range UI) inside the Architect&#39;s layered architecture.</p>
+<h2>3. Open questions</h2>
+<ul>
+<li><strong>Do genuinely untouched, platform-level roofline holdout observations even exist?</strong> If not, the 25%-gate experiment is unrunnable as designed and the honest move is to freeze the anchor-fit model and wait for the next <em>published</em> deployment result. (Empiricist — the sharpest open question, and it gates C-item D entirely.)</li>
+<li><strong>Is the dossier genuinely useful to a SemiAnalysis-tier reader, or decoration?</strong> Undecided until tested. Empiricist proposes the decider: 5 technically literate readers, from a shared scenario link, must answer &quot;which 3 assumptions dominate, which are observed vs assumed, and what would update this?&quot; — ≥4/5 correct within 90 seconds. (Empiricist)</li>
+<li><strong>Conclusion-shopping is under-addressed by the Architect&#39;s design.</strong> Risk Analyst flags that more lenses let a user select the most flattering margin, and prescribes <em>showing the range across all applicable lenses beside the selected result</em> — a mitigation absent from the Architect&#39;s grouping-only approach. Cross-checked against the design: <strong>gap to close.</strong> (Risk Analyst; synthesis-emergent as a design gap)</li>
+<li><strong>Shared-URL privacy.</strong> A permalink that freezes full effective state may embed user-entered compute rates or negotiated discounts. Only the Risk Analyst raised it; none of the permalink schemas in the other three carry a share-time warning or a &quot;strip private overrides&quot; option. (Risk Analyst; synthesis-emergent gap)</li>
+<li><strong>If dossier-canonical is chosen (D1), what is the numerical-review gate on metadata edits?</strong> Left unspecified — it becomes mandatory under that architecture. (synthesis-emergent from D1)</li>
+<li><strong>Which existing near-duplicate presets get pruned, not just supplemented?</strong> The Architect notes TeorTaxes/Zephyr are near-neighbor bull cases and suggests one generic &quot;throughput-optimized bull&quot; in the primary dropdown. No one costed the churn of removing presets users may have linked to — interacts with permalink migration. (Architect; synthesis-emergent)</li>
+</ul>
+<h2>4. Final recommendation</h2>
+<p><strong>Proceed with the revision — but as an ontology refactor first, a feature release second, and a roofline experiment on a separate branch that the rest does not depend on.</strong> Do <em>not</em> implement (A)+(B)+(C)+(D) as a literal bundle on the current data model.</p>
+<p>Ordered plan (merged from four highly-aligned priority lists):</p>
+<ol>
+<li><strong>Refactor presets into typed layers</strong> — model profile / workload+SLA / cost-lens / replay-position — with resolved-provenance compilation. <em>Prerequisite for everything else.</em></li>
+<li><strong>Dossier schema:</strong> set-canonical values referenced by <code>valueRef</code> (D1); <code>attributionType</code> (quoted-position vs reconstruction vs calculator-synthesis) on every position; evidence-label enum separate from uncertainty/range; scope, assumesAway, falsifiers-with-observable-thresholds, temporal validity.</li>
+<li><strong>Drift + integrity tests:</strong> effective-scenario ledger per model×perspective pair (value origin + ignored overrides), nested-blend coverage, source-registry integrity, expiry gating, permalink round-trip/migration fixtures — <strong>plus a human semantic-review checklist</strong> for every new quote/label/falsifier.</li>
+<li><strong>Hard incompatibility gating</strong> (validated/exploratory/incompatible) with an Advanced force-exploratory escape; <strong>and</strong> display the margin range across applicable lenses beside the selected result (closes the conclusion-shopping gap).</li>
+<li><strong>Versioned, frozen permalinks</strong> before expanding the catalog; add a share-time warning/strip for user-entered private rates.</li>
+<li><strong>Cache lifecycle</strong> with token-flow conservation + Google token-hours + separate customer-tariff/provider-COGS + zero-write parity — <em>or keep the current explicit omission if the full model can&#39;t be built.</em> Do not ship a bare <code>cacheWriteMult</code>.</li>
+<li><strong>§7 dollar waterfall,</strong> single denominator, explicit named residual; reported-margin becomes an inverse diagnostic showing the manifold.</li>
+<li><strong>Ship models:</strong> V4-Flash now; GLM-4.7 if it clears the distinct-anchor test (D2); Grok 4.3 held unless it replaces 4.5 (D3); Terra/Luna/Gemini-Flash as pricing-only scenario priors with prominent unknown-parameter ranges; Kimi K2.6 folded into lineage; Anthropic-strategic merged into the existing lens; xAI cash+opportunity xAI-scoped; China dated procurement; Ant SLO replays; Epoch deferred.</li>
+<li><strong>One Scenario Provenance drawer</strong> replacing the preset-note; §10 as the detail destination; sourced tornado replacing the active-param chart <strong>last</strong>, only after ranges are defensible.</li>
+<li><strong>Roofline</strong> on an experimental branch behind a preregistered, platform-level held-out gate with worst-case + downstream-margin bounds and <code>params &lt; platform-groups</code>; keep anchor-fit as primary; fresh external review before any engine swap.</li>
+</ol>
+<p><strong>Confidence.</strong> <em>High</em> that the direction is right — four independent xhigh agents converged on the same core (mitigated proceed, ontology-first, attribution honesty, single canonical value, cache conservation, versioned URLs), and the load-bearing facts were corroborated against primary sources by the Empiricist. <em>Medium-low</em> on scope and sequencing of round-one presets (the one genuine Skeptic↔Architect residual). <em>Low</em> on the roofline timeline and on C-item (D) shipping at all — it&#39;s gated by an experiment that may be unrunnable (Empiricist) and by thresholds no one can set until preregistration (Risk Analyst).</p>
+<p><strong>Conditions that would change this:</strong></p>
+<ul>
+<li>If no untouched platform-level holdout exists → <strong>drop (D) from this revision</strong>, keep anchor-fit, ship (A)/(B)/(C) only.</li>
+<li>If the 5-reader comprehension test fails (&lt;4/5) → the dossier is decoration; simplify to attribution + top-3 unknowns before expanding it.</li>
+<li>If the ontology refactor proves larger than a moderate lift → ship <em>only</em> V4-Flash + GLM-4.7 + §7 bridge + versioned permalinks on the refactor, defer the rest, rather than bolting features onto the old model.</li>
+</ul>
+<p><strong>Cheapest decisive next actions (both cheap, both resolve a top open question):</strong></p>
+<ol>
+<li><strong>Preregister and run the roofline bakeoff</strong> — but <em>first</em> audit whether any genuinely untouched platform observation exists. If it doesn&#39;t, that audit alone (an afternoon) kills (D) honestly and saves the whole build.</li>
+<li><strong>The 5-reader dossier comprehension test</strong> on a single shared scenario link, <em>before</em> building the full drawer. Decides whether the dossier earns its UI surface.</li>
+</ol>
+<p>Both are hours, not days, and each de-risks the two most expensive and most uncertain pieces of the plan.</p>
+<h2>5. Attribution map</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Contributing agent(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Split ontology into typed layers before adding presets</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Attribution laundering is the #1 credibility risk; <code>support</code> + <code>attributionType</code> fields</td>
+<td>Risk-Analyst (lead), Skeptic, Architect, Empiricist</td>
+</tr>
+<tr>
+<td>One canonical value; <strong>set-canonical beats dossier-canonical</strong></td>
+<td>Architect, Empiricist (set); Risk-Analyst (dossier, dissent); Skeptic (neutral)</td>
+</tr>
+<tr>
+<td>Editorial metadata edit silently moving economics (the D1 risk)</td>
+<td>Risk-Analyst</td>
+</tr>
+<tr>
+<td>Evidence label ≠ confidence; controlled enum</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Drift tests must assert effective/resolved state + human semantic gate</td>
+<td>Skeptic, Empiricist (lead on <code>dive</code>/effective-state gap), Risk-Analyst, Architect</td>
+</tr>
+<tr>
+<td>Reject reported-margin preset → inverse diagnostic</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>§7 $/Mtok bridge = highest value, illustrative not reconciliation</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Cache token-flow conservation; 1.25× is total; Google token-hours; keep omission if unmodelable</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Versioned frozen permalinks; IDs-only drift</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Shared-URL leaks user rates → warn/strip</td>
+<td>Risk-Analyst</td>
+</tr>
+<tr>
+<td>Hard incompatibility gating + range-across-lenses display</td>
+<td>Risk-Analyst (lead), Skeptic, Architect, Empiricist</td>
+</tr>
+<tr>
+<td>Tornado last; chart-theater risk</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Roofline gate insufficient at 25%-mean; platform-level holdout, worst-case, keep fallback</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Roofline may be unrunnable (no untouched holdout; DoF &gt; platform groups)</td>
+<td>Empiricist</td>
+</tr>
+<tr>
+<td>Strictest numeric roofline thresholds (≤15% median / ≤5pp margin)</td>
+<td>Risk-Analyst</td>
+</tr>
+<tr>
+<td>V4-Flash ship; Kimi→lineage; Terra/Luna/Gemini pricing-only; Anthropic-strategic merge; xAI xAI-scoped; China procurement; Ant SLO replays; Epoch defer</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>GLM-4.7 ship (vs Architect hold)</td>
+<td>Skeptic, Risk-Analyst, Empiricist (ship); Architect (hold)</td>
+</tr>
+<tr>
+<td>Grok 4.3 hold unless it replaces 4.5</td>
+<td>Architect (lead); Skeptic/Risk-Analyst/Empiricist (ship-speculative)</td>
+</tr>
+<tr>
+<td>One combined provenance drawer; §10 as destination; per-surface single job</td>
+<td>Skeptic, Architect, Risk-Analyst, Empiricist</td>
+</tr>
+<tr>
+<td>Primary-source grounding of every preset/tariff claim</td>
+<td>Empiricist</td>
+</tr>
+<tr>
+<td>5-reader dossier comprehension test as the decoration-vs-useful decider</td>
+<td>Empiricist</td>
+</tr>
+<tr>
+<td>Next-review attack list (attribution, conflation, circular, double-count, overfit, versionless, decoration)</td>
+<td>Skeptic, Architect, Risk-Analyst (all near-identical)</td>
+</tr>
+</tbody></table>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

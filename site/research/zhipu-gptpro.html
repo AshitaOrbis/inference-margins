@@ -1,0 +1,538 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Zhipu / Z.ai (GLM) — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/zhipu-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine's original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site's current terminology. The main report treats these as uncalibrated scenario ranges.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Zhipu / Z.ai (GLM) — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 50m23s · model <code>gpt-5-6-pro</code> (Pro-verified) · <a href="https://chatgpt.com/c/6a5083ce-d2bc-83e8-a922-2e07da15036a">conversation</a>
+Verdict: <strong>GLM-5.2 marginal serving gross margin ≈ 60% central, 80% CI ≈ 35–77%</strong> at direct API list price. Anchored by audited HK filings: FY2025 cloud/API gross margin 18.9% (H1 2025: −0.4%).
+Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).</p>
+</blockquote>
+<hr>
+<h2>1. MODELS</h2>
+<p><strong>Evidence cutoff: July 9, 2026.</strong> &quot;Marginal serving cost&quot; below means long-run incremental inference COGS: accelerator service, host/network/KV-cache resources, and directly attributable serving overhead. It excludes training, research, sales, general administration, and financing.</p>
+<p><strong>Confidence labels</strong></p>
+<ul>
+<li><p><strong>DISCLOSED:</strong> first-party model documentation, provider price sheet, or audited/regulatory filing.</p>
+</li>
+<li><p><strong>CREDIBLY REPORTED:</strong> Reuters or an independent/vendor benchmark with an identifiable methodology.</p>
+</li>
+<li><p><strong>COMMUNITY ESTIMATE:</strong> a technically credible but unaudited self-report.</p>
+</li>
+<li><p><strong>SPECULATION:</strong> my assumption, calculation, or inference.</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Architecture</th>
+<th>Precision evidence</th>
+<th>Serving interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GLM-5.2</strong></td>
+<td><strong>DISCLOSED — 744B total / 40B active</strong> (5.38% activation). Open release supports a <strong>1M-token context window</strong>.</td>
+<td><strong>DISCLOSED — BF16 and FP8 open checkpoints.</strong> <strong>CREDIBLY REPORTED — Baseten created a custom NVFP4 checkpoint from the FP8 release and reported no material BFCL degradation.</strong> Zhipu&#39;s own production precision is <strong>not disclosed</strong>.</td>
+<td>Frontier model and headline API product. The 40B active count understates memory/network burden because the full 744B MoE weight set must be resident or distributed.</td>
+</tr>
+<tr>
+<td><strong>GLM-4.7 — workhorse</strong></td>
+<td><strong>DISCLOSED — 355B total / 32B active</strong> (9.01% activation).</td>
+<td><strong>DISCLOSED — BF16 and FP8 open checkpoints.</strong> First-party API serving precision <strong>not disclosed</strong>.</td>
+<td>Z.ai&#39;s Coding Plan documentation recommends GLM-4.7 for routine work and GLM-5.2 for harder tasks — the best public candidate for the economical workhorse/routing tier.</td>
+</tr>
+<tr>
+<td><strong>GLM-4.7-Flash</strong></td>
+<td><strong>DISCLOSED — 30B total / 3B active.</strong></td>
+<td><strong>DISCLOSED — BF16 checkpoint.</strong></td>
+<td>International API price is free — acquisition/routing/ecosystem role.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://github.com/zai-org/GLM-5">official GLM-5 repository</a>, <a href="https://github.com/zai-org/GLM-4.5/blob/main/README.md">official GLM-4.5/4.7 repository</a>, <a href="https://docs.z.ai/devpack/overview">Z.ai Coding Plan overview</a>, <a href="https://www.baseten.co/blog/how-we-built-the-worlds-fastest-api-for-glm-52/">Baseten&#39;s GLM-5.2 serving write-up</a>.</p>
+<p>Two additional architecture claims matter for cost:</p>
+<ul>
+<li><p><strong>DISCLOSED, company claim — IndexShare reduces per-token attention FLOPs by 2.9× at a 1M-token context</strong>, compared with the model&#39;s non-IndexShare baseline.</p>
+</li>
+<li><p><strong>DISCLOSED, company claim — multi-token prediction increased accepted-token length by up to 20%.</strong></p>
+</li>
+</ul>
+<p>These are real cost levers, but neither directly states production dollars per token; realized benefit depends on context distribution, speculative-decoding acceptance, batch shape, and serving implementation.</p>
+<p>Baseten&#39;s result is useful but should not be transferred to Zhipu&#39;s domestic fleet without adjustment: <strong>CREDIBLY REPORTED — more than 280 output tokens/s/user on Blackwell using NVFP4</strong>, with prefill/decode disaggregation, MTP, KV-aware routing, and prefix caching (disaggregation approximately doubled throughput on its observed workload mix). Evidence the model can be served economically on Western Blackwell — not evidence that Zhipu uses Blackwell.</p>
+<hr>
+<h2>2. FLEET &amp; PROCUREMENT</h2>
+<h3>First-party inference hardware</h3>
+<p><strong>DISCLOSED — Zhipu says GLM-5.2&#39;s online inference runs across multiple domestic platforms</strong>, explicitly naming Huawei Ascend, Alibaba T-Head, Moore Threads, Cambricon, Baidu Kunlunxin, MetaX, Hygon, Biren, and Iluvatar CoreX — described as production deployments supporting throughput, latency, and concurrency. Establishes domestic diversification; does <strong>not</strong> reveal traffic share by vendor or model. <a href="https://www.zhipuai.cn/zh/research/161">Zhipu GLM-5.2 release</a></p>
+<p>For the closely related GLM-5 architecture:</p>
+<ul>
+<li><p><strong>DISCLOSED — one Huawei Atlas 800T A3 server (8× Ascend 910-series NPUs) can hold the ~750B model</strong> using <strong>W8A8 for attention/ordinary MLP and W4A8 for MoE experts</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED, company claim — Zhipu/Huawei say one domestic node can approach the throughput of two foreign-GPU nodes and lower long-context deployment cost by 50%.</strong> Vendor claims without disclosed workload/latency/price — not used directly in the central cost calculation. <a href="https://www.zhipuai.cn/zh/research/153">Zhipu GLM-5 technical report</a> · <a href="https://www.hiascend.com/activities/dynamic-news/648">Huawei GLM-5 deployment note</a> · <a href="https://www.hiascend.com/hardware/ai-server">Atlas A3 specifications</a></p>
+</li>
+</ul>
+<h3>H800/H20 and overseas hardware</h3>
+<p><strong>No disclosed evidence</strong> ties Zhipu&#39;s first-party production GLM-5.2 service to a particular stock of H800s or H20s. The official repository contains H20-related examples (implementation/training examples, not fleet inventory). Baseten&#39;s Blackwell deployment and @_xjdr&#39;s GB300 run are independently useful serving benchmarks; neither establishes Zhipu ownership, leasing, or production use.</p>
+<h3>Owned versus rented capacity</h3>
+<p>The audited procurement disclosures point toward a service-heavy cost basis:</p>
+<ul>
+<li><p><strong>DISCLOSED — 2025 capital expenditure was RMB74.7 million</strong>, down from <strong>RMB462.3 million in 2024</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED — in 2024 Zhipu primarily used equipment leases to acquire computing resources; in 2025 it primarily procured computing services, supplemented by equipment leases.</strong></p>
+</li>
+<li><p><strong>DISCLOSED — cloud-computing supplier agreements generally run for one to four years.</strong></p>
+</li>
+<li><p><strong>DISCLOSED — prepayments for computing services were RMB166.9 million at year-end 2024 and RMB134.0 million at June 30, 2025.</strong></p>
+</li>
+<li><p><strong>DISCLOSED — purchases from an anonymized &quot;Supplier E,&quot; a Beijing cloud/IT subsidiary of a large Chinese internet company, were RMB394.8 million in 2024 and RMB123.5 million in H1 2025.</strong></p>
+</li>
+</ul>
+<p>A rental/reserved-service model is therefore more appropriate than assuming Zhipu buys GPUs and depreciates them itself. It also makes accounting gross margin somewhat more informative about unit economics than for a provider carrying a large owned fleet — although contracts may still include minimum commitments and idle-capacity risk. <a href="https://www.hkexnews.hk/listedco/listconews/sehk/2026/0331/2026033101549.pdf">HKEX FY2025 results</a> · <a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1230/2025123000017.pdf">HKEX prospectus</a></p>
+<h3>Public Chinese cloud-rate comparables</h3>
+<p>These are <strong>not Zhipu&#39;s confidential rates</strong> — public CTyun rates useful for bounding the market. USD conversions use <strong>RMB6.9074/USD</strong> (March 31, 2026 reference).</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th>Public rate</th>
+<th>USD equivalent</th>
+<th>Confidence and interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ascend 910B, ordinary CTyun pool</td>
+<td><strong>RMB36.36–41.29/card-hour</strong></td>
+<td><strong>$5.26–$5.98/card-hour</strong></td>
+<td><strong>DISCLOSED by CTyun</strong>, retail/on-demand, not Zhipu contract pricing.</td>
+</tr>
+<tr>
+<td>Eight-card Ascend server at the same rate</td>
+<td><strong>RMB290.9–330.3/server-hour</strong></td>
+<td><strong>$42.1–$47.8/server-hour</strong></td>
+<td>Arithmetic; excludes host/network/storage/discount uncertainty.</td>
+</tr>
+<tr>
+<td>Ascend 910B, special research pool</td>
+<td><strong>RMB9.60/card-hour</strong></td>
+<td><strong>$1.39/card-hour</strong></td>
+<td><strong>DISCLOSED by CTyun</strong>, probably not representative of unrestricted commercial capacity.</td>
+</tr>
+<tr>
+<td>Nvidia H20 96GB</td>
+<td><strong>RMB17.05/card-hour</strong></td>
+<td><strong>$2.47/card-hour</strong></td>
+<td><strong>DISCLOSED by CTyun</strong> public research-pool rate.</td>
+</tr>
+<tr>
+<td>Nvidia H800 PCIe</td>
+<td><strong>RMB28.56/card-hour</strong></td>
+<td><strong>$4.13/card-hour</strong></td>
+<td><strong>DISCLOSED by CTyun</strong> public research-pool rate.</td>
+</tr>
+<tr>
+<td>Nvidia H800 NVLink</td>
+<td><strong>RMB34.00/card-hour</strong></td>
+<td><strong>$4.92/card-hour</strong></td>
+<td><strong>DISCLOSED by CTyun</strong> public research-pool rate.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://www.ctyun.cn/document/11060230/11060364">CTyun ordinary Ascend pricing</a> · <a href="https://www.ctyun.cn/document/10097674/10135961">CTyun research-pool pricing</a></p>
+<p>Best representation of Zhipu&#39;s undisclosed basis: <strong>SPECULATION — $2.0–$4.8 per contracted accelerator-card-hour, central prior $3.2/card-hour; 65–85% useful serving occupancy, central 75%.</strong> Not performance-normalized units — used only as a sanity check; the final token-cost model is anchored more heavily to financial margins, reseller prices, and measured serving economics.</p>
+<p>Utilization evidence is directional: <strong>DISCLOSED/CREDIBLY REPORTED — Zhipu described a compute shortage beginning February 2026, demand exceeding supply, API requests rising by more than 400%, and paid-token consumption increasing.</strong></p>
+<hr>
+<h2>3. PRICING &amp; REALIZATION</h2>
+<h3>International Z.ai API list price</h3>
+<p>All <strong>DISCLOSED — USD per 1M tokens</strong> (<a href="https://docs.z.ai/guides/overview/pricing">official pricing</a>). Cache-storage charges temporarily free; cached-token processing billed at the cached-input rate.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Uncached input</th>
+<th>Cached input</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GLM-5.2</td>
+<td><strong>$1.40</strong></td>
+<td><strong>$0.26</strong></td>
+<td><strong>$4.40</strong></td>
+</tr>
+<tr>
+<td>GLM-5.1</td>
+<td><strong>$1.40</strong></td>
+<td><strong>$0.26</strong></td>
+<td><strong>$4.40</strong></td>
+</tr>
+<tr>
+<td>GLM-5</td>
+<td><strong>$1.00</strong></td>
+<td><strong>$0.20</strong></td>
+<td><strong>$3.20</strong></td>
+</tr>
+<tr>
+<td>GLM-5-Turbo</td>
+<td><strong>$1.20</strong></td>
+<td><strong>$0.24</strong></td>
+<td><strong>$4.00</strong></td>
+</tr>
+<tr>
+<td>GLM-4.7</td>
+<td><strong>$0.60</strong></td>
+<td><strong>$0.11</strong></td>
+<td><strong>$2.20</strong></td>
+</tr>
+<tr>
+<td>GLM-4.7-FlashX</td>
+<td><strong>$0.07</strong></td>
+<td><strong>$0.01</strong></td>
+<td><strong>$0.40</strong></td>
+</tr>
+<tr>
+<td>GLM-4.7-Flash</td>
+<td><strong>Free</strong></td>
+<td><strong>Free</strong></td>
+<td><strong>Free</strong></td>
+</tr>
+<tr>
+<td>GLM-4.6 / GLM-4.5</td>
+<td><strong>$0.60</strong></td>
+<td><strong>$0.11</strong></td>
+<td><strong>$2.20</strong></td>
+</tr>
+<tr>
+<td>GLM-4.5-Air</td>
+<td><strong>$0.20</strong></td>
+<td><strong>$0.03</strong></td>
+<td><strong>$1.10</strong></td>
+</tr>
+</tbody></table>
+<p>Two economically important observations: <strong>GLM-5.2 output is priced at 3.14× uncached input and 16.9× cached input</strong> — decode throughput is likely the largest direct determinant of gross margin. <strong>The cached-input discount is 81.4%</strong> — Z.ai passes a large portion of prefix-cache savings to customers.</p>
+<h3>Coding Plan</h3>
+<p>No fixed token allowance; enforceable limits are prompt windows, weekly caps, and model-specific quota multipliers. All <strong>DISCLOSED</strong> (<a href="https://docs.z.ai/devpack/overview">overview</a> · <a href="https://docs.z.ai/devpack/transition">transition</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Monthly</th>
+<th>Prompts per 5 hours</th>
+<th>Prompts per week</th>
+<th>Quarterly</th>
+<th>Annual</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lite</td>
+<td><strong>$18</strong></td>
+<td><strong>80</strong></td>
+<td><strong>400</strong></td>
+<td><strong>$48.60</strong></td>
+<td><strong>$172.80</strong></td>
+</tr>
+<tr>
+<td>Pro</td>
+<td><strong>$72</strong></td>
+<td><strong>400</strong></td>
+<td><strong>2,000</strong></td>
+<td><strong>$194.40</strong></td>
+<td><strong>$691.20</strong></td>
+</tr>
+<tr>
+<td>Max</td>
+<td><strong>$160</strong></td>
+<td><strong>1,600</strong></td>
+<td><strong>8,000</strong></td>
+<td><strong>$432.00</strong></td>
+<td><strong>$1,536.00</strong></td>
+</tr>
+</tbody></table>
+<p>Z.ai estimates <strong>one coding prompt ≈ 15–20 underlying model calls</strong>. GLM-5.2 and GLM-5-Turbo ordinarily consume quota at <strong>3× during the 14:00–18:00 UTC+8 peak and 2× off-peak</strong>; a promotion reduces off-peak consumption to 1× through September 2026 — a powerful tool for controlling realized compute consumption without changing advertised prompt caps.</p>
+<h3>Nominal value versus actual realization</h3>
+<p>Official documentation makes two claims that do not reconcile cleanly:</p>
+<ul>
+<li><p><strong>DISCLOSED, company claim — monthly API-equivalent quota is approximately 15–30× the subscription fee.</strong></p>
+</li>
+<li><p><strong>DISCLOSED, company claim — the plan provides &quot;tens of billions&quot; of tokens at approximately 1% of ordinary API pricing</strong> (implying ~100× list-value leverage).</p>
+</li>
+</ul>
+<p>At the more conservative 15–30× claim, cash realization is <strong>3.3–6.7% of list value</strong> on all three plans. Using <strong>SPECULATION — 8 input tokens per output token</strong> and the <strong>COMMUNITY ESTIMATE — 41% cache-hit rate</strong> (from @_xjdr&#39;s event), GLM-5.2 list ≈ <strong>$1.318 per million total tokens</strong>, implying (value-equivalent, NOT allowances): Lite ≈ 205–410M, Pro ≈ 820M–1.64B, Max ≈ 1.82–3.64B total tokens/month.</p>
+<p>The plan therefore has obvious potential for usage leakage. Using the central cost model in Section 5, serving cost ≈ <strong>39.8% of API list value</strong>; a user genuinely consuming 15–30× the fee in GLM-5.2 API value would incur <strong>≈6.0–11.9× the subscription fee in serving cost</strong>. That does not mean the plan necessarily loses money overall — its economics must depend on user breakage and weekly caps; the 2×/3× GLM-5.2 quota multipliers; off-peak utilization of otherwise idle capacity; routing ordinary tasks to GLM-4.7 or cheaper variants; shorter actual prompts; and &quot;API-equivalent value&quot; as a marketing construct.</p>
+<p>Evidence Zhipu has already tightened realization: <strong>DISCLOSED — legacy plans without weekly caps were phased out; Coding Plan prices rose 30% in February 2026; the introductory discount was removed; ~242,000 paying Coding Plan developers.</strong></p>
+<hr>
+<h2>4. COST/MARGIN EVIDENCE</h2>
+<h3>IPO and audited financial status</h3>
+<p>Status correction: <strong>DISCLOSED/CREDIBLY REPORTED — Zhipu listed in Hong Kong on January 8, 2026.</strong> As of July 9 it was pursuing a Shanghai STAR Market dual listing; no accepted STAR prospectus found. The primary financial source is therefore its HKEX prospectus and FY2025 results. <a href="https://www.reuters.com/world/asia-pacific/after-anthropic-shutdown-chinas-zai-closes-frontier-gap-it-plans-dual-listing-2026-06-25/">Reuters on the dual-listing plan</a></p>
+<h3>Revenue and gross margin (FY2025, audited, DISCLOSED)</h3>
+<table>
+<thead>
+<tr>
+<th>FY2025 item</th>
+<th>Amount</th>
+<th>Share / margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Total revenue</td>
+<td><strong>RMB724.3m</strong></td>
+<td><strong>100%</strong></td>
+</tr>
+<tr>
+<td>Cloud-based model/API services</td>
+<td><strong>RMB190.4m</strong></td>
+<td><strong>26.3%</strong></td>
+</tr>
+<tr>
+<td>On-premise solutions</td>
+<td><strong>RMB534.0m</strong></td>
+<td><strong>73.7%</strong></td>
+</tr>
+<tr>
+<td>Enterprise agents</td>
+<td><strong>RMB165.7m</strong></td>
+<td><strong>22.9% of revenue</strong></td>
+</tr>
+<tr>
+<td>Enterprise models</td>
+<td><strong>RMB365.7m</strong></td>
+<td><strong>50.5%</strong></td>
+</tr>
+<tr>
+<td>Technology services</td>
+<td><strong>RMB2.5m</strong></td>
+<td><strong>0.35%</strong></td>
+</tr>
+<tr>
+<td>Cloud/API gross profit</td>
+<td><strong>RMB36.0m</strong></td>
+<td><strong>18.9% gross margin</strong></td>
+</tr>
+<tr>
+<td>Total cost of revenue</td>
+<td><strong>RMB427.7m</strong></td>
+<td>Company-wide</td>
+</tr>
+<tr>
+<td>Net loss</td>
+<td><strong>RMB4.718bn</strong></td>
+<td>Not relevant to marginal serving margin</td>
+</tr>
+</tbody></table>
+<p>The most informative sequence:</p>
+<ul>
+<li><p><strong>DISCLOSED — H1 2025 cloud/API gross margin was −0.4%.</strong></p>
+</li>
+<li><p><strong>DISCLOSED — FY2025 cloud/API gross margin recovered to 18.9%.</strong></p>
+</li>
+<li><p><strong>DISCLOSED — management attributed the improvement to inference-efficiency gains, economies of scale/declining marginal cost, price increases, and programming-subscription growth.</strong> The prospectus says H1 2025 was depressed by price reductions undertaken to gain market share.</p>
+</li>
+</ul>
+<p>This 18.9% is <strong>not</strong> the requested marginal GLM-5.2 margin — it includes reserved/idle capacity, personnel, support, promotions, model mix, subscriptions, older-model traffic. But because Zhipu increasingly purchases compute as a service, it is a more relevant anchor than consolidated company gross margin.</p>
+<h3>Repricing counterfactual</h3>
+<p>Zhipu reported API call prices rose <strong>83% relative to end-2025</strong>, while requests rose more than <strong>400%</strong>. Holding FY2025 unit cost and mix constant: 1 − (1−18.9%)/1.83 = <strong>55.7%</strong>. <strong>SPECULATION — a price-only counterfactual puts cloud/API gross margin at 55.7%</strong> — a valuable independent anchor for a central marginal estimate in the high-50s or low-60s.</p>
+<h3>Third-party reseller prices (all DISCLOSED, USD/M tokens)</h3>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Uncached input</th>
+<th>Cached input</th>
+<th>Output</th>
+<th>Caveat</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Baseten</td>
+<td><strong>$1.40</strong></td>
+<td><strong>$0.26</strong></td>
+<td><strong>$4.40</strong></td>
+<td>Same as Z.ai list; optimized Blackwell/NVFP4 stack.</td>
+</tr>
+<tr>
+<td>Fireworks Standard</td>
+<td><strong>$1.40</strong></td>
+<td><strong>$0.14</strong></td>
+<td><strong>$4.40</strong></td>
+<td>Lower cache price.</td>
+</tr>
+<tr>
+<td>Fireworks Batch</td>
+<td><strong>$0.70</strong></td>
+<td>—</td>
+<td><strong>$2.20</strong></td>
+<td>50% discount, asynchronous scheduling.</td>
+</tr>
+<tr>
+<td>Together</td>
+<td><strong>$1.40</strong></td>
+<td><strong>$0.26</strong></td>
+<td><strong>$4.40</strong></td>
+<td>FP4 endpoint, 262K context.</td>
+</tr>
+<tr>
+<td>DeepInfra Standard</td>
+<td><strong>$0.93</strong></td>
+<td><strong>$0.18</strong></td>
+<td><strong>$3.00</strong></td>
+<td>Lowest public real-time price found.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://www.baseten.co/pricing/">Baseten pricing</a> · <a href="https://docs.fireworks.ai/serverless/pricing">Fireworks pricing</a> · <a href="https://docs.together.ai/docs/glm-5.2-quickstart">Together GLM-5.2</a> · <a href="https://deepinfra.com/zai-org/GLM-5.2">DeepInfra GLM-5.2</a></p>
+<p>These are <strong>conditional cost ceilings</strong>: if DeepInfra&#39;s standard endpoint has positive contribution margin, its direct serving cost must be below <strong>$3.00/M output</strong>. Assuming a 10–30% reseller margin: implied output-cost ceiling <strong>$2.10–$2.70/M</strong>; Fireworks Batch implies <strong>$1.54–$1.98/M</strong>. For the Section 5 representative workload, the DeepInfra retail bill is $7.98 vs <strong>$11.86 at Z.ai list</strong> — a conditional lower-bound margin of ~<strong>32.7%</strong> at Z.ai&#39;s list price before granting DeepInfra any profit.</p>
+<h3>Throughput and modeled serving cost</h3>
+<ul>
+<li><p><strong>CREDIBLY REPORTED — Baseten exceeded 280 output tokens/s/user on Blackwell/NVFP4.</strong></p>
+</li>
+<li><p><strong>COMMUNITY ESTIMATE — @_xjdr reported ~232 output tokens/s/GPU and a 41% cache-hit rate during a GB300 NVL72 free-use event.</strong> <a href="https://x.com/_xjdr/status/2071835604095300079">Post</a></p>
+</li>
+<li><p><strong>CREDIBLY REPORTED — SemiAnalysis&#39; interpolated GLM-5.1 benchmark produces ~$0.41–$4.14/M output tokens across B200/GB300 configurations and 43–91 tok/s/user latency targets.</strong> <a href="https://inferencex.semianalysis.com/compare/glm-5-1-b200-vs-gb300">InferenceX comparison</a> — the very wide range shows how interactivity, batch, and hardware generation dominate a single &quot;cost per token.&quot;</p>
+</li>
+</ul>
+<p>GLM-5.1 is not GLM-5.2, and a Western FP4 deployment is not Zhipu&#39;s domestic service. Still, the benchmark supports an output-cost prior centered around the low-$2 range.</p>
+<hr>
+<h2>5. VERDICT</h2>
+<h3>Headline estimate</h3>
+<p><strong>SPECULATION — central marginal serving gross margin at direct GLM-5.2 API list: 60%.</strong></p>
+<p><strong>SPECULATION — subjective 80%-confidence interval: 35%–77%.</strong></p>
+<h3>Representative workload</h3>
+<p><strong>8 billed input tokens per output token (SPECULATION)</strong>; <strong>41% input-cache hit rate (COMMUNITY ESTIMATE)</strong>; long-run incremental serving cost.</p>
+<table>
+<thead>
+<tr>
+<th>Token class</th>
+<th>Z.ai list price</th>
+<th>Central serving cost</th>
+<th>Wider stress range</th>
+<th>Central component margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Uncached input</td>
+<td><strong>$1.40/M</strong></td>
+<td><strong>$0.50/M</strong></td>
+<td><strong>$0.22–$0.95/M</strong></td>
+<td><strong>64%</strong></td>
+</tr>
+<tr>
+<td>Cached input</td>
+<td><strong>$0.26/M</strong></td>
+<td><strong>$0.08/M</strong></td>
+<td><strong>$0.03–$0.18/M</strong></td>
+<td><strong>69%</strong></td>
+</tr>
+<tr>
+<td>Output</td>
+<td><strong>$4.40/M</strong></td>
+<td><strong>$2.10/M</strong></td>
+<td><strong>$1.20–$3.20/M</strong></td>
+<td><strong>52%</strong></td>
+</tr>
+</tbody></table>
+<p>Revenue = 4.40 + 8(0.59×1.40 + 0.41×0.26) = <strong>$11.8608</strong>. Cost = 2.10 + 8(0.59×0.50 + 0.41×0.08) = <strong>$4.7224</strong>. Gross margin = 1 − 4.7224/11.8608 = <strong>60.2%</strong>.</p>
+<p>Equivalently: blended list revenue <strong>$1.318/M total tokens</strong>; blended marginal serving cost <strong>$0.525/M</strong>; blended gross profit <strong>$0.793/M</strong>.</p>
+<p>The central output cost of $2.10/M is deliberately close to the low end of the DeepInfra reseller-margin inference and the high end of a profitable Fireworks Batch inference. The overall 60% result is close to — but modestly above — the <strong>55.7% price-only financial counterfactual</strong>, reflecting better utilization and inference optimization after FY2025.</p>
+<h3>Sensitivity to token mix</h3>
+<p>Holding component costs fixed: 2:1 input:output → ~56%; 8:1 → ~60%; 20:1 → ~62%. The wider component stress ranges mechanically generate ~30–80% margin; the stated 80% interval narrows to <strong>35–77%</strong> because the most extreme component assumptions are unlikely to co-occur.</p>
+<h3>Why the interval is wide, ranked by impact</h3>
+<ol>
+<li><p><strong>Production decode throughput and latency target: ±15–20 margin points.</strong> GLM-5.2 output pricing is high, but decode becomes expensive with highly interactive latency, low MTP acceptance, or poor batching.</p>
+</li>
+<li><p><strong>Contracted compute price and actual chip mix: ±10–15 points.</strong> Public Ascend/H20/H800 card-hour prices span more than 4× before performance correction; Zhipu&#39;s confidential 1–4-year service rates and traffic shares are unknown.</p>
+</li>
+<li><p><strong>Useful occupancy and treatment of reserved idle capacity: ±7–12 points.</strong></p>
+</li>
+<li><p><strong>First-party serving precision and fallback behavior: ±6–10 points.</strong> Clean W4/NVFP4 expert paths are far cheaper than frequent FP8 fallback, quality-based rerouting, dual execution, or low-batch expert imbalance.</p>
+</li>
+<li><p><strong>Workload distribution: ±5–8 points.</strong></p>
+</li>
+<li><p><strong>Non-accelerator serving overhead and reseller-evidence reliability: ±3–6 points.</strong></p>
+</li>
+</ol>
+<p><strong>Bottom line:</strong> for direct, undiscounted GLM-5.2 API traffic, <strong>60% marginal serving gross margin is the central estimate</strong>, with <strong>35–77%</strong> as the defensible 80% range. The most likely miss is not parameter count; it is assumed production output throughput or Zhipu&#39;s confidential compute-service price. Coding Plan margin can be dramatically lower — and negative for a fully saturating GLM-5.2-heavy user — because realized revenue is only a small fraction of nominal API-list value.</p>
+<hr>
+<h2>6. KNOWN KNOWNS</h2>
+<ul>
+<li><p><strong>DISCLOSED — GLM-5.2 is a 744B-total, 40B-active MoE with BF16 and FP8 open checkpoints and a 1M-token context window.</strong> <a href="https://github.com/zai-org/GLM-5">Repository</a></p>
+</li>
+<li><p><strong>DISCLOSED — international GLM-5.2 list price is $1.40/M uncached input, $0.26/M cached input, and $4.40/M output.</strong> <a href="https://docs.z.ai/guides/overview/pricing">Z.ai pricing</a></p>
+</li>
+<li><p><strong>DISCLOSED — Zhipu says first-party online inference uses multiple domestic hardware platforms, including Huawei Ascend, Cambricon, Kunlunxin, Moore Threads, MetaX, Hygon, Biren, T-Head, and Iluvatar.</strong> <a href="https://www.zhipuai.cn/zh/research/161">GLM-5.2 release</a></p>
+</li>
+<li><p><strong>DISCLOSED — Zhipu moved toward primarily purchasing computing services in 2025; capex fell from RMB462.3m to RMB74.7m.</strong> <a href="https://www.hkexnews.hk/listedco/listconews/sehk/2026/0331/2026033101549.pdf">FY2025 results</a></p>
+</li>
+<li><p><strong>DISCLOSED — FY2025 cloud/API revenue was RMB190.4m and cloud/API gross margin was 18.9%, after a −0.4% margin in H1 2025.</strong> <a href="https://www.hkexnews.hk/listedco/listconews/sehk/2026/0331/2026033101549.pdf">FY2025 results</a> · <a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1230/2025123000017.pdf">prospectus</a></p>
+</li>
+<li><p><strong>DISCLOSED — third parties sell GLM-5.2 below Z.ai list: DeepInfra at $0.93/$0.18/$3.00 and Fireworks Batch at $0.70 input/$2.20 output</strong> — conditional ceilings on profitable third-party serving cost.</p>
+</li>
+</ul>
+<h2>7. KNOWN UNKNOWNS</h2>
+<ul>
+<li><p><strong>Production chip mix and traffic allocation.</strong> Many supported domestic platforms; no disclosure of what fraction of GLM-5.2 tokens runs on each.</p>
+</li>
+<li><p><strong>Confidential compute-service price.</strong> Filings disclose procurement form, suppliers, prepayments, aggregate spending — no card-hours, node-hours, token throughput, or unit rate.</p>
+</li>
+<li><p><strong>Actual production precision.</strong> Open FP8 checkpoints and domestic W8A8/W4A8 recipes do not establish first-party serving precision.</p>
+</li>
+<li><p><strong>Production throughput at a defined service-level objective.</strong> No output tokens/s/card, TTFT, batch size, context distribution, or MTP acceptance on Zhipu&#39;s own fleet.</p>
+</li>
+<li><p><strong>Realized customer mix.</strong> Cache-hit rate, input/output ratio, reasoning length, GLM-4.7 routing, enterprise discounts, API vs Coding Plan division — undisclosed.</p>
+</li>
+<li><p><strong>Subscription breakage and quota enforcement.</strong> The 15–30× API-value claim, &quot;1% of API pricing&quot; claim, prompt caps, and model multipliers do not reveal how much compute the median or top-decile subscriber actually consumes.</p>
+</li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

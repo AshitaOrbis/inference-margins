@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>H800 / H20 / export controls — web sweep · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/chinese-accel-h800-h20-websweep">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Chinese-market NVIDIA accelerators (H800 / H20 / export status) — web sweep 2026-07-09</h1>
+<p>Agent: h20-researcher (Claude web-research subagent, Exa+Brave). Cross-check source for the calculator&#39;s Chinese-accelerator entries; pairs with the GPT Pro Chinese-accelerator dive and the Ascend sweep.</p>
+<h2>1. H800 vs H100</h2>
+<p><strong>H800 SXM</strong> (the variant DeepSeek used): compute DISCLOSED-identical to H100 SXM — same GH100 die, 80GB HBM3, 3.35 TB/s, dense FP8 ≈1,979 TFLOPS. The one deliberate cut: <strong>NVLink capped at 400 GB/s vs 900 GB/s</strong> (REPORTED, concordant). Training/multi-GPU penalty, not per-chip inference penalty.</p>
+<ul>
+<li><a href="https://www.philisun.com/technical-analysis/nvidia-h800-vs-h100-a-technical-deep-dive-into-politically-defined-ai-chips/">https://www.philisun.com/technical-analysis/nvidia-h800-vs-h100-a-technical-deep-dive-into-politically-defined-ai-chips/</a></li>
+<li><a href="https://electronics.alibaba.com/buyingguides/nvidia-h800-vs-h100-ai-gpu-choice-guide">https://electronics.alibaba.com/buyingguides/nvidia-h800-vs-h100-ai-gpu-choice-guide</a></li>
+</ul>
+<p><strong>H800 PCIe</strong> (separate weaker SKU): 80GB, 2.0 TB/s, dense FP8 1,513 TFLOPS, 350W. DISCLOSED (vendor sheet): <a href="https://flopper.io/gpu/nvidia-h800-pcie-80gb/spec-sheet.pdf">https://flopper.io/gpu/nvidia-h800-pcie-80gb/spec-sheet.pdf</a></p>
+<p><strong>China rental</strong>: no clean current H800 $/hr. DeepSeek&#39;s own $2/hr assumption is DISCLOSED (V3 tech report, <a href="https://arxiv.org/pdf/2412.19437">https://arxiv.org/pdf/2412.19437</a>). Trend proxy: TrendForce Apr 2026 — H100 one-year leases in China up 20–30% in ~6 months (RMB 50–60k → 80–90k rack-inclusive) on &gt;1,000× token-volume growth (100B→140T tokens/day, early-2024→Mar-2026, National Data Administration). <a href="https://www.trendforce.com/news/2026/04/17/news-nvidia-h100-rentals-in-china-reportedly-up-20-30-as-token-demand-surges-h-series-also-rises/">https://www.trendforce.com/news/2026/04/17/news-nvidia-h100-rentals-in-china-reportedly-up-20-30-as-token-demand-surges-h-series-also-rises/</a></p>
+<h2>2. H20</h2>
+<p>DISCLOSED specs (concordant: inferencebench.io, willitrunai): 96 GB HBM3, <strong>4.0 TB/s</strong>, dense FP8/INT8 <strong>296 TFLOPS</strong>, BF16 148 TFLOPS, TDP 400W (one outlier source says 500W), NVLink retained ~900GB/s.</p>
+<ul>
+<li><a href="https://inferencebench.io/gpus/nvidia-h20/">https://inferencebench.io/gpus/nvidia-h20/</a></li>
+<li><a href="https://willitrunai.com/gpus/h20-96gb">https://willitrunai.com/gpus/h20-96gb</a></li>
+</ul>
+<p>Inference-friendly because decode is bandwidth-gated: 4.0 TB/s &gt; H100&#39;s 3.35 TB/s. futunn/PETA 2024 analysis: H20 ~20% higher peak tok/s than H100 at low batch (REPORTED, dated): <a href="https://news.futunn.com/en/post/34012455/compared-to-the-h100-how-are-nvidia-s-h20-l20">https://news.futunn.com/en/post/34012455/compared-to-the-h100-how-are-nvidia-s-h20-l20</a></p>
+<p><strong>Price</strong>: launch $12–15k (REPORTED); mid-2026 ~$10–12k (TechPowerUp citing Reuters, Jun 2026): <a href="https://www.techpowerup.com/340664/nvidias-export-compliant-b30a-for-china-priced-at-roughly-twice-the-h20">https://www.techpowerup.com/340664/nvidias-export-compliant-b30a-for-china-priced-at-roughly-twice-the-h20</a></p>
+<p><strong>Rental China</strong>: fragmentary. 191idc aggregator: <del>RMB 4.82/hr (</del>$0.67/hr) on-demand floor, subsidized/oversupply listing — ESTIMATE floor, not market-representative: <a href="http://www.191idc.com/jiageinfo/402.html">http://www.191idc.com/jiageinfo/402.html</a>. GAP: no official Aliyun/Tencent/Volcano H20 rate card found.</p>
+<h2>3. Export-control timeline 2025–2026</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025-04-15</td>
+<td>BIS license requirement on H20 → China; Nvidia $5.5B charge</td>
+<td>DISCLOSED (SEC)</td>
+</tr>
+<tr>
+<td>2025-07-15</td>
+<td>Reversal: H20 licenses to be approved</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2025-08-11</td>
+<td>Nvidia/AMD pay 15% of China chip revenue to US govt</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2025-08</td>
+<td>CAC discourages H20 purchases (Tencent/ByteDance/Alibaba/Baidu); suspension orders reported</td>
+<td>REPORTED</td>
+</tr>
+<tr>
+<td>2025-08-22</td>
+<td>Nvidia halts H20 production amid crackdown</td>
+<td>REPORTED</td>
+</tr>
+<tr>
+<td>2025-10</td>
+<td>B30A (~half B300: ~3.75 PF dense FP8) sampled to China</td>
+<td>REPORTED</td>
+</tr>
+<tr>
+<td>2025-11-07</td>
+<td>White House blocks B30A export</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2025-12-08</td>
+<td>H200 allowed to &quot;approved customers&quot; at 25% revenue share</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2026-01-13/15</td>
+<td>BIS final rule: H200/MI325X case-by-case; ≤50% of US-bound volume, testing + KYC conditions</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2026-05-14</td>
+<td>US clears H200 for 10 named Chinese firms (Alibaba, Tencent, ByteDance, JD…)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2026-05-05</td>
+<td>Huang: Blackwell/Rubin still no-go; ~zero H200 actually shipped</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2026-05-31</td>
+<td>BIS closes non-China-subsidiary loophole for Blackwell/Rubin/MI350x</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td>2026-07-07/08</td>
+<td>Beijing reportedly to LET its top AI firms buy the approved H200s (reversal of domestic discouragement; acute compute shortage)</td>
+<td>REPORTED (The Information via Bloomberg/SCMP)</td>
+</tr>
+</tbody></table>
+<p>B30A as of Jul 2026: treat as still blocked (one contradictory TechPowerUp/Reuters pricing piece ~$20–24k, discount vs Huang&#39;s May statement).</p>
+<p><strong>Legal-to-buy today (Jul 2026)</strong>: H20 (case-by-case, main legal SKU); H200 (10 cleared firms, deliveries just now plausible); everything else (H100/B200/B300/Rubin) banned — smuggling only.</p>
+<p>Key sources: <a href="https://www.bis.gov/press-release/department-commerce-revises-license-review-policy-semiconductors-exported-china">https://www.bis.gov/press-release/department-commerce-revises-license-review-policy-semiconductors-exported-china</a> · <a href="https://www.nbcnews.com/world/asia/us-approves-nvidia-h200-chip-exports-china-conditions-rcna253948">https://www.nbcnews.com/world/asia/us-approves-nvidia-h200-chip-exports-china-conditions-rcna253948</a> · <a href="https://www.reuters.com/business/retail-consumer/us-clears-h200-chip-sales-10-china-firms-nvidia-ceo-looks-breakthrough-2026-05-14/">https://www.reuters.com/business/retail-consumer/us-clears-h200-chip-sales-10-china-firms-nvidia-ceo-looks-breakthrough-2026-05-14/</a> · <a href="https://www.bloomberg.com/news/articles/2026-07-08/china-to-let-ai-firms-buy-nvidia-h200-chips-information-says">https://www.bloomberg.com/news/articles/2026-07-08/china-to-let-ai-firms-buy-nvidia-h200-chips-information-says</a></p>
+<h2>4. Fleet reality (mid-2026)</h2>
+<ul>
+<li><strong>DeepSeek</strong>: V3/R1 trained on H800 (DISCLOSED). V4-class: US officials believe smuggled Blackwell in Inner Mongolia (REPORTED, Reuters Feb 2026). Tried Ascend for training → failed run → back to Nvidia for training, <strong>Ascend for inference</strong> (REPORTED, CAISI via peterwildeford/Grunewald: <a href="https://blog.peterwildeford.com/p/how-banned-ai-chips-end-up-in-china">https://blog.peterwildeford.com/p/how-banned-ai-chips-end-up-in-china</a>). Jul 2026: developing own inference ASIC (~1 yr in): <a href="https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/chinas-deepseek-developing-its-own-ai-chip-sources">https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/chinas-deepseek-developing-its-own-ai-chip-sources</a></li>
+<li><strong>Zhipu</strong>: GLM-Image trained fully on Ascend Atlas 800T A2 (Jan 2026, company-DISCLOSED): <a href="https://www.theregister.com/software/2026/01/15/chinas-zai-trained-a-model-using-only-huawei-hardware/4198774">https://www.theregister.com/software/2026/01/15/chinas-zai-trained-a-model-using-only-huawei-hardware/4198774</a> ; The Information Jul 7 2026: weighing custom chip.</li>
+<li><strong>Alibaba/ByteDance/Tencent</strong>: Aug 2025 ordered to suspend Nvidia purchases (REPORTED); Alibaba PPU &quot;Zhenwu 810E&quot; ~H20-class + 10k-chip self-built DC (Apr 2026, DISCLOSED); all among the 10 firms cleared for H200.</li>
+<li><strong>Moonshot</strong>: GAP — no chip-specific sourcing found.</li>
+<li><strong>Smuggling aggregate</strong>: Epoch AI ~660k H100-equivalents through end-2025 (90% CI 290k–1.6M) ≈ ⅓ of China&#39;s compute: <a href="https://epochai.substack.com/p/diversion-and-resale-estimating-compute">https://epochai.substack.com/p/diversion-and-resale-estimating-compute</a> · Substrate ~20k B300-equivalents in 2026 (CI 2k–100k): <a href="https://www.the-substrate.net/p/where-will-china-get-its-compute">https://www.the-substrate.net/p/where-will-china-get-its-compute</a></li>
+<li><strong>Huawei self-claims</strong>: 910C ~800 TFLOPS FP16 (~80% H100); Ascend 950 1.56 PF + 112GB, &quot;3× H20 inference at ¼ cost&quot; (self-reported, skepticism warranted): <a href="https://www.tomshardware.com/tech-industry/semiconductors/chinas-huawei-to-enter-south-korean-ai-chip-market-with-new-atlas-superpods-clusters-pack-8-192-ascend-950-accelerators-per-deployment-reportedly-challenges-nvidia-dominance-with-tripled-inference-performance-of-h20-at-one-quarter-the-cost">https://www.tomshardware.com/tech-industry/semiconductors/chinas-huawei-to-enter-south-korean-ai-chip-market-with-new-atlas-superpods-clusters-pack-8-192-ascend-950-accelerators-per-deployment-reportedly-challenges-nvidia-dominance-with-tripled-inference-performance-of-h20-at-one-quarter-the-cost</a></li>
+</ul>
+<h2>5. H20 MoE throughput anchors (MFU calibration)</h2>
+<ul>
+<li><strong>LMSYS/SGLang + Ant Group (Sep 2025, production, DISCLOSED)</strong>: DeepSeek-R1 on H20-96G — 16.5k prefill / 5.7k decode tok/s per 8-GPU node; ≈714 tok/s/GPU decode at BS=48 (423 at latency-traded spec-decode config). <a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></li>
+<li><strong>Alibaba InferSim (Apr 2026, validated ±10-15%)</strong>: measured Qwen3-30B-A3B on H20: prefill 16,594 / decode 2,749 tok/s/GPU. Measured DeepSeek-V3 on H800: prefill 7,839 / decode 2,324 tok/s/GPU. <a href="https://pyshine.com/InferSim/">https://pyshine.com/InferSim/</a></li>
+<li><strong>StepFun Step3 on 8×H20</strong> (AMD-sponsored framing; StepFun-attributed baselines): decode 3,147 tok/s aggregate (~393 tok/s/GPU, high-concurrency short-output operating point). <a href="https://moreh.io/customer-case/step3-inference-optimization-on-amd-instinct-mi308x-1-30x-higher-decode-throughput-vs-nvidia-h20-251229/">https://moreh.io/customer-case/step3-inference-optimization-on-amd-instinct-mi308x-1-30x-higher-decode-throughput-vs-nvidia-h20-251229/</a></li>
+</ul>
+<p>Recommendation: anchor H20 on InferSim (validated, error-bounded); LMSYS 714 tok/s/GPU as the large-model production lower bound.</p>
+<h2>Gaps</h2>
+<ol>
+<li>No official hyperscaler H20 rate card. 2. No Moonshot hardware sourcing. 3. B30A status has one contradictory source (discounted). 4. H20 TDP 400W vs 500W discrepancy (400W primary).</li>
+</ol>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

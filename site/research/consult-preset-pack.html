@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preset grounding pack — GPT-5.6 Pro · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/consult-preset-pack">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Preset grounding pack — GPT-5.6 Pro consultation, 2026-07-10</h1>
+<blockquote>
+<p>Run 28m22s · <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a516caf-49d8-83e8-b3ca-99fde11dc9ce">conversation</a>
+Companion design consultation: <code>consultation-2026-07-10-council-design.md</code> (4-persona council, Opus synthesis), whose ship-list adjudications governed which presets exist.
+Note: the first run of this consultation completed but expired from the MCP retention window during a usage-limit pause; this is the re-run. The full 192-row JSON/Markdown pack lives in the conversation&#39;s sandbox files (retrieve from the conversation if ever needed); the summary below carries every decision the site adopted.</p>
+</blockquote>
+<h2>Tariff verifications (all first-party, as of 2026-07-10)</h2>
+<ul>
+<li><strong>DeepSeek V4-Flash</strong>: 284B total / 13B active; $0.14 uncached / $0.0028 cached / $0.28 output; 1M context; 384K max output; concurrency 2,500. → site preset CONFIRMED.</li>
+<li><strong>GLM-4.7</strong>: 355B-A32B (BF16 + FP8 releases, MTP recipes); $0.60 / $0.11 / $2.20; cached-input storage temporarily free. → CONFIRMED.</li>
+<li><strong>GPT-5.6 Terra/Luna</strong>: $2.50/$0.25/$15 and $1/$0.10/$6 standard short-context; cache writes 1.25× uncached; Batch/Flex = 50%; &gt;272K whole-request repricing. → CONFIRMED.</li>
+<li><strong>Gemini 3.5 Flash</strong>: $1.50 / $0.15 / $9 + $1/Mtok-hour cache storage; Batch $0.75/$0.075/$4.50; 1,048,576-token input / 65,536 output; no parameter disclosure. → CONFIRMED.</li>
+</ul>
+<h2>Locked perspective decisions (adopted)</h2>
+<ul>
+<li><strong>xAI cash-marginal</strong>: $0.60/GPU-hr at the dive&#39;s operating point → ~$0.67/M output (site lands ~92% margin on Grok — matches).</li>
+<li><strong>xAI opportunity-cost</strong>: $5.27/GPU-hr (Anthropic contract: ~325k named NVIDIA GPUs + CPUs/storage/networking at $1.25B/mo — a <em>bundled external opportunity value</em>, not pure accelerator cost) → ~$5.86/M output in its coarser replica model; the site&#39;s engine lands ~36% blended vs the dive&#39;s ~29% (model-shape divergence documented in the preset note).</li>
+<li><strong>China public-cloud on-demand</strong>: per-SKU multipliers vs IDC-annual defaults — H20 <strong>6.24×</strong>, H800 <strong>6.07×</strong> (monthly HCC, not clean on-demand), 910C-proxy <strong>6.15×</strong>; scalar fallback <strong>6.15×</strong>; enterprise on-demand utilization <strong>0.35</strong>. → site ADOPTED (was 3.5×/45 pre-pack).</li>
+<li><strong>Ant H20 SLO replay</strong>: representative tier = <strong>Pro (675 tok/s, TPOT&lt;50ms)</strong> — the middle SLO and the page&#39;s neutral anchor; effective MFU 0.16875 ≈ the site&#39;s 17% fit; utilization = 1.0 as the <strong>per-occupied-chip convention</strong> (not a fleet-occupancy claim). → site ADOPTED (util 60→100).</li>
+</ul>
+<h2>Import semantics (recorded for future preset work)</h2>
+<p><code>null</code> = unknown-and-unset, never zero; MFU-override and interactivity-fallback are mutually exclusive; <code>batchShare</code> = published asynchronous batch tariffs only, never internal continuous batching; utilization=1.0 on measured operating points is a convention, not occupancy. Terra/Luna/Gemini-Flash are TARIFF SCENARIOS — size/topology unknown; only tariffs and endpoint metadata carry DISCLOSED.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

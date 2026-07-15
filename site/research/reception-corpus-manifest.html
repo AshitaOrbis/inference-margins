@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reception phase — corpus manifest · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/reception-corpus-manifest">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Reception phase — corpus manifest (source-faithfulness audits)</h1>
+<p>Fixed BEFORE the audits ran. Selection rule: every post by (or featuring) the source that the page or its archived sweeps cite, plus the archived verbatim sweeps themselves (which contain surrounding-thread context the Grok agent captured). <strong>Known circularity limit, stated plainly:</strong> this corpus is the material the page&#39;s own research selected; the audits therefore test <em>faithfulness to the cited record</em>, not completeness against the sources&#39; full timelines. A &quot;no contradiction found in this corpus&quot; verdict is bounded by that.</p>
+<p>Verbatim context sources (archived in this annex, used by all audits): <code>grok-sweep-margin-claims.md</code>, <code>grok-sweep-glm-gb300-plans.md</code>.</p>
+<h2>TeorTaxes (@teortaxesTex) — bull position; [analyst] preset + §1 quotes</h2>
+<p>Scope: direct cost/margin ceiling claims (&quot;at most $4/1Mt&quot;, &quot;90 to 95&quot;, &quot;80% margins&quot; 2025) vs page-added utilization/fleet/stack parameters (the preset&#39;s rentMult 0.85 / util 70 / stack 1.25 are RECONSTRUCTION, labeled).
+Posts (15): 1895876331495477615, 1895876441117769922, 1895889315970044153, 1896141536884396528, 1901766584974155784, 1906521148726100430, 1926656992082337950, 2068833223228924229, 2068980091724419280, 2070786814097440805, 2070832301005537627, 2070833810145415518, 2071314837771014298, 2071315379004051513, 2071325290819641620 (all x.com/teortaxesTex/status/…)</p>
+<h2>Zephyr (@zephyr_z9) — semis-side; unit-vs-company coexistence</h2>
+<p>Scope: the 90–95% unit-margin allegation vs the ~70% company-GM / 15–20% FCF claims — does the page represent BOTH and their coexistence accurately?
+Posts (10): 2048029866633895944, 2069824935967748247, 2069832997218722140, 2070267916013187449, 2070726279540989971, 2070727375386718259, 2071528823422959737, 2074755502878470238, 2074917201589727588, 2075107995508408728</p>
+<h2>Dylan Patel / SemiAnalysis — middle position; owned-TCO preset</h2>
+<p>Scope: separate his DIRECT claim (Opus token margin &quot;north of 80%&quot;) from the site-authored owned-TCO parameter reconstruction; audit InferenceX/InferenceMAX usage against the official benchmark material.
+<strong>Source-class caveat (from the plan review):</strong> the &quot;north of 80%&quot; citation is a PodcastAlphaX post (2072119494563262697) FEATURING him — quoted secondary, not his primary account. The audit must treat it as such.
+SemiAnalysis primary posts (7): 2023447723085885576, 2029693660686680529, 2037575752636301499, 2060043702450446552, 2070915303500849289, 2070915304629129460, 2074908975196221654 · plus <a href="https://inferencex.semianalysis.com/">https://inferencex.semianalysis.com/</a> and the two SemiAnalysis newsletter deep-dives cited in §9.</p>
+<h2>fleetingbits (@fleetingbits) — reported-margin camp</h2>
+<p>Scope: his reported-margin/accounting-perimeter claim ONLY (40–50%, cloud commissions booked under S&amp;M). He does not stand in for every skeptic; the [analyst] Skeptic preset&#39;s parameter vector is RECONSTRUCTION, labeled.
+Posts (1): 2073528885149679622 — a single post; the audit must note the thinness of this base.</p>
+<h2>@_xjdr — deployment-fidelity audit (not a position audit)</h2>
+<p>Scope: verify every transcribed §2c number against the archived sweep verbatim: ~12000 api keys, ~300B tokens, 232/431 tok/s/GPU output avg/max, 2.1s TTFT &quot;overage [sic]&quot;, 61s p95 TTFT (1M ctx), 81k avg input, 41% cache, 0 chat logs; config 60×B300 &quot;15 trays&quot;, bf16 attention + fp8 experts/KV, no MTP/no Eagle; third-party cost estimate attribution (paxaral); separation from SGLang/NVIDIA DeepSeek-V4 and Baseten GLM-5.2 results.
+Posts (12): 2022517795733541146, 2047587676602425625, 2067741647941832818, 2067742918455279934, 2069038936362803544, 2069917609278218601, 2070947967574663249, 2071677153285210283, 2071835604095300079, 2071846027917943274, 2072058942025601533, 2072059152873210101</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

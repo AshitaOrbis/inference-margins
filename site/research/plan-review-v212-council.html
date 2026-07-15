@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2.1.2 plan review — four-persona council (Opus synthesis) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/plan-review-v212-council">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>v2.2 plan review — four-persona council (GPT-5.6 Sol xhigh ×4, Opus synthesis), 2026-07-11</h1>
+<blockquote>
+<p>Pre-implementation adversarial review of PLAN-v22.md. Four personas (skeptic / architect / risk-analyst / empiricist) ran independently with full source access; synthesis below is verbatim. Full persona outputs: workspace run <code>2026-07-11-inference-margins-v22-plan-20260711T021118Z</code>. Verdict: <strong>do not implement as written; revise against seven P0 conditions, then proceed.</strong></p>
+</blockquote>
+<h1>Synthesis: PLAN-v22.md Pre-Implementation Review</h1>
+<p>All four agents independently reached the same headline verdict — <strong>do not implement PLAN-v22 as written; revise first</strong> — and, more tellingly, converged on the <em>same</em> two structural failure modes (false orthogonality in B, provenance laundering in C/E) as the ones that would recreate exactly what v2.1.1 was built to repair. That convergence, reached without cross-talk, is the strongest signal in this packet. The disagreements that remain are about ambition level, current deployment state, and one scope-gate call — not about direction.</p>
+<hr>
+<h2>1. Consensus</h2>
+<ul>
+<li><strong>Current v2.1.1 is healthy and is the compatibility baseline.</strong> Deployed <code>engine.js</code>/<code>app.js</code> byte-match local; all 514 assertions pass. <code>[unanimous]</code> (all four independently ran the check)</li>
+<li><strong>The plan must not be implemented as written.</strong> <code>[unanimous]</code></li>
+<li><strong>Q1: B as written creates a strictly worse hybrid.</strong> Moving only <code>ioRatio</code>/<code>cacheHit</code> to a &quot;workload&quot; axis while <code>interact</code>, batch, SLA, fleet, and replay overrides stay scattered produces three selectors that <em>look</em> orthogonal but aren&#39;t. The load-bearing proof is the same arithmetic in all four outputs: Grok + xAI-opportunity resolves <code>3:1/0%</code> → <strong>26.95%</strong>; forcing that lens to <code>15:1/60%</code> → <strong>36.52%</strong> — the stale value v2.1.1 explicitly repaired. A single <code>nativeWorkload</code> cannot preserve both the 43.35% median default and the 26.95% replay while making lenses workload-independent. <code>[unanimous]</code></li>
+<li><strong>B must be renamed &quot;Traffic Mix,&quot; not &quot;Workload.&quot;</strong> It owns two traffic fields, not a workload ontology. <code>[unanimous]</code></li>
+<li><strong>The proposed preset names overclaim their evidence.</strong> &quot;Agentic API 15:1/60%&quot; contradicts the site&#39;s <em>own</em> tooltip (≈100–300:1 agentic); &quot;Chat 4:1/56%&quot; is the DeepSeek disclosure, not generic chat; &quot;Coding 8:1/41%&quot; is the ncode/GLM observation. Use provenance-bearing names (<code>Reference 15:1/60%</code>, <code>DeepSeek disclosure</code>, <code>ncode event</code>, <code>xAI dive 3:1/0%</code>). <code>[unanimous]</code></li>
+<li><strong>&quot;Provider-native&quot; is a misnomer</strong> — for most models it&#39;s an inherited analyst default, not an observed provider property. Rename to &quot;model default (changes with model).&quot; <code>[unanimous]</code></li>
+<li><strong>Replays must become atomic composite scenarios</strong> (model + traffic mix + perspective + operating point), not a perspective option; editing any axis exits replay; the selector must never display a value the replay silently overrides. <code>[unanimous]</code></li>
+<li><strong>The anti-lens-shopping range must hold the selected traffic mix fixed</strong> and vary only compatible cost lenses — it currently varies workload, which is a <em>residual</em> v2.1.1 defect B is the opportunity to close. <code>[unanimous]</code> (Skeptic and Empiricist name it as an existing, unrepaired defect)</li>
+<li><strong>Permalinks need a v3 schema; v2 links AND <code>im_presets_v1</code> browser presets must be migrated,</strong> mapping exact known pairs to profile IDs and everything else to <code>legacy-custom</code>. <code>[unanimous on v3; skeptic, architect, risk-analyst explicitly flag the browser-preset migration the plan omits]</code></li>
+<li><strong>Q2: the tornado gate is insufficient; D must not ship in v2.2 without a range registry.</strong> &quot;Top three inputs have ranges&quot; is circular — dominance depends on the range itself, so the gate rewards parameters that happen to have convenient bounds and hides dominant un-ranged inputs (SLA, context). <code>[unanimous]</code> (Skeptic/Risk/Empiricist say reject-for-v2.2; Architect says preflight-inventory-first — see Disagreement 4)</li>
+<li><strong>Q3: the persona phase must drop named-person simulation.</strong> &quot;Would he QT approvingly / correct us?&quot; asks a model to invent a real person&#39;s private reaction — neither reception evidence nor citation verification. Replace with third-person source-faithfulness audits. <code>[unanimous]</code></li>
+<li><strong>@_xjdr should be added — as a source-faithfulness/deployment-fidelity audit, not a simulated personality</strong> — because his §2c numbers (232/431 tok/s/GPU, 81k input, 41% cache, 60×B300, no-MTP) are load-bearing. <code>[unanimous]</code></li>
+<li><strong>Drop the standalone quote-tweet-dunker persona</strong> — every reviewer already carries the &quot;worst standalone screenshot&quot; task, making the role redundant. <code>[skeptic, architect, empiricist]</code></li>
+<li><strong>C: reject &quot;verbatim re-emission.&quot;</strong> A new GPT conversation regenerating 192 rows is a <em>reconstruction</em>, not retrieval of the original artifact. Publish the original with checksum if retrievable; otherwise a clearly labeled reconstruction. <code>[unanimous]</code></li>
+<li><strong>A: MODIFY — retain each card&#39;s one-line range-basis sentence; export §6 before cutting; don&#39;t delete unique financial/context evidence</strong> (business-margin estimate, 5× software result, xAI contract) on the assumption the dossier already holds it. <code>[unanimous]</code></li>
+<li><strong>The 514-assertion suite is test-count theater for this refactor</strong> — it imports only <code>engine.js</code>, exercises no DOM/<code>encodeScenario</code>/<code>decodeScenario</code>/migration/selector-identity, and duplicates <code>app.js</code> pairing logic (a fresh drift surface). More engine assertions won&#39;t pre-empt the next review. <code>[empiricist, risk-analyst, skeptic]</code></li>
+<li><strong>Freeze the baseline before refactoring</strong> — current hashes, the 514 assertions, and all 180 model×perspective resolutions; every intentional delta needs a manifest. <code>[unanimous; risk-analyst + empiricist specify the 180-pair freeze]</code></li>
+<li><strong>OUT items are correctly excluded</strong> (numeric ISL/OSL/TTFT/TPOT controls, Epoch preset, roofline retest, Sep-1 tariff touch), and the full four-axis ontology + JSON export should be made <em>explicit</em> OUT items rather than silently absent. <code>[unanimous on the four; skeptic + architect on making ontology/export explicit]</code></li>
+<li><strong>GPT-5.6 reviewing GPT-5.6-authored research is not independent evidence</strong> — shared style and failure modes; nine correlated persona runs are less epistemically diverse than presented. <code>[skeptic, risk-analyst, empiricist]</code></li>
+</ul>
+<hr>
+<h2>2. Disagreements</h2>
+<h3>D1 — Current deployment state of the §0 Jukan edit</h3>
+<p><strong>The disagreement:</strong> Is the §0 Jukan correction already live, applied-locally-not-deployed, or a no-op that risks collateral damage?</p>
+<p><strong>Each side:</strong></p>
+<ul>
+<li><strong>Architect:</strong> &quot;The §0 Jukan edit is already present on the live site, so mark it DONE, not an implementation step.&quot; Treats it as shipped.</li>
+<li><strong>Empiricist / Risk Analyst:</strong> Local <code>index.html</code> differs from production <em>only</em> through the Jukan removal, and <strong>that edit has not yet been deployed</strong>. Risk Analyst adds that the local §6 replacement carries a grammatical break (&quot;— Where…&quot;) that must be finished before deploy.</li>
+<li><strong>Skeptic:</strong> The Jukan material is already <em>absent</em> from current §1, so §0 is a no-op — and following it literally risks deleting the wrong thing, namely the load-bearing <code>_xjdr</code>/ncode §6 attribution paragraph.</li>
+</ul>
+<p><strong>Adjudication — Empiricist + Risk Analyst win on precision.</strong> They performed the byte-level local-vs-deployed diff and caught the unfinished grammatical break; Architect&#39;s &quot;already live&quot; almost certainly conflated &quot;applied locally&quot; with &quot;deployed&quot; (the same byte-check the others ran shows <code>index.html</code> is <em>ahead</em> of production). Resolution: the edit exists locally, is <strong>not yet deployed</strong>, needs the &quot;— Where…&quot; fragment finished, and Skeptic&#39;s caution stands as an overlay — deploy it as a discrete, version-boundaried step and verify the <code>_xjdr</code> §6 paragraph is untouched in the process. This is cheap and should happen before the refactor, not folded into it.</p>
+<h3>D2 — Ambition level: full v2.2 resolver vs. honest scoped Traffic-Mix release</h3>
+<p><strong>The disagreement:</strong> Should the release be a genuine typed model/workload+SLA/lens/replay resolver (earning the &quot;v2.2 ontology&quot; claim), or a scoped Traffic-Mix selector shipped honestly as v2.1.2?</p>
+<p><strong>Each side:</strong></p>
+<ul>
+<li><strong>Architect (pushes hardest for full):</strong> Recommends the full resolver (its &quot;Alternative 3&quot;). Moving two fields &quot;does not earn v2.2 ontology claims&quot;; the scoped version is a <em>fallback</em> that must be renamed v2.1.2. Backs this with the prior design council, which <strong>unanimously called the typed split prerequisite work, not optional cleanup</strong>.</li>
+<li><strong>Risk Analyst:</strong> Prefers the full split, but explicitly accepts the scoped Traffic-Mix version &quot;with SLA debt openly retained&quot; as a legitimate alternative.</li>
+<li><strong>Skeptic / Empiricist (lean scoped-is-fine-if-labeled):</strong> Leaving SLA/blend separate is tolerable <em>if</em> the selector is honestly named Traffic Mix and the page states the larger ontology remains incomplete (&quot;do not claim model/workload conflation is killed&quot;).</li>
+</ul>
+<p><strong>Adjudication — largely reconcilable, with the irreducible part being a business input the agents don&#39;t have.</strong> Everyone agrees the scoped version is <em>shippable</em> provided it (a) is renamed, (b) doesn&#39;t claim to resolve conflation, and (c) lists the full ontology as explicit OUT. So the substantive engineering position is shared. The genuine split is over the version <em>label</em> and default ambition — and that turns on a deadline none of the four can see. <strong>Weight the Architect&#39;s naming discipline:</strong> the prior council&#39;s unanimous &quot;prerequisite work&quot; verdict is real external evidence that a two-field move shouldn&#39;t wear the v2.2 badge. Cleanest resolution: <strong>if you do the full resolver, it&#39;s v2.2; if you ship the scoped version, call it v2.1.2</strong> — the version number should track the ontology work actually done, which resolves the disagreement without anyone conceding on substance. <em>Irreducible until the deadline/resourcing constraint is stated.</em></p>
+<h3>D3 — Five-human-reader test: blocking release gate vs. deferred external validation</h3>
+<p><strong>The disagreement:</strong> Should the human-reader test block v2.2, or remain an open-but-non-blocking validation deferred outside implementation?</p>
+<p><strong>Each side:</strong></p>
+<ul>
+<li><strong>Empiricist (dissenter):</strong> <strong>REJECT the exclusion.</strong> Simulations cannot measure human reception; this is the <em>cheapest actual reception measurement</em> and should remain a release gate (run as a blind comparison against the persona phase). Marshals the strongest evidence: persona prompting showed near-random effects across 4 model families / 2,410 questions (Zheng et al. EMNLP 2024), ~30-point swings from irrelevant persona details (Luz de Araujo EMNLP 2025), 48% of synthetic-survey coefficients diverging from human data with 32% sign flips (Bisbee), plus documented sycophancy (Sharma et al.).</li>
+<li><strong>Skeptic / Architect / Risk Analyst:</strong> Keep it OUT of <em>this implementation</em> (externally coordinated, not code) — but all three insist it&#39;s <strong>not closed</strong> and the persona phase must never be recorded as satisfying it.</li>
+</ul>
+<p><strong>Adjudication — the gap is narrower than it looks, and Empiricist&#39;s framing should win the operative call.</strong> All four agree persona ≠ human-reception substitute, and all four agree the test remains owed. The only real split is whether it <em>blocks ship</em>. Empiricist has both the strongest evidence base and the strongest practical hook: the human test is also the <strong>cheapest decisive experiment</strong> (five literate readers, 90 seconds each, hours not days), and running it <em>before</em> the persona phase turns &quot;is E worth building?&quot; from an assumption into a measurement. Resolution: don&#39;t let it block the <em>code</em> refactor, but make the human-vs-persona blind comparison the recommended next validation action, and treat a green persona phase as non-satisfying. Functionally this adopts Empiricist&#39;s experiment while respecting the others&#39; scope boundary.</p>
+<h3>D4 — D tornado: outright reject vs. preflight-then-maybe (minor)</h3>
+<p><strong>The disagreement:</strong> Skeptic, Risk Analyst, and Empiricist say REJECT D for v2.2 outright; Architect says run a range-metadata inventory first and implement only if ≥3 presets qualify.</p>
+<p><strong>Adjudication — converges in practice.</strong> Both paths gate on a typed range registry (bounds, source locator, date, scope, range-type, correlation group) that does not yet exist, and both leave the chart out of the v2.2 implementation sequence. The only difference is whether the inventory runs now (Architect) or in backlog (others). Resolution: <strong>defer D from the implementation sequence; build the range registry as the gating precondition</strong> — semantically identical outcomes, so this is a sequencing preference, not a real conflict.</p>
+<hr>
+<h2>3. Open questions</h2>
+<ul>
+<li><strong>Are the original roofline derivation and the 192-row preset pack still retrievable?</strong> The Empiricist could not confirm either survives (roofline annex is a 7-line summary; the pack exists only as a claimed sandbox artifact). This gates C&#39;s entire approach — verbatim-with-checksum vs. labeled-reconstruction. <code>[empiricist surfaced; skeptic, architect, risk-analyst all flag the retrieval dependency]</code></li>
+<li><strong>What is the deadline?</strong> D2&#39;s full-vs-scoped choice hinges entirely on it, and no agent has this input. <code>[synthesis-emergent from Architect&#39;s Alternative-3-vs-2 fork]</code></li>
+<li><strong>Does persona simulation add incremental signal over source audits + the human test?</strong> Unknown until the blind comparison runs — it may show E&#39;s simulation track produces only persuasive synthetic objections. <code>[empiricist]</code></li>
+<li><strong>What is the preregistered dominance-ranking procedure for the tornado?</strong> All four say the range registry needs one; none specifies it. Must rank <em>all</em> mutable inputs (including un-ranged ones) before filtering for available bounds, or the selection bias persists. <code>[synthesis-emergent from all four]</code></li>
+<li><strong>Will full-state v3 permalinks leak private rates?</strong> Risk Analyst flags that serializing full effective state can expose private overrides; needs a &quot;strip private overrides&quot; decision and preserved share-warning. <code>[risk-analyst]</code></li>
+<li><strong>Can v2 links whose workload values equal the global default be disambiguated at all?</strong> Risk Analyst reproduced the existing codec bug directly: a link that changed GPT to <code>15:1/60%</code> encodes <em>neither</em> field and reloads as <code>9:1/78%</code>. Some v2→v3 migration is therefore irrecoverably lossy — the open question is only whether to accept <code>legacy-custom</code> as the honest fallback. <code>[risk-analyst]</code></li>
+<li><strong>Is there any rollback boundary?</strong> The project is not under Git — a cross-cutting multi-file refactor currently has no source-level undo, only isolated <code>.bak</code> files and deployed Cloudflare assets. <code>[risk-analyst — unique catch]</code></li>
+</ul>
+<hr>
+<h2>4. Final recommendation</h2>
+<p><strong>Do not implement PLAN-v22 as written. Revise it against the seven P0 conditions below, then proceed with mitigation.</strong> A/C can proceed after provenance cleanup; B needs a written state contract before any code; E needs redesign; D is deferred.</p>
+<p><strong>Confidence:</strong></p>
+<ul>
+<li><em>High</em> (all four converge, ~85–90% self-reported) that the <strong>direction — revise before implement — is correct</strong>, and high on the specific B/E/C/D adjudications, because the load-bearing ones rest on reproduced arithmetic (the xAI 26.95%/36.52% conflict) and primary-source checks, not reasoning-by-proxy.</li>
+<li><em>Medium</em> on <strong>version ambition (D2)</strong> and <strong>whether the human test blocks ship (D3)</strong> — both depend on a deadline and a resourcing decision that none of the four agents had, so they are owner inputs, not analysis gaps.</li>
+<li>The confidence is downgraded on exactly one class of claim the Empiricist grounded and others asserted: treat the persona phase as an <em>idea generator with no established error rate</em>, not validation.</li>
+</ul>
+<p><strong>The seven P0-before-implementation conditions</strong> (consolidated from all four P0 lists):</p>
+<ol>
+<li><strong>Write and test the B state-resolution contract first</strong> — traffic/lens/replay resolution precedence, atomic-replay semantics, anti-shopping range invariance, v2→v3 permalink migration (accepting lossy <code>legacy-custom</code> where default-equality is irrecoverable), and <code>im_presets_v1</code> migration — as <em>failing fixtures</em> before any implementation.</li>
+<li><strong>Rename Workload → Traffic Mix; re-ground every preset name</strong> to evidence-honest labels; replace &quot;provider-native&quot; with &quot;model default.&quot; Remove the generic &quot;Agentic/Chat/Coding&quot; labels the site&#39;s own tooltips contradict.</li>
+<li><strong>Redesign E:</strong> third-person source-faithfulness audits, remove all predicted-approval/QT questions, add @_xjdr as a source-fidelity audit (not a sim), split off an anonymous reception track, drop the redundant dunker persona, and rerun affected tasks after remediation. Note the Dylan citation is a Podcast Alpha post <em>featuring</em> him, not a primary post — the plan&#39;s &quot;only from cited primary posts&quot; rule is already false for one source.</li>
+<li><strong>Defer D</strong> from the implementation sequence; build the typed range registry (with a preregistered dominance ranking over <em>all</em> inputs) in backlog as its gate.</li>
+<li><strong>C:</strong> confirm artifact retrievability before any promise; prohibit calling a re-emission &quot;verbatim&quot;; export §6 in full before A&#39;s cuts (the current &quot;full response&quot; is a 39-line summary).</li>
+<li><strong>Establish a rollback boundary</strong> — <code>git init</code> or a checksum-stamped v2.1.1 snapshot — and freeze the 514 baseline + all 180 model×perspective resolutions before touching anything.</li>
+<li><strong>Finish and deploy §0</strong> — complete the &quot;— Where…&quot; grammatical break, deploy as a discrete version-boundaried step, and verify the <code>_xjdr</code> §6 paragraph is untouched.</li>
+</ol>
+<p><strong>Two live defects to fix regardless of the plan</strong> (Empiricist-found, currently shipped): the <code>_xjdr</code> blockquote alters &quot;2.1 sec TTFT overage&quot; → &quot;average&quot; and drops his 61-second p95 without marking the omission; both are attribution-fidelity errors the <em>next</em> review will flag independently of anything in v2.2. These are near-free and should ride along with the §0 deploy.</p>
+<p><strong>Gaps where Risk Analyst&#39;s failure modes are not addressed by Architect&#39;s design:</strong> the git/rollback boundary, the v3-permalink private-rate exposure, and the reproduced v2-default-equality lossy-migration bug. Fold these into the B contract (P0 #1) and the rollback step (P0 #6).</p>
+<p><strong>Conditions that would change the recommendation:</strong></p>
+<ul>
+<li><em>Hard near-term deadline</em> → ship the scoped Traffic-Mix version as <strong>v2.1.2</strong> (Architect&#39;s Alternative 2) — same seven P0s, lower version ambition, full ontology stays OUT. The P0s don&#39;t relax; only the badge does.</li>
+<li><em>Original artifacts prove retrievable</em> → C becomes &quot;publish verbatim + checksum&quot; (cleaner); otherwise labeled reconstruction with an original-vs-adopted delta.</li>
+<li><em>Blind human-vs-persona experiment shows persona adds no incremental signal</em> → downscope E to source audits + the human test only.</li>
+</ul>
+<p><strong>Cheapest next action that moves the decision forward:</strong> Write the <strong>B resolver fixture matrix</strong> as failing tests — legacy Opus link, Grok + xAI-opportunity, GLM dive replay, model-default workload, named workload, custom workload — asserting selector identity, final state, provenance, dive targets, and lens-range invariance. It&#39;s hours of work, it&#39;s a specification test not a research experiment, and it forces the #1 P0 (the state contract) to be pinned down before a line of production code is written. Run it alongside the Empiricist&#39;s five-reader blind comparison, which for a few more hours answers whether E&#39;s simulation track is worth building at all. Both are cheap, both are decisive, and neither commits you to the refactor.</p>
+<hr>
+<h2>5. Attribution map</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Contributing agent(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v2.1.1 healthy; 514 pass; assets byte-match</td>
+<td>all four (independent verification)</td>
+</tr>
+<tr>
+<td>B is a worse hybrid; xAI 26.95% vs 36.52% conflict</td>
+<td>skeptic, risk-analyst, empiricist (arithmetic); architect (mechanism)</td>
+</tr>
+<tr>
+<td>Rename Workload → Traffic Mix</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Preset names overclaim vs. site&#39;s own tooltips</td>
+<td>unanimous (empiricist cited DeepSeek/xjdr/Epoch primary sources)</td>
+</tr>
+<tr>
+<td>&quot;Provider-native&quot; is a misnomer → &quot;model default&quot;</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Anti-shopping range is a <em>residual</em> unrepaired defect</td>
+<td>skeptic, empiricist</td>
+</tr>
+<tr>
+<td>v3 schema + <code>im_presets_v1</code> browser-preset migration</td>
+<td>skeptic, architect, risk-analyst</td>
+</tr>
+<tr>
+<td>v2 codec loses default-equal workload values (reproduced)</td>
+<td>risk-analyst</td>
+</tr>
+<tr>
+<td>Replays must be atomic composites</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Tornado gate is circular / selection-biased; defer D</td>
+<td>unanimous (architect = preflight-first)</td>
+</tr>
+<tr>
+<td>Drop named-person sim; add @_xjdr as source audit</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Drop redundant dunker persona</td>
+<td>skeptic, architect, empiricist</td>
+</tr>
+<tr>
+<td>C: reject verbatim re-emission</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>A: retain range-basis sentence; export §6 first</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>514 suite = test-count theater (no DOM/permalink coverage)</td>
+<td>empiricist, risk-analyst, skeptic</td>
+</tr>
+<tr>
+<td>Full-resolver vs. scoped-v2.1.2; prior council &quot;prerequisite work&quot;</td>
+<td>architect (primary); risk-analyst (accepts scoped)</td>
+</tr>
+<tr>
+<td>Five-human test should be a release gate + cheapest experiment</td>
+<td>empiricist</td>
+</tr>
+<tr>
+<td>Persona-fidelity literature (Zheng, Luz de Araujo, Bisbee, Sharma)</td>
+<td>empiricist</td>
+</tr>
+<tr>
+<td>§0 applied-locally-not-deployed; &quot;— Where…&quot; break</td>
+<td>empiricist, risk-analyst</td>
+</tr>
+<tr>
+<td>§0 collateral-damage risk to <code>_xjdr</code> paragraph</td>
+<td>skeptic</td>
+</tr>
+<tr>
+<td><code>_xjdr</code> blockquote &quot;overage→average&quot; + dropped p95 defect</td>
+<td>empiricist</td>
+</tr>
+<tr>
+<td>Dylan citation is not a primary post</td>
+<td>empiricist</td>
+</tr>
+<tr>
+<td>No Git / rollback boundary</td>
+<td>risk-analyst</td>
+</tr>
+<tr>
+<td>Freeze 180 resolutions before refactor</td>
+<td>risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td>v3 permalinks may leak private rates</td>
+<td>risk-analyst</td>
+</tr>
+<tr>
+<td>GPT-reviewing-GPT is not independent</td>
+<td>skeptic, risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td>Resolver fixture matrix = cheapest unblock</td>
+<td>empiricist</td>
+</tr>
+</tbody></table>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

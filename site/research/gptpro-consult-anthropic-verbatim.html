@@ -1,0 +1,1223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic consult — verbatim original (recovered) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/gptpro-consult-anthropic-verbatim">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-5.6 Pro Anthropic consult — VERBATIM (recovered original)</h1>
+<blockquote>
+<p>The complete, unedited response of the original Anthropic margin consultation (req_1783636621475, 54m21s, <code>gpt-5-6-pro</code>, Pro-verified, 2026-07-09; <a href="https://chatgpt.com/c/6a50228e-a398-83e8-8445-3c39b76730db">conversation</a>).
+<strong>Provenance:</strong> recovered 2026-07-11 from the session transcript that received it — these are the original bytes as returned by the API, not a regeneration. <code>citeturn…</code> tokens are ChatGPT-internal citation markers and are preserved as received.
+<strong>SHA-256 (response body below this header):</strong> <code>16ea77207011d5c7a65e78bc82b483d187c415ba5e5742befb7d7e3a2ec51f50</code>
+The <a href="gpt-pro-full-response.html">adopted-findings summary</a> distills what the site uses; where they differ, the site&#39;s §6 states the adopted value.</p>
+</blockquote>
+<hr>
+<p>I’ll verify the four source threads, build a transparent token-cost model, benchmark accelerator generations, and reconcile marginal economics with reported margins while distinguishing facts from assumptions.</p>
+<p>Early corrections: DeepSeek’s 545% return-on-cost equals 84.5% margin, and Musk suggested ~5T total Opus parameters. GLM-5.2 and the 5× GB300 DeepSeek-V4 result were separate benchmarks.</p>
+<p>InferenceMAX is now InferenceX, and headline gains combine silicon with precision, expert parallelism, speculative decoding, and software. I’ll separately bridge busy-chip cost, loaded serving, COGS, and subscription dilution.</p>
+<p>Matched-latency calibration gives central Opus serving costs of $0.47/M input and $1.68/M output, implying 90.6% and 93.3% margins; GB300 metal-level output margins approach 98%.</p>
+<h1>Marginal economics of serving Claude tokens</h1>
+<p><strong>As of July 9, 2026, my central estimate is that Anthropic earns roughly 91% marginal serving margin on uncached Opus input tokens and 93% on Opus output tokens at standard API list prices.</strong> On a well-optimized GB300 deployment, I estimate about <strong>94% on both input and output</strong>. For Sonnet, the central figure is approximately <strong>92% input/94% output at today’s promotional $2/$10 pricing</strong>, or <strong>95%/96% at the normal $3/$15 price</strong>.</p>
+<p>Those figures use an <strong>economic marginal cost</strong>: accelerator opportunity cost, realistic utilization, networking/CPU overhead, and production redundancy—but not training, research, sales, or corporate overhead. They are not the instantaneous electricity cost, which would imply margins above 99.8%.</p>
+<h2>Executive results</h2>
+<table>
+<thead>
+<tr>
+<th>Model and serving basis</th>
+<th align="right">List price, input/output</th>
+<th align="right">Modeled cost per M input</th>
+<th align="right">Input margin</th>
+<th align="right">Modeled cost per M output</th>
+<th align="right">Output margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Opus 4.x, illustrative Anthropic fleet</strong></td>
+<td align="right">$5 / $25</td>
+<td align="right"><strong>$0.47</strong></td>
+<td align="right"><strong>90.6%</strong></td>
+<td align="right"><strong>$1.68</strong></td>
+<td align="right"><strong>93.3%</strong></td>
+</tr>
+<tr>
+<td><strong>Opus 4.x, GB300 NVL72</strong></td>
+<td align="right">$5 / $25</td>
+<td align="right"><strong>$0.31</strong></td>
+<td align="right"><strong>93.8%</strong></td>
+<td align="right"><strong>$1.44</strong></td>
+<td align="right"><strong>94.2%</strong></td>
+</tr>
+<tr>
+<td><strong>Opus 4.x, TPU v7 at estimated Anthropic contract economics</strong></td>
+<td align="right">$5 / $25</td>
+<td align="right"><strong>$0.24</strong></td>
+<td align="right"><strong>95.1%</strong></td>
+<td align="right"><strong>$0.70</strong></td>
+<td align="right"><strong>97.2%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet 5, fleet, promotional price through Aug. 31</strong></td>
+<td align="right">$2 / $10</td>
+<td align="right"><strong>$0.16</strong></td>
+<td align="right"><strong>92.2%</strong></td>
+<td align="right"><strong>$0.56</strong></td>
+<td align="right"><strong>94.4%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet, fleet, normal price</strong></td>
+<td align="right">$3 / $15</td>
+<td align="right"><strong>$0.16</strong></td>
+<td align="right"><strong>94.8%</strong></td>
+<td align="right"><strong>$0.56</strong></td>
+<td align="right"><strong>96.3%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet 5, GB300, promotional price</strong></td>
+<td align="right">$2 / $10</td>
+<td align="right"><strong>$0.10</strong></td>
+<td align="right"><strong>94.8%</strong></td>
+<td align="right"><strong>$0.48</strong></td>
+<td align="right"><strong>95.2%</strong></td>
+</tr>
+</tbody></table>
+<p>Current standard pricing is $5/M input and $25/M output for Opus 4.5–4.8. Sonnet 5 is temporarily $2/$10 through August 31, 2026, and becomes $3/$15 on September 1; Sonnet 4.5/4.6 is already $3/$15. Cache hits cost 10% of standard input pricing, while Batch API work is discounted 50%. <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic pricing documentation</a>. citeturn779069view3turn357881view7</p>
+<p>My defensible uncertainty ranges are:</p>
+<table>
+<thead>
+<tr>
+<th>Margin at standard list prices</th>
+<th align="right">Point estimate</th>
+<th align="right">Plausible range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Opus uncached input</strong></td>
+<td align="right"><strong>90.6%</strong></td>
+<td align="right"><strong>85–95%</strong></td>
+</tr>
+<tr>
+<td><strong>Opus output</strong></td>
+<td align="right"><strong>93.3%</strong></td>
+<td align="right"><strong>88–97%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet input at $2 promotional price</strong></td>
+<td align="right"><strong>92.2%</strong></td>
+<td align="right"><strong>88–97%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet output at $10 promotional price</strong></td>
+<td align="right"><strong>94.4%</strong></td>
+<td align="right"><strong>91–98%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet input at $3 normal price</strong></td>
+<td align="right"><strong>94.8%</strong></td>
+<td align="right"><strong>92–98%</strong></td>
+</tr>
+<tr>
+<td><strong>Sonnet output at $15 normal price</strong></td>
+<td align="right"><strong>96.3%</strong></td>
+<td align="right"><strong>94–99%</strong></td>
+</tr>
+</tbody></table>
+<p>The key qualification is procurement: at public hyperscaler on-demand or reservation prices rather than strategic, fleet-scale economics, Opus’s margin can be only <strong>55–85% on input and 63–91% on output</strong>. Thus “90–95%” is reasonable for an optimized, negotiated marginal deployment—not for every token running on every cloud instance.</p>
+<hr>
+<h1>1. Verification of the four evidence threads</h1>
+<h2>1.1 DeepSeek’s “545%” disclosure</h2>
+<p>The primary source is DeepSeek’s final Open Source Week post, <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">“One More Thing: DeepSeek-V3/R1 Inference System Overview”</a>.</p>
+<p>For the 24 hours ending February 28, 2025, DeepSeek reported:</p>
+<ul>
+<li>Average occupancy of <strong>226.75 eight-H800 nodes</strong>, or 1,814 H800s.</li>
+<li>Assumed cost of <strong>$2 per H800-hour</strong>.</li>
+<li>Total daily accelerator cost of <strong>$87,072</strong>.</li>
+<li><strong>608 billion input tokens</strong>, including 342 billion cache hits.</li>
+<li><strong>168 billion output tokens</strong>.</li>
+<li>Theoretical revenue of <strong>$562,027</strong> at then-current R1 prices.</li>
+<li>The phrase “cost-profit margin of 545%.”</li>
+<li>A warning that actual revenue was materially lower because of free services, discounted periods, V3 traffic, and other factors. citeturn380934view0turn779069view0</li>
+</ul>
+<p>The arithmetic is:</p>
+<p>[
+\text{Profit/cost}
+  =\frac{562{,}027-87{,}072}{87{,}072}
+  =545.5%
+]</p>
+<p>But conventional gross margin is:</p>
+<p>[
+\text{Gross margin}
+  =\frac{562{,}027-87{,}072}{562{,}027}
+  =84.5%
+]</p>
+<p>So <strong>545% was a return-on-cost ratio, not a 545% gross margin</strong>. A 545% markup on cost corresponds to an 84.5% margin.</p>
+<p>DeepSeek also disclosed phase-specific throughput of about <strong>73,700 input tokens/s per eight-GPU node</strong> or <strong>14,800 output tokens/s per node</strong>. That gives useful accelerator-time calibrations:</p>
+<p>[
+\text{Output throughput per H800}
+ = \frac{14{,}800}{8}
+ =1{,}850\ \text{tokens/s}
+]</p>
+<p>[
+\text{Busy-H800 cost/M output}
+ = \frac{$2}{1{,}850\times3{,}600}\times10^6
+ = $0.30
+]</p>
+<p>And, including the reported cache-hit workload:</p>
+<p>[
+\text{Busy-H800 cost/M effective input}
+ =\frac{$2}{(73{,}700/8)\times3{,}600}\times10^6
+ \approx $0.06
+]</p>
+<p>These are <strong>phase-capacity accelerator costs</strong>, not fully loaded costs. They omit slack capacity, CPUs, networking, storage, reliability replicas, and the fact that DeepSeek’s model architecture, pricing, interactivity, and output lengths differ from Claude. Still, they make sub-$1/M raw token costs entirely credible for an efficient MoE.</p>
+<p>DeepSeek-V3 itself has <strong>671B total parameters but only 37B activated per token</strong>, an important reason its inference is inexpensive. <a href="https://arxiv.org/abs/2412.19437">DeepSeek-V3 technical report</a>. citeturn735447view3</p>
+<h3>Conclusion on thread 1</h3>
+<p>The evidence is genuine and highly relevant, but the correct takeaway is:</p>
+<blockquote>
+<p>DeepSeek demonstrated approximately <strong>84.5% theoretical gross margin</strong> at exceptionally low API prices, under a hypothetical full-revenue assumption—not 545% gross margin.</p>
+</blockquote>
+<p>That is strong circumstantial support for very high margins at Claude’s much higher list prices.</p>
+<hr>
+<h2>1.2 Elon Musk’s Claude parameter-count claim</h2>
+<p>The underlying <a href="https://x.com/elonmusk/status/2042123561666855235">X post is here</a>. A readable transcription is in <a href="https://eu.36kr.com/en/p/3760679047267075">36Kr’s report</a>.</p>
+<p>Musk said:</p>
+<blockquote>
+<p>“The total parameter count is 0.5T … half the parameter count of Sonnet and one-tenth of Opus.”</p>
+</blockquote>
+<p>That implies:</p>
+<ul>
+<li><strong>Sonnet: approximately 1 trillion total parameters</strong></li>
+<li><strong>Opus: approximately 5 trillion total parameters</strong></li>
+</ul>
+<p>It is explicitly a claim about <strong>total</strong>, not active, parameters. Anthropic has not publicly confirmed either number. citeturn779069view1turn374708view0</p>
+<p>So the attribution in the question needs reversing: Musk did <strong>not</strong> claim Opus was surprisingly small. He claimed an unusually large total parameter count. The economically relevant possibility is that <strong>only a small fraction of those parameters is active for each token</strong>.</p>
+<p>Two pieces of evidence warrant caution:</p>
+<ol>
+<li>A July 2026 revision of the “incompressible knowledge probes” methodology reports good aggregate parameter-estimation performance across open models but still has a roughly <strong>threefold 90% error range in each direction</strong> for individual estimates. <a href="https://arxiv.org/abs/2604.24827">IKP paper</a>. citeturn735447view1</li>
+<li>An independent methodological re-analysis argues that exact closed-model parameter estimates are highly sensitive to assumptions and obtains an Opus 4.7 estimate nearer <strong>1.1T total</strong>, again with substantial uncertainty. <a href="https://www.lesswrong.com/posts/veFMEzDDyWaer2Sms/sanity-checking-incompressible-knowledge-probes">Critical re-analysis</a>. citeturn735447view2</li>
+</ol>
+<h3>My architectural interpretation</h3>
+<p>For the cost model I use:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th align="right">Total-parameter base case</th>
+<th align="right">Active parameters/token</th>
+<th align="right">Sensitivity range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Opus 4.x</strong></td>
+<td align="right">5T</td>
+<td align="right"><strong>300B</strong></td>
+<td align="right">150–600B active</td>
+</tr>
+<tr>
+<td><strong>Sonnet</strong></td>
+<td align="right">1T</td>
+<td align="right"><strong>100B</strong></td>
+<td align="right">60–200B active</td>
+</tr>
+</tbody></table>
+<p>The 300B Opus assumption means approximately 6% of the 5T total is activated. That activation ratio is similar to two disclosed frontier open MoEs:</p>
+<ul>
+<li>DeepSeek-V3: <strong>37B active / 671B total = 5.5%</strong></li>
+<li>GLM-5.2: <strong>40B active / 744B total = 5.4%</strong>. <a href="https://www.baseten.co/blog/how-we-built-the-worlds-fastest-api-for-glm-52/">GLM-5.2 architecture and Baseten implementation</a>. citeturn735447view3turn380934view3</li>
+</ul>
+<p>This is an assumption, not a claim about Claude’s actual architecture.</p>
+<p>A useful sanity check is that a genuinely <strong>dense 5T-active</strong> Opus would cost approximately 16.7 times more to run than my 300B-active base case. Its modeled fleet output cost would exceed $28/M before some additional overhead—above the current $25/M list price. Therefore, if Musk’s 5T total figure is approximately right, Opus almost certainly must be highly sparse, heavily quantized, or otherwise avoid activating anything close to all 5T weights per token.</p>
+<h3>Memory implication</h3>
+<p>A 5T model requires roughly:</p>
+<ul>
+<li><strong>5 TB of weight storage at FP8</strong></li>
+<li><strong>2.5 TB at FP4</strong></li>
+</ul>
+<p>Weights alone therefore require approximately 63 H100s at FP8, 36 H200s at FP8, 14 GB200s at FP4, or nine GB300s at FP4, before KV cache and operating headroom. This is why the 72-GPU NVLink domain matters independently of raw FLOPS.</p>
+<hr>
+<h2>1.3 The purported “Numina Code / GLM-5.2 on GB300” result</h2>
+<p>I could not locate a primary source matching all three elements—<strong>Numina</strong>, <strong>GLM-5.2</strong>, and <strong>GB300</strong>. The recollection appears to combine two separate June 2026 results.</p>
+<h3>Result A: DeepSeek-V4 on GB300</h3>
+<p>The spectacular aggregate-throughput result was published by the <strong>SGLang Team and NVIDIA Team</strong>, not a Numina researcher:</p>
+<p><a href="https://pytorch.org/blog/serving-deepseek-v4-on-gb300-with-sglang-5x-higher-throughput-at-the-same-interactivity-since-day-0/">Serving DeepSeek-V4 on GB300 with SGLang: 5x Higher Throughput</a></p>
+<p>For DeepSeek-V4 Pro, FP4, 8K input/1K output, disaggregated serving:</p>
+<ul>
+<li>April 2026 day-zero, no MTP: approximately <strong>2,200 output tokens/s/GPU</strong></li>
+<li>June 2026 with MTP: approximately <strong>11,200 output tokens/s/GPU</strong></li>
+<li>Both measured at roughly <strong>50 output tokens/s/user</strong></li>
+<li>Same GB300 hardware, a <strong>5× software/runtime improvement</strong>. citeturn380934view2</li>
+</ul>
+<p>The work involved SGLang, NVIDIA Dynamo, improved MoE and attention kernels, better prefill/decode disaggregation, scheduling, multi-token prediction, and numerous correctness and runtime fixes.</p>
+<p>This is not evidence that GB300 hardware is 5× faster than GB200. It is evidence that <strong>software maturation on a fixed accelerator can be larger than a chip-generation gain</strong>.</p>
+<h3>Result B: GLM-5.2 on Blackwell</h3>
+<p>The GLM-5.2 result was from a <strong>Baseten team</strong> whose listed authors were Alex Korte, Magdy Saleh, Tri Dao, Anant Desai, Bryce Dubayah, Abu Qader, and Philip Kiely:</p>
+<p><a href="https://www.baseten.co/blog/how-we-built-the-worlds-fastest-api-for-glm-52/">How we built the world’s fastest API for GLM-5.2</a></p>
+<p>They reported:</p>
+<ul>
+<li><strong>Over 280 output tokens/s</strong>, as measured by Artificial Analysis</li>
+<li>GLM-5.2 architecture of <strong>744B total / 40B active</strong></li>
+<li>NVIDIA Blackwell and in-house NVFP4 quantization</li>
+<li>Roughly equivalent FP8 versus NVFP4 results on the cited BFCL benchmark</li>
+<li><strong>2× higher TPS</strong> for their observed workloads from prefill/decode disaggregation</li>
+<li>Further gains from KV-aware routing and multi-token prediction. citeturn380934view3</li>
+</ul>
+<p>The 280 TPS figure is primarily a <strong>per-user generation-speed/API benchmark</strong>, not 280 aggregate tokens/s/GPU. The article says “NVIDIA Blackwell”; it does not identify that result specifically as a GB300 measurement.</p>
+<h3>Conclusion on thread 3</h3>
+<p>The correct attribution is:</p>
+<ul>
+<li><strong>GB300, ~11,200 aggregate tok/s/GPU:</strong> SGLang + NVIDIA, serving <strong>DeepSeek-V4</strong></li>
+<li><strong>GLM-5.2, 280+ tok/s/user:</strong> the <strong>Baseten team</strong>, serving on NVIDIA Blackwell</li>
+<li>No primary “Numina Code optimized GLM-5.2 on GB300” source was found.</li>
+</ul>
+<hr>
+<h2>1.4 Claude Pro/Max “API-equivalent” consumption</h2>
+<p>The strongest public investigations are real, but their dollar figures are often misunderstood.</p>
+<p>Peter Steinberger’s June 2025 essay, <a href="https://steipete.me/posts/2025/stop-overthinking-ai-subscriptions">“Stop Overthinking AI Subscriptions”</a>, documented the then-prevailing limits as approximately:</p>
+<ul>
+<li>Pro, $20: around 45 messages per rolling five hours</li>
+<li>Max 5×, $100: around 225</li>
+<li>Max 20×, $200: around 900</li>
+</ul>
+<p>He emphasized that actual capacity varies with model, context length, message size, and system load. Those figures are historical rather than guaranteed current allowances. citeturn540453view6</p>
+<p>A detailed ccusage-based case study by Product Compass reported, over 30 days:</p>
+<ul>
+<li>440 sessions</li>
+<li>Approximately 18,000 turns</li>
+<li><strong>$1,588 of API-list-price-equivalent usage</strong></li>
+<li>Covered by a Claude Max subscription. <a href="https://www.productcompass.pm/p/claude-code-pricing">Analysis</a>. citeturn540453view7</li>
+</ul>
+<p>That implies an 87.4% discount to API list value:</p>
+<p>[
+1-\frac{200}{1{,}588}=87.4%
+]</p>
+<p>But it does <strong>not</strong> imply Anthropic spent $1,588 serving the user. ccusage-style tools multiply measured tokens by public API prices. They estimate <strong>foregone list revenue</strong>, not hardware cost.</p>
+<p>Anthropic’s current Claude Code cost documentation says enterprise deployments average approximately <strong>$13 per active developer-day and $150–250 per developer-month</strong>, with 90% remaining below $30 per active day. <a href="https://code.claude.com/docs/en/costs">Claude Code cost documentation</a>. citeturn357881view6</p>
+<h3>Economic interpretation</h3>
+<p>Subscription investigations establish that:</p>
+<ol>
+<li>Anthropic gives heavy users very large discounts relative to API list prices.</li>
+<li>Plan caps, model routing, rolling windows, and peak throttling are important margin controls.</li>
+<li>Subscription average revenue per nominal token is much lower than API sticker price.</li>
+<li>They do <strong>not</strong> by themselves reveal Anthropic’s serving cost.</li>
+</ol>
+<p>A $200 subscriber who consumes $1,588 of API-list-equivalent tokens can still be profitable if the underlying serving cost is, for example, $30–100. But extreme consumers can be loss-making even when the average subscriber remains profitable.</p>
+<hr>
+<h2>1.5 The X-account claims</h2>
+<p>The relevant posts I could verify include:</p>
+<ul>
+<li><a href="https://x.com/teortaxesTex/status/1926656992082337950">@teortaxesTex</a>, whose indexed text includes “They can go for 99% margins …”. citeturn374708view1</li>
+<li><a href="https://x.com/Jukanlosreve/status/1941493202873352400">@Jukanlosreve</a>, who used assumptions around $1/H100-hour and roughly $3/GB200-hour. That is principally a hardware-cost assumption, rather than an independently demonstrated Claude margin. citeturn876456search0</li>
+<li><a href="https://x.com/zephyr_z9/status/2069824935967748247">@zephyr_z9</a>, whose indexed post discusses approximately 95% gross margin. X’s public rendering did not expose enough surrounding thread context for me to validate every premise behind the number. citeturn374708view3</li>
+</ul>
+<p>One arithmetic caution: <strong>5× cost is an 80% margin</strong>, not 95%. A 95% margin requires price to be 20× cost:</p>
+<p>[
+1-\frac{1}{5}=80%,\qquad
+1-\frac{1}{20}=95%
+]</p>
+<hr>
+<h1>2. First-principles Claude serving-cost model</h1>
+<h2>2.1 What “marginal” means</h2>
+<p>I distinguish three levels:</p>
+<ol>
+<li><strong>Cash marginal cost:</strong> electricity and immediately variable networking for a machine that is already purchased and otherwise idle.</li>
+<li><strong>Economic marginal serving cost:</strong> the opportunity cost of scarce accelerator time, plus production utilization and direct serving overhead.</li>
+<li><strong>Company COGS:</strong> actual cloud invoices/depreciation, idle peak capacity, free and subscription use, reliability overhead, internal inference, support infrastructure, and whatever the company’s accounting policy assigns to cost of revenue.</li>
+</ol>
+<p>The headline estimates use level 2.</p>
+<h2>2.2 Workload and architecture assumptions</h2>
+<p>Base workload:</p>
+<ul>
+<li>8,192 uncached input tokens</li>
+<li>1,024 generated output tokens</li>
+<li>Approximately 50 output tokens/s/user</li>
+<li>Production continuous batching</li>
+<li>Prefill/decode disaggregation where supported</li>
+<li>No explicit charge for training or model development</li>
+<li>Blackwell uses quality-preserving NVFP4; Hopper, TPU, and Trainium use FP8-class inference</li>
+</ul>
+<p>Approximate FLOPs per token:</p>
+<p>[
+F_{\text{token}}=\kappa P_{\text{active}}
+]</p>
+<p>where:</p>
+<ul>
+<li>(P_{\text{active}}) is active parameters</li>
+<li>(\kappa=2.3), representing approximately (2P) for the forward pass plus 15% for attention, routing, normalization, sampling, and other operations</li>
+</ul>
+<p>For Opus:</p>
+<p>[
+F_{\text{Opus}}=2.3\times300\text{B}
+=690\text{ GFLOP/token}
+]</p>
+<p>For Sonnet:</p>
+<p>[
+F_{\text{Sonnet}}=2.3\times100\text{B}
+=230\text{ GFLOP/token}
+]</p>
+<p>The simple formula does not fully capture KV-cache bandwidth, inter-device all-to-all communication, speculative tokens that are rejected, or low-batch latency constraints. I therefore use an <strong>end-to-end effective utilization factor</strong>, (\eta), well below peak tensor-core MFU for decode.</p>
+<h2>2.3 Accelerator-price and utilization assumptions</h2>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Dense compute used in model</th>
+<th align="right">Effective hourly cost assumption</th>
+<th align="right">Prefill (\eta)</th>
+<th align="right">Decode (\eta)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100 SXM</td>
+<td align="right">1.979 PF FP8</td>
+<td align="right"><strong>$2.80</strong></td>
+<td align="right">35%</td>
+<td align="right">8%</td>
+</tr>
+<tr>
+<td>H200 SXM</td>
+<td align="right">1.979 PF FP8</td>
+<td align="right"><strong>$3.40</strong></td>
+<td align="right">38%</td>
+<td align="right">10%</td>
+</tr>
+<tr>
+<td>GB200/B200</td>
+<td align="right">10 PF FP4</td>
+<td align="right"><strong>$4.50</strong></td>
+<td align="right">30%</td>
+<td align="right">6%</td>
+</tr>
+<tr>
+<td>GB300/B300</td>
+<td align="right">15 PF FP4</td>
+<td align="right"><strong>$5.00</strong></td>
+<td align="right">30%</td>
+<td align="right">6.5%</td>
+</tr>
+<tr>
+<td>TPU v7 Ironwood</td>
+<td align="right">4.614 PF FP8</td>
+<td align="right"><strong>$1.60</strong></td>
+<td align="right">40%</td>
+<td align="right">14%</td>
+</tr>
+<tr>
+<td>Trainium2</td>
+<td align="right">1.299 PF FP8</td>
+<td align="right"><strong>$1.80</strong></td>
+<td align="right">35%</td>
+<td align="right">12%</td>
+</tr>
+</tbody></table>
+<p>These are <strong>Anthropic-scale economic costs</strong>, not public on-demand prices.</p>
+<p>Public anchors include:</p>
+<ul>
+<li>CoreWeave spot prices around $2.44/H100-hour, $2.58/H200-hour, and $4.48/B300-hour; GB200 inference capacity is advertised at $10.50/GPU-hour. <a href="https://www.coreweave.com/pricing">CoreWeave pricing</a>. citeturn779069view6turn357881view1turn357881view2</li>
+<li>Effective July 1, AWS’s published per-accelerator rates include $5.191 for H100, $5.97 for H200, $12.355 for B200, and $14.04 for B300. <a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">AWS Capacity Blocks</a>. citeturn357881view3</li>
+<li>Google’s public Ironwood pricing in Iowa is $12 on demand, $6 flex-start, $8.40 on a one-year commitment, and $5.40 on a three-year commitment. <a href="https://cloud.google.com/tpu/pricing">Google TPU pricing</a>. citeturn357881view0</li>
+<li>SemiAnalysis estimates Anthropic’s strategic TPU v7 economics near <strong>$1.60/chip-hour</strong>, far below public retail pricing. That is a third-party estimate, not a disclosed contract price. <a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">SemiAnalysis TPU v7 analysis</a>. citeturn527047view0</li>
+<li>AWS publishes $2.235 per Trainium2 accelerator-hour for current Capacity Blocks. <a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">AWS source</a>. citeturn779069view5</li>
+</ul>
+<p>Anthropic has publicly described a heterogeneous strategy spanning Google TPUs, AWS Trainium, and NVIDIA accelerators, but has not disclosed the actual serving mix or unit contract prices. <a href="https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services">Google expansion</a>; <a href="https://www.anthropic.com/news/anthropic-amazon-compute">AWS compute expansion</a>. citeturn360411view0turn360411view1</p>
+<h2>2.4 Cost formula</h2>
+<p>Modeled throughput per accelerator:</p>
+<p>[
+T=\frac{Q_{\text{peak}}\eta}{F_{\text{token}}}
+]</p>
+<p>Busy-accelerator cost per million tokens:</p>
+<p>[
+C_{\text{busy}}
+=\frac{r}{3{,}600T}\times10^6
+]</p>
+<p>I convert busy cost into a production serving cost with:</p>
+<ul>
+<li>75% economic fleet utilization</li>
+<li>10% CPU, host memory, networking, control plane, and direct reliability overhead</li>
+</ul>
+<p>[
+C_{\text{serving}}
+=C_{\text{busy}}\frac{1.10}{0.75}
+=1.4667C_{\text{busy}}
+]</p>
+<p>This overhead is deliberately not a full business-level COGS calculation.</p>
+<h2>2.5 Worked GB300 Opus example</h2>
+<p>For output:</p>
+<p>[
+T_{\text{out}}
+=\frac{15\times10^{15}\times0.065}
+{690\times10^9}
+=1{,}413\ \text{tokens/s/GPU}
+]</p>
+<p>[
+C_{\text{busy,out}}
+=\frac{5}{1{,}413\times3{,}600}\times10^6
+=$0.983/M
+]</p>
+<p>[
+C_{\text{full,out}}
+=0.983\times1.4667
+=$1.44/M
+]</p>
+<p>[
+GM_{\text{out}}
+=1-\frac{1.44}{25}
+=94.2%
+]</p>
+<p>For input:</p>
+<p>[
+T_{\text{in}}
+=\frac{15\times10^{15}\times0.30}
+{690\times10^9}
+=6{,}522\ \text{tokens/s/GPU}
+]</p>
+<p>[
+C_{\text{full,in}}
+=\frac{5}{6{,}522\times3{,}600}\times10^6\times1.4667
+=$0.31/M
+]</p>
+<p>[
+GM_{\text{in}}
+=1-\frac{0.31}{5}
+=93.8%
+]</p>
+<h2>2.6 Modeled Opus cost by accelerator</h2>
+<p>These figures assume 300B active parameters and the rates/utilization above.</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Input tok/s per accelerator</th>
+<th align="right">Input cost, busy → full</th>
+<th align="right">Output tok/s per accelerator</th>
+<th align="right">Output cost, busy → full</th>
+<th align="right">Full-cost Opus margins, input/output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H100</strong></td>
+<td align="right">1,004</td>
+<td align="right">$0.77 → <strong>$1.14</strong></td>
+<td align="right">229</td>
+<td align="right">$3.39 → <strong>$4.97</strong></td>
+<td align="right"><strong>77.3% / 80.1%</strong></td>
+</tr>
+<tr>
+<td><strong>H200</strong></td>
+<td align="right">1,090</td>
+<td align="right">$0.87 → <strong>$1.27</strong></td>
+<td align="right">287</td>
+<td align="right">$3.29 → <strong>$4.83</strong></td>
+<td align="right"><strong>74.6% / 80.7%</strong></td>
+</tr>
+<tr>
+<td><strong>GB200 NVL72</strong></td>
+<td align="right">4,348</td>
+<td align="right">$0.29 → <strong>$0.42</strong></td>
+<td align="right">870</td>
+<td align="right">$1.44 → <strong>$2.11</strong></td>
+<td align="right"><strong>91.6% / 91.6%</strong></td>
+</tr>
+<tr>
+<td><strong>GB300 NVL72</strong></td>
+<td align="right">6,522</td>
+<td align="right">$0.21 → <strong>$0.31</strong></td>
+<td align="right">1,413</td>
+<td align="right">$0.98 → <strong>$1.44</strong></td>
+<td align="right"><strong>93.8% / 94.2%</strong></td>
+</tr>
+<tr>
+<td><strong>TPU v7</strong></td>
+<td align="right">2,675</td>
+<td align="right">$0.17 → <strong>$0.24</strong></td>
+<td align="right">936</td>
+<td align="right">$0.47 → <strong>$0.70</strong></td>
+<td align="right"><strong>95.1% / 97.2%</strong></td>
+</tr>
+<tr>
+<td><strong>Trainium2</strong></td>
+<td align="right">659</td>
+<td align="right">$0.76 → <strong>$1.11</strong></td>
+<td align="right">226</td>
+<td align="right">$2.21 → <strong>$3.25</strong></td>
+<td align="right"><strong>77.7% / 87.0%</strong></td>
+</tr>
+</tbody></table>
+<p>The H100/H200 figures may be optimistic for a 5T-total MoE because those platforms require much larger cross-node expert-parallel deployments. Conversely, Blackwell and TPU results depend on successful low-precision quantization and excellent distributed software.</p>
+<p>If Claude requires FP8 rather than NVFP4 on Blackwell, GB200/GB300 prefill costs could rise by roughly 50–100%, while decode costs might rise by approximately 20–50% because decode is more memory- and communication-bound. Even under that sensitivity, GB300 Opus output margin generally remains around 91–94%.</p>
+<h2>2.7 Illustrative Anthropic fleet blend</h2>
+<p>Because Anthropic does not disclose the actual mix, I use:</p>
+<ul>
+<li>40% TPU v7</li>
+<li>25% GB300</li>
+<li>15% GB200</li>
+<li>15% Trainium2</li>
+<li>5% H200</li>
+</ul>
+<p>Then:</p>
+<p>[
+C_{\text{Opus,in}}
+=.40(.244)+.25(.312)+.15(.422)+.15(1.113)+.05(1.271)
+=$0.469/M
+]</p>
+<p>[
+C_{\text{Opus,out}}
+=.40(.696)+.25(1.442)+.15(2.108)+.15(3.246)+.05(4.830)
+=$1.684/M
+]</p>
+<p>Thus:</p>
+<p>[
+GM_{\text{Opus,in}}
+=1-\frac{.469}{5}
+=90.6%
+]</p>
+<p>[
+GM_{\text{Opus,out}}
+=1-\frac{1.684}{25}
+=93.3%
+]</p>
+<p>For the 100B-active Sonnet assumption, compute-dominated cost is roughly one-third of Opus:</p>
+<p>[
+C_{\text{Sonnet,in}}\approx$0.156/M
+]</p>
+<p>[
+C_{\text{Sonnet,out}}\approx$0.561/M
+]</p>
+<p>At the promotional $2/$10 price this gives 92.2%/94.4%; at $3/$15 it gives 94.8%/96.3%.</p>
+<h2>2.8 Parameter sensitivity</h2>
+<p>Because Claude’s active parameter count is undisclosed, this is the largest model-specific uncertainty.</p>
+<h3>Opus, 150–600B active</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Active parameters</th>
+<th align="right">Input cost/M</th>
+<th align="right">Input margin at $5</th>
+<th align="right">Output cost/M</th>
+<th align="right">Output margin at $25</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">150B</td>
+<td align="right">$0.23</td>
+<td align="right">95.3%</td>
+<td align="right">$0.84</td>
+<td align="right">96.6%</td>
+</tr>
+<tr>
+<td align="right"><strong>300B base</strong></td>
+<td align="right"><strong>$0.47</strong></td>
+<td align="right"><strong>90.6%</strong></td>
+<td align="right"><strong>$1.68</strong></td>
+<td align="right"><strong>93.3%</strong></td>
+</tr>
+<tr>
+<td align="right">600B</td>
+<td align="right">$0.94</td>
+<td align="right">81.2%</td>
+<td align="right">$3.37</td>
+<td align="right">86.5%</td>
+</tr>
+</tbody></table>
+<h3>Sonnet, 60–200B active</h3>
+<table>
+<thead>
+<tr>
+<th align="right">Active parameters</th>
+<th align="right">Input cost/M</th>
+<th align="right">Margin at promotional $2</th>
+<th align="right">Output cost/M</th>
+<th align="right">Margin at promotional $10</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">60B</td>
+<td align="right">$0.09</td>
+<td align="right">95.3%</td>
+<td align="right">$0.34</td>
+<td align="right">96.6%</td>
+</tr>
+<tr>
+<td align="right"><strong>100B base</strong></td>
+<td align="right"><strong>$0.16</strong></td>
+<td align="right"><strong>92.2%</strong></td>
+<td align="right"><strong>$0.56</strong></td>
+<td align="right"><strong>94.4%</strong></td>
+</tr>
+<tr>
+<td align="right">200B</td>
+<td align="right">$0.31</td>
+<td align="right">84.4%</td>
+<td align="right">$1.12</td>
+<td align="right">88.8%</td>
+</tr>
+</tbody></table>
+<p>Other major uncertainties are average batch size, output interactivity, KV-cache length, speculative acceptance rate, quantization quality, expert load balancing, and the actual hardware invoice.</p>
+<h2>2.9 Public-retail-rate stress test</h2>
+<p>Using public cloud prices rather than strategic economics materially lowers the answer.</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator and public-rate proxy</th>
+<th align="right">Full Opus input cost/M</th>
+<th align="right">Input margin</th>
+<th align="right">Full Opus output cost/M</th>
+<th align="right">Output margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100, $5.191/hour</td>
+<td align="right">$2.11</td>
+<td align="right">57.9%</td>
+<td align="right">$9.22</td>
+<td align="right">63.1%</td>
+</tr>
+<tr>
+<td>H200, $5.97/hour</td>
+<td align="right">$2.23</td>
+<td align="right">55.4%</td>
+<td align="right">$8.48</td>
+<td align="right">66.1%</td>
+</tr>
+<tr>
+<td>GB200, $10.50/hour</td>
+<td align="right">$0.98</td>
+<td align="right">80.3%</td>
+<td align="right">$4.92</td>
+<td align="right">80.3%</td>
+</tr>
+<tr>
+<td>B300/GB300 proxy, $14.04/hour</td>
+<td align="right">$0.88</td>
+<td align="right">82.5%</td>
+<td align="right">$4.05</td>
+<td align="right">83.8%</td>
+</tr>
+<tr>
+<td>TPU v7, $5.40/hour three-year public price</td>
+<td align="right">$0.82</td>
+<td align="right">83.5%</td>
+<td align="right">$2.35</td>
+<td align="right">90.6%</td>
+</tr>
+<tr>
+<td>Trainium2, $2.235/hour</td>
+<td align="right">$1.38</td>
+<td align="right">72.4%</td>
+<td align="right">$4.03</td>
+<td align="right">83.9%</td>
+</tr>
+</tbody></table>
+<p>This is why both sides of the online argument can produce superficially plausible calculations. A model using $1–3/GPU-hour concludes 90–99%; one using $6–14 public cloud rates gets 60–85%. Anthropic’s true answer depends on its long-term strategic contracts, committed fleet utilization, and whether it bears or shares infrastructure capital risk.</p>
+<h2>2.10 Literal electricity-only marginal cost</h2>
+<p>For completeness, take a GB300 at:</p>
+<ul>
+<li>1.4 kW maximum device power</li>
+<li>1.15 PUE</li>
+<li>$0.08/kWh electricity</li>
+<li>1,413 output tokens/s</li>
+</ul>
+<p>Hourly device electricity:</p>
+<p>[
+1.4\times1.15\times.08=$0.129/\text{hour}
+]</p>
+<p>Power cost per M output tokens:</p>
+<p>[
+\frac{.129}{1{,}413\times3{,}600}\times10^6
+=$0.025/M
+]</p>
+<p>At a $25 price, that implies 99.90% margin before small incremental host/network power.</p>
+<p>But this is not the economically useful cost when accelerator capacity is scarce. The GPU-hour has an opportunity cost even if the physical machine has already been bought.</p>
+<hr>
+<h1>3. Chip-generation efficiency</h1>
+<h2>3.1 Specifications</h2>
+<p>Peak specifications below are vendor figures. For NVIDIA parts I show <strong>dense-equivalent</strong> values where the published product table quotes sparse performance.</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th>Dense low-precision tensor compute</th>
+<th>HBM and bandwidth</th>
+<th>Scale-up domain/interconnect</th>
+<th align="right">Maximum device power</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H100 SXM</strong></td>
+<td>FP8 <strong>1.98 PF</strong>; BF16 <strong>0.99 PF</strong></td>
+<td>80 GB; 3.35 TB/s</td>
+<td>8 GPUs; 900 GB/s NVLink/GPU</td>
+<td align="right">700 W</td>
+</tr>
+<tr>
+<td><strong>H200 SXM</strong></td>
+<td>FP8 <strong>1.98 PF</strong>; BF16 <strong>0.99 PF</strong></td>
+<td>141 GB; 4.8 TB/s</td>
+<td>8 GPUs; 900 GB/s</td>
+<td align="right">700 W</td>
+</tr>
+<tr>
+<td><strong>B200 / GB200</strong></td>
+<td>FP4 <strong>10 PF</strong>; FP8 <strong>5 PF</strong></td>
+<td>~186–192 GB; 8 TB/s</td>
+<td>72-GPU NVLink domain; 130 TB/s rack aggregate</td>
+<td align="right">~1.2 kW</td>
+</tr>
+<tr>
+<td><strong>B300 / GB300</strong></td>
+<td>FP4 <strong>15 PF</strong>; FP8 <strong>5 PF</strong></td>
+<td>288 GB raw, ~278 usable; 8 TB/s</td>
+<td>72-GPU domain; 130 TB/s rack aggregate</td>
+<td align="right">~1.4 kW</td>
+</tr>
+<tr>
+<td><strong>TPU v7 Ironwood</strong></td>
+<td>FP8 <strong>4.614 PF</strong>; BF16 <strong>2.307 PF</strong></td>
+<td>192 GB; 7.38 TB/s</td>
+<td>1.2 TB/s ICI; up to 9,216-chip pod</td>
+<td align="right">Not publicly specified</td>
+</tr>
+<tr>
+<td><strong>Trainium2</strong></td>
+<td>FP8 <strong>1.299 PF</strong>; BF16 <strong>0.667 PF</strong></td>
+<td>96 GB; 2.9 TB/s</td>
+<td>1.28 TB/s NeuronLink; 64-chip UltraServer topology</td>
+<td align="right">Not publicly specified</td>
+</tr>
+<tr>
+<td><strong>Rubin</strong></td>
+<td>NVFP4 <strong>50 PF</strong>; FP8/FP6 <strong>17.5 PF</strong>; BF16 <strong>4 PF</strong></td>
+<td>288 GB HBM4; 22 TB/s</td>
+<td>72-GPU domain; 260 TB/s rack aggregate, 3.6 TB/s/GPU</td>
+<td align="right">Not publicly specified</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://www.nvidia.com/en-us/data-center/h100/">NVIDIA H100</a>, <a href="https://www.nvidia.com/en-us/data-center/h200/">H200</a>, <a href="https://developer.nvidia.com/blog/inside-nvidia-blackwell-ultra-the-chip-powering-the-ai-factory-era/">Blackwell Ultra architecture</a>, <a href="https://www.nvidia.com/en-eu/data-center/gb200-nvl72/">GB200 NVL72</a>, <a href="https://www.nvidia.com/en-us/data-center/gb300-nvl72/">GB300 NVL72</a>, <a href="https://docs.cloud.google.com/tpu/docs/tpu7x">Google TPU7x</a>, <a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/about-neuron/arch/neuron-hardware/trainium2.html">AWS Trainium2</a>, and <a href="https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/">Vera Rubin NVL72</a>. citeturn997456view0turn997456view1turn997456view2turn997456view3turn997456view4turn997456view5turn997456view6turn997456view7</p>
+<p>The crucial architectural change from Hopper to rack-scale Blackwell is not merely FLOPS. It is the combination of:</p>
+<ul>
+<li>Much larger HBM</li>
+<li>Larger expert/KV-cache capacity per GPU</li>
+<li>A 72-GPU high-bandwidth domain</li>
+<li>FP4 tensor cores</li>
+<li>More efficient prefill/decode separation</li>
+<li>Far more room for large decode batches</li>
+</ul>
+<h2>3.2 Real-world H100 → H200</h2>
+<p>H200 has essentially the same tensor-core arithmetic as H100. Its benefit is more and faster HBM.</p>
+<p>In Nebius’s MLPerf Inference 5.1 analysis, H200 improved Llama 70B performance by approximately <strong>11%</strong> versus the best comparable H100 result. <a href="https://nebius.com/blog/posts/bare-metal-class-performance-mlperf-inference">Nebius MLPerf analysis</a>. citeturn997456view8</p>
+<p>Because H200 hourly rates are generally 5–25% above H100, the resulting cost per token is commonly:</p>
+<ul>
+<li>Roughly flat for compute-bound prefill</li>
+<li>0–15% lower for memory-constrained decode</li>
+<li>Much better for models or context windows that do not fit efficiently on 80 GB H100s</li>
+</ul>
+<p>In my Opus model, H200 output cost is only 3% lower than H100 and input cost is slightly higher because the assumed hourly premium offsets its utilization gain.</p>
+<h2>3.3 H200 → B200/GB200</h2>
+<p>MLPerf-derived comparisons show much larger real gains:</p>
+<ul>
+<li>B200 versus H200 on Llama 3.1 405B: approximately <strong>3× offline throughput and 4.3× server throughput</strong></li>
+<li>B200 versus H200 on Llama 70B: approximately <strong>2.9–3×</strong></li>
+<li>A four-GPU GB200 host delivered about 55% more total throughput than an eight-H200 host in one comparison, implying approximately <strong>3.1× per accelerator</strong>. <a href="https://nebius.com/blog/posts/bare-metal-class-performance-mlperf-inference">Nebius MLPerf analysis</a>. citeturn997456view8</li>
+</ul>
+<p>Given a typical 1.3–2× increase in effective hourly cost, that translates to approximately <strong>40–70% lower $/token</strong>, not the full 3–4× throughput gain.</p>
+<p>My Opus model gives:</p>
+<ul>
+<li>H200 → GB200 input cost: <strong>−67%</strong></li>
+<li>H200 → GB200 output cost: <strong>−56%</strong></li>
+</ul>
+<p>Those reductions assume quality-preserving FP4 and good rack-scale model parallelism.</p>
+<h2>3.4 GB200 → GB300</h2>
+<p>GB300 increases FP4 arithmetic by 50% and HBM capacity by roughly 50%, but FP8 arithmetic and HBM bandwidth remain approximately unchanged. Therefore, the real gain depends heavily on whether the workload benefits from:</p>
+<ul>
+<li>Larger FP4 compute</li>
+<li>More KV-cache capacity</li>
+<li>Larger decode batch size</li>
+<li>Fewer model-parallel shards</li>
+<li>Better expert placement</li>
+</ul>
+<h3>MLPerf</h3>
+<p>CoreWeave’s MLPerf 6.0-derived DeepSeek-R1 figures were approximately:</p>
+<ul>
+<li>Server: 4,868 → 5,574 normalized tokens/s/GPU, <strong>+14.5%</strong></li>
+<li>Offline: 7,323 → 9,821, <strong>+34.1%</strong></li>
+</ul>
+<p>CoreWeave itself notes that TPS/GPU is its normalization, not an official MLPerf metric. <a href="https://www.coreweave.com/blog/coreweaves-innovation-velocity-drives-mlperf-6-0-leadership">CoreWeave MLPerf 6.0 analysis</a>. citeturn380934view11turn779069view10</p>
+<h3>SemiAnalysis InferenceX</h3>
+<p>At matched user interactivity for DeepSeek-R1 FP4:</p>
+<ul>
+<li>Around 85 tok/s/user: cost fell from approximately $0.079/M to $0.070/M, <strong>13% lower</strong></li>
+<li>Around 152 tok/s/user: approximately $0.447/M to $0.277/M, <strong>38% lower</strong></li>
+<li>Around 219 tok/s/user: GB200 slightly outperformed GB300 in the displayed data</li>
+</ul>
+<p>The dashboard’s prose appears to overstate the second reduction; the arithmetic from $0.447 to $0.277 is 38%, not 61%. <a href="https://inferencex.semianalysis.com/compare/deepseek-r1-gb200-vs-gb300">InferenceX GB200 versus GB300 comparison</a>. citeturn380934view10turn779069view9</p>
+<p>A separate long-context SGLang result found approximately <strong>1.38–1.58×</strong> GB300 throughput versus GB200 at matched latency, with the larger HBM allowing higher decode concurrency. <a href="https://www.lmsys.org/blog/2026-02-19-gb300-longctx/">SGLang long-context GB300 analysis</a>. citeturn912949search16</p>
+<h3>Practical conclusion</h3>
+<p>For a mature production workload I would underwrite:</p>
+<ul>
+<li><strong>10–25% lower $/token as a normal GB300-over-GB200 gain</strong></li>
+<li>30–40% in favorable FP4, high-concurrency, or long-context cases</li>
+<li>Very little improvement—and occasionally regression—at some extreme low-latency operating points</li>
+</ul>
+<p>My first-principles model gives 26% lower input cost and 32% lower output cost, near the favorable end.</p>
+<h2>3.5 Software gains can dominate chip gains</h2>
+<p>SemiAnalysis emphasizes that inference software changes weekly while hardware generations change annually. Its InferenceX v2 work shows large changes in the throughput/interactivity frontier as runtimes mature. <a href="https://newsletter.semianalysis.com/p/inferencex-v2-nvidia-blackwell-vs">InferenceX v2</a>. citeturn997456view10</p>
+<p>The SGLang/NVIDIA DeepSeek-V4 result is the clearest example: <strong>5× more throughput on the same GB300 generation</strong> over roughly two months. citeturn380934view2</p>
+<p>This means a model based only on NVIDIA’s peak FLOPS can easily be wrong by severalfold. Serving software, speculative decoding, quantization, routing, and batching are first-order economic variables.</p>
+<h2>3.6 Rubin projection</h2>
+<p>Rubin’s published vendor specifications imply, versus B300:</p>
+<ul>
+<li>FP4: 50 versus 15 PF, <strong>3.33×</strong></li>
+<li>HBM bandwidth: 22 versus 8 TB/s, <strong>2.75×</strong></li>
+<li>NVLink per GPU: 3.6 versus 1.8 TB/s, <strong>2×</strong></li>
+<li>Same nominal 288 GB HBM capacity per GPU, but HBM4 and much higher bandwidth</li>
+</ul>
+<p>There are no independent Rubin LLM-serving benchmarks yet. All Rubin estimates are therefore projections based on preliminary NVIDIA specifications. <a href="https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/">NVIDIA Rubin page</a>. citeturn997456view7</p>
+<p>My base projection is:</p>
+<ul>
+<li>Real throughput gain: <strong>2.5–4×</strong> over mature B300/GB300, depending on phase</li>
+<li>Hourly economic cost: <strong>1.3–1.8×</strong> GB300</li>
+<li>Implied cost/token reduction: <strong>28–68%</strong></li>
+<li>Central expectation: approximately <strong>50–60% lower $/token</strong></li>
+</ul>
+<h2>3.7 Fixed-model cost trajectory, 2026–2028</h2>
+<p>This projection holds model size, output quality, context length, and user latency constant. It is not a forecast of API prices.</p>
+<table>
+<thead>
+<tr>
+<th>Deployment vintage</th>
+<th align="right">Relative $/token, H100 = 100</th>
+<th align="right">Opus input cost/M</th>
+<th align="right">Opus output cost/M</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100 baseline</td>
+<td align="right">100</td>
+<td align="right">$1.0–2.2</td>
+<td align="right">$4–9</td>
+</tr>
+<tr>
+<td>H200 mature</td>
+<td align="right">90–105</td>
+<td align="right">$0.9–2.2</td>
+<td align="right">$3.5–8.5</td>
+</tr>
+<tr>
+<td>GB200 mature</td>
+<td align="right">30–55</td>
+<td align="right">$0.35–0.75</td>
+<td align="right">$1.5–3.5</td>
+</tr>
+<tr>
+<td><strong>GB300 mature, 2026</strong></td>
+<td align="right"><strong>25–45</strong></td>
+<td align="right"><strong>$0.25–0.55</strong></td>
+<td align="right"><strong>$1.0–2.5</strong></td>
+</tr>
+<tr>
+<td><strong>Rubin ramp, 2027</strong></td>
+<td align="right"><strong>10–22</strong></td>
+<td align="right"><strong>$0.12–0.30</strong></td>
+<td align="right"><strong>$0.45–1.20</strong></td>
+</tr>
+<tr>
+<td><strong>Rubin mature plus software, 2028</strong></td>
+<td align="right"><strong>6–15</strong></td>
+<td align="right"><strong>$0.06–0.18</strong></td>
+<td align="right"><strong>$0.20–0.65</strong></td>
+</tr>
+</tbody></table>
+<p>In practice, frontier labs are likely to spend part or all of these gains on larger active models, longer contexts, more test-time reasoning, faster “fast mode,” multimodal processing, and higher reliability. Therefore, cost per token can fall rapidly without company-level compute spending falling.</p>
+<hr>
+<h1>4. Anthropic’s actual company gross margin</h1>
+<h2>4.1 Reported figures</h2>
+<p>Anthropic is private, so these are press-reported internal projections and analyst estimates rather than audited public filings.</p>
+<p>In January 2026, The Information reported that Anthropic had reduced its projected 2025 gross margin to approximately <strong>40%</strong>, ten percentage points below its previous internal estimate, because Google and Amazon third-party inference costs were approximately <strong>23% higher than planned</strong>. <a href="https://www.investing.com/news/stock-market-news/anthropic-trims-profit-margin-outlook-as-ai-operating-costs-rise--the-information-4459316">Accessible summary of The Information report</a>. citeturn380934view12</p>
+<p>The latest quantified public estimate I found is PitchBook/Morningstar’s June 2026 estimate of approximately <strong>44% gross margin</strong>. It said Anthropic had spent approximately <strong>$0.71 of compute per revenue dollar in Q1</strong> and projected <strong>$0.56 in Q2</strong>. <a href="https://pitchbook.com/news/articles/anthropics-gross-margin-ipo">PitchBook analysis</a>; <a href="https://www.morningstar.com/stocks/anthropics-gross-margin-is-most-important-number-tech">Morningstar version</a>. citeturn283019search0turn283019search4</p>
+<p>These figures should not be treated as audited GAAP disclosures. In particular, “compute spend” and accounting cost of revenue may not be identical.</p>
+<h2>4.2 Why 90%+ marginal token margins can coexist with 40–44% company gross margin</h2>
+<p>The two numbers use different numerators and denominators.</p>
+<p>A 93% token margin says:</p>
+<p>[
+\frac{\text{API list price}-\text{incremental optimized serving cost}}
+{\text{API list price}}
+\approx93%
+]</p>
+<p>Company gross margin says:</p>
+<p>[
+\frac{\text{all realized revenue}-\text{all allocated cost of revenue}}
+{\text{all realized revenue}}
+]</p>
+<p>The gap is large for several reasons.</p>
+<h3>A. Realized prices are much lower than list prices</h3>
+<p>Sources of lower realized price include:</p>
+<ul>
+<li>Enterprise volume discounts</li>
+<li>Cloud-platform revenue shares</li>
+<li>Batch API’s 50% discount</li>
+<li>Prompt-cache hits at 10% of standard input price</li>
+<li>Consumer subscription bundles</li>
+<li>Free-tier traffic</li>
+<li>Promotional pricing</li>
+<li>Model routing toward cheaper tiers</li>
+</ul>
+<p>SemiAnalysis estimates that agentic workloads can have input/output ratios around 300:1 and cache-hit rates above 90%, yielding a much lower blended realized price per nominal token than the headline output-token price. <a href="https://newsletter.semianalysis.com/p/ai-value-capture-the-shift-to-model">SemiAnalysis value-capture analysis</a>. citeturn997456view11</p>
+<p>Caching is not purely margin-negative: it lowers revenue per counted input token but also avoids almost all repeated prefill computation. In many cases it improves throughput and contribution profit per GPU even while reducing nominal price.</p>
+<h3>B. Cloud-provider markup</h3>
+<p>My central token model uses an economic accelerator cost of $1.60–5/hour. Public cloud rates can be $5–14/hour. If Anthropic is temporarily short of committed capacity and buys expensive incremental Google, AWS, or NVIDIA-based cloud capacity, much of the theoretical token margin transfers to the infrastructure supplier.</p>
+<p>This is consistent with the reported 23% third-party inference-cost overrun. citeturn380934view12</p>
+<h3>C. Peak provisioning and low utilization</h3>
+<p>Consumer and coding-agent demand is highly bursty:</p>
+<ul>
+<li>Day/night variation</li>
+<li>Weekday variation</li>
+<li>Model launches and viral events</li>
+<li>Regional fragmentation</li>
+<li>Need to reserve low-latency capacity</li>
+<li>Failover and maintenance capacity</li>
+</ul>
+<p>A fleet that is 95% utilized in a benchmark can be only 50–70% economically utilized across a week. DeepSeek itself disclosed that it reduced inference nodes at night and reassigned them to research and training. citeturn779069view0</p>
+<h3>D. Subscription over-consumption and free traffic</h3>
+<p>A power user may consume many times the API-list equivalent of the subscription fee. Anthropic can limit this with rolling windows and dynamic caps, but the heavy-user tail reduces subscription gross margin.</p>
+<p>Free users produce no corresponding token revenue. Subscription revenue is also recognized evenly while usage can be highly concentrated around product releases.</p>
+<h3>E. Non-accelerator serving costs</h3>
+<p>Direct serving COGS can include:</p>
+<ul>
+<li>CPU and host memory</li>
+<li>KV-cache storage</li>
+<li>Networking and inter-region transfer</li>
+<li>Request routing and API gateways</li>
+<li>Logging and observability</li>
+<li>Safety classifiers</li>
+<li>Moderation</li>
+<li>Tool-use orchestration</li>
+<li>Retries and failed requests</li>
+<li>Customer-support infrastructure</li>
+<li>Data retention and compliance</li>
+<li>Depreciation or cloud commitment costs</li>
+</ul>
+<h3>F. Unbilled model work</h3>
+<p>The serving system often performs more computation than the customer sees:</p>
+<ul>
+<li>Rejected speculative draft tokens</li>
+<li>Hidden reasoning or routing steps</li>
+<li>Safety-model calls</li>
+<li>Automatic retries</li>
+<li>Context compression</li>
+<li>Agent planning</li>
+<li>Internal evaluations and canary traffic</li>
+<li>Model-development inference</li>
+</ul>
+<p>Whether internal inference is COGS or R&amp;D depends on Anthropic’s accounting policy, which is not public.</p>
+<h3>G. Older and heterogeneous hardware</h3>
+<p>Not all traffic immediately migrates to GB300 or TPU v7. Older H100/H200 fleets can remain in service because of capacity constraints, software qualification, regional availability, reliability, and sunk commitments. My model puts Opus output cost near $5/M on economically priced H100/H200, versus $0.70–1.44 on TPU v7/GB300.</p>
+<h2>4.3 Illustrative margin bridge</h2>
+<p>The following is <strong>not an Anthropic disclosure</strong>. It is one numerically plausible bridge from optimized list-price token economics to a 44% company gross margin:</p>
+<table>
+<thead>
+<tr>
+<th>Bridge item</th>
+<th align="right">Margin after item</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Optimized marginal serving margin at list price</td>
+<td align="right"><strong>93.5%</strong></td>
+</tr>
+<tr>
+<td>Enterprise, subscription, batch, cache and promotional price realization: −12 points</td>
+<td align="right">81.5%</td>
+</tr>
+<tr>
+<td>Peak provisioning, geographic fragmentation, reliability slack: −8 points</td>
+<td align="right">73.5%</td>
+</tr>
+<tr>
+<td>Cloud markup, older hardware and unfavorable contract mix: −7.5 points</td>
+<td align="right">66.0%</td>
+</tr>
+<tr>
+<td>Free traffic and heavy subscription consumers: −9 points</td>
+<td align="right">57.0%</td>
+</tr>
+<tr>
+<td>CPU/network/storage, retries, safety, internal and unbilled inference: −13 points</td>
+<td align="right"><strong>44.0%</strong></td>
+</tr>
+</tbody></table>
+<p>Reasonable ranges for the individual, partly overlapping buckets are:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th align="right">Approximate gross-margin impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Price realization versus standard API list</td>
+<td align="right">−8 to −18 points</td>
+</tr>
+<tr>
+<td>Cloud markup / older hardware</td>
+<td align="right">−5 to −12</td>
+</tr>
+<tr>
+<td>Utilization and peak provisioning</td>
+<td align="right">−5 to −10</td>
+</tr>
+<tr>
+<td>Free and subscription traffic</td>
+<td align="right">−5 to −15</td>
+</tr>
+<tr>
+<td>CPU/network/retries/safety/internal inference</td>
+<td align="right">−7 to −15</td>
+</tr>
+</tbody></table>
+<p>The purpose of the bridge is not to claim that these are Anthropic’s exact allocations. It shows that no contradiction exists between 90–95% on an incremental list-price token and roughly 40–44% across the whole business.</p>
+<h2>4.4 Batch and cache economics illustrate the distinction</h2>
+<p>At the modeled fleet cost:</p>
+<h3>Opus Batch API</h3>
+<p>Prices are $2.50 input and $12.50 output:</p>
+<p>[
+GM_{\text{batch,in}}
+=1-\frac{.469}{2.50}
+=81.2%
+]</p>
+<p>[
+GM_{\text{batch,out}}
+=1-\frac{1.684}{12.50}
+=86.5%
+]</p>
+<p>Actual batch cost should be somewhat lower than my standard serving estimate because Anthropic can tolerate longer queues and fill accelerators more efficiently. Even so, batch traffic is clearly below the 90–95% headline at the same underlying model size.</p>
+<h3>Cache hits</h3>
+<p>Opus cache hits are billed at $0.50/M rather than $5/M. It would be incorrect to compare the $0.50 price against the full $0.47 uncached-input cost, because a hit skips most of prefill. The relevant marginal costs are KV storage, routing, transfer, and any residual attention work. Consequently, cache-hit percentage margin can remain high even though revenue per nominal token is 90% lower.</p>
+<hr>
+<h1>5. Verdict</h1>
+<h2>Is 90–95% correct?</h2>
+<p><strong>Yes, as an order-of-magnitude estimate for economically marginal, standard-list-price Claude serving on a well-optimized 2026 fleet. It is not universally correct.</strong></p>
+<p>My conclusions are:</p>
+<h3>Opus</h3>
+<ul>
+<li><strong>Uncached input:</strong> point estimate <strong>90.6%</strong>, plausible <strong>85–95%</strong></li>
+<li><strong>Output:</strong> point estimate <strong>93.3%</strong>, plausible <strong>88–97%</strong></li>
+<li><strong>GB300-only:</strong> approximately <strong>93.8% input / 94.2% output</strong></li>
+<li><strong>TPU v7 at the estimated strategic contract rate:</strong> approximately <strong>95.1% / 97.2%</strong></li>
+</ul>
+<p>A blanket 95% Opus claim is therefore slightly aggressive for a heterogeneous, fully loaded fleet, but plausible on the best hardware and contracts.</p>
+<h3>Sonnet</h3>
+<p>At the current temporary $2/$10 price:</p>
+<ul>
+<li><strong>Input:</strong> point estimate <strong>92.2%</strong></li>
+<li><strong>Output:</strong> point estimate <strong>94.4%</strong></li>
+</ul>
+<p>At the normal $3/$15 price:</p>
+<ul>
+<li><strong>Input:</strong> <strong>94.8%</strong></li>
+<li><strong>Output:</strong> <strong>96.3%</strong></li>
+</ul>
+<p>For Sonnet on modern hardware, “95%” is near the center rather than an extreme upper bound.</p>
+<h2>How GB300 changes the picture</h2>
+<p>Relative to H100/H200 in my Opus model, GB300 lowers fully loaded serving cost by approximately:</p>
+<ul>
+<li><strong>72–75% for input</strong></li>
+<li><strong>70–71% for output</strong></li>
+</ul>
+<p>That changes Opus list-price margins from roughly 75–80% on Hopper to approximately 94% on GB300.</p>
+<p>Relative to GB200, the gain is less dramatic:</p>
+<ul>
+<li>Model estimate: 26% lower input cost and 32% lower output cost</li>
+<li>Independent/standardized evidence: generally 10–35% lower cost, workload dependent</li>
+<li>Favorable long-context cases: up to roughly 1.5–1.6× throughput</li>
+</ul>
+<p>The larger strategic story is that GB300 combines hardware gains with a still-steep software optimization curve. The 5× SGLang improvement on fixed GB300 hardware demonstrates that a mature 2026 stack may be several times cheaper than launch-day benchmarks suggest. citeturn380934view2</p>
+<h2>Is 95% an upper bound?</h2>
+<p><strong>No.</strong></p>
+<p>It is not an upper bound in at least four senses:</p>
+<ol>
+<li>Sonnet at normal pricing can exceed 95%.</li>
+<li>Opus on low-cost TPU contracts can exceed 95%.</li>
+<li>Power-only instantaneous marginal margin can exceed 99.8%.</li>
+<li>Future Rubin-class systems may reduce fixed-model cost another 50% or more.</li>
+</ol>
+<p>But 95% is <strong>not conservative for every Opus token</strong>. It can be materially too high when:</p>
+<ul>
+<li>The token runs on public-priced H100/H200 capacity</li>
+<li>Active parameters are nearer 600B than 300B</li>
+<li>Low latency forces small batches</li>
+<li>Contexts are very long</li>
+<li>Quantization must remain FP8</li>
+<li>Traffic is discounted, batch, subscription, or free</li>
+<li>Cloud-provider markup is large</li>
+</ul>
+<p>The most defensible one-number answer is:</p>
+<blockquote>
+<p><strong>Standard-list-price marginal serving margin: approximately 92–94% for Opus and 94–96% for Sonnet on a mature 2026 fleet.</strong></p>
+</blockquote>
+<hr>
+<h1>6. Best public analyses of LLM inference economics</h1>
+<ol>
+<li><p><strong>Epoch AI — <a href="https://epoch.ai/publications/inference-economics-of-language-models">Inference economics of language models</a></strong><br>Best general first-principles treatment of compute, memory, latency, networking, batch size, and the economics of prefill versus decode. citeturn997456view9</p>
+</li>
+<li><p><strong>SemiAnalysis — <a href="https://inferencex.semianalysis.com/">InferenceX public benchmark dashboard</a></strong><br>The most useful public source for throughput-versus-interactivity frontiers, where a single “tokens/s” number is inadequate. Includes reproducible configurations and cost normalization. citeturn380934view10</p>
+</li>
+<li><p><strong>SemiAnalysis — <a href="https://newsletter.semianalysis.com/p/inferencex-v2-nvidia-blackwell-vs">InferenceX v2: NVIDIA Blackwell vs AMD vs Hopper</a></strong><br>Comprehensive analysis of the serving software stack, disaggregated inference, latency constraints, and the large difference between peak specifications and real deployment throughput. citeturn997456view10</p>
+</li>
+<li><p><strong>SemiAnalysis — <a href="https://newsletter.semianalysis.com/p/ai-value-capture-the-shift-to-model">AI Value Capture: The Shift to Model Labs</a></strong><br>Most relevant public treatment of model-provider pricing, cache-heavy agentic workloads, realized blended prices, and model-lab inference margins. citeturn997456view11</p>
+</li>
+<li><p><strong>MLCommons — <a href="https://mlcommons.org/benchmarks/inference-datacenter/">MLPerf Inference: Datacenter</a></strong><br>The strongest standardized benchmark corpus for cross-generation comparisons, although configuration differences and vendor-tuned submissions still require careful interpretation. citeturn472837view11</p>
+</li>
+</ol>
+<p>DeepSeek’s <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">Open Source Week inference disclosure</a> is the most valuable single primary-source operator disclosure, even though it is a one-day snapshot rather than a general economics framework. citeturn380934view0</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

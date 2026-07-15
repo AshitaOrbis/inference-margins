@@ -1,0 +1,763 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roofline consultation — verbatim full derivation (recovered) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/consult-roofline-verbatim">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Roofline consultation — VERBATIM full derivation (recovered original)</h1>
+<blockquote>
+<p>The complete, unedited response of the roofline throughput-model consultation (58m52s, <code>gpt-5-6-pro</code>, Pro-verified, 2026-07-10; <a href="https://chatgpt.com/g/g-p-6a42f0b0f46e81919a65018455ee56dd/c/6a516cd6-1834-83e8-a950-20302f616c6d">conversation</a>).
+<strong>Provenance:</strong> recovered 2026-07-11 from the session transcript that received it — original bytes, not a regeneration. The <a href="consult-roofline.html">adopted-verdict wrapper</a> states the decision the site took (anchor fits stay); this page is the full derivation behind it. The runnable diagnostic is at <a href="../tests/roofline-diagnostic.mjs">/tests/roofline-diagnostic.mjs</a>.
+<strong>SHA-256 (response body below this header):</strong> <code>c3b6e650d6e80e11ff9c7c03b502563401a45fc0d99e9dbac6f2415e37ae891d</code></p>
+</blockquote>
+<hr>
+<p>I’ll derive an implementable roofline, audit current assumptions, and run platform-level holdouts with explicit batch/MTP sensitivity and downstream margin propagation.</p>
+<p>The key transfer variable is decode reuse: weight traffic scales roughly as 1/B, while MTP alters useful tokens and work per iteration.</p>
+<p>A critical comparability issue is that GB200’s 10.1k result appears to use NVFP4/FP8 at batch 1024, not an 8-bit-equivalent operating point.</p>
+<p>The explicit roofline is a retrospective near-miss: worst decode error is 28.5%, rising to 50.5% with literal GB200 precision; H800-only fitting invalidates the formal gate.</p>
+<h2>Verdict</h2>
+<p><strong>Do not replace the anchor-fit model with this roofline yet.</strong></p>
+<p>A favorable retrospective implementation gives respectable predictions at the throughput-oriented operating points: H20 within 11–16%, GB200 within about 2% under an optimistic NVFP4 assumption, and Ascend’s 50 ms point within 10%. But the council-compliant test must hold out and score the <strong>entire platform</strong>. Once Ascend’s documented 15 ms operating point is included, the model predicts <strong>324 vs 538 tokens/s/NPU, a −39.8% error</strong>. That exceeds the existing ~25% gate.</p>
+<p>More fundamentally, the preregistered experiment is presently <strong>unrunnable</strong>:</p>
+<ul>
+<li>One shared residual fitted on H800 means (p=1) fitted parameter and (n_{\text{train}}=1) independent platform group, so the hard requirement (p&lt;n_{\text{train}}) is false: (1&lt;1) does not hold.</li>
+<li>H20, GB200, and Ascend have all already been examined in the MFU falsification and in selecting this roofline’s assumptions. None is a genuinely untouched platform.</li>
+<li>Several supposedly “physical” inputs are missing, especially H800 batch, H800 KV precision and MTP status, exact GB200 mixed-precision weight bytes, and Ascend KV precision. Choosing those after observing throughput creates hidden effective degrees of freedom.</li>
+</ul>
+<p>The existing single-MFU test failed at 59% worst error; this roofline improves the favorable retrospective result but still fails the whole-platform gate and cannot be called a preregistered validation. citeturn692601view0turn525695view0</p>
+<hr>
+<h1>1. Functional form</h1>
+<h2>Per-iteration decode roofline</h2>
+<p>For platform (j) and operating point (o), define:</p>
+<ul>
+<li>(b): decode sequences per chip</li>
+<li>(q): target-model token positions processed per iteration</li>
+<li>(a): accepted output tokens per sequence per iteration</li>
+<li>(L): current KV-cache length</li>
+<li>(F_j): applicable dense compute peak in FLOP/s</li>
+<li>(B_{H,j}): HBM bandwidth in bytes/s</li>
+<li>(B_{\ell,j},B_{r,j}): local and remote fabric bandwidth</li>
+<li>(\eta): <strong>one shared fitted roof-utilization residual</strong></li>
+<li>(t_0=0): no second residual, because it cannot be identified from one H800 observation</li>
+</ul>
+<p>DeepSeek-R1/V3 supplies the physical architecture constants: 37B active parameters, 61 layers, hidden size 7,168, 128 attention heads, 512-dimensional compressed KV, 64-dimensional decoupled RoPE key, 58 MoE layers, and eight routed experts per token. citeturn848796view0turn692601view9</p>
+<h3>Compute work per target position</h3>
+<p>Including core attention work rather than only parameter FLOPs:</p>
+<h1>[
+\Phi(L)</h1>
+<p>2P_{\rm active}
++
+2N_LN_H(d_{qk}+d_v)L
+]</p>
+<p>Using (P_{\rm active}=37\text{B}), (d_{qk}=128+64=192), and (d_v=128):</p>
+<h1>[
+\Phi(L)</h1>
+<p>74\times10^9
++
+4{,}997{,}120L
+\quad\text{FLOPs.}
+]</p>
+<p>Thus:</p>
+<p>[
+t_C=\frac{bq\Phi(L)}{F_j}.
+]</p>
+<p>For genuinely mixed precision, replace that with:</p>
+<p>[
+t_C=bq\sum_r\frac{\Phi_r(L)}{F_{j,r}}.
+]</p>
+<h3>HBM traffic</h3>
+<p>One complete scan of the latent KV cache for one sequence and one target position is:</p>
+<h1>[
+K(L)</h1>
+<p>N_L(512+64)s_{KV}L.
+]</p>
+<p>Therefore:</p>
+<ul>
+<li>FP8 KV: (35{,}136L) bytes per sequence scan</li>
+<li>BF16 KV: (70{,}272L) bytes per sequence scan</li>
+</ul>
+<p>Let (W_{\rm iter}) be active weight bytes fetched during one iteration. Then:</p>
+<h1>[
+t_H</h1>
+<p>\frac{W_{\rm iter}+bqK(L)}{B_{H,j}}.
+]</p>
+<p>For the hand calculation, I use the favorable simplification (W_{\rm iter}=37) GB for the 8-bit runs: active weights are fetched once and reused across the batch.</p>
+<p>A production MoE implementation should instead calculate expected distinct expert-weight traffic:</p>
+<h1>[
+W_{\rm iter}</h1>
+<p>W_{\rm always}
++
+\sum_e W_e\left[1-(1-p_e)^{bqk}\right],
+]</p>
+<p>with routing probabilities and expert placement fixed independently of end-to-end throughput. The simple 37 GB assumption is especially questionable at small batch and large expert-parallel degree.</p>
+<h3>Fabric traffic</h3>
+<p>A gross BF16 dispatch-plus-combine payload is:</p>
+<h1>[
+D</h1>
+<h1>2N_{\rm MoE}kHs_{\rm act}</h1>
+<h1>2(58)(8)(7168)(2)</h1>
+<p>13.304\text{ MB}
+]</p>
+<p>per target position.</p>
+<p>With a remote-traffic fraction (r) and independently measured round-trip collective startup (\alpha_j):</p>
+<h1>[
+t_N</h1>
+<p>N_{\rm MoE}\alpha_j
++
+bqD
+\left(
+\frac{1-r}{B_{\ell,j}}
++
+\frac{r}{B_{r,j}}
+\right).
+]</p>
+<p>The available table does not provide consistent collective-startup measurements, so the hand calculation sets (\alpha_j=0) and uses scale-up bandwidth. This is a favorable lower bound. It is not innocuous: H20 EP16 spans two nodes and approximately half of its MoE traffic remains on NVLink while the rest goes inter-node. citeturn692601view2</p>
+<h3>Roofline and output throughput</h3>
+<p>[
+t_{\rm roof}=\max(t_C,t_H,t_N)
+]</p>
+<p>[
+t_{\rm iter}=\frac{t_{\rm roof}}{\eta}+t_0
+]</p>
+<p>[
+\boxed{
+\widehat T=\frac{ba}{t_{\rm iter}}
+}
+]</p>
+<p>and the predicted latency is:</p>
+<p>[
+\widehat{\rm TPOT}=\frac{t_{\rm iter}}{a}=\frac{b}{\widehat T}.
+]</p>
+<p>Do <strong>not</strong> put achieved TPOT into the throughput equation. Since (T=b/\mathrm{TPOT}), doing that would simply restate the measured result. TPOT should be an output and an SLO check.</p>
+<p>HBM capacity is a separate feasibility condition:</p>
+<p>[
+W_{\rm resident}
++
+bL,N_L(512+64)s_{KV}
++
+W_{\rm workspace}
+\leq M_{\rm HBM}.
+]</p>
+<h2>Compact JavaScript implementation</h2>
+<pre><code class="language-js">const ARCH = Object.freeze({
+  active: 37e9,
+  layers: 61,
+  heads: 128,
+  qkDim: 192,
+  vDim: 128,
+  kvDim: 576,
+  moeLayers: 58,
+  topK: 8,
+  hidden: 7168,
+});
+
+export function decodeRoof(hw, op, etaRoof, t0 = 0) {
+  const attnFlops =
+    2 * ARCH.layers * ARCH.heads * (ARCH.qkDim + ARCH.vDim) * op.context;
+  const flopsPerPos = 2 * ARCH.active + attnFlops;
+
+  const kvPerScan =
+    ARCH.layers * ARCH.kvDim * op.kvBytes * op.context;
+  const fabricPerPos =
+    2 * ARCH.moeLayers * ARCH.topK * ARCH.hidden *
+    op.activationBytes * (op.dispatchScale ?? 1);
+
+  const tCompute = op.batch * op.targetPositions *
+    (op.computeSecondsPerPos ?? flopsPerPos / hw.flops);
+
+  const kvScans = op.kvScans ?? op.targetPositions;
+  const tHbm = (op.weightBytesIter +
+    op.batch * kvScans * kvPerScan) / hw.hbmBps;
+
+  const invFabric =
+    op.localFraction / hw.localFabricBps +
+    (op.remoteFraction ? op.remoteFraction / hw.remoteFabricBps : 0);
+  const tFabric = ARCH.moeLayers * (op.fabricRttSec ?? 0) +
+    op.batch * op.targetPositions * fabricPerPos * invFabric;
+
+  const tRoof = Math.max(tCompute, tHbm, tFabric);
+  const tIter = t0 + tRoof / etaRoof;
+  const tps = op.batch * op.acceptedTokens / tIter;
+
+  const residentKv = op.batch * op.context *
+    ARCH.layers * ARCH.kvDim * op.kvBytes;
+  const feasible = op.residentWeightBytes + residentKv +
+    op.workspaceBytes &lt;= hw.hbmBytes;
+
+  return { tps, tpot: tIter / op.acceptedTokens,
+           tCompute, tHbm, tFabric, feasible };
+}
+</code></pre>
+<hr>
+<h1>2. Exact operating-point assumptions</h1>
+<table>
+<thead>
+<tr>
+<th>Platform/row</th>
+<th align="right">(b)</th>
+<th align="right">(L)</th>
+<th align="right">(q)</th>
+<th align="right">(a)</th>
+<th align="right">Weight traffic</th>
+<th>KV dtype</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H800 calibration</td>
+<td align="right">96</td>
+<td align="right">4,989</td>
+<td align="right">1</td>
+<td align="right">1.00</td>
+<td align="right">37 GB</td>
+<td>FP8</td>
+</tr>
+<tr>
+<td>H20 Pro</td>
+<td align="right">32</td>
+<td align="right">4,096</td>
+<td align="right">3</td>
+<td align="right">1.85</td>
+<td align="right">37 GB</td>
+<td>FP8</td>
+</tr>
+<tr>
+<td>H20 Base</td>
+<td align="right">48</td>
+<td align="right">4,096</td>
+<td align="right">3</td>
+<td align="right">1.85</td>
+<td align="right">37 GB</td>
+<td>FP8</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">128</td>
+<td align="right">average 3,000</td>
+<td align="right">1</td>
+<td align="right">1.00</td>
+<td align="right">18.5 GB, optimistic lower bound</td>
+<td>FP8</td>
+</tr>
+<tr>
+<td>Ascend, 50 ms</td>
+<td align="right">96</td>
+<td align="right">4,096</td>
+<td align="right">2</td>
+<td align="right">1.70</td>
+<td align="right">37 GB</td>
+<td>BF16 assumed</td>
+</tr>
+<tr>
+<td>Ascend, 15 ms</td>
+<td align="right">8</td>
+<td align="right">4,096</td>
+<td align="right">2</td>
+<td align="right">1.70</td>
+<td align="right">37 GB</td>
+<td>BF16 assumed</td>
+</tr>
+</tbody></table>
+<p>Important qualifications:</p>
+<ul>
+<li><strong>H800:</strong> the published production row gives batch as “N/A,” KV length 4,989 and TPOT of roughly 50 ms. I use (b=96), consistent with (1{,}850\times0.05=92.5) active sequences per chip, rounded upward. That batch is inferred from the calibration outcome, not independently disclosed. H800 MTP status is also unspecified. citeturn692601view5</li>
+<li><strong>H20:</strong> the documented configurations are batch 32 and 48, one speculative step, two draft tokens, with acceptance length approximately 1.8–1.9. I use (a=1.85) and (q=3), interpreted as one base position plus two draft positions. The source reports 675 and 714 tokens/s/GPU at those rows. citeturn692601view1turn692601view3turn692601view4</li>
+<li><strong>GB200:</strong> the 10,108.4 row is not merely “possibly NVFP4.” Its reproduction command loads an NVFP4 checkpoint, FP8 KV cache, and NVFP4 MoE dispatch. It runs 1,024 sequences over DP8, from which I infer (b=128) per GPU. The average context during a 2K-input/2K-output run is approximately 3K. citeturn692601view7turn692601view8turn530181view0turn530181view1</li>
+<li>The GB200 weight assumption of 18.5 GB treats the full 37B active path as 4-bit. That is an optimistic lower bound because attention and some other components remain FP8. It gives the roofline its best chance.</li>
+<li><strong>Ascend:</strong> the paper explicitly specifies batch 96 and batch 8 for the 50 ms and 15 ms rows. It also states that MTP processes two input positions per iteration and produces 1.7 accepted tokens on average. citeturn692601view5turn848796view4</li>
+</ul>
+<hr>
+<h1>3. H800 fit by hand</h1>
+<p>At (L=4{,}989):</p>
+<h1>[
+\Phi(4989)</h1>
+<h1>74\text{ GF}
++
+4{,}997{,}120(4989)</h1>
+<p>98.931\text{ GF/position}.
+]</p>
+<p>An FP8 KV scan is:</p>
+<h1>[
+K(4989)</h1>
+<h1>35{,}136(4989)</h1>
+<p>175.294\text{ MB/sequence}.
+]</p>
+<p>For (b=96,q=1):</p>
+<h1>[
+t_C</h1>
+<h1>\frac{96(98.931\text{ GF})}{1.98\text{ PF}}</h1>
+<p>4.797\text{ ms}.
+]</p>
+<h1>[
+t_H</h1>
+<h1>\frac{37\text{ GB}+96(175.294\text{ MB})}{3.35\text{ TB/s}}</h1>
+<p>16.068\text{ ms}.
+]</p>
+<h1>[
+t_N</h1>
+<h1>\frac{96(13.304\text{ MB})}{400\text{ GB/s}}</h1>
+<p>3.193\text{ ms}.
+]</p>
+<p>So HBM is the roof:</p>
+<p>[
+t_{\rm roof}=16.068\text{ ms}.
+]</p>
+<p>The observed iteration time under (a=1) is:</p>
+<h1>[
+t_{\rm observed}</h1>
+<h1>\frac{96}{1850}</h1>
+<p>51.892\text{ ms}.
+]</p>
+<p>Hence the one shared residual is:</p>
+<h1>[
+\boxed{
+\eta</h1>
+<h1>\frac{16.068}{51.892}</h1>
+<p>0.30965
+}
+]</p>
+<p>or <strong>30.96% roof utilization</strong>.</p>
+<p>This is not an MFU: it multiplies the active bottleneck, whether compute, HBM, or fabric.</p>
+<hr>
+<h1>4. Held-out predictions by hand</h1>
+<h2>H20 Pro, batch 32</h2>
+<p>At 4K context:</p>
+<p>[
+\Phi(4096)=94.468\text{ GF},
+\qquad
+K_{\rm FP8}(4096)=143.917\text{ MB}.
+]</p>
+<h1>[
+t_C</h1>
+<h1>\frac{32(3)(94.468\text{ GF})}{0.296\text{ PF}}</h1>
+<p>30.638\text{ ms}.
+]</p>
+<h1>[
+t_H</h1>
+<p>\frac{37\text{ GB}+32(3)(143.917\text{ MB})}
+     {4.0\text{ TB/s}}
+=
+12.704\text{ ms}.
+]</p>
+<p>Using the supplied 900 GB/s scale-up bandwidth:</p>
+<h1>[
+t_N</h1>
+<h1>\frac{32(3)(13.304\text{ MB})}{900\text{ GB/s}}</h1>
+<p>1.419\text{ ms}.
+]</p>
+<p>Compute is the roof:</p>
+<h1>[
+\widehat T</h1>
+<h1>\frac{0.309646(32)(1.85)}{0.030638}</h1>
+<p>\boxed{598\text{ tokens/s/GPU}}.
+]</p>
+<p>Measured: 675, so error is <strong>−11.4%</strong>.</p>
+<h2>H20 Base, batch 48</h2>
+<p>[
+t_C=45.958\text{ ms},\qquad
+t_H=14.431\text{ ms},\qquad
+t_N=2.129\text{ ms}.
+]</p>
+<p>Because the row is compute-bound, batch cancels in (ba/t_C):</p>
+<h1>[
+\widehat T</h1>
+<h1>\frac{0.309646(48)(1.85)}{0.045958}</h1>
+<p>\boxed{598}.
+]</p>
+<p>Measured: 714, so error is <strong>−16.2%</strong>.</p>
+<h2>GB200, source-faithful optimistic bound</h2>
+<p>For a 2K-input/2K-output run, use (L_{\rm avg}=3{,}000):</p>
+<p>[
+\Phi(3000)=88.991\text{ GF},
+\qquad
+K_{\rm FP8}(3000)=105.408\text{ MB}.
+]</p>
+<p>Using the favorable 18.5 GB all-active-FP4 weight lower bound and 10 PF FP4 compute:</p>
+<h1>[
+t_C</h1>
+<h1>\frac{128(88.991\text{ GF})}{10\text{ PF}}</h1>
+<p>1.139\text{ ms}.
+]</p>
+<h1>[
+t_H</h1>
+<h1>\frac{18.5\text{ GB}+128(105.408\text{ MB})}{8.0\text{ TB/s}}</h1>
+<p>3.999\text{ ms}.
+]</p>
+<p>NVFP4 dispatch divides the nominal activation payload by four:</p>
+<h1>[
+t_N</h1>
+<h1>\frac{128(13.304/4\text{ MB})}{1.8\text{ TB/s}}</h1>
+<p>0.237\text{ ms}.
+]</p>
+<p>HBM is the roof:</p>
+<h1>[
+\widehat T</h1>
+<h1>\frac{0.309646(128)}{0.003999}</h1>
+<p>\boxed{9{,}911}.
+]</p>
+<p>Measured: 10,108.4, so error is <strong>−2.0%</strong>.</p>
+<p>That near-match should not be overinterpreted: 18.5 GB is the minimum physically possible active-weight traffic. The actual mixed-precision checkpoint is heavier.</p>
+<h2>Ascend 910C, 50 ms row</h2>
+<p>At 4K with BF16 KV:</p>
+<p>[
+K_{\rm BF16}(4096)=287.834\text{ MB}.
+]</p>
+<h1>[
+t_C</h1>
+<h1>\frac{96(2)(94.468\text{ GF})}{1.504\text{ PF}}</h1>
+<p>12.060\text{ ms}.
+]</p>
+<h1>[
+t_H</h1>
+<h1>\frac{37\text{ GB}+96(2)(287.834\text{ MB})}{3.2\text{ TB/s}}</h1>
+<p>28.833\text{ ms}.
+]</p>
+<h1>[
+t_N</h1>
+<h1>\frac{96(2)(13.304\text{ MB})}{784\text{ GB/s}}</h1>
+<p>3.258\text{ ms}.
+]</p>
+<h1>[
+\widehat T</h1>
+<h1>\frac{0.309646(96)(1.7)}{0.028833}</h1>
+<p>\boxed{1{,}753}.
+]</p>
+<p>Measured: 1,943, so error is <strong>−9.8%</strong>.</p>
+<p>Notably, the HBM time increases from about 20.2 ms without MTP to 28.8 ms with two KV scans, a 43% increase. That closely matches the paper’s measured approximately 44% MTP iteration-latency increase, although it does not prove the decomposition is unique. citeturn848796view4</p>
+<h2>Ascend 910C, 15 ms row</h2>
+<p>Use the same physical configuration but (b=8):</p>
+<h1>[
+t_C=1.005\text{ ms},
+\qquad
+t_H</h1>
+<h1>\frac{37+8(2)(0.287834)}{3.2}</h1>
+<p>13.002\text{ ms},
+\qquad
+t_N=0.272\text{ ms}.
+]</p>
+<h1>[
+\widehat T</h1>
+<h1>\frac{0.309646(8)(1.7)}{0.013002}</h1>
+<p>\boxed{324}.
+]</p>
+<p>Measured: 538, so error is:</p>
+<p>[
+\boxed{-39.8%}.
+]</p>
+<p>This is the load-bearing failure. At batch eight, the constant shared residual and simple “37 GB once per iteration” traffic assumption do not describe the platform.</p>
+<hr>
+<h1>5. Errors, worst-platform score, and margin error</h1>
+<p>Let:</p>
+<p>[
+e=\frac{\widehat T}{T}-1.
+]</p>
+<p>The calculator’s cost is inversely proportional to throughput, and its contribution margin is (M=1-C/R). Therefore, if (\widehat M) is the margin calculated from predicted throughput:</p>
+<h1>[
+M_{\rm true}</h1>
+<p>1-(1-\widehat M)\frac{\widehat T}{T},
+]</p>
+<p>so:</p>
+<h1>[
+\boxed{
+\widehat M-M_{\rm true}</h1>
+<p>(1-\widehat M)e
+}.
+]</p>
+<p>The following percentage-point values assume the throughput error applies to the entire relevant serving cost. For a blended workload where decode is only fraction (\omega_d) of direct cost, multiply the values by (\omega_d). citeturn525695view0</p>
+<table>
+<thead>
+<tr>
+<th>Held-out row</th>
+<th align="right">Predicted</th>
+<th align="right">Measured</th>
+<th align="right">Throughput error</th>
+<th align="right">Margin error at 80%</th>
+<th align="right">Margin error at 90%</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H20 Pro</td>
+<td align="right">598</td>
+<td align="right">675</td>
+<td align="right">−11.4%</td>
+<td align="right">−2.27 pp</td>
+<td align="right">−1.14 pp</td>
+</tr>
+<tr>
+<td>H20 Base</td>
+<td align="right">598</td>
+<td align="right">714</td>
+<td align="right">−16.2%</td>
+<td align="right">−3.24 pp</td>
+<td align="right">−1.62 pp</td>
+</tr>
+<tr>
+<td>GB200, optimistic FP4 bound</td>
+<td align="right">9,911</td>
+<td align="right">10,108</td>
+<td align="right">−2.0%</td>
+<td align="right">−0.39 pp</td>
+<td align="right">−0.20 pp</td>
+</tr>
+<tr>
+<td>Ascend, 50 ms</td>
+<td align="right">1,753</td>
+<td align="right">1,943</td>
+<td align="right">−9.8%</td>
+<td align="right">−1.96 pp</td>
+<td align="right">−0.98 pp</td>
+</tr>
+<tr>
+<td>Ascend, 15 ms</td>
+<td align="right">324</td>
+<td align="right">538</td>
+<td align="right"><strong>−39.8%</strong></td>
+<td align="right"><strong>−7.96 pp</strong></td>
+<td align="right"><strong>−3.98 pp</strong></td>
+</tr>
+</tbody></table>
+<p>Define a platform-level score as:</p>
+<p>[
+E_j=\max_{o\in j}|e_{jo}|.
+]</p>
+<p>Then:</p>
+<ul>
+<li>H20 platform: <strong>16.2%</strong></li>
+<li>GB200 platform: <strong>2.0%</strong> under the favorable FP4 lower bound</li>
+<li>Ascend platform: <strong>39.8%</strong></li>
+<li><strong>Worst platform: 39.8%</strong></li>
+</ul>
+<p>At an 85% nominal margin, the worst-row downstream error is approximately <strong>5.97 percentage points</strong>.</p>
+<p>The tempting result is “16.2% worst” after looking only at H20, GB200, and Ascend’s throughput-oriented 50 ms row. That is not the council-compliant score: it excludes Ascend’s 15 ms observation from a held-out platform after seeing it.</p>
+<p>The separate 1,303 tokens/s “neutral Ascend” figure should not be scored using the optimized batch-96/MTP constants. Doing so gives 1,753 vs 1,303, or <strong>+34.5%</strong>, but the comparison is invalid until the neutral row’s batch, context, MTP, EP placement, and precision are specified.</p>
+<hr>
+<h1>6. Sensitivity to the assumed batches and MTP settings</h1>
+<p>The favorable result is not stable.</p>
+<h3>H800 calibration batch</h3>
+<p>The H800 batch is undisclosed. Holding every other assumption fixed:</p>
+<table>
+<thead>
+<tr>
+<th align="right">Assumed H800 batch</th>
+<th align="right">Fitted shared (\eta)</th>
+<th align="right">Worst error over all held-out rows</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">80</td>
+<td align="right">35.22%</td>
+<td align="right">31.5%</td>
+</tr>
+<tr>
+<td align="right"><strong>96</strong></td>
+<td align="right"><strong>30.96%</strong></td>
+<td align="right"><strong>39.8%</strong></td>
+</tr>
+<tr>
+<td align="right">128</td>
+<td align="right">25.64%</td>
+<td align="right">50.1%</td>
+</tr>
+</tbody></table>
+<p>All held-out predictions scale almost linearly with (\eta). Even the favorable batch-80 case remains above the 25% whole-platform gate.</p>
+<h3>H800 production MTP</h3>
+<p>The central calculation assumes no H800 MTP. DeepSeek’s model report says one additional token can have 85–90% acceptance and produce approximately a 1.8× TPS gain, but that does not establish whether the 1,850 production disclosure used it. citeturn848796view2</p>
+<p>If H800 instead had (q=2,a=1.85):</p>
+<p>[
+\eta=21.97%
+]</p>
+<p>rather than 30.96%, and the Ascend 15 ms prediction falls to about 230 tokens/s, a <strong>−57.3%</strong> error.</p>
+<h3>H20 MTP interpretation</h3>
+<p>Central assumption:</p>
+<p>[
+q=3,\qquad a=1.85
+]</p>
+<p>for one base plus two drafted positions.</p>
+<p>If the target-equivalent work is instead (q=2):</p>
+<ul>
+<li>H20 Pro prediction: 897, error <strong>+33.0%</strong></li>
+<li>H20 Base prediction: 897, error <strong>+25.7%</strong></li>
+</ul>
+<p>With (q=3), changing acceptance from 1.8 to 1.9 moves the Pro prediction only from 582 to 614. The large sensitivity is to the number of expensive target positions, not to the narrow acceptance range.</p>
+<h3>GB200 precision and context</h3>
+<p>At average context 3K:</p>
+<table>
+<thead>
+<tr>
+<th align="right">Assumed active weight traffic</th>
+<th align="right">Prediction</th>
+<th align="right">Error</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">18.5 GB, all active path FP4 lower bound</td>
+<td align="right">9,911</td>
+<td align="right">−2.0%</td>
+</tr>
+<tr>
+<td align="right">23 GB mixed-precision approximation</td>
+<td align="right">8,689</td>
+<td align="right">−14.0%</td>
+</tr>
+<tr>
+<td align="right">37 GB strict 8-bit counterfactual</td>
+<td align="right">6,280</td>
+<td align="right">−37.9%</td>
+</tr>
+</tbody></table>
+<p>With 18.5 GB weights, changing average context from 2K to 4K moves the prediction from 11,532 to 8,690, or from +14.1% to −14.0%.</p>
+<p>Consequently, the GB200 row cannot be a clean “8-bit held-out platform.” It is a different precision treatment that must either be modeled layer by layer or excluded from an apples-to-apples 8-bit gate.</p>
+<h3>Ascend KV precision</h3>
+<p>At batch 96:</p>
+<ul>
+<li>BF16 KV assumption: 1,753, error −9.8%</li>
+<li>FP8 KV assumption: 2,502, error +28.8%</li>
+</ul>
+<p>At batch eight:</p>
+<ul>
+<li>BF16 KV: 324, error −39.8%</li>
+<li>FP8 KV: 343, error −36.3%</li>
+</ul>
+<p>The low-batch failure survives either KV assumption.</p>
+<hr>
+<h1>7. Verdict against each precondition</h1>
+<h3>(a) Hold out entire platforms</h3>
+<p>The retrospective calculation does this only when <strong>all</strong> H20 and Ascend rows are scored. On that basis, the worst platform error is 39.8%, so the approximately 25% gate fails.</p>
+<p>Selecting only the 50 ms Ascend row would be row selection, not a whole-platform holdout.</p>
+<h3>(b) No per-platform fitted efficiency</h3>
+<p>The proposed equation has no per-platform (\eta): only one shared (\eta).</p>
+<p>However, this condition is satisfied only if batch, MTP work, acceptance, precision mix, KV dtype, expert occupancy, topology fractions, and collective startup are fixed from independent configuration records or microbenchmarks before throughput is revealed. In the present dataset, several are unknown. Post-hoc choices among them would function as undeclared platform-specific fits.</p>
+<h3>(c) Parameter count strictly below independent platform groups</h3>
+<p>For decode:</p>
+<p>[
+p=1,\qquad n_{\rm train}=1,\qquad 1&lt;1\text{ is false}.
+]</p>
+<p>Adding the optional shared (t_0) would make (p=2), which is even less identifiable.</p>
+<p>The only H800-only model satisfying this condition has (p=0). Setting (\eta=1) gives an ideal H800 prediction of approximately 5,975 tokens/s versus 1,850 measured, a +223% error. So the zero-parameter alternative is formally runnable but plainly fails.</p>
+<h3>(d) Worst platform and margin error</h3>
+<p>Reported above:</p>
+<ul>
+<li>Worst platform throughput error: <strong>39.8%</strong></li>
+<li>Corresponding absolute margin error:<ul>
+<li><strong>7.96 pp</strong> at 80% nominal margin</li>
+<li><strong>5.97 pp</strong> at 85%</li>
+<li><strong>3.98 pp</strong> at 90%</li>
+</ul>
+</li>
+</ul>
+<h3>(e) Genuinely untouched platform</h3>
+<p>There is none among H20, GB200, and Ascend. Their outcomes have already informed:</p>
+<ul>
+<li>rejection of scalar MFU,</li>
+<li>selection of compute/HBM/fabric terms,</li>
+<li>choice of MTP handling,</li>
+<li>choice of precision treatment,</li>
+<li>and the sensitivity analysis.</li>
+</ul>
+<p>Therefore:</p>
+<p>[
+\boxed{\text{The preregistered held-out experiment is unrunnable on the current observations.}}
+]</p>
+<hr>
+<h1>8. Prefill</h1>
+<p>For a 4K prompt, the average attention history during prefill is approximately (L/2). A favorable compute-roof approximation is therefore:</p>
+<h1>[
+\Phi_P(4096)</h1>
+<h1>74\text{ GF}
++
+4{,}997{,}120(4096/2)</h1>
+<p>84.234\text{ GF/input token}.
+]</p>
+<p>A full prefill roofline would also include FlashAttention I/O, prompt-token batch size, TP collectives, EPLB, and weight traffic. Unfortunately, the H800 4,026 row has batch and input length recorded as N/A, while the comparable Ascend rows use 16,384 total tokens and 4,096-token prompts. citeturn131213view0</p>
+<p>Using the requested H800 fresh-prefill anchor anyway:</p>
+<h1>[
+\eta_P</h1>
+<h1>\frac{4026(84.234\text{ GF})}{1.98\text{ PF}}</h1>
+<p>17.13%.
+]</p>
+<p>At the same prompt length, the FLOPs/token cancel, so predictions reduce to peak-compute ratios:</p>
+<h1>[
+\widehat T_{H20}</h1>
+<h1>4026\frac{0.296}{1.98}</h1>
+<p>\boxed{602}.
+]</p>
+<p>H20 measured input throughput is approximately (16.5\text{k}/8=2{,}062.5) per GPU, giving <strong>−70.8%</strong> error. citeturn459091view0</p>
+<h1>[
+\widehat T_{\rm Ascend}</h1>
+<h1>4026\frac{1.504}{1.98}</h1>
+<p>\boxed{3{,}058}.
+]</p>
+<p>Against Ascend:</p>
+<ul>
+<li>Default 5,655: <strong>−45.9%</strong></li>
+<li>Perfect-EPLB 6,688: <strong>−54.3%</strong></li>
+</ul>
+<p>The prefill worst-platform error is therefore <strong>70.8%</strong>, equivalent to approximately <strong>14.16 pp</strong> of margin at 80% or <strong>7.08 pp</strong> at 90%, under the same whole-cost convention.</p>
+<p>Using the more comparable H800 profile result of 7,839 at 16K total tokens and 4K prompts would predict 1,172 on H20 and 5,954 on Ascend. That still misses H20 by 43%. The prefill residual also does not transfer.</p>
+<p>Fitting separate decode and prefill residuals would mean (p=2) residuals from one H800 platform group, violating the parameter-count precondition even more clearly.</p>
+<hr>
+<h1>Recommendation</h1>
+<p><strong>Freeze the present per-platform anchor-fit calculator.</strong> Keep its current language that anchored rows are interpolations rather than validated physics. The roofline can be added as an experimental diagnostic or uncertainty band, but not as the production replacement.</p>
+<p>A valid future test needs:</p>
+<ol>
+<li>The equations, precision treatment, MoE weight-occupancy rule, and all thresholds frozen before the final observation.</li>
+<li>At least two independent training platform groups for one fitted residual, or at least three for separate decode and prefill residuals.</li>
+<li>A genuinely new entire platform held out after model freeze.</li>
+<li>Exact checkpoint byte counts, KV dtype, batch per chip, input/output lengths, MTP (q) and (a), TP/DP/EP placement, scale-out traffic, and collective latency fixed before throughput is inspected.</li>
+<li>A primary gate of maximum absolute error over <strong>every operating point on the held-out platform</strong>, not mean error. At a 25% throughput gate, the corresponding conservative margin gates are 5 pp at an 80% nominal margin and 2.5 pp at 90%.</li>
+</ol>
+<p>The roofline is directionally better than scalar MFU because it correctly changes bottlenecks across H20, GB200, and Ascend. But with the available metadata it is still an operating-point reconstruction, not a transferable throughput law.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+# ---------------------------------------------------------------------------
+# Quarantined feedback intake — Cloudflare Worker config
+#
+# SECURITY MODEL (do not weaken):
+#   * Submissions are FULLY ADVERSARIAL untrusted content.
+#   * The store is Cloudflare D1 — OUT of this repo, structurally unreachable
+#     by any workspace-reading agent. Never mirror/export it into the repo.
+#   * Public ingress is WRITE-ONLY (POST /submit). The only read path is
+#     GET /admin, which is fail-closed until Cloudflare Access is configured.
+#     There is NO development bypass — no var can open /admin.
+#   * NEVER wire this Worker, its D1 database, or its Durable Objects into
+#     any agent, cron, or event-bus pipeline. (The [triggers] cron below is
+#     Cloudflare-native retention that runs INSIDE the Worker itself — it is
+#     not a workspace coupling and touches nothing outside Cloudflare.)
+#   * No secrets in this file. Secrets go in via `wrangler secret put`.
+# ---------------------------------------------------------------------------
+
+name = "inference-margins-feedback"
+main = "src/worker.js"
+compatibility_date = "2026-06-01"
+
+# admin.html is imported by the Worker as a text module and served at GET /admin.
+rules = [
+  { type = "Text", globs = ["**/*.html"], fallthrough = false }
+]
+
+# --- Retention cron (P2-10) --------------------------------------------------
+# Daily. Runs the Worker's own scheduled() handler, which purges REVIEWED
+# rows older than RETENTION_DAYS. Entirely Cloudflare-native — no workspace
+# agent or cron is involved, and nothing is logged.
+[triggers]
+crons = ["17 4 * * *"]
+
+# --- D1: the out-of-repo feedback store -------------------------------------
+# OWNER STEP: create the database first —
+#   wrangler d1 create inference-margins-feedback
+# then paste the printed database_id below and apply the schema:
+#   wrangler d1 execute inference-margins-feedback --remote --file=schema.sql
+[[d1_databases]]
+binding = "FEEDBACK_DB"
+database_name = "inference-margins-feedback"
+database_id = "4fc6ed7e-9eac-4fd3-9267-f13756b66a1a"
+
+# --- Durable Object: atomic rate-limit counters (P1-5) ----------------------
+# Replaces the former KV read-modify-write counters (KV is eventually
+# consistent; concurrent bursts could race past the limit). One object per
+# hashed IP plus one "global" singleton, each doing a serialized
+# increment-and-check. Stores ONLY {window, n} — never submission content.
+# No owner provisioning needed: the [[migrations]] entry creates the class
+# on first `wrangler deploy`.
+[durable_objects]
+bindings = [
+  { name = "RATE_LIMITER", class_name = "RateLimiterDO" }
+]
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiterDO"]
+
+# --- Plain (non-secret) configuration ---------------------------------------
+[vars]
+# Origins of the static site that embeds form.html — comma-separated, exact
+# scheme+host, no trailing slash, canonical origin FIRST (it is the CORS
+# fallback). Used for CORS, the Origin-header check, AND the Turnstile
+# hostname assert on POST /submit (the token's hostname claim must equal one
+# of these origins' hostnames). Both origins serve the same current release:
+# margins.ashitaorbis.com is canonical, pages.dev is the intentional mirror.
+ALLOWED_ORIGINS = "https://margins.ashitaorbis.com,https://inference-margins.pages.dev"
+
+# Max size of the feedback text itself, in bytes (decoded field, not transport).
+MAX_BODY_BYTES = "4096"
+
+# Rate limits (fixed windows, enforced atomically by the RATE_LIMITER DO).
+RATE_PER_IP_PER_HOUR = "5"
+RATE_GLOBAL_PER_DAY = "200"
+
+# Retention window for the daily scheduled purge: REVIEWED submissions older
+# than this many days are deleted by the Worker's scheduled() handler.
+RETENTION_DAYS = "90"
+
+# Cloudflare Access JWT verification for GET /admin (fail-closed: while these
+# are empty, /admin returns 403). After creating the Access application
+# (RUNBOOK step 7), set:
+#   ACCESS_TEAM_DOMAIN — your Zero Trust team domain, e.g. "myteam"
+#                        (or full "myteam.cloudflareaccess.com")
+#   ACCESS_AUD         — the Access application's Audience (AUD) tag
+ACCESS_TEAM_DOMAIN = "ashitaorbis"
+ACCESS_AUD = "b46caa46b373f6c0a9a6ced8c03676c189abe959e4d5130a15a69f1cce77712b"
+
+# --- Secrets (NOT here — `wrangler secret put <NAME>`) ----------------------
+#   TURNSTILE_SECRET  — Turnstile secret key (from the Turnstile dashboard)
+#   IP_HASH_SALT      — random salt for ip_hash, e.g. `openssl rand -hex 32`
+#                       (rotating it orphans old hashes; that is acceptable)
+#
+# NOTE: do not enable observability/log ingestion that captures request
+# bodies. The Worker itself never logs raw bodies or raw IPs.

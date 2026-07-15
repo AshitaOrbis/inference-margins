@@ -1,0 +1,23 @@
+{
+  "name": "inference-margins-mcp-worker",
+  "version": "1.0.0",
+  "description": "Cloudflare Workers (remote streamable-HTTP) deployment of the inference-margins MCP server. The shared tool/shape/label sources are copied verbatim from ../src at build time (scripts/build.mjs) — mcp-server/src stays the single source of truth; only engine.ts (bundler import), reports.ts (live-site fetch) and get_report.ts (async read) are worker-native.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "typecheck": "npm run build && tsc -p tsconfig.json",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "npm run build && tsc -p tsconfig.json && wrangler deploy"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.29.0",
+    "agents": "^0.17.3",
+    "zod": "^3.25.1"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260629.1",
+    "typescript": "^5.6.0",
+    "wrangler": "^4.105.0"
+  }
+}

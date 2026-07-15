@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GLM-on-GB300 &amp; subscription plans — Grok 4.5 sweep · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/grok-sweep-glm-gb300">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><p>I&#39;ll search X extensively across all three topics in parallel, then pull threads for the strongest hits.
+Identified match: <strong>ncode</strong> (not Numina) by <strong>@_xjdr</strong> — pulling his GB300 posts and Claude tokenomics threads.# X/Twitter research report — 2026-07-09</p>
+<hr>
+<h2>1. GLM 5.2 on GB300 / “Numina Code” person</h2>
+<h3>Identity match</h3>
+<p>You almost certainly mean <strong>ncode</strong> (Noumena Code), not “Numina Code.”</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Finding</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Handle</strong></td>
+<td><a href="https://x.com/_xjdr">@_xjdr</a> (display name: <strong>xjdr</strong>)</td>
+</tr>
+<tr>
+<td><strong>Platform</strong></td>
+<td><strong>Noumena</strong> — <code>https://code.noumena.com/</code></td>
+</tr>
+<tr>
+<td><strong>Product / CLI</strong></td>
+<td><strong>ncode</strong> (“noumena code”) — coding agent/harness</td>
+</tr>
+<tr>
+<td><strong>Hardware partner</strong></td>
+<td><a href="https://x.com/PrimeIntellect">@PrimeIntellect</a> GB300 NVL72 racks</td>
+</tr>
+</tbody></table>
+<p>I did <strong>not</strong> find a well-known researcher product literally named “Numina Code” optimizing GLM 5.2 on GB300. Project Numina is math/Lean; this person’s stack is <strong>ncode + noumena</strong>.</p>
+<hr>
+<h3>Finding 1.1 — Free GLM 5.2 week + final throughput stats</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2071835604095300079">https://x.com/_xjdr/status/2071835604095300079</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>final GLM 5.2 served stats: ~12000 unique api keys served ~300B tokens total 232 tok/s/gpu output average 431 tok/s/gpu output max sustained 2.1 sec TTFT overage (1M ctx) 61 sec p95 TTFT (1M ctx) 81k tok average input size 41% cache hit rate 0 chat logs kept (dont be evil)</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>~12,000</strong> API keys; <strong>~300B</strong> tokens total; <strong>232 tok/s/gpu</strong> output average; <strong>431 tok/s/gpu</strong> max sustained; <strong>2.1 s</strong> avg TTFT (1M ctx); <strong>61 s</strong> p95 TTFT; <strong>81k</strong> avg input tokens; <strong>41%</strong> cache hit rate</td>
+</tr>
+</tbody></table>
+<p>Related end-of-promo post:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2071677153285210283">https://x.com/_xjdr/status/2071677153285210283</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-29</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Today marks the end of the free GLM 5.2 with ncode. i hope y&#39;all enjoyed the tokens and found some of our tools useful.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>(none beyond “free GLM 5.2 with ncode”)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 1.2 — Hardware: GB300 NVL72, 60× B300</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2067742918455279934">https://x.com/_xjdr/status/2067742918455279934</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-18</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Special shout out to our hardware provider @PrimeIntellect . this model is running on gb300NVL72s and the have been absolutely amazing. could not recommend getting your large scale hardware from them highly enough</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Running on <strong>gb300NVL72s</strong> (Prime Intellect)</td>
+</tr>
+</tbody></table>
+<p>Thread clarification on the stats post:</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2071846027917943274">https://x.com/_xjdr/status/2071846027917943274</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>yes, 15 trays specifically or 60xB300s</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>15 trays</strong> / <strong>60× B300s</strong> (reply to “this was on nvl72?”)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2072059152873210101">https://x.com/_xjdr/status/2072059152873210101</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>no mtp and no eagle just optimized inference and disagg</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>No MTP, no Eagle</strong> — optimized inference + disaggregation only</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2072058942025601533">https://x.com/_xjdr/status/2072058942025601533</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>this was our in house, nmoe based serving stack (mostly rust)</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>In-house <strong>nmoe</strong> stack, mostly <strong>Rust</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 1.3 — Precision (bf16 / FP8 / NVFP4)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2070947967574663249">https://x.com/_xjdr/status/2070947967574663249</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-27</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>we&#39;ve been running GLM 5.2 in bf16 and in fp8 (experts and kvcache only, attention is always bf16) and have recorded virtually 0 measurable quality difference in our A/B tests and audits (very surprisingly) NVFP4 has shown a slight performance regression but could probably be fixed with proper L/DoRA and might also totally be worth it given your hardware and serving constraints.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>bf16</strong> full; <strong>fp8</strong> for experts + KV cache only; attention always <strong>bf16</strong>; <strong>~0</strong> measurable quality delta bf16 vs that fp8; <strong>NVFP4</strong> slight regression (not quantified further by him)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 1.4 — Product name &amp; onboarding (ncode / noumena)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2067741647941832818">https://x.com/_xjdr/status/2067741647941832818</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-18</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Today marks the beginning of our launch calendar and to celebrate i am making ncode and our flagship kimi k2.7 model free to use for the next week ... 1) sign up for a noumena account at https://code.noumena.com/ 2) go to ... and clone and build noumena code (ncode) 3) login to the platform with \</code>ncode auth login` ... 4) enjoy blazing fast tokens on the noumena platform with ncode`</td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Free for <strong>next week</strong> (or until traffic knocks them out)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2069038936362803544">https://x.com/_xjdr/status/2069038936362803544</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-22</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>What all is involved with onboarding a new model to noumena and ncode? I added GLM support over the weekend ... Luckily GLM5.2 is close enough to DeepSeek ... Hopefully you found that interesting and you continue to use and enjoy GLM 5.2 on noumena with ncode</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>GLM onboarded “over the weekend” (no tok/s here)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 1.5 — GB300 vs earlier Blackwell (not a full tok/s bake-off)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2022517795733541146">https://x.com/_xjdr/status/2022517795733541146</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-02-14</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>i dont have gb200s anymore, i was comparing blackwell to grace blackwell here. as for the GB300 specifically, sm103 has some nice scheduling bits and the extra HBM and nvlink speed is nice</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>No numeric tok/s vs GB200/H100 in this post; qualitative <strong>extra HBM</strong> + <strong>NVLink</strong> on GB300</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2047587676602425625">https://x.com/_xjdr/status/2047587676602425625</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-04-24</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>finally got v4 up on some GB300 nodes. took a min to do correctly. luckily it was pretty similar to the architecture i was already using (mHC, mxfp4 experts, NSA ish, etc)</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>(DeepSeek) V4 on GB300 nodes; no tok/s</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2069917609278218601">https://x.com/_xjdr/status/2069917609278218601</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-24</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>I have not rebooted my racks in months (well past 66 days). I did however have this problem with my first set of B200 racks</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>&gt;66 days</strong> uptime; prior <strong>B200</strong> racks</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Cost-per-million: what he published vs what others inferred</h3>
+<p><strong>Not found from @_xjdr:</strong> an explicit self-authored $/M tokens cost for GLM 5.2 on GB300.</p>
+<p>A <strong>third-party reply</strong> on his stats thread (not confirmed by him in the results I retrieved):</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/paxaral/status/2071995188302557585">https://x.com/paxaral/status/2071995188302557585</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@paxaral</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Assuming $6 per gpu, gpt 5.5 seems to think this implies about a $0.35 mTok in / $1.50 out cost-to-serve</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Assumed <strong>$6/GPU</strong>; inferred <strong>$0.35 / MTok in</strong>, <strong>$1.50 / MTok out</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Also not found from him:</strong> a published head-to-head GLM 5.2 tok/s table of <strong>GB300 vs GB200 vs H100/H200</strong> with batch size and precision on the same workload. Closest are the qualitative GB300 notes above and the absolute <strong>232 / 431 tok/s/gpu</strong> numbers on <strong>60× B300 / NVL72</strong>.</p>
+<hr>
+<h3>Nearby but different people (for disambiguation)</h3>
+<table>
+<thead>
+<tr>
+<th>Who</th>
+<th>Why not the match</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>@thejackobrien</strong> / Subconscious</td>
+<td>GLM 5.2 “3.5× faster / ½ compute” marketing; <strong>no GB300 rack numbers</strong> found</td>
+</tr>
+<tr>
+<td><strong>@m_sirovatka</strong></td>
+<td>Cited as self-hosting GLM-5.2 on NVL72 GB300; <strong>HR at Prime Intellect</strong>, not the ncode product author</td>
+</tr>
+<tr>
+<td><strong>@mgoin_</strong> (vLLM)</td>
+<td>GB300 NVL72 for <strong>DSpark training</strong> on GLM 5.2, not “Numina/ncode” product</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Claude subscription tokenomics (Pro / Max 5× / Max 20×)</h2>
+<p>Anthropic plans commonly discussed: <strong>Pro $20</strong>, <strong>Max 5× $100</strong>, <strong>Max 20× $200</strong>, with <strong>5-hour</strong> session windows and <strong>weekly</strong> caps. Below are practitioner / investigation posts. Numbers are <strong>quoted as published</strong> (API-list equivalent, not Anthropic COGS).</p>
+<hr>
+<h3>Finding 2.1 — Most cited “math on the $200 plan” (weekly → monthly API equiv)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/melvynx/status/2012326484300677454">https://x.com/melvynx/status/2012326484300677454</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@melvynx</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-01-17</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>just did the math on Claude Code $200 plan and i&#39;m shocked spent ~$50 = 6% weekly usage that means i can burn through ~$800 EACH WEEK → $3,200/month if you were on API pricing → $200/month with the Max plan the $200 plan literally saves you $3k/month if you actually use it hard</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>~$50</strong> ≈ <strong>6%</strong> of weekly usage ⇒ <strong>~$800/week</strong> full weekly ⇒ <strong>~$3,200/month</strong> API-equivalent vs <strong>$200/mo</strong> Max</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.2 — Multi-month ccusage (strong longitudinal claim)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/olofj/status/2037703420724019285">https://x.com/olofj/status/2037703420724019285</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@olofj</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-03-28</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Seems like I&#39;ve been getting my money&#39;s worth out of Claude Max 20x so far. 2.5 months into it, 14+B tokens. Per-token charges would have been $7k5 according to ccusage.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>Max 20×</strong>; <strong>2.5 months</strong>; <strong>14+B tokens</strong>; <strong>$7.5k</strong> API-equivalent (ccusage)</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.3 — $100 Max plan monthly range</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/xtophr/status/1970836340234461548">https://x.com/xtophr/status/1970836340234461548</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@xtophr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2025-09-24</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>$100 Claude Max Plan. generally get $1500-$2000/mo token equivalent when I run ccusage. git worktrees and Sonnet subagents use a lot of tokens.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>$100</strong> Max; <strong>$1,500–$2,000/mo</strong> API-equivalent</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.4 — Extreme short-window usage (viral-scale)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/bridgemindai/status/2060693626712141885">https://x.com/bridgemindai/status/2060693626712141885</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@bridgemindai</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-05-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>In the last 2 days I&#39;ve run over 1.6 BILLION tokens through Claude Code. 1,628,985,347 to be exact. ... The wild part: that&#39;s ~$1,500 in API-equivalent usage. I ran it on Max plans for a flat fee.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>1,628,985,347</strong> tokens in <strong>2 days</strong>; <strong>~$1,500</strong> API-equivalent on Max flat fee</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/Earth_1729/status/2073245916497428689">https://x.com/Earth_1729/status/2073245916497428689</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@Earth_1729</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-04</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Someone got $8,030 in raw API-equivalent spend over the past 4 weeks on claude max 20x plan which costs $200.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>$8,030</strong> API-equivalent / <strong>4 weeks</strong> on <strong>Max 20× $200</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_davejh/status/2073349348524425683">https://x.com/_davejh/status/2073349348524425683</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_davejh</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-04</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>LOLLLLL, Claude Max (5x) plan, one session on a simple dumbass app with a few /compacts = $4,243 at token rate. $12.40 worth of usage out of a $100 plan. 34,118% subsidy.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>Max 5× $100</strong>; one session <strong>$4,243</strong> at token rate; <strong>$12.40</strong> of plan; <strong>34,118%</strong> subsidy (as stated)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/btcbigd/status/2075147528358822331">https://x.com/btcbigd/status/2075147528358822331</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@btcbigd</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-09</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>过去 60 天（自 5/11）跑了 86 亿 tokens。按 API 计价约 $8,531（ccusage），但我实付只是 Max 订阅 $200/月——等于用订阅撬了约 21× 的用量。</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>60 days</strong>; <strong>8.6B tokens</strong>; <strong>~$8,531</strong> API (ccusage); paid <strong>Max $200/mo</strong> ⇒ <strong>~21×</strong> leverage</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.5 — Limit structure (5-hour + weekly), official + user math</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/claudeai/status/2052060693269008586">https://x.com/claudeai/status/2052060693269008586</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@claudeai</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-05-06</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Effective today, we are: 1) Doubling Claude Code’s 5-hour rate limits for Pro, Max, and Team plans; 2) Removing the peak hours limit reduction on Claude Code for Pro and Max plans; and 3) Substantially raising our API rate limits for Opus models.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>2×</strong> Claude Code <strong>5-hour</strong> limits (Pro/Max/Team); peak-hour reduction <strong>removed</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/BTA_labs/status/2073422107380264966">https://x.com/BTA_labs/status/2073422107380264966</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@BTA_labs</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-04</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>Just hit 100% on my current session again after maybe 20 minutes of serious coding. Look at the weekly limit: 6% used. That means one solid session burned through 12% of the weekly limit of Fable 5. ... With medium thinking effort, you might squeeze out ~35 minutes of productive coding. Switch to high effort and it drops to roughly 12-15 minutes. Go max / ultracode? Those 5-hour limits disappear in under 8 minutes.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Session <strong>100%</strong> in ~<strong>20 min</strong>; weekly <strong>6%</strong> used ⇒ one session ≈ <strong>12%</strong> weekly (Fable 5); medium ~<strong>35 min</strong>; high <strong>12–15 min</strong>; max/ultracode <strong>&lt;8 min</strong> of the 5-hour window</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/tkinfinance/status/2075292575737520577">https://x.com/tkinfinance/status/2075292575737520577</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@tkinfinance</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-09</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>So with the Claude Pro plan I only have 9, 5 hour sessions This one sprint used 11% of my weekly limit Thats less than 2 days per week I can push it</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Pro: <strong>9</strong> five-hour sessions; one sprint <strong>11%</strong> weekly ⇒ <strong>&lt;2 days/week</strong> at that intensity</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.6 — SemiAnalysis internal token economics (lab/org, not consumer plan alone)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/SemiAnalysis_/status/2070915303500849289">https://x.com/SemiAnalysis_/status/2070915303500849289</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@SemiAnalysis_</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-27</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>The blended Opus 4.7 cost we observe is about $0.99 per million against $5/$25 sticker, mostly because agentic workloads run 300:1 input-to-output ratios and cache hit rates above 90% pull the effective price down.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Blended <strong>~$0.99 / million</strong> vs sticker <strong>$5/$25</strong>; <strong>300:1</strong> I/O; cache <strong>&gt;90%</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/SemiAnalysis_/status/2074908975196221654">https://x.com/SemiAnalysis_/status/2074908975196221654</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@SemiAnalysis_</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-08</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>We analyzed 1.5M+ of our Claude Code requests (mostly Opus). ~95% of all tokens spent by us are cache hits, which cut our token bill by ~84%.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>1.5M+</strong> requests; <strong>~95%</strong> cache hits; <strong>~84%</strong> bill cut</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 2.7 — Peter Steinberger</h3>
+<p><strong>Explicit result:</strong> In this search pass I <strong>did not find</strong> a comprehensive Steinberger (@steipete) investigation post that quantifies Max $20/$100/$200 → API-dollar extract with ccusage-style tables. His recent posts are about OpenClaw, Codex, hardware, etc., not a tokenomics deep-dive. If such a post exists older/off-X (blog), it was <strong>not surfaced</strong> in the X results used here.</p>
+<hr>
+<h3>Single most comprehensive investigation (URL)</h3>
+<p>On <strong>written depth + longitudinal sample</strong>, the best single investigation found (off-X, widely referenced) is:</p>
+<p><strong><a href="https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/">https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/</a></strong><br>(author site; claims tracking <strong>10 billion tokens / 8 months</strong> → <strong>~$15,000</strong> API vs <strong>~$800</strong> paid on Max)</p>
+<p>On <strong>X alone</strong>, the single most reusable “primary calculation” post is still:</p>
+<p><strong><a href="https://x.com/melvynx/status/2012326484300677454">https://x.com/melvynx/status/2012326484300677454</a></strong> — <strong>$50 ≈ 6% weekly ⇒ ~$800/week ⇒ ~$3,200/month</strong> on <strong>$200 Max</strong>.</p>
+<p><strong>Effective $/M paid vs list:</strong> user posts typically report <strong>API list equivalent</strong> (often Opus $5/$25 sticker, cache-adjusted) vs <strong>flat subscription</strong>. True all-in $/M paid = <code>$subscription / tokens_used</code> and varies wildly; examples above imply heavy Max 20× users often sitting at <strong>well under list</strong>, sometimes <strong>tens of dollars of API value per $1 of subscription</strong> when fully maxing weekly caps.</p>
+<hr>
+<h2>3. GB300 (Blackwell Ultra) real-world MoE inference (practitioners / engines)</h2>
+<p>Focus: tokens/sec and vs GB200/H100/H200 from practitioners and engine maintainers — not pure NVIDIA keynote marketing (some posts still relay SemiAnalysis InferenceX, which is industry-standard third-party bench).</p>
+<hr>
+<h3>Finding 3.1 — SemiAnalysis InferenceX: GB300 NVL72 vs H100 (multipliers)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/firstadopter/status/2023489524735574481">https://x.com/firstadopter/status/2023489524735574481</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@firstadopter (quoting SemiAnalysis InferenceX v2)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-02-16</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>&quot;Nvidia’s GB300 NVL72 doesn’t disappoint. It achieves up to 100x on FP8 vs FP4 compared to even a strong H100 disagg+wideEP+MTP baseline and 65x on FP8 vs FP8.&quot;</code> … <code>&quot;Nvidia absolutely frame mogs with the B200, B300 and ASU frat leader, rack scale GB200/GB300 NVL72 across both SGLang and TRTLLM.&quot;</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>Up to 100×</strong> (H100 baseline FP8 vs GB300 FP4); <strong>65×</strong> (H100 FP8 vs GB300 FP8); engines <strong>SGLang</strong> + <strong>TRTLLM</strong></td>
+</tr>
+</tbody></table>
+<p>Source report link in SemiAnalysis post:<br><a href="https://x.com/SemiAnalysis_/status/2023447723085885576">https://x.com/SemiAnalysis_/status/2023447723085885576</a><br>(<code>InferenceX v2: NVIDIA Blackwell Vs AMD vs Hopper ... GB300 NVL72, MI355X, B200, H100 ... SGLang, vLLM, TRTLLM</code>)</p>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/SemiAnalysis_/status/2029693660686680529">https://x.com/SemiAnalysis_/status/2029693660686680529</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@SemiAnalysis_</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-03-05</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>For frontier MoE inferencing, GB300 NVL72 FP4 framemogs h100 even when both blackwell ultra &amp; hopper have all the optimizations including disagg &amp; wide expert parallelism enabled. We see similar trends when comparing GB300 FP8 to H100 FP8. For pretraining, blackwell &amp; rack scale only offers 2-4x performance uplifts while inference is where blackwell shines.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Pretrain uplift <strong>2–4×</strong>; inference much larger (qualitative “framemogs”; no single tok/s in this post)</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/SemiAnalysis_/status/2070915304629129460">https://x.com/SemiAnalysis_/status/2070915304629129460</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@SemiAnalysis_</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-27</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>On the same B300 running DeepSeek R1, baseline FP8 sits near 1,000 tokens/sec/GPU, adding wideEP plus disagg gets you to roughly 8,000, and layering MTP on top pushes it to about 14,000, a 14x gain from software alone. Factor in hardware too and the most optimized GB300 NVL72 hits about 17x the best H100 config in FP8, 32x in FP4.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>B300 / DeepSeek R1:</strong> ~<strong>1,000</strong> → ~<strong>8,000</strong> → ~<strong>14,000</strong> tok/s/GPU (FP8 → +wideEP+disagg → +MTP); <strong>~14×</strong> software; optimized <strong>GB300 NVL72</strong> ~<strong>17×</strong> best H100 FP8, <strong>~32×</strong> in FP4</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 3.2 — LMSYS / SGLang maintainers (DeepSeek-V4 on GB300)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/lmsysorg/status/2065513735213773021">https://x.com/lmsysorg/status/2065513735213773021</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@lmsysorg</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-12</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>New record on GB300 NVL72: SGLang exceeds 12K tok/s per GPU on DeepSeek V4 Pro 1.6T (FP4, 8K/1K), orchestrated with NVIDIA Dynamo (SGLang) and MTP.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>&gt;12K tok/s per GPU</strong>; model <strong>DeepSeek V4 Pro 1.6T</strong>; <strong>FP4</strong>; <strong>8K/1K</strong>; <strong>GB300 NVL72</strong>; <strong>MTP</strong> + Dynamo</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/lmsysorg/status/2069454066376487031">https://x.com/lmsysorg/status/2069454066376487031</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@lmsysorg</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-23</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>New blog: Serving DeepSeek-V4 on GB300 with SGLang: 5x Higher Throughput at the Same Interactivity Since Day-0 ... 5X throughput on GB300 disaggregated: ~2,200 → ~11,200 tok/s/GPU at ~50 tok/s/user ... 2.6X more throughput at 80 tok/s/user with MTP ... 2.91X on Blackwell Ultra aggregated at 30 tok/s/user</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>Disagg: <strong>~2,200 → ~11,200 tok/s/GPU</strong> at <strong>~50 tok/s/user</strong> (<strong>5×</strong>); <strong>2.6×</strong> at <strong>80 tok/s/user</strong> with MTP; aggregated <strong>2.91×</strong> at <strong>30 tok/s/user</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/lmsysorg/status/2049769087610572823">https://x.com/lmsysorg/status/2049769087610572823</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@lmsysorg (quoting SemiAnalysis)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-04-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>By leveraging @NVIDIAAI Dynamo + SGLang disaggregation on the GB300 NVL72 (powered by @CoreWeave), we&#39;re seeing a massive 6.5x performance leap over B200 for DeepSeek-v4 Pro 1.6T</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>6.5×</strong> vs <strong>B200</strong> (DeepSeek-v4 Pro 1.6T; Dynamo + SGLang disagg; CoreWeave GB300 NVL72)</td>
+</tr>
+</tbody></table>
+<p>Quoted SemiAnalysis wording (same thread parent):<br><code>GB300 NVL72 Rack Scale Dynamo SGLang disaggregation has up to 6.5x better performance than B200 on DeepSeekv4 Pro 1.6T</code></p>
+<hr>
+<h3>Finding 3.3 — vLLM maintainer on GB300 (GLM 5.2 training/serving hybrid, not pure InferenceX)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/mgoin_/status/2072785822231728363">https://x.com/mgoin_/status/2072785822231728363</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@mgoin_ (vLLM maintainer)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-02</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>DSpark update: Turns out with a little Speculators+Mooncake, I&#39;m able to scale training on GB300 NVL72! 9 vLLM nodes serve the full GLM 5.2 FP8 verifier -&gt; Mooncake RDMA store -&gt; 6 nodes train the DSpark with FSDP (DP=24). 125k prefill tok/s, 1.5 steps/s, full online training :)</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>GB300 NVL72</strong>; <strong>9</strong> vLLM nodes (GLM 5.2 <strong>FP8</strong> verifier); <strong>6</strong> train nodes; <strong>125k prefill tok/s</strong>; <strong>1.5 steps/s</strong>; <strong>DP=24</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/vllm_project/status/2019105689403334825">https://x.com/vllm_project/status/2019105689403334825</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@vllm_project</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-02-04</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>vLLM on NVIDIA GB200: 26.2K prefill TPGS, 10.1K decode TPGS for DeepSeek R1/V3. 3-5x throughput vs H200 - with half the GPUs!</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>GB200</strong> (not GB300): <strong>26.2K</strong> prefill TPGS, <strong>10.1K</strong> decode TPGS; <strong>3–5×</strong> vs <strong>H200</strong> with <strong>½ GPUs</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 3.4 — Practitioner rack-level throughput comparison</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/The_Analyst_Lab/status/2074768377105498428">https://x.com/The_Analyst_Lab/status/2074768377105498428</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@The_Analyst_Lab</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-08</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>At the rack level, an H100 rack 2 years ago with 4 HGX had 2.6TB of HBM and did 8,830 tok/s. Today a GB300 with 72 GPUs has 20.7TB of HBM and does 370k tok/s. HBM content at rack level has grown 8x in 2 years while token throuput is 42x.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>H100 rack: <strong>2.6 TB</strong> HBM, <strong>8,830 tok/s</strong>; GB300 <strong>72</strong> GPUs: <strong>20.7 TB</strong> HBM, <strong>370k tok/s</strong>; HBM <strong>8×</strong>, throughput <strong>42×</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h3>Finding 3.5 — AMD MI355X vs NVIDIA (context for MoE GLM 5.2, not GB300 win)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/loretoparisi/status/2073319812952953234">https://x.com/loretoparisi/status/2073319812952953234</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@loretoparisi</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-04</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td><code>@Zai_org GLM 5.2 inferencing with SGLang on the @AMD MI355X at 2626 tok/s/node and 213 tok/s single node at &gt; 2.7x lower cost per GPU than Blackwell B300.</code></td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td>GLM 5.2 / SGLang / <strong>MI355X</strong>: <strong>2626 tok/s/node</strong>, <strong>213 tok/s</strong> single-stream; <strong>&gt;2.7×</strong> lower cost/GPU than <strong>B300</strong></td>
+</tr>
+</tbody></table>
+<p>(Useful as cross-vendor MoE number; <strong>not</strong> a GB300 primary result.)</p>
+<hr>
+<h3>Finding 3.6 — @_xjdr GLM 5.2 absolute GB300-class numbers (link to §1)</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>URL</strong></td>
+<td><a href="https://x.com/_xjdr/status/2071835604095300079">https://x.com/_xjdr/status/2071835604095300079</a></td>
+</tr>
+<tr>
+<td><strong>Author</strong></td>
+<td>@_xjdr</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-06-30</td>
+</tr>
+<tr>
+<td><strong>Verbatim quote</strong></td>
+<td>(same as §1) <code>232 tok/s/gpu output average</code> / <code>431 tok/s/gpu output max sustained</code> on <code>60xB300s</code> / NVL72, no MTP</td>
+</tr>
+<tr>
+<td><strong>Numbers claimed</strong></td>
+<td><strong>232 / 431</strong> output <strong>tok/s/gpu</strong>; <strong>60× B300</strong>; <strong>no MTP</strong></td>
+</tr>
+</tbody></table>
+<p>These are <strong>lower per-GPU than InferenceX DeepSeek “12K–14K tok/s/GPU”</strong> headlines — different model, batch/interactivity regime, and no MTP. That gap is itself useful practitioner context.</p>
+<hr>
+<h2>Gaps (explicit)</h2>
+<ol>
+<li><strong>“Numina Code”</strong> as a product name: <strong>not found</strong>. Closest real match is <strong>ncode / Noumena</strong> by <strong>@_xjdr</strong>.</li>
+<li><strong>@_xjdr</strong> did <strong>not</strong> (in retrieved posts) publish a full <strong>GB300 vs GB200 vs H100/H200</strong> GLM 5.2 tok/s table, nor an authoritative <strong>$/M</strong> cost-to-serve for his free week.</li>
+<li><strong>Peter Steinberger</strong> comprehensive Max-plan API-dollar investigation: <strong>not found on X</strong> in this pass.</li>
+<li><strong>TensorRT-LLM maintainer personal posts</strong> with GB300 MoE numbers: <strong>not found</strong> beyond SemiAnalysis citing TRTLLM in InferenceX results.</li>
+<li>Batch sizes for @_xjdr’s <strong>232 / 431</strong> figures: <strong>not published</strong> in the posts retrieved (only “tok/s/gpu output average/max sustained”).</li>
+</ol>
+<hr>
+<h3>Quick index of highest-signal posts</h3>
+<table>
+<thead>
+<tr>
+<th>Topic</th>
+<th>Best primary post</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ncode + GLM 5.2 + GB300 hardware</td>
+<td><a href="https://x.com/_xjdr/status/2067742918455279934">https://x.com/_xjdr/status/2067742918455279934</a></td>
+</tr>
+<tr>
+<td>GLM 5.2 tok/s/gpu on 60× B300</td>
+<td><a href="https://x.com/_xjdr/status/2071835604095300079">https://x.com/_xjdr/status/2071835604095300079</a></td>
+</tr>
+<tr>
+<td>Claude $200 → ~$3.2k/mo API math</td>
+<td><a href="https://x.com/melvynx/status/2012326484300677454">https://x.com/melvynx/status/2012326484300677454</a></td>
+</tr>
+<tr>
+<td>Claude multi-month ccusage</td>
+<td><a href="https://x.com/olofj/status/2037703420724019285">https://x.com/olofj/status/2037703420724019285</a></td>
+</tr>
+<tr>
+<td>Long-form Claude pricing investigation</td>
+<td><a href="https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/">https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/</a></td>
+</tr>
+<tr>
+<td>GB300 vs H100 multipliers (InferenceX)</td>
+<td><a href="https://x.com/SemiAnalysis_/status/2070915304629129460">https://x.com/SemiAnalysis_/status/2070915304629129460</a></td>
+</tr>
+<tr>
+<td>SGLang &gt;12K tok/s/GPU GB300</td>
+<td><a href="https://x.com/lmsysorg/status/2065513735213773021">https://x.com/lmsysorg/status/2065513735213773021</a></td>
+</tr>
+</tbody></table>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

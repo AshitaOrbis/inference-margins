@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chinese accelerators — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/chinese-accel-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Chinese-market AI accelerators — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 57m45s · model <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508ea1-3b48-83e8-b3cc-651a7dc8bc80">conversation</a>
+Headline for the calculator: <strong>910C peak is 1.504 POPS INT8 (the CloudMatrix paper&#39;s &quot;1,054&quot; is a typo)</strong>; annual-commit rents H800 ≈ $1.75/hr, H20 ≈ $1.00/hr, 910C ≈ $1.95/hr (Huatai procurement); neutral 910C decode MFU 7% (5–10%); H20 17% (Ant production tiers); and &quot;one China rental rate&quot; is a category error — the same H20 spans ¥5–72/card-hour by rental class.
+Archived verbatim below (citation-marker artifacts from the source renderer preserved).</p>
+</blockquote>
+<hr>
+<p><strong>Evidence snapshot: 2026-07-09.</strong> Dollar conversions use the SAFE midpoint of <strong>¥6.8036/$ [DISCLOSED]</strong>. Monthly prices normalized at <strong>730 hours/month [SPECULATION: calculator convention]</strong>.</p>
+<h3>Evidence labels</h3>
+<ul>
+<li><strong>DISCLOSED</strong> — official specification, public rate card, operator disclosure, government document, or public procurement result.</li>
+<li><strong>CREDIBLY REPORTED</strong> — Reuters, FT, or reporting with a reasonably defined source basis.</li>
+<li><strong>COMMUNITY ESTIMATE</strong> — reseller listing, copied cloud-calculator output, open-source issue, or an anonymous market memo.</li>
+<li><strong>SPECULATION</strong> — my modeling recommendation or projection.</li>
+</ul>
+<h2>Bottom line</h2>
+<ol>
+<li><p><strong>Change the 910C peak from 1.054P to 1.504P INT8.</strong> Huawei says an eight-NPU Atlas 800T A3 has <strong>12.0 POPS INT8 [DISCLOSED]</strong> ⇒ ~1.50P/NPU; the CloudMatrix paper&#39;s tables repeatedly use <strong>1,504 TFLOPS [DISCLOSED]</strong>. The paper&#39;s isolated &quot;1,054&quot; sentence is internally inconsistent — a typo. Proof: reported prefill efficiency <strong>6,688 ÷ 1,504 = 4.45 tok/s/TFLOP</strong> matches the paper&#39;s own table; 1,054 would give 6.35.</p>
+</li>
+<li><p><strong>Do not use one generic &quot;China rental rate.&quot;</strong> In June–July 2026 the same H20 ranges from <strong>¥5–8/card-hour</strong> (long-term bare-metal IDC) to <strong>¥21–30</strong> (committed Tencent) to <strong>¥30–72</strong> (on-demand/bundled public cloud). Different products, not one market.</p>
+</li>
+<li><p><strong>For marginal-serving presets use annual-commit IDC/private-cloud pricing:</strong> H800 ≈ <strong>$1.75/card-hour</strong>, H20 ≈ <strong>$1.00</strong>, 910C ≈ <strong>$1.95</strong> [all SPECULATION←CR/CE/procurement].</p>
+</li>
+<li><p><strong>H20&#39;s 714 tok/s/GPU is real production evidence but the relaxed &lt;70ms tier.</strong> Neutral production anchor ≈ <strong>675–700</strong> (Ant Pro tier, &lt;50ms); use <strong>423</strong> for &lt;30ms latency-sensitive scenarios.</p>
+</li>
+<li><p><strong>910C: 7% effective decode MFU central, 5–10% range.</strong> CloudMatrix&#39;s optimized 1,943 tok/s = 9.56% MFU supports the upper end; the second-hand &quot;60% of H100&quot; claim implies 5.5–6.4%.</p>
+</li>
+</ol>
+<hr>
+<h2>1. Rental rate cards</h2>
+<h3>1.1 Hyperscaler / public cloud (keep as a separate rental class)</h3>
+<table>
+<thead>
+<tr>
+<th>Provider and product</th>
+<th align="right">Published rate</th>
+<th align="right">Per card-hour</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tencent TI-ONE H800 HCC, 8-card monthly</td>
+<td align="right">¥418,988–424,235/mo [DISCLOSED]</td>
+<td align="right"><strong>¥71.74–72.64 / $10.55–10.68</strong></td>
+<td>Doc updated 2026-06-03</td>
+</tr>
+<tr>
+<td>Tencent PNV6 H20 monthly (1 card)</td>
+<td align="right">¥15,676/mo [DISCLOSED]</td>
+<td align="right"><strong>¥21.47 / $3.16</strong></td>
+<td>Lowest clear Tencent monthly H20</td>
+</tr>
+<tr>
+<td>Tencent HCC-PNV6 H20, 8-card monthly</td>
+<td align="right">¥174,579/mo [DISCLOSED]</td>
+<td align="right"><strong>¥29.89 / $4.39</strong></td>
+<td>HCC fabric, big host bundle</td>
+</tr>
+<tr>
+<td>Tencent PNV6 H20 on-demand</td>
+<td align="right">¥30.48/card-hr [DISCLOSED]</td>
+<td align="right"><strong>$4.48</strong></td>
+<td>CPU-heavy variant ¥34.25/$5.03</td>
+</tr>
+<tr>
+<td>Tencent HCC-PNV6 H20 on-demand</td>
+<td align="right">¥212.63–340/8-card node-hr [DISCLOSED]</td>
+<td align="right"><strong>$3.91–6.25</strong></td>
+<td>Bundle spread</td>
+</tr>
+<tr>
+<td>Alibaba RDS Custom AI H20-96G</td>
+<td align="right">¥50.32/card-hr [DISCLOSED]</td>
+<td align="right"><strong>$7.40</strong></td>
+<td>RDS product, not plain ECS</td>
+</tr>
+<tr>
+<td>Alibaba RDS Custom AI H20-141G</td>
+<td align="right">¥72.24/card-hr [DISCLOSED]</td>
+<td align="right"><strong>$10.62</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Huawei Cloud 910C private-cloud procurement</strong></td>
+<td align="right"><strong>¥8,500–11,200/card-month [CREDIBLY REPORTED public award]</strong></td>
+<td align="right"><strong>¥11.64–15.34 / $1.71–2.25</strong></td>
+<td>Huatai Securities framework award (avg 192 one-card instances, 1 yr); Huawei Cloud won at ¥8,500. Best reproducible 910C price.</td>
+</tr>
+<tr>
+<td>China Telecom Tianyi 910B monthly</td>
+<td align="right">¥18,454/card-mo [DISCLOSED]</td>
+<td align="right"><strong>¥25.28 / $3.72</strong></td>
+<td>910B public-cloud proxy</td>
+</tr>
+<tr>
+<td>China Telecom Tianyi 910B on-demand</td>
+<td align="right">¥38.45/card-hr [DISCLOSED]</td>
+<td align="right"><strong>$5.65</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>Alibaba: <code>gn8v</code> documented (96GB HBM3, 4TB/s, 900GB/s NVLink [DISCLOSED]) but mainland tariff is sales-gated; copied calculator outputs ≈ ¥22.8–24.1 monthly / ¥34.7–36.7 on-demand per card-hour [COMMUNITY ESTIMATE]; a PAI doc example bid ceiling of ¥33/8-card-node-hour (¥4.125/card) is an example, not a clearing price. No reproducible static Alibaba H800 tariff. Volcano: no reproducible static mid-2026 card; stale Feb 2025 quote ≈ ¥133k/mo per 8-H20 node (¥22.77/$3.35).</p>
+<h3>1.2 IDC / neocloud market</h3>
+<table>
+<thead>
+<tr>
+<th>Hardware</th>
+<th align="right">Listing</th>
+<th align="right">Per card-hour</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H800 SXM, Cloud Engine</td>
+<td align="right">¥59,000/8-card node-mo</td>
+<td align="right"><strong>¥10.10 / $1.48</strong></td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td>H800 SXM, 2026 market interview</td>
+<td align="right">¥63,000–64,000/node-mo</td>
+<td align="right"><strong>¥10.79–10.96 / $1.59–1.61</strong></td>
+<td>CREDIBLY REPORTED (also: ~30% rise post-Spring-Festival; annual contracts dominant)</td>
+</tr>
+<tr>
+<td>H800 SXM, APEtops</td>
+<td align="right">¥82,000/node-mo</td>
+<td align="right"><strong>¥14.04 / $2.06</strong></td>
+<td>CE (full CPUs/RAM/9×400G)</td>
+</tr>
+<tr>
+<td>H800 SXM, Luchen Cloud</td>
+<td align="right">from ¥12.70/card-hr</td>
+<td align="right"><strong>from $1.87</strong></td>
+<td>CE (hourly retail)</td>
+</tr>
+<tr>
+<td>H20 96GB, Cloud Engine</td>
+<td align="right">¥30,000/node-mo</td>
+<td align="right"><strong>¥5.14 / $0.76</strong></td>
+<td>CE (lowest transparent)</td>
+</tr>
+<tr>
+<td>H20 141GB, Cloud Engine</td>
+<td align="right">¥40,000/node-mo</td>
+<td align="right"><strong>¥6.85 / $1.01</strong></td>
+<td>CE</td>
+</tr>
+<tr>
+<td>H20 96GB, APEtops</td>
+<td align="right">¥38,000/node-mo</td>
+<td align="right"><strong>¥6.51 / $0.96</strong></td>
+<td>CE</td>
+</tr>
+<tr>
+<td>Ascend 910B2</td>
+<td align="right">¥15,000–22,000/node-mo</td>
+<td align="right"><strong>¥2.57–3.77 / $0.38–0.55</strong></td>
+<td>CE — 910B only, never transfer to 910C</td>
+</tr>
+</tbody></table>
+<p><strong>Rental values to encode (annual-commit/bare-metal/private-cloud):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Central</th>
+<th align="right">Range</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H800 SXM</td>
+<td align="right"><strong>$1.75/h</strong></td>
+<td align="right">$1.47–2.06</td>
+</tr>
+<tr>
+<td>H20 96/141GB</td>
+<td align="right"><strong>$1.00/h</strong></td>
+<td align="right">$0.76–1.12</td>
+</tr>
+<tr>
+<td>Ascend 910C</td>
+<td align="right"><strong>$1.95/h</strong></td>
+<td align="right">$1.71–2.25</td>
+</tr>
+<tr>
+<td>Ascend 910B</td>
+<td align="right"><strong>$0.47/h</strong></td>
+<td align="right">$0.38–0.55</td>
+</tr>
+</tbody></table>
+<p>DeepSeek&#39;s <strong>$2/H800-hour [DISCLOSED]</strong> was a Feb 2025 internal costing assumption, not an invoice — a sanity check near the top of the current IDC range.</p>
+<hr>
+<h2>2. Hardware inputs and owned TCO</h2>
+<h3>2.1 Specification cross-check</h3>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Dense 8-bit</th>
+<th align="right">HBM</th>
+<th align="right">BW</th>
+<th align="right">Power</th>
+<th>Interconnect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H800 SXM</strong></td>
+<td align="right"><strong>1.979 PF dense FP8 [DISCLOSED]</strong></td>
+<td align="right">80GB</td>
+<td align="right">3.35TB/s</td>
+<td align="right">700W max</td>
+<td>400GB/s NVLink</td>
+</tr>
+<tr>
+<td><strong>H20 96GB</strong></td>
+<td align="right"><strong>296 TF dense FP8 [DISCLOSED by operator]</strong></td>
+<td align="right">96GB</td>
+<td align="right">4.0TB/s</td>
+<td align="right">400W nominal (~460W max CR)</td>
+<td>900GB/s NVLink</td>
+</tr>
+<tr>
+<td><strong>Ascend 910C</strong></td>
+<td align="right"><strong>1.504 POPS INT8 [DISCLOSED]</strong>; 752 TF FP16</td>
+<td align="right">128GB</td>
+<td align="right">3.2TB/s</td>
+<td align="right">600W central (550–690 CE)</td>
+<td>784GB/s D2D; no native FP8</td>
+</tr>
+<tr>
+<td><strong>Ascend 950DT</strong></td>
+<td align="right"><strong>1.0 PF FP8 / 2.0 PF FP4 [DISCLOSED]</strong></td>
+<td align="right">144GB</td>
+<td align="right">4.0TB/s</td>
+<td align="right">~650W (550–800 SPECULATION)</td>
+<td>2TB/s aggregate</td>
+</tr>
+</tbody></table>
+<h3>2.2 Accelerator capex (installed per accelerator)</h3>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th>Evidence</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H800 SXM</td>
+<td>Exporter listings ~$29–34k installed; higher domestic quotes ~$44–47k [CE] — banned finite stock, provenance-dominated</td>
+<td><strong>$40k central; $30–48k</strong></td>
+</tr>
+<tr>
+<td>H20</td>
+<td>Reuters $10–12k/chip [CR]; full-node quotes imply ~$17.8k (96G) / ~$22k (141G) installed [CE]</td>
+<td><strong>$11k module / $20k installed central; $18–22k</strong></td>
+</tr>
+<tr>
+<td>Ascend 910C</td>
+<td>CloudMatrix 384 ≈ RMB 60M [CR] ⇒ RMB 156,250 = <strong>$22,965/NPU</strong> at 2026-07-09 FX</td>
+<td><strong>$23k central; $22–29k</strong> (RMB 180–200k figure = older market estimate)</td>
+</tr>
+<tr>
+<td>Ascend 950DT</td>
+<td>No price; 950PR RMB 50k (DDR) / 70k (HBM) [CR] are PR prices</td>
+<td><strong>$18k installed central; $14–25k</strong> for mid-2027 modeling</td>
+</tr>
+</tbody></table>
+<h3>2.3 Electricity, PUE, facility, depreciation</h3>
+<ul>
+<li>Western-zone delivered electricity: Ulanqab ~¥0.35/kWh [CR]; Zhongwei ~¥0.36 [DISCLOSED]; Qingyang ≤¥0.40 [DISCLOSED] → <strong>¥0.38/kWh central</strong>; subsidized domestic-chip projects <strong>¥0.30 (¥0.25–0.36)</strong>; coastal scenario ¥0.70 (0.60–0.85).</li>
+<li>PUE: national caps 1.25 new large / 1.20 hub-cluster [DISCLOSED] → <strong>1.20 central (1.12–1.30)</strong>.</li>
+<li>Facility capex: China 50MW benchmark ≈ <strong>$5.61–8.61/W [CR→derived]</strong>; international ~$11/W → <strong>$7.8/W central ($6.5–9.5)</strong>.</li>
+<li>Depreciation: Alibaba computer equipment <strong>3–5 years [DISCLOSED]</strong> → <strong>4 years central (3–5)</strong>; facility <strong>15 years (14–20)</strong>. Chinese lessors&#39; 5-year &quot;payback model&quot; is pricing practice, not depreciation economics.</li>
+<li>Chip-only electricity at ¥0.38 + PUE 1.2: H800 $0.047/h; H20 $0.027/h; 910C $0.040/h — depreciation and utilization dominate, not power.</li>
+</ul>
+<hr>
+<h2>3. Throughput anchors</h2>
+<table>
+<thead>
+<tr>
+<th>Deployment</th>
+<th>Condition</th>
+<th align="right">Per-chip</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek H800 production</td>
+<td>V3/R1 real traffic</td>
+<td align="right"><strong>1,850 out tok/s/GPU</strong></td>
+<td>DISCLOSED→derived (14.8k/node)</td>
+</tr>
+<tr>
+<td>DeepSeek H800 production prefill</td>
+<td>mixed traffic incl. disk-KV hits</td>
+<td align="right"><strong>9,212 in tok/s/GPU</strong></td>
+<td>DISCLOSED→derived</td>
+</tr>
+<tr>
+<td>H800 optimized profile</td>
+<td>R1, batch 128, ~50ms TPOT</td>
+<td align="right"><strong>2,325 out tok/s/GPU</strong></td>
+<td>DISCLOSED (CloudMatrix comparison)</td>
+</tr>
+<tr>
+<td>Ant/SGLang H20 Base</td>
+<td>R1, TPOT &lt;70ms, batch 48 + MTP</td>
+<td align="right"><strong>714 out tok/s/GPU</strong></td>
+<td>DISCLOSED operator production</td>
+</tr>
+<tr>
+<td>Ant/SGLang H20 Pro</td>
+<td>TPOT &lt;50ms, batch 32</td>
+<td align="right"><strong>675 out tok/s/GPU</strong></td>
+<td>DISCLOSED — best neutral H20 anchor</td>
+</tr>
+<tr>
+<td>Ant/SGLang H20 Max</td>
+<td>TPOT &lt;30ms, batch 12</td>
+<td align="right"><strong>423 out tok/s/GPU</strong></td>
+<td>DISCLOSED — latency-sensitive preset</td>
+</tr>
+<tr>
+<td>CloudMatrix 910C default prefill</td>
+<td>R1 INT8, 4K input</td>
+<td align="right"><strong>5,655 in tok/s/NPU</strong></td>
+<td>DISCLOSED (default EPLB)</td>
+</tr>
+<tr>
+<td>CloudMatrix 910C idealized prefill</td>
+<td>&quot;perfect EPLB&quot;</td>
+<td align="right"><strong>6,688 in tok/s/NPU</strong></td>
+<td>DISCLOSED (idealized)</td>
+</tr>
+<tr>
+<td>CloudMatrix 910C decode</td>
+<td>R1 INT8, batch 96, 49.4ms TPOT, MTP@70%</td>
+<td align="right"><strong>1,943 out tok/s/NPU</strong></td>
+<td>DISCLOSED vendor/operator — upper anchor</td>
+</tr>
+<tr>
+<td>CloudMatrix 910C strict latency</td>
+<td>24.6ms / 14.9ms TPOT</td>
+<td align="right"><strong>974 / 538</strong></td>
+<td>DISCLOSED — latency slope</td>
+</tr>
+</tbody></table>
+<p><strong>Evidence gap:</strong> no credible hardware-normalized production tok/s/chip for DeepSeek V4 on 950-series, GLM-5 on H20/H800/910C, Kimi K2.x on any of them, or MiniMax — deployability evidence only. Huawei&#39;s Atlas 950 SuperPoD &quot;19.6M tokens/s across 8,192 NPUs&quot; (⇒2,393/NPU) is a marketing metric without model/precision/SLO — do not anchor on it.</p>
+<hr>
+<h2>4. The Ascend reality check</h2>
+<p>Effective decode MFU (37B-active convention, dense 8-bit peak denominator):</p>
+<table>
+<thead>
+<tr>
+<th>Anchor</th>
+<th align="right">Derived MFU</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H800 DeepSeek production 1,850</td>
+<td align="right"><strong>6.92%</strong></td>
+</tr>
+<tr>
+<td>H800 optimized 2,325</td>
+<td align="right"><strong>8.69%</strong></td>
+</tr>
+<tr>
+<td>H20 Base 714</td>
+<td align="right"><strong>17.85%</strong></td>
+</tr>
+<tr>
+<td>H20 Pro 675</td>
+<td align="right"><strong>16.88%</strong></td>
+</tr>
+<tr>
+<td>H20 Max 423</td>
+<td align="right"><strong>10.58%</strong></td>
+</tr>
+<tr>
+<td>910C CloudMatrix 1,943</td>
+<td align="right"><strong>9.56%</strong></td>
+</tr>
+<tr>
+<td>910C ~25ms TPOT 974</td>
+<td align="right"><strong>4.79%</strong></td>
+</tr>
+<tr>
+<td>910C ~15ms TPOT 538</td>
+<td align="right"><strong>2.65%</strong></td>
+</tr>
+</tbody></table>
+<p>H20&#39;s high FLOP-MFU is real: little peak compute, excellent bandwidth — the 4TB/s memory subsystem does the economic work in decode.</p>
+<p><strong>Reconciling 1,943 with &quot;60% of H100&quot;:</strong> the 60% claim [CR, unverified, no public benchmark] implies 1,110–1,303 tok/s ⇒ <strong>5.5–6.4% MFU</strong> vs CloudMatrix&#39;s 9.56%. Both can be true: CloudMatrix is EP320 across a 384-NPU optical supernode with co-designed INT8 kernels, MTP, ~50ms TPOT, batch 96; a generic 910C cluster, older CANN, or stricter latency won&#39;t reproduce it. <strong>Neutral recommendation: 7% central; 10% optimistic; 5% conservative; 2.5–5% strict-latency tail.</strong> At 1.504P INT8, 7% ⇒ ~1,423 tok/s/NPU on 37B-active.</p>
+<p><strong>Power:</strong> CloudMatrix ~559kW total IT [CR] vs NVL72 ~145kW is 3.86× — but 384 vs 72 devices (5.33×). Per-token IT energy: CloudMatrix 0.749 J/token; chip-only 910C 0.309; H800 0.378; H20 0.560. Chip-only excludes CloudMatrix&#39;s CPUs/optics/switches. Use <strong>600W chip-only</strong> or <strong>1.45kW attributable IT/NPU</strong> for CloudMatrix-like deployments; never multiply 910C power by 3.9.</p>
+<p><strong>Honest error bars (generic 910C serving):</strong> throughput/MFU ±35–40%; chip power ±15%; whole-system J/token ±40–50%. The uncertainty is software/topology, not the INT8 peak.</p>
+<hr>
+<h2>5. Who runs what (SPECULATION priors — no audited fleet percentages exist)</h2>
+<p>Share of frontier-model inference accelerator-hours in mainland China:</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th align="right">H800</th>
+<th align="right">H20</th>
+<th align="right">Ascend 910C/950</th>
+<th align="right">Other domestic</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek</td>
+<td align="right">35% (25–40)</td>
+<td align="right">10% (5–15)</td>
+<td align="right"><strong>50% (45–65)</strong></td>
+<td align="right">5%</td>
+<td>Medium-low</td>
+</tr>
+<tr>
+<td>Zhipu / Z.ai</td>
+<td align="right">20% (10–30)</td>
+<td align="right">10% (5–20)</td>
+<td align="right"><strong>50% (40–60)</strong></td>
+<td align="right">20% (10–35)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Moonshot / Kimi</td>
+<td align="right"><strong>55% (45–65)</strong></td>
+<td align="right">30% (20–35)</td>
+<td align="right">10% (5–20)</td>
+<td align="right">5%</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td align="right">35%</td>
+<td align="right">25%</td>
+<td align="right">20%</td>
+<td align="right">20%</td>
+<td>Very low</td>
+</tr>
+<tr>
+<td>Alibaba / Qwen</td>
+<td align="right">20%</td>
+<td align="right">15%</td>
+<td align="right">10%</td>
+<td align="right"><strong>55% (T-Head PPU)</strong></td>
+<td>Low-medium</td>
+</tr>
+</tbody></table>
+<p>Evidence: DeepSeek V3/R1 disclosed on H800; V4 optimized for Ascend 950 (Reuters); own ASIC early-stage. Zhipu: GLM-5 developed with domestic chips incl. Ascend; broad adaptations. Moonshot: H800-class deployment guidance historically; Ascend K2.5 guide exists but no migration disclosure. Alibaba: sizable internal PPU deployments reported + evaluating 950PR. Countervailing: a May 2026 rental-market interview claims 90–95% Nvidia utilization and low domestic-card use in the commercial rental channel — true of that channel, not of hyperscaler/lab internal fleets.</p>
+<hr>
+<h2>6. Forward 12 months (through mid-2027)</h2>
+<ul>
+<li><strong>Ascend 950PR/950DT:</strong> 950DT on Huawei Cloud ~Aug 2026 (CR; likely preview) then Q4 GA. 950PR: ~RMB 50k (DDR) / 70k (HBM) per card; ~750k units planned for 2026, H2-weighted [CR]. Cheaper domestic prefill; 950DT improves decode via native FP8 + interconnect. Risks: yield, HBM supply, software maturity.</li>
+<li><strong>Ascend 960:</strong> 2P FP8 / 4P FP4, 2× memory/bandwidth, Q4 2027 [DISCLOSED] — outside horizon.</li>
+<li><strong>H200 to China:</strong> approvals under discussion for &lt;200,000 chips total [CR]; no confirmed deliveries as of Jul 9. Scenario: ~200k delivered ⇒ <strong>5–12% reduction in H800/H20 annual-lease pricing by mid-2027</strong> [SPECULATION].</li>
+<li><strong>DeepSeek inference ASIC:</strong> early-stage [CR]; base case = no material serving capacity by mid-2027.</li>
+</ul>
+<hr>
+<h2>7. Recommended calculator presets (annual-commit / owned-fleet marginal serving)</h2>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Rent central (range)</th>
+<th align="right">Installed capex</th>
+<th align="right">Effective decode MFU</th>
+<th align="right">Power</th>
+<th>Justification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H800 SXM</strong></td>
+<td align="right"><strong>$1.75/h</strong> ($1.47–2.06)</td>
+<td align="right"><strong>$40k</strong> ($30–48k)</td>
+<td align="right"><strong>7.0%</strong> (6–9%)</td>
+<td align="right">700W</td>
+<td>IDC quotes surround DeepSeek&#39;s $2/h; 7% reproduces 1,850 tok/s production</td>
+</tr>
+<tr>
+<td><strong>H20 96GB</strong></td>
+<td align="right"><strong>$1.00/h</strong> ($0.76–1.12)</td>
+<td align="right"><strong>$20k installed</strong> ($18–22k; $11k module)</td>
+<td align="right"><strong>17%</strong> (11–18%)</td>
+<td align="right">400W (to 460)</td>
+<td>17% ⇒ ~680 tok/s, matching Ant&#39;s 675–714 production tiers</td>
+</tr>
+<tr>
+<td><strong>Ascend 910C</strong></td>
+<td align="right"><strong>$1.95/h</strong> ($1.71–2.25)</td>
+<td align="right"><strong>$23k</strong> ($22–29k)</td>
+<td align="right"><strong>7%</strong> (5–10%)</td>
+<td align="right">600W chip-only or 1.45kW CloudMatrix-attributable</td>
+<td>Huatai procurement midpoint; MFU between &quot;60% of H100&quot; and Huawei&#39;s optimized 1,943</td>
+</tr>
+<tr>
+<td><strong>Ascend 950DT (mid-2027 projection)</strong></td>
+<td align="right"><strong>$1.50/h</strong> ($0.90–2.40)</td>
+<td align="right"><strong>$18k</strong> ($14–25k)</td>
+<td align="right"><strong>15%</strong> (10–20%)</td>
+<td align="right">~650W</td>
+<td>Native FP8, 144GB/4TB/s, decode-oriented; no independent data yet</td>
+</tr>
+</tbody></table>
+<p><strong>Public-cloud sticker sanity checks (separate mode):</strong> H800 Tencent HCC ~$10.6/h; H20 Tencent $3.16–6.25/h; H20 Alibaba RDS $7.40–10.62/h; 910B Tianyi $3.72–5.65/h; 910C public retail not reproducible.</p>
+<p><strong>Other owned-TCO defaults:</strong> electricity ¥0.38/kWh (0.35–0.45), subsidized ¥0.30 (0.25–0.36); PUE 1.20 (1.12–1.30); facility $7.8/W (6.5–9.5); accelerator depreciation 4 yr (3–5); facility 15 yr (14–20).</p>
+<p><strong>Highest-value calculator improvement: a rental-class selector</strong> — (1) IDC/bare-metal annual, (2) enterprise private-cloud procurement, (3) hyperscaler monthly commit, (4) hyperscaler on-demand/elastic, (5) spot/subsidized. Without it, a &quot;China H20 rate&quot; can differ by <strong>&gt;10×</strong> even though every quoted instance contains an H20.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

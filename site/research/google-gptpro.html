@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google (Gemini) — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/google-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine's original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site's current terminology. The main report treats these as uncalibrated scenario ranges.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Google (Gemini) — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 45m03s · model <code>gpt-5-6-pro</code> (Pro-verified) · <a href="https://chatgpt.com/c/6a508389-7288-83e8-98f0-615179528f76">conversation</a>
+Verdict: <strong>Gemini 3.1 Pro marginal serving gross margin ≈ 95.7% central, 80% CI ≈ 89–98%</strong> at standard ≤200K list price.
+Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).</p>
+</blockquote>
+<hr>
+<h2>1. MODELS: flagship + workhorse</h2>
+<p><strong>Research cutoff: July 9, 2026.</strong> Labels mean:</p>
+<ul>
+<li><p><strong>DISCLOSED</strong> — stated by Google or another directly involved party.</p>
+</li>
+<li><p><strong>CREDIBLY REPORTED</strong> — attributed reporting or specialist supply-chain/TCO analysis.</p>
+</li>
+<li><p><strong>COMMUNITY ESTIMATE</strong> — reproducible or at least inspectable outside inference, but not confirmed.</p>
+</li>
+<li><p><strong>SPECULATION</strong> — my modeling assumption or deduction; useful for sensitivity analysis, not a factual claim.</p>
+</li>
+</ul>
+<h3>Public-model status</h3>
+<p>As of the cutoff, the relevant flagship is <strong>Gemini 3.1 Pro Preview</strong>, not Gemini 3.5 Pro. Google said at I/O that Gemini 3.5 Pro was &quot;coming next month,&quot; and a June investor presentation said it was expected during June, but Google&#39;s model catalog—updated <strong>July 9, 2026</strong>—still lists only Gemini 3.1 Pro under Pro and Gemini 3.5 Flash as stable. Therefore, <strong>no public Gemini 3.5 Pro endpoint or price existed by the cutoff</strong>. <strong>DISCLOSED.</strong> <a href="https://ai.google.dev/gemini-api/docs/models">Google model catalog</a> · <a href="https://blog.google/innovation-and-ai/sundar-pichai-io-2026/">I/O 2026 keynote</a> · <a href="https://blog.google/alphabet/investor-presentation-june-2026/">June investor presentation</a></p>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Gemini 3.1 Pro Preview — flagship</th>
+<th>Gemini 3.5 Flash — workhorse</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Public architecture</td>
+<td><strong>DISCLOSED:</strong> Sparse mixture-of-experts transformer, natively multimodal; only a subset of parameters is activated per token.</td>
+<td><strong>DISCLOSED:</strong> Based on Gemini 3 Flash, which belongs to the same sparse-MoE Gemini 3 family.</td>
+</tr>
+<tr>
+<td>Context/output limit</td>
+<td><strong>DISCLOSED:</strong> <strong>1M-token</strong> input context and <strong>64K-token</strong> output.</td>
+<td><strong>DISCLOSED:</strong> <strong>1M-token</strong> input context and <strong>64K-token</strong> output.</td>
+</tr>
+<tr>
+<td>Total parameters</td>
+<td><strong>Unknown.</strong> Google has disclosed no count. <strong>SPECULATION scenario bracket:</strong> approximately <strong>1–4T</strong>, with <strong>3T</strong> as a calculator midpoint—not a measured estimate.</td>
+<td><strong>Unknown.</strong> <strong>SPECULATION scenario bracket:</strong> approximately <strong>0.4–1.2T</strong>, with <strong>0.6T</strong> as a calculator midpoint.</td>
+</tr>
+<tr>
+<td>Active parameters/token</td>
+<td><strong>Unknown. SPECULATION:</strong> central <strong>120B</strong>; judgmental 80% range <strong>60–240B</strong>.</td>
+<td><strong>Unknown. SPECULATION:</strong> central <strong>20B</strong>; very rough range <strong>10–50B</strong>.</td>
+</tr>
+<tr>
+<td>Production precision</td>
+<td><strong>Unknown. SPECULATION:</strong> FP8-equivalent weight/matmul economics on Ironwood, with higher precision for sensitive operations and accumulation.</td>
+<td><strong>Unknown. SPECULATION:</strong> FP8 or narrower quantized serving is plausible, particularly for a speed model, but no model-specific dtype is public.</td>
+</tr>
+</tbody></table>
+<p>Architecture and context limits come from the <a href="https://deepmind.google/models/model-cards/gemini-3-pro/">Gemini 3 family model card</a>, the <a href="https://deepmind.google/models/model-cards/gemini-3-1-pro/">Gemini 3.1 Pro card</a>, and the <a href="https://deepmind.google/models/model-cards/gemini-3-5-flash/">Gemini 3.5 Flash card</a>.</p>
+<h3>What can actually be inferred about parameter counts?</h3>
+<p><strong>The honest answer is that nobody outside Google appears to know.</strong> There is no credible leak tying a total or active parameter count to either public endpoint, and black-box size estimators are particularly unreliable for sparse MoEs because memorization, expert count, routing density, distillation and training-token count all break the dense-model scaling assumptions.</p>
+<p>The best structured evidence I found is:</p>
+<ul>
+<li><p>A 2026 memorization-based preprint assigns the preceding <strong>Gemini 3 Flash Preview</strong> a <strong>405B-parameter lower bound</strong>. <strong>COMMUNITY ESTIMATE.</strong> The authors explicitly say that their dense scaling law cannot provide precise point estimates for MoEs; it can only establish lower bounds relative to dense models. This is not a direct estimate of Gemini 3.5 Flash, and it says nothing reliable about active parameters. <a href="https://arxiv.org/html/2605.29223v2">Paper</a></p>
+</li>
+<li><p>Public speed-based discussions have put Gemini 3 Flash around <strong>250–300B total</strong> and roughly <strong>10–16B active</strong>. <strong>COMMUNITY ESTIMATE, very low confidence.</strong> These calculations are underdetermined because observers do not know the chip count, batching, speculative-decoding acceptance rate, expert parallelism, hidden-token generation or whether internal pre-release hardware was used.</p>
+</li>
+<li><p>One independent industry watcher has placed Gemini 3 Pro around <strong>3T total parameters</strong>. <strong>COMMUNITY ESTIMATE, low confidence.</strong> It is a reasonable scenario point but not evidence strong enough to call a measured estimate.</p>
+</li>
+<li><p>Bloomberg reporting, carried by Reuters, described a <strong>custom 1.2T-parameter Gemini model</strong> for Apple&#39;s Siri. <strong>CREDIBLY REPORTED.</strong> This establishes that Google has at least built a Gemini-family system at that scale; it does <strong>not</strong> establish that public Gemini 3.1 Pro is the same model, the same architecture, or even served by Google. <a href="https://www.reuters.com/business/apple-use-googles-ai-model-run-new-siri-bloomberg-news-reports-2025-11-05/">Reuters</a></p>
+</li>
+</ul>
+<p>Consequently, the <strong>1–4T total / 60–240B active</strong> Pro bracket should be read as an economics scenario envelope. Total parameters principally determine weight memory, shard count and communications; <strong>active parameters drive FLOPs per token and therefore dominate marginal cost</strong>.</p>
+<h3>Serving precision</h3>
+<p>Google says its serving stack uses quantization methods such as <strong>AQT</strong> and narrower numerical types, while Ironwood natively exposes <strong>4.614 PFLOP/s of FP8 compute per chip</strong>. Those facts support an FP8-equivalent cost model, but they do not reveal Gemini 3.1 Pro&#39;s actual weight, activation, KV-cache or accumulation formats. <strong>DISCLOSED hardware capability; SPECULATION model mapping.</strong> <a href="https://arxiv.org/html/2508.15734v1">Google serving-efficiency paper</a> · <a href="https://docs.cloud.google.com/tpu/docs/tpu7x">Ironwood documentation</a></p>
+<hr>
+<h2>2. FLEET &amp; PROCUREMENT</h2>
+<h3>Likely inference fleet</h3>
+<p>Google states that TPUs power Gemini training and serving across APIs and products including Search. <strong>DISCLOSED.</strong> <a href="https://blog.google/alphabet/investor-presentation-june-2026/">Google June 2026 investor presentation</a></p>
+<p>The defensible fleet picture at the cutoff is:</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th>July 9 status and likely role</th>
+<th>Relevant disclosed economics/capability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TPU v7 Ironwood</strong></td>
+<td><strong>DISCLOSED:</strong> Generally available; designed for dense and MoE training, sampling and decode-heavy inference. <strong>SPECULATION:</strong> principal marginal-cost reference for Gemini 3.1 Pro.</td>
+<td><strong>DISCLOSED:</strong> <strong>4.614 PFLOP/s FP8</strong>, <strong>2.307 PFLOP/s BF16</strong>, <strong>192 GiB HBM</strong>, <strong>7.38 TB/s HBM bandwidth</strong>, up to <strong>9,216 chips/pod</strong>.</td>
+</tr>
+<tr>
+<td><strong>TPU v6e Trillium</strong></td>
+<td><strong>DISCLOSED:</strong> generally available. <strong>SPECULATION:</strong> still material in the installed fleet, especially for smaller, batchable and cost-sensitive inference.</td>
+<td><strong>DISCLOSED public 3-year price:</strong> <strong>$1.22/chip-hour</strong> in the cheapest listed US region.</td>
+</tr>
+<tr>
+<td><strong>TPU v5e</strong></td>
+<td><strong>DISCLOSED:</strong> still offered. <strong>SPECULATION:</strong> legacy/high-volume inference and overflow workloads where capacity is already depreciated.</td>
+<td><strong>DISCLOSED public 3-year price:</strong> <strong>$0.54/chip-hour</strong> in several US regions.</td>
+</tr>
+<tr>
+<td><strong>TPU 8i</strong></td>
+<td><strong>DISCLOSED:</strong> announced April 22, but still marked <strong>&quot;Coming soon&quot;</strong> on July 9. It should not be the central public-fleet assumption. Internal pre-GA use is possible but unknown.</td>
+<td><strong>DISCLOSED:</strong> intended for sampling/serving; Google claims up to <strong>80% better inference performance per dollar than Ironwood</strong>, especially for low-latency large MoEs.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://docs.cloud.google.com/tpu/docs/tpu7x">Ironwood documentation</a>, <a href="https://cloud.google.com/tpu">Cloud TPU landing page</a>, <a href="https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive">TPU 8i technical deep dive</a>, and <a href="https://cloud.google.com/tpu/pricing">Cloud TPU pricing</a>.</p>
+<p>The exact mapping of Gemini model/version, region and request class to TPU generation is <strong>unknown</strong>. Google can route short, latency-sensitive, cached, batch and long-context requests differently, so a single &quot;Gemini chip&quot; assumption is inevitably an average.</p>
+<h3>Public price versus Google&#39;s internal economic cost</h3>
+<p>Google&#39;s public US-central1 Ironwood rates are:</p>
+<table>
+<thead>
+<tr>
+<th>Ironwood purchasing mode</th>
+<th>Price per chip-hour</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>On demand</td>
+<td><strong>$12.00</strong></td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>DWS Flex-start</td>
+<td><strong>$6.00</strong></td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>1-year/calendar commitment</td>
+<td><strong>$8.40</strong></td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>3-year commitment</td>
+<td><strong>$5.40</strong></td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+</tbody></table>
+<p><a href="https://cloud.google.com/tpu/pricing">Google Cloud TPU pricing</a></p>
+<p>These are unsuitable as Google&#39;s own serving cost. They include sales margin, customer capacity optionality, demand risk, support and Cloud overhead.</p>
+<p>SemiAnalysis estimates that:</p>
+<ul>
+<li><p>Google&#39;s all-in Ironwood TCO is approximately <strong>44% below GB200</strong>. <strong>CREDIBLY REPORTED.</strong></p>
+</li>
+<li><p>External GCP Ironwood TCO, including Google&#39;s margin, can still be approximately <strong>30% below GB200</strong> for a customer such as Anthropic. <strong>CREDIBLY REPORTED.</strong></p>
+</li>
+<li><p>Anthropic&#39;s negotiated Ironwood cost is approximately <strong>$1.60 per TPU-hour</strong>. <strong>CREDIBLY REPORTED.</strong></p>
+</li>
+</ul>
+<p><a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">SemiAnalysis Ironwood TCO work</a></p>
+<p>A simple internal/external ratio from that analysis is (1−44%)/(1−30%) = 0.80. Applying it to the reported Anthropic rate gives <strong>$1.60 × 0.80 = $1.28/Ironwood chip-hour</strong>.</p>
+<p>That <strong>$1.28/hour</strong> is <strong>SPECULATION derived from CREDIBLY REPORTED inputs</strong>, not a SemiAnalysis quote. I use a judgmental <strong>80% range of $0.90–$1.60/hour</strong>. The high end is deliberately close to Anthropic&#39;s margin-inclusive strategic rate; the low end allows for Google&#39;s lower procurement cost, fleet depreciation, power procurement and very large utilization base.</p>
+<p>The implication is important: the central internal economic cost is approximately <strong>24% of the public 3-year rate</strong> and approximately <strong>11% of on-demand list price</strong>. <strong>SPECULATION, arithmetic from the figures above.</strong></p>
+<h3>Utilization evidence</h3>
+<p>Google&#39;s most useful production disclosure is not an MFU number but a full-stack energy decomposition for the median Gemini Apps text prompt in May 2025:</p>
+<ul>
+<li><p><strong>DISCLOSED:</strong> active accelerator energy <strong>0.14 Wh</strong>, or <strong>58%</strong> of total.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> host CPU and DRAM <strong>0.06 Wh</strong>, or <strong>25%</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> provisioned idle capacity <strong>0.02 Wh</strong>, or <strong>10%</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> datacenter overhead <strong>0.02 Wh</strong>, or <strong>8%</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> total <strong>0.24 Wh/prompt</strong>.</p>
+</li>
+</ul>
+<p>The percentages differ slightly from 100% because of rounding. Google says that moving from accelerator-only to full-stack energy requires a factor of approximately <strong>1.72×</strong> for this measured workload. <a href="https://arxiv.org/html/2508.15734v1">Google production-serving paper</a></p>
+<p>That does <strong>not</strong> mean one should multiply SemiAnalysis&#39;s all-in chip TCO by 1.72: its TCO already includes much of the power and datacenter stack. It does show that a token calculator based solely on active tensor-core time will miss host service, idle reservation and request-control overhead.</p>
+<p>Google also reports that over the year ending May 2025 it achieved:</p>
+<ul>
+<li><p><strong>DISCLOSED:</strong> <strong>33×</strong> lower energy per median Gemini prompt.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> <strong>23×</strong> from model/software improvements.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> <strong>1.4×</strong> from improved machine utilization.</p>
+</li>
+</ul>
+<p><a href="https://arxiv.org/html/2508.15734v1">Google production-serving paper</a></p>
+<p>SemiAnalysis discusses approximately <strong>40% MFU</strong> for Anthropic&#39;s TPU workloads, but that passage concerns training economics. I do <strong>not</strong> transplant it into low-latency autoregressive inference. For the margin model below, I use <strong>8% effective FP8 decode MFU</strong>, with a judgmental <strong>4–15% 80% interval</strong>. <strong>SPECULATION.</strong> This folds memory stalls, expert routing, inter-chip collectives, batching and latency constraints into one effective-throughput variable.</p>
+<hr>
+<h2>3. PRICING &amp; REALIZATION</h2>
+<p>All prices below are <strong>DISCLOSED</strong>, in US dollars per <strong>1M tokens</strong>, from Google&#39;s July 9 pricing page. &quot;Output&quot; includes billed thinking tokens. Cache figures are cache-read prices; storage is separately billed per million cached tokens per hour. <a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini Developer API pricing</a></p>
+<h3>Gemini 3.1 Pro Preview</h3>
+<table>
+<thead>
+<tr>
+<th>Service class</th>
+<th>Context tier</th>
+<th>Input</th>
+<th>Output incl. thinking</th>
+<th>Cache read</th>
+<th>Cache storage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Standard</td>
+<td>Prompt ≤200K</td>
+<td><strong>$2.00</strong></td>
+<td><strong>$12.00</strong></td>
+<td><strong>$0.20</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Standard</td>
+<td>Prompt &gt;200K</td>
+<td><strong>$4.00</strong></td>
+<td><strong>$18.00</strong></td>
+<td><strong>$0.40</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>≤200K</td>
+<td><strong>$1.00</strong></td>
+<td><strong>$6.00</strong></td>
+<td><strong>$0.20</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Batch</td>
+<td>&gt;200K</td>
+<td><strong>$2.00</strong></td>
+<td><strong>$9.00</strong></td>
+<td><strong>$0.40</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Flex</td>
+<td>≤200K</td>
+<td><strong>$1.00</strong></td>
+<td><strong>$6.00</strong></td>
+<td><strong>$0.20</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Flex</td>
+<td>&gt;200K</td>
+<td><strong>$2.00</strong></td>
+<td><strong>$9.00</strong></td>
+<td><strong>$0.40</strong></td>
+<td><strong>$4.50/hour</strong></td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>≤200K</td>
+<td><strong>$3.60</strong></td>
+<td><strong>$21.60</strong></td>
+<td><strong>$0.36</strong></td>
+<td><strong>$8.10/hour</strong></td>
+</tr>
+<tr>
+<td>Priority</td>
+<td>&gt;200K</td>
+<td><strong>$7.20</strong></td>
+<td><strong>$32.40</strong></td>
+<td><strong>$0.72</strong></td>
+<td><strong>$8.10/hour</strong></td>
+</tr>
+</tbody></table>
+<p>There is <strong>no free API tier for Gemini 3.1 Pro</strong>. <strong>DISCLOSED.</strong></p>
+<h3>Gemini 3.5 Flash</h3>
+<table>
+<thead>
+<tr>
+<th>Service class</th>
+<th>Input</th>
+<th>Output incl. thinking</th>
+<th>Cache read</th>
+<th>Cache storage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Standard paid</td>
+<td><strong>$1.50</strong></td>
+<td><strong>$9.00</strong></td>
+<td><strong>$0.15</strong></td>
+<td><strong>$1.00/hour</strong></td>
+</tr>
+<tr>
+<td>Batch</td>
+<td><strong>$0.75</strong></td>
+<td><strong>$4.50</strong></td>
+<td><strong>$0.075</strong></td>
+<td><strong>$1.00/hour</strong></td>
+</tr>
+<tr>
+<td>Flex</td>
+<td><strong>$0.75</strong></td>
+<td><strong>$4.50</strong></td>
+<td><strong>$0.08</strong></td>
+<td><strong>$1.00/hour</strong></td>
+</tr>
+<tr>
+<td>Priority</td>
+<td><strong>$2.70</strong></td>
+<td><strong>$16.20</strong></td>
+<td><strong>$0.27</strong></td>
+<td><strong>$1.00/hour</strong></td>
+</tr>
+<tr>
+<td>Standard free tier</td>
+<td><strong>$0</strong> within rate limits</td>
+<td><strong>$0</strong> within rate limits</td>
+<td><strong>$0</strong></td>
+<td>subject to free-tier terms</td>
+</tr>
+</tbody></table>
+<p>Google advertises Batch as a <strong>50% price reduction</strong>, and enterprise contracts can include provisioned throughput and usage-based volume discounts, but Google does not disclose the discount schedules. <strong>DISCLOSED.</strong> <a href="https://ai.google.dev/gemini-api/docs/pricing">Gemini pricing overview</a></p>
+<h3>List-price realization</h3>
+<p>The API price is only one monetization channel:</p>
+<ol>
+<li><p><strong>Paid API.</strong> Explicit token revenue, but realized price is reduced by Batch/Flex usage and undisclosed enterprise discounts.</p>
+</li>
+<li><p><strong>Search and AI Overviews.</strong> End users are not charged per token; economics are ad-supported and must be evaluated as incremental query engagement, coverage and ad yield versus incremental serving cost.</p>
+</li>
+<li><p><strong>Gemini app.</strong> Google said in Q1 2026 that monetization was still centered on free access and subscriptions, rather than ads in the app. <strong>DISCLOSED.</strong> <a href="https://abc.xyz/investor/events/event-details/2026/2026-Q1-Earnings-Call-2026-nW8kCrBAKS/">Alphabet Q1 2026 call</a></p>
+</li>
+<li><p><strong>Workspace.</strong> Gemini functionality is bundled into Business and Enterprise plans, so realized revenue per token depends on seat price, adoption and incremental retention rather than an API meter. <strong>DISCLOSED bundling; realized-token economics unknown.</strong> <a href="https://workspace.google.com/blog/product-announcements/empowering-businesses-with-AI">Google Workspace announcement</a></p>
+</li>
+<li><p><strong>Free API/AI Studio.</strong> Direct serving revenue is zero; the economic rationale is developer acquisition, feedback and conversion to paid production usage.</p>
+</li>
+</ol>
+<p>The scale of this non-list-price surface is enormous:</p>
+<ul>
+<li><p><strong>DISCLOSED:</strong> approximately <strong>3.2 quadrillion tokens/month</strong> across Google&#39;s surfaces by June 2026.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> approximately <strong>19B API tokens/minute</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> AI Overviews had more than <strong>2.5B monthly users</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> AI Mode had more than <strong>1B monthly users</strong>.</p>
+</li>
+<li><p><strong>DISCLOSED:</strong> the Gemini app had more than <strong>900M monthly users</strong>.</p>
+</li>
+</ul>
+<p><a href="https://blog.google/alphabet/investor-presentation-june-2026/">Alphabet June 2026 investor presentation</a></p>
+<p>An illustrative Barclays analysis estimated Alphabet&#39;s Q1 2025 inference spending at approximately <strong>$750M</strong>, annualizing to roughly <strong>1% of Search revenue</strong>. <strong>CREDIBLY REPORTED analyst estimate</strong>, but it is old, Alphabet-wide, includes far more than Gemini API, and predates Google&#39;s subsequent serving-cost reductions. It should not be converted into Gemini cost/token. <a href="https://www.investing.com/news/stock-market-news/is-google-really-losing-share-to-chatgpt-barclays-answers-4099355">Reported Barclays analysis</a></p>
+<p><strong>Treatment recommendation:</strong> calculate paid-API list-price margin separately. Do not average free Search, app and Workspace tokens into that denominator. A second &quot;all-surface realization&quot; metric would require assumptions about ad lift, subscription allocation and free-to-paid conversion that Google does not disclose.</p>
+<hr>
+<h2>4. COST/MARGIN EVIDENCE</h2>
+<p>There is <strong>no direct Google disclosure of Gemini API gross margin, Gemini 3.1 Pro cost per token, Google DeepMind inference margin, or the internal transfer price charged for TPU time</strong>. The best evidence is indirect:</p>
+<h3>Primary Google disclosures</h3>
+<ul>
+<li><p>Google lowered <strong>Gemini serving unit costs by 78% during 2025</strong> through model optimization, efficiency and utilization improvements. <strong>DISCLOSED.</strong> This is the strongest direct statement about Gemini serving economics, but Google does not provide the starting cost, ending cost or workload-normalization methodology. <a href="https://abc.xyz/investor/events/event-details/2026/2025-Q4-Earnings-Call-2026-Dr_C033hS6/default.aspx">Alphabet Q4 2025 call</a></p>
+</li>
+<li><p>After moving AI Overviews and AI Mode to Gemini 3, Google reduced the cost of &quot;core AI responses&quot; by <strong>more than 30%</strong>. <strong>DISCLOSED.</strong> Again, no absolute cost is given. <a href="https://abc.xyz/investor/events/event-details/2026/2026-Q1-Earnings-Call-2026-nW8kCrBAKS/">Alphabet Q1 2026 call</a></p>
+</li>
+<li><p>Direct customer API traffic rose to more than <strong>16B tokens/minute</strong> in Q1 2026 and approximately <strong>19B/minute</strong> by the June investor presentation. <strong>DISCLOSED.</strong> That level of demand improves batching and amortization, although it does not reveal model mix or utilization.</p>
+</li>
+<li><p>Google Cloud reported a <strong>33% operating margin</strong> in Q1 2026. <strong>DISCLOSED, but not usable as Gemini inference margin.</strong> It includes infrastructure rental, databases, security, Workspace and other products, while operating margin also includes R&amp;D, sales and depreciation accounting.</p>
+</li>
+</ul>
+<h3>Third-party cost and margin evidence</h3>
+<p>SemiAnalysis&#39;s estimated <strong>$1.60/hour Anthropic Ironwood rate</strong> and its conclusion that Google can earn &quot;superior EBIT margins&quot; on large TPU leases are the most useful external checks on hardware economics. <strong>CREDIBLY REPORTED.</strong> But TPU leasing margin is not Gemini API margin: the API adds model IP, inference software, safety systems, host compute, storage, networking, support and demand-shaping, while also carrying much higher value-based prices. <a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">SemiAnalysis</a></p>
+<p>The production energy paper shows that active accelerator power is only <strong>58%</strong> of measured full-stack prompt energy. <strong>DISCLOSED.</strong> It supports adding host/control/idle overhead to a chip-throughput calculation, but prompt energy cannot be translated into dollars without knowing prompt token counts, model routing and the fleet&#39;s capital cost. <a href="https://arxiv.org/html/2508.15734v1">Google serving paper</a></p>
+<h3>Internal transfer pricing</h3>
+<p>I found no credible report of:</p>
+<ul>
+<li><p>an internal DeepMind-to-Cloud TPU charge;</p>
+</li>
+<li><p>a Search/Gemini-app chargeback rate;</p>
+</li>
+<li><p>whether internal consumers are charged average fleet cost, marginal power cost, public-equivalent opportunity cost or a capacity reservation rate;</p>
+</li>
+<li><p>how fully depreciated v5e/Trillium capacity is valued internally.</p>
+</li>
+</ul>
+<p>For economic modeling, an all-in <strong>resource cost</strong> is preferable to an accounting transfer price anyway. A transfer price could be deliberately set above or below cost for organizational incentives and would not necessarily represent the marginal cost of serving another token.</p>
+<hr>
+<h2>5. VERDICT</h2>
+<h3>Base-case methodology</h3>
+<p>This is a <strong>marginal serving gross-margin</strong> model. It includes economic TPU TCO, occupancy and serving-stack overhead. It excludes model training, research, post-training, sales, corporate overhead, free-surface acquisition costs and unused capacity that is not attributable to the serving pool.</p>
+<p>For comparability across providers, I use this representative request mix:</p>
+<table>
+<thead>
+<tr>
+<th>Assumption</th>
+<th>Base case</th>
+<th>Judgmental 80% range</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input:output token ratio</td>
+<td><strong>15:1</strong></td>
+<td>workload-dependent</td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Share of input served from cache</td>
+<td><strong>60%</strong></td>
+<td>workload-dependent</td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro active parameters</td>
+<td><strong>120B</strong></td>
+<td><strong>60–240B</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>FLOPs per output token</td>
+<td><strong>2.2× active parameters</strong></td>
+<td><strong>2.0–2.6×</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Ironwood FP8 peak</td>
+<td><strong>4.614 PFLOP/s</strong></td>
+<td>fixed hardware spec</td>
+<td><strong>DISCLOSED</strong></td>
+</tr>
+<tr>
+<td>Effective decode MFU</td>
+<td><strong>8%</strong></td>
+<td><strong>4–15%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Serving-pool occupancy</td>
+<td><strong>75%</strong></td>
+<td><strong>55–90%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Internal Ironwood economic cost</td>
+<td><strong>$1.28/chip-hour</strong></td>
+<td><strong>$0.90–$1.60</strong></td>
+<td><strong>SPECULATION derived from CREDIBLY REPORTED evidence</strong></td>
+</tr>
+<tr>
+<td>Host, control-plane, safety and retry uplift</td>
+<td><strong>12%</strong></td>
+<td><strong>0–30%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Uncached input cost/output-token cost</td>
+<td><strong>28%</strong></td>
+<td>approximately <strong>18–45%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Cached input/uncached input cost</td>
+<td><strong>10%</strong></td>
+<td>approximately <strong>4–20%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+</tbody></table>
+<p>The central effective throughput is (4.614×10¹⁵ × 8%) / (120×10⁹ × 2.2) = <strong>1,398 aggregate output tokens/s/chip</strong>. <strong>SPECULATION derived from the disclosed Ironwood peak and modeled architecture/utilization.</strong></p>
+<p>That gives:</p>
+<table>
+<thead>
+<tr>
+<th>Central modeled result</th>
+<th>Value</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Output-token serving cost</td>
+<td><strong>$0.380/M tokens</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Uncached-input serving cost</td>
+<td><strong>$0.106/M tokens</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Cache-read serving cost</td>
+<td><strong>$0.0106/M tokens</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Blended serving cost at 15:1 and 60% cache hit</td>
+<td><strong>$0.0696/M served tokens</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Blended standard-list revenue, ≤200K tier</td>
+<td><strong>$1.6125/M served tokens</strong></td>
+<td><strong>SPECULATION calculation from DISCLOSED prices</strong></td>
+</tr>
+<tr>
+<td>Marginal serving gross margin</td>
+<td><strong>95.7%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+</tbody></table>
+<p>The blended revenue calculation is (6×$2 + 9×$0.20 + 1×$12)/16 = <strong>$1.6125/M</strong>.</p>
+<p>The central verdict is therefore <strong>1 − $0.0696/$1.6125 = 95.7% marginal serving gross margin</strong>.</p>
+<h3>80%-confidence interval</h3>
+<p><strong>VERDICT — SPECULATION:</strong> <strong>approximately 89–98% marginal serving gross margin</strong> at Gemini 3.1 Pro&#39;s standard list price for prompts at or below 200K tokens.</p>
+<p>This corresponds to an approximate blended serving-cost interval of <strong>$0.03–$0.18 per million served tokens</strong> under the stated workload. The interval is judgmental rather than a frequentist confidence interval because the dominant inputs are architectural secrets, not noisy public measurements.</p>
+<p>For context:</p>
+<ul>
+<li><p><strong>SPECULATION:</strong> output-only central margin is approximately <strong>96.8%</strong> against the disclosed <strong>$12/M</strong> output price.</p>
+</li>
+<li><p><strong>SPECULATION:</strong> the same central cost against Batch pricing gives approximately <strong>91.9%</strong> blended margin, before crediting Batch for better scheduling and utilization.</p>
+</li>
+<li><p>The &gt;200K list tier produces higher nominal revenue, but I would <strong>not</strong> apply the same serving cost to it. Long contexts increase prefill work, KV-cache footprint, shard pressure and request duration; Google&#39;s price step is partly charging for those nonlinear costs.</p>
+</li>
+</ul>
+<h3>Why the interval is wide — ranked by impact</h3>
+<ol>
+<li><p><strong>Active parameter count.</strong> Cost scales approximately linearly with active weights/FLOPs. Moving from <strong>60B to 240B active</strong> is a <strong>4× cost swing</strong> before any other change. <strong>SPECULATION.</strong></p>
+</li>
+<li><p><strong>Effective production throughput at the target latency.</strong> Decode MFU, continuous batching, expert balance, speculative-decoding acceptance and collectives can readily create another <strong>roughly 3–4×</strong> span. <strong>SPECULATION.</strong></p>
+</li>
+<li><p><strong>Request mix and hidden work.</strong> Context length, generated thinking tokens, retries, tool loops and output length determine whether the API meter tracks all internal computation. Long-context/agentic workloads can cost materially more than a simple token ratio suggests.</p>
+</li>
+<li><p><strong>Fleet occupancy and internal TCO.</strong> Google&#39;s vertical integration substantially lowers cost, but reserved low-latency capacity and regional fragmentation can offset part of that advantage.</p>
+</li>
+<li><p><strong>Chip-generation and precision routing.</strong> Serving on Trillium, Ironwood or internal TPU 8i capacity—and using FP8 versus narrower formats—changes both capital cost and attainable throughput.</p>
+</li>
+<li><p><strong>Non-accelerator serving overhead.</strong> Host CPU/DRAM, safety filters, networking and idle reservation are visible in Google&#39;s energy telemetry, but their dollar allocation is not public.</p>
+</li>
+</ol>
+<p>The principal conclusion is robust to fairly pessimistic assumptions: <strong>Google&#39;s vertical integration makes a sub-90% marginal margin at standard Gemini 3.1 Pro list price possible only if the model is much denser, production throughput much lower, or unbilled reasoning much larger than the central case.</strong> Conversely, a <strong>97–98%</strong> result is plausible if active parameters are near the lower end and Google&#39;s production stack extracts strong batching and speculative-decoding gains.</p>
+<hr>
+<h2>6. KNOWN KNOWNS</h2>
+<ul>
+<li><p><strong>DISCLOSED:</strong> Gemini 3.1 Pro and Gemini 3.5 Flash belong to a sparse-MoE family that activates only a subset of parameters per token; both expose up to <strong>1M input / 64K output</strong>. <a href="https://deepmind.google/models/model-cards/gemini-3-pro/">Gemini 3 family card</a></p>
+</li>
+<li><p><strong>DISCLOSED:</strong> On <strong>July 9, 2026</strong>, Gemini 3.1 Pro was the public Pro preview and Gemini 3.5 Flash was stable; Gemini 3.5 Pro was absent despite earlier expectations of a June release. <a href="https://ai.google.dev/gemini-api/docs/models">Model catalog</a></p>
+</li>
+<li><p><strong>DISCLOSED:</strong> TPUs power Gemini serving; Ironwood provides <strong>4.614 PFLOP/s FP8, 192 GiB HBM and 7.38 TB/s bandwidth per chip</strong>. <a href="https://docs.cloud.google.com/tpu/docs/tpu7x">Ironwood documentation</a></p>
+</li>
+<li><p><strong>DISCLOSED:</strong> Gemini 3.1 Pro standard prices are <strong>$2/M input, $12/M output and $0.20/M cache read</strong> below the 200K threshold, with a higher &gt;200K tier. <a href="https://ai.google.dev/gemini-api/docs/pricing">API pricing</a></p>
+</li>
+<li><p><strong>DISCLOSED:</strong> Google reduced Gemini serving unit costs by <strong>78% during 2025</strong> and subsequently reduced core Search AI-response cost by <strong>more than 30%</strong> after moving to Gemini 3. <a href="https://abc.xyz/investor/events/event-details/2026/2025-Q4-Earnings-Call-2026-Dr_C033hS6/default.aspx">Q4 2025 call</a> · <a href="https://abc.xyz/investor/events/event-details/2026/2026-Q1-Earnings-Call-2026-nW8kCrBAKS/">Q1 2026 call</a></p>
+</li>
+<li><p><strong>DISCLOSED:</strong> Google serves Gemini at massive scale—approximately <strong>3.2 quadrillion tokens/month across surfaces</strong> and approximately <strong>19B API tokens/minute</strong> by June 2026—supporting unusually strong batching and infrastructure amortization. <a href="https://blog.google/alphabet/investor-presentation-june-2026/">June investor presentation</a></p>
+</li>
+</ul>
+<h2>7. KNOWN UNKNOWNS</h2>
+<ul>
+<li><p><strong>Total and active parameter counts.</strong> This is the dominant uncertainty: total parameters determine memory and sharding, while active parameters approximately scale per-token computation.</p>
+</li>
+<li><p><strong>Exact production precision.</strong> Ironwood supports FP8 and Google uses quantization, but Gemini-specific weight, activation, accumulation and KV-cache formats are undisclosed.</p>
+</li>
+<li><p><strong>Model-to-fleet routing.</strong> The share served on Ironwood, Trillium, v5e or internal pre-GA TPU 8i capacity is unknown, as is the routing by latency class and context length.</p>
+</li>
+<li><p><strong>Production throughput at latency.</strong> Google publishes hardware peaks and optimization techniques, not Gemini 3.1 Pro tokens/chip-second, decode MFU, batch size or speculative-decoding acceptance.</p>
+</li>
+<li><p><strong>Internal economic charge for TPU capacity.</strong> There is no public DeepMind/Search/Cloud transfer rate, depreciation policy or model-specific occupancy figure.</p>
+</li>
+<li><p><strong>Realized revenue per token.</strong> Enterprise discounts, Batch/Flex mix, Search advertising, Workspace bundling, subscriptions and the immense free surface make Alphabet-wide realized $/token fundamentally unobservable from public data.</p>
+</li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

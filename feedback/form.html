@@ -1,0 +1,133 @@
+<!-- =======================================================================
+  FEEDBACK FORM — snippet to embed in the static Pages site (a /feedback
+  section, e.g. at the bottom of site/index.html).
+
+  BEFORE EMBEDDING, replace two placeholders (RUNBOOK step 8):
+    1. REPLACE_WITH_WORKER_ORIGIN     — the FULL deployed Worker origin,
+       pasted once, scheme included (no trailing slash),
+       e.g. https://inference-margins-feedback.<subdomain>.workers.dev
+       (the form action becomes <origin>/submit).
+    2. REPLACE_WITH_TURNSTILE_SITE_KEY — the Turnstile SITE key (public;
+       the SECRET key never appears client-side).
+
+  The Turnstile widget carries data-action="feedback_submit"; the Worker
+  rejects tokens whose action or hostname claims don't match — don't rename
+  the action without changing TURNSTILE_ACTION in src/worker.js.
+
+  The Turnstile script tag below is the one external script this snippet
+  needs; if the host page already loads it, don't include it twice.
+
+  Submission path is WRITE-ONLY: this form POSTs to the Worker; nothing on
+  the public site can read submissions back.
+======================================================================== -->
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<section id="feedback" class="fb-section">
+  <h2 class="fb-title">Feedback</h2>
+  <p class="fb-note">
+    Feedback on this public research page — not a support channel; please
+    don't submit sensitive personal data. Submissions are reviewed manually
+    and periodically purged.
+  </p>
+  <form id="feedback-form" class="fb-form"
+        action="https://feedback.ashitaorbis.com/submit" method="POST">
+    <label class="fb-label" for="fb-body">Your feedback</label>
+    <textarea id="fb-body" name="body" class="fb-textarea" required
+              rows="5" maxlength="4000"
+              placeholder="Corrections, methodology questions, unclear figures…"></textarea>
+    <label class="fb-label" for="fb-contact">
+      Contact <span class="fb-optional">(optional — only if you want a reply)</span>
+    </label>
+    <input id="fb-contact" name="contact" class="fb-input" type="text"
+           maxlength="200" autocomplete="off"
+           placeholder="email or handle (optional)">
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAD1Oj0BBNdkKFWKl"
+         data-action="feedback_submit"></div>
+    <div class="fb-actions">
+      <button type="submit" class="fb-submit">Send feedback</button>
+      <p class="fb-status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<style>
+  /* Matches the site theme: uses the site's CSS custom properties with
+     standalone fallbacks so the snippet also degrades gracefully. */
+  .fb-section {
+    max-width: 640px; margin: 28px 0 0; padding: 16px 18px;
+    background: var(--surface-1, #fcfcfb);
+    border: 1px solid var(--border, rgba(11,11,11,0.10));
+    border-radius: 12px;
+    box-shadow: var(--shadow, 0 1px 3px rgba(11,11,11,0.06));
+  }
+  .fb-title { font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .fb-note { color: var(--ink-2, #52514e); font-size: 13px; margin: 0 0 12px; }
+  .fb-form { display: flex; flex-direction: column; gap: 8px; }
+  .fb-label { font-size: 12.5px; font-weight: 600; color: var(--ink-2, #52514e); }
+  .fb-optional { font-weight: 400; color: var(--ink-3, #898781); }
+  .fb-textarea, .fb-input {
+    font: inherit; color: var(--ink-1, #0b0b0b);
+    background: var(--tile, #ffffff);
+    border: 1px solid var(--border, rgba(11,11,11,0.10));
+    border-radius: 8px; padding: 8px 10px; width: 100%;
+  }
+  .fb-textarea { resize: vertical; min-height: 96px; }
+  .fb-textarea:focus, .fb-input:focus {
+    outline: 2px solid var(--accent, #2a78d6); outline-offset: 1px;
+  }
+  .fb-actions { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+  .fb-submit {
+    font: inherit; font-size: 14px; cursor: pointer; white-space: nowrap;
+    color: #fff; background: var(--accent, #2a78d6);
+    border: 1px solid var(--accent, #2a78d6); border-radius: 8px;
+    padding: 6px 16px;
+  }
+  .fb-submit:hover { filter: brightness(1.08); }
+  .fb-submit:disabled { opacity: 0.6; cursor: default; }
+  .fb-status { font-size: 13px; color: var(--ink-2, #52514e); margin: 0; }
+</style>
+
+<script>
+  // Progressive enhancement: fetch() with inline status. With JS disabled the
+  // plain form POST still works — the Worker returns a small thank-you page.
+  (function () {
+    var form = document.getElementById("feedback-form");
+    if (!form || !window.fetch) return;
+    var statusEl = form.querySelector(".fb-status");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var btn = form.querySelector(".fb-submit");
+      btn.disabled = true;
+      statusEl.textContent = "Sending…";
+      var params = new URLSearchParams();
+      new FormData(form).forEach(function (value, key) {
+        params.append(key, value);
+      });
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: params
+      })
+        .then(function (res) {
+          return res.json()
+            .catch(function () { return {}; })
+            .then(function (data) { return { res: res, data: data }; });
+        })
+        .then(function (r) {
+          if (r.res.ok && r.data.ok) {
+            statusEl.textContent = r.data.message || "Thank you — feedback recorded.";
+            form.reset();
+          } else {
+            statusEl.textContent =
+              r.data.error || "Submission failed (" + r.res.status + "). Please try again.";
+          }
+          if (window.turnstile) { try { window.turnstile.reset(); } catch (err) {} }
+        })
+        .catch(function () {
+          statusEl.textContent = "Network error — please try again.";
+        })
+        .finally(function () { btn.disabled = false; });
+    });
+  })();
+</script>

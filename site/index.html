@@ -1,0 +1,699 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Frontier Inference Margins — interactive cost model</title>
+<meta name="description" content="Interactive model of the marginal cost of serving frontier LLM tokens (Claude, GPT, DeepSeek, GLM) across GPU/TPU generations, and the implied unit direct-serving contribution margins — not company gross margins. With sources, presets, and a full research report.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="page">
+
+<header class="masthead">
+  <div class="masthead-row">
+    <h1>Frontier Inference Margins</h1>
+    <div class="masthead-actions">
+      <button id="skin-toggle" class="ghost-btn" title="Switch visual identity (app / editorial) — presentation only; no number changes">Skin</button>
+      <button id="theme-toggle" class="ghost-btn" title="Toggle light/dark">◐</button>
+      <a class="ghost-btn" href="#evidence-board" title="Pick a margin range you've heard claimed and see what it would take — plus the sourced claims compatible with each range, and under what relation">Range explorer ↓</a>
+      <a class="ghost-btn" href="#report">Full report ↓</a>
+    </div>
+  </div>
+  <p class="subtitle">An interactive model of what it costs to serve one token of a frontier LLM — and the <strong>modeled unit direct-serving contribution margin</strong> that implies (a list-price metric only when the batch and discount sliders are 0%; not a company gross margin). Prices and inputs are current as of <strong>July 15, 2026</strong> unless a different effective date is shown. Anchored platforms use per-platform fits to public measurements (DeepSeek's serving disclosure, production H20/Ascend deployments, GB200/GB300 benchmarks); TPU v7, Trainium 2/3 and Rubin use analyst-estimated MFUs because no comparable public serving anchors were found. Every slider documents its sources. Adjust the assumptions — nothing here is any provider's actual ledger.</p>
+</header>
+
+<details class="scope-note methods-box">
+  <summary><strong>What this calculator does — and deliberately does not — model</strong> (read before quoting numbers)</summary>
+  <ul>
+    <li><strong>Metric:</strong> modeled unit direct-serving contribution margin = 1 − modeled direct-serving cost ÷ realized billings for the selected traffic mix. "Realized billings" reflects the selected cache pricing, batch share and negotiated discount — it is a list-price metric only when batch share and discount are both 0% (the §10 dive replays are; the default lens is not). <strong>Cost perimeter:</strong> accelerator rental or modeled TCO, serving-stack throughput, and paid-capacity slack allocated through the utilization divisor. It does not separately model support, R&amp;D, sales, revenue shares, free traffic, or unbilled retries/storage. It is neither company COGS nor company gross margin.</li>
+    <li><strong>Cost lens matters more than any slider:</strong> short-run cash cost, long-run economic serving cost (this page's default), and capacity-opportunity cost give different answers — for Grok 4.5 the calculator lands at ~92% (cash-marginal), ~67% (full-cycle TCO) and ~27% (capacity-opportunity), all three at the dive's own workload — the archived dive's coarser replica put the last at ~29%, a replica-shape difference, not a fourth lens. Never compare providers across mixed lenses or replicas.</li>
+    <li><strong>Per-platform MFUs are anchor fits, not physics:</strong> a single MFU does not transfer across hardware (mean 37% error), and a physically-informed roofline follow-up also failed the whole-platform gate — anchor fits stay by documented decision (<a href="research/methods-loao.html">methods note</a>). Unanchored platforms (TPU v7, Trainium, Rubin) are analyst estimates with materially lower confidence.</li>
+    <li><strong>Cache writes:</strong> billable write premiums (OpenAI 1.25×; Anthropic 1.25×/2× by TTL) are modeled revenue-side via the cache-write sliders, default off; the serving-cost side is unchanged because prefill produces the KV regardless. Cache storage, transfer, retention, replication and reads-per-write are unmodeled and may be material.</li>
+    <li><strong>Not modeled:</strong> context length, TTFT/TPOT targets, KV-cache lifecycle and storage billing, speculative-decoding acceptance, unbilled retries/safety reruns (a served-vs-billed overhead you can approximate with the stack-efficiency slider), and free traffic.</li>
+    <li><strong>Traffic-mix axis (v2.1.2):</strong> the Traffic mix selector owns the I/O ratio and cache-hit share only — profiles carry provenance-honest names (a disclosure, a named deployment, a stated convention; no generic "chat/coding" archetypes). SLA/interactivity, service class and cache lifecycle remain modeled elsewhere; the full workload ontology is future work. the serving-side reuse share and the billable cached-input share are DIFFERENT observables; by default the calculator assumes them equal (a labeled assumption you can now break with the "Billable cached-input share" slider). The assumption is material: on the Opus default, billable-share 0% / =serving / 95% spans 86.2% / 76.8% / 61.5% margin — tens of points on headline provider cases. Replay presets lock their traffic (it is part of the published operating point); the hero's cost-lens span holds the selected traffic fixed and therefore excludes traffic-mix uncertainty.</li>
+    <li><strong>Rental class:</strong> the same chip spans up to 10× between IDC annual leases and hyperscaler on-demand (H20: ¥5–72/card-hr). China rows default to annual-commit rates; the cost multiplier is the dial.</li>
+    <li><strong>Reproducibility:</strong> every §10 card's headline regenerates from the "§10 dive replay" perspective; a deterministic release suite (several hundred assertions, published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the <a href="tests/roofline-diagnostic.mjs">roofline diagnostic</a>) gates every deploy.</li>
+  </ul>
+</details>
+
+<!-- Position dossier: PERSPECTIVE position + all loaded-link IDENTITY warnings (RANGE
+     EXPLORATION counterfactual, [modified scenario/range exploration], drift/off-scope, migration
+     notes). Stays near the hero. The MODEL block moved down under the Model selector (below). -->
+<details id="dossier" class="dossier">
+  <summary><span id="preset-note" class="preset-note"></span> <span class="dossier-hint">· expand for the perspective, its source, evidence label, and what would falsify it</span></summary>
+  <div id="dossier-body" class="dossier-body"></div>
+</details>
+
+<section id="evidence-board" class="evidence-board" aria-label="Margin-range explorer and evidence board">
+  <div class="board-head">
+    <h2>What would have to be true for a ~90% margin? Or ~45%?</h2>
+    <p class="board-skim"><strong>These are “what would it take?” questions — not this page's estimate.</strong> Each range below is a hypothesis to stress-test: pick one to see the assumptions it would require. The page's own modeled result is shown only in the calculator below, and never takes its value from this explorer.</p>
+    <p class="board-sub">Pick a margin range you've heard claimed and see the assumptions it would take to land there. Each range with a claimed position behind it carries a <strong>page-authored route</strong> — what would have to be true of procurement, occupancy and serving efficiency — that you can load into the calculator as an <strong>explicit counterfactual</strong>. The headline estimate (derived from the Model / Traffic-mix selections at the central cost lens) never takes its value from this explorer.</p>
+  </div>
+  <div class="front-door" id="front-door">
+    <div class="range-chips" id="range-chips" role="group" aria-label="Claimed margin ranges"><!-- built by app.js --></div>
+    <div class="front-door-detail" id="front-door-detail" hidden></div>
+  </div>
+  <!-- Saved scenarios (layout restructure 2026-07-11): the im_presets_v1 store, surfaced as a
+       link-style dropdown under the front-door cards. Loading keeps the FAIL-CLOSED saved-preset
+       behavior (always a MODIFIED state; never inherits the currently-selected lens); rename and
+       delete act on the same store. Saving happens at the bottom of the adjustment column. -->
+  <details id="saved-scenarios" class="saved-scenarios">
+    <summary>Saved scenarios</summary>
+    <div class="saved-panel">
+      <p class="saved-hint">Scenarios saved in this browser. Selecting one loads it as a <strong>modified state</strong> — the saved numbers, never the currently-selected lens. Save new ones from “Save scenario” at the end of the adjustment sections below.</p>
+      <div id="saved-list"><!-- built by app.js from the im_presets_v1 store --></div>
+    </div>
+  </details>
+  <details id="board-catalog" class="board-catalog">
+    <summary>Evidence catalog — sourced claims per range, badged by relation (verbatim where archived; reported figures labeled as such), plus every page-authored route</summary>
+    <p class="board-note">This grouping of claims into ranges is this page's organization, not the claimants'. A claim renders under a range only with its typed relation badged — asserts, locates-within, conditional transition, unnamed subject, different metric, disclosure anchor — and a floor claim never renders as interval membership: it is compatible with its range and every higher one. Company-GM and reported figures are different objects from this calculator's unit metric (<a href="#s7">§7</a>). Routes are ordered by fewest changed registry fields from the central configuration (stable-id tie-break) — an edit count, not a measure of which route is right.</p>
+    <div class="board-grid" id="board-grid"><!-- built by app.js from the claims registry --></div>
+  </details>
+</section>
+
+<main class="layout">
+  <div class="controls-col">
+    <div class="controls" id="controls"><!-- built by app.js; every adjustment section starts collapsed --></div>
+
+    <!-- Selector dissolve (layout feedback 2026-07-12): the standalone selector row is gone. The
+         Model selector is injected by buildControls() into the "Model architecture" section; the
+         Traffic-mix selector into the "Traffic mix (I/O + cache)" section; the Perspective select is
+         a HIDDEN state carrier (set only programmatically — routes, replays, saved scenarios, §10
+         links, the permalink codec). These elements are PARKED here between rebuilds; buildControls
+         moves them into their sections (and rescues them back here before wiping #controls). Do NOT
+         remove ids — the codec (encode/decode) and ~15 call sites read #persp-preset/#model-preset. -->
+    <div id="picker-holder" hidden aria-hidden="true">
+      <!-- Perspective: HIDDEN state carrier only; no visible label. Default stays "median". -->
+      <select id="persp-preset"></select>
+
+      <div id="model-picker-group" class="ctl-picker-group">
+        <label for="model-preset">Model</label>
+        <select id="model-preset"></select>
+        <p class="ctl-hint">Applies the selected model's sizes, prices and native traffic profile — or pick <strong>Custom</strong> to define one entirely with the sliders. The headline stays derived from Model / Traffic mix.</p>
+      </div>
+      <!-- MODEL dossier (collapsed): the selected model's own parameter cards + sizing note, grouped
+           with the Model selector. Un-hidden/hidden by renderModelDossier() exactly as before. -->
+      <details id="model-dossier-card" class="dossier model-dossier-card" hidden>
+        <summary><span id="model-dossier-note" class="preset-note">Model sizing &amp; assumptions</span> <span class="dossier-hint">· sizes, prices, sources &amp; sizing note</span></summary>
+        <div id="model-dossier" class="dossier-body"></div>
+      </details>
+      <!-- Model-sizing provenance panel (D3): while a range-exploration route is loaded, the model's
+           sizing/pricing provenance renders HERE — structurally separate from the route dossier.
+           Injected with the model group into the "Model architecture" section. -->
+      <details id="model-context" class="dossier model-context" hidden>
+        <summary><span id="model-context-note" class="preset-note"></span> <span class="dossier-hint">· expand for the model-sizing provenance (sizes, prices, and their sources)</span></summary>
+        <div id="model-context-body" class="dossier-body"></div>
+      </details>
+
+      <div id="traffic-picker-group" class="ctl-picker-group">
+        <label for="traffic-preset" title="Traffic mix — I/O ratio + cache-hit share. SLA/interactivity, service class and cache lifecycle are modeled elsewhere; this axis owns only the token mix.">Traffic-mix profile</label>
+        <select id="traffic-preset"></select>
+        <p class="ctl-hint">Named traffic-mix profiles (I/O ratio + cache-hit share only). §10 dive replays lock their traffic; reach those operating points from the §10 report links below.</p>
+      </div>
+    </div>
+
+    <!-- Output/results tiles (layout feedback 2026-07-12): relocated here, AFTER all the inputs,
+         so outputs read last in causal order (inputs drive outputs). Same ids/data-tips/structure
+         — app.js still populates #out-margin etc. and scrollIntoView(".hero-row") still targets it. -->
+    <!-- Persistent state-identity strip (public-release P0): sits ON the result surface so a cropped
+         screenshot / permalink can never present a conditional number under a false or absent identity.
+         Populated by renderIdentityStrip() from the ACTUAL state (model · traffic · lens/replay · state)
+         and carries the "Return to central scenario" reset. -->
+    <div id="identity-strip" class="identity-strip" aria-label="Current scenario identity"></div>
+    <section class="hero-row" aria-label="Headline results">
+      <div class="tile tile-hero">
+        <div class="tile-label">Serving contribution margin <button class="info" data-tip="margin">ⓘ</button></div>
+        <div class="tile-value" id="out-margin">—</div>
+        <div class="tile-delta tile-gm"><strong>Not a company gross margin.</strong> Unit direct-serving contribution margin only — see the methods box.</div>
+        <div class="tile-delta" id="out-margin-unanchored"></div>
+        <div class="tile-delta" id="out-margin-note"></div>
+      </div>
+      <div class="tile">
+        <div class="tile-label">Blended cost <button class="info" data-tip="blended-cost">ⓘ</button></div>
+        <div class="tile-value" id="out-cost">—</div>
+        <div class="tile-delta">per 1M tokens served (traffic mix)</div>
+      </div>
+      <div class="tile">
+        <div class="tile-label">Blended realized price <button class="info" data-tip="blended-price">ⓘ</button></div>
+        <div class="tile-value" id="out-price">—</div>
+        <div class="tile-delta" id="out-price-note"></div>
+        <div class="tile-delta">per 1M tokens billed (after cache mix)</div>
+      </div>
+      <div class="tile">
+        <div class="tile-label">Cost per 1M output <button class="info" data-tip="cost-out">ⓘ</button></div>
+        <div class="tile-value" id="out-cost-out">—</div>
+        <div class="tile-delta" id="out-cost-in">input: —</div>
+      </div>
+      <div class="tile">
+        <div class="tile-label">Serving feasibility</div>
+        <div class="tile-value tile-small" id="out-feas">—</div>
+        <div class="tile-delta" id="out-feas-note"></div>
+      </div>
+    </section>
+
+    <!-- Save scenario (layout feedback 2026-07-12): collapsed blue-link — the SAME treatment as the
+         "Saved scenarios" dropdown — moved to the end of the controls column, after the output tiles.
+         Every id (#scenario-name, #save-preset, #share-scenario, #save-note) and all app.js wiring
+         (im_presets_v1 store, fail-closed load, auto-name) is unchanged. -->
+    <details class="saved-scenarios save-scenario">
+      <summary>Save scenario</summary>
+      <div class="saved-panel">
+        <label for="scenario-name">Scenario name</label>
+        <input id="scenario-name" type="text" autocomplete="off" spellcheck="false" maxlength="80">
+        <div class="save-row">
+          <button id="save-preset" class="ghost-btn">Save scenario</button>
+          <button id="share-scenario" class="ghost-btn" title="Copy a URL that reproduces every current slider">Copy scenario link</button>
+        </div>
+        <p id="save-note" class="ctl-hint save-note" aria-live="polite"></p>
+        <p class="ctl-hint">Saved to this browser only; it reloads as a modified state (never inheriting a lens). Load, rename or delete under “Saved scenarios” in the range explorer above.</p>
+      </div>
+    </details>
+  </div>
+
+  <div class="results">
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Margin if served entirely on each accelerator</span>
+        <span class="chart-sub" id="chart-hw-sub"></span>
+      </figcaption>
+      <div id="chart-hw" class="chart"></div>
+    </figure>
+
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Where the cost of a token goes</span>
+        <span class="chart-sub">owned-TCO decomposition per 1M blended tokens, by accelerator</span>
+      </figcaption>
+      <div id="chart-stack" class="chart"></div>
+    </figure>
+
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Margin sensitivity — active parameters</span>
+        <span class="chart-sub">holding everything else at current settings</span>
+      </figcaption>
+      <div id="chart-sens" class="chart"></div>
+    </figure>
+
+    <figure class="chart-card">
+      <figcaption>
+        <span class="chart-title">Cost per 1M output tokens across hardware generations</span>
+        <span class="chart-sub">current model settings; margin at current price labeled on each bar</span>
+      </figcaption>
+      <div id="chart-gen" class="chart"></div>
+    </figure>
+
+    <figure class="chart-card" id="sub-card">
+      <figcaption>
+        <span class="chart-title">Subscription economics</span>
+        <span class="chart-sub">is the $200 plan underwater? Depends whether you price usage at list or at marginal cost.</span>
+      </figcaption>
+      <div id="sub-controls"></div>
+      <div id="chart-sub" class="chart"></div>
+    </figure>
+  </div>
+</main>
+
+<section id="report" class="report">
+  <h2>Full report: how fat are frontier inference margins?</h2>
+  <p class="byline">Research 2026-07-09, revised to methodology v2.1.3 by 2026-07-12 (the v2.1.1 milestone landed 2026-07-10) after separately run model-based adversarial reviews (<a href="research/index.html">archived</a>) — independent executions, not independent human validation · Maintained by Ashita Orbis · Analysis by Claude (Fable 5) with independent GPT-5.6 Pro research runs · X evidence via Grok 4.5 sweep · web evidence via Exa + Parallel deep research. Load-bearing claims are labeled by source class — first-party disclosure, regulatory filing, reputable reporting, reproducible benchmark, market quote, community estimate, or modeling assumption — and linked where a public source exists; a handful of reported figures carry no archived public link and are labeled as such (see §7).</p>
+
+  <div class="scope-note"><strong>Scope note:</strong> this is first and foremost an investigation of <em>Anthropic's</em> serving margins — that is where the strongest 90–95%-range claims cluster (as conditional and floor claims, not an unconditional "Anthropic = 90–95%" statement — see the §1 source audit), where the public evidence concentrates, and where the two independent research runs went deep. The other providers in the calculator are included for comparison at materially lower evidence density; their presets are best-effort estimates (marked * where speculative). Each non-Anthropic provider has since received its own independent GPT-5.6 Pro deep dive — <a href="#s10">§10</a> audits what is actually known about each one, with judgmental margin ranges and the reasons for their width, and links the <a href="research/index.html">full unedited research reports</a>.</div>
+
+  <div class="toc">
+    <ol>
+      <li><a href="#s1">The claim and the claimants</a></li>
+      <li><a href="#s2">The evidence base, verified</a></li>
+      <li><a href="#s3">The cost model and its calibration</a></li>
+      <li><a href="#s4">Chip efficiency: H100 → GB300 → Rubin</a></li>
+      <li><a href="#s5">Claude's analysis and verdict</a></li>
+      <li><a href="#s6">GPT-5.6 Pro's analysis and verdict</a></li>
+      <li><a href="#s7">Why reported gross margins are so much lower</a></li>
+      <li><a href="#s8">The subscription-token investigations</a></li>
+      <li><a href="#s9">The most comprehensive public analyses</a></li>
+      <li><a href="#s10">The other providers: knowns, unknowns, confidence</a></li>
+    </ol>
+  </div>
+
+  <h3 id="s1">1 · The claim and the claimants</h3>
+  <p>The framing under examination: <strong>that Anthropic's marginal cost of serving a Claude token sits so far below its API list price that serving gross margins reach the 90–95% range</strong> — the loudest figure the discourse repeats. This is a claim about <em>unit serving economics</em> — one token, on a warm GPU, at scale, in the claimants' framing — not about Anthropic's income statement (see §7 for why those diverge). Note this page's own metric is stricter than the warm-GPU framing: it allocates paid idle capacity through the utilization divisor (methods box). Read what follows as an audit of that <em>range</em>: as this section documents, the cited corpus carries the 90–95% zone as <em>conditional</em> and <em>floor</em> claims, not as an unconditional "Anthropic = 90–95%" statement.</p>
+  <p>The loudest and most quantitative proponent is <a href="https://x.com/teortaxesTex">@teortaxesTex</a>:</p>
+  <p>His cited record, summarized (verbatim posts in the <a href="research/grok-sweep-margin-claims.html">annex sweep</a>): an Anthropic-specific serving-cost claim — DeepSeek-style math prices serving Opus at <strong>at most $4/Mtok</strong> (token class unspecified), implying very high unit margins even on subscriptions except at full utilization (<a href="https://x.com/teortaxesTex/status/2071315379004051513">Jun 28, 2026</a>) — and a CONDITIONAL claim, made in a western-provider context:</p>
+  <blockquote>"No, they'll just increase the batch size, have the same speed, and drive margins from 90% to 95%. You're welcome" — <a href="https://x.com/teortaxesTex/status/2070786814097440805">Jun 27, 2026</a></blockquote>
+  <p>Earlier and more conservative from the same account: "if we exclude R&amp;D and look at inference alone, Anthropic and OpenAI are making like 80% margins" (<a href="https://x.com/teortaxesTex/status/1906521148726100430">Mar 2025</a>). The cited corpus does not contain an unconditional claim that Anthropic's margin is exactly 90–95%.</p>
+  <p><a href="https://x.com/zephyr_z9">@zephyr_z9</a> (Zephyr) makes a related pricing allegation from the semis side: a <a href="https://x.com/zephyr_z9/status/2074917201589727588">Jul 8, 2026 post</a> says xAI is not "juicing up the gross margins to 90%-95%" — but it names no comparison lab and does not define the metric as unit serving margin (both are this page's readings). Separately, a <a href="https://x.com/zephyr_z9/status/2069832997218722140">Jun 24 post</a> explicitly places Anthropic at ~70% company-level gross margin with 15–20% FCF margin. The two figures coexist in one account's posts; this corpus does not establish that the 90–95% allegation is Anthropic-specific.</p>
+  <p>One reported-margin objection: <a href="https://x.com/fleetingbits/status/2073528885149679622">@fleetingbits</a> — "we know approximately what frontier lab inference margins are; it's like 40-50%; it's been reported a bunch of times. anthropic labels cloud provider commissions as a sales and marketing expense; so the gross margins are mostly inference compute costs." And in the middle, a <a href="https://x.com/PodcastAlphaX/status/2072119494563262697">Jul 1, 2026 PodcastAlphaX clip-account post featuring Dylan Patel</a> of SemiAnalysis quotes him putting Anthropic's margin on an Opus API token "north of 80%" — quoted-secondary evidence, not a post from his or SemiAnalysis's account.</p>
+
+  <h3 id="s2">2 · The evidence base, verified</h3>
+
+  <h4>2a · DeepSeek's serving disclosure — the one primary source in the field</h4>
+  <p>On <a href="https://x.com/deepseek_ai/status/1895688300574462431">March 1, 2025</a> (Open Source Week "Day 6"), DeepSeek published actual production serving statistics for V3/R1 on H800 clusters: <strong>73.7k input / 14.8k output tokens per second per 8-GPU H800 node</strong>, 56.3% input cache-hit rate, ~$87,072/day GPU cost (at $2/H800-hr) against $562,027/day theoretical revenue at R1 list prices — the famous <strong>"545% cost-profit ratio," which is a markup; as a margin it is 84.5%</strong> (a distinction TeorTaxes himself <a href="https://x.com/teortaxesTex/status/1896141536884396528">insisted on</a>). Caveats DeepSeek listed: much traffic was free web/app users and off-peak V3 pricing, so <em>realized</em> revenue was materially lower than the theoretical figure.</p>
+  <p>Why it matters for Anthropic: DeepSeek's disclosure implies an <strong>84.5% theoretical margin had all observed traffic been billed at R1 list prices</strong> — DeepSeek itself stated actual realized revenue was materially lower — on export-restricted hardware, in early 2025, at prices far below Anthropic's on a like-for-like token-class basis: <strong>3.6× cheaper for cache reads, 9.1× for fresh input, 11.4× for output</strong>. The hardware and serving-software inputs to that calculation have since improved (§4), though tariffs, fleet constraints and latency targets can move the other way. The a-fortiori argument — if DeepSeek could get to ~85% theoretical at $2.19/Mtok output on H800s, what does $25/Mtok output on GB300s and TPUv7 imply? — is the strongest single piece of evidence in the bull case. It is an anchor for what optimized serving <em>can</em> cost, not proof of what Anthropic's margin <em>is</em>.</p>
+
+  <h4>2b · The Musk size leak — total vs active, a distinction that matters</h4>
+  <p>The leak is widely retold as "Musk revealed Opus is much smaller than expected" — but on <em>total</em> parameters it says the opposite. What Musk actually posted (<a href="https://x.com/elonmusk/status/2042123561666855235">Apr 9, 2026</a>): <em>"0.5T total. Current Grok is half the size of Sonnet and 1/10th the size of Opus. Very strong model for its size."</em> The community deduction (<a href="https://x.com/mark_k/status/2042304980456030666">e.g.</a>): <strong>Sonnet ≈ 1T, Opus ≈ 5T total parameters</strong> — Opus is <em>big</em>.</p>
+  <p>The "smaller than expected" intuition belongs to <strong>active</strong> parameters: TeorTaxes, observing Fable served at ~90 tok/s, concluded it had <a href="https://x.com/teortaxesTex/status/2068980091724419280">"shockingly FEW active parameters for what it was"</a>, and Zephyr puts OpenAI's frontier at <a href="https://x.com/zephyr_z9/status/2075107995508408728">"~100B active range"</a> with Opus/Fable "the highest active parameters" among peers. For serving cost, <strong>active parameters are the dominant modeled driver</strong> (FLOPs/token ≈ 2 × active — the model does not separately resolve context length, KV traffic, attention or communication overhead); total size mostly sets the HBM footprint. A 5T-total/~300B-active MoE is the shape our defaults assume — and the active number is the single most uncertain, most consequential slider on this page. Even the total is contested: the "incompressible knowledge probes" estimation method (<a href="https://arxiv.org/abs/2604.24827">arXiv:2604.24827</a>) carries a ~threefold prediction interval (per the paper's v2 revision of Jul 5, 2026: median fold-error 1.48×, with 86% of models within 3×), and a <a href="https://www.lesswrong.com/posts/veFMEzDDyWaer2Sms/sanity-checking-incompressible-knowledge-probes">methodological re-analysis</a> lands nearer 1.1T total for Opus 4.7. GPT Pro's sanity check cuts the other way: a <em>dense</em> 5T Opus would cost more than its own $25/Mtok list price to serve — so if Musk's number is right, heavy sparsity isn't optional, it's implied.</p>
+
+  <h4>2c · GLM 5.2 on GB300 — the ncode/Noumena deployment by @_xjdr</h4>
+  <p>The researcher is <a href="https://x.com/_xjdr">@_xjdr</a>; the product is <strong>ncode</strong> on the <strong>Noumena</strong> platform (code.noumena.com), served on <a href="https://x.com/_xjdr/status/2067742918455279934">GB300 NVL72 racks from Prime Intellect</a>. His free-week postmortem (<a href="https://x.com/_xjdr/status/2071835604095300079">Jun 30, 2026</a>) is the best public look at frontier-style serving on Blackwell Ultra:</p>
+  <blockquote>"final GLM 5.2 served stats: ~12000 unique api keys served ~300B tokens total 232 tok/s/gpu output average 431 tok/s/gpu output max sustained 2.1 sec TTFT overage [sic] (1M ctx) 61 sec p95 TTFT (1M ctx) 81k tok average input size 41% cache hit rate 0 chat logs kept (dont be evil)"</blockquote>
+  <p>Configuration: 60× B300 (<a href="https://x.com/_xjdr/status/2071846027917943274">"15 trays"</a>), bf16 attention with fp8 experts/KV (<a href="https://x.com/_xjdr/status/2070947967574663249">"virtually 0 measurable quality difference"</a>), <a href="https://x.com/_xjdr/status/2072059152873210101">no MTP, no Eagle</a> — a custom Rust stack. A third-party estimate on his thread put the implied cost at <a href="https://x.com/paxaral/status/2071995188302557585">~$0.35/Mtok in, ~$1.50/Mtok out at $6/GPU-hr</a>. Note his 232 tok/s/GPU <em>average</em> is output-only bookkeeping, and the same post reports 81k-token average inputs at a 1M context limit — but it does not report average output length, request rate, phase-level GPU allocation, or an input:output split, so it does not establish how GPU time divided between prefill and decode; it is not comparable to SGLang's 12k tok/s/GPU throughput records (different model, batch regime, and MTP). The original labels the 2.1-second TTFT statistic "overage"; that field remains uninterpreted. (<strong>Erratum:</strong> an earlier revision of this page silently normalized "overage" to "average"; the token is now preserved verbatim as "overage [sic]" and left uninterpreted — see the <a href="research/changelog.html">changelog</a>.) The separately reported <strong>61-second p95 TTFT</strong> at 1M context documents a long tail, but the corpus does not identify its cause.</p>
+  <p>Adjacent results worth separating from the ncode story (GPT Pro's browsing initially merged them, §6): GLM-5.2's architecture is public via <a href="https://www.baseten.co/blog/how-we-built-the-worlds-fastest-api-for-glm-52/">Baseten's serving writeup</a> — <strong>744B total / 40B active</strong>, NVFP4-clean, 280+ tok/s/user on Blackwell (a per-user speed record, not aggregate throughput). And the headline GB300 aggregate number belongs to <a href="https://pytorch.org/blog/serving-deepseek-v4-on-gb300-with-sglang-5x-higher-throughput-at-the-same-interactivity-since-day-0/">SGLang + NVIDIA serving DeepSeek-V4</a>: 2,200 → 11,200 tok/s/GPU from April to June 2026 on the same racks — five-fold, from software alone.</p>
+
+  <h4>2d · What the plans actually hand out</h4>
+  <p>Covered in §8 — the short version: heavy Claude Max users have documented API-equivalent usage far above the subscription price. That is consistent with low marginal serving cost, but it does not identify the subscriber distribution or exclude breakage, throttling, routing or cross-subsidy; §8 treats it as tail evidence only.</p>
+
+  <h3 id="s3">3 · The cost model and its calibration</h3>
+  <p>The calculator above prices a token from an explicit cost identity:</p>
+  <p><code>output $/Mtok = ($/GPU-hr ÷ 3600 ÷ tokens/s/GPU) × 10⁶ ÷ utilization</code>, with <code>tokens/s/GPU = (dense FP8 FLOPS × precision factor × effective-MFU × interactivity) ÷ (2 × active params)</code>. Fresh prefill (input) uses the same compute form at higher MFU, but the engine does not apply the interactivity factor to prefill — it scales decode only. Cache reads cost a few percent of prefill. The traffic mix (input:output ratio, cache-hit rate) blends the three, and the same mix prices revenue at list minus cache/batch/negotiated discounts.</p>
+  <p><strong>Anchor fits, not vibes — and not a validated predictive model.</strong> Each accelerator's effective-MFU is fitted so the model reproduces that platform's best public measurement. That is six separate anchor fits, not one calibrated theory: we ran the obvious falsification test — fit a <em>single</em> global MFU on the DeepSeek anchor alone and predict the other platforms — and it <strong>fails</strong> (mean error 37%, worst 59%). A commissioned physically-informed roofline follow-up got throughput-oriented points within 2–16% but still failed the whole-platform gate (worst −40%) and the preregistered test proved formally unrunnable on public data — so the anchor fits stay, as a documented decision (full write-ups in the <a href="research/methods-loao.html">LOAO methods note</a>). Consequences we adopt: reproducing an anchor is an identity, not a validation; per-platform values are interpolation near their anchored operating points; the published anchors are all ≤~50B-active models while the flagship scenarios assume 120–300B active (the model's largest unanchored extrapolation); and <strong>platforms with no published anchor (TPU v7, Trainium, the Rubin projection) carry materially lower confidence</strong> than the anchored rows. Validation anchors are also not always the neutral defaults — where a published anchor comes from a vendor-optimized or latency-relaxed configuration, the deployed default is the hardware dive's neutral recommendation, and the table shows both:</p>
+  <table>
+    <thead><tr><th>Anchor (published)</th><th>Published</th><th>Reproduces at</th><th>Deployed default</th></tr></thead>
+    <tbody>
+      <tr><td>DeepSeek disclosure, H800 decode (37B active, FP8, production average)</td><td>1,850 tok/s/GPU</td><td>1,873 at MFU 7.0%</td><td>7.0%</td></tr>
+      <tr><td>DeepSeek disclosure, H800 input flow — <strong>includes the 56.3% disk-cache-hit share</strong>, so it is not a fresh-prefill benchmark</td><td>9,212 tok/s/GPU aggregate</td><td>not used directly</td><td>fresh prefill 15% ≈ 4,013 tok/s (cache-share reconstruction ≈ 4,026; v1 wrongly used 34%)</td></tr>
+      <tr><td>vLLM GB200, R1 decode (source precision basis not fully pinned — possibly NVFP4)</td><td>~10,100 tok/s/GPU</td><td>10,135 at MFU 15% — using GB200's verified 5.0 PF dense per GPU (an earlier revision missed by −10% by using B200's 4.5 PF, a sparse/dense mixup common in secondary sources)</td><td>15%, treated as an upper anchor</td></tr>
+      <tr><td>SGLang GB300 record, V4 Pro 1.6T FP4 + MTP (49B active, disclosed)</td><td>&gt;12,000 tok/s/GPU</td><td>~12,050 at 12.7% × 1.85 FP4 (refit after the 49B disclosure; v1 fit assumed ~66B active)</td><td>12.7%</td></tr>
+      <tr><td>Ant Group/SGLang production, H20 decode (R1, FP8, relaxed &lt;70 ms tier)</td><td>714 tok/s/GPU (675 at &lt;50 ms; 423 at &lt;30 ms)</td><td>714 at MFU 18%</td><td><strong>17% neutral</strong> ≈ 680 tok/s (the tighter tier)</td></tr>
+      <tr><td>CloudMatrix-Infer, Ascend 910C decode (R1, INT8; vendor-measured, optimized 384-NPU supernode)</td><td>1,943 tok/s/NPU</td><td>1,943 at MFU 9.5% of 1.504 PF INT8</td><td><strong>7% neutral</strong> ≈ 1,422 tok/s (DeepSeek's "60% of H100" eval implies 5.5–6.5%)</td></tr>
+    </tbody>
+  </table>
+  <p>Those single-digit decode MFUs are not a bug — decode is memory/interconnect-bound; this is why <a href="https://x.com/jukan05/status/2071139712082022855">"inference is memory"</a> and why bigger NVLink domains and HBM keep beating raw FLOPS. The H20's seemingly heroic 17–18% is the same physics from the other side: a bandwidth-rich chip whose FLOPS denominator is tiny — and it is exactly why a single MFU cannot transfer across platforms. Domain of validity: short-to-moderate context, throughput-oriented serving; context length, TTFT/TPOT targets and KV-cache lifecycle are not modeled, and the latency curve is steep (CloudMatrix drops 1,943 → 538 tok/s when TPOT tightens from ~50 ms to 15 ms).</p>
+
+  <h3 id="s4">4 · Chip efficiency: H100 → GB300 → Rubin</h3>
+  <table>
+    <thead><tr><th>Platform</th><th>Dense FP8 (PF)</th><th>Dense FP4 (PF)</th><th>HBM</th><th>BW</th><th>TDP</th><th>Rental (Jul 2026)</th></tr></thead>
+    <tbody>
+      <tr><td>H100 SXM (2022)</td><td>1.98</td><td>—</td><td>80 GB</td><td>3.35 TB/s</td><td>700 W</td><td>$1.99–3.90/hr, spot ≈ $2.40</td></tr>
+      <tr><td>H200 (2024)</td><td>1.98</td><td>—</td><td>141 GB</td><td>4.8 TB/s</td><td>700 W</td><td>$2.45–4.50/hr</td></tr>
+      <tr><td>B200 HGX, per GPU (2024)</td><td>4.5</td><td>9</td><td>180 GB</td><td>8 TB/s</td><td>1.0 kW</td><td>$6.69/hr on-demand (Lambda)</td></tr>
+      <tr><td>GB200 NVL72, per GPU (2024-25)</td><td>5.0</td><td>10</td><td>186 GB</td><td>8 TB/s</td><td>1.2 kW</td><td>$3.50–6.00/hr; rack ≈ $3–3.5M</td></tr>
+      <tr><td>GB300 NVL72 "Blackwell Ultra" (2025-26)</td><td>5.0</td><td>15</td><td>288 GB</td><td>8 TB/s</td><td>1.4 kW</td><td>$4–7/hr early; rack ≈ $3.5–4.5M</td></tr>
+      <tr><td>TPU v7 Ironwood (GA Mar 2026)</td><td>4.61</td><td>—</td><td>192 GB</td><td>7.37 TB/s</td><td>~1 kW</td><td>undisclosed; Anthropic deal: up to 1M chips</td></tr>
+      <tr><td>Trainium2 (GA Dec 2024) / Trainium3 (GA Dec 2025)</td><td>1.3 / 2.51</td><td>—</td><td>96 / 144 GB</td><td>2.9 / 4.9 TB/s</td><td>~0.5–0.8 kW</td><td>AWS-internal; Rainier launched with ~500k Trainium2; Anthropic reported &gt;1M in use by Apr 2026</td></tr>
+      <tr><td>H800 — China export SKU (2023)</td><td>1.98</td><td>—</td><td>80 GB</td><td>3.35 TB/s</td><td>700 W</td><td>IDC annual-commit $1.47–2.06/hr (mid-2026, +30% post-Spring-Festival); DeepSeek's disclosure assumed $2</td></tr>
+      <tr><td>H20 — China-legal SKU (2024)</td><td>0.296</td><td>—</td><td>96 GB</td><td>4.0 TB/s</td><td>400 W</td><td>~$10–12k chip / ~$20k installed; rental class spans ~$0.76 (IDC annual) to $7+ (cloud on-demand)</td></tr>
+      <tr><td>Huawei Ascend 910C (2024–25)</td><td>1.50 (INT8; no FP8)</td><td>—</td><td>128 GB</td><td>3.2 TB/s</td><td>~0.6 kW</td><td>~$23k/chip installed; Huatai procurement $1.71–2.25/hr; CloudMatrix 384 ≈ RMB 60M</td></tr>
+      <tr><td>Vera Rubin NVL72, per GPU (preliminary 2026 specs)</td><td>17.5 (dense FP8/FP6)</td><td>50 <em>sparse NVFP4 inference</em> (35 dense-class training)</td><td>288 GB HBM4</td><td>22 TB/s</td><td>~1.8 kW</td><td>production power, throughput and cost TBD</td></tr>
+    </tbody>
+  </table>
+  <p><strong>Measured, not marketing:</strong> SemiAnalysis InferenceX (the successor to InferenceMAX, the field's independent benchmark) finds the most-optimized <strong>GB300 NVL72 delivers ~17× the best H100 config in FP8 and ~32× in FP4</strong> on DeepSeek R1 (<a href="https://x.com/SemiAnalysis_/status/2070915304629129460">Jun 27, 2026</a>) — and, critically, that <strong>software alone was a 14× gain on the same silicon</strong> (baseline FP8 ~1k → wideEP+disagg ~8k → +MTP ~14k tok/s/GPU). SGLang's reproducible benchmark runs agree: <a href="https://x.com/lmsysorg/status/2065513735213773021">~11–12k tok/s/GPU on V4 Pro 1.6T</a> (an InferenceX/SGLang benchmark, not production telemetry), <a href="https://x.com/lmsysorg/status/2049769087610572823">6.5× over B200</a> with Dynamo disaggregation. At rack level: an H100 rack two years ago did ~8.8k tok/s; a GB300 NVL72 does ~370k — <a href="https://x.com/The_Analyst_Lab/status/2074768377105498428">42× in two years</a> (8× of it HBM growth).</p>
+  <p><strong>The China stack is its own cost universe.</strong> Under export controls the Chinese labs serve on three tiers: hoarded pre-ban H800s (H100 compute, capped NVLink — where DeepSeek's disclosure happened), the deliberately compute-starved but bandwidth-rich H20 (the main legal SKU since mid-2025; decode-friendly because decode is bandwidth-bound — <a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">Ant Group's production SGLang deployment</a> is the best public anchor), and Huawei's Ascend 910C (<a href="https://arxiv.org/abs/2506.12708">Huawei's CloudMatrix-Infer paper</a> reports 1,943 tok/s/NPU decode on R1, while DeepSeek's internal evaluation put the chip at <a href="https://www.tomshardware.com/tech-industry/artificial-intelligence/deepseek-research-suggests-huaweis-ascend-910c-delivers-60-percent-nvidia-h100-inference-performance">~60% of H100</a> — vendor and customer numbers disagree, so the calculator's Ascend row carries wide error bars). H200s were license-cleared for ten named Chinese firms in early 2026 but essentially none had shipped as of May; Beijing reportedly moved to allow those purchases this week (Jul 7–8). Chip scarcity also cuts the other way on price: Chinese H-series lease rates rose 20–30% over early 2026 on a &gt;1,000× surge in national token volume (<a href="https://www.trendforce.com/news/2026/04/17/news-nvidia-h100-rentals-in-china-reportedly-up-20-30-as-token-demand-surges-h-series-also-rises/">TrendForce</a>) — Chinese margins are being squeezed from the cost side at exactly the moment Western $/token falls. One more trap: "the China rental rate" is a category error — the same H20 spans roughly ¥5–72 per card-hour (&gt;10×) between annual IDC bare-metal leases and hyperscaler on-demand instances. The calculator's China rows use annual-commit rates; the GPU-hour cost multiplier is the dial for other rental classes.</p>
+  <p><strong>But cost per token falls slower than throughput rises</strong>, because rental prices track capability: $2.40/hr H100 → $6/hr GB300 eats ~2.5× of the 17×. Net hardware-economics gain per generation in $/Mtok: H100→H200 ~1.2×, H200→GB200 ~2–3×, GB200→GB300 ~1.1–1.5× (GB300's edge is HBM capacity for reasoning/long-context, not FLOPS), Rubin ~2–3× again. Cumulative 2024→2027: <strong>roughly 5–16× cheaper per token at the hardware level</strong> (the product of the per-generation ranges just listed; the commissioned fixed-model projection lands in the same band — ~4.5–10× by the 2027 Rubin ramp, ~7–17× by mature Rubin), before model-side efficiency (sparser MoEs, MTP, quantization) which historically contributed as much again. This is why margins <em>at constant list prices</em> would, on these hardware-cost assumptions alone, trend toward 95%+ — a mechanical consequence of the cost model under a fixed-price counterfactual, not a prediction, and one the market visibly pre-empts, which is why in practice prices fall instead (Opus's 2025-11 cut to $5/$25 was 3×; fast mode — $10/$50 on Opus 4.8, down from 4.7's $30/$150 tier retiring July 24 — shows the latency premium being monetized separately, and itself falling).</p>
+
+  <h3 id="s5">5 · Claude's analysis and verdict</h3>
+  <div class="verdict">
+    <p><strong>Verdict: conditional, not blanket. A 90–95% list-price serving contribution margin is plausible under strategic-partner or owned-TCO compute, optimized batch-heavy workloads and high fleet occupancy — and 95% is not the ceiling for output tokens on the newest hardware. Under this page's own open-market rental scenario at 50% utilization, the Opus-class result is materially lower: ~75–88% blended, with the deployed calculator's default landing at ~77%. The claim's truth is a function of the invoice and the operating point, and it sits atop a stack of margins that shrinks at every step toward the income statement.</strong></p>
+    <p>My central scenarios for mid-2026 — balanced latency, 50% fleet utilization, neocloud-level hardware costs, the deployed billing defaults (15% batch share, 5% discount; a pure list-price run lands ~2.8 points higher than the ~77% default):</p>
+    <ul>
+      <li><strong>Opus-class</strong> (assume ~5T total / ~300B active): output tokens cost ≈ $2.50–5.50/Mtok to serve vs $25 list → <strong>78–90%</strong>; blended across the calculator's Reference traffic convention (15:1 I/O, 60% cache; not a measured Anthropic operating point) → sensitivity span <strong>~75–88%</strong>, with the deployed central scenario at <strong>~77%</strong>; no coverage probability is assigned to this span. The cited "$4/1Mt" ceiling overlaps this output-cost range numerically, but the post does not identify input, output or blended tokens — it is therefore not an output-token validation target. The quoted-secondary ">80%" sits inside the span.</li>
+      <li><strong>Sonnet-class</strong> (~1T total / ~120B active): at Sonnet 5's current <strong>$2/$10 introductory tariff</strong> (through Aug 31, 2026) the same fleet gives <strong>~78–90% blended</strong>; at the <strong>$3/$15 standard tariff</strong> from Sep 1 it is <strong>85–93%</strong>. The 90–95% zone genuinely exists at standard pricing — for frontier models at Western-lab list tariffs served throughput-optimized on GB200/GB300. Not at post-price-war open-weight tariffs: DeepSeek V4 Pro at its own list stays below 90% on a GB300 fleet in this calculator at any utilization — the zone is tariff-driven, not hardware-guaranteed. (Sonnet 5's tokenizer also emits ~30% more tokens per text than 4.6 — per-token and per-text economics diverge across generations.)</li>
+      <li><strong>If active params are lower than my assumption</strong> (TeorTaxes's reading of Fable's serving speed), Opus margins move up 5–10 points. The claim's truth is nearly monotonic in one number nobody outside Anthropic knows.</li>
+    </ul>
+    <p>Three things the bull case gets right: (1) the DeepSeek a-fortiori argument is the strongest first-party-grounded argument identified in this research (an anchor for what optimized serving <em>can</em> cost, not proof of any provider's margin — §2); (2) caching is a margin machine — cache reads bill at 10% of input price but cost ~1–5% of prefill to serve, so agentic traffic stays high-margin even at deep effective discounts (assuming reuse is billed at the cache tariff; the billable-share caveat in the methods box spans 86.2%→61.5% on that assumption); (3) each hardware generation adds margin at constant prices, and Anthropic sits on three platforms (GB-class NVIDIA, up to 1M TPU v7, &gt;1M Trainium2) with pricing leverage none of its open-weight competitors have.</p>
+    <p>Three things it elides: (1) <strong>utilization</strong> — fleets are provisioned for peak; at 35% utilization my Opus central estimate drops ~8 points; (2) <strong>the latency premium is not free</strong> — interactive serving at user-acceptable speed costs ~1.4–3× throughput-optimal serving (fast mode's price premium exists for a reason — 2× on Opus 4.8, and it launched at 6×); (3) <strong>subscriptions and whales</strong> — documented tail users extract 15–40× their subscription in list-value tokens (§8); how much of the subscriber base is underwater is unknowable without a usage distribution nobody publishes, but the leakage direction is real and the API numbers never show it.</p>
+    <p>Forward hardware sensitivity scenario (not a forecast): the GB300→Rubin cost path would imply 92–96% Opus-class output margins by 2027 <em>only if</em> list prices and every non-hardware assumption held fixed (they will not) — a conditional sensitivity output of the cost model, not a prediction, with no probability assigned to future list prices, price cuts, token volume, or realized margins. The open question the scenario sharpens: how long can list prices sit this far above a falling cost floor while open-weight models (DeepSeek V4, GLM 5.2, Kimi) sell adequate quality at 10–20× less?</p>
+  </div>
+
+  <h3 id="s6">6 · GPT-5.6 Pro's analysis and verdict</h3>
+  <div id="gpt-pro-section">
+    <p class="byline">Independent 54-minute research run on GPT-5.6 Pro (2026-07-09), given the same brief and no access to this page's model. The <a href="research/gptpro-consult-anthropic-verbatim.html">complete verbatim response</a> and an <a href="research/anthropic-gptpro.html">adopted-findings summary</a> are in the annex; divergences from §5 are tabulated below, preserved rather than harmonized.</p>
+    <p class="load-op-row"><span class="load-op-lead">Reach this operating point in the calculator:</span> <a href="#" class="load-op" data-model="opus" data-persp="gptpro">Load the strategic-partner fleet ↑ (GPT-5.6 Pro lens on Opus)</a></p>
+    <div class="verdict">
+      <p class="verdict-provenance">Model-generated scenario analysis; the spans below are uncalibrated sensitivity ranges, not confidence intervals.</p>
+      <p><strong>GPT-5.6 Pro's verdict: "Standard-list-price marginal serving margin: approximately 92–94% for Opus and 94–96% for Sonnet on a mature 2026 fleet." And: "Is 95% an upper bound? No."</strong> — Sonnet at normal $3/$15 exceeds it, Opus on strategic TPU contracts exceeds it (97.2%) — but 95% is "not conservative for every token": at <em>public</em> cloud rates the same math yields only 55–85%.</p>
+    </div>
+    <p><strong>Where its 93% and this page's ~77% central scenario actually differ</strong> — assumption by assumption, not a single "disagreement":</p>
+    <table>
+      <thead><tr><th>Assumption</th><th>§5 (this page's central scenario)</th><th>§6 (GPT-5.6 Pro)</th><th>Why it matters</th></tr></thead>
+      <tbody>
+        <tr><td><b>Estimand / metric</b></td><td>Modeled unit direct-serving contribution margin at realized billings, blended across the traffic mix</td><td>"Economic marginal cost" margin; input and output legs quoted separately, no cache blending in the headline</td><td>Different metrics can differ by points before any input differs</td></tr>
+        <tr><td><b>Traffic mix</b></td><td>Reference 15:1 / 60% cache</td><td>Per-leg costs (cache economics treated separately)</td><td>Cache-heavy mixes raise blended margin at Anthropic's 10% cache tariff</td></tr>
+        <tr><td><b>Procurement</b></td><td>Open-market neocloud rental (1.0×)</td><td>Anthropic-scale strategic contracts (SemiAnalysis's Nov 2025 estimate for the 600,000 GCP-rented TPU v7: ≈$1.60/TPU-hr inclusive of Google's margin — an estimate, not a disclosed contract price)</td><td><b>The dominant term</b> — most of the 77-vs-93 gap</td></tr>
+        <tr><td><b>Utilization</b></td><td>50%</td><td>75%</td><td>Linear divisor on all costs</td></tr>
+        <tr><td><b>Architecture</b></td><td>Opus ≈ 5T total / 300B active; 2 × active FLOPs/token</td><td>Same sizes (independent convergence on ~6% activation); 2.3 × active</td><td>Agreement here is the notable fact — the debate compresses into procurement, not physics</td></tr>
+        <tr><td><b>Fleet</b></td><td>Mixed default blend (Hopper/Blackwell/TPU/Trainium)</td><td>40% TPU v7 · 25% GB300 · 15% GB200 · 15% Trn2 · 5% H200</td><td>TPU-heavy blends are cheaper under strategic rates</td></tr>
+        <tr><td><b>Overhead</b></td><td>Stack multiplier 1.0; cluster overhead modeled in TCO mode</td><td>+10% CPU/network/reliability; explicitly not electricity-only, not full COGS</td><td>Small beside procurement</td></tr>
+      </tbody>
+    </table>
+    <p>Its dominant sensitivity is the same as this page's: <strong>active parameters</strong> (Opus at 150B active → 95–97%; at 600B → 81–87%). Run this calculator in owned-TCO mode at its utilization and the two models converge at ~93% — a site-authored translation anchored to the quoted claims, not a SemiAnalysis or Dylan Patel model (the owned-TCO and GPT-5.6-Pro-fleet presets are both page reconstructions and land there). The honest summary: <strong>roughly 78–85% if you think Anthropic pays market rates for compute, roughly 90–95% if you think it pays hyperscaler-partner rates</strong> — while architecture, traffic mix, latency targets and utilization remain first-order unknowns in their own right. Its other unique contributions are placed where they belong: the PitchBook/Morningstar 44% gross-margin estimate (§7), the GB300 5×-from-software-alone progression (§2c), and its own 93.5%→44% bridge allocation (verbatim annex).</p>
+    <p><strong>Attribution divergence, preserved:</strong> GPT Pro's browsing never located the ncode/Noumena deployment and instead attributed the GB300 GLM-5.2 story to a merger of the SGLang/NVIDIA DeepSeek-V4 result with Baseten's GLM-5.2 work. The Grok X sweep, however, found the actual account — <a href="https://x.com/_xjdr">@_xjdr</a>'s ncode/Noumena, with primary post URLs (§2c). Where the two engines' account attributions conflicted we kept only what primary post URLs confirm; the direct post links in §1–2 are the ground truth we could verify.</p>
+    <p><strong>A rare piece of direct evidence on the invoice question surfaced in the xAI dive (§10):</strong> the SpaceXAI prospectus discloses that Anthropic pays xAI <strong>$1.25B per month for ~325,000 GPUs plus supporting CPUs, storage and networking</strong> — about <strong>$5.27 per bundled GPU-hour</strong>, a real, dated, arm's-length price for capacity Anthropic actually buys. Caveats: it is a bundled service price, not a bare chip-hour, and contracted reserve capacity need not price the marginal fleet. But it brackets one tranche of the debate from above: a disclosed, dated, arm's-length price for capacity Anthropic actually buys. One bundled contract need not bound the blended invoice across all partners — but a blended rate far above a price it demonstrably pays one supplier would need explaining, and this rate sits between this page's "market rental" and "strategic partner" scenarios — closer to the former.</p>
+  </div>
+
+  <h3 id="s7">7 · Why reported gross margins are so much lower</h3>
+  <p>Reported/leaked figures for Anthropic's <em>business-level</em> gross margin paint a different picture from the unit math. The Information (<a href="https://www.theinformation.com/articles/anthropic-lowers-profit-margin-projection-revenue-skyrockets">Jan 2026</a>, from people with knowledge of its financials): Anthropic lowered its <strong>2025 gross-margin projection to 40%</strong> (down 10 points from the earlier 50% plan) because inference costs on Google/Amazon servers ran <strong>23% higher than anticipated</strong>; including free-tier chatbot inference the margin would be ≈38%. Same reporting: 2025 revenue ≈ $4.5B (~12× 2024's $381M), 86% of it API. SemiAnalysis put the 2024 accounting gross margin at <a href="https://x.com/SemiAnalysis_/status/2037575752636301499">−94%</a> (yes, negative). Zephyr's mid-2026 read is <a href="https://x.com/zephyr_z9/status/2069832997218722140">~70% GM with 15–20% FCF margin</a>; a detailed July 2026 thread claims quarterly gross profit swung from −$55M to ~$453M with inference cost/token down ~40× since early 2024 (<a href="https://x.com/IvanaSpear/status/2075227080657129631">@IvanaSpear</a>). The freshest independent estimate is PitchBook/Morningstar (Jun 2026): gross margin ≈ <strong>44%</strong>, with compute spend of <a href="https://pitchbook.com/news/articles/anthropics-gross-margin-ipo">$0.71 per revenue dollar in Q1 2026, projected $0.56 in Q2</a>. A related forward-looking read from the lease-economics side: Anthropic converting roughly $5B of compute spend into an expected $15B of ARR (<a href="https://x.com/jukan05/status/2052957921563316619">May 2026</a>) — a spend-to-revenue multiple, not a margin. Inverting those reported margins back through this calculator does not yield a unique cost story: many combinations of hyperscaler markup, utilization, discounting and free-traffic share rationalize a 40–44% book margin equally well — which is why the reported-margin camp appears here as a diagnostic (the skeptic lens) rather than a claimed parameter set. These observations are not a time series and should not be read as one common-perimeter progression: −94% is SemiAnalysis's estimate of 2024 company gross margin; 40% is a reported internal projection for 2025; 44% is a PitchBook/Morningstar estimate tied to projected compute spend (which is not necessarily accounting cost of revenue); 70% is one analyst's mid-2026 social-media claim. Differences among them can reflect perimeter, method and forecast status as much as operating improvement — and The Information ran a follow-up on <a href="https://www.theinformation.com/newsletters/dealmaker/openai-anthropic-missed-gross-margin-forecasts">why the labs kept missing their own gross-margin forecasts</a>.</p>
+  <p><strong>Sensitivity and perimeter map — not an accounting reconciliation.</strong> The rows below identify one-at-a-time sensitivities and items outside the calculator, roughly in order of size. Several are already embedded in the selected unit result; the ranges must not be added or subtracted from the headline, and they do not reconcile unit contribution margin to company gross margin:</p>
+  <table>
+    <thead><tr><th>Item</th><th>Mechanism</th><th>Rough magnitude</th><th>Already in the calculator?</th></tr></thead>
+    <tbody>
+      <tr><td><b>Compute procurement markup</b></td><td>Anthropic buys most compute from AWS/GCP, who take their own margin; partner-committed economics can also sit well below public cloud rental. DeepSeek/High-Flyer appear to control substantial compute (the $2/hr figure was a costing assumption; the current owned/rented mix is undisclosed).</td><td>−10 to −20 pts</td><td>Yes — the cost lens / rent multiplier</td></tr>
+      <tr><td><b>Marketplace / channel revenue share</b></td><td>Some channel revenue shares 30–40% with the clouds (<a href="https://x.com/aakashgupta/status/2020272837907669179">Bedrock/Vertex economics</a>) — a revenue-side item, distinct from procurement cost.</td><td>−3 to −10 pts</td><td>No — outside the calculator</td></tr>
+      <tr><td><b>Utilization &amp; peak provisioning</b></td><td>Capacity sized for Monday-morning peak. 35% vs 70% utilization is a 2× on cost.</td><td>−5 to −15 pts</td><td>Yes — the utilization divisor (the default already allocates 50% slack)</td></tr>
+      <tr><td><b>Subscription over-consumption</b></td><td>Flat-fee plans where the tail extracts 15–40× the fee (§8); weekly caps (Aug 2025) exist to clamp exactly this.</td><td>−5 to −10 pts</td><td>No — API-billing perimeter only</td></tr>
+      <tr><td><b>Free tier &amp; internal inference</b></td><td>claude.ai free traffic, evals, RL/synthetic-data generation all burn serving compute against zero revenue (some booked as R&amp;D, treatment varies).</td><td>−5 to −10 pts</td><td>No — billed traffic only</td></tr>
+      <tr><td><b>Discounts &amp; mix</b></td><td>Enterprise/committed-use discounts, 50%-off batch tier, and cache-heavy traffic. SemiAnalysis estimated <a href="https://x.com/SemiAnalysis_/status/2070915303500849289">~$0.99/Mtok for its Opus 4.7 agentic workload</a> at ~300:1 input:output and &gt;90% cache hits — a workload-specific blended billed price, not Anthropic-wide realized revenue per token.</td><td>−3 to −8 pts</td><td>Partly — batch/discount sliders and cache tariffs</td></tr>
+      <tr><td><b>Unreconciled accounting perimeter</b></td><td>What lands in COGS vs S&amp;M vs R&amp;D differs by lab — fleetingbits' point that Anthropic books cloud commissions under sales &amp; marketing cuts the other way, flattering GM.</td><td>±</td><td>No — accounting policy, not unit economics</td></tr>
+    </tbody>
+  </table>
+  <p>Dollars make the map legible in a way percentage points hide: at the Opus central-scenario default (Reference 15:1/60% traffic, 15% batch share, 5% average discount), 1M blended tokens bill $3.71875 before discounting and $3.26785 realized; modeled direct-serving cost is $0.75885. At that fixed denominator one percentage point ≈ $0.03268/Mtok, so a notional 10–20-point cost increase is $0.32679–$0.65357 per million tokens — <em>comparable to the entire direct serving cost</em>. These are scenario conversions at the deployed defaults, not an accounting reconciliation.</p>
+  <p>Training compute — the industry's historically heavy cash burn — sits <em>below</em> gross margin in R&amp;D — it explains why the company loses money overall (training reportedly falling from 400%+ of revenue toward ~36% by end-2026 per the IvanaSpear thread), not why gross margin is below the unit margin.</p>
+
+  <h3 id="s8">8 · The subscription-token investigations</h3>
+  <p>Selection rule for this section: multi-month, tool-tracked (ccusage-class) longitudinal records only — single-session anomalies and one-off screenshots are excluded as tail-of-the-tail. The two that qualify: <a href="https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/">ksred's Claude Code pricing guide</a> — ~10B tokens over 8 months: ~$15,000 at API list prices against ~$800 of Max subscription fees (~19×) — and <a href="https://x.com/btcbigd/status/2075147528358822331">btcbigd's 60-day record</a> — 8.6B tokens / ~$8.5k at list (~21×). Shorter-window corroborators (the widely-shared melvynx $3,200-capacity calculation, olofj's 2.5-month track, and others) point the same direction and are archived in the <a href="research/grok-sweep-margin-claims.html">annex sweep</a>; the subscription card below defaults to the melvynx capacity figure.</p>
+  <p>What these investigations do and do not establish: heavy subscribers demonstrably extract API-list-value equivalents many times their fee — $3,200 of sticker sold for $200 in the melvynx case, which at this page's modeled direct serving cost is perhaps $300–900 to actually serve depending on mix. <strong>They characterize the tail, not the median</strong> — no representative usage distribution, mean or median is public, so nothing here identifies whether the typical subscriber is profitable. What the plans' generosity is <em>consistent with</em> is low marginal serving cost; it does not independently prove it — breakage, throttling, workload routing, acquisition subsidy and cross-subsidy can all contribute. The weekly limits (Aug 2025) and repeated 5-hour-window retuning (<a href="https://x.com/claudeai/status/2052060693269008586">May 2026 doubling</a>) show the tail is real enough to clamp. The subscription card in the calculator computes break-even for whatever usage level you set — it says nothing about the distribution.</p>
+
+  <h3 id="s9">9 · The most comprehensive public analyses</h3>
+  <ul id="sources-list">
+    <li><a href="https://github.com/deepseek-ai/open-infra-index">DeepSeek — V3/R1 Inference System Overview</a> (Open Source Week Day 6, Mar 2025). The clearest and most complete first-party production serving-economics disclosure identified in this research. Start here.</li>
+    <li><a href="https://epoch.ai/publications/inference-economics-of-language-models">Epoch AI — "Inference economics of language models"</a> (Ege Erdil, Jun 2025; <a href="https://arxiv.org/abs/2506.04645">arXiv:2506.04645</a>, <a href="https://github.com/ege-erdil/inference-economics">reproducible notebook</a>). The rigorous version of what this page approximates: Pareto frontiers of cost-per-token vs serving speed from arithmetic, memory-bandwidth, network and latency constraints — the academic anchor for why latency, not FLOPs, binds.</li>
+    <li><a href="https://inferencex.semianalysis.com/">SemiAnalysis — InferenceX</a> (née InferenceMAX). Continuous, vendor-neutral tokens/s and $/Mtok benchmarking across GB300/GB200/B200/H100/MI355X on real MoEs; the source for the per-generation efficiency numbers here.</li>
+    <li><a href="https://newsletter.semianalysis.com/p/vera-rubin-extreme-co-design-an-evolution">SemiAnalysis — Vera Rubin deep-dive</a> (Feb 2026) and <a href="https://newsletter.semianalysis.com/p/aws-trainium3-deep-dive-a-potential">Trainium3 deep-dive</a> — the forward cost-curve.</li>
+    <li><a href="https://www.ksred.com/claude-code-pricing-guide-which-plan-actually-saves-you-money/">ksred — Claude Code pricing guide</a> — the most rigorous plan-tokenomics investigation.</li>
+    <li><a href="https://lmsys.org/blog/">LMSYS/SGLang engineering blog</a> — <a href="https://x.com/lmsysorg/status/2069454066376487031">"Serving DeepSeek-V4 on GB300: 5× higher throughput at the same interactivity"</a> (Jun 2026) — what optimized open-source serving actually achieves, with methodology.</li>
+    <li><a href="https://newsletter.semianalysis.com/p/ai-value-capture-the-shift-to-model">SemiAnalysis — "AI Value Capture: The Shift to Model Labs"</a> — the best public treatment of realized blended prices, cache-heavy agentic workloads, and model-lab inference margins (GPT Pro's top pick for the pricing side).</li>
+    <li><a href="https://mlcommons.org/benchmarks/inference-datacenter/">MLCommons — MLPerf Inference: Datacenter</a> — the standardized cross-generation benchmark corpus (v6.0 added DeepSeek-R1 latency-constrained + speculative-decoding scenarios).</li>
+    <li><a href="https://x.com/deepseek_ai/status/1895688300574462431">The DeepSeek disclosure thread</a> + <a href="https://x.com/teortaxesTex/status/2070832301005537627">TeorTaxes's running commentary</a> — the live debate this page quantifies.</li>
+    <li><a href="research/index.html">This page's research annex</a> — the full, unedited GPT-5.6 Pro deep dives (one per provider), hardware sweeps, and X-post hunts behind every section here, with their own citations.</li>
+  </ul>
+  <h3 id="s10">10 · The other providers: what's known, what isn't</h3>
+  <p class="byline">One independent GPT-5.6 Pro deep dive per provider (2026-07-09), cross-checked against dedicated hardware sweeps. Full unedited reports — with their own citations — in the <a href="research/index.html">research annex</a>.</p>
+  <p>The Anthropic verdict above rests on an unusual density of evidence: a primary serving disclosure from a direct competitor, a parameter leak from a rival CEO, leaked business financials, and a live X-sphere argument between named analysts. None of the other providers has all of that, and some have almost none of it. Read the cards below as <strong>provider-native case studies, not a like-for-like ranking</strong>: each headline reports the metric its underlying deep dive estimated — OpenAI, Google, xAI, DeepSeek and Zhipu are workload-specific <em>blended list-price serving contribution margins</em>, while <strong>Moonshot is an output-token margin only</strong> — and the traffic mixes, service tiers and cost lenses differ materially across cards, so rank order would encode the analyst's assumptions as much as the providers' economics. The displayed ranges are <strong>analyst-elicited scenario ranges spanning selected downside and upside cases</strong> — they have no stated coverage probability and are not statistically calibrated. The <strong>badge grades public observability of the evidence base</strong>, not confidence in the number, and each card carries a five-dimension evidence profile inside. Every headline is reproducible in the calculator above: select the model and the <em>"§10 dive replay"</em> perspective — a deterministic test suite holds each within a point.</p>
+  <div id="provider-cards">
+
+  <details class="prov" id="prov-openai">
+    <summary><strong>OpenAI — GPT-5.6 Sol</strong> <span class="badge badge-med">evidence: medium</span> <span class="prov-margin">unit CM ~94% <span class="prov-ci">(scenario range 86–97%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-m">medium</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-m">medium</b> · production throughput: <b class="ev-l">low</b> · financial perimeter: <b class="ev-m">medium</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> blended list-price serving contribution margin · <strong>lens:</strong> partner-fleet economics (dive: 0.85× rental, 73% utilization) · <strong>traffic:</strong> OpenAI dive mix 9:1 / 78% cache. <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>The closest analogue to the Anthropic case: a partner-hosted fleet (OpenAI discloses <strong>3 GW of dedicated inference capacity</strong> on Hopper/Blackwell across Microsoft, OCI and CoreWeave — contractually controlled but not owned), premium list prices (Sol $5/$30 short-context), and an active-parameter estimate (~100B) that is only a community figure — though one independently corroborated by Epoch's inference-economics work. The most interesting tension: a ~94% modeled list-price margin coexists with a <em>reported</em> 70% "compute margin for paying users" (The Information, Oct 2025) and a 33% company adjusted gross margin — the gap is take-or-pay reserved capacity, subscriptions and free traffic, i.e. the same margin-stack that separates Anthropic's unit math from its books (§7).</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/openai-gptpro.html">dive</a>)</h5><ul>
+          <li>Sol/Terra/Luna list prices: $5/$30, $2.50/$15, $1/$6 (in/out, short-context); batch/flex exactly −50%; cache reads −90% <em>(disclosed)</em></li>
+          <li>3 GW dedicated inference capacity; Stargate Abilene runs GB200 via OCI; strategy explicitly "partner-centric" <em>(disclosed)</em></li>
+          <li>70% compute margin on paying users (Oct 2025) and 33% adjusted gross margin for 2025, vs a 46% forecast <em>(The Information)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Parameters and routing: ~100B active is an estimate; effective-capacity methods allow 3–29T total</li>
+          <li>The Azure/Stargate transfer price ($2.2–4.8/GPU-hr modeled band) and Microsoft&#39;s revenue-share percentage</li>
+          <li>Fleet occupancy and aggregate tok/s/GPU — <strong>the dominant driver</strong>: a &gt;4× cost span on its own</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 86–97%:</strong> throughput assumptions alone span &gt;4× in cost; reserved take-or-pay capacity can make slack-period allocated cost several times the engineering marginal cost; and the true transfer price is bracketed only by market comparables and Oracle-offtake arithmetic. <em>Would update on:</em> a production tok/s/GPU datapoint, a Stargate/Azure transfer-price disclosure, or a credible parameter leak.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach this operating point in the calculator:</span> <a href="#" class="load-op" data-model="gpt" data-persp="dive">Reproduce this card ↑ (§10 dive replay)</a></p>
+      <p><a href="research/openai-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  <details class="prov" id="prov-google">
+    <summary><strong>Google — Gemini 3.1 Pro</strong> <span class="badge badge-low">evidence: low (params)</span> <span class="prov-margin">unit CM ~96% <span class="prov-ci">(scenario range 89–98%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-l">low</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-m">medium</b> · production throughput: <b class="ev-l">low</b> · financial perimeter: <b class="ev-m">medium</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> blended list-price serving contribution margin · <strong>lens:</strong> internal-cost path (dive: derived ≈$1.28/Ironwood-hr, 75% utilization, throughput batching) · <strong>traffic:</strong> Reference 15:1 / 60% (no Google-native mix is public). <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>A structurally distinctive case: Google has the most direct internal-cost path on the page: it designs the TPU stack and serves Gemini on Google-operated infrastructure — though model-to-fleet routing and the internal capacity charge are undisclosed, so the derived ≈<strong>$1.28/Ironwood-hour</strong> (vs the $12 on-demand public rate, and below even Anthropic's reported ~$1.60 strategic rate). But it carries the weakest architecture evidence of any provider: no credible leak of Gemini's total or active parameters exists at all, so the 120B-active/3T-total inputs are scenario midpoints, not estimates. The disclosed facts are all about scale and trajectory: serving unit costs down <strong>78% during 2025</strong>, ~3.2 quadrillion tokens/month across surfaces, ~19B API tokens/minute.</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/google-gptpro.html">dive</a>)</h5><ul>
+          <li>List: $2/$12 with $0.20 cache reads ≤200K (higher tier above); no free API tier for 3.1 Pro <em>(disclosed)</em></li>
+          <li>Serving unit cost −78% during 2025; a further &gt;30% cut on Search AI responses after Gemini 3 <em>(disclosed, earnings calls)</em></li>
+          <li>Full-stack energy telemetry: accelerators are only 58% of per-prompt energy — the 1.72× stack-overhead anchor <em>(disclosed, paper)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Total and active parameters — <strong>the dominant driver</strong>; genuinely unknown outside Google; a 60–240B active bracket is a 4× cost swing</li>
+          <li>Internal transfer price for TPU time — no credible report exists</li>
+          <li>Production throughput at latency (decode MFU modeled at 4–15%)</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 89–98%:</strong> the two dominant unknowns (active params, effective decode MFU) each span 3–4× in cost, but vertical integration puts a floor under the answer — a sub-90% result lies toward the costly end of the stated architecture, throughput and occupancy ranges — public evidence does not rule it out. <em>Would update on:</em> any credible Gemini parameter information, an internal TPU-rate datapoint, or a public Ironwood serving benchmark at stated latency.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach this operating point in the calculator:</span> <a href="#" class="load-op" data-model="gemini" data-persp="dive">Reproduce this card ↑ (§10 dive replay)</a></p>
+      <p><a href="research/google-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  <details class="prov" id="prov-xai">
+    <summary><strong>xAI — Grok 4.5</strong> <span class="badge badge-med">evidence: medium</span> <span class="prov-margin">unit CM ~67% <span class="prov-ci">full-cycle-TCO lens (scenario range 10–85%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-m">medium</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-h">high</b> · production throughput: <b class="ev-l">low</b> · financial perimeter: <b class="ev-h">high</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> blended list-price serving contribution margin under the <strong>full-cycle-TCO lens</strong> (cash-marginal ≈92% and Anthropic-contract opportunity ≈27% are selectable as valuation replays in the calculator) · <strong>traffic:</strong> Uncached 3:1 / 0% (the dive convention). <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>The one lab that operationally controls a purpose-built fleet — much of it finance-leased, so “owned” is not the relevant cost classification — and the widest judgmental range on the page, because "what does a GPU-hour cost xAI?" has three defensible answers. The SpaceXAI prospectus disclosed cluster counts that sum to <strong>&gt;440k accelerators</strong> (200k+ H100/H200/GB200 at Colossus, 110k GB200 + 110k GB300 at Colossus II — the total is a derivation from those disclosed counts) — but $20.2B of it sits on finance leases, and AI capex ran $12.7B in 2025 alone. Grok 4.5 (launched Jul 8 at $2/$6) is <strong>disclosed at 1.5T total parameters</strong>; active count is anyone's guess (100–500B). The decisive fact: <strong>Anthropic pays xAI $1.25B/month for ~325k GPUs (≈$5.27/GPU-hr)</strong> — so, to the extent that capacity is fungible with the Anthropic contract, a GPU-hour spent serving Grok instead of billed to Anthropic forgoes a disclosed wholesale price more than twice xAI's estimated full-cycle cost. (This opportunity cost is bounded by the ~325k contracted GPUs; it does not apply uniformly to every GPU-hour across the whole &gt;440k fleet.) At cash-marginal cost Grok's margin is ~92%; at full-cycle TCO ~67%; at the Anthropic-contract opportunity value ~27% (the dive's coarser replica said ~29%) — serving output-heavy traffic barely beats selling the capacity. Zephyr's "xAI isn't juicing margins" is true or false depending entirely on which lens you pick.</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/xai-gptpro.html">dive</a>)</h5><ul>
+          <li>Grok 4.5 = 1.5T-total MoE ("V9 foundation model", Musk; MoE per Cursor); 80 tok/s user streams; $2/$0.50/$6 list <em>(disclosed)</em></li>
+          <li>Fleet: &gt;440k accelerators across Colossus I/II — but $20.2B sits on finance leases: "owned" ≠ paid-for <em>(prospectus, disclosed)</em></li>
+          <li>Anthropic capacity contract: $1.25B/mo for ~325k GPUs ≈ $5.27/GPU-hr; Google (from Oct 2026): $920M/mo for ~110k ≈ $11.45/hr <em>(disclosed/derived)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Saturated aggregate throughput — 80 tok/s is per stream; <strong>the dominant driver</strong> (~8× cost swing)</li>
+          <li>Active parameters and routing on the 1.5T MoE (100–500B — the Grok-2 lineage ran unusually dense at 42.7%)</li>
+          <li>How capacity is allocated among Grok, Anthropic, Google, Cursor, training, and idle</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 10–85%:</strong> unknown batch throughput spans ~8× in cost, and the GPU-hour can be honestly valued anywhere from $0.60 (cash) through $2.40 (full-cycle) to $5.27 (contracted opportunity cost) — the margin question dissolves into the valuation question. <em>Would update on:</em> any saturated-throughput datapoint, new capacity-contract terms in SpaceXAI filings, or an active-parameter disclosure.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach these operating points in the calculator:</span> <a href="#" class="load-op" data-model="grok" data-persp="dive">Reproduce this card ↑ (full-cycle TCO)</a> · <a href="#" class="load-op" data-model="grok" data-persp="xaicash">Cash-marginal valuation ↑ (≈92%)</a> · <a href="#" class="load-op" data-model="grok" data-persp="xaiopp">Anthropic-contract opportunity cost ↑ (≈27%)</a></p>
+      <p><a href="research/xai-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  <details class="prov" id="prov-deepseek">
+    <summary><strong>DeepSeek — V4 Pro</strong> <span class="badge badge-mixed">evidence: mixed</span> <span class="prov-margin">unit CM ~69% <span class="prov-ci">(scenario range 45–83%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-h">high</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-l">low</b> · production throughput: <b class="ev-l">low</b> · financial perimeter: <b class="ev-l">low</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> blended list-price serving contribution margin · <strong>lens:</strong> dive central scenario (≈$1.50/H800-equivalent-hr, their own stack) · <strong>traffic:</strong> DeepSeek disclosure 4:1 / 56% cache. <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>The inversion of the Anthropic story. DeepSeek has the <em>best</em> evidence of any provider — disclosed architecture (<strong>1.6T total / 49B active</strong>, selective FP4), disclosed pricing, and the clearest production serving disclosure identified in this research — yet one of the <em>lower</em> provider-native estimates (the cards are not directly rankable), because it chose to convert its efficiency into price: a permanent 75% cut took V4 Pro to $0.435/$0.87, roughly 60% below R1's old output price. Repricing the old disclosed workload at today's tariff turns the famous 84.5% margin into ~67% before any cost improvement — and V4-Flash would be <em>underwater</em> on the old cost structure. The announced mid-July 2× peak-hour surcharge would restore ~84.5% in peak windows: the old margin, now sold as a surge price. Export controls cut both ways on the cost side: they constrain hardware choice and add software/fleet-fragmentation overhead (the fleet is now reportedly part Huawei Ascend 950), yet current H800 asking rates sit <em>below</em> the old $2/hr basis — the net effect cannot be signed from public evidence.</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/deepseek-gptpro.html">dive</a>)</h5><ul>
+          <li>V4 Pro: 1.6T/49B; V4-Flash: 284B/13B; FP4 is selective (routed experts + indexer; KV stays BF16/FP8) <em>(disclosed)</em></li>
+          <li>List (Jul 9): $0.003625 cache-hit / $0.435 miss / $0.87 out — after a permanent 75% cut <em>(disclosed)</em></li>
+          <li>The 2025 H800 production trace: $2/hr assumption, 84.5% theoretical margin at R1 list <em>(disclosed)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Current fleet mix (H800 vs H20 vs Ascend 950 vs internal) — <strong>the dominant driver</strong></li>
+          <li>V4 production throughput — no V4 equivalent of the 2025 73.7k/14.8k tok/s disclosure</li>
+          <li>The 2026 owned/rented split and true chip-hour basis</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 45–83%:</strong> the estimate scales the disclosed 2025 baseline by two unknown factors — hardware-hour cost (0.5–1.1× the old basis) and per-token work for the bigger-but-sparser V4 (1.05–1.5×) — which compound to a 3× cost span. <em>Would update on:</em> a V4-era serving disclosure (the 2025 one set the standard), realized peak-surcharge data after mid-July, or fleet-mix reporting.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach these operating points in the calculator:</span> <a href="#" class="load-op" data-model="dsv4" data-persp="dive">Reproduce this card ↑ (dive replay)</a> · <a href="#" class="load-op" data-model="dsr1" data-persp="deepseek">DeepSeek Feb-2025 disclosure replay ↑ (≈84%, on R1)</a> · <a href="#" class="load-op" data-model="dsr1" data-persp="anth20">Ant Group H20 SLO replay ↑ (China H20 &lt;50 ms, on R1)</a> · <a href="#" class="load-op" data-model="dsr1" data-persp="chinacloud">China public-cloud on-demand lens ↑ (on R1)</a></p>
+      <p><a href="research/deepseek-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  <details class="prov" id="prov-zhipu">
+    <summary><strong>Zhipu / Z.ai — GLM 5.2</strong> <span class="badge badge-mixed">evidence: mixed</span> <span class="prov-margin">unit CM ~60% <span class="prov-ci">(scenario range 35–77%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-h">high</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-l">low</b> · production throughput: <b class="ev-l">low</b> · financial perimeter: <b class="ev-h">high</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> blended list-price serving contribution margin · <strong>lens:</strong> audit-implied procurement haircut (dive: 1.9× rent, 75% utilization, 0.60 stack) · <strong>traffic:</strong> site-assumed 8:1 I/O + the ncode-week 41% cache observation. <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>The rare provider with <em>audited</em> numbers: Zhipu's Hong Kong listing (Jan 2026) forces disclosure nobody else makes. Its cloud/API segment ran a <strong>−0.4% gross margin in H1 2025</strong> (price-war casualty) recovering to <strong>18.9% for FY2025</strong> — and with API prices up 83% since end-2025, a price-only counterfactual lands in the mid-50s, which is what the marginal estimate here reflects. The architecture is fully disclosed (744B/40B, open weights), and third-party reseller prices give a conditional cost ceiling (valid only if the reseller serves at positive contribution margin — the same conditionality noted on the Kimi card): DeepInfra sells GLM-5.2 <em>below</em> Z.ai's own list. The wrinkle: Zhipu’s filings show sharply lower capex (down 84% in 2025) and a shift toward one-to-four-year compute-service contracts — the current owned-vs-rented mix is undisclosed and says it serves across <em>nine</em> domestic chip platforms, so its cost basis is contract-opaque and its Coding Plan (~242k paying developers) can be deeply subsidized for heavy users.</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/zhipu-gptpro.html">dive</a>)</h5><ul>
+          <li>GLM-5.2: 744B/40B, BF16+FP8 open checkpoints, 1M context <em>(disclosed)</em></li>
+          <li>List: $1.40 / $0.26 cached / $4.40 out <em>(disclosed)</em></li>
+          <li>Audited FY2025: cloud/API revenue RMB 190.4M at 18.9% GM (H1: −0.4%); company net loss RMB 4.7B <em>(HKEX filings)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Traffic share by chip platform — nine named, zero percentages</li>
+          <li>The confidential compute-service rate — with decode throughput, <strong>the dominant drivers</strong> (public Chinese card-hour prices span &gt;4×)</li>
+          <li>Coding Plan consumption distribution — claimed 15–30× (even "~100×") API-value leverage vs actual breakage</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 35–77%:</strong> decode throughput and the confidential compute price each move the answer ±10–20 points; the audited 18.9% segment-margin anchor and the conditional reseller price ceiling are what keep the interval from being wider still. <em>Would update on:</em> the H1 2026 interim filing (does cloud/API GM keep climbing from 18.9%?), any platform-share disclosure, or reseller-economics evidence.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach this operating point in the calculator:</span> <a href="#" class="load-op" data-model="glm" data-persp="dive">Reproduce this card ↑ (§10 dive replay)</a></p>
+      <p><a href="research/zhipu-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  <details class="prov" id="prov-moonshot">
+    <summary><strong>Moonshot — Kimi K2.7 Code</strong> <span class="badge badge-med">evidence: medium</span> <span class="prov-margin">output-token CM ~81% <span class="prov-ci">OUTPUT-TOKEN margin (scenario range 55–91%; uncalibrated)</span></span></summary>
+    <div class="prov-body">
+      <p class="evprofile"><strong>Evidence profile</strong> — architecture: <b class="ev-h">high</b> · pricing: <b class="ev-h">high</b> · fleet &amp; TCO: <b class="ev-l">low</b> · production throughput: <b class="ev-m">medium</b> · financial perimeter: <b class="ev-l">low</b></p>
+      <p class="cardmeta"><strong>Metric:</strong> OUTPUT-TOKEN margin only (a blended margin needs Moonshot&#39;s undisclosed traffic mix) · <strong>lens:</strong> dive replica (H200-class decode floor, their stack) · <strong>traffic:</strong> n/a for the output metric; the calculator&#39;s blended headline uses the Kimi dive mix 8:1 / 40%. <em>Provider-native case — not cross-provider comparable.</em></p>
+      <p>An <strong>output-token margin</strong>, not blended — so despite its large headline it cannot be ranked against DeepSeek’s and Zhipu’s blended figures. The economics are legible though: K2.7 kept a premium output price (<strong>$4.00/M</strong> — 4.6× DeepSeek V4 Pro's post-cut $0.87) on an aggressively cheap-to-serve architecture — 1T total but only <strong>32B active</strong>, in natively quantized selective INT4 that fits an 8-GPU replica. The open weights make the cost side unusually boundable: a reproducible 128×H200 benchmark puts the short-context decode-accelerator floor at <strong>~$0.21/M output</strong>, SemiAnalysis's same-lineage runs span $0.14–$1.00/M by hardware and speed, and DeepInfra resells K2.7 at $3.50/M — a weak market-price ceiling (its contribution margin is undisclosed, so this is conditional evidence, not a cost bound). Business context: ARR reportedly passed <strong>$300M</strong> by mid-June with API revenue above 70% — Moonshot is the most API-dependent of the Chinese labs, which is exactly where these margins live.</p>
+      <div class="kk">
+        <div><h5>Known knowns (top 3 — full ledger in the <a href="research/grounding-ledger.html">grounding ledger</a> and <a href="research/moonshot-gptpro.html">dive</a>)</h5><ul>
+          <li>K2.7 Code / K2.6: 1T total, 32B active, 384 experts, 256K context; selective weight-only INT4 (595GB); no native MTP <em>(disclosed, open config)</em></li>
+          <li>List: $0.95 / $0.19 cached / $4.00 out; HighSpeed exactly 2× price for 5–6× user speed; batch = 60% of standard <em>(disclosed)</em></li>
+          <li>Reproducible K2 decode floor ~$0.21/M output (128×H200); same-lineage cost curves $0.14–$1.00/M <em>(LMSYS, SemiAnalysis)</em></li>
+        </ul></div>
+        <div><h5>Known unknowns (top 3)</h5><ul>
+          <li>Current accelerator mix — A800/H800 verified only historically; H20/Ascend production use unproven</li>
+          <li>Production throughput/batching at their latency target — <strong>the dominant driver</strong> (32→90 tok/s/user alone moves cost 2.4×)</li>
+          <li>Owned-vs-rented split and effective GPU-hour basis (China retail proxies $1.01–$2.01/hr)</li>
+        </ul></div>
+      </div>
+      <p><strong>Why the interval is 55–91%:</strong> the open weights pin the architecture but not the deployment — per-user speed targets and the actual fleet each move serving cost 2–3×; the $0.21 decode floor and the $3.50 reseller price bracket the answer from both sides. Note this is an output-token margin; a blended margin needs Moonshot's undisclosed traffic mix. <em>Would update on:</em> a K2.7-specific serving benchmark, any fleet disclosure, or revenue-mix updates against the &gt;$300M ARR report.</p>
+      <p class="load-op-row"><span class="load-op-lead">Reach this operating point in the calculator:</span> <a href="#" class="load-op" data-model="kimi" data-persp="dive">Reproduce this card ↑ (output-token dive replay)</a></p>
+      <p><a href="research/moonshot-gptpro.html">Full GPT-5.6 Pro report →</a></p>
+    </div>
+  </details>
+
+  </div>
+
+  <h4 id="s10-normalized">Same lens, same workload — the calculator's normalized view</h4>
+  <p>For readers who want one comparable row per provider anyway, this table is computed live by the calculator with the lens held fixed (open-market rental, 50% utilization, balanced latency — this page's central read) and the traffic mix pinned to the Reference profile (15:1 input:output, 60% cache hits — regardless of the interactive traffic selector above), while keeping each provider's own prices, cache tariff and fleet. This is deliberately <em>not</em> each provider's operating point — it prices everyone as if they procured compute the same way — and DeepSeek V4's negative number is the honest consequence of its post-price-war tariff under Western rental economics (its own operating point is the ~69% card above). Margins are rounded to whole points. These are deterministic outputs of one normalized scenario; the provider-native §10 ranges do NOT apply after changing the lens and traffic mix, and this table does not propagate input uncertainty. Excluded tariff-only scenarios with unidentified architecture: GPT-5.6 Terra, GPT-5.6 Luna, Gemini 3.5 Flash.</p>
+  <div id="normalized-table"></div>
+
+  <p style="font-size:12.5px;color:var(--ink-3)">Method note: X posts located and quoted via a Grok 4.5 agent sweep (2026-07-09); hardware/TCO data via Parallel deep research + Exa across SemiAnalysis, MLCommons, NVIDIA/Google/AWS primary pages; cross-model verification via an independent GPT-5.6 Pro research run. The per-provider audits in §10 come from one dedicated GPT-5.6 Pro deep dive per provider plus two Chinese-accelerator hardware sweeps (all 2026-07-09, archived unedited in the <a href="research/index.html">research annex</a>). Attributions (the direction of the Musk leak, the ncode/Noumena identification) were verified against primary posts; where the research engines disagreed, both readings are shown rather than harmonized. Model sizes for closed models remain estimates — the calculator exists so you can disagree with a slider instead of a screenshot.</p>
+</section>
+
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+<section id="feedback" class="fb-section">
+  <h2 class="fb-title">Feedback</h2>
+  <p class="fb-note">
+    Feedback on this public research page — not a support channel; please
+    don't submit sensitive personal data. Submissions are reviewed manually
+    and periodically purged.
+  </p>
+  <form id="feedback-form" class="fb-form"
+        action="https://feedback.ashitaorbis.com/submit" method="POST">
+    <label class="fb-label" for="fb-body">Your feedback</label>
+    <textarea id="fb-body" name="body" class="fb-textarea" required
+              rows="5" maxlength="4000"
+              placeholder="Corrections, methodology questions, unclear figures…"></textarea>
+    <label class="fb-label" for="fb-contact">
+      Contact <span class="fb-optional">(optional — only if you want a reply)</span>
+    </label>
+    <input id="fb-contact" name="contact" class="fb-input" type="text"
+           maxlength="200" autocomplete="off"
+           placeholder="email or handle (optional)">
+    <div class="cf-turnstile" data-sitekey="0x4AAAAAAD1Oj0BBNdkKFWKl"
+         data-action="feedback_submit"></div>
+    <div class="fb-actions">
+      <button type="submit" class="fb-submit">Send feedback</button>
+      <p class="fb-status" role="status" aria-live="polite"></p>
+    </div>
+  </form>
+</section>
+
+<style>
+  /* Matches the site theme: uses the site's CSS custom properties with
+     standalone fallbacks so the snippet also degrades gracefully. */
+  .fb-section {
+    max-width: 640px; margin: 28px 0 0; padding: 16px 18px;
+    background: var(--surface-1, #fcfcfb);
+    border: 1px solid var(--border, rgba(11,11,11,0.10));
+    border-radius: 12px;
+    box-shadow: var(--shadow, 0 1px 3px rgba(11,11,11,0.06));
+  }
+  .fb-title { font-size: 18px; margin: 0 0 4px; letter-spacing: -0.01em; }
+  .fb-note { color: var(--ink-2, #52514e); font-size: 13px; margin: 0 0 12px; }
+  .fb-form { display: flex; flex-direction: column; gap: 8px; }
+  .fb-label { font-size: 12.5px; font-weight: 600; color: var(--ink-2, #52514e); }
+  .fb-optional { font-weight: 400; color: var(--ink-3, #898781); }
+  .fb-textarea, .fb-input {
+    font: inherit; color: var(--ink-1, #0b0b0b);
+    background: var(--tile, #ffffff);
+    border: 1px solid var(--border, rgba(11,11,11,0.10));
+    border-radius: 8px; padding: 8px 10px; width: 100%;
+  }
+  .fb-textarea { resize: vertical; min-height: 96px; }
+  .fb-textarea:focus, .fb-input:focus {
+    outline: 2px solid var(--accent, #2a78d6); outline-offset: 1px;
+  }
+  .fb-actions { display: flex; align-items: center; gap: 12px; margin-top: 2px; }
+  .fb-submit {
+    font: inherit; font-size: 14px; cursor: pointer; white-space: nowrap;
+    color: var(--on-accent, #fff); background: var(--accent, #2a78d6);
+    border: 1px solid var(--accent, #2a78d6); border-radius: 8px;
+    padding: 6px 16px;
+  }
+  .fb-submit:hover { filter: brightness(1.08); }
+  .fb-submit:disabled { opacity: 0.6; cursor: default; }
+  .fb-status { font-size: 13px; color: var(--ink-2, #52514e); margin: 0; }
+</style>
+
+<script>
+  // Progressive enhancement: fetch() with inline status. With JS disabled the
+  // plain form POST still works — the Worker returns a small thank-you page.
+  (function () {
+    // Match the Turnstile widget to the active theme (it defaults to the OS scheme, which the
+    // skin system deliberately overrides). Set before the async api.js renders the widget.
+    var ts = document.querySelector(".cf-turnstile");
+    if (ts && !ts.dataset.theme) ts.dataset.theme = document.documentElement.dataset.theme || "auto";
+    var form = document.getElementById("feedback-form");
+    if (!form || !window.fetch) return;
+    var statusEl = form.querySelector(".fb-status");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var btn = form.querySelector(".fb-submit");
+      btn.disabled = true;
+      statusEl.textContent = "Sending…";
+      var params = new URLSearchParams();
+      new FormData(form).forEach(function (value, key) {
+        params.append(key, value);
+      });
+      fetch(form.action, {
+        method: "POST",
+        headers: { "Accept": "application/json" },
+        body: params
+      })
+        .then(function (res) {
+          return res.json()
+            .catch(function () { return {}; })
+            .then(function (data) { return { res: res, data: data }; });
+        })
+        .then(function (r) {
+          if (r.res.ok && r.data.ok) {
+            statusEl.textContent = r.data.message || "Thank you — feedback recorded.";
+            form.reset();
+          } else {
+            statusEl.textContent =
+              r.data.error || "Submission failed (" + r.res.status + "). Please try again.";
+          }
+          if (window.turnstile) { try { window.turnstile.reset(); } catch (err) {} }
+        })
+        .catch(function () {
+          statusEl.textContent = "Network error — please try again.";
+        })
+        .finally(function () { btn.disabled = false; });
+    });
+  })();
+</script>
+
+<footer class="footer">
+  <p>Built 2026-07-09 from public sources; extended same date with per-provider deep dives (§10), Chinese accelerators, and the <a href="research/index.html">research annex</a>. Analysis: Claude (Fable 5) + GPT-5.6 Pro; X sweep: Grok 4.5; source discovery: Exa + Parallel. This is an open scenario model, not financial disclosure. Release manifest: methodology v2.1.3 · engine v2.1.5-2026-07-15 · data as of 2026-07-15 · source commit <span id="release-commit">54e8051</span> · release gates published at <a href="tests/snapshots.test.mjs">/tests/</a>: engine suite + <a href="tests/traffic-contract.test.mjs">traffic contract</a> + <a href="tests/run-app-tests.sh">application browser suite</a> (every §10 headline reproduces from a named preset; the traffic-mix state contract is fixture-pinned against the frozen v2.1.1 baseline; the app suite replays the final-gate attack payloads). Served-asset integrity: <a href="asset-manifest.sha256">/asset-manifest.sha256</a> (a sha256sum manifest; byte-exact vs the release-stamp commit). Machine access: the same engine and claims registry are served as a read-only <strong>MCP connector</strong> at <code>https://margins-mcp.ashitaorbis.com/mcp</code> (add as a custom connector in a Claude client, no auth; responses carry the same honest-labeling contract — status-fused margins with selection receipts, never a bare number). Revision history: see the review + changelog pages in the <a href="research/index.html">annex</a>. All figures are estimates unless linked to a primary source.</p>
+</footer>
+
+</div>
+<div id="tooltip" class="tooltip" role="tooltip" hidden></div>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

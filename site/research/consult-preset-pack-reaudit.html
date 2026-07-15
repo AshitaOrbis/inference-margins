@@ -1,0 +1,2081 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Preset pack re-audit — GPT-5.6 Pro re-emission + delta · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/consult-preset-pack-reaudit">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Preset grounding pack — dated re-audit (GPT-5.6 Pro re-emission, 2026-07-11)</h1>
+<blockquote>
+<p><strong>Provenance class: author-model re-emission, not an independently verified original.</strong> The original pack&#39;s full row set lived in conversation-sandbox files that expired. On 2026-07-11 the same GPT-5.6 Pro project was asked to re-emit the pack inline; it reports having located its own retained &quot;22:29 UTC final export&quot; and re-emitting it exactly (run 21m0s, Pro-verified, <code>completion_path: api</code>, <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a51a7c0-eb28-83e8-b98a-1f8fb4e382a9">conversation</a>). That exactness claim is the model&#39;s own and cannot be independently byte-verified — which is why the site&#39;s authoritative parameter record is the <a href="grounding-ledger.html">adopted grounding ledger</a>, generated from the deployed preset registry. <strong>Where this page and the ledger differ, the ledger wins.</strong>
+<strong>SHA-256 (response body below the delta section):</strong> <code>c4a8bc8219d952895f6c73004e6547c3872f46e6930cbdd37e994c2ec5e6d197</code></p>
+</blockquote>
+<h2>Delta vs the adopted values (checked 2026-07-11)</h2>
+<p>Tariff and architecture rows were checked against the deployed presets: <strong>all mappable tariff rows (prices, cached-input ratios, context/output limits) and all disclosed architecture rows match the adopted values.</strong> The differences are where the site&#39;s council-gated ship list deliberately departed from the pack&#39;s recommendations, plus two modeling-mechanism differences:</p>
+<table>
+<thead>
+<tr>
+<th>area</th>
+<th>this re-audit says</th>
+<th>site adopted</th>
+<th>why the site differs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek V4-Flash fleet blend</td>
+<td>Ascend .50 / H800 .35 / H20 .15</td>
+<td>H800 50 / H20 20 / Ascend 30</td>
+<td>Council ship list kept the V4-family blend consistent with the V4 Pro dive scenario; both are labeled assumptions</td>
+</tr>
+<tr>
+<td>GLM-4.7 fleet blend</td>
+<td>Ascend .70 / H800 .20 / H20 .10</td>
+<td>Ascend 40 / H800 40 / H20 20</td>
+<td>Adopted blend mirrors GLM-5.2&#39;s (same serving estate); both speculative</td>
+</tr>
+<tr>
+<td>GPT-5.6 Terra/Luna blends</td>
+<td>include a B200 class</td>
+<td>H100/H200/GB200/GB300</td>
+<td>The calculator&#39;s hardware table does not model B200 separately; GB200 row carries the Blackwell class</td>
+</tr>
+<tr>
+<td>Gemini 3.5 Flash fleet</td>
+<td>TPUv7 .60 / v6e .30 / v5e .10</td>
+<td>TPU v7 100%</td>
+<td>Older TPU generations are not modeled; the single-row simplification is stated in the preset note</td>
+</tr>
+<tr>
+<td>xAI valuation mechanism</td>
+<td>GB300-only replica, chip-hour override ($0.60 / $5.27), MFU override 0.02, util = 1</td>
+<td>rentMult 0.156 / 1.37 on the Colossus blend (weighted rent $3.85/hr → $0.60 / $5.27), util 48</td>
+<td>Same $/GPU-hour by construction; the site expresses it through the blend-relative multiplier so the lens composes with the model&#39;s fleet</td>
+</tr>
+<tr>
+<td>Ant H20 SLO mechanism</td>
+<td>effective-MFU override 0.16875 (Pro tier)</td>
+<td>H20 effDec default 0.17 + stack 1.0</td>
+<td>Same operating point within rounding (the site&#39;s neutral default was fit to this anchor)</td>
+</tr>
+<tr>
+<td>China on-demand multiplier</td>
+<td>6.152857142857143</td>
+<td>6.15</td>
+<td>Display rounding; the ledger records 6.15 as adopted</td>
+</tr>
+</tbody></table>
+<p>Rows describing candidate presets the council rejected (Anthropic-strategic merge, reported-margin-implied, Kimi K2.6, Grok 4.3) are absent from both the re-audit&#39;s final export and the site — consistent.</p>
+<hr>
+<p>I’m reconstructing the annex from project artifacts and live presets, verifying volatile values against authoritative sources, and explicitly marking any irrecoverable rows rather than inferring them.</p>
+<p>The archived consultation confirms 192 rows and preserves adopted tariff scenarios and China procurement multipliers; I’m extracting deployed static definitions to avoid fresh approximations.</p>
+<p>I located the exact July 10 final JSON and Markdown exports, plus earlier versions for delta checking, enabling exact recovery of the row set.</p>
+<h1>Inference Margins preset grounding pack — durable inline export</h1>
+<p>According to a document from 2026-07-10, this is the recovered <strong>22:29 UTC final export</strong>. It contains <strong>192 preset parameter rows</strong>: 78 PERSPECTIVE rows and 114 MODEL rows. <strong>OMITTED-UNRECONSTRUCTED: none.</strong> fileciteturn33file8</p>
+<p>The recovered evidence labels map to the requested source classes as follows: <code>DISCLOSED</code> → <strong>first-party</strong>; <code>CREDIBLY REPORTED</code> → <strong>credible-secondary</strong>; <code>COMMUNITY ESTIMATE</code> → <strong>community</strong>; <code>SPECULATION</code> → <strong>assumption</strong>.</p>
+<h2>Schema and implementation semantics — not counted in the 192 preset rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>meta.presetRowCount</code></td>
+<td align="right"><code>192</code></td>
+<td>rows</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>78 PERSPECTIVE rows plus 114 MODEL rows.</td>
+</tr>
+<tr>
+<td><code>meta.outputCostUSDPerToken</code></td>
+<td align="right"><code>(chipHourUSD / 3600 / outputTokPerSecPerChip) / utilization</code></td>
+<td>formula</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator output-token cost equation.</td>
+</tr>
+<tr>
+<td><code>meta.outputTokPerSecPerChip</code></td>
+<td align="right"><code>dense8bitFLOPS × precisionMult × effectiveMFU × interactivityMult / (2 × activeParams)</code></td>
+<td>formula</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator throughput equation.</td>
+</tr>
+<tr>
+<td><code>meta.tokenPriceUnit</code></td>
+<td align="right"><code>USD per 1,000,000 tokens</code></td>
+<td>convention</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Applies to input, cached input, cache write and output tariff fields.</td>
+</tr>
+<tr>
+<td><code>meta.chipHourUnit</code></td>
+<td align="right"><code>USD per accelerator-hour</code></td>
+<td>convention</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>“Card-hour” and “GPU-hour” rows are normalized to the named accelerator.</td>
+</tr>
+<tr>
+<td><code>meta.throughputUnit</code></td>
+<td align="right"><code>aggregate output tokens/s/accelerator</code></td>
+<td>convention</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Unless a row explicitly states another denominator.</td>
+</tr>
+<tr>
+<td><code>meta.parameterCountUnit</code></td>
+<td align="right"><code>billions of parameters</code></td>
+<td>convention</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Applies to total and active parameter fields.</td>
+</tr>
+<tr>
+<td><code>meta.nullSemantics</code></td>
+<td align="right"><code>unknown / leave unset, never zero</code></td>
+<td>rule</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>A published zero tariff remains zero; an undisclosed field is null.</td>
+</tr>
+<tr>
+<td><code>meta.effectiveMFUOverrideRule</code></td>
+<td align="right"><code>mutually exclusive with fallback interactivity multiplier</code></td>
+<td>rule</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Never apply both representations to one calculation.</td>
+</tr>
+<tr>
+<td><code>meta.measuredThroughputUtilizationRule</code></td>
+<td align="right"><code>utilization = 1 for measured saturated per-occupied-chip throughput</code></td>
+<td>rule</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Fleet occupancy is a separate allocation question.</td>
+</tr>
+<tr>
+<td><code>meta.batchShareSemantics</code></td>
+<td align="right"><code>customer-token share receiving a published asynchronous batch tariff</code></td>
+<td>rule</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Internal continuous batching is not customer-visible Batch API usage.</td>
+</tr>
+<tr>
+<td><code>meta.chinaPublicCloudFallback</code></td>
+<td align="right"><code>rentMult.globalFallback = 6.152857142857143</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Prefer supported per-chip multipliers; use this only when one scalar is required.</td>
+</tr>
+<tr>
+<td><code>meta.tariffScenarioSemantics</code></td>
+<td align="right"><code>price and endpoint metadata grounded; topology, parameters, precision, workload and fleet remain scenarios</code></td>
+<td>rule</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Applies to visibly marked TARIFF SCENARIO presets.</td>
+</tr>
+</tbody></table>
+<h2>Provider tariffs and endpoint limits — 55 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DeepSeek V4-Flash.contextTokens</code></td>
+<td align="right"><code>1000000</code></td>
+<td>tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official standard context.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.maxOutputTokens</code></td>
+<td align="right"><code>384000</code></td>
+<td>tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official maximum output.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.price.inputMiss</code></td>
+<td align="right"><code>0.14</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.price.inputHit</code></td>
+<td align="right"><code>0.0028</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.price.output</code></td>
+<td align="right"><code>0.28</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.price.cacheWrite</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No separate cache-write tariff shown.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.price.cacheStoragePerMtokHour</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cached tokens-hour</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No cache-storage tariff shown.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.batchDiscount</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>fraction</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No V4-Flash batch tariff shown.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.concurrency</code></td>
+<td align="right"><code>2500</code></td>
+<td>concurrent requests</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/pricing">https://api-docs.deepseek.com/quick_start/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official V4-Flash concurrency tier; not sequences per accelerator.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.contextTokens</code></td>
+<td align="right"><code>200000</code></td>
+<td>tokens</td>
+<td><a href="https://docs.z.ai/guides/llm/glm-4.7">https://docs.z.ai/guides/llm/glm-4.7</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official model guide.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.maxOutputTokens</code></td>
+<td align="right"><code>128000</code></td>
+<td>tokens</td>
+<td><a href="https://docs.z.ai/guides/llm/glm-4.7">https://docs.z.ai/guides/llm/glm-4.7</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official model guide.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.price.inputMiss</code></td>
+<td align="right"><code>0.6</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.price.inputHit</code></td>
+<td align="right"><code>0.11</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.price.output</code></td>
+<td align="right"><code>2.2</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.price.cacheWrite</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No separate cache-write price shown.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.price.cacheStoragePerMtokHour</code></td>
+<td align="right"><code>0</code></td>
+<td>USD/million cached tokens-hour</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Rate card states “Limited-time Free”; zero is a published temporary tariff, not unknown.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.batchDiscount</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>fraction</td>
+<td><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No GLM-4.7 batch tariff shown.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.concurrency</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>concurrent requests</td>
+<td><a href="https://docs.z.ai/guides/llm/glm-4.7">https://docs.z.ai/guides/llm/glm-4.7</a><br><a href="https://docs.z.ai/guides/overview/pricing">https://docs.z.ai/guides/overview/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No model-specific public concurrency tier identified.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.contextTokens</code></td>
+<td align="right"><code>1050000</code></td>
+<td>tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official endpoint page.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.maxOutputTokens</code></td>
+<td align="right"><code>128000</code></td>
+<td>tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official endpoint page.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.longContextThresholdInputTokens</code></td>
+<td align="right"><code>272000</code></td>
+<td>input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Above 272K input, the entire request reprices at 2× input and 1.5× output.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.inputMiss.short</code></td>
+<td align="right"><code>2.5</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official standard short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.inputHit.short</code></td>
+<td align="right"><code>0.25</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official cached-input short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.cacheWrite.short</code></td>
+<td align="right"><code>3.125</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official cache-write short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.output.short</code></td>
+<td align="right"><code>15</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official standard short-context output rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.inputMiss.long</code></td>
+<td align="right"><code>5</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.inputHit.long</code></td>
+<td align="right"><code>0.5</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.cacheWrite.long</code></td>
+<td align="right"><code>6.25</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.output.long</code></td>
+<td align="right"><code>22.5</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.price.cacheStoragePerMtokHour</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cached tokens-hour</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No persistent cache-storage tariff shown.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.batchDiscount</code></td>
+<td align="right"><code>0.5</code></td>
+<td>fraction</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch and Flex are exactly half Standard rates.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.concurrency</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>concurrent requests</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">https://developers.openai.com/api/docs/models/gpt-5.6-terra</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No model-specific public concurrency tier identified.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.contextTokens</code></td>
+<td align="right"><code>1050000</code></td>
+<td>tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official endpoint page.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.maxOutputTokens</code></td>
+<td align="right"><code>128000</code></td>
+<td>tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official endpoint page.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.longContextThresholdInputTokens</code></td>
+<td align="right"><code>272000</code></td>
+<td>input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Above 272K input, the entire request reprices at 2× input and 1.5× output.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.inputMiss.short</code></td>
+<td align="right"><code>1</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official standard short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.inputHit.short</code></td>
+<td align="right"><code>0.1</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official cached-input short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.cacheWrite.short</code></td>
+<td align="right"><code>1.25</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official cache-write short-context rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.output.short</code></td>
+<td align="right"><code>6</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official standard short-context output rate.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.inputMiss.long</code></td>
+<td align="right"><code>2</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.inputHit.long</code></td>
+<td align="right"><code>0.2</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.cacheWrite.long</code></td>
+<td align="right"><code>2.5</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.output.long</code></td>
+<td align="right"><code>9</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a><br><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official &gt;272K whole-request tariff.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.price.cacheStoragePerMtokHour</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cached tokens-hour</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No persistent cache-storage tariff shown.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.batchDiscount</code></td>
+<td align="right"><code>0.5</code></td>
+<td>fraction</td>
+<td><a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch and Flex are exactly half Standard rates.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.concurrency</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>concurrent requests</td>
+<td><a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">https://developers.openai.com/api/docs/models/gpt-5.6-luna</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No model-specific public concurrency tier identified.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.contextTokens</code></td>
+<td align="right"><code>1048576</code></td>
+<td>tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash">https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official model/API limit.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.maxOutputTokens</code></td>
+<td align="right"><code>65536</code></td>
+<td>tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash">https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash</a><br><a href="https://deepmind.google/models/model-cards/gemini-3-5-flash/">https://deepmind.google/models/model-cards/gemini-3-5-flash/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official model/API limit.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.price.inputMiss</code></td>
+<td align="right"><code>1.5</code></td>
+<td>USD/million input tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official rate card checked 2026-07-10.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.price.inputHit</code></td>
+<td align="right"><code>0.15</code></td>
+<td>USD/million cached-input tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official context-caching tariff.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.price.output</code></td>
+<td align="right"><code>9</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official output tariff; output includes thinking tokens.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.price.cacheWrite</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>USD/million cache-write tokens</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No separate cache-write tariff; creation is billed through input plus storage.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.price.cacheStoragePerMtokHour</code></td>
+<td align="right"><code>1</code></td>
+<td>USD/million cached tokens-hour</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official explicit-caching storage rate.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.batchDiscount</code></td>
+<td align="right"><code>0.5</code></td>
+<td>fraction</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch input, cached input and output are half Standard rates.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.concurrency</code></td>
+<td align="right"><code>null (leave unset)</code></td>
+<td>concurrent requests</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash">https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash</a><br><a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No model-specific public concurrency tier identified.</td>
+</tr>
+</tbody></table>
+<h2>Model architectures and parameterization — 32 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DeepSeek V4-Flash.architecture</code></td>
+<td align="right"><code>MoE + token-wise compression + DSA</code></td>
+<td>text</td>
+<td><a href="https://api-docs.deepseek.com/news/news260424">https://api-docs.deepseek.com/news/news260424</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official V4 release and linked technical report.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.totalParamsB</code></td>
+<td align="right"><code>284</code></td>
+<td>billion parameters</td>
+<td><a href="https://api-docs.deepseek.com/news/news260424">https://api-docs.deepseek.com/news/news260424</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official V4-Flash disclosure.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.activeParamsB</code></td>
+<td align="right"><code>13</code></td>
+<td>billion active parameters</td>
+<td><a href="https://api-docs.deepseek.com/news/news260424">https://api-docs.deepseek.com/news/news260424</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official V4-Flash disclosure.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.precisionMult</code></td>
+<td align="right"><code>1.85</code></td>
+<td>multiplier</td>
+<td><a href="https://api-docs.deepseek.com/news/news260424">https://api-docs.deepseek.com/news/news260424</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Selective low-precision calculator scenario; not a disclosed end-to-end production speedup.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.architecture</code></td>
+<td align="right"><code>MoE + MTP; interleaved/preserved thinking</code></td>
+<td>text</td>
+<td><a href="https://github.com/zai-org/GLM-4.5/blob/main/README.md">https://github.com/zai-org/GLM-4.5/blob/main/README.md</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official repository and serving recipes.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.totalParamsB</code></td>
+<td align="right"><code>355</code></td>
+<td>billion parameters</td>
+<td><a href="https://github.com/zai-org/GLM-4.5/blob/main/README.md">https://github.com/zai-org/GLM-4.5/blob/main/README.md</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official GLM-4.7 model download table.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.activeParamsB</code></td>
+<td align="right"><code>32</code></td>
+<td>billion active parameters</td>
+<td><a href="https://github.com/zai-org/GLM-4.5/blob/main/README.md">https://github.com/zai-org/GLM-4.5/blob/main/README.md</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official GLM-4.7 model download table.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.precisionMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://github.com/zai-org/GLM-4.5/blob/main/README.md">https://github.com/zai-org/GLM-4.5/blob/main/README.md</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>BF16 and FP8 weights are published, but hosted numerical format is unknown; retain dense-8-bit baseline.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.architecture</code></td>
+<td align="right"><code>sparse/MoE-family scenario — UNKNOWN</code></td>
+<td>text</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>OpenAI does not disclose architecture; scenario only.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.totalParamsB.central</code></td>
+<td align="right"><code>1000</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Project OpenAI deep-dive scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.totalParamsB.min</code></td>
+<td align="right"><code>250</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.totalParamsB.max</code></td>
+<td align="right"><code>5000</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.activeParamsB.central</code></td>
+<td align="right"><code>50</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Project OpenAI deep-dive scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.activeParamsB.min</code></td>
+<td align="right"><code>20</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.activeParamsB.max</code></td>
+<td align="right"><code>110</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.precisionMult</code></td>
+<td align="right"><code>1.35</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Mixed FP8/MXFP4-equivalent calculator scenario; production numerical format is undisclosed.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.architecture</code></td>
+<td align="right"><code>sparse/MoE-family scenario — UNKNOWN</code></td>
+<td>text</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>OpenAI does not disclose architecture; scenario only.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.totalParamsB.central</code></td>
+<td align="right"><code>250</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Project OpenAI deep-dive scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.totalParamsB.min</code></td>
+<td align="right"><code>50</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.totalParamsB.max</code></td>
+<td align="right"><code>1500</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.activeParamsB.central</code></td>
+<td align="right"><code>20</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Project OpenAI deep-dive scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.activeParamsB.min</code></td>
+<td align="right"><code>8</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.activeParamsB.max</code></td>
+<td align="right"><code>50</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Subjective scenario range.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.precisionMult</code></td>
+<td align="right"><code>1.35</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Mixed FP8/MXFP4-equivalent calculator scenario; production numerical format is undisclosed.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.architecture</code></td>
+<td align="right"><code>natively multimodal reasoning; topology undisclosed</code></td>
+<td>text</td>
+<td><a href="https://deepmind.google/models/model-cards/gemini-3-5-flash/">https://deepmind.google/models/model-cards/gemini-3-5-flash/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Official model card; topology is not disclosed.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.totalParamsB.central</code></td>
+<td align="right"><code>600</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Google-dive scenario, not a leak.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.totalParamsB.min</code></td>
+<td align="right"><code>400</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Scenario bracket.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.totalParamsB.max</code></td>
+<td align="right"><code>1200</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Scenario bracket.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.activeParamsB.central</code></td>
+<td align="right"><code>20</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Google-dive scenario.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.activeParamsB.min</code></td>
+<td align="right"><code>10</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Scenario bracket.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.activeParamsB.max</code></td>
+<td align="right"><code>50</code></td>
+<td>billion active parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Scenario bracket.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.precisionMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Dense-8-bit calculator baseline; hosted production precision is undisclosed.</td>
+</tr>
+</tbody></table>
+<h2>Hardware rates by procurement class — 23 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>xAI cash-marginal.costBasisMode</code></td>
+<td align="right"><code>cash-marginal</code></td>
+<td>mode</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Strict short-run economic lens: sunk hardware; only incremental power, cooling, maintenance and operations are marginal.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.chipHourUSD</code></td>
+<td align="right"><code>0.6</code></td>
+<td>USD/accelerator-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Central strict short-run cash value.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.rentMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Direct chip-hour override; do not apply a second procurement scalar.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.derived.outputCostUSDPerMtok</code></td>
+<td align="right"><code>0.6666666666666667</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>0.60 ÷ 3600 ÷ 250 × 1,000,000.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.costBasisMode</code></td>
+<td align="right"><code>external-opportunity-value</code></td>
+<td>mode</td>
+<td><a href="https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf">https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf</a><br><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>credible-secondary</td>
+<td>2026-07-10</td>
+<td>Allocation lens defined from the Anthropic capacity agreement; this is foregone external revenue, not xAI production cost.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.chipHourUSD</code></td>
+<td align="right"><code>5.27</code></td>
+<td>USD/accelerator-hour</td>
+<td><a href="https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf">https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf</a></td>
+<td>credible-secondary</td>
+<td>2026-07-10</td>
+<td>$1.25B/month ÷ 325,000 named GPUs ÷ 730 h/month = $5.267…; the contract bundle also includes CPUs, storage and networking.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.rentMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Direct chip-hour override; do not apply a second procurement scalar.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.derived.outputCostUSDPerMtok</code></td>
+<td align="right"><code>5.855555555555555</code></td>
+<td>USD/million output tokens</td>
+<td><a href="https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf">https://content.spacex.com/cms-assets/FINAL_Documents%20and%20Updates/SpaceX%20-%20EU%20Prospectus%20%28Approved%20by%20Bafin%29%20-%20June%205%2C%202026.pdf</a><br><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>5.27 ÷ 3600 ÷ 250 × 1,000,000.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.baseAnnualChipHourUSD.H800</code></td>
+<td align="right"><code>1.75</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator annual-commit central value used as the H800 denominator.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.baseAnnualChipHourUSD.H20</code></td>
+<td align="right"><code>1</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator annual-commit central value used as the H20 denominator.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.baseAnnualChipHourUSD.Ascend910C</code></td>
+<td align="right"><code>1.95</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>credible-secondary</td>
+<td>2026-07-10</td>
+<td>Huatai one-year private-cloud procurement midpoint used as the annual 910C baseline.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rateCard.Tencent.H800.HCC.monthly</code></td>
+<td align="right"><code>10.615</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Midpoint of $10.55–$10.68 per card-hour for the eight-card monthly HCC product.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rateCard.Tencent.H20.PNV6.onDemand</code></td>
+<td align="right"><code>4.48</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Tencent PNV6 posted on-demand normalization.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rateCard.Tencent.H20.HCC.onDemandMid</code></td>
+<td align="right"><code>5.08</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Midpoint of the $3.91–$6.25 per-card-hour HCC-PNV6 bundle spread.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rateCard.Alibaba.H20.96G.onDemand</code></td>
+<td align="right"><code>7.4</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Alibaba RDS Custom AI H20-96G normalization.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rateCard.Alibaba.H20.141G.onDemand</code></td>
+<td align="right"><code>10.62</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Alibaba RDS Custom AI H20-141G normalization.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.chipHourUSD.H20.representative</code></td>
+<td align="right"><code>6.24</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Median of [4.48, 5.08, 7.40, 10.62] = (5.08 + 7.40) ÷ 2.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rentMult.H20</code></td>
+<td align="right"><code>6.24</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>6.24 ÷ annual H20 default 1.00.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rentMult.H800</code></td>
+<td align="right"><code>6.065714285714286</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>10.615 ÷ annual H800 default 1.75.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rentMult.globalFallback</code></td>
+<td align="right"><code>6.152857142857143</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Mean of H20 multiplier 6.24 and H800 multiplier 6.065714285714286.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rentMult</code></td>
+<td align="right"><code>6.152857142857143</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Compatibility alias for rentMult.globalFallback when the calculator supports only one procurement multiplier.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.rentMult.Ascend910CProxy</code></td>
+<td align="right"><code>6.152857142857143</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Apply the global public-cloud fallback because no reproducible public on-demand 910C tariff was found.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.chipHourUSD.Ascend910CProxy</code></td>
+<td align="right"><code>11.998071428571428</code></td>
+<td>USD/card-hour</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>1.95 × 6.152857142857143; explicit scalar proxy, not a reproduced Huawei public retail price.</td>
+</tr>
+</tbody></table>
+<h2>Hardware fleet routing and blend assumptions — 20 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>xAI cash-marginal.hardwareFleetBlend.GB300</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Central 8×GB300 Grok 4.5 replica scenario.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.hardwareFleetBlend.GB300</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Central 8×GB300 Grok 4.5 replica scenario.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).hardwareFleetBlend.H20</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Operator benchmark hardware.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.hardwareFleetBlend.Ascend910C_proxy_for_950</code></td>
+<td align="right"><code>0.5</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/deepseek-gptpro">https://inference-margins.pages.dev/research/deepseek-gptpro</a><br><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>DeepSeek 2026 serving prior; 910C is an explicit calculator proxy for newer Ascend hardware.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.hardwareFleetBlend.H800</code></td>
+<td align="right"><code>0.35</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/deepseek-gptpro">https://inference-margins.pages.dev/research/deepseek-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>DeepSeek 2026 serving prior; no audited shares.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.hardwareFleetBlend.H20</code></td>
+<td align="right"><code>0.15</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/deepseek-gptpro">https://inference-margins.pages.dev/research/deepseek-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>DeepSeek 2026 serving prior; no audited shares.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.hardwareFleetBlend.Ascend910C_proxy_for_domestic_other</code></td>
+<td align="right"><code>0.7</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/zhipu-gptpro">https://inference-margins.pages.dev/research/zhipu-gptpro</a><br><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Domestic-accelerator scenario; proxy for a broader domestic pool.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.hardwareFleetBlend.H800</code></td>
+<td align="right"><code>0.2</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/zhipu-gptpro">https://inference-margins.pages.dev/research/zhipu-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Mixed-fleet scenario.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.hardwareFleetBlend.H20</code></td>
+<td align="right"><code>0.1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/zhipu-gptpro">https://inference-margins.pages.dev/research/zhipu-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Mixed-fleet scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.hardwareFleetBlend.H100</code></td>
+<td align="right"><code>0.25</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.hardwareFleetBlend.H200</code></td>
+<td align="right"><code>0.2</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.hardwareFleetBlend.B200</code></td>
+<td align="right"><code>0.2</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.hardwareFleetBlend.GB200</code></td>
+<td align="right"><code>0.35</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.hardwareFleetBlend.H100</code></td>
+<td align="right"><code>0.35</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.hardwareFleetBlend.H200</code></td>
+<td align="right"><code>0.3</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.hardwareFleetBlend.B200</code></td>
+<td align="right"><code>0.15</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.hardwareFleetBlend.GB200</code></td>
+<td align="right"><code>0.2</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Partner-hosted Hopper/Blackwell routing scenario.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.hardwareFleetBlend.TPUv7</code></td>
+<td align="right"><code>0.6</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Google-dive serving-generation scenario.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.hardwareFleetBlend.TPUv6e</code></td>
+<td align="right"><code>0.3</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Google-dive serving-generation scenario.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.hardwareFleetBlend.TPUv5e</code></td>
+<td align="right"><code>0.1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Google-dive serving-generation scenario.</td>
+</tr>
+</tbody></table>
+<h2>Throughput, MFU and latency constants — 36 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>xAI cash-marginal.referenceActiveParamsB</code></td>
+<td align="right"><code>200</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Central calibration point within the dive’s 100–500B active-parameter range.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.aggregateOutputTokPerSecPerGPU</code></td>
+<td align="right"><code>250</code></td>
+<td>output tokens/s/GPU</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>80 user tok/s × 25 streams ÷ 8 GPUs; only the 80 tok/s user-stream speed is disclosed.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.effectiveMFUOverride</code></td>
+<td align="right"><code>0.02</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>250 × 2 × 200B ÷ 5.0 PFLOP/s = 0.0200; all-in busy-GPU operating point.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.interactivityMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Use with effectiveMFUOverride=0.02; latency and continuous batching are already absorbed.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.fallback.interactivityMultVsGB300Anchor</code></td>
+<td align="right"><code>0.15748031496062992</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>0.0200 ÷ calculator GB300 anchor MFU 0.127; use only when an MFU override is unavailable, never together with it.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.stackEfficiency</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>The all-in MFU override already absorbs the stack operating point; no second stack haircut.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.latencyRegime</code></td>
+<td align="right"><code>80 user tok/s; 25 concurrent streams; 8-GPU replica</code></td>
+<td>text</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Launch stream speed plus central saturation scenario.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.fallback.assumedGB300AnchorEffectiveMFU</code></td>
+<td align="right"><code>0.127</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator GB300 effective-MFU anchor used only to derive the fallback interactivity multiplier.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.referenceActiveParamsB</code></td>
+<td align="right"><code>200</code></td>
+<td>billion parameters</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Central calibration point within the dive’s 100–500B active-parameter range.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.aggregateOutputTokPerSecPerGPU</code></td>
+<td align="right"><code>250</code></td>
+<td>output tokens/s/GPU</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>80 user tok/s × 25 streams ÷ 8 GPUs; only the 80 tok/s user-stream speed is disclosed.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.effectiveMFUOverride</code></td>
+<td align="right"><code>0.02</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>250 × 2 × 200B ÷ 5.0 PFLOP/s = 0.0200; all-in busy-GPU operating point.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.interactivityMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Use with effectiveMFUOverride=0.02; latency and continuous batching are already absorbed.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.fallback.interactivityMultVsGB300Anchor</code></td>
+<td align="right"><code>0.15748031496062992</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>0.0200 ÷ calculator GB300 anchor MFU 0.127; fallback only and never together with the override.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.stackEfficiency</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>The all-in MFU override already absorbs the stack operating point.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.latencyRegime</code></td>
+<td align="right"><code>80 user tok/s; 25 concurrent streams; 8-GPU replica</code></td>
+<td>text</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Launch stream speed plus central saturation scenario.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.fallback.assumedGB300AnchorEffectiveMFU</code></td>
+<td align="right"><code>0.127</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator GB300 effective-MFU anchor used only to derive the fallback multiplier.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.stackEfficiency</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Preserve the selected model/hardware preset’s stack setting; this lens changes procurement and occupancy only.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.latencyRegime</code></td>
+<td align="right"><code>enterprise-interactive</code></td>
+<td>text</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>On-demand rate cards are most relevant to elastic interactive use, not throughput-optimized reserved batch pools.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.interactivityMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>No extra latency multiplier; preserve the selected operating point.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).model</code></td>
+<td align="right"><code>DeepSeek-R1</code></td>
+<td>model</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Operator benchmark model.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).activeParamsB</code></td>
+<td align="right"><code>37</code></td>
+<td>billion active parameters</td>
+<td><a href="https://github.com/deepseek-ai/DeepSeek-V3">https://github.com/deepseek-ai/DeepSeek-V3</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>DeepSeek-R1/V3 activated parameter count.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).precisionMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Measured MFU is derived against the H20 dense 8-bit peak; do not apply a second precision multiplier.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).dense8bitFLOPS_PF</code></td>
+<td align="right"><code>0.296</code></td>
+<td>PFLOP/s</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>H20 dense FP8/INT8 peak used by the project hardware table.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Base.outputTokPerSecPerGPU</code></td>
+<td align="right"><code>714</code></td>
+<td>output tokens/s/GPU</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch 48, TTFT &lt;2 s, TPOT &lt;70 ms.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Base.effectiveMFU</code></td>
+<td align="right"><code>0.1785</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Exact arithmetic: 714 × 2 × 37B ÷ 296 TFLOP/s.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Pro.outputTokPerSecPerGPU</code></td>
+<td align="right"><code>675</code></td>
+<td>output tokens/s/GPU</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch 32, TTFT &lt;1.5 s, TPOT &lt;50 ms.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Pro.effectiveMFU</code></td>
+<td align="right"><code>0.16875</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Exact arithmetic: 675 × 2 × 37B ÷ 296 TFLOP/s.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Max.outputTokPerSecPerGPU</code></td>
+<td align="right"><code>423</code></td>
+<td>output tokens/s/GPU</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Batch 12, TTFT &lt;1 s, TPOT &lt;30 ms.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).tier.Max.effectiveMFU</code></td>
+<td align="right"><code>0.10575</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Exact arithmetic: 423 × 2 × 37B ÷ 296 TFLOP/s.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).representativeTier</code></td>
+<td align="right"><code>Pro</code></td>
+<td>tier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>The annex identifies 675–700 output tok/s/GPU as the neutral production anchor.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).effectiveMFUOverride</code></td>
+<td align="right"><code>0.16875</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Use the measured Pro-tier equivalent directly.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).interactivityMult</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Use with the MFU override; the measured point already includes SLO, batch, MTP and production software.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).fallback.interactivityMultVsH20Anchor</code></td>
+<td align="right"><code>0.9926470588235294</code></td>
+<td>multiplier</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>0.16875 ÷ calculator H20 anchor MFU 0.17; use only when no MFU override exists.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).fallback.assumedH20AnchorEffectiveMFU</code></td>
+<td align="right"><code>0.17</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Calculator H20 effective-MFU anchor used only to derive the fallback multiplier.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).stackEfficiency</code></td>
+<td align="right"><code>1</code></td>
+<td>multiplier</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Measured effective MFU already includes the production software and latency/batch regime.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).latencyRegime</code></td>
+<td align="right"><code>Pro: TPOT &lt;50 ms</code></td>
+<td>text</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Published middle SLO tier.</td>
+</tr>
+</tbody></table>
+<h2>Workload, utilization and accounting conventions — 26 rows</h2>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th align="right">value</th>
+<th>unit</th>
+<th>source (URL)</th>
+<th>source class</th>
+<th>as-of date</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>xAI cash-marginal.utilization</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Per-occupied, saturated decode-GPU unit-cost convention; not a whole-fleet occupancy claim.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.batchShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No published Grok 4.5 asynchronous API batch discount; internal continuous batching is already in the 25-stream assumption.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.negotiatedDiscount</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>List-price unit-economics perimeter.</td>
+</tr>
+<tr>
+<td><code>xAI cash-marginal.freeTrafficShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Billed marginal-token perimeter; free and subscription traffic excluded.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.utilization</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Per-occupied, saturated decode-GPU allocation convention; not a whole-fleet occupancy claim.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.batchShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>No published Grok 4.5 asynchronous API batch discount; internal batching already appears in throughput.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.negotiatedDiscount</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>List-price unit-economics perimeter.</td>
+</tr>
+<tr>
+<td><code>xAI opportunity-cost.freeTrafficShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/xai-gptpro">https://inference-margins.pages.dev/research/xai-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Billed marginal-token perimeter; free and subscription traffic excluded.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.utilization</code></td>
+<td align="right"><code>0.35</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Enterprise elastic capacity is peak-provisioned; the report uses 35% versus 70% as a salient occupancy contrast.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.batchShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Infrastructure rental does not imply a provider-model asynchronous batch tariff.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.negotiatedDiscount</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Use posted/public rates; negotiated commitments belong in a separate lens.</td>
+</tr>
+<tr>
+<td><code>China public-cloud on-demand.freeTrafficShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Infrastructure procurement lens only.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).utilization</code></td>
+<td align="right"><code>1</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Per-occupied decode-GPU benchmark convention; do not divide measured throughput by fleet occupancy again.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).batchShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/">https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/</a></td>
+<td>first-party</td>
+<td>2026-07-10</td>
+<td>Published batch size 32 is internal continuous batching, not a discounted asynchronous API tariff.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).negotiatedDiscount</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Operating-point preset only.</td>
+</tr>
+<tr>
+<td><code>Ant Group production H20 (SLO replay).freeTrafficShare</code></td>
+<td align="right"><code>0</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/chinese-accel-gptpro">https://inference-margins.pages.dev/research/chinese-accel-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Operating-point preset only.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.nativeInputOutputRatio</code></td>
+<td align="right"><code>3.619047619047619</code></td>
+<td>input tokens/output token</td>
+<td><a href="https://github.com/deepseek-ai/open-infra-index">https://github.com/deepseek-ai/open-infra-index</a><br><a href="https://inference-margins.pages.dev/">https://inference-margins.pages.dev/</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Transfer of DeepSeek’s 2025 production trace: 608 input units ÷ 168 output units.</td>
+</tr>
+<tr>
+<td><code>DeepSeek V4-Flash.nativeCacheHitRate</code></td>
+<td align="right"><code>0.5625</code></td>
+<td>fraction</td>
+<td><a href="https://github.com/deepseek-ai/open-infra-index">https://github.com/deepseek-ai/open-infra-index</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Transfer of the approximately 56.3% V3/R1 production cache-hit rate, represented as the project’s exact trace fraction.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.nativeInputOutputRatio</code></td>
+<td align="right"><code>8</code></td>
+<td>input tokens/output token</td>
+<td><a href="https://inference-margins.pages.dev/research/zhipu-gptpro">https://inference-margins.pages.dev/research/zhipu-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Transferred GLM production-workload scenario; not GLM-4.7 telemetry.</td>
+</tr>
+<tr>
+<td><code>GLM-4.7.nativeCacheHitRate</code></td>
+<td align="right"><code>0.41</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/zhipu-gptpro">https://inference-margins.pages.dev/research/zhipu-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Transferred GLM production-workload scenario; not GLM-4.7 telemetry.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.nativeInputOutputRatio</code></td>
+<td align="right"><code>9</code></td>
+<td>input tokens/output token</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Transfer of Sol-dive workload: 7 cached + 2 fresh input : 1 output.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Terra.nativeCacheHitRate</code></td>
+<td align="right"><code>0.7777777777777778</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>7 cached ÷ 9 total input, transferred from the Sol dive.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.nativeInputOutputRatio</code></td>
+<td align="right"><code>9</code></td>
+<td>input tokens/output token</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>Transfer of Sol-dive workload: 7 cached + 2 fresh input : 1 output.</td>
+</tr>
+<tr>
+<td><code>GPT-5.6 Luna.nativeCacheHitRate</code></td>
+<td align="right"><code>0.7777777777777778</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/openai-gptpro">https://inference-margins.pages.dev/research/openai-gptpro</a></td>
+<td>community</td>
+<td>2026-07-10</td>
+<td>7 cached ÷ 9 total input, transferred from the Sol dive.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.nativeInputOutputRatio</code></td>
+<td align="right"><code>15</code></td>
+<td>input tokens/output token</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Provider-native traffic scenario; not a disclosed Gemini 3.5 traffic trace.</td>
+</tr>
+<tr>
+<td><code>Gemini 3.5 Flash.nativeCacheHitRate</code></td>
+<td align="right"><code>0.6</code></td>
+<td>fraction</td>
+<td><a href="https://inference-margins.pages.dev/research/google-gptpro">https://inference-margins.pages.dev/research/google-gptpro</a></td>
+<td>assumption</td>
+<td>2026-07-10</td>
+<td>Provider-native traffic scenario; not a disclosed Gemini 3.5 traffic trace.</td>
+</tr>
+</tbody></table>
+<h2>Delta notes</h2>
+<ul>
+<li><code>DeepSeek V4-Flash.architecture</code> was stated in the superseded 17:53 draft as <code>MoE + DSA</code>; the adopted 22:29 final value is <code>MoE + token-wise compression + DSA</code>.</li>
+<li><code>GLM-4.7.architecture</code> was stated in the superseded draft as <code>MoE + MTP; hybrid reasoning</code>; the adopted final value is <code>MoE + MTP; interleaved/preserved thinking</code>.</li>
+<li><code>GPT-5.6 Terra.architecture</code> and <code>GPT-5.6 Luna.architecture</code> previously omitted the explicit uncertainty suffix; the adopted final values add <code>— UNKNOWN</code>.</li>
+<li>The adopted China public-cloud preset added the <code>rentMult</code> compatibility alias and the explicit <code>rentMult.Ascend910CProxy</code> row, both equal to <code>6.152857142857143</code>.</li>
+<li>The adopted Ant Group preset made the fallback representation explicit with <code>fallback.interactivityMultVsH20Anchor = 0.9926470588235294</code> and <code>fallback.assumedH20AnchorEffectiveMFU = 0.17</code>.</li>
+<li>The superseded earlier draft contained additional Anthropic, reported-margin, Epoch, Kimi and Grok candidate preset rows. Those were not part of the adopted 192-row final export and are therefore not included here. fileciteturn29file0</li>
+<li>Apart from the textual and structural changes listed above, no numeric value in this response differs from the recovered 22:29 final artifact.</li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

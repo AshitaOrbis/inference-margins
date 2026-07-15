@@ -1,0 +1,10 @@
+# inference-margins MCP — remote streamable-HTTP connector on Cloudflare Workers.
+# Stateless plain Worker (createMcpHandler + WorkerTransport from agents/mcp): no Durable
+# Object, a fresh McpServer per request (required by MCP SDK >=1.26). Read-only, no auth,
+# no secrets — same exposure as the public site. Request bodies are never logged
+# (observability stays disabled; they may contain a caller's private negotiated rates).
+name = "inference-margins-mcp"
+main = "src/index.ts"
+compatibility_date = "2026-06-11"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true

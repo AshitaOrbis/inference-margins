@@ -1,0 +1,27 @@
+{
+  "name": "inference-margins-mcp",
+  "version": "1.0.0",
+  "description": "Read-only MCP server over the Frontier Inference Margins claims registry + scenario calculator. site/engine.js is the single source of truth; this package re-declares no engine constant.",
+  "type": "module",
+  "private": true,
+  "bin": {
+    "inference-margins-mcp": "dist/stdio.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('node:fs').chmodSync('dist/stdio.js', 0o755)\"",
+    "test": "npm run build && node --test \"test/*.test.mjs\"",
+    "start:stdio": "node dist/stdio.js",
+    "start:http": "node dist/http.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.0",
+    "zod": "^3.25.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  }
+}

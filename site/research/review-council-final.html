@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Final review — four-persona council on v2.1 (Opus synthesis) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/review-council-final">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Synthesis: Ship/No-Ship Review of inference-margins.pages.dev (methodology v2.1)</h1>
+<p>All four agents fetched the live page, <code>engine.js</code>, <code>app.js</code>, and the annex; three explicitly confirmed the deployed assets byte-match the local release artifacts [architect, risk-analyst, empiricist]. This is a well-corroborated review — the big findings appear independently in all four outputs with matching exact quotes and matching numeric endpoints, which raises my confidence substantially.</p>
+<h2>1. Consensus</h2>
+<ul>
+<li><strong>The core arithmetic engine is sound — this is a trust-layer problem, not an arithmetic rollback.</strong> 452 release assertions pass; five of six §10 blended headlines reproduce within one point (OpenAI ~94.7%, Google ~95.9%, xAI ~66.9%, DeepSeek ~68.1%, Zhipu ~60.0%). <code>[unanimous]</code></li>
+<li><strong>Cache-write accounting is conservation-safe and default-off</strong> — total write tariff, partitioned fresh input, prefill charged once, v2 baselines preserved. The prior cache-contamination bug is genuinely fixed. <code>[unanimous]</code> (Cache double-count is the one attack-list item all four score <strong>PASS</strong>.)</li>
+<li><strong>The anti-shopping lens range is broken and does the opposite of what it advertises.</strong> <code>lensRangeForCurrentModel()</code> unions every non-replay perspective — including <code>[analyst]</code> positions and pairing-warned, scope-incompatible lenses — ignoring the compatibility warnings generated elsewhere. All four independently reproduced the same absurd endpoints: <strong>Opus −79.3% to 97.1%, Grok −337.4% to 92.8%, DeepSeek V4 −867.5% to 85.8%.</strong> <code>[unanimous]</code></li>
+<li><strong>The <code>quoted-position</code> attribution line contradicts its own tables.</strong> The rendered sentence &quot;the parameters below come from the source&#39;s own disclosure&quot; is shown for <code>xaiopp</code>, <code>chinacloud</code>, and <code>anth20</code>, whose tables label utilization, stack, batch share, discounts, etc. as SPECULATION. This is textbook attribution laundering in the mechanism built to prevent it. <code>[unanimous]</code></li>
+<li><strong>Both v2 §10 language commitments regressed.</strong> Ranking language survives (&quot;The highest central margin on the page&quot;, &quot;highest raw headline among the three Chinese-provider cards&quot;) and confidence-interval language survives (&quot;margin confidence intervals&quot;, &quot;the widest confidence interval on the page&quot;) — directly contradicting the page&#39;s own &quot;not statistically calibrated confidence intervals.&quot; Card badges are correctly labeled &quot;judgmental range,&quot; but &quot;everywhere&quot; is not met. <code>[unanimous]</code></li>
+<li><strong>The advertised &quot;runnable diagnostic&quot; is not deployed.</strong> <code>/tests/roofline-diagnostic.mjs</code> (and <code>/tests/snapshots.test.mjs</code>) return the HTML homepage with <code>content-type: text/html</code>. The local diagnostic&#39;s numbers are accurate (H20 −11.4/−16.2%, GB200 −1.9%, Ascend@50ms −9.8%, Ascend@15ms −39.8%), but external readers cannot run the artifact the methods note names. <code>[unanimous]</code></li>
+<li><strong>Permalinks are schema-tagged, not reproducible.</strong> They encode only diffs from mutable <code>DEFAULTS</code>, carry no engine/data hash, and discard <code>_meta</code>. The versionless-URL attack is not actually pre-empted. <code>[unanimous]</code> (framing disagreement below).</li>
+<li><strong>The typed ontology is cosmetic.</strong> <code>ioRatio</code>/<code>cacheHit</code>/<code>blend</code> remain <code>MODEL_OWNED_KEYS</code>; <code>[lens]</code>/<code>[analyst]</code>/<code>[replay]</code> are labels on the old perspective axis, not a refactored model/workload/SLA/lens separation. Changing &quot;model&quot; still silently changes workload and procurement. <code>[skeptic, risk-analyst, empiricist; architect treats it as the structural root of P1.1]</code></li>
+<li><strong>The China 6.15× scalar is arithmetically exact but is a scenario scalar, not a coherent observed cross-SKU on-demand multiplier</strong> (H800 matches ~$10.6; H20 → $6.15 vs clean ~$4.48 observation; 910C has no reproducible public retail). P2 — caveats prevent it from being an undisclosed error. <code>[unanimous]</code></li>
+<li><strong>The explanatory surfaces compete, and the problem is not verbosity — it&#39;s that the layers disagree.</strong> The 29% vs 36.5% mismatch, stale CI language, and ranking regressions are <em>symptoms of duplicated truth</em> across methods box / preset note / dossier / §10 cards. <code>[architect, risk-analyst, empiricist; skeptic frames it as &quot;over-explained and under-specified where it matters&quot;]</code></li>
+</ul>
+<p><strong>Attack-list scorecard — the four converge:</strong> attribution laundering <strong>FAIL</strong>, model/workload conflation <strong>FAIL</strong>, cache double-count <strong>PASS</strong>, versionless URLs <strong>PARTIAL/FAIL</strong>, dossier decoration <strong>FAIL</strong>, coverage theater <strong>FAIL/PARTIAL</strong>.</p>
+<h2>2. Disagreements</h2>
+<h3>A. Is anything a P0? (Severity taxonomy)</h3>
+<p><strong>The disagreement:</strong> Skeptic calls the xAI lens comparison and the anti-shopping range <strong>two P0s</strong>; Architect, Risk Analyst, and Empiricist find <strong>no P0s</strong> and classify both as P1.</p>
+<ul>
+<li><strong>Skeptic&#39;s strongest argument:</strong> The anti-shopping range &quot;converts invalid pairings into the most prominent uncertainty display… worse than omitting the range because it gives nonsense a methodological imprimatur.&quot; A flagship trust feature that actively misleads about the product&#39;s headline guarantee is not a P1 wording fix — it requires re-architecting what enters the statistic.</li>
+<li><strong>The other three&#39;s strongest argument:</strong> P0 should mean arithmetic corruption. The engine math is correct in every case; these are presentation/provenance defects layered on a sound core. Empiricist: &quot;no P0 arithmetic corruption.&quot;</li>
+</ul>
+<p><strong>Adjudication:</strong> Largely definitional and <strong>operationally moot</strong> — all four block ship on both findings regardless of label. But Skeptic&#39;s severity <em>instinct</em> is directionally right on one point the taxonomy obscures: the anti-shopping-range fix is not a lint, it&#39;s a re-architecture of range membership. I&#39;d record both as ship-blockers and not litigate the number. Where the label genuinely matters is the xAI case below.</p>
+<h3>B. What is the correct xAI opportunity-cost number — ~27% or 36.5%? (The sharpest genuine disagreement)</h3>
+<p><strong>The disagreement:</strong> Skeptic says 36.52% is a <em>bug artifact</em> and the true controlled value is ~27%; the other three say 36.52% is the <em>legitimate calculator output</em> and 29% is merely stale prose to be relabeled.</p>
+<ul>
+<li><strong>Skeptic&#39;s strongest argument:</strong> The page advertises &quot;Same operating point as the dive; only the valuation changes.&quot; But the cash/opportunity lens presets omit <code>ioRatio</code> and <code>cacheHit</code>, so the preset merge falls back to the global 15:1 / 60% cache defaults — a <em>different</em> operating point than the dive&#39;s 3:1 / 0% cache. Holding the dive workload genuinely fixed, Skeptic recomputes the opportunity lens at <strong>26.95%</strong>, near the dive&#39;s ~29% — with no &quot;model-shape divergence&quot; needed. So neither 36.5% nor the &quot;model shape&quot; explanation is a controlled result; the ~10-point gap is a workload-merge bug.</li>
+<li><strong>The other three&#39;s strongest argument (Architect&#39;s is cleanest):</strong> The deployed calculator genuinely emits 92.77% → 66.94% → 36.52%; the 29% belongs to the external dive&#39;s coarser replica model. The defect is a 7.5-point <em>inconsistency</em> — the methods box and Grok dossier still print 29% as if it were the calculator&#39;s third lens. Fix = harmonize the prose to &quot;~93% → 67% → 36.5% calculator; ~29% annex replica.&quot;</li>
+</ul>
+<p><strong>Adjudication: Skeptic has the stronger case, and it modifies the Architect&#39;s fix.</strong> Skeptic did the controlled recomputation the other three did not — they verified the engine <em>emits</em> 36.52% (true) but not whether 36.52% is computed at the <em>same operating point the page claims</em>. It isn&#39;t. Architect&#39;s P1.3 fix (relabel 29% → 36.5%) does <strong>not survive</strong> Skeptic&#39;s critique: it would harmonize the prose onto a number that itself violates the page&#39;s &quot;same operating point, only valuation changes&quot; claim. The correct sequence is Skeptic&#39;s: <strong>fix the workload merge so all three lenses inherit the dive&#39;s 3:1/0% operating point, recompute (expect opportunity ≈ 27%), <em>then</em> harmonize the prose.</strong> Residual uncertainty: this assumes &quot;same operating point&quot; is the <em>intended</em> semantic. If the author intended the lenses to carry their own default workloads, 36.5% is legitimate and only the prose needs fixing — but then the &quot;only the valuation changes&quot; claim must be struck. Either way there is an inconsistency to fix; the <em>magnitude</em> of the required fix depends on author intent (Open Question C).</p>
+<h3>C. Permalinks: version-drift (future) vs identity-corruption (now)</h3>
+<p><strong>The disagreement:</strong> Skeptic/Architect frame the permalink defect primarily as <em>future</em> drift (a later <code>DEFAULTS</code> change silently reinterprets old links); Empiricist and Risk Analyst find a <em>same-deployment, right-now</em> corruption.</p>
+<ul>
+<li><strong>Version-drift framing (Skeptic, Architect):</strong> No <code>engineRevision</code>/snapshot hash; diffs merge into whatever defaults exist later. Architect explicitly offers a downgrade: &quot;if shared links are explicitly guaranteed same-deployment-only… these findings could drop to P2.&quot;</li>
+<li><strong>Identity-corruption framing (Empiricist, Risk Analyst):</strong> The URL serializes only numeric state — not <code>modelId</code>/<code>perspectiveId</code>/scope/provenance. On load, selectors stay Opus/median, the dossier doesn&#39;t render, and the lens range is computed for the <em>selector&#39;s</em> model. So a Grok+xAI-opportunity permalink displays Grok arithmetic while its selectors and anti-shopping range refer to Opus — misattribution <em>within the same deployment</em>.</li>
+</ul>
+<p><strong>Adjudication:</strong> Empiricist/Risk have the stronger, more specific finding, and it <strong>invalidates Architect&#39;s downgrade condition.</strong> &quot;Same-deployment-only&quot; does not rescue the permalink, because the identity corruption manifests on the current deployment. The fix must serialize full state (model/perspective IDs + scope + engine/data hash) and restore selectors/dossier/warning/range together — not merely add a version hash. This is a cross-check where the Risk/Empiricist failure mode is <em>not</em> addressed by the Architect&#39;s proposed fix — flagged.</p>
+<h3>D. Are tariff point-estimates and the ontology refactor ship-blockers?</h3>
+<p><strong>The disagreement:</strong> Skeptic lists tariff-as-point-estimate as P1 (&quot;not genuinely range-first&quot;); Empiricist calls tariff labeling &quot;mostly good&quot; (P2-ish); Architect scopes the full workload/model ontology split to a <em>v2.2</em> refactor, explicitly inappropriate as an emergency gate.</p>
+<p><strong>Adjudication:</strong> Architect&#39;s staging is right and I weight it. The <em>labeling</em> (names, speculative marks, table exclusion) passes for all four; the <em>residual</em> concern (point margins from arbitrary architecture midpoints) is real but is a symptom of the same MODEL_OWNED ontology. Correct call: a cheap mitigation now (suppress/qualify the tariff point-margin headline, e.g. &quot;illustrative architecture scenario&quot; in the result tile) + defer the true workload/SLA/model separation to v2.2. Do not gate v2.1.1 on the full refactor.</p>
+<h2>3. Open questions</h2>
+<ul>
+<li><strong>Are permalinks intended to be same-deployment-only?</strong> [architect raised as a downgrade condition] — but Empiricist&#39;s identity-corruption finding suggests even that wouldn&#39;t save them. Needs the author&#39;s design intent.</li>
+<li><strong>Is the roofline diagnostic intentionally private?</strong> [architect] If yes, the fix collapses to deleting the word &quot;runnable&quot;; if no, deploy it. Cheap either way.</li>
+<li><strong>Is &quot;same operating point, only the valuation changes&quot; the intended semantic for the xAI lenses?</strong> [synthesis-emergent, from Disagreement B] This single answer determines whether the correct opportunity value is ~27% (fix the merge) or 36.5% (fix only the prose <em>and</em> strike the &quot;same operating point&quot; claim). Only the author can settle it.</li>
+<li><strong>Does any genuinely untouched roofline holdout exist?</strong> [risk-analyst, empiricist] Both conclude no — zero residual DoF, post-hoc operating-point choices, no untouched platform. This bounds how strong the roofline &quot;validation&quot; claim can ever be.</li>
+<li><strong>Tencent H20/H800 and the 910C-proxy rates are unverifiable from the annex</strong> (no primary URLs) [empiricist]. Downgrades confidence in the China multiplier evidence specifically.</li>
+</ul>
+<h2>4. Final recommendation</h2>
+<p><strong>NO-SHIP / hold v2.1 as deployed. Ship after a surgical v2.1.1 gate repair — no engine rollback.</strong> (Risk Analyst&#39;s &quot;PAUSE, fix the P1s first&quot; is operationally the same verdict; the four are effectively unanimous.)</p>
+<p><strong>Confidence:</strong></p>
+<ul>
+<li><strong>Very high (~95%)</strong> that it should not ship as-is. This is not a judgment call — four independent reviews on a byte-matched deployment corroborate the three load-bearing failures (anti-shopping range, attribution laundering, §10 regressions) with matching exact quotes and matching numeric endpoints.</li>
+<li><strong>High</strong> that the surgical fix set below is complete and correct, and that the core numeric engine needs no changes.</li>
+<li><strong>Medium</strong> on the exact xAI opportunity number (~27% vs 36.5%) — it hinges on an author-only design intent (Open Question C), and I weight Skeptic&#39;s controlled recomputation but cannot close the intent question from the outside.</li>
+<li><strong>Lower</strong> on whether tariff point-estimates / the ontology refactor are gate items — a genuine judgment split; I side with Architect&#39;s v2.2 staging.</li>
+</ul>
+<p><strong>Ship gate (deduped across all four):</strong></p>
+<ol>
+<li><strong>Anti-shopping range</strong> — compute only over compatible <code>kind === &quot;lens&quot;</code> entries passing <code>pairingWarning() === &quot;&quot;</code>; exclude analyst positions and replays; move exploratory/incompatible pairings to a separately labeled range. Assert contributor names. <code>[unanimous]</code></li>
+<li><strong>xAI lenses</strong> — make all three inherit the dive operating point (3:1, 0% cache); recompute (expect opportunity ≈ 27%); <em>then</em> harmonize the methods box and Grok dossier. Do <strong>not</strong> merely relabel 29% → 36.5% (Skeptic&#39;s correction to Architect&#39;s fix). <code>[skeptic-weighted]</code></li>
+<li><strong>Dossiers</strong> — reclassify <code>xaiopp</code>/<code>chinacloud</code>/<code>anth20</code> from <code>quoted-position</code> to <code>reconstruction</code> (or split &quot;quoted anchor&quot; from &quot;reconstructed vector&quot;); annotate every dynamic <code>dive</code>/<code>set</code> override; make displayed values derive from final applied state. <code>[unanimous]</code></li>
+<li><strong>§10 language</strong> — remove ranking phrases and remaining &quot;confidence interval&quot; language; add a static lint (<code>highest|lowest|best|worst|confidence interval|\bCI\b</code>). <code>[unanimous]</code></li>
+<li><strong>Roofline diagnostic</strong> — deploy the script + frozen inputs + snapshot test as real artifacts; assert content-type/hash in release. <code>[unanimous]</code></li>
+<li><strong>Permalinks</strong> — serialize full state incl. model/perspective IDs + scope + engine/data hash; validate on load; fix the same-deployment identity corruption first, then version-safety; add round-trip + migration fixtures. <code>[unanimous, empiricist/risk-sharpened]</code></li>
+<li><strong>Moonshot/Kimi</strong> — expose an output-token-margin tile so the headline literally regenerates, or drop the &quot;every headline reproducible&quot; claim. <code>[architect, risk-analyst, empiricist]</code></li>
+</ol>
+<p><strong>Include in the same release (P2s that <em>prove the P1 fixes held</em>):</strong> the dossier DOM test (assert <em>rendered</em> values, not key membership) and engine-generated bridge/test-count numbers (fixes the &quot;29 assertions&quot; → 452 and the &quot;$3.10/Mtok&quot; → $3.72-list staleness Risk Analyst uniquely caught). <strong>Defer:</strong> China per-SKU multiplier rename, roofline &quot;preregistered holdout could not be executed as designed&quot; phrasing, and the full workload/SLA/model ontology split (v2.2).</p>
+<p><strong>Conditions that would change the recommendation:</strong></p>
+<ul>
+<li>If the diagnostic is intentionally private → item 5 collapses to deleting &quot;runnable.&quot;</li>
+<li>If &quot;same operating point&quot; is <em>not</em> the intended xAI-lens semantic → item 2 shrinks to a prose fix (relabel 29% → 36.5%) <em>plus</em> striking the &quot;only the valuation changes&quot; claim.</li>
+<li><strong>Note the one downgrade that does <em>not</em> hold:</strong> Architect&#39;s &quot;if permalinks are same-deployment-only, drop to P2&quot; is defeated by Empiricist&#39;s identity-corruption finding — do not rely on it.</li>
+</ul>
+<p><strong>Cheapest next action that moves the decision forward (Empiricist&#39;s, and I weight it heavily):</strong> write the <strong>~1-hour semantic release test</strong> — four fixtures + §10 lint that catch <em>every</em> ship-blocker above:</p>
+<ol>
+<li>Serialize+reload Grok+xAI-opportunity; assert model/perspective IDs, dossier, warning, margin, and range all survive.</li>
+<li>Assert no <code>pairingWarning()</code>-triggering pairing contributes to any lens range.</li>
+<li>Assert every <code>quoted-position</code> parameter is genuinely source-selected, else fail classification.</li>
+<li>Fetch the public roofline URL; require JS content + expected output.</li>
+<li>Static §10 lint for ranking/CI terms.</li>
+</ol>
+<p>This test file <em>is</em> the regression gate that would have caught all of these pre-deploy — build it first; it converts the fix list from &quot;trust the patch&quot; into &quot;trust the assertion.&quot;</p>
+<h2>5. Attribution map</h2>
+<table>
+<thead>
+<tr>
+<th>Claim</th>
+<th>Contributing agent(s)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Core engine sound; 452 assertions pass; 5/6 §10 headlines reproduce ≤1pt</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Cache-write accounting conservation-safe, default-off (attack PASS)</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Anti-shopping range unions incompatible lenses; endpoints −79.3%/97.1%, −337.4%/92.8%, −867.5%/85.8%</td>
+<td>unanimous (all four reproduced the endpoints)</td>
+</tr>
+<tr>
+<td><code>quoted-position</code> attribution line contradicts SPECULATION tables (xaiopp/chinacloud/anth20)</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>§10 ranking + confidence-interval regressions (exact quotes)</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td><code>/tests/*.mjs</code> return HTML — diagnostic not deployed</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td>Permalinks not reproducible (no engine/data hash, diff-only)</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td><strong>xAI lenses don&#39;t hold operating point constant; controlled opportunity ≈ 27%, not 36.5%</strong></td>
+<td><strong>skeptic</strong> (sole controlled recompute)</td>
+</tr>
+<tr>
+<td>xAI methods box shows 29% while calculator emits 36.5% (7.5-pt inconsistency)</td>
+<td>architect, risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td><strong>Permalink identity corruption <em>within</em> current deployment (selectors show Opus, math is Grok)</strong></td>
+<td><strong>empiricist, risk-analyst</strong></td>
+</tr>
+<tr>
+<td>Typed ontology cosmetic — ioRatio/cacheHit/blend still MODEL_OWNED</td>
+<td>skeptic, risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td>Moonshot/Kimi headline (81% output) not regenerated by hero tile (79.9% blended)</td>
+<td>architect, risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td><strong>Stale prose: 29 assertions (→452), $3.10/Mtok bridge (→$3.72 list)</strong></td>
+<td><strong>risk-analyst</strong> (sole catch)</td>
+</tr>
+<tr>
+<td>China 6.15× arithmetically exact but scenario scalar, not observed multiplier (P2)</td>
+<td>unanimous</td>
+</tr>
+<tr>
+<td><strong>Roofline &quot;formally unrunnable&quot; overstates — exactly-fitted, not non-identifiable</strong></td>
+<td><strong>empiricist</strong> (sole methodological nuance)</td>
+</tr>
+<tr>
+<td>Tencent H20/H800 + 910C-proxy rates unverifiable from annex</td>
+<td>empiricist</td>
+</tr>
+<tr>
+<td>Filtering invalid lenses could hide useful stress tests → preserve as labeled &quot;exploratory&quot;</td>
+<td>risk-analyst, empiricist</td>
+</tr>
+<tr>
+<td>Surgical v2.1.1 vs v2.2 ontology-refactor staging</td>
+<td>architect</td>
+</tr>
+<tr>
+<td>~1-hour four-fixture semantic release test as decisive next action</td>
+<td>empiricist</td>
+</tr>
+</tbody></table>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

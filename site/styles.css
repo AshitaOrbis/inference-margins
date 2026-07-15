@@ -1,0 +1,668 @@
+/* Frontier Inference Margins — skin system + layout
+   Two visual identities (Ashita Orbis tiers), selected via data-skin on <html>:
+     app       — tier-3 Next.js identity (DEFAULT; its native theme is dark)
+     editorial — tier-2 Astro identity (its native theme is light)
+   crossed with data-theme="dark|light". Every color flows through the token
+   layer below; component rules never hardcode color. Skin/theme resolution
+   (URL params → referrer → localStorage → app+dark default) runs in a
+   pre-paint head script in index.html. Pages that do not run that script
+   (research annex, 404) get the app skin following prefers-color-scheme.
+   Dataviz rule preserved: text never wears series color; --accent-ink is the
+   AA-safe accent for text (differs from --accent only where needed). */
+
+/* ---------- self-hosted fonts (latin subsets, variable-weight woff2) ---------- */
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/inter-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Grotesk"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("fonts/space-grotesk-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Playfair Display"; font-style: normal; font-weight: 500 800; font-display: swap;
+  src: url("fonts/playfair-display-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/source-serif-4-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- app skin (tier-3), dark — the site default ---------- */
+:root {
+  color-scheme: dark;
+  --font-head: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+
+  --page: #050505;
+  --surface-1: rgba(255,255,255,0.03);
+  --tile: rgba(255,255,255,0.06);
+  --overlay: #1c1c1e;          /* opaque pop-over surface (tooltips) */
+  --ink-1: #E8E8E8;
+  --ink-2: #B4B4B4;
+  --ink-3: #888888;
+  --grid: rgba(255,255,255,0.08);
+  --baseline: rgba(255,255,255,0.28);
+  --border: rgba(255,255,255,0.12);
+  --accent: #7B61FF;
+  --accent-ink: #9885FF;       /* accent as small text: lightened to clear 4.5:1 on washed tiles */
+  --accent-2: #00F0FF;
+  --on-accent: #050505;
+  --good: #3FB950;
+  --warn: #FAB219;
+  --bad: #F87171;
+  --wash: rgba(123,97,255,0.14);
+  --series-1: #7B61FF;
+  --series-2: #00F0FF;
+  --series-3: #F59E0B;
+  --series-4: #4CC38A;
+  --series-5: #FF2E86;
+  --series-6: #FF6B6B;
+  --ord-1: #C9BBFF; --ord-2: #A48FFF; --ord-3: #7B61FF; --ord-4: #5B3FD9; --ord-5: #4025A8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-pop: 0 4px 16px rgba(0,0,0,0.55);
+}
+
+/* app skin, light */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #F8F9FA;
+  --surface-1: rgba(0,0,0,0.03);
+  --tile: rgba(0,0,0,0.055);
+  --overlay: #FFFFFF;
+  --ink-1: #1A1A2E;
+  --ink-2: #44445C;
+  --ink-3: #61617A;
+  --grid: rgba(0,0,0,0.08);
+  --baseline: rgba(0,0,0,0.30);
+  --border: rgba(0,0,0,0.13);
+  --accent: #6644BB;
+  --accent-ink: #6644BB;
+  --accent-2: #0088CC;
+  --on-accent: #FFFFFF;
+  --good: #116329;
+  --warn: #8A5A00;
+  --bad: #B03030;
+  --wash: rgba(102,68,187,0.09);
+  --series-1: #6644BB;
+  --series-2: #0088CC;
+  --series-3: #B45309;
+  --series-4: #2DA44E;
+  --series-5: #B8005C;
+  --series-6: #B03030;
+  --ord-1: #B49BE8; --ord-2: #9678D6; --ord-3: #6644BB; --ord-4: #4E3392; --ord-5: #3A2470;
+  --shadow: 0 1px 3px rgba(26,26,46,0.08);
+  --shadow-pop: 0 4px 16px rgba(26,26,46,0.16);
+}
+
+/* Pages that never run the head script (research annex, 404) carry no
+   data-theme attribute: give them the app skin following the OS preference. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --page: #F8F9FA;
+    --surface-1: rgba(0,0,0,0.03);
+    --tile: rgba(0,0,0,0.055);
+    --overlay: #FFFFFF;
+    --ink-1: #1A1A2E;
+    --ink-2: #44445C;
+    --ink-3: #61617A;
+    --grid: rgba(0,0,0,0.08);
+    --baseline: rgba(0,0,0,0.30);
+    --border: rgba(0,0,0,0.13);
+    --accent: #6644BB;
+    --accent-ink: #6644BB;
+    --accent-2: #0088CC;
+    --on-accent: #FFFFFF;
+    --good: #116329;
+    --warn: #8A5A00;
+    --bad: #B03030;
+    --wash: rgba(102,68,187,0.09);
+    --series-1: #6644BB;
+    --series-2: #0088CC;
+    --series-3: #B45309;
+    --series-4: #2DA44E;
+    --series-5: #B8005C;
+    --series-6: #B03030;
+    --ord-1: #B49BE8; --ord-2: #9678D6; --ord-3: #6644BB; --ord-4: #4E3392; --ord-5: #3A2470;
+    --shadow: 0 1px 3px rgba(26,26,46,0.08);
+    --shadow-pop: 0 4px 16px rgba(26,26,46,0.16);
+  }
+}
+
+/* ---------- editorial skin (tier-2 Astro identity) ---------- */
+:root[data-skin="editorial"] {
+  --font-head: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-data: system-ui, -apple-system, "Segoe UI", sans-serif; /* charts stay sans for tick/label legibility */
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+}
+
+/* editorial, light — the tier's native theme */
+:root[data-skin="editorial"][data-theme="light"] {
+  color-scheme: light;
+  --page: #FDF6E3;
+  --surface-1: #F5ECD7;
+  --tile: #FAF2DC;
+  --overlay: #FFFBEF;
+  --ink-1: #2D2926;
+  --ink-2: #4E463E;
+  --ink-3: #6B6157;  /* tier muted #7A7067 darkened one step to clear 4.5:1 on the tier surfaces */
+  --grid: #E7DCC4;
+  --baseline: #B5A88C;
+  --border: #DDD0B8;
+  --accent: #1B4965;
+  --accent-ink: #1B4965;
+  --accent-2: #C44536;
+  --on-accent: #FFFFFF;
+  --good: #386641;
+  --warn: #8A5A00;
+  --bad: #9E3527;
+  --wash: rgba(27,73,101,0.08);
+  --series-1: #1B4965;
+  --series-2: #4A8B8C;
+  --series-3: #A9762B;
+  --series-4: #386641;
+  --series-5: #6D4C7D;
+  --series-6: #9E3527;
+  --ord-1: #8FB3C7; --ord-2: #5E8CA7; --ord-3: #3D6B88; --ord-4: #1B4965; --ord-5: #0F3049;
+  --shadow: 0 1px 3px rgba(45,41,38,0.08);
+  --shadow-pop: 0 4px 16px rgba(45,41,38,0.18);
+}
+
+/* editorial, dark */
+:root[data-skin="editorial"][data-theme="dark"] {
+  color-scheme: dark;
+  --page: #1A1412;
+  --surface-1: #261E1A;
+  --tile: #2E241F;
+  --overlay: #2B221D;
+  --ink-1: #E8DDD4;
+  --ink-2: #C2B3A6;
+  --ink-3: #9C8A7D;
+  --grid: #3A2E28;
+  --baseline: #6B584A;
+  --border: #4A3B32;
+  --accent: #D4A574;
+  --accent-ink: #D4A574;
+  --accent-2: #D4785A;
+  --on-accent: #1A1412;
+  --good: #7FB069;
+  --warn: #E0B050;
+  --bad: #E08A6E;
+  --wash: rgba(212,165,116,0.10);
+  --series-1: #7FA8C9;
+  --series-2: #6BB5A0;
+  --series-3: #C9A96E;
+  --series-4: #7FB069;
+  --series-5: #B594D6;
+  --series-6: #DE8668;
+  --ord-1: #E8CBA4; --ord-2: #D4A574; --ord-3: #B98A55; --ord-4: #976F41; --ord-5: #755430;
+  --shadow: 0 1px 3px rgba(0,0,0,0.45);
+  --shadow-pop: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink-1);
+  font-size: 15px; line-height: 1.55;
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-head); }
+code { font-family: var(--font-code); font-size: 0.92em; }
+.page { max-width: 1240px; margin: 0 auto; padding: 24px 20px 60px; }
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Masthead */
+.masthead-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+.subtitle { color: var(--ink-2); max-width: 900px; margin: 6px 0 18px; }
+.masthead-actions { display: flex; gap: 8px; }
+.ghost-btn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--ink-2); padding: 5px 12px; font: inherit; font-size: 13px;
+  cursor: pointer; white-space: nowrap;
+}
+.ghost-btn:hover { background: var(--wash); color: var(--ink-1); }
+
+/* Preset / scenario identity note (lives in the dossier summary) */
+.preset-note { font-size: 12px; color: var(--ink-3); }
+
+/* Persistent state-identity strip (public-release P0): reads model · traffic · lens/replay · state, on
+   the result surface. Colour-coded by state so a modified/crafted/counterfactual state is unmistakable. */
+.identity-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px;
+  border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px;
+  padding: 8px 12px; margin: 0 0 10px; font-size: 12.5px; background: var(--surface-1); min-width: 0;
+}
+.identity-strip .id-chip { color: var(--ink-2); }
+.identity-strip .id-lead { color: var(--ink-3); }
+.identity-strip .id-model { font-weight: 700; color: var(--ink-1); }
+.identity-strip .id-state { font-weight: 600; }
+.identity-strip .id-reset { margin-left: auto; font-size: 12px; }
+.identity-strip.id-central { border-left-color: var(--good); }
+.identity-strip.id-central .id-state { color: var(--good); }
+.identity-strip.id-lens { border-left-color: var(--accent); }
+.identity-strip.id-custom { border-left-color: var(--series-5); }
+.identity-strip.id-custom .id-state { color: var(--series-5); }
+.identity-strip.id-counterfactual { border-left-color: var(--warn); }
+.identity-strip.id-counterfactual .id-state { color: var(--warn); }
+.identity-strip.id-modified { border-left-color: var(--series-6); background: var(--wash); }
+.identity-strip.id-modified .id-state { color: var(--series-6); }
+
+/* Hero tiles */
+.hero-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.tile {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; box-shadow: var(--shadow);
+  min-width: 0; overflow-wrap: anywhere; /* grid items must shrink inside the narrow controls column, never overflow it */
+}
+/* Output tiles relocated into .controls-col (layout feedback 2026-07-12): responsive tile row as
+   before; in the narrow controls column it wraps to a 2-up grid. It is the column's last child, so
+   drop the trailing margin (the column's own gap handles spacing). .tile-hero emphasis preserved. */
+.controls-col .hero-row { margin-bottom: 0; }
+.tile-hero { background: var(--wash); }
+.tile-label { font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.tile-value { font-size: 34px; font-weight: 600; margin-top: 2px; letter-spacing: -0.02em; font-family: var(--font-head); font-variant-numeric: tabular-nums; }
+.tile-hero .tile-value { font-size: 48px; }
+.tile-small { font-size: 20px; }
+.tile-delta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+/* Persistent metric-identity qualifier on the hero tile (persona RL3: the "not company GM" caveat
+   must survive a screenshot). Bolded lead in full-contrast ink so it isn't dropped when skimmed. */
+.tile-gm { color: var(--ink-2); }
+.tile-gm strong { color: var(--ink-1); }
+/* The hero's identity/counterfactual banner (PAGE-AUTHORED / MODIFIED / CRAFTED wording) is the
+   most honesty-critical line on the tile: hold it at secondary ink, not faint ink, in every skin. */
+#out-margin-note { color: var(--ink-2); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 390px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+/* Controls */
+.controls-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.controls { display: flex; flex-direction: column; gap: 12px; }
+
+/* Static cards in the controls column (layout restructure 2026-07-11):
+   Save scenario, then the Model / Perspective / Traffic-mix selectors — below all sliders. */
+.ctl-static {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.ctl-static-title { margin: 0; font-size: 14px; font-weight: 600; }
+.ctl-static label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.ctl-static select, .ctl-static input[type="text"] {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%; text-overflow: ellipsis;
+}
+.ctl-hint { font-size: 11.5px; color: var(--ink-3); margin: 0; }
+
+/* Model dossier card (layout feedback 2026-07-11 → collapsed <details> 2026-07-12): the selected
+   model's own parameter cards under the Model selector. Now reuses the .dossier collapse frame +
+   summary styling and the .dossier-body separator; collapsed by default, never auto-opened. */
+.model-dossier-card .model-note { font-size: 12.5px; color: var(--ink-2); margin: 0 0 6px; }
+
+/* Save-scenario collapsible (layout feedback 2026-07-12): same blue-link treatment as
+   .saved-scenarios; the expanded .saved-panel carries the name field + Save/Copy buttons. */
+.save-scenario .saved-panel { display: flex; flex-direction: column; gap: 6px; }
+.save-scenario .saved-panel label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.save-scenario .saved-panel input[type="text"] {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%;
+}
+.save-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.save-note { color: var(--ink-2); }
+.save-note:empty { display: none; }
+.ctl-section {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.ctl-section > summary {
+  cursor: pointer; padding: 11px 14px; font-weight: 600; font-size: 14px;
+  list-style: none; display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.ctl-section > summary::-webkit-details-marker { display: none; }
+.ctl-section > summary::after { content: "▾"; color: var(--ink-3); font-size: 12px; transition: transform .15s; }
+.ctl-section:not([open]) > summary::after { transform: rotate(-90deg); }
+.ctl-body { padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Injected selector groups (selector dissolve 2026-07-12): the Model / Traffic-mix pickers rendered
+   at the top of their sections. #picker-holder parks them (hidden) between rebuilds. */
+#picker-holder[hidden] { display: none; }
+.ctl-picker-group { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ctl-picker-group label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.ctl-picker-group select {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%; text-overflow: ellipsis;
+}
+.ctl-picker-group .ctl-hint { font-size: 11.5px; color: var(--ink-3); margin: 0; }
+
+.param { display: flex; flex-direction: column; gap: 4px; }
+.param-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.param-name { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.param-val { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.param input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; height: 22px; }
+.param select, .param input[type="text"], .param input[type="number"] {
+  font: inherit; font-size: 13.5px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px;
+}
+.ticks { position: relative; height: 26px; margin-top: -3px; }
+.tick {
+  position: absolute; transform: translateX(-50%); top: 0; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: none; border: none; padding: 0; font: inherit;
+}
+.tick i { display: block; width: 1px; height: 5px; background: var(--baseline); }
+.tick span {
+  font-size: 10px; color: var(--ink-3); white-space: nowrap; line-height: 1.15;
+  max-width: 86px; overflow: hidden; text-overflow: ellipsis;
+}
+.tick:hover span { color: var(--accent-ink); }
+.tick.tk-alt { top: 13px; }
+.tick.tk-alt i { display: none; }
+
+.info {
+  background: none; border: none; color: var(--ink-3); cursor: help; font-size: 12px;
+  padding: 0 2px; line-height: 1;
+}
+.info:hover, .info:focus { color: var(--accent-ink); }
+
+/* Hardware blend rows */
+.hw-row { display: grid; grid-template-columns: 118px 1fr 44px; gap: 8px; align-items: center; }
+.hw-name { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.hw-pct { font-size: 12.5px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.hw-meta { grid-column: 1 / -1; font-size: 11px; color: var(--ink-3); margin: -4px 0 2px; }
+
+.radio-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.radio-row button {
+  font: inherit; font-size: 12.5px; padding: 5px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--tile); color: var(--ink-2); cursor: pointer;
+}
+.radio-row button[aria-pressed="true"] { background: var(--wash); color: var(--ink-1); border-color: var(--accent); }
+
+/* Charts */
+.results { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.chart-card {
+  margin: 0; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px 10px; box-shadow: var(--shadow);
+}
+.chart-card figcaption { display: flex; flex-direction: column; gap: 1px; margin-bottom: 6px; }
+.chart-title { font-weight: 600; font-size: 14.5px; }
+.chart-sub { font-size: 12px; color: var(--ink-3); }
+.chart { width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font-family: var(--font-data); }
+
+/* Tooltip */
+.tooltip {
+  position: fixed; z-index: 50; max-width: 320px; pointer-events: none;
+  background: var(--overlay); color: var(--ink-1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 9px 11px; font-size: 12.5px; line-height: 1.45;
+  box-shadow: var(--shadow-pop);
+}
+.tooltip .tt-title { font-weight: 600; margin-bottom: 3px; }
+.tooltip .tt-src { color: var(--ink-3); font-size: 11.5px; margin-top: 4px; }
+.tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; }
+.tooltip .tt-row b { font-variant-numeric: tabular-nums; }
+.tt-key { display: inline-block; width: 12px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+/* Subscription card */
+#sub-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; margin-bottom: 8px; }
+@media (max-width: 700px) { #sub-controls { grid-template-columns: 1fr; } }
+
+/* Report */
+.report {
+  margin-top: 34px; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px clamp(18px, 4vw, 44px); box-shadow: var(--shadow);
+}
+.report h2 { font-size: 24px; margin: 8px 0 4px; letter-spacing: -0.01em; }
+.report h3 { font-size: 18px; margin: 26px 0 6px; }
+.report h4 { font-size: 15px; margin: 18px 0 4px; }
+.report p, .report li { color: var(--ink-2); font-size: 14.5px; }
+.report strong { color: var(--ink-1); }
+.report .byline { color: var(--ink-3); font-size: 13px; margin-bottom: 14px; }
+.report table {
+  border-collapse: collapse; width: 100%; font-size: 13px; margin: 10px 0 16px;
+  display: block; overflow-x: auto;
+}
+.report th, .report td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+.report th { color: var(--ink-3); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.report td { color: var(--ink-2); }
+.report td b, .report td strong { color: var(--ink-1); }
+.report blockquote {
+  margin: 10px 0; padding: 8px 14px; border-left: 3px solid var(--accent);
+  background: var(--wash); border-radius: 0 8px 8px 0; color: var(--ink-2); font-size: 14px;
+}
+.report code { background: var(--wash); border-radius: 4px; padding: 1px 5px; font-size: 13px; }
+.report .toc { columns: 2; font-size: 13.5px; }
+@media (max-width: 700px) { .report .toc { columns: 1; } }
+.report .verdict {
+  border: 1px solid var(--accent); background: var(--wash); border-radius: 10px;
+  padding: 12px 16px; margin: 12px 0;
+}
+.report .scope-note {
+  border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px;
+  padding: 10px 14px; margin: 10px 0 14px; font-size: 13.5px; color: var(--ink-2);
+}
+.report details { margin: 8px 0; }
+.report details summary { cursor: pointer; color: var(--ink-1); font-weight: 600; font-size: 14px; }
+
+/* per-provider evidence cards */
+.report details.prov {
+  border: 1px solid var(--grid); border-radius: 10px; background: var(--tile);
+  margin: 10px 0; padding: 0 14px; box-shadow: var(--shadow);
+}
+.report .prov > summary {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  padding: 10px 0; font-size: 14.5px; list-style: none;
+}
+.report .prov > summary::-webkit-details-marker { display: none; }
+.report .prov > summary::before { content: "▸"; color: var(--ink-3); font-size: 12px; align-self: center; }
+.report .prov[open] > summary::before { content: "▾"; }
+.report .prov .prov-margin { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink-1); }
+.report .prov .prov-ci { font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
+.report .prov .prov-body { border-top: 1px solid var(--grid); padding: 8px 0 12px; }
+.report .prov .prov-body p { font-size: 13.5px; }
+.report .prov .prov-body li { font-size: 13px; }
+.report .prov .kk { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+@media (max-width: 700px) { .report .prov .kk { grid-template-columns: 1fr; } }
+.report .prov .kk h5 { margin: 8px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
+.badge { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; border: 1px solid; white-space: nowrap; }
+.badge-high { color: var(--good); border-color: var(--good); }
+.badge-med { color: var(--warn); border-color: var(--warn); }
+.badge-low { color: var(--ink-3); border-color: var(--ink-3); }
+.badge-mixed { color: var(--series-5); border-color: var(--series-5); }
+.report .evprofile { font-size: 12px; color: var(--ink-3); border-bottom: 1px solid var(--grid); padding-bottom: 6px; }
+.report .evprofile .ev-h { color: var(--good); } .report .evprofile .ev-m { color: var(--warn); } .report .evprofile .ev-l { color: var(--ink-3); }
+.methods-box summary { cursor: pointer; font-size: 13.5px; }
+.methods-box li { font-size: 13px; color: var(--ink-2); margin: 4px 0; }
+
+/* §10/§6 "Load this operating point ↑" preserve-links (selector dissolve 2026-07-12) */
+.report .load-op-row { font-size: 13px; margin: 8px 0 4px; color: var(--ink-2); }
+.report .load-op-row .load-op-lead { color: var(--ink-3); }
+.report a.load-op { font-weight: 600; color: var(--accent-ink); cursor: pointer; }
+.report a.load-op:hover { text-decoration: underline; }
+
+.footer { margin-top: 22px; color: var(--ink-3); font-size: 12.5px; text-align: center; }
+
+/* position dossier panel */
+.dossier { max-width: 100%; margin: 6px 0 14px; border: 1px solid var(--grid); border-radius: 10px; background: var(--tile); padding: 6px 14px; }
+.dossier > summary { cursor: pointer; font-size: 12.5px; color: var(--ink-3); list-style: none; }
+.dossier > summary::-webkit-details-marker { display: none; }
+.dossier .preset-note { color: var(--ink-2); }
+.dossier-hint { color: var(--ink-3); font-style: italic; }
+.dossier-body { border-top: 1px solid var(--grid); margin-top: 8px; padding: 4px 0 8px; }
+.dossier-body h4 { font-size: 13.5px; margin: 10px 0 2px; }
+.dossier-who { font-size: 13px; color: var(--ink-2); margin: 2px 0 6px; }
+.dossier-body blockquote { margin: 6px 0; padding: 6px 12px; border-left: 3px solid var(--accent); background: var(--wash); border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); }
+.dossier-params { border-collapse: collapse; width: 100%; font-size: 12px; margin: 6px 0; }
+.dossier-params th { text-align: left; color: var(--ink-3); text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; padding: 3px 8px; border-bottom: 1px solid var(--grid); }
+.dossier-params td { padding: 3px 8px; border-bottom: 1px solid var(--grid); color: var(--ink-2); vertical-align: top; }
+.dossier-params .ev-disc { color: var(--good); font-weight: 600; }
+.dossier-params .ev-cred { color: var(--accent-ink); font-weight: 600; }
+.dossier-params .ev-comm { color: var(--warn); font-weight: 600; }
+.dossier-params .ev-spec { color: var(--ink-3); font-weight: 600; }
+.dossier-cap { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); margin: 8px 0 0; }
+.dossier-body ul { margin: 2px 0 6px; padding-left: 20px; }
+.dossier-body li { font-size: 12.5px; color: var(--ink-2); }
+
+.dossier-attr { font-size: 12px; color: var(--warn); margin: 0 0 6px; font-style: italic; }
+
+/* model-sizing provenance panel (v2.1.3, D3): a separately-collapsed sibling of the dossier,
+   shown only while a range-exploration route is loaded — visibly its own panel, not route content */
+.model-context { border-style: dashed; }
+
+/* traffic-mix axis (v2.1.2) */
+.param.locked input[type="range"] { opacity: .45; }
+.lock-note { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.dossier-traffic { font-size: 12.5px; color: var(--ink-2); border-top: 1px dashed var(--grid); padding-top: 8px; margin-top: 10px; }
+#traffic-preset:disabled { opacity: .55; cursor: not-allowed; }
+.cardmeta { font-size: 12.5px; color: var(--ink-2); border-left: 3px solid var(--grid); padding-left: 10px; margin: 6px 0 10px; }
+
+.verdict-provenance { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px; }
+
+/* margin-range evidence board (v2.1.3 preset redesign, M3).
+   First-class but causally secondary: it renders the claims registry and page-authored routes;
+   it never sets the hero. Mobile (P0-9): grid collapses to one column, every child min-width:0,
+   quotes wrap, buttons wrap — no horizontal overflow (LUR-1 class). */
+.evidence-board {
+  margin: 4px 0 18px; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px clamp(14px, 3vw, 28px) 20px; box-shadow: var(--shadow);
+  min-width: 0; overflow-wrap: anywhere;
+}
+.evidence-board h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -0.01em; }
+/* Skimmer clarifier under the range-explorer H2 (persona: a 60–90s skimmer must register the ranges
+   as what-if questions, not a claim). Prominent, accented left rule, but not a card. */
+.board-skim { color: var(--ink-1); font-size: 14px; margin: 6px 0 8px; max-width: 1000px;
+  border-left: 3px solid var(--accent); padding-left: 10px; }
+.board-sub { color: var(--ink-2); font-size: 13.5px; margin: 4px 0 6px; max-width: 1000px; }
+.board-note { color: var(--ink-3); font-size: 12.5px; margin: 8px 0 12px; max-width: 1000px; }
+
+/* range-explorer front door (v2.1.3): the four ranges as entry affordances; a selected range
+   surfaces its route cards; the full catalog is one expansion below. */
+.front-door { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 12px; min-width: 0; }
+.range-chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 900px) { .range-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.range-chip {
+  font: inherit; text-align: left; cursor: pointer; min-width: 0;
+  background: var(--tile); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow);
+}
+.range-chip:hover { border-color: var(--accent); background: var(--wash); }
+.range-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--wash); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.range-chip .chip-range { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink-1); font-family: var(--font-head); }
+.range-chip .chip-meta { font-size: 11.5px; color: var(--ink-3); line-height: 1.35; }
+.range-chip .chip-current { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); line-height: 1.35; }
+.front-door-detail { border: 1px solid var(--grid); border-radius: 12px; background: var(--tile); padding: 10px 14px 12px; min-width: 0; }
+.fd-question { font-size: 14px; font-weight: 600; margin: 2px 0 4px; color: var(--ink-1); }
+.fd-null { font-size: 12.5px; color: var(--ink-2); margin: 4px 0; }
+.fd-claims-line { font-size: 12.5px; color: var(--ink-3); margin: 8px 0 2px; }
+
+/* saved scenarios (layout restructure 2026-07-11): a link/label-style dropdown under the
+   front-door cards — deliberately NO card of its own; only the expanded panel gets a border. */
+.saved-scenarios { margin: 2px 0 10px; }
+.saved-scenarios > summary {
+  cursor: pointer; list-style: none; display: inline-flex; align-items: baseline; gap: 6px;
+  color: var(--accent-ink); font-size: 13px; font-weight: 600; user-select: none;
+}
+.saved-scenarios > summary::-webkit-details-marker { display: none; }
+.saved-scenarios > summary::before { content: "▸"; font-size: 11px; }
+.saved-scenarios[open] > summary::before { content: "▾"; }
+.saved-scenarios > summary:hover { text-decoration: underline; }
+.saved-panel {
+  margin-top: 8px; border: 1px solid var(--grid); border-radius: 12px; background: var(--tile);
+  padding: 10px 14px 8px; max-width: 560px; min-width: 0;
+}
+.saved-hint { font-size: 12px; color: var(--ink-3); margin: 0 0 6px; }
+.saved-empty { font-size: 12.5px; color: var(--ink-3); font-style: italic; margin: 2px 0 6px; }
+.saved-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--grid); min-width: 0; }
+.saved-row:last-child { border-bottom: none; }
+.saved-load {
+  background: none; border: none; padding: 2px 0; font: inherit; font-size: 13px;
+  color: var(--ink-1); cursor: pointer; text-align: left; flex: 1; min-width: 0;
+  overflow-wrap: anywhere;
+}
+.saved-load:hover { color: var(--accent-ink); text-decoration: underline; }
+.saved-act {
+  background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer;
+  font: inherit; font-size: 11px; color: var(--ink-3); padding: 1px 8px; white-space: nowrap;
+}
+.saved-act:hover { color: var(--ink-1); background: var(--wash); }
+.saved-act.saved-del:hover { color: var(--series-6); border-color: var(--series-6); background: none; }
+.saved-rename {
+  font: inherit; font-size: 13px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 2px 6px; flex: 1; min-width: 0;
+}
+
+/* collapsed evidence catalog (one expansion away, never removed) */
+.board-catalog { border-top: 1px solid var(--grid); margin-top: 12px; padding-top: 8px; }
+.board-catalog > summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-2); list-style: none; display: flex; align-items: baseline; gap: 6px; }
+.board-catalog > summary::-webkit-details-marker { display: none; }
+.board-catalog > summary::before { content: "▸"; color: var(--ink-3); font-size: 12px; }
+.board-catalog[open] > summary::before { content: "▾"; }
+.board-catalog > summary:hover { color: var(--ink-1); }
+
+/* intentional 2×2 at desktop widths (P1: auto-fit stranded the 4th card 3+1 at 1440px);
+   single column on narrow screens (no horizontal overflow at 390px). */
+.board-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+@media (max-width: 720px) { .board-grid { grid-template-columns: 1fr; } }
+.bucket {
+  min-width: 0; background: var(--tile); border: 1px solid var(--grid); border-radius: 12px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow);
+}
+.bucket.bucket-current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.bucket-head { display: flex; flex-direction: column; gap: 3px; }
+.bucket-head h3 { margin: 0; font-size: 16.5px; letter-spacing: -0.01em; }
+.bucket-current-note { font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+.claim-group { border-left: 3px solid var(--grid); padding-left: 10px; min-width: 0; }
+.claim-group.g-unit { border-left-color: var(--accent); }
+.claim-group.g-unnamed { border-left-color: var(--series-5); }
+.claim-group.g-diff { border-left-color: var(--series-3); }
+.claim-group.g-anchor { border-left-color: var(--series-2); }
+.claim-group.g-model { border-left-color: var(--ink-3); border-left-style: dashed; }
+.claim-group > h4 { margin: 2px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.claim-row { padding: 3px 0 8px; border-bottom: 1px dashed var(--grid); min-width: 0; }
+.claim-row:last-child { border-bottom: none; padding-bottom: 4px; }
+.claim-who { font-size: 13px; color: var(--ink-1); font-weight: 600; }
+.claim-badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.claim-badges .badge, .config-head .badge { white-space: normal; line-height: 1.35; text-align: left; } /* P0-9: long typed badges (floor/compatible-with) must wrap on mobile, never widen the page */
+.claim-row blockquote {
+  margin: 5px 0; padding: 5px 10px; border-left: 3px solid var(--accent); background: var(--wash);
+  border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere;
+}
+.claim-reported { font-size: 12.5px; color: var(--ink-2); font-style: italic; margin: 5px 0; }
+.claim-src, .claim-scope, .claim-notclaimed { font-size: 12px; color: var(--ink-3); margin: 2px 0; }
+.bucket-empty { font-size: 12.5px; color: var(--ink-3); font-style: italic; margin: 2px 0 4px; }
+.bucket-configs { border-top: 1px solid var(--grid); padding-top: 8px; margin-top: 2px; min-width: 0; }
+.bucket-configs > h4 { margin: 0 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.config-row { border: 1px dashed var(--baseline); border-radius: 10px; padding: 8px 10px; margin: 6px 0; min-width: 0; }
+.config-row.config-loaded { border-style: solid; border-color: var(--accent); background: var(--wash); }
+.config-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.config-name { font-size: 13px; color: var(--ink-1); }
+.config-loaded-tag { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); }
+.config-meta { font-size: 12px; color: var(--ink-3); margin: 4px 0 2px; }
+.config-changes { font-size: 12px; color: var(--ink-2); margin: 2px 0 4px; }
+.config-row details { margin: 2px 0 4px; }
+.config-row details summary { font-size: 11.5px; color: var(--ink-3); cursor: pointer; }
+.config-note { font-size: 12px; color: var(--ink-2); margin: 4px 0; }
+.ghost-btn.btn-wrap { white-space: normal; text-align: left; }

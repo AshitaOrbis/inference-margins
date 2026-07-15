@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reception phase — synthesis &amp; resolution ledger · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/reception-synthesis">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Reception phase — synthesis &amp; resolution ledger (2026-07-11)</h1>
+<blockquote>
+<p><strong>What this is:</strong> a simulated-reader exercise — nine independent GPT-5.6 Sol (xhigh) audit runs against the frozen v2.1.2 preview (deploy <code>201b22a7</code>, git <code>9f1fd0f</code>), designed per the plan reviews: five corpus-bounded <strong>source-faithfulness audits</strong> (third person, no role-play, no approval outputs) and four <strong>anonymous audience archetypes</strong>. <strong>What this is not:</strong> validation. These are model-generated adversarial findings with no established error rate; the absence of a finding is not evidence of correctness, a null result is bounded by the manifest-selected corpus, and this exercise does not satisfy the still-open 5-human-reader comprehension test. No aggregate approval score exists or will be published.
+<strong>Raw artifacts (verbatim):</strong> <a href="reception/">prompts + corpus manifest + all nine raw outputs</a> · run metadata in each file&#39;s header. Synthesis rule: findings were deduplicated and dispositioned; none were upgraded, and every row links back to a raw output.</p>
+</blockquote>
+<h2>Headline</h2>
+<p>The audits re-ran the deployed suites and byte-checked the deployed assets against the frozen commit (both green; the anti-lens-shopping span, the three-deployment separation in §2c, the xAI segment-margin handling, and the $5B→$15B labeling all drew explicit &quot;no contradiction found in this corpus&quot;) — and then found <strong>16 P0-class defects and ~26 P1s</strong> the two prior review rounds had missed. The strongest theme, hit independently by five audits: <strong>attribution boundaries existed in expanded dossiers but vanished at collapsed point-of-use surfaces</strong> (selector names, hero zone labels, preset notes, ledger source cells). The single most damaging class: the calculator&#39;s own voice converting page-authored choices into source-attributed facts.</p>
+<h2>Convergent findings (multiple independent audits)</h2>
+<ul>
+<li><strong>Hero &quot;zone&quot; labels mechanically attributed page-computed states to named people</strong> (TeorTaxes, Zephyr, Dylan Patel, fleetingbits audits + accounting archetype — 5/9 runs). Fixed: bands are now descriptive of cited ranges, never named; analyst presets carry an always-visible SITE-AUTHORED RECONSTRUCTION prefix on both the note and the hero.</li>
+<li><strong>Reconstruction labeling strong when expanded, absent when collapsed</strong> (4 named audits). Fixed: selector renames to <code>[analyst reconstruction] …</code>, boundary line in the collapsed preset note, per-parameter &quot;Page-set X; no value in the cited corpus&quot; source cells.</li>
+<li><strong>Point-of-use metric honesty</strong> (accounting + calibration + lurker). Fixed: metric renamed to <em>modeled unit direct-serving contribution margin</em> with an exact cost-perimeter statement; hero label says &quot;not company GM&quot;; whole-point ≈ display with the unrounded value as an inspectable diagnostic.</li>
+</ul>
+<h2>Final-gate re-audit — round 2 (2026-07-11, later)</h2>
+<p>After the first remediation round, the release went to its final gate (a four-persona council + GPT-5.6 Pro, blind-first). <strong>The council returned NO-SHIP</strong>: four of the dispositions below were <strong>overstated as first closed</strong> — ACC-1 (metric rename incomplete in the tooltip/§5/§6), MLI-1 (the sanitizer blocked the exact audit payload but not a schema-downgrade forgery or out-of-range/enum/blend values), MLI-8 (a warning is not an exit; ticks/radios/selects/blend/URL mutations bypassed it), LUR-5 (a printed commit is not reproducibility — the stamp step itself dirtied the tree) — and the MLI-5 deferral was challenged (an 86.2/76.8/61.5% Opus envelope is material). A second remediation round closed all five: token-prefix schema authority with disagreement rejection; full range/enum/blend-shape validation; divergent overlays and every edit path (sliders, ticks, radios, selects, blend, URL overlays, saved-preset loads) now EXIT replay identity to an explicit &quot;[modified scenario]&quot; state; v2 links and browser presets recover named-profile identity on exact match; the metric rename completed; the cost-lens span computes at the resolved replay traffic; a &quot;Billable cached-input share&quot; slider makes the cache-conflation assumption breakable (default remains the labeled assumed-equal); and releases are now reproducible (clean-tree gate, release-stamp commit, served-asset hash manifest at /asset-manifest.json). An application-level browser suite (tests/run-app-tests.sh) encodes the live attack payloads as permanent regressions. The rows below carry their round-2 status.</p>
+<h2>Resolution ledger</h2>
+<p>Severity is the auditor&#39;s; <strong>disposition</strong> is this page&#39;s, with the deterministic acceptance check applied. &quot;Modified remedy&quot; = the objection was accepted but implemented differently than the audit&#39;s exact wording; the reason is stated.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Audit</th>
+<th>Sev</th>
+<th>Finding</th>
+<th>Disposition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ACC-1</td>
+<td><a href="reception/accounting.md">accounting</a></td>
+<td>P0</td>
+<td>&quot;List-price&quot; metric name contradicts the realized-billings denominator at default batch/discount</td>
+<td><strong>FIXED (round 2)</strong> — first round missed the engine tooltip and §5/§6 phrasing (final gate reopened it); now renamed sitewide. §10 cards keep &quot;list-price&quot; because every dive replay pins batch/discount to 0, test-asserted</td>
+</tr>
+<tr>
+<td>ACC-2</td>
+<td>accounting</td>
+<td>P0</td>
+<td>Idle capacity simultaneously included (util divisor) and declared excluded (methods)</td>
+<td><strong>FIXED</strong> — cost-perimeter statement rewritten; util tooltip states slack allocation explicitly</td>
+</tr>
+<tr>
+<td>ACC-3</td>
+<td>accounting</td>
+<td>P0</td>
+<td>§7 dollar bridge used stale arithmetic ($3.10/$3.72 vs actual $3.26785/$3.71875)</td>
+<td><strong>FIXED</strong> — exact current values in prose; suite now pins all three numbers so drift fails tests</td>
+</tr>
+<tr>
+<td>ACC-4</td>
+<td>accounting</td>
+<td>P1</td>
+<td>&quot;Non-additive bridge&quot; is a sensitivity map inviting bridge use</td>
+<td><strong>FIXED</strong> — renamed &quot;Sensitivity and perimeter map — not an accounting reconciliation&quot;; new &quot;Already in the calculator?&quot; column; cloud row split into cost-side procurement vs revenue-side channel share</td>
+</tr>
+<tr>
+<td>ACC-5</td>
+<td>accounting</td>
+<td>P1</td>
+<td>Heterogeneous margin observations presented as a time series (&quot;margin ladder&quot;)</td>
+<td><strong>FIXED</strong> — replaced with a per-figure perimeter/method/status listing; &quot;not a time series&quot; stated</td>
+</tr>
+<tr>
+<td>ACC-6</td>
+<td>accounting</td>
+<td>P1</td>
+<td>Hero and collapsed §10 cards unsafe as standalone business-margin claims</td>
+<td><strong>FIXED</strong> — hero label &quot;Unit serving margin — not company GM&quot;; card headlines prefixed unit CM / output-token CM; meta description corrected</td>
+</tr>
+<tr>
+<td>MLI-1</td>
+<td><a href="reception/ml-infra.md">ml-infra</a></td>
+<td>P0</td>
+<td>Forged permalink bypasses replay-traffic locking (71.6% forged vs 26.9% authentic while the UI claims locked 3:1/0%)</td>
+<td><strong>FIXED (round 2)</strong> — the first-round sanitizer blocked only the exact payload; the final gate produced a schema-downgrade forgery (inner <code>_meta.schema:&quot;v2&quot;</code> routing through the lock-overriding legacy path) and out-of-range/enum/blend bypasses. Now: token-prefix schema authority (disagreement = rejection), full bounds/enum/blend validation, and replay-divergent overlays exit replay identity. All attack payloads are permanent app-suite regressions</td>
+</tr>
+<tr>
+<td>MLI-2</td>
+<td>ml-infra</td>
+<td>P0</td>
+<td>§3 equation prose claims interactivity applies to prefill; the engine scales decode only</td>
+<td><strong>FIXED</strong> — prose corrected; decode-0.5×/prefill-1.0× assertions added</td>
+</tr>
+<tr>
+<td>MLI-3</td>
+<td>ml-infra</td>
+<td>P0</td>
+<td>Published test suites don&#39;t run from the published tree (<code>../site/engine.js</code>)</td>
+<td><strong>FIXED</strong> — deploy script rewrites imports for the served copies; standalone execution verified (both suites green from a bare download layout)</td>
+</tr>
+<tr>
+<td>MLI-4</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>Calibration tests skipped the GB300/H20-anchor/Ascend-anchor table claims</td>
+<td><strong>FIXED</strong> — three named assertions added</td>
+</tr>
+<tr>
+<td>MLI-5</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>One <code>cacheHit</code> drives both serving reuse and billable cached share</td>
+<td><strong>FIXED (round 2)</strong> — the final gate rejected disclosure-only deferral (&quot;expose it as an unknown input&quot;). A &quot;Billable cached-input share&quot; slider now breaks the coupling explicitly (revenue-side only, engine-tested); the default remains the labeled assumed-equal scenario, and the methods box quantifies the envelope (Opus default: 86.2 / 76.8 / 61.5% at billable 0% / =serving / 95%)</td>
+</tr>
+<tr>
+<td>MLI-6</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>Masthead overstated the anchored basis (35% of default traffic on unanchored MFUs)</td>
+<td><strong>FIXED</strong> — masthead names the unanchored platforms; hero shows &quot;Unanchored-MFU traffic share: N%&quot; live</td>
+</tr>
+<tr>
+<td>MLI-7</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>Interactivity multipliers look calibrated</td>
+<td><strong>FIXED</strong> — control renamed with explicit multipliers, &quot;uncalibrated&quot;, &quot;decode only&quot;</td>
+</tr>
+<tr>
+<td>MLI-8</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>Edited replays keep their published-operating-point attribution</td>
+<td><strong>FIXED (round 2)</strong> — the first-round warning covered only slider drags and was not an exit (final gate reopened it). Every mutation path — sliders, ticks, radios, selects, blend inputs, URL overlays, saved-preset loads — now exits to an explicit &quot;[modified scenario]&quot; identity with replay attribution removed</td>
+</tr>
+<tr>
+<td>MLI-9</td>
+<td>ml-infra</td>
+<td>P1</td>
+<td>&quot;Storage epsilon&quot; asserts immateriality; cache-write=0 hidden from the price tile</td>
+<td><strong>FIXED</strong> — &quot;may be material&quot; wording; live tile note when cache reads are modeled with write billing at 0%</td>
+</tr>
+<tr>
+<td>TEO-1</td>
+<td><a href="reception/teortaxes.md">teortaxes</a></td>
+<td>P0</td>
+<td>The bull preset priced H100 at $2.04/hr, below its own cited $2.40 anchor</td>
+<td><strong>FIXED</strong> — rentMult 0.85→1.0; margins moved (Opus 90.9→89.3%) and the parity fixture carries the documented remediation delta; dossier cell states the DeepSeek-calculation context of the $2.40</td>
+</tr>
+<tr>
+<td>TEO-2</td>
+<td>teortaxes</td>
+<td>P1</td>
+<td>Reconstruction boundary hidden while the named result is visible</td>
+<td><strong>FIXED</strong> — always-visible boundary prefix for analyst presets + selector rename</td>
+</tr>
+<tr>
+<td>TEO-3</td>
+<td>teortaxes</td>
+<td>P0</td>
+<td>Ledger source cells converted non-claims into source-attributed assumptions</td>
+<td><strong>FIXED</strong> — every analyst parameter cell now reads &quot;Page-set …; no value in the cited corpus&quot;</td>
+</tr>
+<tr>
+<td>TEO-4</td>
+<td>teortaxes</td>
+<td>P1</td>
+<td>Unclassified $4/1Mt ceiling treated as an output-token validation target</td>
+<td><strong>FIXED</strong> — §5 and tooltip state token-class is unresolved</td>
+</tr>
+<tr>
+<td>TEO-5</td>
+<td>teortaxes</td>
+<td>P1</td>
+<td>§1 compressed Anthropic-specific and conditional western-provider claims into one 90–95% attribution</td>
+<td><strong>FIXED</strong> — claims separated with scopes and conditions; &quot;no unconditional 90–95% claim in the cited corpus&quot; stated</td>
+</tr>
+<tr>
+<td>TEO-6</td>
+<td>teortaxes</td>
+<td>P1</td>
+<td>300B described as a &quot;median&quot; partly sourced to a qualitative Fable observation</td>
+<td><strong>FIXED</strong> — &quot;page-authored scenario value&quot; with the qualitative/relative nature of the cited posts spelled out</td>
+</tr>
+<tr>
+<td>TEO-7</td>
+<td>teortaxes</td>
+<td>P1</td>
+<td>Hero assigned real-source names to arbitrary states</td>
+<td><strong>FIXED</strong> — de-named bands (see convergent findings)</td>
+</tr>
+<tr>
+<td>ZEP-1</td>
+<td><a href="reception/zephyr.md">zephyr</a></td>
+<td>P0</td>
+<td>The archived sweep&#39;s own &quot;Frontier/Anthropic-style&quot; characterization exceeds the quoted post</td>
+<td><strong>FIXED (modified remedy)</strong> — the artifact is archival, so a dated ERRATUM block corrects both characterizations rather than silently editing the record; the audit&#39;s exact-string removal test is intentionally not satisfied, the misattribution correction is</td>
+</tr>
+<tr>
+<td>ZEP-2</td>
+<td>zephyr</td>
+<td>P0</td>
+<td>§1 &quot;makes the same claim … one analyst&#39;s head&quot; exceeded the corpus</td>
+<td><strong>FIXED</strong> — replacement paragraph separates the unnamed-lab allegation from the explicit Anthropic company-GM post</td>
+</tr>
+<tr>
+<td>ZEP-3</td>
+<td>zephyr</td>
+<td>P0</td>
+<td>Dossier claimed both metric scopes were explicit (&quot;he says both explicitly&quot;)</td>
+<td><strong>FIXED</strong> — dossier states which scope is explicit and which is this page&#39;s interpretation</td>
+</tr>
+<tr>
+<td>ZEP-4</td>
+<td>zephyr</td>
+<td>P1</td>
+<td>Parameter cells like &quot;semis-market insight&quot;/&quot;Implied by position&quot;</td>
+<td><strong>FIXED</strong> — page-set phrasing</td>
+</tr>
+<tr>
+<td>ZEP-5</td>
+<td>zephyr</td>
+<td>P1</td>
+<td>&quot;TeorTaxes/Zephyr 90–95% zone&quot; hero string</td>
+<td><strong>FIXED</strong> — de-named</td>
+</tr>
+<tr>
+<td>DYL-1</td>
+<td><a href="reception/dylan.md">dylan</a></td>
+<td>P1</td>
+<td>Quoted-secondary source class undisclosed at both attribution points</td>
+<td><strong>FIXED</strong> — §1 names the clip-account post and the source class; dossier anchor labeled</td>
+</tr>
+<tr>
+<td>DYL-2</td>
+<td>dylan</td>
+<td>P1</td>
+<td>Preset name + §6 &quot;reproduce ~93%&quot; collapse the claim/reconstruction boundary</td>
+<td><strong>FIXED</strong> — selector renamed; §6 sentence states site-authored translation</td>
+</tr>
+<tr>
+<td>DYL-3</td>
+<td>dylan</td>
+<td>P1</td>
+<td>$0.99 lost its workload/model scope in the §7 row</td>
+<td><strong>FIXED</strong> — Opus 4.7 agentic scope, 300:1, &gt;90% cache, &quot;not Anthropic-wide&quot;</td>
+</tr>
+<tr>
+<td>DYL-4</td>
+<td>dylan</td>
+<td>P1</td>
+<td>$1.60 TPU estimate extrapolated fleet-wide under a reported-evidence label</td>
+<td><strong>FIXED</strong> — §6 cell scoped; ledger label now &quot;SPECULATION derived from CREDIBLY REPORTED&quot;</td>
+</tr>
+<tr>
+<td>FLB-1</td>
+<td><a href="reception/fleetingbits.md">fleetingbits</a></td>
+<td>P1</td>
+<td>One post promoted into a named &quot;camp&quot;</td>
+<td><strong>FIXED</strong> — &quot;One reported-margin objection&quot;; selector renamed &quot;Reported-margin diagnostic (single-post anchor)&quot;</td>
+</tr>
+<tr>
+<td>FLB-2</td>
+<td>fleetingbits</td>
+<td>P1</td>
+<td>Hero converts the reconstruction into a source-associated 21.6%</td>
+<td><strong>FIXED</strong> — reconstruction prefix + de-named band</td>
+</tr>
+<tr>
+<td>FLB-3</td>
+<td>fleetingbits</td>
+<td>P1</td>
+<td>Labeling weak at parameter point of use</td>
+<td><strong>FIXED</strong> — boundary prefix + page-set cells</td>
+</tr>
+<tr>
+<td>FLB-4</td>
+<td>fleetingbits</td>
+<td>P1</td>
+<td>Tooltip/dossier implied a unit-margin interpretation and inversion not in the post</td>
+<td><strong>FIXED</strong> — tooltip source line and dossier identity/assumption/falsifier rewritten (falsifier now warns a failed inversion does not falsify the post)</td>
+</tr>
+<tr>
+<td>XJD-1</td>
+<td><a href="reception/xjdr.md">xjdr</a></td>
+<td>P0</td>
+<td>Unknown /research/ URLs served the homepage as HTTP 200</td>
+<td><strong>FIXED</strong> — <code>_redirects</code> for the misnamed sweep path + a real 404 page (no more SPA fallback impersonating artifacts)</td>
+</tr>
+<tr>
+<td>XJD-2</td>
+<td>xjdr</td>
+<td>P1</td>
+<td>§2c added interpretations beyond the corpus (&quot;read as average&quot;, &quot;~30×&quot;, &quot;mostly prefill&quot;)</td>
+<td><strong>FIXED</strong> — audit&#39;s replacement adopted; &quot;overage&quot; left uninterpreted; the p95 stated without a causal story</td>
+</tr>
+<tr>
+<td>XJD-3</td>
+<td>xjdr</td>
+<td>P0</td>
+<td>The 8:1 in &quot;ncode coding deployment 8:1/41%&quot; is a site-authored assumption presented as deployment telemetry</td>
+<td><strong>FIXED</strong> — profile renamed &quot;ncode-informed scenario&quot;, provenance split (41% observed / 8:1 site-assumed), GLM dossier labels corrected to SPECULATION, §10 cardmeta reworded; numeric state unchanged</td>
+</tr>
+<tr>
+<td>CAL-1</td>
+<td><a href="reception/calibration.md">calibration</a></td>
+<td>P0</td>
+<td>&quot;The §10 ranges still apply&quot; under the normalized table is false (DeepSeek −4% vs 45–83%)</td>
+<td><strong>FIXED</strong> — replaced with the non-transport statement + no-uncertainty-propagation note</td>
+</tr>
+<tr>
+<td>CAL-2</td>
+<td>calibration</td>
+<td>P1</td>
+<td>&quot;Roughly 80% of plausible modeled outcomes&quot; implies an undefined measure</td>
+<td><strong>FIXED</strong> — &quot;analyst-elicited scenario ranges … no stated coverage probability&quot;; all six cards read &quot;(scenario range …; uncalibrated)&quot;</td>
+</tr>
+<tr>
+<td>CAL-3</td>
+<td>calibration</td>
+<td>P1</td>
+<td>Undefined &quot;median&quot; (§5, preset name)</td>
+<td><strong>FIXED</strong> — &quot;[lens] Central scenario&quot;; §5 states the deployed central scenario ~77% and an unassigned-coverage span</td>
+</tr>
+<tr>
+<td>CAL-4</td>
+<td>calibration</td>
+<td>P1</td>
+<td>§6 verdict lacks model-generated provenance labeling at point of use</td>
+<td><strong>FIXED</strong> — provenance banner inside the verdict box</td>
+</tr>
+<tr>
+<td>CAL-5</td>
+<td>calibration</td>
+<td>P1</td>
+<td>Tenths-of-a-point hero precision</td>
+<td><strong>FIXED</strong> — whole-point ≈ display; unrounded value in the tile&#39;s title diagnostic</td>
+</tr>
+<tr>
+<td>CAL-6</td>
+<td>calibration</td>
+<td>P1</td>
+<td>Reference convention called &quot;realistic&quot;</td>
+<td><strong>FIXED</strong></td>
+</tr>
+<tr>
+<td>CAL-7</td>
+<td>calibration</td>
+<td>P1</td>
+<td>Tooltips smuggled speculative population priors (chat 5-20:1; industry 30-60%)</td>
+<td><strong>FIXED</strong> — named observations/conventions only; &quot;no representative distribution is public&quot;</td>
+</tr>
+<tr>
+<td>CAL-8</td>
+<td>calibration</td>
+<td>P1</td>
+<td>A forecast inside a &quot;not forecast&quot; paragraph</td>
+<td><strong>FIXED</strong> — hardware sensitivity scenario only; provider-conduct prediction removed; &quot;No probability is assigned&quot;</td>
+</tr>
+<tr>
+<td>CAL-9</td>
+<td>calibration</td>
+<td>P1</td>
+<td>Direct annex landings still say &quot;80% CI&quot;</td>
+<td><strong>FIXED</strong> — probability-label banner on all six dive wrappers (bodies stay verbatim)</td>
+</tr>
+<tr>
+<td>LUR-1</td>
+<td><a href="reception/lurker.md">lurker</a></td>
+<td>P0</td>
+<td>Long selector names cause document-wide horizontal overflow on mobile</td>
+<td><strong>FIXED</strong> — CSS width constraints + wrap</td>
+</tr>
+<tr>
+<td>LUR-2</td>
+<td>lurker</td>
+<td>P1</td>
+<td>Standalone hero reads as a general margin claim</td>
+<td><strong>FIXED</strong> — hero label/note/diagnostic changes above</td>
+</tr>
+<tr>
+<td>LUR-3</td>
+<td>lurker</td>
+<td>P1</td>
+<td>Masthead overgeneralized anchor-fitting</td>
+<td><strong>FIXED</strong> (= MLI-6)</td>
+</tr>
+<tr>
+<td>LUR-4</td>
+<td>lurker</td>
+<td>P1</td>
+<td>&quot;Evidence median&quot; gave an empirical scent to a mixed-evidence scenario</td>
+<td><strong>FIXED</strong> (= CAL-3)</td>
+</tr>
+<tr>
+<td>LUR-5</td>
+<td>lurker</td>
+<td>P0</td>
+<td>Footer manifest didn&#39;t identify the frozen source</td>
+<td><strong>FIXED (round 2)</strong> — a printed commit was not reproducibility (the stamp step dirtied the tree; final gate reopened it). Releases now require a clean worktree, create a release-stamp commit containing the stamped footer plus a served-asset SHA-256 manifest (/asset-manifest.json), and deploy that exact tree</td>
+</tr>
+</tbody></table>
+<p><strong>Dispositions after round 2: 45 fixed · 0 deferred · 0 rejected</strong> (five rows were overstated at first closing and re-closed under the final gate — the honest history is in each row). Release gates: 499 engine + 220 contract assertions plus a 17-check application-level browser suite encoding the live attack payloads; the audits&#39; own deterministic acceptance checks applied where automatable.</p>
+<h2>What the audits explicitly could not establish</h2>
+<p>Corpus completeness (all null results are bounded by the manifest-selected archive); the real people&#39;s actual opinions (by design — nothing here is an endorsement); human reading behavior (the lurker run is an information-architecture audit; the 5-human-reader gate remains open); byte-level screenshot geometry (headless captures failed in several runs; DOM/CSS reasoning was used instead).</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

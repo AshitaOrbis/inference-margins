@@ -1,0 +1,2036 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adopted grounding ledger (machine-generated) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/grounding-ledger">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Adopted grounding ledger — machine-generated RECONSTRUCTION</h1>
+<blockquote>
+<p><strong>What this is:</strong> every parameter the calculator&#39;s presets pin, with value, source and evidence label, generated directly from the deployed preset registry (<code>engine.js</code> v2.1.5-2026-07-15) and its dossier annotations — so this page cannot drift from what the calculator actually computes.
+<strong>What this is not:</strong> the original &quot;192-row preset grounding pack&quot; consultation artifact. That pack&#39;s full row set lived in conversation-sandbox files that expired; its adopted decisions are summarized in the <a href="consult-preset-pack.html">consultation page</a>, and a dated author-model re-emission with delta notes is published as the <a href="consult-preset-pack-reaudit.html">preset-pack re-audit</a>. Where any re-emission differs from this ledger, <strong>this ledger (the adopted values) wins.</strong>
+Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMATE / SPECULATION (from the on-page dossiers).</p>
+</blockquote>
+<h2>Model presets</h2>
+<h3>Claude Opus 4.x</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>300</td>
+<td>Page-authored 300B scenario value. TeorTaxes&#39;s cited corpus supplies only a qualitative Fable observation (&#39;shockingly FEW active&#39;) and a relative Opus bound; GPT-5.6 Pro&#39;s independent consult also centered on 300B — neither supplies a measured count</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>5000</td>
+<td>Deduction from Musk&#39;s Apr 2026 post (Grok 0.5T = 1/10 Opus); knowledge-probe methods carry ±3× bars</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Assumed frontier norm; FP8 paths standard on H100+ fleets</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>5</td>
+<td>Anthropic price list</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>25</td>
+<td>Anthropic price list</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+</tbody></table>
+<h3>Claude Sonnet 5 (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>120</td>
+<td>4.x-era estimate; Sonnet 5&#39;s architecture is undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1000</td>
+<td>Musk post deduction (Grok = ½ Sonnet 4.x); carried over</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Assumed frontier norm</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2</td>
+<td>Anthropic pricing page (intro through Aug 31, 2026)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>10</td>
+<td>Anthropic pricing page (intro through Aug 31, 2026)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+<tr>
+<td><code>tariff.validUntil</code></td>
+<td>2026-08-31 → {&quot;priceIn&quot;:3,&quot;priceOut&quot;:15}</td>
+<td>intro $2/$10 ends Aug 31, 2026; standard $3/$15 from Sep 1</td>
+<td>DISCLOSED</td>
+</tr>
+</tbody></table>
+<h3>Claude Haiku 4.5 (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>40</td>
+<td>Pure scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>350</td>
+<td>Pure scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Assumed frontier norm</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>1</td>
+<td>Anthropic price list</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>5</td>
+<td>Anthropic price list</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+</tbody></table>
+<h3>GPT-5.6 Sol (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>105</td>
+<td>Zephyr &#39;~100B active range&#39; + Epoch&#39;s independent inference-economics estimate (80% range 50–220B)</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>5000</td>
+<td>Dive central ~5T; subjective range 1–20T — effective-capacity probes allow 3–29T</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>MXFP4 demonstrated in gpt-oss; Sol&#39;s production layers undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>5</td>
+<td>OpenAI API pricing (Standard short-context)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>30</td>
+<td>OpenAI API pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h100&quot;:20,&quot;h200&quot;:25,&quot;gb200&quot;:45,&quot;gb300&quot;:10}</td>
+<td>Hopper/Blackwell across Microsoft/OCI/CoreWeave (disclosed platforms; shares guessed)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>OpenAI dive mix 9:1 / 78% (9:1 / 78%)</td>
+<td>The OpenAI dive&#39;s 7 cached : 2 fresh : 1 output convention — a dive assumption, not disclosed telemetry. · 7 cached : 2 fresh : 1 output benchmark convention (Artificial Analysis)</td>
+<td>CREDIBLY REPORTED</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>0.85</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>73</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>0.75</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>balanced</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>Gemini 3.1 Pro (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>120</td>
+<td>Scenario midpoint (bracket 60–240B); no credible leak exists</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>3000</td>
+<td>Scenario midpoint (bracket 1–4T)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Ironwood exposes FP8; Gemini&#39;s formats undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2</td>
+<td>Gemini API pricing, ≤200K tier</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>12</td>
+<td>Gemini API pricing (output incl. thinking)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;tpu7&quot;:100}</td>
+<td>TPUs serve Gemini (disclosed); simplified to Ironwood — older TPU fleets unmodeled</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>0.3</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>75</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>0.55</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>batch</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>Grok 4.5 (1.5T) (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>200</td>
+<td>Dive central ~200B (13% activation); range 100–500B — Grok-2&#39;s lineage ran unusually dense (42.7%)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1500</td>
+<td>Musk statement, corroborated by Cursor&#39;s MoE description</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Grok-2 recipe was FP8/TP8 — best public prior</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2</td>
+<td>xAI API pricing (launched Jul 8, 2026)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>6</td>
+<td>xAI API pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>25</td>
+<td>$0.50 cached / $2.00 input = 25%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h100&quot;:45,&quot;h200&quot;:5,&quot;gb200&quot;:25,&quot;gb300&quot;:25}</td>
+<td>Colossus I/II composition per SpaceXAI prospectus (shares approximated)</td>
+<td>CREDIBLY REPORTED</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>0.62</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>48</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>1</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>batch</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.ioRatio</code></td>
+<td>3</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.cacheHit</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>Kimi K2.7 Code (1T/32B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>32</td>
+<td>Open checkpoint config</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1000</td>
+<td>Open checkpoint (595GB)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Released weights are INT4; hosted path undisclosed — 8-bit modeled</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.95</td>
+<td>Moonshot platform pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>4</td>
+<td>Moonshot platform pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>20</td>
+<td>$0.19/$0.95 = 20%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h800&quot;:70,&quot;h20&quot;:30}</td>
+<td>Historical A800/H800 production (Mooncake); current fleet undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>1</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>60</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>0.83</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>balanced</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.ioRatio</code></td>
+<td>8</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.cacheHit</code></td>
+<td>40</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>DeepSeek V3/R1 (671B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>37</td>
+<td>V3 technical report</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>671</td>
+<td>V3 technical report</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>FP8 matmuls, BF16 attention (their disclosure)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.55</td>
+<td>R1 price list (historical)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>2.19</td>
+<td>R1 price list (historical)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>25</td>
+<td>$0.14 hit / $0.55 miss = 25%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h800&quot;:100}</td>
+<td>All service ran on 8×H800 nodes (disclosed)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>DeepSeek disclosure (Feb 2025) 4:1 / 56% (4:1 / 56%)</td>
+<td>DeepSeek&#39;s Feb 2025 production disclosure (measured). Their 56.3% is a DISK-cache-hit share; treating it as billable cached-input share is a labeled assumption. · 608B in / 168B out = 3.6:1 (slider granularity: 4)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>1.14</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>100</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>1</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>batch</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>DeepSeek V4 Pro (1.6T/49B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>49</td>
+<td>Official release + technical report</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1600</td>
+<td>Official release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp4</td>
+<td>Selective FP4 (routed experts + indexer; KV BF16/FP8) — modeled as fp4 where hardware supports it</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.435</td>
+<td>api-docs.deepseek.com pricing (Jul 9)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>0.87</td>
+<td>api-docs.deepseek.com pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>1</td>
+<td>$0.003625/$0.435 = 0.83% (slider granularity: 1%)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h800&quot;:50,&quot;h20&quot;:20,&quot;ascend&quot;:30}</td>
+<td>H800 stock + reported Ascend 950 involvement; split unknown</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>DeepSeek disclosure (Feb 2025) 4:1 / 56% (4:1 / 56%)</td>
+<td>DeepSeek&#39;s Feb 2025 production disclosure (measured). Their 56.3% is a DISK-cache-hit share; treating it as billable cached-input share is a labeled assumption. · 2025 disclosed traffic shape carried forward</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>0.857</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>100</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>1.05</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>batch</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.blend</code></td>
+<td>{&quot;h800&quot;:100}</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>DeepSeek V4-Flash (284B/13B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>13</td>
+<td>Official release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>284</td>
+<td>Official release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp4</td>
+<td>Same selective-FP4 family as V4 Pro</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.14</td>
+<td>api-docs.deepseek.com pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>0.28</td>
+<td>api-docs.deepseek.com pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>2</td>
+<td>$0.0028/$0.14 = 2%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h800&quot;:50,&quot;h20&quot;:20,&quot;ascend&quot;:30}</td>
+<td>Same speculative China mix as V4 Pro</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>DeepSeek disclosure (Feb 2025) 4:1 / 56% (4:1 / 56%)</td>
+<td>DeepSeek&#39;s Feb 2025 production disclosure (measured). Their 56.3% is a DISK-cache-hit share; treating it as billable cached-input share is a labeled assumption. · 2025 traffic shape carried forward</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>GLM 5.2 (744B/40B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>40</td>
+<td>Open release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>744</td>
+<td>Open release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>BF16/FP8 checkpoints; first-party serving precision undisclosed (W8A8/W4A8 recipes exist)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>1.4</td>
+<td>Z.ai international pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>4.4</td>
+<td>Z.ai international pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>19</td>
+<td>$0.26/$1.40 = 19%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;ascend&quot;:40,&quot;h800&quot;:40,&quot;h20&quot;:20}</td>
+<td>Nine domestic platforms named, zero shares disclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>ncode-informed scenario 8:1 / 41% (8:1 / 41%)</td>
+<td>The 41% cache-hit rate and 81k-token average inputs are @_xjdr&#39;s free-week observations; the 8:1 input:output ratio is a site-authored Zhipu-dive assumption (the cited posts report no output-length or I/O split). One event informing a scenario, not a generic &#39;coding&#39; archetype. · Site-authored Zhipu-dive assumption; @_xjdr reported 81k average inputs but no output-length or I/O split</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>dive.rentMult</code></td>
+<td>1.9</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.util</code></td>
+<td>75</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.stackMult</code></td>
+<td>0.6</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.interact</code></td>
+<td>balanced</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.batchShare</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+<tr>
+<td><code>dive.discount</code></td>
+<td>0</td>
+<td>§10 dive replay (see the provider dive in this annex)</td>
+<td>dive assumption</td>
+</tr>
+</tbody></table>
+<h3>GLM-4.7 (355B/32B)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>32</td>
+<td>Open release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>355</td>
+<td>Open release</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>BF16/FP8 checkpoints; first-party serving precision undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.6</td>
+<td>Z.ai pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>2.2</td>
+<td>Z.ai pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>18</td>
+<td>$0.11/$0.60 ≈ 18%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;ascend&quot;:40,&quot;h800&quot;:40,&quot;h20&quot;:20}</td>
+<td>As GLM-5.2 — nine platforms named, shares unknown</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>ncode-informed scenario 8:1 / 41% (8:1 / 41%)</td>
+<td>The 41% cache-hit rate and 81k-token average inputs are @_xjdr&#39;s free-week observations; the 8:1 input:output ratio is a site-authored Zhipu-dive assumption (the cited posts report no output-length or I/O split). One event informing a scenario, not a generic &#39;coding&#39; archetype. · Carries over GLM-5.2&#39;s site-assumed 8:1; no GLM-4.7 traffic telemetry supports it</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>GPT-5.6 Terra (tariff scenario) — TARIFF SCENARIO (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>50</td>
+<td>Scenario central from dive range 20–110B</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1000</td>
+<td>Scenario central from dive range 0.25–5T</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Family assumption</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2.5</td>
+<td>OpenAI pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>15</td>
+<td>OpenAI pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>90% cache discount (OpenAI standard)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h100&quot;:20,&quot;h200&quot;:25,&quot;gb200&quot;:45,&quot;gb300&quot;:10}</td>
+<td>Sol&#39;s fleet assumption</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>OpenAI dive mix 9:1 / 78% (9:1 / 78%)</td>
+<td>The OpenAI dive&#39;s 7 cached : 2 fresh : 1 output convention — a dive assumption, not disclosed telemetry. · Same 7:2:1 convention as Sol</td>
+<td>CREDIBLY REPORTED</td>
+</tr>
+</tbody></table>
+<h3>GPT-5.6 Luna (tariff scenario) — TARIFF SCENARIO (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>20</td>
+<td>Scenario central from dive range 8–50B</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>250</td>
+<td>Scenario central from dive range 0.05–1.5T</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Family assumption</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>1</td>
+<td>OpenAI pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>6</td>
+<td>OpenAI pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>90% cache discount</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h100&quot;:20,&quot;h200&quot;:25,&quot;gb200&quot;:45,&quot;gb300&quot;:10}</td>
+<td>Sol&#39;s fleet assumption</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>OpenAI dive mix 9:1 / 78% (9:1 / 78%)</td>
+<td>The OpenAI dive&#39;s 7 cached : 2 fresh : 1 output convention — a dive assumption, not disclosed telemetry. · Sol convention</td>
+<td>CREDIBLY REPORTED</td>
+</tr>
+</tbody></table>
+<h3>Gemini 3.5 Flash (tariff scenario) — TARIFF SCENARIO (speculative sizes)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>20</td>
+<td>Speed-based community guesses 10–16B; scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>600</td>
+<td>Bracketed 0.4–1.2T in the dive; 405B lower-bound applies to the PRIOR generation</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>Unknown; FP8-equivalent assumed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>1.5</td>
+<td>Gemini API pricing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>9</td>
+<td>Gemini API pricing (incl. thinking)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>$0.15/$1.50 = 10%</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;tpu7&quot;:100}</td>
+<td>TPU (as 3.1 Pro)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point. · Default reference mix</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>Custom (define with sliders)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>active</code></td>
+<td>100</td>
+<td>User input (slider)</td>
+<td>USER-SET</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>1000</td>
+<td>User input (slider)</td>
+<td>USER-SET</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>User input (slider)</td>
+<td>USER-SET</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>3</td>
+<td>User input (slider)</td>
+<td>USER-SET</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>15</td>
+<td>User input (slider)</td>
+<td>USER-SET</td>
+</tr>
+<tr>
+<td><code>nativeTraffic</code></td>
+<td>Reference 15:1 / 60% (15:1 / 60%)</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+<td>calculator default</td>
+</tr>
+</tbody></table>
+<h2>Perspective presets</h2>
+<h3>[lens] Central scenario (Claude)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental basis — market-observable, unlike internal TCO; the basis choice is the page&#39;s</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1</td>
+<td>Neocloud list ≈ 1.0× the HW table&#39;s rates</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>50</td>
+<td>Page-set 30–60% sensitivity band, middle</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>Open-source-best (SGLang-class) = 1.0 by construction</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>Balanced latency — neither batch-farm nor premium-interactive</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>15</td>
+<td>Modest batch-tier adoption</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>5</td>
+<td>Light enterprise discounting</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[replay] §10 dive (this model)</h3>
+<p><em>Sets nothing — replays the model&#39;s own §10 dive fields (see each model&#39;s <code>dive.*</code> rows).</em></p>
+<h3>[range exploration] ≥90% · owned-TCO estate route</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>tco</td>
+<td>Page-chosen owned-TCO basis — hourly cost built from capex, power, datacenter and opex</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>55</td>
+<td>Page-set 55% occupancy scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.1</td>
+<td>Page-set 1.1× serving-stack scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>Central-scenario balanced latency</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>15</td>
+<td>Central-scenario 15% batch-tier share</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>5</td>
+<td>Central-scenario 5% blended discount</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[range exploration] 80–90% · market rents, aggressive stack, throughput</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Page-set market-rental basis</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1</td>
+<td>Market spot rate = this page&#39;s base H100 rate (1.0×)</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>Page-set 70% fleet-utilization scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.25</td>
+<td>Page-set 1.25× serving-stack scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Page-set throughput-first serving</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>10</td>
+<td>Page-set 10% batch-price share</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>Page-set 0% negotiated discount</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[range exploration] 80–90% · sub-market rents, above-baseline stack</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Page-set market-rental basis</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>0.9</td>
+<td>Page-set 0.90× scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>65</td>
+<td>Page-set 65% occupancy scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.15</td>
+<td>Page-set 1.15× serving-stack scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Page-set throughput-first serving</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>10</td>
+<td>Page-set 10% batch-price share</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>Page-set 0% negotiated discount</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[range exploration] &lt;60% · reported-margin inverse diagnostic</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Page-chosen hyperscaler-rental basis to test the reported figures</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1.6</td>
+<td>Cloud list ≈1.5-1.8× neocloud (market observation, page-selected)</td>
+<td>COMMUNITY ESTIMATE</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>35</td>
+<td>Page-set 35% (peak-provisioning story)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>0.85</td>
+<td>Page-set 0.85× scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>Page-set balanced mode</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>25</td>
+<td>Page-set 25% scenario value</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>20</td>
+<td>Page-set 20% (enterprise discounting is real, the level is page-chosen)</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[lens] Strategic-partner fleet (GPT-5.6 Pro)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental frame at strategic rates</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>0.7</td>
+<td>Site applies SemiAnalysis&#39;s ~$1.60/TPU-hour estimate (Nov 2025 analysis of the 600k GCP-rented TPU tranche, inclusive of Google&#39;s margin — an estimate, not a disclosed contract price) as a 0.7x scalar across the modeled heterogeneous fleet</td>
+<td>SPECULATION derived from CREDIBLY REPORTED</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>Its 75% occupancy central (70 used here)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>Mature-lab stack ≈ OSS-best</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Throughput-oriented economic-marginal frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>Not separately modeled by the dive</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>List-price frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;tpu7&quot;:40,&quot;gb300&quot;:25,&quot;gb200&quot;:15,&quot;trn2&quot;:15,&quot;h200&quot;:5}</td>
+<td>Its stated 40/25/15/15/5 TPU-heavy fleet</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[valuation replay] xAI cash-marginal (dive operating point)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental frame carrying the cash rate</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>0.156</td>
+<td>$0.60 ÷ the Colossus blend&#39;s $3.85 weighted rate = 0.156</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>48</td>
+<td>Held at the dive&#39;s operating point — only the valuation changes across the three xAI lenses</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>Dive operating point</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Dive operating point</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>List-price frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>List-price frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>ioRatio</code></td>
+<td>3</td>
+<td>The dive&#39;s 3:1 uncached workload — held fixed across all three xAI lenses</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>cacheHit</code></td>
+<td>0</td>
+<td>Dive workload (uncached)</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[valuation replay] xAI opportunity-cost (Anthropic contract)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental frame carrying the contract rate</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1.37</td>
+<td>$5.27 ÷ $3.85 blend rate = 1.37</td>
+<td>DISCLOSED (rate); SPECULATION (application)</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>48</td>
+<td>Held at the dive&#39;s operating point</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>Dive operating point</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Dive operating point</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>List-price frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>List-price frame</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>ioRatio</code></td>
+<td>3</td>
+<td>The dive&#39;s 3:1 uncached workload — held fixed across all three xAI lenses</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>cacheHit</code></td>
+<td>0</td>
+<td>Dive workload (uncached)</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[lens] China public-cloud on-demand (Jul 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental (public rate cards)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>6.15</td>
+<td>Grounding-pack computation vs IDC defaults: H20 6.24×, H800 6.07×, 910C-proxy 6.15× (rate cards DISCLOSED; the blend into one multiplier is analytic)</td>
+<td>DISCLOSED (rates); SPECULATION (blend)</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>35</td>
+<td>Enterprise on-demand occupancy per the grounding pack (~35%)</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>OSS baseline</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>Balanced</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>None</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>None</td>
+<td>SPECULATION</td>
+</tr>
+</tbody></table>
+<h3>[SLO replay] Ant Group production H20 (&lt;50ms)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Rental at the page&#39;s H20 IDC rate</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1</td>
+<td>1.0 — Ant&#39;s own cost basis is undisclosed</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>100</td>
+<td>100 = measured-operating-point convention (per-occupied-chip); Ant&#39;s fleet occupancy is undisclosed</td>
+<td>SPECULATION (convention)</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1.0 = the Pro tier this page&#39;s H20 MFU is fit to</td>
+<td>DISCLOSED (anchor)</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Their production batching</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>Not applicable</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>Not applicable</td>
+<td>SPECULATION</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h20&quot;:100}</td>
+<td>H20-only (their published deployment)</td>
+<td>DISCLOSED</td>
+</tr>
+</tbody></table>
+<h3>[replay] DeepSeek disclosure (Feb 2025)</h3>
+<table>
+<thead>
+<tr>
+<th>parameter</th>
+<th>adopted value</th>
+<th>source</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>Their stated leasing-cost frame</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>rentMult</code></td>
+<td>1.14</td>
+<td>$2/hr ÷ current IDC $1.75 = 1.14×</td>
+<td>DISCLOSED (assumption in source)</td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>100</td>
+<td>100% — disclosed throughputs are averages over deployed nodes; a divisor would double-count idle time</td>
+<td>DISCLOSED (derived)</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>Their stack = the calibration baseline</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>batch</td>
+<td>Throughput-first production serving</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>Not applicable in their billing</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>Theoretical list billing (their own caveat: realized was lower)</td>
+<td>DISCLOSED</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td>{&quot;h800&quot;:100}</td>
+<td>All-H800 (disclosed)</td>
+<td>DISCLOSED</td>
+</tr>
+</tbody></table>
+<h2>Traffic-mix profiles (v2.1.2 axis)</h2>
+<table>
+<thead>
+<tr>
+<th>profile</th>
+<th>I/O</th>
+<th>cache hit</th>
+<th>provenance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reference 15:1 / 60%</td>
+<td>15:1</td>
+<td>60%</td>
+<td>Calculator convention — the held-fixed scenario the normalized table uses. Not any provider&#39;s measured operating point.</td>
+</tr>
+<tr>
+<td>OpenAI dive mix 9:1 / 78%</td>
+<td>9:1</td>
+<td>78%</td>
+<td>The OpenAI dive&#39;s 7 cached : 2 fresh : 1 output convention — a dive assumption, not disclosed telemetry.</td>
+</tr>
+<tr>
+<td>DeepSeek disclosure (Feb 2025) 4:1 / 56%</td>
+<td>4:1</td>
+<td>56%</td>
+<td>DeepSeek&#39;s Feb 2025 production disclosure (measured). Their 56.3% is a DISK-cache-hit share; treating it as billable cached-input share is a labeled assumption.</td>
+</tr>
+<tr>
+<td>ncode-informed scenario 8:1 / 41%</td>
+<td>8:1</td>
+<td>41%</td>
+<td>The 41% cache-hit rate and 81k-token average inputs are @_xjdr&#39;s free-week observations; the 8:1 input:output ratio is a site-authored Zhipu-dive assumption (the cited posts report no output-length or I/O split). One event informing a scenario, not a generic &#39;coding&#39; archetype.</td>
+</tr>
+<tr>
+<td>Kimi dive mix 8:1 / 40%</td>
+<td>8:1</td>
+<td>40%</td>
+<td>The Moonshot dive&#39;s Mooncake-like convention — a dive assumption the dive itself declined to firm up.</td>
+</tr>
+<tr>
+<td>Uncached 3:1 / 0%</td>
+<td>3:1</td>
+<td>0%</td>
+<td>The xAI dive&#39;s operating convention: output-heavy traffic, no billed prefix cache.</td>
+</tr>
+</tbody></table>
+<h2>Hardware table (per-platform adopted values)</h2>
+<table>
+<thead>
+<tr>
+<th>platform</th>
+<th>dense FP8 PF</th>
+<th>HBM GB</th>
+<th>BW TB/s</th>
+<th>rent $/hr</th>
+<th>capex $</th>
+<th>effDec</th>
+<th>effPre</th>
+<th>note</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100 SXM</td>
+<td>1.98</td>
+<td>80</td>
+<td>3.35</td>
+<td>2.4</td>
+<td>25000</td>
+<td>0.07</td>
+<td>0.15</td>
+<td>2022. Anchor: DeepSeek served V3/R1 on H800 (H100-class compute). Prefill MFU is reconstructed FRESH-only (the disclosed 73.7k/node input flow includes the 56.3% disk-cache-hit share).</td>
+</tr>
+<tr>
+<td>H200</td>
+<td>1.98</td>
+<td>141</td>
+<td>4.8</td>
+<td>2.9</td>
+<td>32000</td>
+<td>0.085</td>
+<td>0.36</td>
+<td>Same compute as H100, 1.76× HBM capacity/1.4× bandwidth → better batching.</td>
+</tr>
+<tr>
+<td>GB200 NVL72</td>
+<td>5</td>
+<td>186</td>
+<td>8</td>
+<td>4.5</td>
+<td>45000</td>
+<td>0.15</td>
+<td>0.42</td>
+<td>72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200&#39;s). Anchor: vLLM ~10.1k decode tok/s/GPU on R1 reproduces at 15% MFU; the source run&#39;s precision basis (possibly NVFP4) is not fully pinned, so treat as an upper anchor. Neocloud rates $3.50-6/hr (Jul 2026).</td>
+</tr>
+<tr>
+<td>GB300 NVL72</td>
+<td>5</td>
+<td>288</td>
+<td>8</td>
+<td>6</td>
+<td>55000</td>
+<td>0.127</td>
+<td>0.45</td>
+<td>Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. Anchor: SGLang &gt;12k tok/s/GPU on V4 Pro (FP4+MTP) reproduces at 12.7% × 1.85 FP4 using the now-DISCLOSED 49B active (v1 fit assumed ~66B); InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates).</td>
+</tr>
+<tr>
+<td>H800 (China)</td>
+<td>1.98</td>
+<td>80</td>
+<td>3.35</td>
+<td>1.75</td>
+<td>40000</td>
+<td>0.07</td>
+<td>0.15</td>
+<td>H100 compute with NVLink capped at 400GB/s (export SKU, finite pre-ban stock — capex carries the scarcity premium). THE DeepSeek V3/R1 workhorse. Prefill MFU = FRESH-only reconstruction (~4,026 tok/s/GPU net of the 56.3% disk-cache share; the raw 9,212 aggregate includes cache hits). Annual-commit IDC rate $1.47-2.06/hr mid-2026; DeepSeek&#39;s 2025 disclosure assumed $2/hr.</td>
+</tr>
+<tr>
+<td>H20 (China)</td>
+<td>0.296</td>
+<td>96</td>
+<td>4</td>
+<td>1</td>
+<td>20000</td>
+<td>0.17</td>
+<td>0.5</td>
+<td>The China-legal NVIDIA SKU: only 296 TF dense FP8 but 4.0 TB/s HBM — decode is bandwidth-bound, so it serves far better than its FLOPS suggest (hence the high effective MFU vs a tiny denominator). Default 17% = the hardware dive&#39;s NEUTRAL recommendation (~680 tok/s at the tighter Ant Pro tier); the relaxed &lt;70ms production anchor (714 tok/s) reproduces at 18%. Rental class matters: same chip spans ~$0.76 (IDC annual) to $7+ (hyperscaler on-demand).</td>
+</tr>
+<tr>
+<td>TPU v7 Ironwood</td>
+<td>4.61</td>
+<td>192</td>
+<td>7.37</td>
+<td>4.2</td>
+<td>35000</td>
+<td>0.13</td>
+<td>0.4</td>
+<td>Google&#39;s inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). Google-internal cost unknown — estimates.</td>
+</tr>
+<tr>
+<td>Trainium2</td>
+<td>1.3</td>
+<td>96</td>
+<td>2.9</td>
+<td>1.5</td>
+<td>15000</td>
+<td>0.055</td>
+<td>0.3</td>
+<td>GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025); Anthropic reported &gt;1M Trainium2 in use across AWS by Apr 2026. Cheap per chip, weaker software stack — estimates; NO public serving anchor.</td>
+</tr>
+<tr>
+<td>Trainium3</td>
+<td>2.51</td>
+<td>144</td>
+<td>4.9</td>
+<td>2.2</td>
+<td>20000</td>
+<td>0.08</td>
+<td>0.34</td>
+<td>GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS&#39;s aggressive cost-per-token play — pricing estimates.</td>
+</tr>
+<tr>
+<td>Ascend 910C</td>
+<td>1.504</td>
+<td>128</td>
+<td>3.2</td>
+<td>1.95</td>
+<td>23000</td>
+<td>0.07</td>
+<td>0.28</td>
+<td>Huawei&#39;s dual-die flagship (SMIC 7nm). NO native FP8 — 8-bit here means INT8 (1.504 PF per Huawei&#39;s Atlas spec; a widely-quoted 1,054 figure is a typo in the CloudMatrix paper). Default 7% = the hardware dive&#39;s NEUTRAL recommendation (~1,420 tok/s on R1-class; range 5-10%): Huawei&#39;s own optimized 384-NPU CloudMatrix anchor (1,943 tok/s) reproduces at 9.5% (stack ≈1.36), while DeepSeek&#39;s internal &#39;60% of H100&#39; eval implies ~5.5-6.5%. Rent = Huatai procurement award ($1.71-2.25/hr); CloudMatrix 384 ≈ RMB 60M.</td>
+</tr>
+</tbody></table>
+<p><em>265 parameter rows, regenerated from the registry on every run — <code>node build-grounding-ledger.mjs</code>.</em></p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

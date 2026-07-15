@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Moonshot (Kimi) — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/moonshot-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine's original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site's current terminology. The main report treats these as uncalibrated scenario ranges.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Moonshot AI (Kimi) — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 46m58s · model <code>gpt-5-6-pro</code> (Pro-verified, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508ffe-baf4-83e8-bba0-8fb5edfe77bd">conversation</a>
+Verdict: <strong>Kimi K2.7 Code output-token marginal serving gross margin ≈ 81% central, 80% CI ≈ 55–91%</strong> at the $4/M list price (central COGS $0.75/M output).
+Note: the first Moonshot dive completed but its response expired from the MCP retention window before collection; this is the re-run.
+Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).</p>
+</blockquote>
+<hr>
+<h2>1. MODELS</h2>
+<p><strong>Evidence labels:</strong> <strong>DISCLOSED</strong> = first-party model/configuration/pricing documents, regulatory filings, or Moonshot-authored systems work; <strong>CREDIBLY REPORTED</strong> = reputable reporting but not audited disclosure; <strong>COMMUNITY ESTIMATE</strong> = reproducible external benchmark or public market proxy; <strong>SPECULATION</strong> = my modeled inference.</p>
+<p>Moonshot&#39;s lineup as of <strong>July 9, 2026</strong> is unusual: the newest model is a coding-specialist flagship, while the preceding model remains the recommended general-purpose workhorse.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Model</th>
+<th>Architecture</th>
+<th>Precision &amp; acceleration</th>
+<th>Serving-cost implication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Coding flagship</td>
+<td><strong>Kimi K2.7 Code</strong></td>
+<td><strong>DISCLOSED — 1.0T total; 32B active; 61 layers; 384 routed experts; 8 selected + 1 shared; 256K context; 400M MoonViT encoder.</strong> Thinking-only; Moonshot recommends K2.6 for general use. <a href="https://www.kimi.com/resources/kimi-k2-7-code">K2.7 page</a> · <a href="https://platform.kimi.ai/docs/models">model list</a></td>
+<td><strong>DISCLOSED — native selective, weight-only INT4</strong> (4-bit groupwise, group 32; attention/shared-expert/several MLP/head/vision modules excluded). <strong><code>num_nextn_predict_layers: 0</code> — no native MTP.</strong> <a href="https://huggingface.co/moonshotai/Kimi-K2.7-Code/blob/main/config.json">config</a></td>
+<td><strong>DISCLOSED — 595GB checkpoint. COMMUNITY ESTIMATE — vLLM verified minimum 8×H200.</strong> INT4 cuts weight residency/bandwidth; the 1T expert pool still has to live somewhere. <a href="https://recipes.vllm.ai/moonshotai/Kimi-K2.7-Code">vLLM recipe</a></td>
+</tr>
+<tr>
+<td>Workhorse</td>
+<td><strong>Kimi K2.6</strong></td>
+<td><strong>DISCLOSED — same 1.0T/32B backbone</strong>, text+image+video, thinking and non-thinking. <a href="https://huggingface.co/moonshotai/Kimi-K2.6">K2.6 card</a></td>
+<td><strong>DISCLOSED — native INT4, ~595GB.</strong></td>
+<td>Economically close enough to K2.7 that K2.5/K2.6 benchmarks inform K2.7.</td>
+</tr>
+</tbody></table>
+<p>Qualifications: <strong>hosted precision is not disclosed</strong> (released-weights precision ≠ Moonshot&#39;s production path — any exact hosted-precision claim is SPECULATION). <strong>DISCLOSED — K2.7 uses ~30% fewer thinking tokens than K2.6</strong> on reported evals — reduces cost per completed task, not cost per token.</p>
+<p><strong>Bottom line on INT4:</strong> economically significant because it makes a single high-memory 8-GPU replica feasible and reduces decode weight traffic; it does not remove the 1T fixed-memory footprint, routing communication, or long-context KV requirements.</p>
+<hr>
+<h2>2. FLEET &amp; PROCUREMENT</h2>
+<h3>What Moonshot actually disclosed</h3>
+<p>Strongest evidence: <a href="https://www.usenix.org/system/files/fast25-qin.pdf">Mooncake paper, USENIX FAST &#39;25</a>:</p>
+<ul>
+<li><strong>DISCLOSED — thousands of serving-system nodes, &gt;100B tokens/day</strong> (not necessarily all GPU nodes; predates K2.7).</li>
+<li><strong>DISCLOSED — historical production on NVIDIA A800 and H800 clusters</strong> (Mooncake: +115% requests on A800, +107% on H800 vs prior vLLM-based systems — capacity comparison, not utilization).</li>
+<li><strong>DISCLOSED — prefill/decode disaggregation, continuous batching, distributed KV-cache over GPU/CPU/DRAM/SSD/RDMA.</strong> No production MFU/occupancy/tok/s/GPU published.</li>
+</ul>
+<h3>Alibaba Cloud, Volcengine, H20, Ascend</h3>
+<ul>
+<li><strong>DISCLOSED — Oct 2023: Volcengine was Moonshot&#39;s exclusive training/inference acceleration provider</strong> (historical; predates K2.x). <a href="https://www.volcengine.com/docs/6359/1158257">Volcengine</a></li>
+<li><strong>DISCLOSED — Alibaba Model Studio distributes a Moonshot &quot;direct-supplied&quot; service</strong> (Moonshot supplies the model service; doesn&#39;t establish Alibaba owns the GPUs). <a href="https://help.aliyun.com/zh/model-studio/kimi-api-by-moonshot-ai">Aliyun</a></li>
+<li><strong>DISCLOSED — Kimi Agent&#39;s CPU/tool sandboxes run on Alibaba Cloud</strong> (agent runtime, not LLM backend). <a href="https://www.alibabacloud.com/blog/deep-dive-how-kimis-ai-agent-runs-on-alibaba-cloud_602942">Alibaba blog</a></li>
+<li><strong>No credible public evidence</strong> of H20 in the current endpoint.</li>
+<li><strong>DISCLOSED by Huawei, not Moonshot — K2.5 deployed on Atlas 800 A2/A3 with W4A8</strong> (595→500GiB, &lt;1% degradation on selected evals) — compatibility proof, not production adoption. <a href="https://www.hiascend.com/activities/dynamic-news/20260214-1">Huawei</a></li>
+</ul>
+<p><strong>Owned vs rented:</strong> undisclosed; historical Volcengine relationship proves at least some rented capacity.</p>
+<h3>Public China rental proxy (730 h/mo, USD/CNY 6.8036)</h3>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>8-GPU monthly quote</th>
+<th>Per chip-hour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H20 141GB</td>
+<td><strong>¥40,000 — DISCLOSED vendor quote</strong></td>
+<td><strong>¥6.85 / $1.01 — COMMUNITY ESTIMATE</strong></td>
+</tr>
+<tr>
+<td>H800</td>
+<td><strong>¥59,000</strong></td>
+<td><strong>¥10.10 / $1.48</strong></td>
+</tr>
+<tr>
+<td>H100</td>
+<td><strong>¥68,000</strong></td>
+<td><strong>¥11.64 / $1.71</strong></td>
+</tr>
+<tr>
+<td>H200</td>
+<td><strong>¥80,000</strong></td>
+<td><strong>¥13.70 / $2.01</strong></td>
+</tr>
+</tbody></table>
+<p><a href="https://www.omniyq.com/">Vendor quote</a> — retail proxies, not Moonshot&#39;s basis. Cloud credits should still be valued at opportunity cost.</p>
+<hr>
+<h2>3. PRICING &amp; REALIZATION</h2>
+<h3>API list prices ($/Mtok, ex-tax)</h3>
+<table>
+<thead>
+<tr>
+<th>Model/tier</th>
+<th>Cached input</th>
+<th>Uncached input</th>
+<th>Output</th>
+<th>Other</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>K2.7 Code standard</strong></td>
+<td><strong>$0.19</strong></td>
+<td><strong>$0.95</strong></td>
+<td><strong>$4.00</strong></td>
+<td>262,144 context — all DISCLOSED</td>
+</tr>
+<tr>
+<td>K2.7 Code HighSpeed</td>
+<td>$0.38</td>
+<td>$1.90</td>
+<td>$8.00</td>
+<td>~180 tok/s (to 260 short-context); &quot;5–6× standard speed&quot; — DISCLOSED</td>
+</tr>
+<tr>
+<td>K2.7 standard Batch</td>
+<td>$0.114</td>
+<td>$0.57</td>
+<td>$2.40</td>
+<td>Batch = 60% of standard — DISCLOSED, derived</td>
+</tr>
+<tr>
+<td>K2.6</td>
+<td>$0.16</td>
+<td>$0.95</td>
+<td>$4.00</td>
+<td>262,144 context — DISCLOSED</td>
+</tr>
+</tbody></table>
+<p><a href="https://www.kimi.com/resources/kimi-k2-7-code-pricing">K2.7 pricing</a> · <a href="https://platform.kimi.ai/docs/pricing/batch">Batch</a> · <a href="https://www.kimi.com/resources/kimi-k2-6-pricing">K2.6 pricing</a>. Cache discount is <strong>80%</strong> ($0.19 vs $0.95). Old <code>kimi-k2-turbo-preview</code>/<code>thinking-turbo</code> SKUs <strong>discontinued May 25, 2026 — DISCLOSED</strong>; the current speed tier is HighSpeed.</p>
+<h3>Subscriptions</h3>
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Monthly</th>
+<th>Annual-equivalent monthly</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Moderato</td>
+<td><strong>$19</strong></td>
+<td><strong>$15</strong></td>
+</tr>
+<tr>
+<td>Allegretto</td>
+<td><strong>$39</strong></td>
+<td><strong>$31</strong></td>
+</tr>
+<tr>
+<td>Allegro</td>
+<td><strong>$99</strong></td>
+<td><strong>$79</strong></td>
+</tr>
+<tr>
+<td>Vivace</td>
+<td><strong>$199</strong></td>
+<td><strong>$159</strong></td>
+</tr>
+</tbody></table>
+<p>(All DISCLOSED.) Free Adagio + tiers include ~6/60/150/360/720 agent-credit equivalents + Kimi Code multipliers; Moonshot warns equivalents are approximate. Documentation is internally inconsistent on credit pools — subscription revenue cannot be cleanly divided into a realized token price. <strong>OK Computer is an Agent mode (Sep 26, 2025), not a model/API SKU.</strong> <a href="https://www.kimi.com/help/membership/membership-pricing">Membership pricing</a></p>
+<h3>Reasoning-token realization</h3>
+<p>K2.7 is thinking-only; the Alibaba channel states reasoning/CoT tokens bill as output — <strong>$4/M applies to reasoning tokens</strong>. The 30% thinking-token reduction improves price-per-task, not per-token margin.</p>
+<hr>
+<h2>4. COST/MARGIN EVIDENCE</h2>
+<h3>Direct Moonshot evidence</h3>
+<p>Sophisticated serving-systems evidence, but <strong>no serving COGS/token, no inference gross margin, no GPU-hour basis, no audited product margin</strong>. Mooncake&#39;s real trace: ~<strong>12K-token average conversation inputs, ~40% prefix-cache ratio — DISCLOSED</strong> (predates K2.7).</p>
+<h3>Reproducible 128×H200 benchmark (<a href="https://www.lmsys.org/blog/2025-07-20-k2-large-scale-ep/">LMSYS/SGLang K2 deployment</a>)</h3>
+<p>128×H200 (32 prefill + 96 decode GPUs), 2,000-in/100-out requests, decode batch 480, <strong>224K prefill / 288K decode tok/s aggregate</strong>, $2.30/H200-hr — all COMMUNITY ESTIMATE:</p>
+<ul>
+<li>Decode accelerator cost = 96×$2.30 / (288,000×3600/10⁶) = <strong>$0.213/M output</strong> (the &quot;$0.21&quot; figure — verified).</li>
+<li>Prefill accelerator cost (same arithmetic) = <strong>$0.091/M input</strong> (derived, not author-reported).</li>
+</ul>
+<p>Limitations: decode-GPUs-only, original K2 not K2.7, short-context run, excludes reserves/CPU/network/storage/KV-infrastructure/ops, NVIDIA DGX Cloud infrastructure. <strong>An excellent decode accelerator floor, not a Moonshot COGS estimate.</strong></p>
+<h3>Same-lineage K2.5/K2.6 benchmark (<a href="https://inferencex.semianalysis.com/blog/b200-nvfp4-vs-h200-int4-kimi-k2-vllm-perf-per-dollar">SemiAnalysis InferenceX, May 2026</a>)</h3>
+<p>8K-in/1K-out on single 8-GPU nodes; TCO $1.41/H200-hr, $1.95/B200-hr:</p>
+<table>
+<thead>
+<tr>
+<th>Per-user speed</th>
+<th>H200 INT4</th>
+<th>B200 NVFP4</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>32 tok/s</td>
+<td>$0.413/M out</td>
+<td>$0.140/M</td>
+</tr>
+<tr>
+<td>40 tok/s</td>
+<td>$0.453/M</td>
+<td>$0.154/M</td>
+</tr>
+<tr>
+<td>50 tok/s</td>
+<td>$0.511/M</td>
+<td>$0.177/M</td>
+</tr>
+<tr>
+<td>70 tok/s</td>
+<td>$0.660/M</td>
+<td>$0.244/M</td>
+</tr>
+<tr>
+<td>90 tok/s</td>
+<td>$0.996/M</td>
+<td>$0.347/M</td>
+</tr>
+</tbody></table>
+<p>Facts demonstrated: per-user speed/batching moves cost &gt;2× on identical hardware; hardware+precision moves it ~2.7–3.0× at matched interactivity; a Western B200/NVFP4 deployment can be far cheaper than a China H800/H20-style one on the identical model.</p>
+<h3>Third-party K2.7 prices (all DISCLOSED)</h3>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Uncached in</th>
+<th>Cached in</th>
+<th>Output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Together</td>
+<td>$0.95</td>
+<td>$0.19</td>
+<td>$4.00</td>
+</tr>
+<tr>
+<td>Fireworks</td>
+<td>$0.95</td>
+<td>$0.19</td>
+<td>$4.00</td>
+</tr>
+<tr>
+<td>Novita</td>
+<td>$0.95</td>
+<td>$0.19</td>
+<td>$4.00</td>
+</tr>
+<tr>
+<td>Baseten</td>
+<td>$0.95</td>
+<td>$0.16</td>
+<td>$4.00</td>
+</tr>
+<tr>
+<td><strong>DeepInfra</strong></td>
+<td><strong>$0.74</strong></td>
+<td><strong>$0.15</strong></td>
+<td><strong>$3.50</strong> (priority $1.11/$0.225/$5.25)</td>
+</tr>
+<tr>
+<td>Groq</td>
+<td>—</td>
+<td>—</td>
+<td>(only old K2-instruct at $1.00/$0.50/$3.00; not comparable)</td>
+</tr>
+</tbody></table>
+<p><strong>Reseller-ceiling interpretation (SPECULATION):</strong> DeepInfra&#39;s $3.50/M output is a weak long-run market-price ceiling, not a cost floor. The identical $4 pricing across four providers may reflect reference pricing/wholesale pass-through rather than four independent profitable-cost observations.</p>
+<h3>Financial evidence</h3>
+<ul>
+<li><strong>DISCLOSED — Alibaba invested ~$0.8B (RMB 5.9B) for ~36% of Moonshot</strong> (FY to Mar 2024). <a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0626/2025062601784.pdf">Alibaba filing</a></li>
+<li><strong>CREDIBLY REPORTED — ~$2B raise at ~$20B valuation, May 2026.</strong> <a href="https://techcrunch.com/2026/05/07/chinas-moonshot-ai-raises-2b-at-20b-valuation-as-demand-for-open-source-ai-skyrockets/">TechCrunch</a></li>
+<li><strong>CREDIBLY REPORTED — ARR &gt;$300M by mid-June 2026, API &gt;70% of revenue; new round discussed at $31.5B pre-money.</strong> <a href="https://finance.sina.com.cn/roll/2026-06-30/doc-inifehke3518487.shtml">Cailian Press</a> · <a href="https://wallstreetcn.com/articles/3775860">SSN</a></li>
+</ul>
+<p>No public inference spend, gross profit, credit balances, depreciation, or contribution margin.</p>
+<hr>
+<h2>5. VERDICT</h2>
+<p><strong>K2.7 Code standard output tokens:</strong></p>
+<ul>
+<li><strong>DISCLOSED — list price $4.00/M output</strong></li>
+<li><strong>SPECULATION — central marginal serving COGS: $0.75/M output</strong></li>
+<li><strong>SPECULATION — central marginal serving gross margin: 81%</strong></li>
+<li><strong>SPECULATION — 80% CI: COGS $0.35–$1.80/M ⇒ margin 55%–91%</strong></li>
+</ul>
+<h3>Why $0.75/M central</h3>
+<p>Start from the most transferable benchmark: <strong>$0.45–0.51/M accelerator cost</strong> for H200 INT4 at 40–50 tok/s/user on the same architecture (COMMUNITY ESTIMATE) + <strong>~$0.20–0.30/M</strong> for lower fleet utilization, online headroom, redundancy, CPU/network/storage/KV infrastructure and possibly less favorable hardware (SPECULATION) → <strong>$0.65–0.80/M</strong>, rounded to $0.75. Lower endpoint $0.35 stays above the $0.213 short-context decode floor; upper endpoint $1.80 allows an older/fragmented A800/H800/H20 fleet, low utilization, latency reserves, long-context and multimodal overhead — still materially below DeepInfra&#39;s $3.50 selling price.</p>
+<h3>Scope</h3>
+<p>Unit serving economics (accelerators, power, hosts, network/storage/KV, headroom, control plane, direct ops); excludes training/R&amp;D/sales/corporate. <strong>Output-token estimate, not blended</strong> — a blended margin needs Moonshot&#39;s I/O ratio, cache-hit ratio, tier mix, batch share, subscription utilization, and discounts. Do <strong>not</strong> apply 81% to HighSpeed: 2× price for 5–6× user speed likely costs substantially more than 2× per token.</p>
+<h3>Unknowns ranked by impact</h3>
+<ol>
+<li><strong>Production tok/s/GPU at the actual latency SLO</strong> ($0.413→$0.996/M from 32→90 tok/s/user on H200 INT4 alone).</li>
+<li><strong>Accelerator and hosted precision path</strong> (H200 INT4 vs B200 NVFP4 ≈ 2.7–3.0×; A800/H800/H20/Ascend mix undisclosed).</li>
+<li><strong>Batching, headroom, utilization</strong> (no production MFU published).</li>
+<li><strong>Economic GPU-hour basis</strong> (China retail proxies $1.01–2.01/hr before strategic terms).</li>
+<li><strong>P/D allocation and cache economics.</strong></li>
+<li><strong>Price realization</strong> (batch at 60%, negotiated enterprise, quota subscriptions, undercutting resellers).</li>
+</ol>
+<hr>
+<h2>6. KNOWN KNOWNS</h2>
+<ul>
+<li><strong>DISCLOSED — flagship K2.7 Code + workhorse K2.6, both 1T-total/32B-active, 256K context.</strong></li>
+<li><strong>DISCLOSED — K2.7 checkpoint is selective weight-only INT4, ~595GB, zero native MTP layers; COMMUNITY ESTIMATE — vLLM 8×H200 floor.</strong></li>
+<li><strong>DISCLOSED — K2.7 standard $0.95/$0.19/$4.00; HighSpeed exactly 2×; Batch 60% of standard.</strong></li>
+<li><strong>DISCLOSED — historical production on A800/H800, thousands of nodes, &gt;100B tokens/day (Mooncake, USENIX FAST &#39;25).</strong></li>
+<li><strong>COMMUNITY ESTIMATE — reproducible K2 H200 decode floor ~$0.213/M output; same-lineage benchmarks $0.14–$1.02/M by hardware/precision/speed.</strong></li>
+<li><strong>CREDIBLY REPORTED — ARR &gt;$300M (mid-June 2026), API &gt;70% of revenue; no audited serving margin exists.</strong></li>
+</ul>
+<h2>7. KNOWN UNKNOWNS</h2>
+<ul>
+<li><strong>Current accelerator mix and physical host</strong> (A800/H800 historical; H20/Ascend unproven; Alibaba distributes but GPU residency unknown).</li>
+<li><strong>Owned-vs-rented split and effective $/GPU-hour</strong> (leases, credits, minimums, scarcity premiums).</li>
+<li><strong>Hosted precision and speculative decoding</strong> (open checkpoint ≠ production path).</li>
+<li><strong>Production throughput, batching, reserve capacity.</strong></li>
+<li><strong>Traffic and realization mix</strong> (I/O ratio, cache ratio, batch/HighSpeed share, discounts, subscription utilization).</li>
+<li><strong>Non-accelerator COGS and audited margin.</strong></li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

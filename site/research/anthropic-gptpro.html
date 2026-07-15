@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anthropic — GPT-5.6 Pro independent consult · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/anthropic-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-5.6 Pro consult — ADOPTED-FINDINGS SUMMARY (req_1783636621475_l5tccc, 54m21s, 2026-07-09)</h1>
+<h1>conversation: <a href="https://chatgpt.com/c/6a50228e-a398-83e8-8445-3c39b76730db">https://chatgpt.com/c/6a50228e-a398-83e8-8445-3c39b76730db</a></h1>
+<h1>PROVENANCE NOTE (corrected 2026-07-11): this page is a selected-quotes digest, not the full</h1>
+<h1>response — an earlier revision mislabeled it &quot;verbatim&quot;. The complete original response</h1>
+<h1>(46,417 chars, recovered from the receiving session&#39;s transcript, SHA-256-stamped) is now</h1>
+<h1>published at gptpro-consult-anthropic-verbatim.html.</h1>
+<h2>Headline verdict</h2>
+<p>&quot;As of July 9, 2026, my central estimate is that Anthropic earns roughly 91% marginal serving margin on uncached Opus input tokens and 93% on Opus output tokens at standard API list prices. On a well-optimized GB300 deployment, about 94% on both. Sonnet: ~92/94% at promo $2/$10, 94.8/96.3% at normal $3/$15.&quot;
+&quot;Standard-list-price marginal serving margin: approximately 92–94% for Opus and 94–96% for Sonnet on a mature 2026 fleet.&quot;
+&quot;Is 95% an upper bound? No.&quot; (Sonnet normal-price &gt;95%; Opus on strategic TPU &gt;95%; electricity-only &gt;99.8%; Rubin cuts costs ~50%+ again.) &quot;But not conservative for every token&quot; — public-cloud-priced H100/H200 tokens: 55-85% margins.</p>
+<h2>Method</h2>
+<p>Economic marginal cost (level 2 of 3): accelerator opportunity cost + 75% fleet utilization + 10% CPU/network/reliability overhead (×1.4667 on busy-chip cost). κ=2.3 FLOPs multiplier (2P + 15% attention/routing). Opus assumed 5T total / 300B active (~6% activation, cf. DeepSeek 5.5%, GLM-5.2 5.4%); Sonnet 1T/100B. NVFP4 on Blackwell, FP8 elsewhere. Fleet blend: 40% TPUv7 / 25% GB300 / 15% GB200 / 15% Trn2 / 5% H200.</p>
+<h2>Central cost table (Opus, $/Mtok in→out, full serving cost)</h2>
+<p>H100 $1.14/$4.97 (77/80% margins) · H200 $1.27/$4.83 (75/81%) · GB200 $0.42/$2.11 (91.6/91.6%) · GB300 $0.31/$1.44 (93.8/94.2%) · TPUv7-strategic $0.24/$0.70 (95.1/97.2%) · Trn2 $1.11/$3.25 (78/87%)
+Fleet blend: $0.469/$1.684 → 90.6% in / 93.3% out. Sensitivity: Opus 150B active → 95.3/96.6%; 600B active → 81.2/86.5%.</p>
+<h2>Public-retail stress test (why both camps &quot;prove&quot; their number)</h2>
+<p>H100 @$5.19: 58/63% · GB200 @$10.50 (CoreWeave): 80/80% · B300 @$14.04 (AWS): 82.5/83.8% · TPUv7 @$5.40 3yr: 83.5/90.6%. &quot;$1-3/GPU-hr concludes 90-99%; $6-14 public rates get 60-85%.&quot;</p>
+<h2>Key hourly-cost anchors</h2>
+<p>CoreWeave spot: H100 $2.44, H200 $2.58, B300 $4.48; GB200 inference $10.50. AWS Capacity Blocks (Jul 1): H100 $5.191, H200 $5.97, B200 $12.355, B300 $14.04, Trn2 $2.235. Google TPU v7 public: $12 OD / $8.40 1yr / $5.40 3yr. SemiAnalysis estimate of Anthropic strategic TPUv7: ~$1.60/hr (newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the).</p>
+<h2>Attribution findings (differs from Grok sweep)</h2>
+<ul>
+<li>GLM-5.2 = 744B total / 40B active; Baseten team (Korte, Saleh, Tri Dao, et al.) built &quot;world&#39;s fastest API for GLM-5.2&quot;: 280+ tok/s/user on Blackwell NVFP4 (baseten.co/blog/how-we-built-the-worlds-fastest-api-for-glm-52/).</li>
+<li>GB300 11.2k tok/s/GPU = SGLang+NVIDIA on DeepSeek-V4 (pytorch.org/blog/serving-deepseek-v4-on-gb300-with-sglang...): 2,200 (Apr, day-0, no MTP) → 11,200 (Jun, MTP) = 5× SOFTWARE on fixed hardware.</li>
+<li>Could not find &quot;Numina Code&quot;; believes recollection conflates the two above. (Grok sweep DID find @_xjdr/ncode/Noumena with primary post URLs — both sets of results kept.)</li>
+<li>Musk 5T: total params, needs sparsity; cites IKP paper (arXiv 2604.24827, ±3× error bars) + LessWrong critique estimating Opus 4.7 ~1.1T total.</li>
+</ul>
+<h2>Business margin</h2>
+<p>The Information Jan 2026: 2025 GM projection cut to ~40% (inference costs 23% over plan). PitchBook/Morningstar Jun 2026: ~44% GM estimate; compute spend $0.71 per revenue dollar Q1 → $0.56 projected Q2. Bridge (illustrative): 93.5% marginal → −12 price realization → −8 peak provisioning → −7.5 cloud markup/older hw → −9 free+subs → −13 CPU/net/retries/safety/internal → 44%.</p>
+<h2>Chip trajectory (fixed model, H100=100)</h2>
+<p>H200 90-105 · GB200 30-55 · GB300 mature 25-45 · Rubin ramp 2027 10-22 · Rubin mature+software 2028 6-15. GB300 vs GB200 real gain: underwrite 10-25% $/token (favorable long-ctx up to 1.5-1.6×; InferenceX matched-interactivity 13-38%). Software &gt; silicon: SGLang 5× on fixed GB300.</p>
+<h2>Sonnet 5 pricing note</h2>
+<p>$2/$10 promotional through Aug 31 2026, $3/$15 from Sep 1 (platform.claude.com/docs pricing). Claude Code enterprise cost docs: ~$13/dev-day avg, $150-250/dev-month, 90% under $30/day.</p>
+<h2>Best public analyses (its list)</h2>
+<ol>
+<li>Epoch AI inference economics 2. InferenceX dashboard 3. InferenceX v2 writeup 4. SemiAnalysis &quot;AI Value Capture: The Shift to Model Labs&quot; 5. MLPerf Inference Datacenter + DeepSeek disclosure as best primary source.</li>
+</ol>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

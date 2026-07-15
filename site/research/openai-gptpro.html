@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenAI — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/openai-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine's original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site's current terminology. The main report treats these as uncalibrated scenario ranges.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>OpenAI — GPT-5.6 Pro deep dive</h1>
+<blockquote>
+<p>Run 2026-07-09 · 52m06s · model <code>gpt-5-6-pro</code> (Pro-verified) · <a href="https://chatgpt.com/c/6a508366-a9f0-83e8-ac84-e84bc2bad3e1">conversation</a>
+Verdict: <strong>GPT-5.6 Sol marginal serving gross margin ≈ 94% central, 80% CI ≈ 86–97%</strong> at standard short-context list price (7 cached : 2 fresh : 1 output mix).
+Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).</p>
+</blockquote>
+<hr>
+<h1>1. MODELS: flagship + workhorse</h1>
+<p><strong>Evidence cutoff: July 9, 2026.</strong> Labels mean: <strong>DISCLOSED</strong> = OpenAI or a counterparty said it directly; <strong>CREDIBLY REPORTED</strong> = reputable reporting or measured benchmark data; <strong>COMMUNITY ESTIMATE</strong> = public technical estimate with a stated methodology; <strong>SPECULATION</strong> = my synthesis or model assumption.</p>
+<p>OpenAI&#39;s current general-purpose family is officially divided into <strong>GPT‑5.6 Sol</strong> as the flagship, <strong>GPT‑5.6 Terra</strong> as the balanced workhorse, and <strong>GPT‑5.6 Luna</strong> as the fast, lower-cost tier. OpenAI has not disclosed architecture, parameter counts, number of experts, routing density, or production weight precision for any of the three. <a href="https://openai.com/index/previewing-gpt-5-6-sol/">OpenAI</a></p>
+<h3>Best parameter estimates</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Role and status</th>
+<th>Total parameters</th>
+<th>Active parameters per token</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GPT‑5.6 Sol</strong></td>
+<td>Flagship <strong>(DISCLOSED)</strong></td>
+<td><strong>~5T central; subjective 80% range 1–20T (SPECULATION)</strong></td>
+<td><strong>~100B central (COMMUNITY ESTIMATE); subjective 80% range 50–220B (SPECULATION)</strong></td>
+<td>Zephyr&#39;s claim is approximately <strong>100B active (COMMUNITY ESTIMATE)</strong>. Independently, Epoch estimated GPT‑5 at <strong>~100B active (COMMUNITY ESTIMATE)</strong> and elsewhere used a <strong>50–300B 90% range (COMMUNITY ESTIMATE)</strong>. A newer black-box knowledge-capacity paper put GPT‑5.5 in an <strong>effective 3.2–28.7T total-parameter-equivalent range (COMMUNITY ESTIMATE)</strong>, but that is not a literal weight count.</td>
+</tr>
+<tr>
+<td><strong>GPT‑5.6 Terra</strong></td>
+<td>Balanced/workhorse <strong>(DISCLOSED)</strong></td>
+<td><strong>~1T central; 0.25–5T 80% range (SPECULATION)</strong></td>
+<td><strong>~50B central; 20–110B 80% range (SPECULATION)</strong></td>
+<td>Inferred from its <strong>50% lower input and output price than Sol (DISCLOSED)</strong>, its measured higher throughput, and likely family-level sharing of OpenAI&#39;s sparse architecture. It need not be a simple half-sized Sol.</td>
+</tr>
+<tr>
+<td><strong>GPT‑5.6 Luna</strong></td>
+<td>Fast/low-cost tier <strong>(DISCLOSED)</strong></td>
+<td><strong>~0.25T central; 0.05–1.5T 80% range (SPECULATION)</strong></td>
+<td><strong>~20B central; 8–50B 80% range (SPECULATION)</strong></td>
+<td>Inferred from its <strong>80% lower price than Sol (DISCLOSED)</strong> and measured <strong>~205–229 output tokens/s (CREDIBLY REPORTED)</strong>. It could instead be a much larger model with more aggressive distillation, routing, or speculative decoding.</td>
+</tr>
+<tr>
+<td><strong>o3 / o3‑pro</strong></td>
+<td>Legacy reasoning family still listed in the API <strong>(DISCLOSED)</strong></td>
+<td><strong>~3T effective capacity; published 90% band 1.0–8.9T (COMMUNITY ESTIMATE)</strong>; literal deployed weight count unknown</td>
+<td><strong>~70B central; 30–180B 80% range (SPECULATION)</strong></td>
+<td>A 2026 black-box factual-capacity study placed o3 in the <strong>1.0–8.9T effective-total range (COMMUNITY ESTIMATE)</strong>. OpenAI says o3‑pro is a version of o3 that receives more inference compute, so it should not be assigned a separate base parameter count <strong>(DISCLOSED)</strong>.</td>
+</tr>
+<tr>
+<td><strong>o4‑mini</strong></td>
+<td>Legacy efficient reasoning model still listed <strong>(DISCLOSED)</strong></td>
+<td><strong>~0.4T effective capacity; roughly 0.14–1.3T 90% range (COMMUNITY ESTIMATE)</strong></td>
+<td><strong>~20B central; 8–50B 80% range (SPECULATION)</strong></td>
+<td>Its black-box knowledge score is close to the GPT‑5 Mini band in the same 2026 study. OpenAI&#39;s <strong>117B-total, 5.1B-active gpt‑oss‑120b (DISCLOSED)</strong> also shows that o4‑mini-level reasoning performance does not require tens of billions of active weights in every implementation.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://openai.com/index/gpt-5-6/">OpenAI GPT‑5.6 launch</a>, <a href="https://openai.com/index/previewing-gpt-5-6-sol/">Sol preview</a>, <a href="https://digg.com/tech/u7vja9ni">Zephyr post as preserved by Digg</a>, <a href="https://epochai.substack.com/p/notes-on-gpt-5-training-compute">Epoch&#39;s GPT‑5 compute estimate</a>, <a href="https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy">Epoch&#39;s broader fleet/active-parameter model</a>, <a href="https://arxiv.org/abs/2604.24827">Incompressible Knowledge Probes paper</a>, and <a href="https://openai.com/index/introducing-gpt-oss/">OpenAI&#39;s gpt‑oss disclosure</a>.</p>
+<h3>Assessment of Zephyr&#39;s &quot;~100B active&quot; claim</h3>
+<p><strong>Verdict: directionally corroborated, not confirmed.</strong></p>
+<p>The strongest corroboration is Epoch&#39;s pre‑5.6 inference-economics estimate that GPT‑5 was probably around <strong>100B active parameters (COMMUNITY ESTIMATE)</strong>, based on price, speed, and industry architecture trends. Epoch&#39;s wider analysis allowed <strong>50–300B active parameters (COMMUNITY ESTIMATE)</strong>. That makes Zephyr&#39;s number a defensible central prior rather than an isolated rumor.</p>
+<p>OpenAI&#39;s own open-weight models establish that the company is comfortable with aggressive MoE sparsity: gpt‑oss‑120b has <strong>117B total and 5.1B active parameters (DISCLOSED)</strong>, a roughly <strong>23:1 total-to-active ratio (SPECULATION; arithmetic from DISCLOSED figures)</strong>. That does not prove GPT‑5.6 uses the same topology, but it makes a multi-trillion-total, roughly 100B-active Sol technically plausible. <a href="https://openai.com/index/introducing-gpt-oss/">OpenAI</a></p>
+<p>The important counterweight is the new knowledge-capacity work. It estimates GPT‑5.5&#39;s effective total capacity at <strong>3.2–28.7T (COMMUNITY ESTIMATE)</strong>. Even if that method overstates literal weights because OpenAI has denser data or more efficient factual storage, it argues against treating &quot;100B active&quot; as &quot;approximately a 100B model.&quot; A plausible reconciliation is a <strong>very sparse, multi-trillion-total model with roughly 100B active weights (SPECULATION)</strong>. <a href="https://arxiv.org/html/2604.24827v1">arXiv</a></p>
+<h3>Serving precision</h3>
+<p>The exact serving precision is <strong>not disclosed</strong>. My operational assumption is:</p>
+<ul>
+<li><p>On <strong>H100/H200</strong>, FP8-heavy weight and matrix-multiplication paths with BF16/FP16 in attention, accumulation, or sensitive kernels <strong>(COMMUNITY ESTIMATE)</strong>.</p>
+</li>
+<li><p>On <strong>B200/GB200</strong>, FP4/NVFP4 or MXFP4 weight paths with higher-precision accumulation and FP8-or-higher KV-cache components <strong>(COMMUNITY ESTIMATE)</strong>.</p>
+</li>
+<li><p>I would <strong>not</strong> model the entire serving graph as FP4. Attention, routing, normalization, KV cache, and some expert layers can retain higher precision <strong>(SPECULATION)</strong>.</p>
+</li>
+</ul>
+<p>The evidence is indirect but strong: OpenAI disclosed native <strong>MXFP4 (DISCLOSED)</strong> for gpt‑oss; NVIDIA&#39;s published Blackwell DeepSeek implementation uses <strong>NVFP4 weights and FP8 KV cache (DISCLOSED by NVIDIA)</strong>; and a DeepSeek production H800 system uses <strong>FP8 matrix multiplications with BF16 attention (DISCLOSED by DeepSeek)</strong>. <a href="https://openai.com/index/introducing-gpt-oss/">OpenAI</a></p>
+<p>Measured single-stream rates also matter, but they do not reveal parameter count directly. Artificial Analysis measured approximately <strong>78 output tokens/s for Sol at maximum reasoning, 153 tokens/s for Terra at medium reasoning, and 205–229 tokens/s for Luna depending on mode (CREDIBLY REPORTED)</strong>. OpenAI separately advertises <strong>up to 750 tokens/s for Sol on Cerebras (DISCLOSED)</strong>. Those are endpoint or user-stream speeds, not total batched hardware throughput. <a href="https://artificialanalysis.ai/models/gpt-5-6-sol/providers">Artificial Analysis</a></p>
+<h1>2. FLEET &amp; PROCUREMENT</h1>
+<h3>What appears to serve inference in July 2026</h3>
+<p>OpenAI says it has <strong>3 GW of dedicated inference capacity (DISCLOSED)</strong> and that Hopper- and Blackwell-generation NVIDIA systems are already operating across <strong>Microsoft, Oracle Cloud Infrastructure, and CoreWeave (DISCLOSED)</strong>. That makes NVIDIA H100/H200 and B200/GB200 the defensible central fleet assumption. <a href="https://openai.com/index/scaling-ai-for-everyone/">OpenAI</a></p>
+<p>OpenAI&#39;s Abilene Stargate site is operating through OCI and uses <strong>NVIDIA GB200 systems (DISCLOSED)</strong>. More broadly, OpenAI said by April 2026 that it had secured more than <strong>10 GW of capacity (DISCLOSED)</strong>, while still describing its infrastructure strategy as <strong>partner-centric (DISCLOSED)</strong>. &quot;Secured&quot; includes contracted and planned capacity; it does not mean all 10 GW was commissioned by July 9. <a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">OpenAI</a></p>
+<p>Cerebras is now a real, though probably selective, inference supplier. Reuters reported a <strong>$20B multi-year agreement and 750 MW deployment (CREDIBLY REPORTED)</strong> and that GPT‑5.4 was already running on Cerebras. OpenAI&#39;s Sol material advertises a Cerebras path at <strong>up to 750 tokens/s (DISCLOSED)</strong>. I exclude Cerebras from the central NVIDIA-equivalent cost calculation because no defensible wafer-scale-system-hour transfer price is public. <a href="https://www.reuters.com/business/cerebras-sinks-14-full-year-margin-forecast-disappoints-2026-06-24/">Reuters</a></p>
+<p>Other announced capacity is more important for the forward curve than for the July 9 marginal-cost estimate:</p>
+<ul>
+<li><p>AWS/OpenAI announced an additional <strong>$100B over eight years and roughly 2 GW of Trainium capacity (DISCLOSED)</strong>, spanning Trainium3 and later Trainium4. <a href="https://openai.com/index/amazon-partnership/">OpenAI</a></p>
+</li>
+<li><p>OpenAI and Broadcom said Jalapeño engineering samples had reached target frequency and power and that gigawatt deployment would begin in <strong>2026 (DISCLOSED)</strong>. Public evidence does not show material production share by the cutoff. <a href="https://openai.com/index/openai-broadcom-jalapeno-inference-chip/">OpenAI</a></p>
+</li>
+<li><p>AMD MI450 and NVIDIA Vera Rubin capacity is principally an <strong>H2 2026 or later ramp (DISCLOSED)</strong> and should not be treated as the July fleet&#39;s median chip. <a href="https://openai.com/index/openai-amd-strategic-partnership/">OpenAI</a></p>
+</li>
+</ul>
+<h3>Owned versus rented</h3>
+<p>The best characterization is <strong>dedicated and contractually controlled, but predominantly partner-owned and partner-operated (SPECULATION)</strong>.</p>
+<p>OpenAI&#39;s public descriptions emphasize partner financing, cloud operation, leases, and long-term capacity commitments. Abilene operates through OCI; the Oracle arrangement has Oracle purchasing or financing systems and providing the compute to OpenAI; and OpenAI explicitly describes the broader buildout as partner-centric. I found no public evidence that OpenAI owns a material fraction of the production accelerators outright.</p>
+<p>There has nevertheless been a meaningful economic shift in <strong>2026</strong>:</p>
+<ul>
+<li><p>Microsoft remains OpenAI&#39;s primary cloud, but OpenAI can now serve its products from any cloud when appropriate <strong>(DISCLOSED)</strong>.</p>
+</li>
+<li><p>Microsoft&#39;s previous right of first refusal was removed, while OpenAI made an incremental <strong>$250B Azure commitment (DISCLOSED)</strong>.</p>
+</li>
+<li><p>Microsoft&#39;s OpenAI revenue share continues through <strong>2030 (DISCLOSED)</strong>, at an undisclosed percentage and subject to an undisclosed cap. <a href="https://blogs.microsoft.com/blog/2026/04/27/the-next-phase-of-the-microsoft-openai-partnership/">Microsoft blog</a></p>
+</li>
+</ul>
+<p>Thus Stargate is moving OpenAI from ordinary cloud tenancy toward <strong>quasi-owned economics</strong>: dedicated sites, longer offtakes, more direct control over design and scheduling, and a lower scarcity premium. It is not yet a conventional owned-fleet model. The trade-off is that long-term take-or-pay commitments turn utilization into a major determinant of fully allocated cost.</p>
+<h3>Estimated procurement basis</h3>
+<p>All figures below are normalized to a <strong>single NVIDIA GPU-hour</strong>, not a GB200 superchip-hour or rack-hour.</p>
+<table>
+<thead>
+<tr>
+<th>Price reference</th>
+<th>$/GPU-hour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lambda H100 on-demand</td>
+<td><strong>$3.99 (DISCLOSED)</strong></td>
+</tr>
+<tr>
+<td>Lambda B200 on-demand</td>
+<td><strong>$6.69 (DISCLOSED)</strong></td>
+</tr>
+<tr>
+<td>One-year H100 rental market, March 2026</td>
+<td><strong>$2.35 (CREDIBLY REPORTED)</strong></td>
+</tr>
+<tr>
+<td>OpenAI strategic Hopper basis</td>
+<td><strong>$2.0–$3.2 (SPECULATION)</strong></td>
+</tr>
+<tr>
+<td>OpenAI strategic Blackwell basis</td>
+<td><strong>$2.5–$4.2 (SPECULATION)</strong></td>
+</tr>
+<tr>
+<td><strong>Fleet-weighted OpenAI central assumption</strong></td>
+<td><strong>$3.25; subjective 80% range $2.2–$4.8 (SPECULATION)</strong></td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://lambda.ai/instances">Lambda GPU pricing</a> and <a href="https://newsletter.semianalysis.com/p/the-great-gpu-shortage-rental-capacity">SemiAnalysis&#39;s GPU rental index</a>.</p>
+<p>The Oracle Stargate contract provides a useful cross-check. OpenAI disclosed more than <strong>$300B over five years for up to 4.5 GW (DISCLOSED)</strong>. At constant full nameplate usage that is approximately <strong>$1,522 per MW-hour (SPECULATION; arithmetic)</strong>. At an assumed <strong>1.2–1.5 kW of all-in site load per Blackwell GPU (SPECULATION)</strong>, that corresponds to approximately <strong>$1.83–$2.28 per GPU-hour (SPECULATION)</strong> before allowing for ramp periods, CPUs, storage, network fabric, redundancy, operations, and the fact that &quot;up to 4.5 GW&quot; may not be delivered for all five years. An all-in <strong>$2.0–$3.5/GPU-hour (SPECULATION)</strong> interpretation is therefore plausible, but it is not a quoted Oracle or OpenAI price. <a href="https://openai.com/index/five-new-stargate-sites/">OpenAI</a></p>
+<p>The <strong>$250B Azure commitment (DISCLOSED)</strong> does not provide enough information to derive an Azure chip-hour rate: there is no disclosed power envelope, ramp schedule, hardware mix, service bundle, or minimum utilization. My <strong>$3.25/GPU-hour central estimate (SPECULATION)</strong> therefore comes from term-market comparables, the Oracle offtake arithmetic, and OpenAI&#39;s enormous purchasing volume—not from a leaked Microsoft transfer price.</p>
+<h3>Utilization and aggregate throughput</h3>
+<p>Actual OpenAI fleet utilization is not disclosed. Three external anchors are useful:</p>
+<ol>
+<li><p>Epoch estimated OpenAI&#39;s total stock at <strong>1.1M H100-equivalents, with a 0.8–1.4M 90% interval (COMMUNITY ESTIMATE)</strong>, and estimated that <strong>44% (COMMUNITY ESTIMATE)</strong> was assigned to inference. It assumed only <strong>5–30% realized FLOP utilization (COMMUNITY ESTIMATE)</strong>, which is different from the share of provisioned servers that are occupied. <a href="https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy">Epoch AI</a></p>
+</li>
+<li><p>DeepSeek&#39;s published production H800 system delivered <strong>14,800 output tokens/s per eight-GPU node, or about 1,850 tokens/s/GPU (DISCLOSED)</strong>, and its reported active-node occupancy averaged approximately <strong>82% (SPECULATION; arithmetic from DISCLOSED node counts)</strong>. <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">GitHub</a></p>
+</li>
+<li><p>NVIDIA&#39;s MLPerf-class results for a <strong>37B-active MoE (DISCLOSED)</strong> span approximately <strong>556–1,253 output tokens/s per H200</strong> and <strong>2,327–4,024 per GB200</strong>, depending on server-latency versus offline-throughput mode <strong>(DISCLOSED by NVIDIA)</strong>. <a href="https://developer.nvidia.com/blog/nvidia-blackwell-ultra-sets-new-inference-records-in-mlperf-debut/">NVIDIA Developer</a></p>
+</li>
+</ol>
+<p>For Sol, I use:</p>
+<ul>
+<li><p><strong>1,225 aggregate output tokens/s per NVIDIA GPU-equivalent central; 600–2,500 80% range (SPECULATION)</strong>.</p>
+</li>
+<li><p><strong>5,800 uncached-prefill tokens/s/GPU-equivalent central; 2,000–15,000 80% range (SPECULATION)</strong>.</p>
+</li>
+<li><p><strong>73% provisioned occupancy central; 58–85% 80% range (SPECULATION)</strong>.</p>
+</li>
+</ul>
+<p>These rates are deliberately far above Sol&#39;s <strong>78-token/s single-stream rate (CREDIBLY REPORTED)</strong>. A production server concurrently decodes many sequences; single-user streaming speed is governed by service-level latency, reasoning behavior, and throttling rather than total rack throughput.</p>
+<h1>3. PRICING &amp; REALIZATION</h1>
+<h3>GPT‑5.6 API list prices</h3>
+<p>All figures in the next two tables are <strong>DISCLOSED</strong>, in <strong>US dollars per 1M tokens</strong>, from <a href="https://developers.openai.com/api/docs/pricing">OpenAI&#39;s API pricing page</a>.</p>
+<p><code>I</code> = fresh input, <code>CR</code> = cached read, <code>CW</code> = cache write, <code>O</code> = output.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Standard short-context: I / CR / CW / O</th>
+<th>Standard long-context: I / CR / CW / O</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>GPT‑5.6 Sol</strong></td>
+<td><strong>$5 / $0.50 / $6.25 / $30</strong></td>
+<td><strong>$10 / $1 / $12.50 / $45</strong></td>
+</tr>
+<tr>
+<td><strong>GPT‑5.6 Terra</strong></td>
+<td><strong>$2.50 / $0.25 / $3.125 / $15</strong></td>
+<td><strong>$5 / $0.50 / $6.25 / $22.50</strong></td>
+</tr>
+<tr>
+<td><strong>GPT‑5.6 Luna</strong></td>
+<td><strong>$1 / $0.10 / $1.25 / $6</strong></td>
+<td><strong>$2 / $0.20 / $2.50 / $9</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Batch/Flex short: I / CR / CW / O</th>
+<th>Batch/Flex long: I / CR / CW / O</th>
+<th>Priority short: I / CR / CW / O</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Sol</strong></td>
+<td><strong>$2.50 / $0.25 / $3.125 / $15</strong></td>
+<td><strong>$5 / $0.50 / $6.25 / $22.50</strong></td>
+<td><strong>$10 / $1 / $12.50 / $60</strong></td>
+</tr>
+<tr>
+<td><strong>Terra</strong></td>
+<td><strong>$1.25 / $0.125 / $1.5625 / $7.50</strong></td>
+<td><strong>$2.50 / $0.25 / $3.125 / $11.25</strong></td>
+<td><strong>$5 / $0.50 / $6.25 / $30</strong></td>
+</tr>
+<tr>
+<td><strong>Luna</strong></td>
+<td><strong>$0.50 / $0.05 / $0.625 / $3</strong></td>
+<td><strong>$1 / $0.10 / $1.25 / $4.50</strong></td>
+<td><strong>$2 / $0.20 / $2.50 / $12</strong></td>
+</tr>
+</tbody></table>
+<p>Important realization rules:</p>
+<ul>
+<li><p>Batch and Flex are exactly <strong>50% below Standard (DISCLOSED)</strong>.</p>
+</li>
+<li><p>Cache reads receive a <strong>90% discount to fresh input (DISCLOSED)</strong>; cache writes cost <strong>1.25× fresh input (DISCLOSED)</strong>.</p>
+</li>
+<li><p>Once input exceeds <strong>272K tokens (DISCLOSED)</strong>, OpenAI reprices the <strong>entire request</strong>, not merely the excess, at the long-context tariff.</p>
+</li>
+<li><p>Regional processing adds <strong>10% (DISCLOSED)</strong>.</p>
+</li>
+<li><p>Hidden reasoning tokens are billed as output and consume context. OpenAI says they can range from <strong>hundreds to tens of thousands per request (DISCLOSED)</strong>.</p>
+</li>
+<li><p>Sol&#39;s <code>ultra</code> mode can invoke subagents and multiple internal model runs. It should be modeled as an agentic workload, not as a single pass through Sol. <a href="https://developers.openai.com/api/docs/models/gpt-5.6-terra">OpenAI Developers</a></p>
+</li>
+</ul>
+<h3>Remaining o-series API prices</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Current standard API price</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>o3</strong></td>
+<td><strong>$2 fresh input / $0.50 cached input / $8 output per 1M (DISCLOSED)</strong></td>
+</tr>
+<tr>
+<td><strong>o3 Batch</strong></td>
+<td><strong>$1 / $0.25 / $4 per 1M (DISCLOSED)</strong></td>
+</tr>
+<tr>
+<td><strong>o3‑pro</strong></td>
+<td><strong>$20 input / $80 output per 1M (DISCLOSED)</strong></td>
+</tr>
+<tr>
+<td><strong>o4‑mini</strong></td>
+<td><strong>$1.10 input / $0.275 cached input / $4.40 output per 1M (DISCLOSED)</strong></td>
+</tr>
+</tbody></table>
+<p>o3‑pro&#39;s much higher tariff is primarily a charge for longer inference-time reasoning, not evidence of a proportionally larger base model. OpenAI calls it a version of o3 designed to think longer <strong>(DISCLOSED)</strong>. <a href="https://openai.com/index/introducing-o3-and-o4-mini/">OpenAI</a></p>
+<h3>Subscription plans</h3>
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Price and allowance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ChatGPT Plus</strong></td>
+<td><strong>$20/month (DISCLOSED)</strong>; API usage is separate and limits vary.</td>
+</tr>
+<tr>
+<td><strong>ChatGPT Pro 5×</strong></td>
+<td><strong>$100/month (DISCLOSED)</strong>; approximately <strong>5× Plus allowance (DISCLOSED)</strong>.</td>
+</tr>
+<tr>
+<td><strong>ChatGPT Pro 20×</strong></td>
+<td><strong>$200/month (DISCLOSED)</strong>; approximately <strong>20× Plus allowance (DISCLOSED)</strong>.</td>
+</tr>
+<tr>
+<td><strong>ChatGPT Business</strong></td>
+<td><strong>$25/user/month monthly or $20/user/month annual, minimum two users (DISCLOSED)</strong>; flexible credits can supplement included use.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://help.openai.com/en/articles/6950777-what-is-chatgpt-plus">ChatGPT Plus help page</a>, <a href="https://help.openai.com/en/articles/9793128-about-chatgpt-pro-tiers">Pro tiers</a>, and <a href="https://help.openai.com/en/articles/8792828-what-is-chatgpt-business">Business pricing</a>.</p>
+<p>Sam Altman wrote in January 2025 that OpenAI was &quot;currently losing money on OpenAI Pro subscriptions&quot; because people used it more than expected <strong>(DISCLOSED executive statement)</strong>. That referred to the earlier Pro product, but the economic lesson remains relevant: fixed-price access exposes OpenAI to a heavy right tail of reasoning and agent usage. <a href="https://x.com/sama/status/1876104315296968813">X post</a></p>
+<p>OpenAI has since made at least some of this leakage measurable and monetizable. Codex moved to token-linked credits in April 2026. OpenAI&#39;s rate card charges Sol <strong>125 input, 12.5 cached-input, and 750 output credits per 1M tokens (DISCLOSED)</strong>. Student-credit terms establish <strong>2,500 credits = $100, or $0.04/credit (DISCLOSED)</strong>, so those rates map exactly to Sol&#39;s <strong>$5/$0.50/$30 API tariff (SPECULATION; arithmetic from DISCLOSED values)</strong>. OpenAI says average Codex usage is approximately <strong>$100–$200 per developer per month, with wide variance (DISCLOSED)</strong>. <a href="https://help.openai.com/en/articles/20001106-codex-rate-card">Codex rate card</a></p>
+<p>There is public evidence of the heavy tail, but not a representative distribution. Examples include a GitHub user reporting exhaustion of a <strong>$200 Pro allowance within hours (COMMUNITY ESTIMATE; anecdotal and possibly a metering bug)</strong> and another reporting nearly exhausting a weekly allowance in approximately <strong>two days (COMMUNITY ESTIMATE; anecdotal)</strong>. Local tools such as CodexBar can inspect individual usage, but I found no public aggregate comparable in rigor or sample size to the Claude Max <code>ccusage</code> investigations. These anecdotes establish the possibility of severe over-usage; they do not establish the mean subscriber margin. <a href="https://github.com/openai/codex/issues/27142">GitHub</a></p>
+<h3>Realized revenue versus list revenue</h3>
+<p>For a representative <strong>7 cached-input : 2 fresh-input : 1 output token mix (CREDIBLY REPORTED benchmark convention)</strong>, Sol Standard realizes (7×0.50 + 2×5 + 1×30)/10 = <strong>$4.35 per 1M aggregate tokens</strong> — matching Artificial Analysis&#39;s blended-price convention. Batch or Flex reduces that to <strong>$2.175/M (SPECULATION)</strong> for the same token mix. <a href="https://artificialanalysis.ai/models/gpt-5-6-sol/providers">Artificial Analysis</a></p>
+<p>Actual realization can be lower because of Batch/Flex traffic, enterprise discounts, subscription bundles, prepaid credits, and Microsoft&#39;s undisclosed revenue share. Conversely, output-heavy reasoning traffic realizes more dollars per aggregate token because output is priced at <strong>6× fresh input and 60× a cache read for Sol Standard (SPECULATION; arithmetic from DISCLOSED prices)</strong>.</p>
+<h1>4. COST/MARGIN EVIDENCE</h1>
+<p>There is no official OpenAI disclosure of &quot;cost per million GPT‑5.6 Sol tokens,&quot; accelerator utilization, or API-model gross margin. The following are the closest external anchors.</p>
+<table>
+<thead>
+<tr>
+<th>Evidence</th>
+<th>Metric</th>
+<th>Relevance to marginal serving economics</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>The Information, December 2025</td>
+<td><strong>70% compute margin for paying users in October 2025 (CREDIBLY REPORTED)</strong></td>
+<td>Best reported external anchor. It reportedly measures revenue remaining after the cost of running models for paying users, but blends API, subscriptions, models, tools, discounts, occupancy, and likely infrastructure allocations.</td>
+</tr>
+<tr>
+<td>The Information, February 2026</td>
+<td><strong>33% adjusted gross margin for 2025, down from 40% in 2024 and below a 46% forecast (CREDIBLY REPORTED)</strong></td>
+<td>Company-level gross margin, not marginal token margin. It includes free-user burden and broader cost-of-revenue effects.</td>
+</tr>
+<tr>
+<td>Reuters, February 2026</td>
+<td>Inference costs <strong>quadrupled during 2025 (CREDIBLY REPORTED)</strong>; expected compute spending through 2030 around <strong>$600B (CREDIBLY REPORTED)</strong></td>
+<td>Confirms that rapid usage and capacity growth overwhelmed some efficiency gains, but does not yield a per-token cost.</td>
+</tr>
+<tr>
+<td>The Information reporting summarized in June 2026</td>
+<td>A software optimization reportedly cut inference cost by <strong>more than 50% (CREDIBLY REPORTED)</strong> for some existing workloads and reduced the logged-out ChatGPT segment to roughly <strong>200 GPUs at one point (CREDIBLY REPORTED)</strong></td>
+<td>Important upside evidence, but the technique and workload are undisclosed. It may involve a small routed model, better batching, speculative decoding, or scheduling and may not generalize to Sol.</td>
+</tr>
+<tr>
+<td>Leaked financial statements published by Where&#39;s Your Ed At</td>
+<td><strong>$13.07B 2025 revenue and $7.5B cost of revenue (CREDIBLY REPORTED leaked documents)</strong>, implying <strong>42.6% accounting gross margin (SPECULATION; arithmetic)</strong></td>
+<td>A useful cross-check, but it conflicts with the reported <strong>33% adjusted margin</strong> because the documents and reporting may use different definitions, adjustments, or periods. It is not model-specific.</td>
+</tr>
+</tbody></table>
+<p>Sources: <a href="https://www.theinformation.com/articles/openai-getting-efficient-running-ai-internal-financials-show">The Information on paid-user compute margin</a>, <a href="https://www.theinformation.com/newsletters/dealmaker/openai-anthropic-missed-gross-margin-forecasts">The Information on missed gross-margin forecasts</a>, <a href="https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/">Reuters on compute spending and 2025 margins</a>, <a href="https://aiweekly.co/alerts/openai-engineers-say-theyve-more-than-halved-inference-costs">June 2026 cost-optimization summary</a>, and <a href="https://www.wheresyoured.at/exclusive-openai-financials/">published leaked financials</a>.</p>
+<p>The apparent contradiction between a <strong>70% paid-user compute margin (CREDIBLY REPORTED)</strong> and a <strong>33% company adjusted gross margin (CREDIBLY REPORTED)</strong> is economically plausible:</p>
+<ul>
+<li><p>The former excludes non-paying users but still blends subscriptions and API traffic.</p>
+</li>
+<li><p>Company gross margin can include free-tier inference, image/video/voice tools, search, safety passes, customer-support infrastructure, idle reserved capacity, hosting, revenue sharing, and accounting allocations.</p>
+</li>
+<li><p>A list-price API request has no subscription heavy tail and can be scheduled more efficiently than an interactive free or fixed-price request.</p>
+</li>
+<li><p>Training and frontier R&amp;D are generally below gross profit or otherwise treated separately; they should not be inserted into marginal token cost.</p>
+</li>
+</ul>
+<p>The <strong>70% reported compute margin</strong> is therefore the strongest empirical reason not to confuse OpenAI&#39;s list-price marginal margin with its realized, blended economics. My estimate below is deliberately higher because it prices the opportunity cost of accelerator time for a well-batched marginal request, rather than allocating the full corporate serving estate.</p>
+<h1>5. VERDICT</h1>
+<h2>Central estimate</h2>
+<p>For <strong>GPT‑5.6 Sol, Standard short-context list price</strong>, using a representative <strong>7 cached : 2 fresh : 1 output</strong> mix:</p>
+<blockquote>
+<p><strong>Marginal serving gross margin: 94% central (SPECULATION)</strong></p>
+<p><strong>Subjective 80%-confidence interval: 86–97% (SPECULATION)</strong></p>
+</blockquote>
+<p>This is an <strong>economic marginal cost</strong> estimate: it assigns an opportunity cost to accelerator time and allocates some reserved-capacity slack. It is not the near-zero cash cost of adding a token to an already-paid, otherwise-idle server. It also is not OpenAI&#39;s accounting gross margin.</p>
+<h3>Cost model</h3>
+<p>accelerator cost/token = ($/GPU-hour) / (3600 × aggregate tokens/s/GPU × occupied fraction) × serving overhead — then add non-GPU serving cost, with a lower compute ratio for cache hits.</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Central</th>
+<th>Subjective 80% range</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sol active parameters</td>
+<td><strong>105B</strong></td>
+<td><strong>50–220B</strong></td>
+<td>Central anchored to <strong>COMMUNITY ESTIMATE</strong>; range <strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Strategic all-in GPU-hour</td>
+<td><strong>$3.25</strong></td>
+<td><strong>$2.2–$4.8</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Aggregate output throughput</td>
+<td><strong>1,225 tokens/s/GPU-eq</strong></td>
+<td><strong>600–2,500</strong></td>
+<td><strong>SPECULATION</strong>, benchmark-anchored</td>
+</tr>
+<tr>
+<td>Uncached-prefill throughput</td>
+<td><strong>5,800 tokens/s/GPU-eq</strong></td>
+<td><strong>2,000–15,000</strong></td>
+<td><strong>SPECULATION</strong>, benchmark-anchored</td>
+</tr>
+<tr>
+<td>Provisioned occupancy</td>
+<td><strong>73%</strong></td>
+<td><strong>58–85%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Replication/routing/platform overhead</td>
+<td><strong>1.33×</strong></td>
+<td><strong>1.10–1.60×</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Cache-hit compute versus fresh prefill</td>
+<td><strong>15%</strong></td>
+<td><strong>8–30%</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+<tr>
+<td>Non-GPU serving cost</td>
+<td><strong>$0.081/M tokens</strong></td>
+<td><strong>$0.03–$0.22/M</strong></td>
+<td><strong>SPECULATION</strong></td>
+</tr>
+</tbody></table>
+<p>Active parameters are used to inform the throughput range; I do not multiply by active parameters again, which would double-count model size.</p>
+<h3>Result by token class</h3>
+<table>
+<thead>
+<tr>
+<th>Token class</th>
+<th>Sol list revenue</th>
+<th>Estimated marginal serving cost</th>
+<th>Central margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fresh input</td>
+<td><strong>$5/M (DISCLOSED)</strong></td>
+<td><strong>$0.37/M; 80% range $0.17–$0.83 (SPECULATION)</strong></td>
+<td><strong>92.6% (SPECULATION)</strong></td>
+</tr>
+<tr>
+<td>Cached input read</td>
+<td><strong>$0.50/M (DISCLOSED)</strong></td>
+<td><strong>$0.073/M; 80% range $0.032–$0.178 (SPECULATION)</strong></td>
+<td><strong>85.4% (SPECULATION)</strong></td>
+</tr>
+<tr>
+<td>Output, including billed reasoning tokens</td>
+<td><strong>$30/M (DISCLOSED)</strong></td>
+<td><strong>$1.48/M; 80% range $0.68–$3.35 (SPECULATION)</strong></td>
+<td><strong>95.1% (SPECULATION)</strong></td>
+</tr>
+<tr>
+<td><strong>Blended 7:2:1 workload</strong></td>
+<td><strong>$4.35/M aggregate tokens (SPECULATION)</strong></td>
+<td><strong>$0.279/M; 80% range $0.134–$0.613 (SPECULATION)</strong></td>
+<td><strong>93.6%; 80% range 85.9–96.9% (SPECULATION)</strong></td>
+</tr>
+</tbody></table>
+<p>Rounded for the calculator, that is <strong>94% central and 86–97% at 80% confidence (SPECULATION)</strong>.</p>
+<p>The cache-read leg has the lowest margin because OpenAI discounts cache reads by <strong>90% (DISCLOSED)</strong> while a cache hit still incurs lookup, KV movement, scheduling, memory, and some model-side work. Output has the highest central margin because OpenAI charges <strong>$30/M (DISCLOSED)</strong> against a modeled cost of approximately <strong>$1.48/M (SPECULATION)</strong>.</p>
+<h3>Discount and procurement sensitivities</h3>
+<p>For the same token mix:</p>
+<ul>
+<li><p><strong>Batch/Flex:</strong> revenue falls to <strong>$2.175/M (SPECULATION)</strong>, producing approximately <strong>87% central margin and 72–94% 80% range (SPECULATION)</strong>.</p>
+</li>
+<li><p><strong>One-year H100 market basis of $2.35/GPU-hour (CREDIBLY REPORTED):</strong> approximately <strong>96% margin (SPECULATION)</strong>, though H100 throughput is below Blackwell and the comparison is not perfectly like-for-like.</p>
+</li>
+<li><p><strong>Public B200 rental basis of $6.69/GPU-hour (DISCLOSED):</strong> approximately <strong>89% margin (SPECULATION)</strong>.</p>
+</li>
+<li><p>If the reported <strong>&gt;50% inference-cost optimization (CREDIBLY REPORTED)</strong> generalized fully to Sol, the same list-price workload could approach approximately <strong>97% margin (SPECULATION)</strong>. I do not put that in the central case because the reported deployment was the logged-out tier, not the frontier API.</p>
+</li>
+</ul>
+<h3>What the verdict excludes</h3>
+<p>The <strong>94%</strong> is before: Microsoft&#39;s undisclosed revenue share; enterprise and committed-spend discounts; free-tier inference; training, RL experiments, and research; tools such as search, code execution, images, video, and voice; unbilled retries, safety reruns, failed generations, and multi-agent subcalls beyond the modeled overhead; Sol <code>ultra</code>, where multiple agents make the single-pass token model inapplicable; long-context requests above <strong>272K input tokens (DISCLOSED)</strong>.</p>
+<p>If Microsoft receives an effective fraction <em>s</em> of revenue, post-share contribution margin is approximately 1 − (serving cost / gross billings) − s. Because <em>s</em> is undisclosed, it is not legitimate to fold an assumed Microsoft percentage into the central serving-cost result.</p>
+<h3>Why the 80% interval is wide, ranked by impact</h3>
+<ol>
+<li><p><strong>Actual aggregate throughput and active architecture.</strong> Sol could be a relatively conventional <strong>~100B-active MoE (COMMUNITY ESTIMATE)</strong> or a model whose routing, communication, speculative decoding, and multi-token prediction make &quot;active parameters&quot; a poor proxy. The assumed <strong>600–2,500 output tokens/s/GPU-eq range (SPECULATION)</strong> is a greater than <strong>4× cost span (SPECULATION)</strong>.</p>
+</li>
+<li><p><strong>Reserved-capacity occupancy.</strong> OpenAI has multi-year, multi-GW commitments. At high load these resemble cheap owned capacity; during slack periods, take-or-pay servers can make allocated cost per token several times the engineering marginal cost <strong>(SPECULATION)</strong>. This is the main bridge between a modeled <strong>94% list-price margin</strong> and the reported <strong>70% paid-user compute margin</strong>.</p>
+</li>
+<li><p><strong>OpenAI&#39;s true transfer price.</strong> The <strong>$2.2–$4.8/GPU-hour range (SPECULATION)</strong> is constrained by public rental prices and offtake arithmetic, but Azure&#39;s actual price, service bundling, financing, and Microsoft revenue-share arrangement remain unknown.</p>
+</li>
+<li><p><strong>Token and reasoning mix.</strong> Cache-heavy traffic realizes much less revenue per token; output-heavy reasoning realizes much more. Long-context attention and KV costs are nonlinear, while OpenAI reprices the entire request above <strong>272K input tokens (DISCLOSED)</strong>.</p>
+</li>
+<li><p><strong>Serving-stack overhead.</strong> Redundancy, expert imbalance, model routing, speculative draft models, safety passes, KV-cache misses, memory fragmentation, and failed calls can add meaningful cost. The modeled <strong>1.10–1.60× overhead range (SPECULATION)</strong> is not based on OpenAI telemetry.</p>
+</li>
+<li><p><strong>Revenue realization rather than physical serving cost.</strong> Batch/Flex pricing, enterprise discounts, subscription leakage, prepaid credits, and Microsoft&#39;s revenue share can lower realized margin substantially without changing FLOPs per token.</p>
+</li>
+</ol>
+<h1>6. KNOWN KNOWNS</h1>
+<ul>
+<li><p>OpenAI&#39;s current GPT‑5.6 lineup is <strong>Sol, Terra, and Luna (DISCLOSED)</strong>, priced at <strong>$5/$30, $2.50/$15, and $1/$6 per 1M fresh-input/output tokens respectively for short-context Standard traffic (DISCLOSED)</strong>. <a href="https://developers.openai.com/api/docs/pricing">Pricing</a></p>
+</li>
+<li><p>OpenAI reports <strong>3 GW of dedicated inference capacity (DISCLOSED)</strong>, with Hopper and Blackwell systems already operating across Microsoft, OCI, and CoreWeave. <a href="https://openai.com/index/scaling-ai-for-everyone/">Source</a></p>
+</li>
+<li><p>Stargate remains <strong>partner-centric (DISCLOSED)</strong>; Abilene operates through OCI and uses <strong>GB200 systems (DISCLOSED)</strong>. &quot;Dedicated&quot; should not be read as &quot;OpenAI-owned.&quot; <a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">Source</a></p>
+</li>
+<li><p>Microsoft remains the primary cloud, but OpenAI can serve products from other clouds; Microsoft&#39;s revenue share continues through <strong>2030 (DISCLOSED)</strong> at an undisclosed rate. <a href="https://blogs.microsoft.com/blog/2026/04/27/the-next-phase-of-the-microsoft-openai-partnership/">Source</a></p>
+</li>
+<li><p>Hidden reasoning tokens are billed as output, while requests above <strong>272K input tokens (DISCLOSED)</strong> are wholly repriced under the long-context tariff. <a href="https://developers.openai.com/api/docs/guides/reasoning">Reasoning guide</a></p>
+</li>
+<li><p>The best reported external serving-economics anchor is a <strong>70% paid-user compute margin in October 2025 (CREDIBLY REPORTED)</strong>; OpenAI&#39;s broader <strong>2025 adjusted gross margin was 33% and missed a 46% forecast (CREDIBLY REPORTED)</strong>. <a href="https://www.theinformation.com/articles/openai-getting-efficient-running-ai-internal-financials-show">The Information</a></p>
+</li>
+</ul>
+<h1>7. KNOWN UNKNOWNS</h1>
+<ul>
+<li><p><strong>Literal total and active parameters.</strong> No GPT‑5.6 parameter count or routing topology is disclosed. The <strong>~100B-active central estimate</strong> is independently plausible but remains a <strong>COMMUNITY ESTIMATE</strong>, while total-capacity methods permit a multi-trillion model.</p>
+</li>
+<li><p><strong>Production numerical precision.</strong> OpenAI has demonstrated MXFP4 in gpt‑oss, but it has not said which GPT‑5.6 layers run in FP4, FP8, BF16, or higher precision, nor whether precision changes by cloud or request type.</p>
+</li>
+<li><p><strong>Azure and Stargate transfer pricing.</strong> The <strong>$250B Azure commitment (DISCLOSED)</strong> and Oracle&#39;s multi-GW offtake reveal scale, not the per-chip-hour price, ramp penalties, network charges, or minimum-utilization terms.</p>
+</li>
+<li><p><strong>Actual occupancy, batching, and aggregate tokens per accelerator.</strong> OpenAI publishes user-visible speeds but not concurrent sequence counts, scheduler efficiency, expert imbalance, cache-hit rates, fleet utilization, or cost-weighted hardware mix.</p>
+</li>
+<li><p><strong>How broadly the reported &gt;50% optimization applies.</strong> It could be a general serving breakthrough or a logged-out-tier-specific combination of routing, batching, and smaller models. The technique was not disclosed and is therefore excluded from the central estimate.</p>
+</li>
+<li><p><strong>Realized revenue leakage.</strong> Enterprise discounts, Microsoft&#39;s revenue share, subscription usage distributions, unbilled retries, and internal agent calls are undisclosed. These variables can reduce realized contribution margin much more than they change the physical cost of one well-batched API token.</p>
+</li>
+</ul>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Huawei Ascend — web sweep · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/chinese-accel-ascend-websweep">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Huawei Ascend for LLM inference — web sweep 2026-07-09</h1>
+<blockquote>
+<p><strong>CORRECTION (2026-07-10):</strong> this sweep&#39;s &quot;INT8 1,054 TFLOPS&quot; figure for the 910C reproduces a typo in the CloudMatrix paper. Huawei&#39;s Atlas 800T A3 spec (12.0 POPS INT8 per 8-NPU server) and the paper&#39;s own tables give <strong>1.504 POPS INT8 per NPU</strong>, which the paper&#39;s prefill-efficiency arithmetic confirms. Superseded by the <a href="chinese-accel-gptpro.html">GPT Pro Chinese-accelerator dive</a>; the calculator uses 1.504.</p>
+</blockquote>
+<p>Agent: ascend-researcher (Claude web-research subagent, Exa+Brave). Cross-check source for the calculator&#39;s Ascend entry; pairs with the H800/H20 sweep and the GPT Pro Chinese-accelerator dive.</p>
+<h2>Headline facts for the calculator</h2>
+<ol>
+<li><strong>No native FP8 on 910B/910C</strong> — FP16/BF16/INT8 only; 8-bit = INT8 (Huawei claims near-FP8 quality, arXiv 2506.12708). Native FP8/MXFP4 arrives with Ascend 950 series (950PR launched Mar 2026 as Atlas 350; 950DT live on Huawei Cloud Aug 2026: 144GB HiZQ 2.0, 4 TB/s, 1 PF FP8 / 2 PF MXFP4).</li>
+<li><strong>910C</strong>: dense FP16 752 TFLOPS (The Register per-die decomposition); INT8 1,054 TFLOPS (Huawei CloudMatrix paper); 128 GB HBM @ 3.2 TB/s package; TDP ~550–600W (no clean datasheet); SMIC 7nm N+2; UB scale-up 2.8 Tbit/s.</li>
+<li><strong>910B</strong> (low confidence, noisy): ~376–400 TF FP16, 64GB HBM2e, ~310–400W.</li>
+<li><strong>CloudMatrix 384</strong>: 384×910C + 192 Kunpeng, ~300 PF BF16 (checks arithmetically), 49.2 TB HBM (3.6× NVL72 ✓), 1,228.8 TB/s aggregate BW (2.1× NVL72 ✓), <strong>~559 kW</strong> (≈3.9× NVL72), <strong>~$8.2M/unit (RMB 60M)</strong> — FT-reported, widely corroborated ⇒ ~$21.4k/chip bundled.</li>
+<li><strong>Chip price</strong>: 910C RMB 180–200k (~$25–28k, Chinese-media consensus); Western estimates $12–18k (unsourced). Working range <strong>$22–28k</strong>. 910B <del>RMB 110k (</del>$15.5k).</li>
+<li><strong>Rental</strong>: genuinely not publicly disclosed. One low-provenance listing $2.60/hr (MyAIHardware). SiliconFlow sells per-token (R1 $0.50/$2.18 as of mid-2026) and reserved groups (¥486–594k/mo). Surface as ESTIMATE, low confidence.</li>
+</ol>
+<h2>Throughput anchors (MFU calibration)</h2>
+<ul>
+<li><strong>Huawei CloudMatrix-Infer paper (arXiv 2506.12708, vendor-measured)</strong>: DeepSeek-R1, INT8, EP320 across 384 NPUs — <strong>prefill 6,688 tok/s/NPU</strong> (4K prompts), <strong>decode 1,943 tok/s/NPU</strong> (TPOT&lt;50ms); 538 tok/s/NPU under 15ms TPOT. Paper claims efficiency above SGLang-on-H100 — vendor-self-measured, skepticism warranted.</li>
+<li><strong>DeepSeek internal eval (Feb 2025, widely cited through 2026)</strong>: 910C ≈ <strong>60% of H100</strong> inference performance (Tom&#39;s Hardware/TrendForce). Best single MFU-discount anchor; suggested range 50–65%.</li>
+<li><strong>Framework spread is huge on Ascend</strong>: xLLM beats MindIE by ~34% (11,352 vs 8,476 tok/s on 8×910C R1 @TPOT=100ms) and beats vLLM-Ascend ~12× on 910B (arXiv 2510.14686) — framework choice matters far more than on CUDA.</li>
+<li>Training MFU context: 910B clusters 30–42% vs 39–58% CUDA-equivalents; Pangu Ultra MoE &gt;52% with heavy engineering.</li>
+</ul>
+<h2>Who serves on Ascend (mid-2026)</h2>
+<ul>
+<li>SiliconFlow: DeepSeek R1/V3 on Huawei Cloud Ascend since Feb 2025, still running.</li>
+<li>Zhipu: GLM-5/5.2 support Ascend inference (also Moore Threads/Cambricon); GLM-5.1 reportedly trained on 100k×910B zero-CUDA (single-source); GLM-Image on Atlas 800T A2 (company-disclosed); weighing custom chip (The Information, Jul 2026).</li>
+<li>Huawei claims 1,000×910C post-trained DeepSeek V4 1.6T (Tom&#39;s Hardware).</li>
+<li>Moonshot/iFlytek: no strong Ascend-inference sourcing; iFlytek reported 3-month training delay after 910B switch (single mention).</li>
+</ul>
+<h2>Calculator recommendations (from researcher)</h2>
+<ol>
+<li>Precision flag: 910-series 8-bit = INT8, no FP8 selection without caveat.</li>
+<li>Ascend MFU discount ~60% of comparable NVIDIA (range 50–65%) if not using the CloudMatrix-Infer anchors directly.</li>
+<li>910C capex $22–28k (system math corroborates ~$21k bundled).</li>
+<li>Rental: present as low-confidence estimate ($2.60/hr listing) or derive from SiliconFlow token pricing.</li>
+<li>CloudMatrix aggregate numbers (300 PF / 49.2TB / 1,228.8 TB/s / 559kW / $8.2M) are the highest-confidence set — cross-validated against SemiAnalysis NVL72 ratios.</li>
+</ol>
+<p>Key sources: arXiv 2506.12708 (CloudMatrix-Infer) · SemiAnalysis CloudMatrix 384 analysis · The Register 2025-07-29 rack-scale analysis · TrendForce 2026-03-23 (Atlas 350/950PR) · Huawei Central (950DT Aug 2026) · Tom&#39;s Hardware (DeepSeek 60%-of-H100; V4 post-training) · arXiv 2510.14686 (xLLM) · FT/Capacity/Igor&#39;s Lab ($8.2M CloudMatrix)</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

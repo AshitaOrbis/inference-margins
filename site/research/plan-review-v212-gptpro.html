@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>v2.1.2 plan review — GPT-5.6 Pro · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/plan-review-v212-gptpro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>v2.2 plan review — GPT-5.6 Pro, 2026-07-11</h1>
+<blockquote>
+<p>Pre-implementation adversarial review of PLAN-v22.md (run 12m39s, <code>gpt-5-6-pro</code>, Pro-verified, <code>completion_path: api</code>, Ashitaorbis project; <a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a51a635-877c-83e8-bce0-8199f4d015cc">conversation</a>). Verbatim except ChatGPT-internal citation tokens, which are stripped. Verdict: <strong>proceed only after three P0 plan corrections</strong> — B state/precedence contract before code; no regenerated pack presented as original; no named-person role-play/approval in E.</p>
+</blockquote>
+<p>I’m verifying the live v2.1.1 calculator, research materials, state/permalink semantics, and test claims before adjudicating each proposal and distinguishing implementation-blocking P0s.</p>
+<p>The central risk is precedence ambiguity when workload ownership collides with replay, permalink, or custom values; I’m testing whether B preserves v2.1.1’s repaired invariants.</p>
+<h2>1. Item-by-item adjudication</h2>
+<p><strong>Overall verdict: proceed only after three P0 plan corrections:</strong> define B’s state/precedence contract before coding; do not present a regenerated grounding pack as the original artifact; replace named-person role-play/“approval” in E with corpus-bounded representation audits.</p>
+<p><strong>§0 owner edit — APPROVE.</strong> Remove the attribution-dispute narrative. Keep the two citations attached to the specific claims they support, rather than as contextless “bare links.” The current three-way repetition in §1, §6 and the method note is research-process debris, not useful evidence.</p>
+<h3>A. Coherence cuts — <strong>MODIFY</strong></h3>
+<p>The cuts are directionally right and should ship, with three requirements:</p>
+<ul>
+<li><strong>§6:</strong> The divergence table needs rows for <strong>estimand/metric, workload, procurement basis, utilization, architecture, fleet and overhead</strong>. Otherwise it will compare §5’s blended result with §6’s input/output or fleet result as though only procurement differs. Put the xAI contract evidence in a short paragraph after the table as an empirical invoice bracket, not as another analyst-assumption row.</li>
+<li><strong>§8:</strong> Keep ksred plus <strong>one independent longitudinal tracker</strong>, not the pathological one-session example. State the selection rule and retain “tail, not distribution” in the main text.</li>
+<li><strong>§10:</strong> Add <strong>workload/traffic mix</strong> to the proposed metric/lens line, plus one sentence naming the dominant driver and observable update trigger. Every card must remain screenshot-safe: “provider-native case; not cross-provider comparable” should be visible on the card, not only in the §10 introduction.</li>
+</ul>
+<p>The deployed sections are currently long enough to justify the cuts, but their essential caveats are metric non-comparability, tail-selection bias and range causation—not the full parameter inventories.</p>
+<h3>B. Workload axis — <strong>MODIFY — P0</strong></h3>
+<p>The incremental split is worthwhile, but <strong>do not call this a complete WORKLOAD axis</strong> while SLA/interactivity, service class and cache lifecycle remain elsewhere. Call it <strong>TRAFFIC MIX — I/O + cache</strong>.</p>
+<p>Before implementation, specify:</p>
+<ol>
+<li>The ownership and precedence state machine.</li>
+<li>Replay/analyst behavior.</li>
+<li>URL and saved-preset migration.</li>
+<li>The exact meaning and provenance of <code>cacheHit</code>.</li>
+<li>How the anti-lens range behaves under each traffic profile.</li>
+</ol>
+<p>Without those, this risks repeating v2.1’s “typed labels on the old merge model” problem. The final v2.1 review explicitly called the present ontology cosmetic, while v2.1.1’s xAI repair depended on keeping its 3:1/0% traffic fixed across all three lenses.</p>
+<p>Detailed contract in §2 below.</p>
+<h3>C. Durable exports — <strong>MODIFY</strong></h3>
+<ul>
+<li><p><strong>Roofline derivation — APPROVE</strong>, but do not replace the useful adopted-summary wrapper. Publish:</p>
+<ol>
+<li>the concise adopted verdict;</li>
+<li>the full raw derivation on the same page or a child page;</li>
+<li>run metadata and a content hash;</li>
+<li>a prominent distinction between raw consultation output and adopted methodology.</li>
+</ol>
+<p>The current public wrapper explicitly says the full derivation exists only in the linked conversation, so making it durable is warranted.</p>
+</li>
+<li><p><strong>Grounding-pack re-emission as archival recovery — REJECT AS WRITTEN — P0.</strong> A new generation is not a durable export of the original 192-row artifact, even if it happens to match. Do this instead:</p>
+<ul>
+<li>Retrieve and publish the original bytes if they still exist.</li>
+<li>Otherwise publish a <strong>reconstructed adopted grounding ledger</strong>, generated from the current canonical preset/source registry, labeled as reconstruction—not “the full original pack” or “verbatim re-emission.”</li>
+<li>A fresh GPT run may be published separately as a dated re-audit, with a machine-generated row-by-row delta against the adopted ledger.</li>
+</ul>
+</li>
+</ul>
+<p>The current wrapper itself records that the full pack lived in transient sandbox files and that the displayed page is only a decision summary.</p>
+<h3>D. Tornado chart — <strong>MODIFY; conditional ship</strong></h3>
+<p>The proposed gate is still underspecified. “Top three inputs with sourced ranges” can be gamed by defining the top three only among inputs that happen to have ranges, and “sourced” may merely mean a judgmental bracket in a model-generated dive.</p>
+<p>It becomes sufficient under the exact rule in §3. Otherwise, drop it from v2.2. This remains the lowest-priority feature and should never delay A–C. The earlier council’s conditions—actual parameter ranges, correlated-variable grouping, cost alongside margin and explicit non-probabilistic labeling—remain correct.</p>
+<h3>E. Persona reception phase — <strong>MODIFY — P0</strong></h3>
+<p>The purpose is valuable; the named-person framing is not.</p>
+<p>Replace:</p>
+<blockquote>
+<p>“Do the four people … consider their representation fair?”</p>
+</blockquote>
+<p>with:</p>
+<blockquote>
+<p>“Does a corpus-bounded adversarial audit identify unsupported, contradicted or over-broad representations of the cited person’s public position?”</p>
+</blockquote>
+<p>Do not prompt a model to speak in the first person as TeorTaxes, Zephyr, Dylan Patel or fleetingbits. Do not publish simulated “approval,” even with caveats. A named simulation saying “yes, fair” is synthetic endorsement-shaped content and will be screenshotted as such.</p>
+<p>Use named <strong>position-corpus audits</strong>, blind claim extraction and claim-to-page matrices. Full design in §4.</p>
+<h3>OUT exclusions</h3>
+<ul>
+<li><strong>Numeric ISL/OSL/TTFT/TPOT controls — APPROVE OUT.</strong> The deployed model expressly excludes these variables, and the roofline attempt missed the strict Ascend point by about 40% and transferred worse on prefill. Numeric controls would imply a validated latency surface that does not exist. Keep measured SLO replays and read-only caveats.</li>
+<li><strong>Epoch preset — APPROVE OUT.</strong> Continue using Epoch as a methods/prior source, not as a calculator preset until the engine represents its latency and bandwidth constraints. This matches the prior unanimous adjudication.</li>
+<li><strong>Roofline re-test — APPROVE OUT.</strong> “New data” must mean a genuinely untouched platform/operating-point family with frozen batch, precision, MTP and SLA metadata—not another interpretation of already-used observations.</li>
+<li><strong>September 1 tariff touch — MODIFY OUT.</strong> Do not change the price early, but add <code>effectiveFrom</code>/<code>validUntil</code> metadata and an expiry assertion now. The report currently distinguishes the introductory tariff through August 31, 2026 from the standard tariff beginning September 1, 2026; the site should automatically become stale-loud rather than depend on a remembered manual edit.</li>
+<li><strong>Five-human-reader test — APPROVE OUT of the automated phase, with a hard limitation.</strong> The casual-lurker simulation is an information-architecture heuristic, not the previously specified 4-of-5 human comprehension test. Keep that test visibly open; do not mark dossier reception “tested” or “passed.”</li>
+</ul>
+<hr>
+<h2>2. Workload-axis scoping</h2>
+<p><strong>Verdict: MODIFY. The right moderate cut is a <code>TRAFFIC MIX</code> axis, not a purportedly complete <code>WORKLOAD</code> axis.</strong></p>
+<p>Leaving accelerator <strong>fleet blend</strong> outside traffic mix is correct; it is a deployment/fleet property. Leaving <strong>SLA/interactivity</strong> outside means the new selector is incomplete by definition. That is tolerable only if the UI and state names are narrow and honest.</p>
+<h3>Required state behavior</h3>
+<ul>
+<li><strong>Provider-native selected:</strong> changing model resolves that model’s <code>nativeTrafficProfile</code>; the UI must show the resolved profile name and numeric values. The selector cannot remain visually static while silently changing the effective workload.</li>
+<li><strong>Explicit profile selected:</strong> changing model leaves the selected profile fixed.</li>
+<li><strong>Custom selected:</strong> changing model preserves the custom values.</li>
+<li><strong>Pure lens selected:</strong> it must never write <code>ioRatio</code> or <code>cacheHit</code>.</li>
+<li><strong>Analyst reconstruction selected:</strong> it may load a recommended profile, but any subsequent traffic edit must relabel the scenario “modified reconstruction.”</li>
+<li><strong>Dive replay or SLO replay selected:</strong> traffic is locked. Changing traffic must exit replay mode or produce an unmistakable “modified replay—not the published result” state. A replay cannot remain named “§10 dive replay” after its workload has changed.</li>
+</ul>
+<p>The clean compilation model is:</p>
+<p><code>model/deployment profile + traffic profile + pure cost lens + custom overrides</code></p>
+<p>A replay is a frozen snapshot of those layers, not another ordinary lens.</p>
+<h3>P0: workload-profile grounding</h3>
+<p>The proposed names currently overstate what their numbers establish:</p>
+<ul>
+<li>The 15:1/60% profile is the calculator’s held-fixed normalized scenario, explicitly not each provider’s operating point.</li>
+<li>DeepSeek’s 56.3% figure is its own production <strong>disk-cache-hit</strong> share.</li>
+<li>The 41% figure is from the ncode/GLM coding deployment with 81k average inputs and 1M-context behavior.</li>
+</ul>
+<p>Those do not automatically justify generic “Chat” and “Coding-assistant” archetypes across every provider.</p>
+<p>Either:</p>
+<ol>
+<li>label these as <strong>illustrative traffic scenarios</strong>, with provenance and no claim of population representativeness; or</li>
+<li>use source-specific names such as “DeepSeek disclosure replay” and “ncode coding deployment proxy.”</li>
+</ol>
+<p>Also define whether <code>cacheHit</code> means <strong>serving-side prefix reuse</strong> or <strong>billable cached-input share</strong>. The engine currently uses the traffic mix to blend both serving cost and realized billing; treating a server cache observation as portable billable-cache share is an additional modeling assumption and must be labeled as such.</p>
+<h3>Permalinks and migration</h3>
+<p>The URL schema must be bumped; do not silently extend the existing v2 interpretation. A v2.2 URL needs:</p>
+<ul>
+<li><code>workloadId</code> or <code>trafficProfileId</code>;</li>
+<li>mode: <code>native | explicit | custom | replay-locked</code>;</li>
+<li>resolved <code>ioRatio</code> and <code>cacheHit</code>, so the link preserves its numerical identity;</li>
+<li>custom values where applicable;</li>
+<li>existing model, perspective, engine revision and privacy behavior.</li>
+</ul>
+<p>Migration cannot be “missing workload ⇒ Provider-native.” It must be pair-specific or numeric-state-preserving. In particular:</p>
+<ul>
+<li>old Grok+xAI lens links must remain 3:1/0%;</li>
+<li>old dive links must become replay-locked;</li>
+<li>old analyst positions with traffic assumptions must retain them;</li>
+<li>old custom links must become <code>Custom</code>, not be remapped to the nearest named profile.</li>
+</ul>
+<p>Also migrate browser-saved custom presets; the live UI supports them, and silently changing their interpretation would be the same identity-corruption class v2.1.1 just repaired.</p>
+<h3>Anti-lens-shopping range</h3>
+<p>Compute the range by:</p>
+<ol>
+<li>resolving the selected traffic profile once;</li>
+<li>running every compatible pure lens with exactly those resolved traffic values;</li>
+<li>excluding analysts and replays as today;</li>
+<li>labeling the result <strong>“cost-lens span at [traffic profile]”</strong>.</li>
+</ol>
+<p>The selected traffic profile must be visible inside the hero tile. Adding this selector creates a new conclusion-shopping dimension, so the page must explicitly say that the lens span <strong>does not include traffic-mix uncertainty</strong>. The normalized provider table must continue to use its fixed 15:1/60% scenario regardless of the interactive selector.</p>
+<h3>Release-suite invariants</h3>
+<p>Do not use the 514 count as the quality claim. Add named invariants:</p>
+<ol>
+<li>Default parity for every existing model.</li>
+<li>No model or pure lens owns <code>ioRatio/cacheHit</code>; models own only <code>nativeTrafficProfileId</code>.</li>
+<li>Every old permalink and saved-preset fixture reproduces its old effective numbers.</li>
+<li>Replay traffic is locked; editing it exits replay identity.</li>
+<li>Every lens-range contributor receives byte-identical traffic values.</li>
+<li>Explicit/custom traffic survives model changes; provider-native resolves on model changes.</li>
+<li>The §10 normalized table and every dive headline retain their old targets.</li>
+<li>Dossiers render the effective value and its origin—native profile, explicit profile, replay or custom—with no ignored override hidden from the ledger.</li>
+</ol>
+<hr>
+<h2>3. Tornado gate</h2>
+<p><strong>Verdict: insufficient as written; sufficient only with the following auto-hide rule.</strong></p>
+<p>Render a tornado only when <strong>all</strong> conditions hold:</p>
+<ol>
+<li><strong>Canonical state only.</strong> The active state exactly matches a canonical preset/replay. Hide it for Custom, user-modified, forced-exploratory and tariff-only scenarios.</li>
+<li><strong>Top three are predeclared.</strong> Each dossier has a frozen <code>dominantDrivers[3]</code> selected from the dive’s causal analysis before range availability is considered. Never choose “top three among the ranged parameters.”</li>
+<li><strong>Every driver has complete range metadata:</strong> <code>lo</code>, <code>hi</code>, units, range basis, source class, locator, date, applicable model/hardware/lens/workload scope and correlation group. The baseline must lie inside the bracket.</li>
+<li><strong>No reverse engineering.</strong> Parameter brackets may not be inferred from the provider card’s judgmental output-margin range.</li>
+<li><strong>Correlated factors are grouped.</strong> For example, rent/utilization/stack overhead may appear as one coherent “capacity economics” endpoint pair if their source describes a joint scenario; they must not appear as three falsely independent bars. The same applies to MFU/interactivity/SLA.</li>
+<li><strong>One group at a time.</strong> Hold model, traffic, lens, prices and every other group fixed. Do not refit MFU or silently switch hardware when active parameters move.</li>
+<li><strong>Sort by cost impact, not margin impact.</strong> Rank by the maximum absolute change in <code>$ / Mtok</code>; display both <code>$ / Mtok</code> and margin at low, baseline and high. Margin alone compresses large cost errors near 100%.</li>
+<li><strong>Exact caption:</strong>
+<strong>“One-at-a-time sensitivity over stated assumption brackets. Other inputs are held fixed. Bars are not probabilities, a joint uncertainty interval, or independently realizable scenarios.”</strong></li>
+<li><strong>Fail closed.</strong> Missing, expired, out-of-scope or categorical top-three range ⇒ no chart, with no fallback to slider bounds.</li>
+</ol>
+<p>Under this rule, D is useful. Under a looser rule, it is chart theater and should be dropped.</p>
+<hr>
+<h2>4. Persona reception phase</h2>
+<p><strong>Verdict: MODIFY substantially.</strong></p>
+<h3>Purpose and anti-sycophancy design</h3>
+<p>For each named source, use a two-stage, non-role-playing audit:</p>
+<ol>
+<li><strong>Blind extraction:</strong> Before showing the page, extract the person’s direct claims, qualifiers, non-claims and dates from the complete supplied primary-source corpus.</li>
+<li><strong>Comparison:</strong> Compare those propositions against exact page passages and dossier fields.</li>
+<li>Classify each representation as:<ul>
+<li>directly entailed;</li>
+<li>compatible but not source-supported;</li>
+<li>contradicted;</li>
+<li>over-broad/out of scope;</li>
+<li>page-authored reconstruction correctly labeled as such.</li>
+</ul>
+</li>
+</ol>
+<p>Do not ask “Are you represented fairly?” Do not use first-person answers. Do not output “approval.” “No contradiction found in this corpus” is the strongest permissible null result.</p>
+<p>The corpus also needs a completeness manifest: every included post/thread, relevant surrounding context, later correction and the authors’ selection rule. “Only the posts already cited by the page” otherwise makes the exercise circular.</p>
+<h3>Cast</h3>
+<p>The four named-position audits are justified, but their scopes must be narrow:</p>
+<ul>
+<li><strong>TeorTaxes:</strong> direct cost/margin ceilings versus page-added utilization, fleet and workload assumptions.</li>
+<li><strong>Zephyr:</strong> the coexistence of unit-margin and company-margin claims.</li>
+<li><strong>Dylan Patel/SemiAnalysis:</strong> separate his direct “north of 80%” claim from the site-created owned-TCO reconstruction; audit InferenceX usage against official benchmark material as well as posts.</li>
+<li><strong>fleetingbits:</strong> audit his reported-margin/accounting claim only. Do not make him stand in for every possible skeptic or “approve” the calculator’s inverse diagnostic.</li>
+</ul>
+<p>Add a <strong>cost-accounting/financial-reporting reader</strong> as a ninth audience. The largest enduring comprehension risk is still unit serving contribution margin versus company gross margin, and neither the ML-infra engineer nor calibration reviewer owns that perimeter.</p>
+<p>Add <strong>@_xjdr as a targeted source-fidelity audit, not a named persona</strong>. His deployment statistics are load-bearing in §2c and are explicitly described as the best public Blackwell Ultra serving observation on the page. The audit should verify every transcribed number, the output-only caveat, hardware count, precision and separation from adjacent SGLang/Baseten results.</p>
+<p>No existing audience archetype is clearly superfluous. The casual lurker, however, is only an LLM information-scent audit—not evidence that a human can navigate and comprehend the page in 90 seconds.</p>
+<h3>Required task-template fields</h3>
+<p>Every output should contain:</p>
+<ul>
+<li>preview revision/hash and audit run metadata;</li>
+<li>exact page anchor and exact scenario permalink;</li>
+<li>affected metric, model, traffic profile and lens;</li>
+<li>source locator supporting the objection;</li>
+<li>failure class and P0/P1/P2 severity under a fixed rubric;</li>
+<li>exact replacement wording or UI change;</li>
+<li>a deterministic acceptance test;</li>
+<li>confidence and unresolved ambiguity;</li>
+<li>for the quote-tweet task: viewport, crop boundaries, proposed caption, what surrounding context is lost, and what must be placed inside the screenshot-safe card;</li>
+<li>for the lurker: navigation path, time-to-location, answers, confidence and where each answer was found.</li>
+</ul>
+<p>For technical objections, require reproducible steps and expected versus observed behavior—not “this feels confusing.”</p>
+<h3>Run and synthesis controls</h3>
+<ul>
+<li>One Sol run per persona is acceptable for <strong>issue discovery</strong>, but absence of a finding is not evidence of correctness.</li>
+<li>Any proposed P0/P1 must be verified against the page and source by a second clean-context pass or manual evidence check before remediation.</li>
+<li>Opus synthesis must preserve dissent and link every synthesized issue back to the raw structured output. It may deduplicate, not silently rewrite or upgrade claims.</li>
+<li>Publish the exact prompts, corpus manifest, raw outputs, synthesis and a resolution table: <code>open / fixed / rejected with reason</code>.</li>
+<li>Never publish an aggregate approval score, named-person pass count or “the simulations agreed the page was fair.”</li>
+</ul>
+<p>This makes the exercise useful without converting synthetic readers into synthetic validators.</p>
+<hr>
+<h2>5. What the next external review will otherwise flag</h2>
+<ol>
+<li><p><strong>P0 — workload-attribution laundering.</strong> “Chat 56%” and “Coding 41%” will be attacked as generic labels built from provider-specific deployment observations with materially different cache semantics.</p>
+</li>
+<li><p><strong>P0 — hidden state corruption.</strong> <code>Provider-native</code> will still allow a model change to alter workload behind a stable selector label; v2 links, local saved presets and analyst/replay scenarios will migrate inconsistently—especially the xAI 3:1/0% fixtures.</p>
+</li>
+<li><p><strong>P0 — simulated endorsement.</strong> A published “TeorTaxes-sim: yes, fair” screenshot will overwhelm every annex disclaimer. The reviewer will call it attribution laundering by simulation.</p>
+</li>
+<li><p><strong>P0 — false archival provenance.</strong> A fresh 192-row generation labeled as the missing original pack will be identified as a reconstruction masquerading as a verbatim artifact.</p>
+</li>
+<li><p><strong>P1 — conclusion-shopping moved, not solved.</strong> The anti-lens span will remain correct but conditional on a user-selected traffic profile; the user can now shop workload instead. The hero must say exactly what the displayed range conditions on.</p>
+</li>
+<li><p><strong>P1 — tornado ranges are not empirical ranges.</strong> “Sourced” will be challenged when a bracket comes from a model-authored dive, applies to another operating point, or splits correlated rent/utilization/MFU assumptions into independent bars.</p>
+</li>
+<li><p><strong>P1 — the comprehension claim still has no humans.</strong> An LLM with full-page access cannot test scanning behavior, visual salience, distraction, mobile navigation or real 90-second comprehension. The original human gate remains open.</p>
+</li>
+<li><p><strong>P1 — circular persona corpora and missing accounting expertise.</strong> Briefs assembled only from already-selected page citations will reproduce the authors’ framing, while no reader is explicitly tasked with auditing the serving-margin/accounting perimeter.</p>
+</li>
+<li><p><strong>P1 — §10 cuts may become caveat cuts.</strong> A headline plus top-three list is insufficient unless metric, traffic, cost lens, non-comparability and update trigger remain in-card and therefore survive screenshots.</p>
+</li>
+</ol>
+<hr>
+<h2>6. Ordering and sequencing risks</h2>
+<p><strong>Persona before the final gate is correct.</strong> It must happen after the preview is feature-complete and before the independent final review, so remediations receive a clean gate. Do not run it before an internal correctness/identity gate; otherwise persona runs will spend their budget rediscovering deterministic bugs.</p>
+<p>Recommended sequence:</p>
+<ol>
+<li><strong>Freeze v2.1.1:</strong> record engine hash, all existing permalink fixtures, saved-preset fixtures, default outputs, dive targets and lens-range membership.</li>
+<li><strong>Apply §0 as a separately versioned editorial commit</strong> or keep it on the v2.2 branch. Do not silently mutate the release still labeled v2.1.1.</li>
+<li><strong>Write B’s state contract, URL-schema migration and invariant tests before UI work.</strong></li>
+<li><strong>Implement the traffic-mix compiler and migrations; prove exact default and replay parity.</strong></li>
+<li><strong>Then perform A’s §6 and §10 cuts.</strong> Both must use the new traffic-profile terminology and resolved provenance. The independent §8 cut can happen earlier or in parallel.</li>
+<li><strong>Publish C’s durable artifacts.</strong> The adopted grounding ledger should derive from canonical data after any relevant schema changes.</li>
+<li><strong>Implement D last.</strong> Decide its go/no-go before freezing the reception preview; do not persona-test a chart that may then be removed.</li>
+<li><strong>Run the deterministic release/semantic gate</strong> on the frozen preview.</li>
+<li><strong>Run named corpus audits and audience reception exercises.</strong></li>
+<li><strong>Verify and remediate P0/P1 findings; rerun affected tasks and the full release suite.</strong></li>
+<li><strong>Run the final council/GPT gate in a clean context.</strong> Ideally, the reviewers first inspect the product blind, then inspect the persona findings and resolution ledger so the synthesis does not anchor their initial search.</li>
+<li><strong>Ship only after the final gate covers both the product and the newly published reception annex.</strong></li>
+</ol>
+<p>The main sequencing error to avoid is cutting §6/§10 first and then changing workload semantics underneath their new compact wording. The second is treating persona review as the first QA layer rather than a reception layer on top of a mechanically stable release.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>
