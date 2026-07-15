@@ -62,8 +62,7 @@ paywalled-source summaries that don't belong in public.
 
 ## License
 
-Not yet granted — all rights reserved until a license file lands (a code/content split is
-under consideration). The live site remains freely readable either way.
+MIT — code and content alike (see [LICENSE](LICENSE)).
 
 ## Disclaimer
 
