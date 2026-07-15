@@ -544,7 +544,7 @@ function reconcileLinkTraffic(declared, cleanDiff) {
 }
 
 /* ---------- permalink codec (v4 since the v2.1.3 preset redesign; decodes v3/v2 — pure) ---------- */
-const ENGINE_REVISION = "v2.1.5-2026-07-15"; // v2.1.5: permalink round-trip baseline fix (encoder diffs against the loader's preset baseline, not global DEFAULTS) + source-currency corrections (arXiv IKP v2 figures, §4 cumulative multiplier, xAI fleet-count derivation wording) from the 2026-07-15 Sol release inspection
+const ENGINE_REVISION = "v2.1.6-2026-07-15"; // v2.1.6: weekly update (Q-001/Q-007) — DeepSeek V4 API 70–80% GM (The Information, Jul 14–15) added to the evidence board + §2/§10 narrative, AMD MI350X non-NVIDIA production throughput note (DigitalOcean/RadixArk); no preset/parameter numbers changed
 const DATA_AS_OF = "2026-07-15";
 const _toB64 = str => (typeof btoa === "function") ? btoa(unescape(encodeURIComponent(str))) : Buffer.from(str, "utf8").toString("base64");
 const _fromB64 = b => (typeof atob === "function") ? decodeURIComponent(escape(atob(b))) : Buffer.from(b, "base64").toString("utf8");
@@ -1356,6 +1356,18 @@ const MARGIN_CLAIMS = [
     subjectScope: "Zhipu/z.ai GLM-5.2 official endpoint, unit token GM — a rare China first-party unit estimate",
     notClaimed: "independent verification; low-follower account",
     binnable: true, relation: "asserts" },
+  // --- 2026-07-15 weekly update (Q-001): The Information's DeepSeek V4 API margin report ---
+  { id: "theinformation-7080-deepseek-v4", who: "The Information (reporting)",
+    verbatim: null,
+    reportedFigure: "DeepSeek V4 API gross margin 70–80% (an update to an earlier reported '>50%' figure); annualized revenue nearing $500M, raising ~¥50B (~$7.4B) at a ~¥500B (~$74B) valuation with STAR Market IPO prep",
+    url: "https://www.theinformation.com/articles/deepseeks-annualized-revenue-nears-500-million-boosting-fundraise-ipo-plans", date: "2026-07-14/15",
+    sourceClass: "reporting", scopeLayer: "api-product-line", provenanceTier: "reported-unverified",
+    tierSource: "The Information (relayed by @jukan05/@jingyanghk); a same-cluster GPT-5.6 Pro consult independently rates the figure 'medium-low' confidence — no accounting definition or company confirmation is public (research/gptpro-reports/recovered-deepseek-dive-2026-07-15.md, not part of the published annex)",
+    metricScope: "api-product-line-GM (reported)", boundType: "interval",
+    numeric: { lo: 70, hi: 80 },
+    subjectScope: "DeepSeek V4 API gross margin, reported Jul 2026 — the first company-reported post-V4 margin datapoint identified in this research, upgrading the evidence quality of this range beyond community backsolves",
+    notClaimed: "an audited or company-confirmed figure; this calculator's unit direct-serving contribution-margin metric; consumer-app revenue (the ARR figure and the TeorTaxes fleet backsolves it prompted are paid-API-only in scope, per TeorTaxes's own caveat)",
+    binnable: true, relation: "different-metric" },
   // --- Model-generated scenario analysis: its own group, ZERO claimant weight (P0-8/Q9) ---
   { id: "gptpro-9296-model-generated", who: "GPT-5.6 Pro consult (model-generated scenario analysis — not a person's claim)",
     verbatim: "approximately 92–94% for Opus and 94–96% for Sonnet on a mature 2026 fleet.",
