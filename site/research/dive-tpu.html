@@ -1,0 +1,723 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Google TPU inference economics — GPT-5.6 Pro deep dive · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/dive-tpu">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>RECOVERED — GPT-5.6 Pro dive: TPU Inference Economics Analysis</h1>
+<blockquote>
+<p><strong>RECOVERED from ChatGPT history — dispatcher timer died before filing (commissioned by owner 2026-07-15, Targeted 4).</strong>
+Retrieved read-only from the owner&#39;s ChatGPT account (project: Ashitaorbis) via the backend
+conversation API over CDP against the owner&#39;s logged-in Chrome — the same browser the
+<code>chatgpt-pro</code> MCP uses. No new prompt was sent; this is the verbatim assistant report as it
+already existed in-account. The dispatching (pro-dive-fleet) session&#39;s in-session MCP request
+registry expired unread, but the ChatGPT conversation itself survived.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Model</strong></td>
+<td><code>gpt-5-6-pro</code> (from message <code>metadata.model_slug</code>)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-15</td>
+</tr>
+<tr>
+<td><strong>Dive title</strong></td>
+<td>TPU Inference Economics Analysis</td>
+</tr>
+<tr>
+<td><strong>Conversation ID</strong></td>
+<td><code>6a57eeaf-67f8-83e8-bf11-faf45d6357b2</code></td>
+</tr>
+<tr>
+<td><strong>Created / final answer (UTC)</strong></td>
+<td>2026-07-15T20:33:52.159Z / 2026-07-15T21:31:11.150Z</td>
+</tr>
+</tbody></table>
+<p><strong>Citation normalization:</strong> ChatGPT&#39;s private-use-unicode citation anchors (<code>U+E200/E201/E202</code>)
+are rendered as readable <code>[cite: &lt;ref-id&gt;]</code> markers; <code>turn…viewN/searchN/newsN</code> ids are ChatGPT&#39;s
+internal web.run source-reference tokens. Report text otherwise verbatim.</p>
+<p><strong>Provenance routing:</strong> any site change this dive justifies must enter through the update queue
+(<code>research/update-queue.md</code>), not via direct edits.</p>
+<details><summary>Dispatched prompt (verbatim)</summary><pre><code>You are conducting a rigorous source-hunting deep dive for a quantitative model of frontier-LLM inference serving economics (cost per token, and margin at list prices). I need the strongest available PUBLIC anchors for Google TPU inference/serving economics — or a rigorous, well-documented finding that no such public anchor exists.
+
+SCOPE:
+- TPU v5e, v6e (Trillium), and v7 (Ironwood) used for LLM *inference/serving*, not training.
+- Published inference throughput on frontier-class models: MLPerf Inference submissions (v4.x/v5.x rounds) on TPU; Google&#39;s own published serving claims (Gemini serving on TPU, JetStream / MaxText / vLLM-on-TPU benchmarks); and any third-party TPU inference benchmarks (via GKE, JetStream, SGLang, etc.). Prefer figures expressed as tokens/sec/chip (or per host) on a named model at a named precision.
+- GCP TPU pricing: on-demand $/chip-hour and $/host-hour, 1-yr and 3-yr committed-use discounts, spot/preemptible rates, for v5e / v6e / v7 where published.
+- Power and TCO comparisons vs NVIDIA H100/H200/GB200 (perf-per-watt, perf-per-dollar), from Google or credible third parties.
+- Any disclosures about Gemini serving cost or TPU fleet economics.
+
+GOAL: a candidate quantitative anchor for cost-per-token on TPU — ideally (tokens/sec/chip on a named model at a named precision) paired with ($/chip-hour) so a $/token can be derived. If no such public serving anchor exists (e.g. Google publishes peak FLOPS and rental pricing but no real-model serving throughput), say so explicitly and precisely — a rigorous negative result is exactly as valuable here. TPU is currently the single weakest-anchored platform in the model, so precision about what is and is not publicly disclosed matters more than breadth.
+
+Structure your findings as dated claims. For each: the claim, primary source (URL + date), your assessment of source quality (vendor claim / third-party benchmark / production disclosure / analyst estimate), and whether it could serve as a quantitative anchor (tokens/sec/chip, $/hr, $/token). If no public anchor exists for a platform, say so explicitly as a finding — a rigorous negative result is wanted. End with a numbered list of your 5 most load-bearing sources.
+</code></pre>
+</details><hr>
+<h1>Bottom line</h1>
+<p><strong>A public cost-per-output-token anchor now exists for TPU v5e, v6e, and v7/Ironwood.</strong> The evidence is materially better than a model built only from peak FLOPS:</p>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th align="right">Public named-model throughput?</th>
+<th align="right">Public rental price?</th>
+<th align="right">Defensible accelerator-rental $/token?</th>
+<th>Main limitation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TPU v5e</strong></td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right"><strong>Yes</strong></td>
+<td>Strongest large-model result is Llama 2 70B; several results are vendor saturation benchmarks.</td>
+</tr>
+<tr>
+<td><strong>TPU v6e / Trillium</strong></td>
+<td align="right">Yes</td>
+<td align="right">Yes</td>
+<td align="right"><strong>Yes</strong></td>
+<td>Best vendor numbers sometimes omit precision; the best independent comparison is a 2026 preprint rather than an audited benchmark.</td>
+</tr>
+<tr>
+<td><strong>TPU v7 / Ironwood</strong></td>
+<td align="right">Yes, as of 2026</td>
+<td align="right">Yes</td>
+<td align="right"><strong>Yes</strong></td>
+<td>The useful results are new Google reference recipes, not MLPerf or independent production disclosures; no latency-qualified result accompanies the headline throughput.</td>
+</tr>
+<tr>
+<td><strong>Gemini production serving</strong></td>
+<td align="right">No model-level rate</td>
+<td align="right">Internal fleet cost not public</td>
+<td align="right"><strong>No</strong></td>
+<td>Google discloses aggregate energy per Gemini prompt, but not model, TPU generation, token lengths, throughput, utilization, or dollars.</td>
+</tr>
+</tbody></table>
+<p>The strongest frontier-scale public anchor I found is <strong>Qwen3-Coder-480B-A35B-Instruct-FP8 on four Ironwood chips</strong>:</p>
+<ul>
+<li>1,024 input / 8,192 output workload</li>
+<li>2,075.47 aggregate output tokens/s, or 518.86 tokens/s/chip</li>
+<li>Current four-chip on-demand list price: $48/hour</li>
+<li>Derived accelerator-rental floor: <strong>$6.42 per million output tokens</strong></li>
+<li>At the current three-year commitment price: <strong>$2.89 per million output tokens</strong></li>
+</ul>
+<p>That is a real named-model, named-precision, named-topology serving benchmark. It is nevertheless a <strong>maximum-throughput vendor reference run at infinite offered load</strong>, not a production cost disclosure or a latency-constrained serving result. [cite: turn358674view0, turn130469view1, turn583429view0]</p>
+<p>The rigorous negative finding is narrower but important:</p>
+<blockquote>
+<p><strong>There is no public basis for calculating Gemini gross margin from TPU economics.</strong> Public TPU rental prices are external customer list prices, not Google’s internal TPU fleet cost, and Google has not published a mapping from a named Gemini API SKU to TPU generation, topology, precision, output throughput, traffic mix, utilization, or supporting-model overhead.</p>
+</blockquote>
+<hr>
+<h1>Calculation convention</h1>
+<p>For a benchmark reporting aggregate <strong>output-token throughput</strong>, I use:</p>
+<h1>[
+\text{Accelerator $ per 1M output tokens}</h1>
+<p>\frac{
+N_{\text{chips}}\times $/{\text{chip-hour}}
+}{
+\text{output tokens/sec}\times 3600
+}
+\times 10^6
+]</p>
+<p>This is an <strong>accelerator-rental floor</strong>, not fully loaded serving COGS. It excludes:</p>
+<ul>
+<li>Latency/SLO headroom and replica redundancy</li>
+<li>Idle time and utilization losses</li>
+<li>Host CPU, networking, storage, GKE, load balancing, and observability</li>
+<li>Compilation, model loading, failover, and maintenance</li>
+<li>Ancillary models, safety classifiers, routers, retrieval, and speculative-draft models</li>
+<li>Engineering, support, and datacenter overhead beyond what is embedded in the cloud rental price</li>
+</ul>
+<p>Where a benchmark has a specified input length, its reported output-token rate implicitly includes the cost of processing those inputs. It should therefore be read as <strong>cost per output token for that particular input/output workload</strong>, not as a universal decode-only cost.</p>
+<p>All calculated prices below use the current lowest listed US price for each generation as of <strong>July 15, 2026</strong>. Pairing a current price with an older benchmark is a <strong>current repricing of the benchmark</strong>, not necessarily the economics prevailing when it was published.</p>
+<hr>
+<h1>Current public GCP TPU pricing</h1>
+<p>Primary source:<br><a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a> — accessed <strong>2026-07-15</strong></p>
+<p>Prices are USD per chip-hour. Google explicitly says the TPU price table is expressed per chip-hour even where billing interfaces may display VM-hours. [cite: turn358674view0]</p>
+<table>
+<thead>
+<tr>
+<th>Generation</th>
+<th align="right">On-demand</th>
+<th align="right">DWS Flex</th>
+<th align="right">DWS Calendar</th>
+<th align="right">1-year commitment</th>
+<th align="right">3-year commitment</th>
+<th>Useful host equivalents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>v5e</strong></td>
+<td align="right">$1.20</td>
+<td align="right">$0.60</td>
+<td align="right">$0.84</td>
+<td align="right">$0.84</td>
+<td align="right">$0.54</td>
+<td>v5e-8: $9.60 on-demand; $4.32 at 3 years</td>
+</tr>
+<tr>
+<td><strong>v6e</strong></td>
+<td align="right">$2.70</td>
+<td align="right">$1.35</td>
+<td align="right">$1.89</td>
+<td align="right">$1.89</td>
+<td align="right">$1.22</td>
+<td>v6e-4: $10.80 on-demand; v6e-8: $21.60</td>
+</tr>
+<tr>
+<td><strong>v7 / Ironwood</strong></td>
+<td align="right">$12.00</td>
+<td align="right">$6.00</td>
+<td align="right">$8.40</td>
+<td align="right">$8.40</td>
+<td align="right">$5.40</td>
+<td>Current standard four-chip VM: $48 on-demand; $21.60 at 3 years</td>
+</tr>
+</tbody></table>
+<p><strong>Spot/preemptible:</strong> Google’s current public TPU pricing page does not provide a stable numeric spot rate. It says Spot prices are dynamic and can change as frequently as once every 30 days. DWS Flex is a separately quoted queue-based rate and should not be relabeled as Spot. Therefore, a timeless numeric “TPU spot price” is not available from the public static price card. [cite: turn358674view0]</p>
+<p>Current topology documentation says:</p>
+<ul>
+<li>v5e has eight chips per host and common one-, four-, and eight-chip serving slices.</li>
+<li>v6e also has eight chips per host; v6e-4 is a half-host and v6e-8 is a full host optimized for inference.</li>
+<li>Current Ironwood standard topology documentation describes four-chip full-host VMs. [cite: turn763260view0, turn846552view0, turn846552view2]</li>
+</ul>
+<hr>
+<h1>Best candidate quantitative anchors</h1>
+<p>The table uses <strong>output-token throughput</strong>, not total input-plus-output throughput.</p>
+<table>
+<thead>
+<tr>
+<th>Platform and model</th>
+<th>Configuration and workload</th>
+<th align="right">Published output throughput</th>
+<th align="right">Derived $/1M output tokens: on-demand / DWS Flex / 3-year</th>
+<th>Anchor assessment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>v5e — Llama 2 13B</strong></td>
+<td>v5e-8; INT8 weights, activations, and KV cache; maximum input/output 1,024</td>
+<td align="right">3,938 tok/s</td>
+<td align="right"><strong>$0.677 / $0.339 / $0.305</strong></td>
+<td>Clean, precisely quantized vendor anchor; model is small by current frontier standards.</td>
+</tr>
+<tr>
+<td><strong>v5e — Llama 2 70B</strong></td>
+<td>Eight chips; INT8 weight quantization; ShareGPT variable-length workload</td>
+<td align="right">1,510 tok/s</td>
+<td align="right"><strong>$1.766 / $0.883 / $0.795</strong></td>
+<td>Best straightforward public 70B v5e anchor; activation/KV precision is not fully specified.</td>
+</tr>
+<tr>
+<td><strong>v6e — Llama 2 70B</strong></td>
+<td>v6e-8; MaxText/JetStream; maximum input/output 1,024</td>
+<td align="right">6,389 tok/s</td>
+<td align="right"><strong>$0.939 / $0.470 / $0.424</strong></td>
+<td>Very strong throughput figure, but precision and latency/load point are omitted. Treat as optimistic saturation floor.</td>
+</tr>
+<tr>
+<td><strong>v6e — Qwen3-32B</strong></td>
+<td>v6e-4; W8A8 INT8; 1,800 input / 128 output; 1,000 requests</td>
+<td align="right">1,396.35 tok/s</td>
+<td align="right"><strong>$2.148 / $1.074 / $0.971</strong></td>
+<td>Exact and reproducible, but mean TTFT was 44.4 seconds; relevant to batch/high-throughput economics, not interactive serving.</td>
+</tr>
+<tr>
+<td><strong>v6e — Gemma 4 31B</strong></td>
+<td>v6e-8; 4,096 input / 512 output; TPU KV cache FP8</td>
+<td align="right">1,206 tok/s</td>
+<td align="right"><strong>$4.975 / $2.488 / $2.248</strong></td>
+<td>Best independent TPU anchor found; small sample and not perfectly precision-matched to the H100 comparison.</td>
+</tr>
+<tr>
+<td><strong>v7 — Qwen3-32B</strong></td>
+<td>One-chip-normalized recipe; FP8 weights, activations, and KV; 1K/1K; concurrency 320</td>
+<td align="right">6,556.72 tok/s/chip</td>
+<td align="right"><strong>$0.508 / $0.254 / $0.229</strong></td>
+<td>Excellent normalized vendor figure, but the recipe’s one-chip machine type conflicts with current four-chip-minimum topology documentation.</td>
+</tr>
+<tr>
+<td><strong>v7 — Qwen3-Coder-480B-A35B</strong></td>
+<td>Four chips; FP8 model and KV; 1K/8K; concurrency 64</td>
+<td align="right">2,075.47 total; 518.86/chip</td>
+<td align="right"><strong>$6.424 / $3.212 / $2.891</strong></td>
+<td><strong>Best frontier-scale public TPU anchor.</strong> Exact model, topology, precision, and workload; vendor saturation benchmark with no published achieved latency.</td>
+</tr>
+</tbody></table>
+<p>The v5e figures come from Google’s 2024 JetStream and Hex-LLM publications; v6e figures come from Google’s 2025–2026 JetStream/vLLM work and an independent Gemma 4 paper; Ironwood figures come from Google’s 2026 AI Hypercomputer reference recipes. [cite: turn551217view0, turn737569view6, turn835598view0, turn206048view0, turn632373view3, turn130469view0, turn130469view1]</p>
+<hr>
+<h1>Dated findings</h1>
+<h2>1. July 15, 2026 — Public price legs exist for all three generations</h2>
+<p><strong>Claim.</strong> GCP publishes stable on-demand, DWS Flex, DWS Calendar, one-year, and three-year per-chip-hour rates for v5e, v6e, and Ironwood. Ironwood is currently $12/chip-hour on demand; v6e is $2.70; v5e is $1.20. Three-year rates are $5.40, $1.22, and $0.54 respectively.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a> — accessed <strong>2026-07-15</strong></p>
+<p><strong>Source quality.</strong> Official commercial price card; strongest possible source for external list-price economics.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes, for the $/hour leg.</strong> It does not disclose Google’s internal fleet cost. Spot remains a dynamic price rather than a stable published number. [cite: turn358674view0]</p>
+<hr>
+<h2>2. April 10, 2024 — JetStream supplied a clean v5e INT8 throughput-and-cost anchor</h2>
+<p><strong>Claim.</strong> Google reported JetStream on a v5e-8 slice with continuous batching and INT8 weights, activations, and KV cache. With maximum input and output lengths of 1,024 tokens, it reported:</p>
+<ul>
+<li>Llama 2 13B: 3,938 output tok/s</li>
+<li>Gemma 7B: 4,030 output tok/s</li>
+<li>Llama 2 7B: 4,783 output tok/s</li>
+</ul>
+<p>The original publication also gave an explicit three-year-CUD estimate of approximately $0.30 per million output tokens for Gemma 7B and Llama 2 13B and $0.25 for Llama 2 7B.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus">https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus</a> — <strong>2024-04-10</strong></p>
+<p><strong>Source quality.</strong> Vendor benchmark. The workload, slice size, continuous-batching mode, and quantization are unusually well specified. It is not independently reproduced and represents a maximum-throughput operating point.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes.</strong> Repricing Llama 2 13B at today’s rates gives $0.677/M output tokens on demand and $0.305/M under the current three-year rate. This is probably the cleanest v5e anchor, although not a frontier-size model. [cite: turn291446view0, turn551217view0, turn551217view1]</p>
+<hr>
+<h2>3. July 26, 2024 — Hex-LLM supplied the strongest public v5e 70B anchor</h2>
+<p><strong>Claim.</strong> Google reported Hex-LLM on eight v5e chips using a ShareGPT variable-length workload. At its highest-throughput point:</p>
+<ul>
+<li>Gemma 7B reached 6,250 output tok/s.</li>
+<li>INT8 weight-quantized Llama 2 70B reached 1,510 output tok/s.</li>
+</ul>
+<p>Google separately reported low-load per-output-token latencies, but the peak-throughput and minimum-latency figures are different points on the load curve and must not be combined into one serving configuration.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/blog/products/ai-machine-learning/hex-llm-on-tpus-in-vertex-ai-model-garden/">https://cloud.google.com/blog/products/ai-machine-learning/hex-llm-on-tpus-in-vertex-ai-model-garden/</a> — <strong>2024-07-26</strong></p>
+<p><strong>Source quality.</strong> Vendor benchmark with a realistic variable-length dataset and a named 70B model. The source specifies INT8 weight quantization but does not fully specify activation and KV-cache precision.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes.</strong> At current list pricing, 1,510 tok/s on a $9.60/hour v5e-8 slice implies:</p>
+<ul>
+<li>On demand: <strong>$1.766/M output tokens</strong></li>
+<li>DWS Flex: <strong>$0.883/M</strong></li>
+<li>Three-year: <strong>$0.795/M</strong></li>
+</ul>
+<p>This is the best simple public v5e anchor for a large dense model. [cite: turn737569view5, turn737569view6, turn737569view7]</p>
+<hr>
+<h2>4. 2024–2025 MLPerf rounds — no frontier TPU LLM tokens/sec anchor</h2>
+<p><strong>Claim.</strong> Google did submit a TPU v5e LLM result to MLPerf Inference v4.0, but it is not a strong cost-per-token anchor:</p>
+<ul>
+<li>System: four TPU v5e chips, one node, SAXML.</li>
+<li>Model: GPT-J 6B.</li>
+<li>Offline result: 10.1502 samples/s.</li>
+<li>Server result: 7.20 completed samples/s.</li>
+<li>The reference workload permits between 30 and 128 generated tokens and uses beam size four.</li>
+</ul>
+<p>The variable generated length means samples/s cannot be converted exactly to output tokens/s from the summary result. GPT-J 6B also does not meet the requested frontier-class criterion.  [filecite: turn3file0, L3-L18]  [filecite: turn3file0, L33-L41]  [filecite: turn5file0, L3-L13]  [filecite: turn7file0, L3-L22]  [filecite: turn14file0, L15-L20]</p>
+<p><strong>Primary sources.</strong></p>
+<ul>
+<li><a href="https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/systems/tpu_v5e_x4.json">https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/systems/tpu_v5e_x4.json</a></li>
+<li><a href="https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/results/tpu_v5e_x4/gptj-99/offline/performance/run_1/mlperf_log_summary.txt">https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/results/tpu_v5e_x4/gptj-99/offline/performance/run_1/mlperf_log_summary.txt</a></li>
+<li><a href="https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/results/tpu_v5e_x4/gptj-99/server/performance/run_1/mlperf_log_summary.txt">https://github.com/mlcommons/inference_results_v4.0/blob/main/closed/Google/results/tpu_v5e_x4/gptj-99/server/performance/run_1/mlperf_log_summary.txt</a></li>
+<li><a href="https://github.com/mlcommons/inference/blob/v4.0/language/gpt-j/backend.py">https://github.com/mlcommons/inference/blob/v4.0/language/gpt-j/backend.py</a></li>
+</ul>
+<p><strong>Source quality.</strong> Auditable MLCommons submission; very high benchmark integrity, but the reported unit and workload are unsuitable for exact $/output-token conversion.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>No exact $/token anchor.</strong> It can support a cost-per-sample calculation—about $0.000131 per offline sample at current on-demand v5e pricing—but not exact cost per generated token.</p>
+<p>In the Google closed-submission directories inspected:</p>
+<ul>
+<li>v4.1’s TPU entries were for Stable Diffusion XL rather than an LLM.</li>
+<li>v5.0’s Trillium submission was also SDXL.</li>
+<li>v5.1’s Google results were H200/B200 systems, with no TPU LLM submission.</li>
+</ul>
+<p>Therefore, <strong>MLPerf Inference v4.0 through v5.1 does not provide the desired frontier TPU LLM tokens/sec/chip anchor.</strong> [cite: turn739283view0, turn739283view1, turn741076view0]</p>
+<hr>
+<h2>5. May 14, 2024 — Trillium power-efficiency claim is not a serving power anchor</h2>
+<p><strong>Claim.</strong> At the Trillium announcement, Google claimed 4.7 times the peak compute per chip of v5e and “over 67%” greater energy efficiency. It also said Gemini 1.5 Flash, Imagen 3, and Gemma 2 were trained and served using TPUs, but did not attribute a named model’s production serving rate to a specified Trillium topology.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/blog/products/compute/introducing-trillium-6th-gen-tpus">https://cloud.google.com/blog/products/compute/introducing-trillium-6th-gen-tpus</a> — <strong>2024-05-14</strong></p>
+<p><strong>Source quality.</strong> Vendor generation-level specification and production-use statement.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>No.</strong> It does not state the LLM, precision, tokens/s, watts, utilization, or latency corresponding to the energy-efficiency claim. It is a useful architectural prior, not a serving tokens/J measurement. [cite: turn130789view1]</p>
+<hr>
+<h2>6. May 9, 2025 — JetStream supplied high-throughput v6e anchors</h2>
+<p><strong>Claim.</strong> Google reported the following MaxText/JetStream output throughput, with maximum input and output lengths of 1,024:</p>
+<ul>
+<li>Llama 2 70B on eight Trillium chips: <strong>6,389 output tok/s</strong></li>
+<li>Mixtral 8×7B on four Trillium chips: <strong>4,128 output tok/s</strong></li>
+</ul>
+<p>The article states that JetStream uses the same inference stack Google uses to serve Gemini.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/blog/products/compute/ai-hypercomputer-inference-updates-for-google-cloud-tpu-and-gpu">https://cloud.google.com/blog/products/compute/ai-hypercomputer-inference-updates-for-google-cloud-tpu-and-gpu</a> — <strong>2025-05-09</strong></p>
+<p><strong>Source quality.</strong> Vendor benchmark with named models, chip counts, and workloads. The notable omission is precision/quantization. Load level, TTFT, and output latency are also not reported.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes, with a precision caveat.</strong></p>
+<p>For Llama 2 70B:</p>
+<ul>
+<li>On-demand v6e-8: <strong>$0.939/M output tokens</strong></li>
+<li>DWS Flex: <strong>$0.470/M</strong></li>
+<li>Three-year: <strong>$0.424/M</strong></li>
+</ul>
+<p>This is the lowest public v6e 70B accelerator-floor estimate I found, but it should be modeled as an optimistic maximum-throughput case because the precision and latency point are undisclosed. [cite: turn737569view0, turn737569view1, turn737569view2, turn835598view0]</p>
+<p>The same article reported 1,703 tok/s for Llama 3.1 405B and a threefold inference-per-dollar improvement over v5e. However, it did <strong>not</strong> disclose the Trillium chip count/topology or precision for that figure. Consequently, the 405B result cannot be converted into $/token and is not a valid frontier anchor despite being the most frontier-relevant model in the article. [cite: turn737569view2]</p>
+<hr>
+<h2>7. April 16, 2026 — Google’s RPA paper supplies exact BF16 v6e rates, but as a software-progress figure</h2>
+<p><strong>Claim.</strong> A Google-authored paper on Ragged Paged Attention reports up to 86% memory-bandwidth utilization in decode and 73% model-FLOP utilization in prefill on Ironwood. A fixed-workload software-progress figure also reports, for 1,800 input and 128 output tokens in BF16:</p>
+<ul>
+<li>Llama 3 8B on v6e-1: 11.6 requests/s as of August 14, 2025</li>
+<li>Llama 3 70B on v6e-8: 7.65 requests/s as of August 14, 2025</li>
+</ul>
+<p>Because every request has 128 output tokens, these imply:</p>
+<ul>
+<li>8B: 1,484.8 output tok/s on one chip</li>
+<li>70B: 979.2 output tok/s on eight chips</li>
+</ul>
+<p><strong>Primary source and date.</strong><br><a href="https://arxiv.org/abs/2604.15464">https://arxiv.org/abs/2604.15464</a> — submitted <strong>2026-04-16</strong></p>
+<p><strong>Source quality.</strong> Vendor-authored research preprint. Precision, model, topology, and fixed output length are specified; the chart is primarily a history of software improvements rather than a complete latency-qualified serving benchmark.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes, as a conservative technical anchor.</strong> Current on-demand accelerator floors are approximately $0.505/M for the 8B run and $6.13/M for the 70B run. The large difference from the 2025 JetStream 70B figure illustrates how strongly TPU $/token depends on serving engine, quantization, batching, and benchmark workload. [cite: turn851529view0, turn851529view1, turn630152view1]</p>
+<p>The 86%/73% utilization results are <strong>not themselves cost anchors</strong> because they do not disclose end-to-end tokens/s for the corresponding Ironwood runs. [cite: turn851529view4]</p>
+<hr>
+<h2>8. May 1, 2026 — An official vLLM tutorial supplied an exact W8A8 v6e anchor</h2>
+<p><strong>Claim.</strong> Google’s vLLM-on-TPU tutorial used:</p>
+<ul>
+<li>Qwen3-32B</li>
+<li>Four v6e chips</li>
+<li>INT8 weights and activations, W8A8</li>
+<li>1,000 random requests</li>
+<li>1,800 input and 128 output tokens</li>
+<li>Asynchronous scheduling</li>
+</ul>
+<p>It reported:</p>
+<ul>
+<li>1,396.35 output tok/s</li>
+<li>21,032.45 total input-plus-output tok/s</li>
+<li>Mean TTFT of 44,362 ms</li>
+<li>P99 TTFT of 88,584 ms</li>
+</ul>
+<p><strong>Primary source and date.</strong><br><a href="https://cloud.google.com/blog/ja/products/infrastructure/lets-try-llm-inference-with-cloud-tpu-and-vllm">https://cloud.google.com/blog/ja/products/infrastructure/lets-try-llm-inference-with-cloud-tpu-and-vllm</a> — <strong>2026-05-01</strong></p>
+<p><strong>Source quality.</strong> Official, reproducible vendor tutorial with a named model, exact quantization, topology, workload, throughput, and latency metrics.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes—but specifically for high-throughput/batch economics.</strong></p>
+<p>Using output tokens:</p>
+<ul>
+<li>On demand: <strong>$2.148/M</strong></li>
+<li>DWS Flex, matching the tutorial’s procurement mode: <strong>$1.074/M</strong></li>
+<li>One-year: <strong>$1.504/M</strong></li>
+<li>Three-year: <strong>$0.971/M</strong></li>
+</ul>
+<p>Using the published total-token throughput instead would produce $0.143/M total processed tokens on demand, but that is a different denominator and should not be compared directly with API output-token prices.</p>
+<p>The 44-second mean TTFT makes this unsuitable as a low-latency interactive serving anchor. [cite: turn206048view0]</p>
+<hr>
+<h2>9. May–June 2026 — Best independent TPU-versus-H100 serving comparison</h2>
+<p><strong>Claim.</strong> An independent preprint compared Gemma 4 31B on a v6e-8 system with the same model on two H100 GPUs. At comparable hourly rental prices, reported output throughput included:</p>
+<table>
+<thead>
+<tr>
+<th>Input/output workload</th>
+<th align="right">v6e-8</th>
+<th align="right">2×H100</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>512 / 256</td>
+<td align="right">1,403 tok/s</td>
+<td align="right">1,490 tok/s</td>
+</tr>
+<tr>
+<td>1,024 / 512</td>
+<td align="right">1,404 tok/s</td>
+<td align="right">1,387 tok/s</td>
+</tr>
+<tr>
+<td>4,096 / 512</td>
+<td align="right">1,206 tok/s</td>
+<td align="right">728 tok/s</td>
+</tr>
+<tr>
+<td>8,192 / 512</td>
+<td align="right">482 tok/s</td>
+<td align="right">449 tok/s</td>
+</tr>
+<tr>
+<td>16,384 / 512</td>
+<td align="right">474 tok/s</td>
+<td align="right">326 tok/s</td>
+</tr>
+</tbody></table>
+<p>The paper’s own cost table put the TPU at approximately $4.27/M output tokens for the shortest workload and $4.95/M at 4,096/512, versus $4.13/M and $8.44/M respectively for the H100 pair.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://arxiv.org/abs/2605.25645">https://arxiv.org/abs/2605.25645</a> — submitted <strong>2026-05-25</strong>; version 3 dated <strong>2026-06-05</strong></p>
+<p><strong>Source quality.</strong> Independent third-party benchmark/preprint with scripts and multiple sequence lengths. It is not peer-reviewed or audited, and the runs used only 30 prompts per QPS point.</p>
+<p>A significant comparability caveat is that the TPU used FP8 KV cache while the GPU path used BF16 KV cache, and the two paths used different software versions. Thus it is not a perfect hardware-only comparison.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes.</strong> At the current official $21.60/hour v6e-8 rate:</p>
+<ul>
+<li>1,403 tok/s: <strong>$4.28/M output tokens</strong></li>
+<li>1,206 tok/s: <strong>$4.98/M</strong></li>
+<li>At the current three-year rate, those become approximately <strong>$1.93/M</strong> and <strong>$2.25/M</strong></li>
+</ul>
+<p>This is the strongest independent evidence I found for TPU serving performance per dollar versus NVIDIA. It compares against H100, not H200 or GB200. [cite: turn386181view0, turn386181view1, turn632373view2, turn632373view3]</p>
+<hr>
+<h2>10. April 9, 2025 — Ironwood launch claims alone were not a serving anchor</h2>
+<p><strong>Claim.</strong> Google announced Ironwood as an inference-oriented TPU, with 2,307 BF16 TFLOPS/chip, 4,614 FP8 TFLOPS/chip, 192 GB HBM, and 7.38 TB/s HBM bandwidth. It claimed twice Trillium’s performance per watt.</p>
+<p><strong>Primary sources and dates.</strong></p>
+<ul>
+<li><a href="https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/ironwood-tpu-age-of-inference/">https://blog.google/innovation-and-ai/infrastructure-and-cloud/google-cloud/ironwood-tpu-age-of-inference/</a> — <strong>2025-04-09</strong>, updated 2025-04-23</li>
+<li><a href="https://docs.cloud.google.com/tpu/docs/tpu7x">https://docs.cloud.google.com/tpu/docs/tpu7x</a> — last updated <strong>2026-07-10</strong></li>
+</ul>
+<p><strong>Source quality.</strong> Official vendor hardware specifications and peak-efficiency claim.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>No, by themselves.</strong> The performance-per-watt footnote is based on peak FP8 FLOPS divided by TDP, not measured end-to-end LLM output tokens per joule. Peak FLOPS, bandwidth, and rental price are insufficient to infer serving $/token without a real-model utilization and serving benchmark. [cite: turn130789view0, turn846552view1, turn846552view2]</p>
+<p>This was the correct negative conclusion at Ironwood’s launch. The result changed only when Google began publishing the 2026 reference-recipe benchmarks below.</p>
+<hr>
+<h2>11. April 24, 2026 — Ironwood Qwen3-32B per-chip benchmark</h2>
+<p><strong>Claim.</strong> Google’s AI Hypercomputer recipe reports Qwen3-32B on Ironwood with:</p>
+<ul>
+<li>FP8 E4M3 weights and activations</li>
+<li>FP8 KV cache</li>
+<li>Tensor parallelism across the chip’s two TensorCores</li>
+<li>Infinite request rate, 320 prompts, concurrency 320</li>
+<li>Output throughput per chip:<ul>
+<li>1K/1K: 6,556.72 tok/s</li>
+<li>1K/8K: 3,959.56 tok/s</li>
+<li>8K/1K: 1,382.18 tok/s</li>
+</ul>
+</li>
+</ul>
+<p><strong>Primary source and date.</strong><br><a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-32B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-32B</a> — throughput update merged <strong>2026-04-24</strong></p>
+<p>The relevant commit explicitly updated the per-chip values to 6,556.72, 3,959.56, and 1,382.18 tok/s.  [filecite: turn23file0, L1-L18]</p>
+<p><strong>Source quality.</strong> Google-controlled vendor reference recipe using the open InferenceX client pinned to a specific commit. Highly reproducible, but not independent and clearly optimized for saturation throughput.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes, on a normalized per-chip basis.</strong></p>
+<p>For the 1K/1K result:</p>
+<ul>
+<li>On demand: <strong>$0.508/M output tokens</strong></li>
+<li>DWS Flex: <strong>$0.254/M</strong></li>
+<li>Three-year: <strong>$0.229/M</strong></li>
+</ul>
+<p>For 1K/8K, the corresponding values are approximately $0.842/M, $0.421/M, and $0.379/M. [cite: turn130469view0]</p>
+<p><strong>Material topology caveat.</strong> The recipe uses a <code>tpu7x-standard-1t</code> one-chip configuration, while current TPU7x documentation describes standard four-chip full-host VMs. This may reflect a preview or superseded machine type. The reported per-chip throughput remains a useful normalized engineering result, but a current customer may face a four-chip minimum bill. Unless four independent model replicas can fill that VM, the actual deployment cost can exceed the simple per-chip estimate by as much as fourfold. [cite: turn130469view0, turn846552view2]</p>
+<hr>
+<h2>12. May 4, 2026 — Ironwood frontier-scale Qwen3-Coder anchor</h2>
+<p><strong>Claim.</strong> Google’s Ironwood vLLM recipe reports:</p>
+<ul>
+<li>Qwen3-Coder-480B-A35B-Instruct-FP8</li>
+<li>Four TPU7x chips, eight TensorCores</li>
+<li>Tensor parallelism eight</li>
+<li>FP8 KV cache</li>
+<li>Expert parallelism</li>
+<li>InferenceX at infinite offered load</li>
+</ul>
+<p>Published rates:</p>
+<table>
+<thead>
+<tr>
+<th>Workload</th>
+<th align="right">Aggregate output throughput</th>
+<th align="right">Per chip</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1K/1K</td>
+<td align="right">1,996.00 tok/s</td>
+<td align="right">499.00 tok/s</td>
+</tr>
+<tr>
+<td>1K/8K</td>
+<td align="right">2,075.47 tok/s</td>
+<td align="right">518.86 tok/s</td>
+</tr>
+<tr>
+<td>8K/1K</td>
+<td align="right">1,053.10 tok/s</td>
+<td align="right">263.27 tok/s</td>
+</tr>
+</tbody></table>
+<p><strong>Primary source and date.</strong><br><a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B</a> — values updated <strong>2026-05-04</strong></p>
+<p>The dated commit records both the aggregate and per-chip figures.  [filecite: turn26file0, L1-L18]</p>
+<p><strong>Source quality.</strong> Vendor reference benchmark using an open benchmark client. The model, checkpoint precision, topology, tensor/expert parallelism, input/output lengths, and concurrency are disclosed. No achieved TTFT, TPOT, or latency percentiles are supplied with the final table.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes; this is the strongest public frontier-scale TPU cost anchor found.</strong></p>
+<p>For 1K input / 8K output:</p>
+<ul>
+<li>Four-chip on-demand cost: $48/hour</li>
+<li>Throughput: 2,075.47 output tok/s</li>
+<li>On-demand floor: <strong>$6.424/M output tokens</strong></li>
+<li>DWS Flex floor: <strong>$3.212/M</strong></li>
+<li>One-year/DWS Calendar floor: <strong>$4.497/M</strong></li>
+<li>Three-year floor: <strong>$2.891/M</strong></li>
+</ul>
+<p>The fact that the 1K/8K workload slightly outperforms 1K/1K is plausible for a saturation benchmark because the longer decode phase amortizes prefill and scheduling overhead. It should not be interpreted as an interactive single-user rate. [cite: turn130469view1, turn583429view0]</p>
+<hr>
+<h2>13. Current by July 15, 2026 — corroborating Ironwood Qwen3.5 result</h2>
+<p><strong>Claim.</strong> A second frontier-scale recipe reports Qwen3.5-397B-A17B-FP8 on four Ironwood chips:</p>
+<ul>
+<li>1K/8K: 3,956.67 aggregate tok/s, or 989.17 tok/s/chip</li>
+<li>8K/1K: 1,998.18 aggregate tok/s, or 499.55 tok/s/chip</li>
+<li>Maximum concurrency 128</li>
+<li>FP8 model checkpoint</li>
+<li>Four-chip, eight-TensorCore setup</li>
+</ul>
+<p><strong>Primary source and date.</strong><br><a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3.5-397B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3.5-397B</a> — current recipe accessed <strong>2026-07-15</strong>; benchmark image/build dated 2026-06-26</p>
+<p><strong>Source quality.</strong> Vendor reference recipe; reproducible but not independent or latency-qualified.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>Yes.</strong> The 1K/8K result implies approximately:</p>
+<ul>
+<li>On demand: <strong>$3.370/M output tokens</strong></li>
+<li>DWS Flex: <strong>$1.685/M</strong></li>
+<li>Three-year: <strong>$1.516/M</strong></li>
+</ul>
+<p>This corroborates that Ironwood’s public serving evidence is no longer limited to small dense models. However, the difference between this result and Qwen3-Coder also shows that active parameters, expert routing, architecture, kernels, and software maturity dominate simple parameter-count comparisons. [cite: turn776357view5]</p>
+<hr>
+<h2>14. August 21, 2025 — strongest real-production Gemini disclosure, but not a cost/token anchor</h2>
+<p><strong>Claim.</strong> Google’s production environmental-impact paper measured the median Gemini Apps text prompt in May 2025 at a total of <strong>0.24 Wh</strong>, broken down as:</p>
+<ul>
+<li>Active accelerators: 0.14 Wh</li>
+<li>Host CPU and DRAM: 0.06 Wh</li>
+<li>Idle capacity allocation: 0.02 Wh</li>
+<li>Datacenter overhead: 0.02 Wh</li>
+</ul>
+<p>The methodology covers the full production serving stack, including supporting models and machines. Google also reported a 33-fold reduction in energy per median prompt over the preceding year.</p>
+<p><strong>Primary source and date.</strong><br><a href="https://arxiv.org/abs/2508.15734">https://arxiv.org/abs/2508.15734</a> — submitted <strong>2025-08-21</strong></p>
+<p><strong>Source quality.</strong> Primary production disclosure based on Google’s actual fleet, rather than a laboratory benchmark. This is the strongest public evidence about full-stack Gemini serving resource use.</p>
+<p><strong>Quantitative-anchor status.</strong> <strong>No $/token anchor.</strong> The paper does not disclose:</p>
+<ul>
+<li>Which Gemini model or mixture of models served the median prompt</li>
+<li>Input and output token lengths</li>
+<li>TPU versus GPU mix</li>
+<li>TPU generation or topology</li>
+<li>Tokens/s/chip</li>
+<li>Electricity price or hardware amortization</li>
+<li>Utilization and reservation economics in dollar terms</li>
+</ul>
+<p>The 0.24 Wh figure can support an energy-per-request model. It cannot be converted rigorously into $/token or gross margin without inventing token counts, hardware assignment, and internal cost assumptions. [cite: turn495624view0, turn495624view1, turn495624view2, turn891246view0]</p>
+<hr>
+<h1>Power and TCO comparison verdict</h1>
+<h2>What is public</h2>
+<p>Google publishes generation-to-generation peak/specification claims:</p>
+<ul>
+<li>Trillium: over 67% greater energy efficiency than v5e.</li>
+<li>Ironwood: approximately twice Trillium’s performance per watt.</li>
+<li>Ironwood’s cited comparison is peak FP8 FLOPS divided by TDP, not LLM serving tokens/J. [cite: turn130789view0, turn130789view1]</li>
+</ul>
+<p>Google’s v5e and v6e spec pages also expose a relative “expected performance/TCO” index, with v5e shown below v6e, but the index is not tied to a named model, serving workload, price basis, latency target, or disclosed methodology. It is not usable as a quantitative serving-TCO anchor. [cite: turn763260view0, turn846552view0]</p>
+<p>The independent Gemma 4 study provides a useful <strong>performance-per-rental-dollar</strong> comparison against two H100s, especially at long context, but it does not measure wall power. [cite: turn632373view2, turn632373view3]</p>
+<h2>Rigorous negative finding</h2>
+<p>I found <strong>no public, credible, apples-to-apples benchmark</strong> that simultaneously provides:</p>
+<ul>
+<li>The same named LLM</li>
+<li>The same model and KV-cache precision</li>
+<li>The same input/output distribution</li>
+<li>Comparable TTFT/TPOT or another latency SLO</li>
+<li>Measured wall or accelerator power</li>
+<li>TPU v5e, v6e, or v7 versus H200 or GB200</li>
+</ul>
+<p>Therefore:</p>
+<ul>
+<li>There is a public TPU-versus-H100 <strong>performance/$</strong> anchor.</li>
+<li>There is no comparable public TPU-versus-H200/GB200 <strong>measured tokens/J</strong> anchor.</li>
+<li>Google’s Ironwood and Trillium perf/W numbers should remain classified as <strong>vendor peak/spec claims</strong>, not serving measurements.</li>
+<li>Any modeled TPU versus GB200 energy advantage would presently be assumption-driven.</li>
+</ul>
+<hr>
+<h1>Gemini serving-cost and margin verdict</h1>
+<p>A valid model-level API margin calculation would require:</p>
+<h1>[
+\text{Gross margin}</h1>
+<p>1-
+\frac{\text{fully loaded serving COGS per token}}
+{\text{API list revenue per token}}
+]</p>
+<p>Even the narrower accelerator-only approximation,</p>
+<p>[
+1-
+\frac{\text{TPU rental floor per output token}}
+{\text{Gemini API output list price}},
+]</p>
+<p>is not defensible because the numerator and denominator would refer to different things:</p>
+<ol>
+<li>The public TPU benchmarks are predominantly Llama, Gemma, Qwen, and Mixtral self-hosting runs.</li>
+<li>Google does not publicly map a named Gemini API SKU to a TPU generation, chip count, precision, serving engine, or measured output tokens/s.</li>
+<li>GCP’s TPU rental price is the <strong>customer-facing retail price</strong>, not Google’s internal depreciation, power, networking, or datacenter cost.</li>
+<li>Gemini production includes routers and supporting models that are absent from the open-model accelerator benchmarks.</li>
+<li>API traffic has a latency and utilization profile that is not represented by <code>request-rate=inf</code> saturation tests.</li>
+</ol>
+<p>Accordingly:</p>
+<blockquote>
+<p><strong>No rigorous public Gemini cost-per-token or list-price gross-margin anchor exists.</strong></p>
+</blockquote>
+<p>The production 0.24 Wh/prompt disclosure is valuable, and JetStream’s use in Gemini serving establishes technological relevance, but neither closes the missing token, model, topology, utilization, and dollar-cost fields. [cite: turn737569view1, turn495624view1]</p>
+<hr>
+<h1>Recommended modeling treatment</h1>
+<p>For a quantitative serving-economics model, I would represent TPU with three separate cases rather than one point estimate:</p>
+<h3>1. Saturation accelerator floor</h3>
+<p>Use the published output throughput and current per-chip rental rate directly. This captures the best case at effectively full utilization.</p>
+<p>Best examples:</p>
+<ul>
+<li>v5e Llama 2 70B: <strong>$1.77/M</strong> on demand</li>
+<li>v6e Llama 2 70B: <strong>$0.94/M</strong> on demand, with a major precision caveat</li>
+<li>v7 Qwen3-Coder-480B-A35B: <strong>$6.42/M</strong> on demand</li>
+<li>v7 Qwen3.5-397B-A17B: <strong>$3.37/M</strong> on demand</li>
+</ul>
+<h3>2. Commitment-price accelerator floor</h3>
+<p>Use DWS Flex or a three-year commitment according to workload interruptibility and capacity certainty. Do not describe DWS as Spot.</p>
+<p>Examples:</p>
+<ul>
+<li>Ironwood Qwen3-Coder: <strong>$3.21/M DWS</strong>, <strong>$2.89/M three-year</strong></li>
+<li>v6e Qwen3-32B: <strong>$1.07/M DWS</strong>, <strong>$0.97/M three-year</strong></li>
+<li>v5e Llama 2 70B: <strong>$0.88/M DWS</strong>, <strong>$0.79/M three-year</strong></li>
+</ul>
+<h3>3. Production-adjusted scenario</h3>
+<p>Apply explicit, separately modeled multipliers for:</p>
+<ul>
+<li>Achieved utilization</li>
+<li>Latency/SLO headroom</li>
+<li>Redundancy and failover</li>
+<li>Host/infrastructure overhead</li>
+<li>Ancillary model overhead</li>
+<li>Effective price versus public cloud list price</li>
+</ul>
+<p>For example, if a service realizes only 40% of saturation throughput after SLO headroom and utilization, the accelerator component is 2.5 times the benchmark floor before adding non-accelerator costs. This should be an explicit scenario assumption, not silently embedded in the TPU benchmark.</p>
+<p>The public evidence supports the accelerator-floor cases. It does <strong>not</strong> identify a single empirically justified production-utilization multiplier for Gemini.</p>
+<hr>
+<h1>Five most load-bearing sources</h1>
+<ol>
+<li><p><strong>Google Cloud TPU pricing</strong> — current per-chip on-demand, DWS, and committed-use price legs for v5e, v6e, and Ironwood.<br><a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a> — accessed <strong>2026-07-15</strong>. [cite: turn358674view0]</p>
+</li>
+<li><p><strong>Ironwood Qwen3-Coder-480B-A35B vLLM recipe</strong> — best public frontier-scale TPU benchmark: named FP8 model, four-chip topology, explicit input/output workloads, and per-chip throughput.<br><a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B</a> — values updated <strong>2026-05-04</strong>.  [filecite: turn26file0, L1-L18]</p>
+</li>
+<li><p><strong>AI Hypercomputer inference updates for Trillium</strong> — Llama 2 70B and Mixtral throughput with explicit chip counts; also establishes JetStream’s relationship to Gemini serving.<br><a href="https://cloud.google.com/blog/products/compute/ai-hypercomputer-inference-updates-for-google-cloud-tpu-and-gpu">https://cloud.google.com/blog/products/compute/ai-hypercomputer-inference-updates-for-google-cloud-tpu-and-gpu</a> — <strong>2025-05-09</strong>. [cite: turn737569view1, turn737569view2, turn835598view0]</p>
+</li>
+<li><p><strong>Original JetStream v5e publication</strong> — unusually clean specification of v5e-8, INT8 weights/activations/KV cache, model, context limits, output throughput, and contemporary cost per million tokens.<br><a href="https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus">https://cloud.google.com/blog/products/compute/accelerating-ai-inference-with-google-cloud-tpus-and-gpus</a> — <strong>2024-04-10</strong>. [cite: turn291446view0, turn551217view0, turn551217view1]</p>
+</li>
+<li><p><strong>Independent Gemma 4 31B v6e-versus-H100 study</strong> — strongest non-Google throughput-per-dollar check, including sequence-length sensitivity and a direct H100 comparison.<br><a href="https://arxiv.org/abs/2605.25645">https://arxiv.org/abs/2605.25645</a> — submitted <strong>2026-05-25</strong>, v3 <strong>2026-06-05</strong>. [cite: turn386181view0, turn632373view2, turn632373view3]</p>
+</li>
+</ol>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -19,9 +19,9 @@ const HW = {
   h200:  { name: "H200",            flopsFp8: 1.98, fp4: false, hbm: 141, bw: 4.80, tdp: 0.70, rent: 2.90, capex: 32000, effDec: 0.085, effPre: 0.36, note: "Same compute as H100, 1.76× HBM capacity/1.4× bandwidth → better batching." },
   gb200: { name: "GB200 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 186, bw: 8.00, tdp: 1.20, rent: 4.50, capex: 45000, effDec: 0.150, effPre: 0.42, note: "72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200's). Anchor: vLLM ~10.1k decode tok/s/GPU on R1 reproduces at 15% MFU; the source run's precision basis (possibly NVFP4) is not fully pinned, so treat as an upper anchor. Neocloud rates $3.50-6/hr (Jul 2026)." },
   gb300: { name: "GB300 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 288, bw: 8.00, tdp: 1.40, rent: 6.00, capex: 55000, effDec: 0.127, effPre: 0.45, note: "Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. Anchor: SGLang >12k tok/s/GPU on V4 Pro (FP4+MTP) reproduces at 12.7% × 1.85 FP4 using the now-DISCLOSED 49B active (v1 fit assumed ~66B); InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates)." },
-  tpu7:  { name: "TPU v7 Ironwood", flopsFp8: 4.61, fp4: false, hbm: 192, bw: 7.37, tdp: 1.00, rent: 4.20, capex: 35000, effDec: 0.130, effPre: 0.40, note: "Google's inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). Google-internal cost unknown — estimates." },
-  trn2:  { name: "Trainium2",       flopsFp8: 1.30, fp4: false, hbm: 96,  bw: 2.90, tdp: 0.50, rent: 1.50, capex: 15000, effDec: 0.055, effPre: 0.30, note: "GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025); Anthropic reported >1M Trainium2 in use across AWS by Apr 2026. Cheap per chip, weaker software stack — estimates; NO public serving anchor." },
-  trn3:  { name: "Trainium3",       flopsFp8: 2.51, fp4: false, hbm: 144, bw: 4.90, tdp: 0.80, rent: 2.20, capex: 20000, effDec: 0.080, effPre: 0.34, note: "GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS's aggressive cost-per-token play — pricing estimates." },
+  tpu7:  { name: "TPU v7 Ironwood", flopsFp8: 4.61, fp4: false, hbm: 192, bw: 7.37, tdp: 1.00, rent: 4.20, capex: 35000, effDec: 0.130, effPre: 0.40, note: "Google's inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). 2026-07-15 dive: named-model accelerator-rental anchors now exist (Qwen3-Coder-480B, 4 chips, 518.86 tok/s/chip ⇒ $6.42/M output on-demand, $2.89/M 3-yr) — not yet fitted into this roofline's MFU (effDec/effPre above stay analyst estimates). Google-internal fleet cost still unknown: no public Gemini-SKU→TPU mapping exists — estimates." },
+  trn2:  { name: "Trainium2",       flopsFp8: 1.30, fp4: false, hbm: 96,  bw: 2.90, tdp: 0.50, rent: 1.50, capex: 15000, effDec: 0.055, effPre: 0.30, note: "GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025, confirmed running Claude inference alongside training); Anthropic reported >1M Trainium2 in use across AWS by Apr 2026 — inference/training allocation, utilization and internal rate undisclosed. 2026-07-15 dive: a narrow public ENGINEERING anchor exists (AWS Neuron tutorials, batch=1/concurrency=1: Llama 3.3 70B spec-decode $68.90/M output tokens, Llama 3.1 405B $98.65/M) — not a production-TCO measurement, not fitted into this roofline. Cheap per chip, weaker software stack — estimates." },
+  trn3:  { name: "Trainium3",       flopsFp8: 2.51, fp4: false, hbm: 144, bw: 4.90, tdp: 0.80, rent: 2.20, capex: 20000, effDec: 0.080, effPre: 0.34, note: "GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS's aggressive cost-per-token play — pricing estimates. 2026-07-15 dive: AWS has published a GPT-OSS-120B inference recipe but no achieved tok/s and no public Trn3 instance/UltraServer price — neither side of $/token is public; NO public serving anchor of any kind (confirmed negative)." },
   // China-market accelerators — what DeepSeek/GLM/Kimi actually serve on.
   // Rents = annual-commit IDC/private-cloud rates (GPT Pro China-hardware dive, Jul 2026);
   // the same chip can cost 3-10x more on hyperscaler on-demand — use the rent multiplier for that.
@@ -544,7 +544,7 @@ function reconcileLinkTraffic(declared, cleanDiff) {
 }
 
 /* ---------- permalink codec (v4 since the v2.1.3 preset redesign; decodes v3/v2 — pure) ---------- */
-const ENGINE_REVISION = "v2.1.6-2026-07-15"; // v2.1.6: weekly update (Q-001/Q-007) — DeepSeek V4 API 70–80% GM (The Information, Jul 14–15) added to the evidence board + §2/§10 narrative, AMD MI350X non-NVIDIA production throughput note (DigitalOcean/RadixArk); no preset/parameter numbers changed
+const ENGINE_REVISION = "v2.1.7-2026-07-15"; // v2.1.7: EXPEDITED release — TPU v5e/v6e/v7 + Trainium2 accelerator-rental anchors (evidence-quality upgrade, not fitted into the roofline), independent blinded unit-margin replication (central 73.3%, range 47–89%) added to MARGIN_CLAIMS, AMD MI350X→MI355X correction with total-vs-interactive-throughput caveat (Q-007 partial confirm); no preset/parameter numbers changed
 const DATA_AS_OF = "2026-07-15";
 const _toB64 = str => (typeof btoa === "function") ? btoa(unescape(encodeURIComponent(str))) : Buffer.from(str, "utf8").toString("base64");
 const _fromB64 = b => (typeof atob === "function") ? decodeURIComponent(escape(atob(b))) : Buffer.from(b, "base64").toString("utf8");
@@ -1377,6 +1377,19 @@ const MARGIN_CLAIMS = [
     numeric: { lo: 92, hi: 96 },
     subjectScope: "Claude Opus (92–94) and Sonnet (94–96) on a modeled mature 2026 fleet",
     notClaimed: "human endorsement — model-generated analysis with zero claimant weight, rendered only in its own provenance-labeled group",
+    binnable: true, relation: "locates-within" },
+  // --- Independent BLINDED replication (2026-07-15): a from-scratch bottom-up estimate built
+  //     under an explicit instruction not to consult this site/repo; disclosed blind held. Its
+  //     own metric definition ("unit serving margin") is deliberately the same object this
+  //     calculator computes — the strongest-provenance model-generated record in the registry. ---
+  { id: "gptpro-blinded-replication-733", who: "GPT-5.6 Pro consult (independent BLINDED replication — not a person's claim)",
+    verbatim: "about $0.73 of each list-price revenue dollar survives the steady-state marginal cost of serving frontier-model tokens",
+    url: "research/dive-replication-blinded.html", date: "2026-07-15",
+    sourceClass: "model-generated", scopeLayer: "token-SKU", provenanceTier: "model-generated",
+    metricScope: "unit-serving-informal", boundType: "interval",
+    numeric: { lo: 47, hi: 89 },
+    subjectScope: "equal-dollar basket of GPT-5.5 / Gemini 3.1 Pro / DeepSeek V4 Pro on a 4M-in/1M-out workload, built bottom-up from public anchors only — central 73.3% (cross-model median 71.8%; per-model GPT-5.5 96.2%, Gemini 3.1 Pro 71.8%, DeepSeek V4 Pro 52.0%); modeled scenario range 47–89%",
+    notClaimed: "human endorsement — model-generated analysis with zero claimant weight; identity with this page's own metric or numbers (independent construction, different model basket and workload; disclosed at the end that it never encountered or opened margins.ashitaorbis.com or its repository in its search results)",
     binnable: true, relation: "locates-within" },
   // --- binnable:false records: present PRECISELY so tests can assert they never render as
   //     claimants in any margin range (P0-8; recon §2). ---

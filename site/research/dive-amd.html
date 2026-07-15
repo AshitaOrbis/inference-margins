@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AMD Instinct inference economics — GPT-5.6 Pro deep dive (partial, 120-min timeout) · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/dive-amd">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-5.6 Pro deep-dive: AMD Instinct LLM serving economics</h1>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Model</strong></td>
+<td><code>gpt-5-6-pro</code> (confirmed via check() <code>model_slug</code>, <code>is_pro: true</code>)</td>
+</tr>
+<tr>
+<td><strong>Date</strong></td>
+<td>2026-07-15</td>
+</tr>
+<tr>
+<td><strong>Dive title</strong></td>
+<td>AMD serving economics (Targeted 4 — dive 3 of 4)</td>
+</tr>
+<tr>
+<td><strong>Conversation ID</strong></td>
+<td><code>6a57ef06-ebb0-83e8-8eb5-6bd314528be9</code></td>
+</tr>
+<tr>
+<td><strong>Conversation URL</strong></td>
+<td><a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a57ef06-ebb0-83e8-8eb5-6bd314528be9">https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a57ef06-ebb0-83e8-8eb5-6bd314528be9</a></td>
+</tr>
+<tr>
+<td><strong>Request ID</strong></td>
+<td><code>req_1784147717347_pvneg3</code></td>
+</tr>
+<tr>
+<td><strong>Commissioned</strong></td>
+<td>by owner 2026-07-15 (&quot;Targeted 4&quot; package)</td>
+</tr>
+</tbody></table>
+<h2>Provenance — READ BEFORE USING (important)</h2>
+<ul>
+<li><strong>This dive hit the ChatGPT-Pro MCP&#39;s 120-minute HARD TIMEOUT.</strong> <code>completion_path: hard_timeout_api</code>, elapsed <code>2h0m13s</code>. The MCP returned its <strong>latest captured text and flagged it &quot;may be incomplete.&quot;</strong></li>
+<li><strong>What this means:</strong> GPT-5.6 Pro was still in its extended reasoning/tool-use (search) phase at the 2-hour cap and had <strong>not yet emitted a full structured report</strong>. Across ~10 polls over the final ~15 minutes the captured <code>partial</code> never grew beyond the same <strong>770-character reasoning summary</strong> reproduced verbatim below — so this is the model&#39;s own dense <strong>reasoning-trace synopsis of its findings</strong>, NOT the requested full &quot;dated claims + 5 sources&quot; report.</li>
+<li><strong>The reasoning synopsis is still substantively useful</strong> — it contains concrete, specific findings (MI355X-not-MI350X source correction; total-vs-generated throughput split; a derived $/M-output-token anchor; MLPerf/Azure/Oracle anchor-quality negatives). Those are captured in the update queue.</li>
+<li><strong>Recovery:</strong> the conversation persists in the owner&#39;s account (project <strong>Ashitaorbis</strong>, url above). A CDP read of the live conversation (same technique as <code>recovered-deepseek-dive-2026-07-15.md</code>) <strong>may</strong> yield more if the model wrote any additional text server-side after the MCP stopped polling — worth attempting, but the flat 770-char partial suggests little-to-no final-answer body was produced within 120 min.</li>
+<li><strong>Sibling dives:</strong> TPU, Trainium, and the blinded replication completed during a poller dormancy gap and expired from the 5-min MCP cache (<code>check() = not_found</code>) — recovered separately via CDP by conversation id.</li>
+<li><strong>Routing:</strong> any site change this justifies enters through <code>research/update-queue.md</code> (Q-AUTO items), never via direct edits to the site/engine/tracked numbers.</li>
+</ul>
+<h2>Goal (as dispatched)</h2>
+<p>Strongest available PUBLIC anchors for AMD Instinct (MI300X / MI325X / MI350X / MI355X / MI400) LLM inference/serving economics — or a rigorous negative result. Special task: corroborate or challenge the DigitalOcean/RadixArk claim of DeepSeek V4 at 3,500+ tok/s/GPU on MI350X; pin down benchmark conditions; assess whether it is a defensible quantitative anchor. Output contract: dated claims (claim / primary source URL+date / source-quality class / anchor-usability), explicit negative results where no anchor exists, and a numbered list of the 5 most load-bearing sources.</p>
+<hr>
+<h2>Verbatim captured text (reasoning-summary; 120-min hard-timeout truncation)</h2>
+<blockquote>
+<p>I&#39;ll trace the MI350X claim to its earliest source and reconstruct omitted conditions, while inventorying deployments, pricing, MLPerf, and ROCm evidence to separate defensible anchors from marketing.</p>
+<p>The source resolves to MI355X, not MI350X: synthetic 8,192/1,024-token FP4/FP8 sweeps at concurrency 1,024+, with 3.5K on a low-interactivity frontier. HIP graphs were one of several optimizations.</p>
+<p>The exact artifact shows 3.56–3.67K total tokens/s/GPU but only 396–408 generated, with 64–178s TTFT. At TensorWave&#39;s $2.95/hour, that is roughly $2/M output tokens.</p>
+<p>MLPerf offers audited MI355X latency-qualified throughput, but its 405B submission prunes layers, limiting economics use. Azure lacks public chip-tied rates; Oracle&#39;s audited result lacks cloud pricing.</p>
+<p>[NOTE: Hard timeout at 120 minutes; returned latest captured text — may be incomplete.]</p>
+</blockquote>
+<hr>
+<h2>Interpretation for the model (from the captured synopsis; sources NOT yet URL-pinned — pending CDP recovery)</h2>
+<p>The synopsis makes four load-bearing points, all of which sharpen (rather than overturn) the site&#39;s low-confidence stance on non-NVIDIA anchors:</p>
+<ol>
+<li><strong>The viral &quot;3.5K tok/s/GPU MI350X&quot; headline is mis-attributed and mis-framed.</strong> The primary artifact is <strong>MI355X</strong> (not MI350X), a <strong>synthetic 8,192-input / 1,024-output</strong> sweep at <strong>concurrency 1,024+</strong>, FP4/FP8. The &quot;3.5K&quot; is <strong>total</strong> throughput (prefill-dominated); <strong>generated (decode) throughput is only ~396–408 tok/s/GPU</strong> at <strong>64–178 s TTFT</strong> — a low-interactivity operating point unusable for interactive serving. HIP graphs were one of several optimizations, not a standalone 10× lever.</li>
+<li><strong>Derived cost anchor (heavily caveated):</strong> at TensorWave <strong>~$2.95/GPU-hour</strong>, the synthetic generated-throughput figure implies <strong>≈ $2 / M output tokens</strong> — a candidate AMD rental-path $/token anchor, valid only at that low-interactivity point.</li>
+<li><strong>MLPerf</strong> has an <strong>audited MI355X latency-qualified</strong> result, but the <strong>405B submission prunes layers</strong>, limiting its economics usefulness.</li>
+<li><strong>Anchor-quality negatives:</strong> <strong>Azure</strong> (ND MI300X v5) exposes <strong>no public chip-tied rate</strong>; <strong>Oracle&#39;s</strong> audited result <strong>lacks cloud pricing</strong>. Net: no clean <em>production interactive</em> AMD $/token anchor exists publicly as of 2026-07-15; the only derivable number is the synthetic-sweep figure in (2).</li>
+</ol>
+<p>These items are queued in <code>research/update-queue.md</code> as Q-AUTO-2026-07-15 entries, marked QUEUED-AUTO and flagged as reasoning-summary-derived pending CDP recovery for exact source URLs/dates.</p>
+
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -54,7 +54,7 @@
 <section class="report">
 <div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Adopted grounding ledger — machine-generated RECONSTRUCTION</h1>
 <blockquote>
-<p><strong>What this is:</strong> every parameter the calculator&#39;s presets pin, with value, source and evidence label, generated directly from the deployed preset registry (<code>engine.js</code> v2.1.6-2026-07-15) and its dossier annotations — so this page cannot drift from what the calculator actually computes.
+<p><strong>What this is:</strong> every parameter the calculator&#39;s presets pin, with value, source and evidence label, generated directly from the deployed preset registry (<code>engine.js</code> v2.1.7-2026-07-15) and its dossier annotations — so this page cannot drift from what the calculator actually computes.
 <strong>What this is not:</strong> the original &quot;192-row preset grounding pack&quot; consultation artifact. That pack&#39;s full row set lived in conversation-sandbox files that expired; its adopted decisions are summarized in the <a href="consult-preset-pack.html">consultation page</a>, and a dated author-model re-emission with delta notes is published as the <a href="consult-preset-pack-reaudit.html">preset-pack re-audit</a>. Where any re-emission differs from this ledger, <strong>this ledger (the adopted values) wins.</strong>
 Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMATE / SPECULATION (from the on-page dossiers).</p>
 </blockquote>
@@ -1990,7 +1990,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>35000</td>
 <td>0.13</td>
 <td>0.4</td>
-<td>Google&#39;s inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). Google-internal cost unknown — estimates.</td>
+<td>Google&#39;s inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). 2026-07-15 dive: named-model accelerator-rental anchors now exist (Qwen3-Coder-480B, 4 chips, 518.86 tok/s/chip ⇒ $6.42/M output on-demand, $2.89/M 3-yr) — not yet fitted into this roofline&#39;s MFU (effDec/effPre above stay analyst estimates). Google-internal fleet cost still unknown: no public Gemini-SKU→TPU mapping exists — estimates.</td>
 </tr>
 <tr>
 <td>Trainium2</td>
@@ -2001,7 +2001,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>15000</td>
 <td>0.055</td>
 <td>0.3</td>
-<td>GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025); Anthropic reported &gt;1M Trainium2 in use across AWS by Apr 2026. Cheap per chip, weaker software stack — estimates; NO public serving anchor.</td>
+<td>GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025, confirmed running Claude inference alongside training); Anthropic reported &gt;1M Trainium2 in use across AWS by Apr 2026 — inference/training allocation, utilization and internal rate undisclosed. 2026-07-15 dive: a narrow public ENGINEERING anchor exists (AWS Neuron tutorials, batch=1/concurrency=1: Llama 3.3 70B spec-decode $68.90/M output tokens, Llama 3.1 405B $98.65/M) — not a production-TCO measurement, not fitted into this roofline. Cheap per chip, weaker software stack — estimates.</td>
 </tr>
 <tr>
 <td>Trainium3</td>
@@ -2012,7 +2012,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>20000</td>
 <td>0.08</td>
 <td>0.34</td>
-<td>GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS&#39;s aggressive cost-per-token play — pricing estimates.</td>
+<td>GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS&#39;s aggressive cost-per-token play — pricing estimates. 2026-07-15 dive: AWS has published a GPT-OSS-120B inference recipe but no achieved tok/s and no public Trn3 instance/UltraServer price — neither side of $/token is public; NO public serving anchor of any kind (confirmed negative).</td>
 </tr>
 <tr>
 <td>Ascend 910C</td>
