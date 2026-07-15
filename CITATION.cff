@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you reference this model or its numbers, please cite it as below and include the version — figures change across methodology revisions."
+title: "Frontier Inference Margins: an interactive model of frontier-LLM serving costs and unit margins"
+type: software
+authors:
+  - name: "Ashita Orbis"
+version: v2.1.6
+date-released: 2026-07-15
+url: "https://margins.ashitaorbis.com"
+repository-code: "https://github.com/AshitaOrbis/inference-margins"
+license: MIT
+abstract: >-
+  An open scenario model of what it costs to serve one token of a frontier LLM and the
+  modeled unit direct-serving contribution margin that implies, with per-platform anchored
+  effective-MFU fits, a typed public-claims registry, published negative results, and a
+  full research annex. Estimates, not provider disclosures.

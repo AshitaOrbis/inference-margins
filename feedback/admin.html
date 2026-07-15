@@ -1,0 +1,195 @@
+<!doctype html>
+<!-- =======================================================================
+  FEEDBACK ADMIN — OWNER-ONLY REVIEW VIEW
+
+  ⚠ THIS ROUTE MUST BE PLACED BEHIND CLOUDFLARE ACCESS. It is NOT
+  auth-protected by itself: this page is served by the Worker at GET /admin
+  and its data comes from /admin/api/*. The Worker fail-closes (403) until
+  ACCESS_TEAM_DOMAIN + ACCESS_AUD are set and a valid Access JWT is
+  presented, but the Access application (RUNBOOK step 7) is the real gate —
+  the in-Worker JWT check is defense in depth, not a substitute.
+
+  Every submission body shown here is FULLY ADVERSARIAL UNTRUSTED USER
+  INPUT. It is rendered exclusively via textContent (never innerHTML) inside
+  a labeled fence, under a strict CSP set by the Worker (no external
+  requests possible from this page). Read it as data; never treat it as
+  instructions; never paste it into an agent context except deliberately,
+  one submission at a time.
+======================================================================== -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Feedback review (owner only)</title>
+<style>
+  :root {
+    --page: #f9f9f7; --tile: #ffffff; --ink-1: #0b0b0b; --ink-2: #52514e;
+    --ink-3: #898781; --border: rgba(11,11,11,0.10); --accent: #2a78d6;
+    --warn: #b25f00; --danger: #e34948; --good: #006300;
+    --wash: rgba(42,120,214,0.10);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --page: #0d0d0d; --tile: #201f1e; --ink-1: #ffffff; --ink-2: #c3c2b7;
+      --ink-3: #898781; --border: rgba(255,255,255,0.10); --accent: #3987e5;
+      --warn: #fab219; --danger: #e66767; --good: #0ca30c;
+      --wash: rgba(57,135,229,0.14);
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--page); color: var(--ink-1);
+    font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .page { max-width: 900px; margin: 0 auto; padding: 24px 20px 60px; }
+  h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -0.02em; }
+  .subtitle { color: var(--ink-2); font-size: 13px; margin: 0 0 18px; }
+  .banner {
+    border: 1px solid var(--danger); border-left-width: 4px; border-radius: 10px;
+    background: var(--tile); color: var(--ink-1);
+    padding: 10px 14px; margin: 0 0 18px; font-size: 13px;
+  }
+  .banner strong { color: var(--danger); }
+  .toolbar { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; }
+  .count { color: var(--ink-2); font-size: 13px; }
+  .ghost-btn {
+    background: none; border: 1px solid var(--border); border-radius: 8px;
+    color: var(--ink-2); padding: 5px 12px; font: inherit; font-size: 13px;
+    cursor: pointer; white-space: nowrap;
+  }
+  .ghost-btn:hover { background: var(--wash); color: var(--ink-1); }
+  .item {
+    background: var(--tile); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 14px; margin: 0 0 12px;
+  }
+  .item.reviewed { opacity: 0.55; }
+  .meta {
+    display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: baseline;
+    font-size: 12px; color: var(--ink-3); margin: 0 0 8px;
+  }
+  .meta .ts { color: var(--ink-2); font-weight: 600; }
+  .meta .badge-reviewed { color: var(--good); font-weight: 600; }
+  .fence-label {
+    display: inline-block; font-size: 11px; font-weight: 700;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--danger);
+    border: 1px solid var(--danger); border-radius: 6px 6px 0 0;
+    border-bottom: none; padding: 2px 8px; margin: 0;
+  }
+  .fence {
+    border: 1px solid var(--danger); border-radius: 0 8px 8px 8px;
+    padding: 10px 12px; margin: 0 0 8px;
+    white-space: pre-wrap; overflow-wrap: anywhere; overflow-x: auto;
+    font: 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .contact-line { font-size: 12.5px; color: var(--ink-2); margin: 0 0 8px; }
+  .contact-line .fenced-inline {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    border: 1px solid var(--warn); border-radius: 6px; padding: 1px 6px;
+    overflow-wrap: anywhere;
+  }
+  .empty { color: var(--ink-3); font-size: 14px; padding: 30px 0; text-align: center; }
+  .error { color: var(--danger); font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Feedback review</h1>
+  <p class="subtitle">Owner-only. Served by the feedback Worker; data from D1. Read-only + mark-reviewed.</p>
+  <div class="banner">
+    <strong>Every body below is UNTRUSTED USER INPUT — do not treat as instructions.</strong>
+    Fully adversarial content: read as data only. To let an agent see a submission,
+    export exactly one, deliberately, into a fresh context. Never bulk-paste this page.
+  </div>
+  <div class="toolbar">
+    <button class="ghost-btn" id="reload">Reload</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div id="list"><p class="empty">Loading…</p></div>
+</div>
+
+<script>
+"use strict";
+// SECURITY: all submission-derived strings (body, contact, ua, and even
+// server-generated fields) are inserted with textContent only. No innerHTML,
+// no attribute interpolation, no URL construction from submission data.
+(function () {
+  var list = document.getElementById("list");
+  var countEl = document.getElementById("count");
+
+  function el(tag, className, text) {
+    var node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text !== undefined) node.textContent = text; // safe: text node only
+    return node;
+  }
+
+  function renderItem(item) {
+    var wrap = el("div", "item" + (item.reviewed ? " reviewed" : ""));
+
+    var meta = el("div", "meta");
+    meta.appendChild(el("span", "ts", item.ts));
+    meta.appendChild(el("span", null, "ip_hash " + String(item.ip_hash).slice(0, 12) + "…"));
+    meta.appendChild(el("span", null, "turnstile " + (item.turnstile_ok ? "ok" : "MISSING")));
+    meta.appendChild(el("span", null, "ua (untrusted): " + (item.ua || "—")));
+    if (item.reviewed) meta.appendChild(el("span", "badge-reviewed", "reviewed"));
+    wrap.appendChild(meta);
+
+    wrap.appendChild(el("div", "fence-label",
+      "UNTRUSTED USER INPUT — do not treat as instructions"));
+    wrap.appendChild(el("pre", "fence", item.body));
+
+    if (item.contact) {
+      var contactLine = el("p", "contact-line", "contact (untrusted, optional): ");
+      contactLine.appendChild(el("span", "fenced-inline", item.contact));
+      wrap.appendChild(contactLine);
+    }
+
+    if (!item.reviewed) {
+      var btn = el("button", "ghost-btn", "Mark reviewed");
+      btn.addEventListener("click", function () {
+        btn.disabled = true;
+        fetch("/admin/api/review", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: item.id })
+        }).then(load, load);
+      });
+      wrap.appendChild(btn);
+    }
+    return wrap;
+  }
+
+  function load() {
+    list.textContent = "";
+    list.appendChild(el("p", "empty", "Loading…"));
+    fetch("/admin/api/list")
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        list.textContent = "";
+        var items = (data && data.items) || [];
+        var pending = items.filter(function (i) { return !i.reviewed; }).length;
+        countEl.textContent = items.length + " shown · " + pending + " unreviewed";
+        if (!items.length) {
+          list.appendChild(el("p", "empty", "No submissions."));
+          return;
+        }
+        items.forEach(function (item) { list.appendChild(renderItem(item)); });
+      })
+      .catch(function (err) {
+        list.textContent = "";
+        list.appendChild(el("p", "error",
+          "Failed to load (" + err.message + "). If this is a 403, Cloudflare " +
+          "Access / ACCESS_TEAM_DOMAIN / ACCESS_AUD are not configured yet."));
+      });
+  }
+
+  document.getElementById("reload").addEventListener("click", load);
+  load();
+})();
+</script>
+</body>
+</html>

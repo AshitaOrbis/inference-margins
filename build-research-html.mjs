@@ -95,7 +95,13 @@ const CI_BANNER_SLUGS = new Set(["openai-gptpro", "google-gptpro", "xai-gptpro",
 for (const r of REPORTS) {
   const src = join(ROOT, r.md);
   if (!existsSync(src)) { console.log(`skip (missing): ${r.md}`); continue; }
-  const html = execFileSync("npx", ["-y", "marked", "--gfm", "-i", src], { encoding: "utf8", maxBuffer: 32 * 1024 * 1024 });
+  // Escape tildes before rendering: marked's GFM mode eats single-tilde pairs as <del>,
+  // silently striking through money figures like "~¥50B (~$7.4B)" (Pro review #15). No annex
+  // source uses intentional ~~strikethrough~~ or tildes in code spans, so a blanket escape is
+  // safe and keeps the PRESERVED source documents byte-identical (the fix lives in the
+  // renderer, not the records).
+  const mdRaw = readFileSync(src, "utf8").replace(/~/g, "\\~");
+  const html = execFileSync("npx", ["-y", "marked", "--gfm"], { encoding: "utf8", input: mdRaw, maxBuffer: 32 * 1024 * 1024 });
   const ciBanner = CI_BANNER_SLUGS.has(r.slug) ? `<div class="raw-note"><strong>Probability-label note</strong> — this artifact preserves the authoring engine\'s original labels: any "CI" below is verbatim model-output terminology, not a statistically calibrated interval and not the site\'s current terminology. The main report treats these as uncalibrated scenario ranges.</div>` : "";
   const note = ciBanner + `<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div>`;
   writeFileSync(join(OUT, r.slug + ".html"), page(r.title, note + html, { canonical: `https://margins.ashitaorbis.com/research/${r.slug}` }));

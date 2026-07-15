@@ -5,11 +5,16 @@
 set -euo pipefail
 cd "$(dirname "$0")"
 [ -z "$(git status --porcelain)" ] || { echo "FATAL: dirty worktree — commit first (release reproducibility gate)"; exit 1; }
+# Regenerate BEFORE the gates so the suites run against the exact bytes that ship
+# (Pro repo review 2026-07-15: tests-then-regen let generated output change after the gate;
+# the ledger was not regenerated at all despite its no-drift claim).
+node build-grounding-ledger.mjs > /dev/null
+node build-research-html.mjs > /dev/null
+echo "grounding ledger + research annex regenerated from sources (pre-gate)"
 node tests/snapshots.test.mjs > /dev/null
 node tests/traffic-contract.test.mjs > /dev/null
 bash tests/run-app-tests.sh > /dev/null
 echo "engine + contract + application suites green"
-node build-research-html.mjs > /dev/null && echo "research annex HTML rebuilt from sources"
 SRC=$(git rev-parse --short HEAD)
 sed -i "s#<span id=\"release-commit\">[^<]*</span>#<span id=\"release-commit\">${SRC}</span>#" site/index.html
 mkdir -p site/tests
@@ -28,7 +33,7 @@ sed 's#/site/index\.html"#/index.html"#' tests/run-app-tests.sh > site/tests/run
 # (it is sha256sum text, not JSON — public-release P1: don't serve checksum text as application/json).
 ( cd site && find . -type f ! -name asset-manifest.sha256 -print0 | sort -z | xargs -0 sha256sum ) > site/asset-manifest.sha256
 git add -A
-git -c user.name="Ashita Orbis" -c user.email="hyperprocessed@gmail.com" commit -q -m "release stamp ${SRC} (footer commit + served-asset manifest)"
+git -c user.name="Ashita Orbis" -c user.email="AshitaOrbis@users.noreply.github.com" commit -q -m "release stamp ${SRC} (footer commit + served-asset manifest)"
 echo "release-stamp commit: $(git rev-parse --short HEAD) (source ${SRC})"
 npx wrangler@3 pages deploy site --project-name inference-margins --branch main --commit-dirty=false
 echo "deployed source ${SRC}; verify: curl /asset-manifest.sha256 and byte-check against the stamp commit"

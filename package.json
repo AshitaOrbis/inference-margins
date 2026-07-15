@@ -1,0 +1,16 @@
+{
+  "name": "inference-margins",
+  "version": "2.1.6",
+  "private": true,
+  "description": "Interactive model of frontier-LLM serving costs and unit direct-serving contribution margins — margins.ashitaorbis.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node tests/snapshots.test.mjs && node tests/traffic-contract.test.mjs",
+    "test:browser": "bash tests/run-app-tests.sh",
+    "test:all": "npm test && npm run test:browser",
+    "build": "node build-grounding-ledger.mjs && node build-research-html.mjs"
+  }
+}

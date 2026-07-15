@@ -1,0 +1,56 @@
+name: ci
+
+# Runs against the exported public snapshot on every push/PR — the point is that a fresh
+# checkout of THIS tree passes every advertised build and test (GPT-5.6 Pro repo review,
+# 2026-07-15: the mirror must be self-verifying, not vouched for by a private script).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  site:
+    name: engine + contract + browser suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Engine suite (snapshots + semantic gates)
+        run: node tests/snapshots.test.mjs
+      - name: Traffic-mix state contract
+        run: node tests/traffic-contract.test.mjs
+      - name: Browser application suite (headless Chrome ships on the runner)
+        run: bash tests/run-app-tests.sh
+
+  mcp:
+    name: MCP package build + tests, worker typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: MCP package tests (self-building)
+        working-directory: mcp-server
+        run: |
+          npm ci
+          npm test
+      - name: Worker build + typecheck
+        working-directory: mcp-server/worker
+        run: |
+          npm ci
+          npm run typecheck
+
+  feedback:
+    name: feedback worker bundles cleanly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Wrangler dry-run bundle (verifies admin.html import resolves)
+        working-directory: feedback
+        run: npx -y wrangler@3 deploy --dry-run --outdir /tmp/feedback-bundle

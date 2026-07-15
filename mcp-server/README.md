@@ -49,7 +49,7 @@ Node ≥ 20. The server must live next to the site checkout — it resolves
 ## Install — Claude Code (stdio)
 
 ```bash
-claude mcp add inference-margins -- node /home/ashita/claudeworkspace/research/inference-margins/mcp-server/dist/stdio.js
+claude mcp add inference-margins -- node /path/to/inference-margins/mcp-server/dist/stdio.js
 ```
 
 (or with the packaged bin: `npm install && npm run build`, then point at
@@ -97,7 +97,7 @@ Override values are **never logged** (they may contain private negotiated rates)
 ```toml
 [mcp_servers.inference-margins]
 command = "node"
-args = ["/home/ashita/claudeworkspace/research/inference-margins/mcp-server/dist/stdio.js"]
+args = ["/path/to/inference-margins/mcp-server/dist/stdio.js"]
 ```
 
 ## Version coupling
