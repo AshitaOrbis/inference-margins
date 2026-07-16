@@ -54,7 +54,7 @@
 <section class="report">
 <div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Adopted grounding ledger — machine-generated RECONSTRUCTION</h1>
 <blockquote>
-<p><strong>What this is:</strong> every parameter the calculator&#39;s presets pin, with value, source and evidence label, generated directly from the deployed preset registry (<code>engine.js</code> v2.1.7-2026-07-15) and its dossier annotations — so this page cannot drift from what the calculator actually computes.
+<p><strong>What this is:</strong> every parameter the calculator&#39;s presets pin, with value, source and evidence label, generated directly from the deployed preset registry (<code>engine.js</code> v2.1.8-2026-07-15) and its dossier annotations — so this page cannot drift from what the calculator actually computes.
 <strong>What this is not:</strong> the original &quot;192-row preset grounding pack&quot; consultation artifact. That pack&#39;s full row set lived in conversation-sandbox files that expired; its adopted decisions are summarized in the <a href="consult-preset-pack.html">consultation page</a>, and a dated author-model re-emission with delta notes is published as the <a href="consult-preset-pack-reaudit.html">preset-pack re-audit</a>. Where any re-emission differs from this ledger, <strong>this ledger (the adopted values) wins.</strong>
 Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMATE / SPECULATION (from the on-page dossiers).</p>
 </blockquote>
@@ -1946,7 +1946,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>45000</td>
 <td>0.15</td>
 <td>0.42</td>
-<td>72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200&#39;s). Anchor: vLLM ~10.1k decode tok/s/GPU on R1 reproduces at 15% MFU; the source run&#39;s precision basis (possibly NVFP4) is not fully pinned, so treat as an upper anchor. Neocloud rates $3.50-6/hr (Jul 2026).</td>
+<td>72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200&#39;s). Anchor: vLLM ~10.1k decode tok/s/GPU on R1 reproduces at 15% MFU; the source run&#39;s precision basis (possibly NVFP4) is not fully pinned, so treat as an upper anchor. Neocloud rates $3.50-6/hr (Jul 2026). 2026-07-15 dive: AWS Capacity Block $761.904/rack-hr ($10.582/GPU-hr) is the cleanest explicit full-rack market datum; paired with audited MLPerf v6.0 rack throughput it derives $0.881/$0.630/$0.435 per M output tok (Interactive/Server/Offline) — a rack-scale bridge anchor, not fitted into this row&#39;s rent (left at the existing neocloud estimate).</td>
 </tr>
 <tr>
 <td>GB300 NVL72</td>
@@ -1957,7 +1957,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>55000</td>
 <td>0.127</td>
 <td>0.45</td>
-<td>Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. Anchor: SGLang &gt;12k tok/s/GPU on V4 Pro (FP4+MTP) reproduces at 12.7% × 1.85 FP4 using the now-DISCLOSED 49B active (v1 fit assumed ~66B); InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates).</td>
+<td>Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. Anchor: SGLang &gt;12k tok/s/GPU on V4 Pro (FP4+MTP) reproduces at 12.7% × 1.85 FP4 using the now-DISCLOSED 49B active (v1 fit assumed ~66B); InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates). 2026-07-15 dive: audited MLPerf v6.0 single-rack results now confirm generated-throughput at scale (NVIDIA Interactive 250,634 / Server 400,437 / Offline 647,076 gen tok/s; Nebius Server 575,580 / Offline 673,936 gen tok/s) — but NO numeric GB300 rack rental rate is public on any major provider checked (AWS/CoreWeave/Nebius/GCP/Azure/OCI/Crusoe, Jul 2026): model GB300 $/M-output as a function of rack-hour price, not a point estimate. Cleanest current Blackwell-Ultra pair is same-provider B300 (node-scale, not rack): Nebius 8-GPU MLPerf Server 60,413 gen tok/s at $7.85/GPU-hr ⇒ $0.289/M output.</td>
 </tr>
 <tr>
 <td>H800 (China)</td>
@@ -2023,7 +2023,7 @@ Generated 2026-07-15 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMA
 <td>23000</td>
 <td>0.07</td>
 <td>0.28</td>
-<td>Huawei&#39;s dual-die flagship (SMIC 7nm). NO native FP8 — 8-bit here means INT8 (1.504 PF per Huawei&#39;s Atlas spec; a widely-quoted 1,054 figure is a typo in the CloudMatrix paper). Default 7% = the hardware dive&#39;s NEUTRAL recommendation (~1,420 tok/s on R1-class; range 5-10%): Huawei&#39;s own optimized 384-NPU CloudMatrix anchor (1,943 tok/s) reproduces at 9.5% (stack ≈1.36), while DeepSeek&#39;s internal &#39;60% of H100&#39; eval implies ~5.5-6.5%. Rent = Huatai procurement award ($1.71-2.25/hr); CloudMatrix 384 ≈ RMB 60M.</td>
+<td>Huawei&#39;s dual-die flagship (SMIC 7nm). NO native FP8 — 8-bit here means INT8 (1.504 PF per Huawei&#39;s Atlas spec; a widely-quoted 1,054 figure is a typo in the CloudMatrix paper). Default 7% = the hardware dive&#39;s NEUTRAL recommendation (~1,420 tok/s on R1-class; range 5-10%): Huawei&#39;s own optimized 384-NPU CloudMatrix anchor (1,943 tok/s) reproduces at 9.5% (stack ≈1.36), while DeepSeek&#39;s internal &#39;60% of H100&#39; eval implies ~5.5-6.5%. Rent = Huatai procurement award ($1.71-2.25/hr); CloudMatrix 384 ≈ RMB 60M. 2026-07-15 dive: a full 384-card CloudMatrix system (FlexNPU, arXiv:2606.04415) serves DeepSeek-R1 W8A8 at ≈633,000 generated tok/s system-wide (≈1,646/card) under TTFT≤1s/TPOT≤50ms — a DIFFERENT, full-system SLO-constrained anchor from the isolated-decode figure above; not yet reconciled into this MFU fit (queued for a considered pass). No public CM384 hourly rental price exists — throughput anchored, cost unanchored. Cross-source proxy for the OLDER 910B chip (not this row): JD xLLM 709 gen tok/s/card × CTyun RMB 38.45/hr ⇒ ≈$2.09/M output (range $1.61-2.80/M), medium-low confidence. Ascend 920 has no official SKU, benchmark, deployment or price (Huawei&#39;s roadmap goes 910C→950PR/950DT→960→970, no 920) — excluded from this model.</td>
 </tr>
 </tbody></table>
 <p><em>265 parameter rows, regenerated from the registry on every run — <code>node build-grounding-ledger.mjs</code>.</em></p>
