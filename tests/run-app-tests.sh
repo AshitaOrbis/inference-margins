@@ -206,5 +206,22 @@ check "annex: light theme applied from URL param"          "$TMP/annex.html" mus
   --dump-dom "file://$(pwd)/site/research/index.html" 2>/dev/null > "$TMP/annex-default.html"
 check "annex: app/dark default without params"             "$TMP/annex-default.html" must 'data-skin="app" data-theme="dark"'
 
+# --- chart-gen billing-mix parity (2026-07-15 cold-review MAJOR, code-confirmed): the
+# "Cost per 1M output tokens across hardware generations" chart used to compute price mix
+# with a local formula that ignored billCacheHit/cacheWriteShare/cacheWriteMult. Force the
+# blend 100% onto one GEN_TIMELINE generation (h200) so the hero and that generation's chart
+# bar are computed over the IDENTICAL hardware, then set billCacheHit/cacheWriteShare away
+# from their defaults — hero and the h200 bar must now report the same margin. Pre-fix, the
+# hero read 79.8% (correct, billing-aware) while the chart's h200 bar read 67.6% (wrong,
+# ignored billCacheHit/cacheWriteShare) — reproduced and recorded in
+# logs/weekly/2026-07-15-expedited4.md via a direct engine.js node script before this fix
+# landed. This DOM check is the end-to-end proof the browser-rendered chart agrees, since
+# renderGenChart only runs in a browser (SVG/DOM), never under plain node.
+TCHART=$(b64 '{"blend":{"h200":100},"billCacheHit":20,"cacheWriteShare":30,"cacheWriteMult":150,"_meta":{"schema":"v4","model":"opus","persp":"median","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
+render "?s=$(urlenc "v4.$TCHART")" > "$TMP/chartbug.html"
+check "chart-gen/hero parity: hero shows the billing-aware 79.80% margin" "$TMP/chartbug.html" must "unrounded: 79.80%"
+check "chart-gen/hero parity: h200 generation bar agrees with hero (79.8% margin)" "$TMP/chartbug.html" must "79.8% margin"
+check "chart-gen/hero parity: h200 bar does NOT show the pre-fix wrong value (67.6% margin)" "$TMP/chartbug.html" mustnot "67.6% margin"
+
 echo
 if [ "$fails" -eq 0 ]; then echo "ALL APP TESTS PASS"; else echo "$fails APP TEST FAILURE(S)"; exit 1; fi

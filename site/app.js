@@ -1093,17 +1093,8 @@ function renderGenChart() {
   const ramp = ORDINAL;
   const gens = [...GEN_TIMELINE.map(k => ({ key: k, hw: HW[k] })), { key: "rubin", hw: RUBIN }];
   const cols = gens.map((g, i) => {
-    const s = structuredClone(S); s.blend = { x: 100 };
-    const cost = (() => {
-      const hr = hwHourCost(g.hw, s);
-      return hr / 3600 / tokPerS(g.hw, s, "out") * 1e6 / (s.util / 100);
-    })();
-    const cIn = hwHourCost(g.hw, s) / 3600 / tokPerS(g.hw, s, "in") * 1e6 / (s.util / 100);
-    const R = s.ioRatio, h = s.cacheHit / 100;
-    const mix = (cost + R * ((1 - h) * cIn + h * cIn * (s.cacheCost / 100))) / (R + 1);
-    const discMult = (1 - (s.batchShare / 100) * 0.5) * (1 - s.discount / 100);
-    const priceMix = ((s.priceOut + R * ((1 - h) * s.priceIn + h * s.priceIn * (s.cacheReadMult / 100))) / (R + 1)) * discMult;
-    return { name: g.hw.name.replace(" NVL72", ""), cost, margin: 1 - mix / priceMix, color: ramp[i], proj: g.key === "rubin" };
+    const wl = workloadOnHw(g.hw, S); // single source of truth — same billing math as the hero
+    return { name: g.hw.name.replace(" NVL72", ""), cost: wl.cOut, margin: wl.margin, color: ramp[i], proj: g.key === "rubin" };
   });
   const W = 720, H = 300, padL = 56, padR = 16, padT = 26, padB = 34;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Cost per generation" });

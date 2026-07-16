@@ -330,11 +330,14 @@ function blendedCost(s, kind, activeOverride) {
   const w = blendWeights(s);
   return Object.entries(w).reduce((a, [k, wt]) => a + wt * costPerMtok(HW[k], s, kind, activeOverride), 0);
 }
-function workload(s, activeOverride) {
+// Canonical billed price-mix / served cost-mix math — the SINGLE source of truth for every
+// surface that shows a margin (hero, per-hw margin chart, per-generation chart, normalized
+// table, subscription chart). Takes already-computed per-token costs so callers can source
+// them from a blend (workload) or a single accelerator (workloadOnHw) — the billing math
+// itself never varies by hardware.
+function computeMix(cIn, cOut, s) {
   const R = s.ioRatio, h = s.cacheHit / 100;               // serving-side prefix-reuse share (cost)
   const hb = (s.billCacheHit ?? s.cacheHit) / 100;         // billable cached-input share (revenue); null = assumed equal
-  const cIn = blendedCost(s, "in", activeOverride);
-  const cOut = blendedCost(s, "out", activeOverride);
   const cCache = cIn * (s.cacheCost / 100);
   const costMix = (cOut + R * ((1 - h) * cIn + h * cCache)) / (R + 1);
   const discMult = (1 - (s.batchShare / 100) * 0.5) * (1 - s.discount / 100);
@@ -344,10 +347,21 @@ function workload(s, activeOverride) {
   const priceMix = priceMixList * discMult;
   return { cIn, cOut, cCache, costMix, priceMix, priceMixList, margin: priceMix > 0 ? 1 - costMix / priceMix : NaN };
 }
-function marginOnHw(hwKey, s) {
-  const one = structuredClone(s);
-  one.blend = { [hwKey]: 100 };
-  return workload(one);
+function workload(s, activeOverride) {
+  const cIn = blendedCost(s, "in", activeOverride);
+  const cOut = blendedCost(s, "out", activeOverride);
+  return computeMix(cIn, cOut, s);
+}
+// Same billing math on a SINGLE accelerator (not the blend) — used by the per-hw margin chart
+// and the per-generation chart. `hw` is a hardware spec object (an HW[key] entry, or RUBIN,
+// which has no HW key since it has no public serving anchor).
+function workloadOnHw(hw, s, activeOverride) {
+  const cIn = costPerMtok(hw, s, "in", activeOverride);
+  const cOut = costPerMtok(hw, s, "out", activeOverride);
+  return computeMix(cIn, cOut, s);
+}
+function marginOnHw(hwKey, s, activeOverride) {
+  return workloadOnHw(HW[hwKey], s, activeOverride);
 }
 function feasibility(s) {
   const w = blendWeights(s);
@@ -544,7 +558,7 @@ function reconcileLinkTraffic(declared, cleanDiff) {
 }
 
 /* ---------- permalink codec (v4 since the v2.1.3 preset redesign; decodes v3/v2 — pure) ---------- */
-const ENGINE_REVISION = "v2.1.8-2026-07-15"; // v2.1.8: EXPEDITED release #2 — GB300 NVL72 now MLPerf v6.0 audited-throughput-confirmed (price remains unanchored, modeled as f(rack-hour price)), clean B300 $/token anchor ($0.289/M), GB200 rack-price bridge, Rubin absolute-economics negative confirmed; CM384/910C generated-throughput anchor (FlexNPU) + cross-source 910B $/token proxy ($2.09/M), Ascend 920 exclusion confirmed; no preset/parameter numbers changed
+const ENGINE_REVISION = "v2.1.9-2026-07-15"; // v2.1.9: EXPEDITED release #4 — fixed chart-gen ("Cost per 1M output tokens across hardware generations") billing-mix bug: it reimplemented price mix locally, ignoring billCacheHit/cacheWriteShare/cacheWriteMult; now routes through the shared computeMix()/workloadOnHw() engine functions the hero already used, so hero and chart can never diverge again; no preset/parameter numbers changed
 const DATA_AS_OF = "2026-07-15";
 const _toB64 = str => (typeof btoa === "function") ? btoa(unescape(encodeURIComponent(str))) : Buffer.from(str, "utf8").toString("base64");
 const _fromB64 = b => (typeof atob === "function") ? decodeURIComponent(escape(atob(b))) : Buffer.from(b, "base64").toString("utf8");
@@ -749,7 +763,7 @@ if (typeof module !== "undefined" && module.exports) {
     encodeScenario, decodeScenario, migrateV2Traffic, sanitizeScenarioDiff, matchTrafficProfile, overlayDivergesFromReplay, SCENARIO_BOUNDS, TRAFFIC_MODES, ENGINE_REVISION, DATA_AS_OF,
     normalizePerspId, reconcileLinkTraffic,
     hwHourCost, hwHourParts, precMult, tokPerS, costPerMtok,
-    blendWeights, blendedCost, workload, marginOnHw, feasibility,
+    blendWeights, blendedCost, computeMix, workload, workloadOnHw, marginOnHw, feasibility,
   };
 }
 

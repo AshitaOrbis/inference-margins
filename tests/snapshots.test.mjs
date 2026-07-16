@@ -91,6 +91,50 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   assert("default write share is 0 (baselines unchanged)", s0.cacheWriteShare === 0);
 }
 
+// 6c. chart-gen billing-mix parity (2026-07-15 cold-review MAJOR, code-confirmed): the
+// "Cost per 1M output tokens across hardware generations" chart used to reimplement the
+// billed price mix locally in site/app.js, using serving-side cacheHit as the billable
+// share and ignoring billCacheHit/cacheWriteShare/cacheWriteMult entirely. The fix routes
+// both the hero (workload) and the per-generation chart (workloadOnHw) through the same
+// engine.js computeMix() — so under non-default billCacheHit + cacheWriteShare, a
+// single-hardware blend's hero price mix must be BIT-IDENTICAL to that hardware's
+// workloadOnHw price mix. This assertion is a tautology against the fixed engine.js (both
+// paths share one function) — its purpose is to lock the contract in place; the second half
+// of this test (source-guard below) is what actually fails against the pre-fix code, since
+// the bug lived in app.js's now-deleted local formula, not in engine.js.
+{
+  const m = E.MODELS.find(x => x.id === "opus"), p = E.PERSPECTIVES.find(x => x.id === "median");
+  const s = E.applyPresetSettings(m, p, { mode: "native", profileId: "reference", ioRatio: 15, cacheHit: 60 });
+  s.billCacheHit = 20; s.cacheWriteShare = 30; s.cacheWriteMult = 150; // non-default on both axes
+  s.blend = { h200: 100 };
+  const hero = E.workload(s);
+  const chart = E.workloadOnHw(E.HW.h200, s);
+  assert("hero.priceMix === chart(h200).priceMix under non-default billCacheHit+cacheWriteShare",
+    hero.priceMix === chart.priceMix, `${hero.priceMix} vs ${chart.priceMix}`);
+  assert("hero.margin === chart(h200).margin under non-default billCacheHit+cacheWriteShare",
+    hero.margin === chart.margin, `${hero.margin} vs ${chart.margin}`);
+  // Concrete regression fixture (matches the reproduction in the 2026-07-15 expedited run
+  // report): the pre-fix chart formula computed 67.58% margin here; the correct figure is 79.80%.
+  assert("chart(h200).margin matches the documented pre-fix-vs-post-fix reproduction (≈79.8%)",
+    Math.abs(chart.margin * 100 - 79.80) < 0.05, (chart.margin * 100).toFixed(2));
+}
+// 6d. Source guard: site/app.js's renderGenChart must call the shared engine function, not
+// reimplement the billing formula. This is the assertion that actually fails on the OLD
+// code — the pre-fix function body contained a literal "s.priceOut +" / "cacheReadMult"
+// arithmetic reimplementation and never called workloadOnHw. Reverting the app.js fix
+// (restoring the local priceMix formula) makes this fail immediately, without needing a
+// browser to render the SVG.
+{
+  const fs = require("node:fs");
+  const appSrc = fs.readFileSync(new URL("../site/app.js", import.meta.url), "utf8");
+  const fnMatch = appSrc.match(/function renderGenChart\(\)\s*{[\s\S]*?\n}\n/);
+  assert("renderGenChart() found in site/app.js", !!fnMatch);
+  const body = fnMatch ? fnMatch[0] : "";
+  assert("renderGenChart calls the shared workloadOnHw() (single source of truth)", /workloadOnHw\(/.test(body));
+  assert("renderGenChart no longer reimplements cache-read billing locally", !/cacheReadMult/.test(body));
+  assert("renderGenChart no longer reimplements the price-mix formula locally", !/s\.priceOut\s*\+/.test(body));
+}
+
 // 7. Dossier coverage + drift prevention: every preset has a dossier; every dossier
 // param annotation refers to a key the preset actually sets (values render live, so
 // they cannot drift — key mismatches are the only failure mode).
