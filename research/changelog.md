@@ -20,6 +20,8 @@
 
 **No preset or flagship engine numbers changed** — every item above is an evidence-quality upgrade or a precisely-scoped negative finding; the cost model's fitted MFUs, prices and architecture assumptions are untouched.
 
+**Addendum (same day, annex hygiene pass on four dive reports).** The TPU, Trainium, blinded-replication and AMD dive pages (`research/gptpro-reports/dive-{tpu,trainium,replication-blinded,amd}-2026-07-15.md`, all first published in v2.1.7) had their provenance headers condensed for public share ahead of wider circulation: recovery-mechanics language describing the private CDP/browser recovery technique was replaced with plain "recovered from the ChatGPT conversation history after the dispatching session failed" phrasing; internal conversation-ID values were removed from the provenance tables; raw `[cite: turn…viewN]` / `[filecite: …]` interface citation markers were stripped throughout (sentence text otherwise untouched); "commissioned by owner" became "commissioned". The AMD page's honest 120-minute-hard-timeout provenance narrative is preserved intact. Verbatim pre-edit copies are archived at `research/gptpro-reports/archive/pre-hygiene-2026-07-15/`. Beyond the header cleanup and marker removal, the findings/analysis prose is unedited — **no engine, data, or claim content changed.**
+
 ## Engine v2.1.7 — 2026-07-15 (EXPEDITED release: TPU/Trainium anchors, blinded replication, AMD correction)
 
 **Why expedited.** Same-day second release: a "Targeted 4" GPT-5.6 Pro dive package landed four items the owner ordered applied immediately rather than held for the next weekly cycle — a correction to a figure already live in v2.1.6, plus three new evidence-quality upgrades. All four ship together as v2.1.7.

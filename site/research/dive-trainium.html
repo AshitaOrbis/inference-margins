@@ -54,12 +54,11 @@
 <section class="report">
 <div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>RECOVERED — GPT-5.6 Pro dive: AWS Trainium Inference Economics</h1>
 <blockquote>
-<p><strong>RECOVERED from ChatGPT history — dispatcher timer died before filing (commissioned by owner 2026-07-15, Targeted 4).</strong>
-Retrieved read-only from the owner&#39;s ChatGPT account (project: Ashitaorbis) via the backend
-conversation API over CDP against the owner&#39;s logged-in Chrome — the same browser the
-<code>chatgpt-pro</code> MCP uses. No new prompt was sent; this is the verbatim assistant report as it
-already existed in-account. The dispatching (pro-dive-fleet) session&#39;s in-session MCP request
-registry expired unread, but the ChatGPT conversation itself survived.</p>
+<p><strong>RECOVERED from ChatGPT history — dispatcher timer died before filing (commissioned 2026-07-15, Targeted 4).</strong>
+Recovered from the ChatGPT conversation history after the dispatching session failed. No new
+prompt was sent; this is the verbatim assistant report as it already existed in-account. The
+dispatching (pro-dive-fleet) session&#39;s in-session MCP request registry expired unread, but the
+ChatGPT conversation itself survived.</p>
 </blockquote>
 <table>
 <thead>
@@ -81,17 +80,12 @@ registry expired unread, but the ChatGPT conversation itself survived.</p>
 <td>AWS Trainium Inference Economics</td>
 </tr>
 <tr>
-<td><strong>Conversation ID</strong></td>
-<td><code>6a57eedb-f7f8-83e8-a218-9954f1df6830</code></td>
-</tr>
-<tr>
 <td><strong>Created / final answer (UTC)</strong></td>
 <td>2026-07-15T20:34:36.714Z / 2026-07-15T21:39:58.041Z</td>
 </tr>
 </tbody></table>
-<p><strong>Citation normalization:</strong> ChatGPT&#39;s private-use-unicode citation anchors (<code>U+E200/E201/E202</code>)
-are rendered as readable <code>[cite: &lt;ref-id&gt;]</code> markers; <code>turn…viewN/searchN/newsN</code> ids are ChatGPT&#39;s
-internal web.run source-reference tokens. Report text otherwise verbatim.</p>
+<p><strong>Citation anchors removed:</strong> citation anchors from the original interface were removed for
+publication; original preserved in the archive copy.</p>
 <p><strong>Provenance routing:</strong> any site change this dive justifies must enter through the update queue
 (<code>research/update-queue.md</code>), not via direct edits.</p>
 <details><summary>Dispatched prompt (verbatim)</summary><pre><code>You are conducting a rigorous source-hunting deep dive for a quantitative model of frontier-LLM inference serving economics (cost per token, and margin at list prices). I need the strongest available PUBLIC anchors for AWS Trainium inference/serving economics — or a rigorous, well-documented finding that no such public anchor exists.
@@ -116,10 +110,10 @@ Structure your findings as dated claims. For each: the claim, primary source (UR
 <li><strong>Llama 3.3 70B, optimized speculative-decoding configuration:</strong> <strong>$68.90 per million output tokens</strong></li>
 <li><strong>Llama 3.1 405B, FP8-rescaled weights plus speculative decoding:</strong> <strong>$98.65 per million output tokens</strong></li>
 </ul>
-<p>These are the strongest public Trainium2 cost-per-token candidates I found. They are <strong>not production-serving TCO measurements</strong>: both use batch size 1, <code>max-num-seqs=1</code>, request concurrency 1, a fixed 10,000-token prompt, and roughly 1,500 generated tokens. The normalized tokens/sec/chip figures are accounting divisions of a 16-chip model deployment, not single-chip benchmarks. [cite: turn199855view0, turn199855view2, turn199855view3, turn199855view4, turn199855view6, turn199855view7]</p>
-<p><strong>No equivalent public anchor exists for Trainium3.</strong> Trn3 is generally available and AWS has published relative serving claims and a GPT-OSS-120B inference recipe. However, that recipe publishes no achieved tokens/sec, and I found no public numeric Trn3 instance or UltraServer hourly price. Thus neither side of the $/token equation is presently public. [cite: turn440129view0, turn309173view0, turn309173view2, turn309173view3]</p>
-<p><strong>Project Rainier is confirmed to run Claude inference, but it supplies no serving-economics anchor.</strong> AWS has disclosed roughly 500,000 Trainium2 chips and explicitly said Anthropic was training and running Claude inference on Rainier. It has not disclosed the training/inference allocation, tokens served, utilization, model mix, precision, replication level, or internal charge rate. [cite: turn166886view1, turn199855view8]</p>
-<p><strong>I found no Trainium submission in the public MLPerf Inference results through v6.0, and no credible public apples-to-apples Trn2-versus-H100/H200 named-model serving benchmark.</strong> AWS’s 30–40% price-performance claim and customer testimonials remain unaccompanied by the workload details needed to reproduce or normalize them. [cite: turn236466view1, turn236466view2]</p>
+<p>These are the strongest public Trainium2 cost-per-token candidates I found. They are <strong>not production-serving TCO measurements</strong>: both use batch size 1, <code>max-num-seqs=1</code>, request concurrency 1, a fixed 10,000-token prompt, and roughly 1,500 generated tokens. The normalized tokens/sec/chip figures are accounting divisions of a 16-chip model deployment, not single-chip benchmarks.</p>
+<p><strong>No equivalent public anchor exists for Trainium3.</strong> Trn3 is generally available and AWS has published relative serving claims and a GPT-OSS-120B inference recipe. However, that recipe publishes no achieved tokens/sec, and I found no public numeric Trn3 instance or UltraServer hourly price. Thus neither side of the $/token equation is presently public.</p>
+<p><strong>Project Rainier is confirmed to run Claude inference, but it supplies no serving-economics anchor.</strong> AWS has disclosed roughly 500,000 Trainium2 chips and explicitly said Anthropic was training and running Claude inference on Rainier. It has not disclosed the training/inference allocation, tokens served, utilization, model mix, precision, replication level, or internal charge rate.</p>
+<p><strong>I found no Trainium submission in the public MLPerf Inference results through v6.0, and no credible public apples-to-apples Trn2-versus-H100/H200 named-model serving benchmark.</strong> AWS’s 30–40% price-performance claim and customer testimonials remain unaccompanied by the workload details needed to reproduce or normalize them.</p>
 <hr>
 <h2>1. Candidate quantitative Trainium2 anchor</h2>
 <p>For a benchmark reporting aggregate output throughput (T) on a complete instance:</p>
@@ -136,7 +130,7 @@ Structure your findings as dated claims. For each: the claim, primary source (UR
 P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 =$2.23505/\text{chip-hour}
 ]</p>
-<p>AWS labels the per-accelerator price as $2.235 after rounding. Capacity Block prices are dynamic; AWS says the current schedule is next due to update in October 2026. [cite: turn199855view7, turn233249view0]</p>
+<p>AWS labels the per-accelerator price as $2.235 after rounding. Capacity Block prices are dynamic; AWS says the current schedule is next due to update in October 2026.</p>
 <table>
 <thead>
 <tr>
@@ -176,9 +170,9 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <td><strong>Second-best public Trn2 candidate</strong></td>
 </tr>
 </tbody></table>
-<p>The exact logged “Overall Output Throughput” numbers are used rather than the rounded conclusion-table values. AWS reports 36.5557 and 144.1714 output tokens/sec for the 70B configurations, and 24.4210 and 100.6999 for the 405B configurations. [cite: turn199855view0, turn199855view1, turn199855view4, turn199855view5]</p>
+<p>The exact logged “Overall Output Throughput” numbers are used rather than the rounded conclusion-table values. AWS reports 36.5557 and 144.1714 output tokens/sec for the 70B configurations, and 24.4210 and 100.6999 for the 405B configurations.</p>
 <h3>What these numbers do and do not mean</h3>
-<p>For the optimized 70B test, the implied infrastructure spend is approximately <strong>$0.1034 per benchmark request</strong>. For the optimized 405B test, it is approximately <strong>$0.1481 per request</strong>. Each request includes a 10,000-token input and approximately 1,501 generated tokens. If one mechanically divides by all input-plus-output tokens, the resulting workload-specific blended figures are approximately <strong>$8.99/M total processed tokens</strong> for 70B and <strong>$12.87/M</strong> for 405B. Those blended numbers should not be generalized: prefill and decode consume materially different resources, and the 10,000:1,500 token mix is unusually input-heavy. [cite: turn199855view0, turn199855view2, turn199855view4, turn199855view6]</p>
+<p>For the optimized 70B test, the implied infrastructure spend is approximately <strong>$0.1034 per benchmark request</strong>. For the optimized 405B test, it is approximately <strong>$0.1481 per request</strong>. Each request includes a 10,000-token input and approximately 1,501 generated tokens. If one mechanically divides by all input-plus-output tokens, the resulting workload-specific blended figures are approximately <strong>$8.99/M total processed tokens</strong> for 70B and <strong>$12.87/M</strong> for 405B. Those blended numbers should not be generalized: prefill and decode consume materially different resources, and the 10,000:1,500 token mix is unusually input-heavy.</p>
 <p>The derived $/M output figures include the prompt-prefill time because AWS’s aggregate throughput is based on total benchmark wall time. They exclude, among other things:</p>
 <ul>
 <li>idle and fragmentation losses;</li>
@@ -196,13 +190,14 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <h1>2. Dated findings</h1>
 <h2>2024-12-03 — Trn2 launch established the hardware unit and access model</h2>
 <p><strong>Claim.</strong> AWS launched <code>trn2.48xlarge</code> with <strong>16 Trainium2 chips</strong>, 1.5 TiB aggregate HBM, and 46 TB/s aggregate memory bandwidth. At launch, production access in Ohio was through EC2 Capacity Blocks. AWS also claimed 30–40% better price-performance than P5e and P5en, but published no benchmark definition or named-model result supporting that percentage.</p>
-<p><strong>Source, December 3, 2024.</strong><br><a href="https://aws.amazon.com/blogs/aws/amazon-ec2-trn2-instances-and-trn2-ultraservers-for-aiml-training-and-inference-is-now-available/">https://aws.amazon.com/blogs/aws/amazon-ec2-trn2-instances-and-trn2-ultraservers-for-aiml-training-and-inference-is-now-available/</a></p>
+<p><strong>Source, December 3, 2024.</strong>
+<a href="https://aws.amazon.com/blogs/aws/amazon-ec2-trn2-instances-and-trn2-ultraservers-for-aiml-training-and-inference-is-now-available/">https://aws.amazon.com/blogs/aws/amazon-ec2-trn2-instances-and-trn2-ultraservers-for-aiml-training-and-inference-is-now-available/</a></p>
 <p><strong>Quality.</strong> Official vendor product disclosure. Hardware count and availability are high-quality; the price-performance comparison is an unsupported vendor claim.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>$ / hour:</strong> Partial; it established Capacity Blocks as the launch access mechanism, but the blog did not itself publish the price.</li>
 <li><strong>Tokens/sec/chip:</strong> No.</li>
-<li><strong>$ / token:</strong> No. [cite: turn393980view0, turn393980view1, turn236466view2]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
 <hr>
 <h2>2024 re:Invent — Historical Trn2 Capacity Block and 3-year RI prices</h2>
@@ -212,7 +207,8 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li><strong>3-year Reserved Instance:</strong> $34.39/hour, or <strong>$2.149375/chip-hour</strong></li>
 </ul>
 <p>The slide does not clearly identify the region or the RI payment option, so the $34.39 number should be treated as a historical illustrative rate rather than a current contract-comparable price.</p>
-<p><strong>Source, ©2024 AWS presentation.</strong><br><a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/events/approved/reinvent-2025/reinvent/2024/slides/cmp/CMP333-NEW_AWS-Trainium2-for-breakthrough-AI-training-and-inference-performance.pdf">https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/events/approved/reinvent-2025/reinvent/2024/slides/cmp/CMP333-NEW_AWS-Trainium2-for-breakthrough-AI-training-and-inference-performance.pdf</a></p>
+<p><strong>Source, ©2024 AWS presentation.</strong>
+<a href="https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/events/approved/reinvent-2025/reinvent/2024/slides/cmp/CMP333-NEW_AWS-Trainium2-for-breakthrough-AI-training-and-inference-performance.pdf">https://d1.awsstatic.com/onedam/marketing-channels/website/aws/en_US/events/approved/reinvent-2025/reinvent/2024/slides/cmp/CMP333-NEW_AWS-Trainium2-for-breakthrough-AI-training-and-inference-performance.pdf</a></p>
 <p><strong>Quality.</strong> Official vendor presentation; strong historical evidence, but incomplete commercial terms.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
@@ -240,7 +236,6 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <td align="right">$123.30/M</td>
 </tr>
 </tbody></table>
-<p> [cite: turn393980view2, turn393980view3, turn753349view0]</p>
 <hr>
 <h2>2026-02-26 repository snapshot — Llama 3.3 70B absolute throughput</h2>
 <p><strong>Claim.</strong> AWS’s Neuron tutorial deploys Llama 3.3 70B on one <code>trn2.48xlarge</code>, with tensor parallelism 64, BF16, <code>max-num-seqs=1</code>, batch size 1, 10,000 input tokens, approximately 1,501 output tokens, and one concurrent request. It reports:</p>
@@ -249,14 +244,17 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>fused speculative decoding with Llama 3.2 1B draft: <strong>144.171369 aggregate output tokens/sec</strong>.</li>
 </ul>
 <p>The tutorial states that batch size 1 is used for the reported metrics, though the configuration can support up to batch size 4.</p>
-<p><strong>Source, GitHub file last modified February 26, 2026.</strong><br>Documentation:<br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html</a></p>
-<p>Repository source:<br><a href="https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.rst">https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.rst</a></p>
-<p><strong>Quality.</strong> Official vendor benchmark with runnable configuration and raw sample output. Stronger than a marketing claim, but not independently validated or production-shaped. The repository file’s modification date is February 26, 2026.  [filecite: turn33file0, L1-L3]</p>
+<p><strong>Source, GitHub file last modified February 26, 2026.</strong>
+Documentation:
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html</a></p>
+<p>Repository source:
+<a href="https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.rst">https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.rst</a></p>
+<p><strong>Quality.</strong> Official vendor benchmark with runnable configuration and raw sample output. Stronger than a marketing claim, but not independently validated or production-shaped. The repository file’s modification date is February 26, 2026.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Tokens/sec/chip:</strong> Yes, after explicitly dividing the 16-chip deployment: 9.0107 normalized output t/s/chip.</li>
 <li><strong>$ / hour:</strong> No; must be paired with EC2 pricing.</li>
-<li><strong>$ / token:</strong> <strong>Yes, conditionally:</strong> $68.90/M output tokens at the July 15, 2026 Capacity Block rate. [cite: turn199855view0, turn199855view2, turn199855view3, turn444310view4]</li>
+<li><strong>$ / token:</strong> <strong>Yes, conditionally:</strong> $68.90/M output tokens at the July 15, 2026 Capacity Block rate.</li>
 </ul>
 <hr>
 <h2>2026-02-26 repository snapshot — Llama 3.1 405B absolute throughput</h2>
@@ -266,14 +264,17 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>optimized configuration: <strong>100.699865 aggregate output tokens/sec</strong>.</li>
 </ul>
 <p>The optimized configuration uses FP8-rescaled target weights, a BF16 execution setting, a Llama 3.2 1B draft model, fused speculation, and quantized kernels. AWS’s conclusion table labels the scenarios as using BF16, so describing it simply as “FP8 inference” would overstate what is disclosed.</p>
-<p><strong>Source, GitHub file last modified February 26, 2026.</strong><br>Documentation:<br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html</a></p>
-<p>Repository source:<br><a href="https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.rst">https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.rst</a></p>
-<p><strong>Quality.</strong> Official, reproducible vendor benchmark. Strong engineering evidence, not an independent or saturation-throughput measurement. The repository file’s modification date is February 26, 2026.  [filecite: turn34file0, L1-L3]</p>
+<p><strong>Source, GitHub file last modified February 26, 2026.</strong>
+Documentation:
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html</a></p>
+<p>Repository source:
+<a href="https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.rst">https://github.com/aws-neuron/aws-neuron-sdk/blob/7a9740cd128d56d9f1dc9e70d06dd7b31c357ae9/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.rst</a></p>
+<p><strong>Quality.</strong> Official, reproducible vendor benchmark. Strong engineering evidence, not an independent or saturation-throughput measurement. The repository file’s modification date is February 26, 2026.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Tokens/sec/chip:</strong> Yes, normalized to 6.2937 output t/s/chip.</li>
 <li><strong>$ / hour:</strong> No.</li>
-<li><strong>$ / token:</strong> <strong>Yes, conditionally:</strong> $98.65/M output tokens at the current Capacity Block price. [cite: turn444310view0, turn444310view1, turn444310view2, turn199855view4, turn199855view6]</li>
+<li><strong>$ / token:</strong> <strong>Yes, conditionally:</strong> $98.65/M output tokens at the current Capacity Block price.</li>
 </ul>
 <hr>
 <h2>2026-07-15 — Current public Trn2 Capacity Block price</h2>
@@ -285,13 +286,14 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li><code>trn2.3xlarge</code> in Melbourne and São Paulo: <strong>$2.235/hour</strong> for one chip.</li>
 </ul>
 <p>AWS says Capacity Block prices are updated according to supply and demand and that the current rates are scheduled for their next update in October 2026.</p>
-<p><strong>Source, accessed July 15, 2026.</strong><br><a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">https://aws.amazon.com/ec2/capacityblocks/pricing/</a></p>
+<p><strong>Source, accessed July 15, 2026.</strong>
+<a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">https://aws.amazon.com/ec2/capacityblocks/pricing/</a></p>
 <p><strong>Quality.</strong> Authoritative current AWS commercial price.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>$ / hour:</strong> <strong>Yes.</strong></li>
 <li><strong>$ / chip-hour:</strong> <strong>Yes.</strong></li>
-<li><strong>$ / token:</strong> Yes when paired with a compatible throughput measurement. [cite: turn199855view7, turn233249view0]</li>
+<li><strong>$ / token:</strong> Yes when paired with a compatible throughput measurement.</li>
 </ul>
 <hr>
 <h2>2026-07-15 — Ordinary On-Demand, RI, and Savings Plan pricing remains inadequately anchored</h2>
@@ -304,13 +306,14 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 </ul>
 <p>The current official numeric rate I could verify is the Capacity Block price. The only verified RI figure is the historical $34.39/hour three-year RI shown on the 2024 AWS presentation.</p>
 <p>AWS does maintain public machine-readable service and Savings Plan price catalogs. I was not able to validate the exact current Trn2 SKU entries and commercial dimensions from those bulk files in this research pass. Therefore, this finding means <strong>“no current rate located and independently verified,” not “the SKU is categorically absent from every AWS price file.”</strong></p>
-<p><strong>Source documentation, accessed July 15, 2026.</strong><br><a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api-fetching-price-list-files-manually.html">https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api-fetching-price-list-files-manually.html</a></p>
+<p><strong>Source documentation, accessed July 15, 2026.</strong>
+<a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api-fetching-price-list-files-manually.html">https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/using-the-aws-price-list-bulk-api-fetching-price-list-files-manually.html</a></p>
 <p><strong>Quality.</strong> Rigorous search negative, with an explicit scope limitation.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Capacity Block $ / hour:</strong> Yes.</li>
 <li><strong>Current OD/RI/SP $ / hour:</strong> No verified anchor.</li>
-<li><strong>$ / token under OD/RI/SP:</strong> No. [cite: turn473256view0, turn473256view1, turn393980view2]</li>
+<li><strong>$ / token under OD/RI/SP:</strong> No.</li>
 </ul>
 <hr>
 <h2>2024-12-03 — First Trainium2-backed Claude serving price, but no underlying cost</h2>
@@ -321,25 +324,27 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 </ul>
 <p>The ordinary version was listed at $0.80/M input and $4/M output. Anthropic did not disclose model parameter count, precision, chips per replica, tokens/sec, concurrency, utilization, or cost allocation.</p>
 <p>The same announcement described Rainier as hundreds of thousands of Trainium2 chips delivering over five times the compute used to train Anthropic’s then-current generation, clearly framing Rainier primarily as a training project at that date.</p>
-<p><strong>Source, December 3, 2024.</strong><br><a href="https://claude.com/blog/trainium2-and-distillation">https://claude.com/blog/trainium2-and-distillation</a></p>
+<p><strong>Source, December 3, 2024.</strong>
+<a href="https://claude.com/blog/trainium2-and-distillation">https://claude.com/blog/trainium2-and-distillation</a></p>
 <p><strong>Quality.</strong> First-party model-provider production and list-price disclosure; performance is an “up to” claim without benchmark details.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Serving list price:</strong> Yes.</li>
 <li><strong>Infrastructure cost:</strong> No.</li>
-<li><strong>Gross margin:</strong> <strong>No.</strong> It is not valid to subtract the Llama 70B or 405B engineering costs above from the Haiku list price because the model, serving stack, hardware allocation, request mix, and performance target differ. [cite: turn359366view0, turn393980view4, turn393980view5]</li>
+<li><strong>Gross margin:</strong> <strong>No.</strong> It is not valid to subtract the Llama 70B or 405B engineering costs above from the Haiku list price because the model, serving stack, hardware allocation, request mix, and performance target differ.</li>
 </ul>
 <hr>
 <h2>2025-11-03 — Project Rainier explicitly confirmed as mixed training and inference infrastructure</h2>
 <p><strong>Claim.</strong> AWS said Project Rainier had brought nearly <strong>500,000 Trainium2 chips</strong> online and that Anthropic was already both <strong>training and running inference for Claude</strong> on it. AWS also said the deployment was expected to scale beyond one million Trainium2 chips across direct usage and Bedrock by the end of 2025.</p>
-<p><strong>Source, November 3, 2025.</strong><br><a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/">https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/</a></p>
+<p><strong>Source, November 3, 2025.</strong>
+<a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/">https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/</a></p>
 <p><strong>Quality.</strong> Official production disclosure. This is the strongest public evidence that Rainier itself—not merely the broader AWS Trainium fleet—has served Claude inference.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Chip count:</strong> Yes, approximately.</li>
 <li><strong>Inference chip count:</strong> No; training/inference allocation absent.</li>
 <li><strong>Tokens/sec or tokens served:</strong> No.</li>
-<li><strong>$ / token:</strong> No. [cite: turn166886view1, turn199855view8]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
 <hr>
 <h2>2026-02-05 — Broader Trainium2 production scale became clearer, but not Rainier economics</h2>
@@ -352,14 +357,15 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>Trainium3 was already delivering production workloads.</li>
 </ul>
 <p>This wording is important. The broader 1.4-million-chip fleet is explicitly tied to Bedrock inference, while the Rainier sentence specifically emphasizes training. That does not contradict AWS’s November 2025 statement that Rainier also runs inference, but it underscores that no current workload split is disclosed.</p>
-<p><strong>Source, February 5, 2026.</strong><br><a href="https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/">https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/</a></p>
+<p><strong>Source, February 5, 2026.</strong>
+<a href="https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/">https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/</a></p>
 <p><strong>Quality.</strong> Public-company production disclosure; high confidence for aggregate fleet counts and broad use, but no operational detail.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Fleet-capacity context:</strong> Yes.</li>
 <li><strong>Rainier inference allocation:</strong> No.</li>
 <li><strong>Utilization or tokens/sec:</strong> No.</li>
-<li><strong>$ / token:</strong> No. [cite: turn199855view9, turn166886view0]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
 <h3>Precise Rainier conclusion</h3>
 <p>The public record now supports all three of the following:</p>
@@ -379,13 +385,14 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>over 5× output tokens per megawatt at similar user latency.</li>
 </ul>
 <p>No named model, absolute output tokens/sec, workload shape, precision-specific result, or price was given for those serving claims.</p>
-<p><strong>Source, December 2, 2025.</strong><br><a href="https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/">https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/</a></p>
+<p><strong>Source, December 2, 2025.</strong>
+<a href="https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/">https://aws.amazon.com/about-aws/whats-new/2025/12/amazon-ec2-trn3-ultraservers/</a></p>
 <p><strong>Quality.</strong> Official launch disclosure; architectural specifications are useful, serving-performance figures are unbenchmarked relative vendor claims.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Tokens/sec/chip:</strong> No.</li>
 <li><strong>$ / hour:</strong> No.</li>
-<li><strong>$ / token:</strong> No. [cite: turn440129view0]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
 <hr>
 <h2>2026 Neuron 2.31.0 documentation — Trn3 has a benchmark recipe but no published result</h2>
@@ -398,14 +405,15 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>a benchmark recipe with 10,000 input tokens, 3,000 output tokens, and concurrency 1.</li>
 </ul>
 <p>The tutorial requires a private-beta Deep Learning AMI and publishes the benchmark command but <strong>no achieved throughput, latency, or cost result</strong>. A text search of the page finds no “Overall Output Throughput” result.</p>
-<p><strong>Source, Neuron 2.31.0 documentation, accessed July 15, 2026.</strong><br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html</a></p>
+<p><strong>Source, Neuron 2.31.0 documentation, accessed July 15, 2026.</strong>
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html</a></p>
 <p><strong>Quality.</strong> Official runnable recipe, but not a benchmark disclosure.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Configuration:</strong> Yes.</li>
 <li><strong>Tokens/sec/chip:</strong> <strong>No.</strong></li>
 <li><strong>$ / hour:</strong> No public Trn3 rate located.</li>
-<li><strong>$ / token:</strong> <strong>No public anchor exists as of July 15, 2026.</strong> [cite: turn309173view0, turn309173view1, turn309173view2, turn309173view3]</li>
+<li><strong>$ / token:</strong> <strong>No public anchor exists as of July 15, 2026.</strong></li>
 </ul>
 <hr>
 <h2>Public MLPerf results through v6.0 — no Trainium inference submission located</h2>
@@ -417,15 +425,18 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 </ul>
 <p>That result is Inferentia1, BERT, and samples/sec—not Trainium or LLM output tokens/sec—so it is outside the requested scope.</p>
 <p><strong>Sources.</strong></p>
-<p>Current public results repository:<br><a href="https://github.com/mlcommons/inference_results_v6.0">https://github.com/mlcommons/inference_results_v6.0</a></p>
-<p>Historical Inferentia1 system metadata:<br><a href="https://github.com/mlcommons/inference_results_v2.0/blob/36d324b502175621063a478fcbf6d2cb9421ca34/closed/NVIDIA/systems/Triton_Inferentia_INF1_6XLARGEx1.json">https://github.com/mlcommons/inference_results_v2.0/blob/36d324b502175621063a478fcbf6d2cb9421ca34/closed/NVIDIA/systems/Triton_Inferentia_INF1_6XLARGEx1.json</a></p>
-<p>MLPerf methodology:<br><a href="https://mlcommons.org/benchmarks/inference-datacenter/">https://mlcommons.org/benchmarks/inference-datacenter/</a></p>
+<p>Current public results repository:
+<a href="https://github.com/mlcommons/inference_results_v6.0">https://github.com/mlcommons/inference_results_v6.0</a></p>
+<p>Historical Inferentia1 system metadata:
+<a href="https://github.com/mlcommons/inference_results_v2.0/blob/36d324b502175621063a478fcbf6d2cb9421ca34/closed/NVIDIA/systems/Triton_Inferentia_INF1_6XLARGEx1.json">https://github.com/mlcommons/inference_results_v2.0/blob/36d324b502175621063a478fcbf6d2cb9421ca34/closed/NVIDIA/systems/Triton_Inferentia_INF1_6XLARGEx1.json</a></p>
+<p>MLPerf methodology:
+<a href="https://mlcommons.org/benchmarks/inference-datacenter/">https://mlcommons.org/benchmarks/inference-datacenter/</a></p>
 <p><strong>Quality.</strong> MLPerf is an independent benchmark registry with compliance rules and closed-division comparability. The Trainium finding is a documented repository-search negative, not a claim about unpublished submissions or future rounds.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Trainium tokens/sec/chip:</strong> No.</li>
 <li><strong>Inferentia historical context:</strong> Yes, but irrelevant to Trn2/Trn3 frontier-LLM serving.</li>
-<li><strong>$ / token:</strong> No. [cite: turn236466view1]  [filecite: turn6file0, L3-L50]  [filecite: turn9file0, L3-L30]  [filecite: turn10file0, L3-L25]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
 <hr>
 <h2>Third-party evidence — architecture detail, but no independent serving anchor</h2>
@@ -436,15 +447,16 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <li>approximately 400,000 Trainium2 chips for the then-planned Rainier deployment.</li>
 </ul>
 <p>These were explicit analyst estimates. The article did not publish measured LLM tokens/sec, cost per token, or a named-model Trn2-versus-H100/H200 serving benchmark.</p>
-<p><strong>Source, December 2024.</strong><br><a href="https://newsletter.semianalysis.com/p/amazons-ai-self-sufficiency-trainium2-architecture-networking">https://newsletter.semianalysis.com/p/amazons-ai-self-sufficiency-trainium2-architecture-networking</a></p>
+<p><strong>Source, December 2024.</strong>
+<a href="https://newsletter.semianalysis.com/p/amazons-ai-self-sufficiency-trainium2-architecture-networking">https://newsletter.semianalysis.com/p/amazons-ai-self-sufficiency-trainium2-architecture-networking</a></p>
 <p><strong>Quality.</strong> High-quality specialist architectural analysis, but estimates rather than production disclosures or measured serving benchmarks.</p>
 <p><strong>Quantitative-anchor utility.</strong></p>
 <ul>
 <li><strong>Power modeling:</strong> Potentially useful as a secondary sanity check.</li>
 <li><strong>Tokens/sec/chip:</strong> No.</li>
-<li><strong>$ / token:</strong> No. [cite: turn359366view3]</li>
+<li><strong>$ / token:</strong> No.</li>
 </ul>
-<p>Other public repositories I found were near misses rather than anchors: deployment recipes without results, biological-sequence models with nonstandard tokenization, or screenshots without independently auditable run metadata. A GitHub search for the exact Trn2 phrase “Overall Output Throughput” surfaced only the two AWS Neuron tutorials above.  [filecite: turn49file0, L1-L2]  [filecite: turn49file1, L3-L4]</p>
+<p>Other public repositories I found were near misses rather than anchors: deployment recipes without results, biological-sequence models with nonstandard tokenization, or screenshots without independently auditable run metadata. A GitHub search for the exact Trn2 phrase “Overall Output Throughput” surfaced only the two AWS Neuron tutorials above.</p>
 <hr>
 <h1>3. Trn2 versus H100/H200 pricing and TCO</h1>
 <p>The same current AWS Capacity Block page gives the following Ohio prices:</p>
@@ -482,7 +494,6 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <td align="right">$6.865</td>
 </tr>
 </tbody></table>
-<p> [cite: turn199855view7, turn233249view2, turn233249view3, turn233249view4]</p>
 <p>Purely on price:</p>
 <ul>
 <li>Trn2 is <strong>13.9% cheaper per instance-hour</strong> than P5;</li>
@@ -495,11 +506,11 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <blockquote>
 <p><strong>No auditable, public apples-to-apples inference TCO anchor for Trn2 versus P5, P5e, or P5en was found.</strong></p>
 </blockquote>
-<p>The raw EC2 prices are useful denominators; the comparative performance numerators are missing. [cite: turn236466view2, turn113398view0, turn113398view3]</p>
+<p>The raw EC2 prices are useful denominators; the comparative performance numerators are missing.</p>
 <hr>
 <h1>4. Trn2 UltraServer-specific conclusion</h1>
 <p>AWS discloses that a Trn2 UltraServer contains <strong>64 Trainium2 chips</strong>, formed from four 16-chip Trn2 instances, and makes qualitative or relative claims about inference response time and performance. I found <strong>no public absolute output-tokens/sec result for a named LLM on a 64-chip Trn2 UltraServer</strong>.</p>
-<p>The two usable absolute throughput anchors are both on a single 16-chip <code>trn2.48xlarge</code>, not an UltraServer. Therefore, scaling the 16-chip numbers by four would be an unsupported assumption: the UltraServer may change model partitioning, communication, batching, replica count, and attainable utilization. [cite: turn393980view1, turn236466view2]</p>
+<p>The two usable absolute throughput anchors are both on a single 16-chip <code>trn2.48xlarge</code>, not an UltraServer. Therefore, scaling the 16-chip numbers by four would be an unsupported assumption: the UltraServer may change model partitioning, communication, batching, replica count, and attainable utilization.</p>
 <hr>
 <h1>5. Margin at model list prices</h1>
 <p>The public record does not support a defensible Trainium serving-margin calculation.</p>
@@ -563,15 +574,25 @@ P_{\text{Trn2}}=$35.7608/\text{instance-hour}
 <hr>
 <h1>7. Five most load-bearing sources</h1>
 <ol>
-<li><p><strong>AWS Neuron: Llama 3.3 70B on Trn2 with speculative decoding</strong> — the strongest public absolute Trainium2 LLM-output-throughput source.<br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html</a><br>Repository snapshot modified February 26, 2026. [cite: turn199855view0, turn199855view2, turn199855view3]</p>
+<li><p><strong>AWS Neuron: Llama 3.3 70B on Trn2 with speculative decoding</strong> — the strongest public absolute Trainium2 LLM-output-throughput source.
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html</a>
+Repository snapshot modified February 26, 2026.</p>
 </li>
-<li><p><strong>AWS Neuron: Llama 3.1 405B on Trn2 with quantization and speculative decoding</strong> — second named-model throughput anchor and large-model cross-check.<br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html</a><br>Repository snapshot modified February 26, 2026. [cite: turn444310view0, turn444310view2, turn199855view4]</p>
+<li><p><strong>AWS Neuron: Llama 3.1 405B on Trn2 with quantization and speculative decoding</strong> — second named-model throughput anchor and large-model cross-check.
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html</a>
+Repository snapshot modified February 26, 2026.</p>
 </li>
-<li><p><strong>AWS EC2 Capacity Blocks pricing</strong> — current authoritative Trn2, P5, P5e and P5en hourly-price denominator.<br><a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">https://aws.amazon.com/ec2/capacityblocks/pricing/</a><br>Accessed July 15, 2026. [cite: turn199855view7, turn233249view2, turn233249view3, turn233249view4]</p>
+<li><p><strong>AWS EC2 Capacity Blocks pricing</strong> — current authoritative Trn2, P5, P5e and P5en hourly-price denominator.
+<a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">https://aws.amazon.com/ec2/capacityblocks/pricing/</a>
+Accessed July 15, 2026.</p>
 </li>
-<li><p><strong>AWS Weekly Roundup: Project Rainier online</strong> — strongest explicit disclosure that Rainier runs both Claude training and inference, with nearly 500,000 Trainium2 chips.<br><a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/">https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/</a><br>November 3, 2025. [cite: turn166886view1, turn199855view8]</p>
+<li><p><strong>AWS Weekly Roundup: Project Rainier online</strong> — strongest explicit disclosure that Rainier runs both Claude training and inference, with nearly 500,000 Trainium2 chips.
+<a href="https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/">https://aws.amazon.com/blogs/aws/aws-weekly-roundup-project-rainier-online-amazon-nova-amazon-bedrock-and-more-november-3-2025/</a>
+November 3, 2025.</p>
 </li>
-<li><p><strong>AWS Neuron: GPT-OSS 120B on Trn3</strong> — documents a real Trn3 inference configuration while demonstrating the crucial public-data gap: benchmark command, but no achieved result.<br><a href="https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html</a><br>Neuron 2.31.0 documentation, accessed July 15, 2026. [cite: turn309173view0, turn309173view1, turn309173view2, turn309173view3]</p>
+<li><p><strong>AWS Neuron: GPT-OSS 120B on Trn3</strong> — documents a real Trn3 inference configuration while demonstrating the crucial public-data gap: benchmark command, but no achieved result.
+<a href="https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html">https://awsdocs-neuron.readthedocs-hosted.com/en/v2.31.0/libraries/nxd-inference/tutorials/trn3-gpt-oss-120b-tutorial.html</a>
+Neuron 2.31.0 documentation, accessed July 15, 2026.</p>
 </li>
 </ol>
 

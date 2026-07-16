@@ -54,12 +54,11 @@
 <section class="report">
 <div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>RECOVERED — GPT-5.6 Pro dive: LLM Inference Unit Margin Estimate (blinded replication)</h1>
 <blockquote>
-<p><strong>RECOVERED from ChatGPT history — dispatcher timer died before filing (commissioned by owner 2026-07-15, Targeted 4).</strong>
-Retrieved read-only from the owner&#39;s ChatGPT account (project: Ashitaorbis) via the backend
-conversation API over CDP against the owner&#39;s logged-in Chrome — the same browser the
-<code>chatgpt-pro</code> MCP uses. No new prompt was sent; this is the verbatim assistant report as it
-already existed in-account. The dispatching (pro-dive-fleet) session&#39;s in-session MCP request
-registry expired unread, but the ChatGPT conversation itself survived.</p>
+<p><strong>RECOVERED from ChatGPT history — dispatcher timer died before filing (commissioned 2026-07-15, Targeted 4).</strong>
+Recovered from the ChatGPT conversation history after the dispatching session failed. No new
+prompt was sent; this is the verbatim assistant report as it already existed in-account. The
+dispatching (pro-dive-fleet) session&#39;s in-session MCP request registry expired unread, but the
+ChatGPT conversation itself survived.</p>
 </blockquote>
 <table>
 <thead>
@@ -81,17 +80,12 @@ registry expired unread, but the ChatGPT conversation itself survived.</p>
 <td>LLM Inference Unit Margin Estimate (blinded replication)</td>
 </tr>
 <tr>
-<td><strong>Conversation ID</strong></td>
-<td><code>6a57ef31-4b74-83e8-b33d-43d8d7f51b6f</code></td>
-</tr>
-<tr>
 <td><strong>Created / final answer (UTC)</strong></td>
 <td>2026-07-15T20:36:02.038Z / 2026-07-15T21:16:01.383Z</td>
 </tr>
 </tbody></table>
-<p><strong>Citation normalization:</strong> ChatGPT&#39;s private-use-unicode citation anchors (<code>U+E200/E201/E202</code>)
-are rendered as readable <code>[cite: &lt;ref-id&gt;]</code> markers; <code>turn…viewN/searchN/newsN</code> ids are ChatGPT&#39;s
-internal web.run source-reference tokens. Report text otherwise verbatim.</p>
+<p><strong>Citation anchors removed:</strong> citation anchors from the original interface were removed for
+publication; original preserved in the archive copy.</p>
 <p><strong>Provenance routing:</strong> any site change this dive justifies must enter through the update queue
 (<code>research/update-queue.md</code>), not via direct edits.</p>
 <details><summary>Dispatched prompt (verbatim)</summary><pre><code>Using only public data and your own modeling, independently estimate the unit serving margin on frontier LLM inference at list prices: of every dollar a lab charges for tokens, how much survives the marginal cost of serving them? Define your metric precisely (unit serving margin, NOT company gross margin). Build the estimate bottom-up: pick 2–3 representative frontier models, hardware cost assumptions, throughput assumptions, utilization; show the model structure and every anchor. Give a central estimate and a range, with the sensitivity drivers ranked.
@@ -190,73 +184,73 @@ C_{\rm serve}</h1>
 </thead>
 <tbody><tr>
 <td><strong>2026-07-15</strong></td>
-<td>GPT‑5.5 standard short-context pricing was <strong>$5/M input and $30/M output</strong>. Source: <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a>, accessed 2026-07-15. [cite: turn725567view5]</td>
+<td>GPT‑5.5 standard short-context pricing was <strong>$5/M input and $30/M output</strong>. Source: <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a>, accessed 2026-07-15.</td>
 <td>Vendor price disclosure; high quality for current list price.</td>
 <td><strong>Yes — $/token.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-04-23</strong></td>
-<td>OpenAI disclosed that GPT‑5.5 was co-designed for, trained with and served on <strong>NVIDIA GB200 and GB300 NVL72</strong> systems. It also said production partitioning improvements increased token-generation speed by more than 20%. Source: <a href="https://openai.com/index/introducing-gpt-5-5/">https://openai.com/index/introducing-gpt-5-5/</a>. [cite: turn725567view1, turn725567view0]</td>
+<td>OpenAI disclosed that GPT‑5.5 was co-designed for, trained with and served on <strong>NVIDIA GB200 and GB300 NVL72</strong> systems. It also said production partitioning improvements increased token-generation speed by more than 20%. Source: <a href="https://openai.com/index/introducing-gpt-5-5/">https://openai.com/index/introducing-gpt-5-5/</a>.</td>
 <td>Production-hardware disclosure, but without model throughput or fleet economics.</td>
 <td>Hardware family: <strong>yes</strong>. Tokens/sec/chip or $/hour: <strong>no</strong>.</td>
 </tr>
 <tr>
 <td><strong>2026-07-15</strong></td>
-<td>CoreWeave listed four-GB200 configurations at <strong>$42/hour</strong>, or <strong>$10.50/GPU-hour</strong>. Its eight-B200 configuration was $68.80/hour on demand and $34.87/hour spot, or $8.60 and $4.36/GPU-hour. Nebius listed B200 at $7.15 on demand and $3.95 preemptible. Sources: <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a> and <a href="https://nebius.com/prices">https://nebius.com/prices</a>, accessed 2026-07-15. [cite: turn454726view4, turn517702view6]</td>
+<td>CoreWeave listed four-GB200 configurations at <strong>$42/hour</strong>, or <strong>$10.50/GPU-hour</strong>. Its eight-B200 configuration was $68.80/hour on demand and $34.87/hour spot, or $8.60 and $4.36/GPU-hour. Nebius listed B200 at $7.15 on demand and $3.95 preemptible. Sources: <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a> and <a href="https://nebius.com/prices">https://nebius.com/prices</a>, accessed 2026-07-15.</td>
 <td>Vendor cloud-price disclosures. These include cloud-provider economics, so they are more likely upper bounds than exact lab costs.</td>
 <td><strong>Yes — $/GPU-hour.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-07-15</strong></td>
-<td>NVIDIA’s TensorRT‑LLM table reported DeepSeek‑R1‑0528 on GB200 at <strong>4,379 output t/s/GPU</strong> for 1,024 input/8,192 output and <strong>1,192 output t/s/GPU</strong> for 8,192 input/1,024 output. Source: <a href="https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md">https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md</a>, accessed 2026-07-15. [cite: turn275609view2]</td>
+<td>NVIDIA’s TensorRT‑LLM table reported DeepSeek‑R1‑0528 on GB200 at <strong>4,379 output t/s/GPU</strong> for 1,024 input/8,192 output and <strong>1,192 output t/s/GPU</strong> for 8,192 input/1,024 output. Source: <a href="https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md">https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md</a>, accessed 2026-07-15.</td>
 <td>Vendor benchmark; highly quantitative, but optimized benchmark conditions rather than closed-model production.</td>
 <td><strong>Yes — tokens/sec/GPU proxy.</strong></td>
 </tr>
 <tr>
 <td><strong>2025-09-25</strong></td>
-<td>The independent SGLang team reported DeepSeek V3/R1 GB200 throughput of <strong>18,471 input and 9,087 output t/s/GPU</strong> at conventional precision, rising to 26,156 and 13,386 with lower precision. Source: <a href="https://www.lmsys.org/blog/2025-09-25-gb200-part-2/">https://www.lmsys.org/blog/2025-09-25-gb200-part-2/</a>. [cite: turn912538view0]</td>
+<td>The independent SGLang team reported DeepSeek V3/R1 GB200 throughput of <strong>18,471 input and 9,087 output t/s/GPU</strong> at conventional precision, rising to 26,156 and 13,386 with lower precision. Source: <a href="https://www.lmsys.org/blog/2025-09-25-gb200-part-2/">https://www.lmsys.org/blog/2025-09-25-gb200-part-2/</a>.</td>
 <td>Third-party benchmark with reproduction material; strong cross-check, though sequence shape and precision differ from NVIDIA’s test.</td>
 <td><strong>Yes — tokens/sec/GPU.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-07-09</strong></td>
-<td>Gemini 3.1 Pro Preview standard pricing was <strong>$2/M input and $12/M output</strong>, including thinking tokens, for prompts up to 200,000 tokens. Source: <a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a>, last updated 2026-07-09. [cite: turn517702view8, turn275609view7]</td>
+<td>Gemini 3.1 Pro Preview standard pricing was <strong>$2/M input and $12/M output</strong>, including thinking tokens, for prompts up to 200,000 tokens. Source: <a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a>, last updated 2026-07-09.</td>
 <td>Vendor price disclosure.</td>
 <td><strong>Yes — $/token.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-07-15</strong></td>
-<td>Google listed Ironwood TPU at <strong>$12/chip-hour on demand, $6 flex-start, $8.40 under a one-year commitment, and $5.40 under a three-year commitment</strong> in Iowa. Source: <a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a>, accessed 2026-07-15. [cite: turn725567view4]</td>
+<td>Google listed Ironwood TPU at <strong>$12/chip-hour on demand, $6 flex-start, $8.40 under a one-year commitment, and $5.40 under a three-year commitment</strong> in Iowa. Source: <a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a>, accessed 2026-07-15.</td>
 <td>Vendor cloud-price disclosure; likely above Google’s internal cost but directly observable.</td>
 <td><strong>Yes — $/chip-hour.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-07-14</strong></td>
-<td>Google reported Ironwood serving throughput for Qwen 3.5‑397B‑A17B of <strong>3,707 total t/s/chip</strong> under an 8K-input/1K-output workload and <strong>677 total t/s/chip</strong> under 1K-input/8K-output, at concurrency 64. Source: <a href="https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/">https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/</a>. [cite: turn725567view2, turn517702view14, turn275609view5]</td>
+<td>Google reported Ironwood serving throughput for Qwen 3.5‑397B‑A17B of <strong>3,707 total t/s/chip</strong> under an 8K-input/1K-output workload and <strong>677 total t/s/chip</strong> under 1K-input/8K-output, at concurrency 64. Source: <a href="https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/">https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/</a>.</td>
 <td>Vendor hardware benchmark, but unusually detailed and empirical. It is not a Gemini benchmark.</td>
 <td><strong>Yes — tokens/sec/chip proxy.</strong></td>
 </tr>
 <tr>
 <td><strong>2026-04-22</strong></td>
-<td>Google described TPU 8i as its serving-specialist TPU and claimed <strong>up to 80% better inference performance per dollar than Ironwood</strong>, particularly for low-latency large-MoE workloads. Source: <a href="https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive">https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive</a>. [cite: turn217940view0, turn275609view8]</td>
+<td>Google described TPU 8i as its serving-specialist TPU and claimed <strong>up to 80% better inference performance per dollar than Ironwood</strong>, particularly for low-latency large-MoE workloads. Source: <a href="https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive">https://cloud.google.com/blog/products/compute/tpu-8t-and-tpu-8i-technical-deep-dive</a>.</td>
 <td>Vendor relative-performance claim; “up to” and no workload-normalized raw benchmark.</td>
 <td>Useful as an <strong>upside multiplier</strong>, not a direct $/hour or t/s anchor.</td>
 </tr>
 <tr>
 <td><strong>2025-02-27–28</strong></td>
-<td>DeepSeek disclosed that V3/R1 production used an average <strong>226.75 eight-H800 nodes</strong>, assumed <strong>$2/H800-hour</strong>, processed 608B input tokens and 168B output tokens, and delivered about <strong>73.7K input t/s/node including cache hits</strong> or <strong>14.8K output t/s/node</strong>. Source: <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md</a>. [cite: turn454726view0]</td>
+<td>DeepSeek disclosed that V3/R1 production used an average <strong>226.75 eight-H800 nodes</strong>, assumed <strong>$2/H800-hour</strong>, processed 608B input tokens and 168B output tokens, and delivered about <strong>73.7K input t/s/node including cache hits</strong> or <strong>14.8K output t/s/node</strong>. Source: <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md</a>.</td>
 <td>Actual production disclosure; the strongest single serving-economics anchor in the dataset, although it covers V3/R1 rather than V4.</td>
 <td><strong>Yes — $/GPU-hour, tokens/sec/GPU, utilization-realized traffic.</strong></td>
 </tr>
 <tr>
 <td><strong>2024-12-27 / 2026-04-26</strong></td>
-<td>DeepSeek V3 had <strong>671B total and 37B active parameters/token</strong>; V4 Pro has <strong>1.6T total and 49B active parameters/token</strong>. V4’s report also claims much lower attention cost at one-million-token context. Sources: <a href="https://arxiv.org/html/2412.19437v1">https://arxiv.org/html/2412.19437v1</a> and <a href="https://arxiv.org/html/2606.19348v1">https://arxiv.org/html/2606.19348v1</a>. [cite: turn517702view12, turn454726view2]</td>
+<td>DeepSeek V3 had <strong>671B total and 37B active parameters/token</strong>; V4 Pro has <strong>1.6T total and 49B active parameters/token</strong>. V4’s report also claims much lower attention cost at one-million-token context. Sources: <a href="https://arxiv.org/html/2412.19437v1">https://arxiv.org/html/2412.19437v1</a> and <a href="https://arxiv.org/html/2606.19348v1">https://arxiv.org/html/2606.19348v1</a>.</td>
 <td>Lab technical reports; strong for architecture, not production throughput.</td>
 <td><strong>Scaling input only</strong>; not itself a t/s or $/token anchor.</td>
 </tr>
 <tr>
 <td><strong>2026-07-15</strong></td>
-<td>DeepSeek V4 Pro pricing was <strong>$0.435/M cache-miss input, $0.003625/M cache-hit input and $0.87/M output</strong>. Source: <a href="https://api-docs.deepseek.com/quick_start/pricing/">https://api-docs.deepseek.com/quick_start/pricing/</a>, accessed 2026-07-15. [cite: turn454726view1]</td>
+<td>DeepSeek V4 Pro pricing was <strong>$0.435/M cache-miss input, $0.003625/M cache-hit input and $0.87/M output</strong>. Source: <a href="https://api-docs.deepseek.com/quick_start/pricing/">https://api-docs.deepseek.com/quick_start/pricing/</a>, accessed 2026-07-15.</td>
 <td>Vendor price disclosure.</td>
 <td><strong>Yes — $/token.</strong></td>
 </tr>
@@ -280,7 +274,7 @@ T_i=12{,}898\text{ input t/s/GPU}
 <p>[
 T_o=4{,}573\text{ output t/s/GPU}
 ]</p>
-<p>These are <strong>two-stage equivalent rates</strong>, not claimed GPT‑5.5 measurements. DeepSeek‑R1 on GB200 is deliberately used as a relatively conservative large frontier-MoE proxy. The SGLang results being roughly twice as fast at traditional precision are the main reason the OpenAI upside case permits a 2× throughput multiplier. [cite: turn275609view2, turn912538view0]</p>
+<p>These are <strong>two-stage equivalent rates</strong>, not claimed GPT‑5.5 measurements. DeepSeek‑R1 on GB200 is deliberately used as a relatively conservative large frontier-MoE proxy. The SGLang results being roughly twice as fast at traditional precision are the main reason the OpenAI upside case permits a 2× throughput multiplier.</p>
 <h2>Google proxy</h2>
 <p>Google reports combined input-plus-output throughput. The corresponding equations are:</p>
 <h1>[
@@ -298,7 +292,7 @@ T_i=10{,}279\text{ input t/s/chip}
 <p>[
 T_o=606\text{ output t/s/chip}
 ]</p>
-<p>The very low decode-equivalent rate is why Gemini’s estimated output serving cost is substantially higher than its input serving cost. This is a Qwen-on-Ironwood proxy, not a Gemini production measurement. [cite: turn275609view5]</p>
+<p>The very low decode-equivalent rate is why Gemini’s estimated output serving cost is substantially higher than its input serving cost. This is a Qwen-on-Ironwood proxy, not a Gemini production measurement.</p>
 <h2>DeepSeek production calibration</h2>
 <p>The raw V3/R1 disclosure gives per-H800 rates of:</p>
 <p>[
@@ -313,7 +307,7 @@ T_o=606\text{ output t/s/chip}
 +
 \frac{168B}{14.8K}
 ]</p>
-<p>implies <strong>226.86 average active nodes</strong>, almost exactly the disclosed 226.75. That makes the phase-throughput numbers unusually credible. [cite: turn454726view0]</p>
+<p>implies <strong>226.86 average active nodes</strong>, almost exactly the disclosed 226.75. That makes the phase-throughput numbers unusually credible.</p>
 <p>Because 56.3% of the disclosed inputs were cache hits, I cannot apply the reported input rate directly to new cache-miss traffic. I assume a hit consumes 10% as much accelerator work as a fresh prefill token:</p>
 <h1>[
 T_{i,\text{fresh equivalent}}</h1>
@@ -331,7 +325,7 @@ T_{i,\text{fresh equivalent}}</h1>
 <p>[
 T_i=3{,}435,\qquad T_o=1{,}397\text{ t/s/H800}
 ]</p>
-<p>That scaling is intentionally simple. V4’s newer sparse-attention architecture may offset or reverse the extra active-parameter cost, particularly at long context, which is represented in the upside case rather than the central estimate. [cite: turn517702view12, turn454726view2]</p>
+<p>That scaling is intentionally simple. V4’s newer sparse-attention architecture may offset or reverse the extra active-parameter cost, particularly at long context, which is represented in the upside case rather than the central estimate.</p>
 <hr>
 <h1>4. Central assumptions</h1>
 <table>
@@ -460,13 +454,13 @@ T_i=3{,}435,\qquad T_o=1{,}397\text{ t/s/H800}
 <h1>6. Ranked sensitivity drivers</h1>
 <h2>1. Delivered tokens/sec/chip at the actual workload</h2>
 <p>This is the largest uncertainty. Halving all central throughput assumptions lowers the equal-dollar basket from <strong>73.3% to 46.6%</strong>. Doubling them raises it to <strong>86.7%</strong>.</p>
-<p>The driver includes undisclosed model architecture, active parameter count, quantization, speculative decoding, batching, parallelism, context length and latency target. Public benchmarks visibly move several-fold with sequence shape: DeepSeek‑R1 GB200 output throughput falls from 6,939 t/s/GPU at roughly 1K/1K to 1,192 at roughly 8K/1K; Google’s Qwen proxy falls from 3,707 total t/s/chip in the prefill-heavy test to 677 in the decode-heavy test. [cite: turn275609view2, turn275609view5]</p>
+<p>The driver includes undisclosed model architecture, active parameter count, quantization, speculative decoding, batching, parallelism, context length and latency target. Public benchmarks visibly move several-fold with sequence shape: DeepSeek‑R1 GB200 output throughput falls from 6,939 t/s/GPU at roughly 1K/1K to 1,192 at roughly 8K/1K; Google’s Qwen proxy falls from 3,707 total t/s/chip in the prefill-heavy test to 677 in the decode-heavy test.</p>
 <h2>2. Rental-equivalent accelerator cost</h2>
 <p>Cost scales linearly with $/chip-hour. Moving only hardware costs across reasonable model-specific bounds changes the equal-dollar basket to roughly <strong>53%–82%</strong>.</p>
-<p>Public Blackwell prices span approximately $3.95–$10.50/GPU-hour, and Ironwood spans $5.40–$12/chip-hour depending on commitment. Actual large-lab contracted or owned cost is undisclosed and may be appreciably lower. [cite: turn454726view4, turn517702view6, turn725567view4]</p>
+<p>Public Blackwell prices span approximately $3.95–$10.50/GPU-hour, and Ironwood spans $5.40–$12/chip-hour depending on commitment. Actual large-lab contracted or owned cost is undisclosed and may be appreciably lower.</p>
 <h2>3. Input/output/cache mix</h2>
 <p>At the central assumptions, an equal-dollar basket consisting entirely of uncached input has a modeled margin of <strong>78.8%</strong>; an output-only basket has <strong>68.1%</strong>.</p>
-<p>The effect is especially large for Google and DeepSeek. DeepSeek’s cached-input economics are additionally difficult to model: the historical production disclosure says 56.3% of input tokens hit an on-disk KV cache, while current cache-hit list price is less than 1% of cache-miss price. No public source decomposes the actual accelerator and storage cost of those hits. [cite: turn454726view0, turn454726view1]</p>
+<p>The effect is especially large for Google and DeepSeek. DeepSeek’s cached-input economics are additionally difficult to model: the historical production disclosure says 56.3% of input tokens hit an on-disk KV cache, while current cache-hit list price is less than 1% of cache-miss price. No public source decomposes the actual accelerator and storage cost of those hits.</p>
 <h2>4. Production realization and SLA headroom</h2>
 <p>Moving OpenAI and Google from their central 60%/65% realization assumptions to 40%/45% lowers the basket to <strong>68.5%</strong>. Moving them to 80%/85% raises it to <strong>75.8%</strong>.</p>
 <p>This effect is smaller than throughput and hardware price in the aggregate estimate but can be material for low-latency endpoints, bursty traffic and models that require large minimum deployment groups.</p>
@@ -474,19 +468,19 @@ T_i=3{,}435,\qquad T_o=1{,}397\text{ t/s/H800}
 <p>Changing (K) from 1.10 to 1.35 moves the central basket from <strong>75.5% to 70.0%</strong>. This is less important than accelerator economics but remains a genuine negative-data area: labs do not publicly provide per-token CPU, routing, moderation, retry, storage and network cost.</p>
 <hr>
 <h1>7. Explicit negative findings</h1>
-<p><strong>As of 2026-07-15, I found no public quantitative anchor for GPT‑5.5 production tokens/sec/GPU, exact parameter or active-parameter count, production realization, or OpenAI’s contracted GB200/GB300 cost.</strong> OpenAI discloses the accelerator family and a relative production optimization, not absolute throughput. GB300 prices on the reviewed CoreWeave and Nebius pages were “contact sales,” not numeric. [cite: turn725567view0, turn517702view4, turn517702view6]</p>
-<p><strong>I found no public quantitative anchor tying Gemini 3.1 Pro to a specific serving-TPU generation, per-chip throughput, parameter count, active parameter count or production realization.</strong> The Ironwood figures are therefore a platform benchmark using Qwen 3.5, not Gemini. Google’s public TPU pricing table did not contain a TPU 8i price, so the 80% price-performance statement can only be used as a relative upside case. [cite: turn725567view2, turn275609view5, turn275609view8, turn725567view4]</p>
-<p><strong>I found no public V4 Pro production tokens/sec/accelerator, deployed hardware mix or fleet utilization.</strong> DeepSeek’s strongest production disclosure is for V3/R1 on H800. V4’s report gives architecture and relative long-context FLOPs, but no production t/s figure. [cite: turn454726view0, turn454726view2]</p>
+<p><strong>As of 2026-07-15, I found no public quantitative anchor for GPT‑5.5 production tokens/sec/GPU, exact parameter or active-parameter count, production realization, or OpenAI’s contracted GB200/GB300 cost.</strong> OpenAI discloses the accelerator family and a relative production optimization, not absolute throughput. GB300 prices on the reviewed CoreWeave and Nebius pages were “contact sales,” not numeric.</p>
+<p><strong>I found no public quantitative anchor tying Gemini 3.1 Pro to a specific serving-TPU generation, per-chip throughput, parameter count, active parameter count or production realization.</strong> The Ironwood figures are therefore a platform benchmark using Qwen 3.5, not Gemini. Google’s public TPU pricing table did not contain a TPU 8i price, so the 80% price-performance statement can only be used as a relative upside case.</p>
+<p><strong>I found no public V4 Pro production tokens/sec/accelerator, deployed hardware mix or fleet utilization.</strong> DeepSeek’s strongest production disclosure is for V3/R1 on H800. V4’s report gives architecture and relative long-context FLOPs, but no production t/s figure.</p>
 <p><strong>No public anchor was found for the direct-serving overhead multiplier (K)</strong> on any of the three platforms. The 20% central assumption is therefore lower-confidence than the price and benchmark anchors.</p>
 <p>The DeepSeek production page itself includes a historical theoretical margin calculation. I encountered it because it is on the same page as the raw fleet-hours and token statistics, but I did <strong>not</strong> use that stated margin in the estimate; I used only the underlying fleet, throughput and token-volume disclosures.</p>
 <p><strong>Blinding disclosure:</strong> no result from <code>margins.ashitaorbis.com</code>, any other <code>ashitaorbis.com</code> page, or the <code>AshitaOrbis/inference-margins</code> repository appeared in the search results I used. I did not open, inspect or use any such content.</p>
 <h2>Five most load-bearing sources</h2>
 <ol>
-<li><strong>DeepSeek V3/R1 production fleet and throughput disclosure, observation window February 27–28, 2025:</strong> <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md</a> [cite: turn454726view0]</li>
-<li><strong>NVIDIA TensorRT‑LLM per-GPU frontier-model throughput table, accessed July 15, 2026:</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md">https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md</a> [cite: turn275609view2]</li>
-<li><strong>Google Ironwood empirical Qwen 3.5 serving benchmark, July 14, 2026:</strong> <a href="https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/">https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/</a> [cite: turn725567view2, turn275609view5]</li>
-<li><strong>Public accelerator-price anchors—CoreWeave, Nebius and Google Cloud TPU pricing, accessed July 15, 2026:</strong> <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a>, <a href="https://nebius.com/prices">https://nebius.com/prices</a>, and <a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a> [cite: turn454726view4, turn517702view6, turn725567view4]</li>
-<li><strong>Official token list-price pages—OpenAI, Google and DeepSeek, accessed July 15, 2026:</strong> <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a>, and <a href="https://api-docs.deepseek.com/quick_start/pricing/">https://api-docs.deepseek.com/quick_start/pricing/</a> [cite: turn725567view5, turn517702view8, turn454726view1]</li>
+<li><strong>DeepSeek V3/R1 production fleet and throughput disclosure, observation window February 27–28, 2025:</strong> <a href="https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md">https://github.com/deepseek-ai/open-infra-index/blob/main/202502OpenSourceWeek/day_6_one_more_thing_deepseekV3R1_inference_system_overview.md</a></li>
+<li><strong>NVIDIA TensorRT‑LLM per-GPU frontier-model throughput table, accessed July 15, 2026:</strong> <a href="https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md">https://github.com/NVIDIA/TensorRT-LLM/blob/main/docs/source/developer-guide/perf-overview.md</a></li>
+<li><strong>Google Ironwood empirical Qwen 3.5 serving benchmark, July 14, 2026:</strong> <a href="https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/">https://developers.googleblog.com/systems-engineering-playbook-optimizing-qwen-35-397b-moe-on-ironwood-tpu7x/</a></li>
+<li><strong>Public accelerator-price anchors—CoreWeave, Nebius and Google Cloud TPU pricing, accessed July 15, 2026:</strong> <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a>, <a href="https://nebius.com/prices">https://nebius.com/prices</a>, and <a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a></li>
+<li><strong>Official token list-price pages—OpenAI, Google and DeepSeek, accessed July 15, 2026:</strong> <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a>, <a href="https://ai.google.dev/gemini-api/docs/pricing">https://ai.google.dev/gemini-api/docs/pricing</a>, and <a href="https://api-docs.deepseek.com/quick_start/pricing/">https://api-docs.deepseek.com/quick_start/pricing/</a></li>
 </ol>
 
 

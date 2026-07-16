@@ -73,20 +73,12 @@
 <td>AMD serving economics (Targeted 4 — dive 3 of 4)</td>
 </tr>
 <tr>
-<td><strong>Conversation ID</strong></td>
-<td><code>6a57ef06-ebb0-83e8-8eb5-6bd314528be9</code></td>
-</tr>
-<tr>
-<td><strong>Conversation URL</strong></td>
-<td><a href="https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a57ef06-ebb0-83e8-8eb5-6bd314528be9">https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a57ef06-ebb0-83e8-8eb5-6bd314528be9</a></td>
-</tr>
-<tr>
 <td><strong>Request ID</strong></td>
 <td><code>req_1784147717347_pvneg3</code></td>
 </tr>
 <tr>
 <td><strong>Commissioned</strong></td>
-<td>by owner 2026-07-15 (&quot;Targeted 4&quot; package)</td>
+<td>2026-07-15 (&quot;Targeted 4&quot; package)</td>
 </tr>
 </tbody></table>
 <h2>Provenance — READ BEFORE USING (important)</h2>
@@ -94,9 +86,10 @@
 <li><strong>This dive hit the ChatGPT-Pro MCP&#39;s 120-minute HARD TIMEOUT.</strong> <code>completion_path: hard_timeout_api</code>, elapsed <code>2h0m13s</code>. The MCP returned its <strong>latest captured text and flagged it &quot;may be incomplete.&quot;</strong></li>
 <li><strong>What this means:</strong> GPT-5.6 Pro was still in its extended reasoning/tool-use (search) phase at the 2-hour cap and had <strong>not yet emitted a full structured report</strong>. Across ~10 polls over the final ~15 minutes the captured <code>partial</code> never grew beyond the same <strong>770-character reasoning summary</strong> reproduced verbatim below — so this is the model&#39;s own dense <strong>reasoning-trace synopsis of its findings</strong>, NOT the requested full &quot;dated claims + 5 sources&quot; report.</li>
 <li><strong>The reasoning synopsis is still substantively useful</strong> — it contains concrete, specific findings (MI355X-not-MI350X source correction; total-vs-generated throughput split; a derived $/M-output-token anchor; MLPerf/Azure/Oracle anchor-quality negatives). Those are captured in the update queue.</li>
-<li><strong>Recovery:</strong> the conversation persists in the owner&#39;s account (project <strong>Ashitaorbis</strong>, url above). A CDP read of the live conversation (same technique as <code>recovered-deepseek-dive-2026-07-15.md</code>) <strong>may</strong> yield more if the model wrote any additional text server-side after the MCP stopped polling — worth attempting, but the flat 770-char partial suggests little-to-no final-answer body was produced within 120 min.</li>
-<li><strong>Sibling dives:</strong> TPU, Trainium, and the blinded replication completed during a poller dormancy gap and expired from the 5-min MCP cache (<code>check() = not_found</code>) — recovered separately via CDP by conversation id.</li>
+<li><strong>Recovery:</strong> the conversation persists in the ChatGPT conversation history. Checking it directly (same approach as <code>recovered-deepseek-dive-2026-07-15.md</code>) <strong>may</strong> yield more if the model wrote any additional text server-side after the MCP stopped polling — worth attempting, but the flat 770-char partial suggests little-to-no final-answer body was produced within 120 min.</li>
+<li><strong>Sibling dives:</strong> TPU, Trainium, and the blinded replication completed during a poller dormancy gap and expired from the 5-min MCP cache (<code>check() = not_found</code>) — recovered separately from the ChatGPT conversation history.</li>
 <li><strong>Routing:</strong> any site change this justifies enters through <code>research/update-queue.md</code> (Q-AUTO items), never via direct edits to the site/engine/tracked numbers.</li>
+<li><strong>Citation anchors:</strong> no raw citation markers were present in this dive&#39;s captured text (hard-timeout truncation); as with the sibling dives, the original is preserved unmodified in the archive copy.</li>
 </ul>
 <h2>Goal (as dispatched)</h2>
 <p>Strongest available PUBLIC anchors for AMD Instinct (MI300X / MI325X / MI350X / MI355X / MI400) LLM inference/serving economics — or a rigorous negative result. Special task: corroborate or challenge the DigitalOcean/RadixArk claim of DeepSeek V4 at 3,500+ tok/s/GPU on MI350X; pin down benchmark conditions; assess whether it is a defensible quantitative anchor. Output contract: dated claims (claim / primary source URL+date / source-quality class / anchor-usability), explicit negative results where no anchor exists, and a numbered list of the 5 most load-bearing sources.</p>
@@ -110,7 +103,7 @@
 <p>[NOTE: Hard timeout at 120 minutes; returned latest captured text — may be incomplete.]</p>
 </blockquote>
 <hr>
-<h2>Interpretation for the model (from the captured synopsis; sources NOT yet URL-pinned — pending CDP recovery)</h2>
+<h2>Interpretation for the model (from the captured synopsis; sources NOT yet URL-pinned — pending recovery from ChatGPT conversation history)</h2>
 <p>The synopsis makes four load-bearing points, all of which sharpen (rather than overturn) the site&#39;s low-confidence stance on non-NVIDIA anchors:</p>
 <ol>
 <li><strong>The viral &quot;3.5K tok/s/GPU MI350X&quot; headline is mis-attributed and mis-framed.</strong> The primary artifact is <strong>MI355X</strong> (not MI350X), a <strong>synthetic 8,192-input / 1,024-output</strong> sweep at <strong>concurrency 1,024+</strong>, FP4/FP8. The &quot;3.5K&quot; is <strong>total</strong> throughput (prefill-dominated); <strong>generated (decode) throughput is only ~396–408 tok/s/GPU</strong> at <strong>64–178 s TTFT</strong> — a low-interactivity operating point unusable for interactive serving. HIP graphs were one of several optimizations, not a standalone 10× lever.</li>
@@ -118,7 +111,7 @@
 <li><strong>MLPerf</strong> has an <strong>audited MI355X latency-qualified</strong> result, but the <strong>405B submission prunes layers</strong>, limiting its economics usefulness.</li>
 <li><strong>Anchor-quality negatives:</strong> <strong>Azure</strong> (ND MI300X v5) exposes <strong>no public chip-tied rate</strong>; <strong>Oracle&#39;s</strong> audited result <strong>lacks cloud pricing</strong>. Net: no clean <em>production interactive</em> AMD $/token anchor exists publicly as of 2026-07-15; the only derivable number is the synthetic-sweep figure in (2).</li>
 </ol>
-<p>These items are queued in <code>research/update-queue.md</code> as Q-AUTO-2026-07-15 entries, marked QUEUED-AUTO and flagged as reasoning-summary-derived pending CDP recovery for exact source URLs/dates.</p>
+<p>These items are queued in <code>research/update-queue.md</code> as Q-AUTO-2026-07-15 entries, marked QUEUED-AUTO and flagged as reasoning-summary-derived pending recovery from ChatGPT conversation history for exact source URLs/dates.</p>
 
 
 </section>
