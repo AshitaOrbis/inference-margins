@@ -1,6 +1,6 @@
 {
   "name": "inference-margins",
-  "version": "2.1.6",
+  "version": "2.1.10",
   "private": true,
   "description": "Interactive model of frontier-LLM serving costs and unit direct-serving contribution margins — margins.ashitaorbis.com",
   "license": "MIT",

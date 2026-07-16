@@ -134,6 +134,54 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   assert("renderGenChart no longer reimplements cache-read billing locally", !/cacheReadMult/.test(body));
   assert("renderGenChart no longer reimplements the price-mix formula locally", !/s\.priceOut\s*\+/.test(body));
 }
+// 6e. Content-contract: v2.1.10 cold-review epistemics/labeling pass. These guard the P0/P1
+// wording fixes against silent regression — the exact overclaim strings the 2026-07-15 cold
+// review + council flagged must stay gone, and the honest replacements must stay present.
+{
+  const fs = require("node:fs");
+  const html = fs.readFileSync(new URL("../site/index.html", import.meta.url), "utf8");
+  const app = fs.readFileSync(new URL("../site/app.js", import.meta.url), "utf8");
+  const eng = fs.readFileSync(new URL("../site/engine.js", import.meta.url), "utf8");
+  // P0-1 blinded run: relabeled as a cross-check, never an "independent ... replication/corroboration"
+  assert("P0-1: §5 no longer calls the blinded run an 'independent blinded replication'", !/independent blinded replication/i.test(html));
+  assert("P0-1: §5 no longer calls it an 'independent, blinded corroboration'", !/independent, blinded corroboration/i.test(html));
+  assert("P0-1: §5 frames it as a blinded model-generated cross-check", /blinded model-generated cross-check/i.test(html));
+  assert("P0-1: registry who-string relabeled (no 'independent BLINDED replication')", !/independent BLINDED replication/.test(eng) && /blinded model-generated cross-check/.test(eng));
+  // P0-2 Gemini card: headline reframed to not-identifiable; ~96% demoted to a labeled scenario
+  assert("P0-2: Gemini card headline reads 'not publicly identifiable'", /Gemini 3\.1 Pro[\s\S]{0,240}not publicly identifiable/.test(html));
+  assert("P0-2: Gemini card no longer prints 'unit CM ~96%' as its headline", !/unit CM ~96%/.test(html));
+  // P1-1 hero unanchored-share warning: no longer claims TPU/Trainium have NO anchors; names GB300 price
+  assert("P1-1: hero warning drops the false 'no public serving anchors' claim", !/have no public serving anchors/.test(app));
+  assert("P1-1: hero warning names the GB300 analyst-price leg (state-aware)", /on GB300, priced from/.test(app) && /analyst-estimated \$6\/GPU-hr base/.test(app));
+  // P1-6 persistent scenario-not-estimate identity chip
+  assert("P1-6: identity strip carries the 'selected scenario output — not an identified estimate' chip", /selected scenario output — not an identified estimate or probability interval/.test(app));
+  // P1-4 press-reported (not company-reported) DeepSeek 70-80%
+  assert("P1-4: DeepSeek 70-80% labeled press-reported, not company-reported", !/first company-reported post-V4/.test(html) && /first press-reported \(The Information/.test(html));
+  // #28 realized -> effective on the hero price tile
+  assert("#28: hero price tile reads 'Blended effective price' (not 'realized')", /Blended effective price/.test(html) && !/Blended realized price/.test(html));
+  // #17 Rubin fully de-dollared: excluded from the $ scale (ymax) AND drawn as an unpriced
+  // placeholder, not a cost-scaled bar — so no $ figure is inferable from its height.
+  {
+    const gen = app.match(/function renderGenChart\(\)\s*{[\s\S]*?\n}\n/);
+    const gbody = gen ? gen[0] : "";
+    assert("#17: renderGenChart marks the projection 'unpriced' instead of a $ figure", /"unpriced"/.test(gbody));
+    assert("#17: renderGenChart excludes the Rubin projection from the $ scale (ymax)", /filter\(c => !c\.proj\)/.test(gbody));
+  }
+  // Reviewer follow-ups (sol-reviewer 2026-07-15): "realized"→"effective" completed across the
+  // live result surfaces (hero tooltip, normalized column), and the annex GENERATOR no longer
+  // reasserts the P0 overclaims it regenerates into site/research/ on every deploy.
+  {
+    const build = fs.readFileSync(new URL("../build-research-html.mjs", import.meta.url), "utf8");
+    assert("realized→effective: no 'Blended realized price' tooltip in engine.js", !/Blended realized price/.test(eng));
+    assert("realized→effective: no 'Realized price /Mtok' column in app.js", !/Realized price \/Mtok/.test(app));
+    assert("realized→effective: margin tooltip uses 'modeled effective billings'", /modeled effective billings/.test(eng));
+    assert("annex generator: dive title is a cross-check, not an 'independent ... replication'", !/blinded unit-margin replication/i.test(build) && /Blinded unit-margin cross-check/.test(build));
+    assert("annex generator: index intro is 'full public', not 'full, unedited'", !/full, unedited/.test(build) && /full public research artifacts/.test(build));
+  }
+  // #27 version identity: footer engine string aligned to v2.1.10 (matches ENGINE_REVISION)
+  assert("#27: footer engine version string is v2.1.10", /engine v2\.1\.10-2026-07-15/.test(html));
+  assert("#27: ENGINE_REVISION is v2.1.10", /ENGINE_REVISION = "v2\.1\.10-2026-07-15"/.test(eng));
+}
 
 // 7. Dossier coverage + drift prevention: every preset has a dossier; every dossier
 // param annotation refers to a key the preset actually sets (values render live, so

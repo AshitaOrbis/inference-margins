@@ -1098,7 +1098,7 @@ function renderGenChart() {
   });
   const W = 720, H = 300, padL = 56, padR = 16, padT = 26, padB = 34;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Cost per generation" });
-  const ymax = Math.max(...cols.map(c => c.cost)) * 1.15;
+  const ymax = Math.max(...cols.filter(c => !c.proj).map(c => c.cost)) * 1.15; // exclude the unpriced Rubin projection from the $ scale
   const ys = v => padT + (1 - v / ymax) * (H - padT - padB);
   const ticks = niceTicks(ymax);
   ticks.forEach(g => {
@@ -1109,12 +1109,25 @@ function renderGenChart() {
   cols.forEach((c, i) => {
     const bw = Math.min(24 * 2, slot * 0.5);
     const x = padL + i * slot + (slot - bw) / 2;
-    const p = svgEl("path", { d: roundedBarPath(x, ys(c.cost), bw, (H - padB) - ys(c.cost), 4, false), fill: c.color, opacity: c.proj ? 0.55 : 1 });
+    if (c.proj) {
+      // Rubin is unanchored — no public rack rate, serving benchmark or purchase price. Draw NO
+      // cost-scaled bar: a $ figure must not be inferable from a bar height read against the $ axis
+      // (Rubin is also excluded from ymax above). A faded full-height placeholder holds the
+      // generation's slot in the timeline, marked "unpriced projection" (cold-review 2026-07-15 #17).
+      const ph = svgEl("rect", { x, y: padT + 2, width: bw, height: (H - padB) - (padT + 2), fill: "var(--grid)", opacity: 0.2, rx: 4 });
+      svg.append(ph);
+      const midY = padT + (H - padT - padB) * 0.5;
+      svg.append(chartText(x + bw / 2, midY - 4, "unpriced", { anchor: "middle", size: 10.5, weight: 600, fill: "var(--ink-3)" }));
+      svg.append(chartText(x + bw / 2, midY + 9, "projection", { anchor: "middle", size: 9.5, fill: "var(--ink-3)" }));
+      svg.append(chartText(x + bw / 2, H - padB + 15, c.name, { anchor: "middle", size: 10.5, fill: "var(--ink-2)" }));
+      attachMarkTip(ph, () => ttRows(c.name, [["status", "unpriced projection"], ["basis", "no public rack rate, serving benchmark, or purchase price"]]));
+      return;
+    }
+    const p = svgEl("path", { d: roundedBarPath(x, ys(c.cost), bw, (H - padB) - ys(c.cost), 4, false), fill: c.color, opacity: 1 });
     svg.append(p);
     svg.append(chartText(x + bw / 2, ys(c.cost) - 18, fmt$(c.cost), { anchor: "middle", weight: 600, fill: "var(--ink-1)" }));
     svg.append(chartText(x + bw / 2, ys(c.cost) - 6, fmtPct(c.margin) + " margin", { anchor: "middle", size: 10, fill: "var(--ink-3)" }));
     svg.append(chartText(x + bw / 2, H - padB + 15, c.name, { anchor: "middle", size: 10.5, fill: "var(--ink-2)" }));
-    if (c.proj) svg.append(chartText(x + bw / 2, H - padB + 27, "(projection)", { anchor: "middle", size: 9.5, fill: "var(--ink-3)" }));
     attachMarkTip(p, () => ttRows(c.name, [["output cost / Mtok", fmt$(c.cost)], ["margin at current price", fmtPct(c.margin)]]));
   });
   el.appendChild(svg);
@@ -1188,7 +1201,7 @@ function renderNormalized() {
     });
     return tr;
   };
-  tbl.appendChild(mkRow(["Provider preset", "Blended margin", "Serving cost /Mtok", "Realized price /Mtok"], true));
+  tbl.appendChild(mkRow(["Provider preset", "Blended margin", "Serving cost /Mtok", "Effective price /Mtok"], true));
   MODELS.filter(m => !m.scenario && m.id !== "custom").forEach(m => { // custom = user scratch model, not a provider row
     const s = applyPresetSettings(m, median);
     s.ioRatio = 15; s.cacheHit = 60; // common reference workload (tariff scenarios excluded — sizes unidentified)
@@ -1644,6 +1657,7 @@ function renderIdentityStrip() {
   el.append(chip("traffic " + id.trafficTxt, "id-traffic"));
   el.append(chip(id.lensName, "id-lensname"));
   el.append(chip(id.stateLabel, "id-state"));
+  el.append(chip("selected scenario output — not an identified estimate or probability interval", "id-epistemic"));
   const btn = document.createElement("button");
   btn.type = "button"; btn.className = "id-reset ghost-btn"; btn.textContent = "↺ Return to central scenario";
   btn.onclick = returnToCentral; btn.hidden = id.isCentral;
@@ -1751,16 +1765,30 @@ function updateTiles() {
   $("out-cost").textContent = fmt$(wl.costMix);
   $("out-price").textContent = fmt$(wl.priceMix);
   { const pn = document.getElementById("out-price-note");
-    if (pn) pn.textContent = (S.cacheHit > 0 && (S.cacheWriteShare || 0) === 0) ? "cache reads are modeled, but cache-write billing is 0% — realized price may be incomplete" : ""; }
+    if (pn) pn.textContent = (S.cacheHit > 0 && (S.cacheWriteShare || 0) === 0) ? "cache reads are modeled, but cache-write billing is 0% — effective price may be incomplete" : ""; }
   $("out-cost-out").textContent = fmt$(wl.cOut);
   $("out-cost-in").textContent = "fresh input: " + fmt$(wl.cIn) + " · cache read: " + fmt$(wl.cCache);
   { const w = blendWeights(S);
-    const unanchored = ["tpu7", "trn2", "trn3"].reduce((a, k) => a + (w[k] || 0), 0);
+    const unfitted = ["tpu7", "trn2", "trn3"].reduce((a, k) => a + (w[k] || 0), 0);
+    const gb300 = w.gb300 || 0;
     const un = document.getElementById("out-margin-unanchored");
-    if (un) un.textContent = unanchored > 0 ? "Unanchored-MFU traffic share: " + Math.round(unanchored * 100) + "% (TPU/Trainium have no public serving anchors — analyst-estimated MFUs)" : ""; }
+    if (un) {
+      const parts = [];
+      if (unfitted > 0) parts.push(Math.round(unfitted * 100) + "% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors that are not yet fitted into this roofline; Trainium3 is unanchored — analyst-estimated MFUs)");
+      if (gb300 > 0) {
+        const basis = (S.hwMode === "tco")
+          ? "analyst-estimated capex/TCO (no public GB300 purchase price)"
+          : "an analyst-estimated $6/GPU-hr base" + (S.rentMult && S.rentMult !== 1 ? " × the current cost multiplier" : "") + " (no public rack rate)";
+        parts.push(Math.round(gb300 * 100) + "% on GB300, priced from " + basis);
+      }
+      un.textContent = parts.length ? "Analyst-input share of this fleet — " + parts.join("; ") + "." : "";
+    } }
   const f = feasibility(S);
-  $("out-feas").textContent = f.gpus + " GPUs min";
-  $("out-feas-note").textContent = `${Math.round(f.gb).toLocaleString()} GB weights (${S.precision}) on ${HW[f.domKey].name} ⇒ ≥${f.racks} × 72-rack${f.racks > 1 ? "s" : ""}`;
+  $("out-feas").textContent = f.gpus + " devices min";
+  const nvl72 = ["gb200", "gb300"].includes(f.domKey);
+  $("out-feas-note").textContent = `${Math.round(f.gb).toLocaleString()} GB weights (${S.precision}) on ${HW[f.domKey].name}`
+    + (nvl72 ? ` ⇒ ≥${f.racks} × NVL72 rack${f.racks > 1 ? "s" : ""}` : ` (${f.gpus} devices; this hardware does not deploy in 72-GPU NVL72 racks — its own topology applies)`)
+    + ` · weight-storage floor only, NOT an SLO/topology feasibility check`;
 }
 function renderAll() {
   updateTiles(); renderIdentityStrip(); renderHwChart(); renderStackChart(); renderSensChart(); renderGenChart(); renderSubChart(); updateBoard();
