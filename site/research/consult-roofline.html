@@ -54,7 +54,7 @@
 <section class="report">
 <div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Roofline throughput-model consultation — GPT-5.6 Pro, 2026-07-10</h1>
 <blockquote>
-<p>Run 58m52s · <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · <a href="https://chatgpt.com/g/g-p-6a42f0b0f46e81919a65018455ee56dd/c/6a516cd6-1834-83e8-a950-20302f616c6d">conversation</a>
+<p>Run 58m52s · <code>gpt-5-6-pro</code> (Pro-verified, <code>completion_path: api</code>, Ashitaorbis project) · conversation archived privately
 VERDICT: <strong>do not replace the anchor-fit model.</strong> A compute/HBM/fabric roofline with 1/batch weight amortization, MTP handling and ONE shared residual (η = 31.0% roof-utilization, fit on H800) predicts throughput-oriented operating points well — H20 −11/−16%, GB200 −2% (optimistic FP4 bound), Ascend@50ms −10% — but fails the whole-platform gate at Ascend&#39;s 15ms point (<strong>−39.8%</strong>, ≈6–8pp of margin), and the preregistered experiment is <strong>formally unrunnable</strong>: p=1 fitted parameter vs n_train=1 platform group; no genuinely untouched platform exists; H800 batch/MTP, GB200 precision bytes and Ascend KV dtype are post-hoc choices. Prefill transfers worse (worst −70.8%). Sensitivity: the favorable result is unstable to the undisclosed H800 batch (worst error 31.5–50.1% across batch 80–128) and to H800-MTP assumptions (η would drop to 22%, Ascend@15ms error −57%).
 DECISION ADOPTED: anchor fits stay primary; the roofline ships as an experimental diagnostic only (<code>tests/roofline-diagnostic.mjs</code>); a valid future test requires ≥2 training platform groups, a genuinely new held-out platform, frozen checkpoint/batch/MTP/precision metadata, and a max-error-per-held-out-operating-point gate (≈25% throughput ⇒ 5pp margin at 80%).</p>
 </blockquote>
@@ -62,7 +62,7 @@ DECISION ADOPTED: anchor fits stay primary; the roofline ships as an experimenta
 
 
 </section>
-<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
 </div>
 </body>
 </html>

@@ -178,9 +178,15 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     assert("annex generator: dive title is a cross-check, not an 'independent ... replication'", !/blinded unit-margin replication/i.test(build) && /Blinded unit-margin cross-check/.test(build));
     assert("annex generator: index intro is 'full public', not 'full, unedited'", !/full, unedited/.test(build) && /full public research artifacts/.test(build));
   }
-  // #27 version identity: footer engine string aligned to v2.1.10 (matches ENGINE_REVISION)
-  assert("#27: footer engine version string is v2.1.10", /engine v2\.1\.10-2026-07-15/.test(html));
-  assert("#27: ENGINE_REVISION is v2.1.10", /ENGINE_REVISION = "v2\.1\.10-2026-07-15"/.test(eng));
+  // #27 version identity: footer engine string aligned to ENGINE_REVISION
+  assert("#27: footer engine version string is v2.1.11", /engine v2\.1\.11-2026-07-16/.test(html));
+  assert("#27: ENGINE_REVISION is v2.1.11", /ENGINE_REVISION = "v2\.1\.11-2026-07-16"/.test(eng));
+  // cold-review-v2110 follow-ups (2026-07-16): guard the fixes against regression.
+  assert("v2110#3: Gemini card no longer asserts a '89–98%' interval floor", !/Why the interval is 89–98%/.test(html) && /Why there is no identified interval/.test(html));
+  {
+    const build = fs.readFileSync(new URL("../build-research-html.mjs", import.meta.url), "utf8");
+    assert("v2110#22: annex footer no longer claims 'archived as produced'", !/archived as produced/.test(build) && /selected public artifacts/i.test(build));
+  }
 }
 
 // 7. Dossier coverage + drift prevention: every preset has a dossier; every dossier

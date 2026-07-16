@@ -1,6 +1,6 @@
 # Google (Gemini) — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 45m03s · model `gpt-5-6-pro` (Pro-verified) · [conversation](https://chatgpt.com/c/6a508389-7288-83e8-98f0-615179528f76)
+> Run 2026-07-09 · 45m03s · model `gpt-5-6-pro` (Pro-verified) · conversation archived privately
 > Verdict: **Gemini 3.1 Pro marginal serving gross margin ≈ 95.7% central, 80% CI ≈ 89–98%** at standard ≤200K list price.
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).
 

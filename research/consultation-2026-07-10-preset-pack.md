@@ -1,6 +1,6 @@
 # Preset grounding pack — GPT-5.6 Pro consultation, 2026-07-10
 
-> Run 28m22s · `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a516caf-49d8-83e8-b3ca-99fde11dc9ce)
+> Run 28m22s · `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · conversation archived privately
 > Companion design consultation: `consultation-2026-07-10-council-design.md` (4-persona council, Opus synthesis), whose ship-list adjudications governed which presets exist.
 > Note: the first run of this consultation completed but expired from the MCP retention window during a usage-limit pause; this is the re-run. The full 192-row JSON/Markdown pack lives in the conversation's sandbox files (retrieve from the conversation if ever needed); the summary below carries every decision the site adopted.
 

@@ -1,6 +1,6 @@
 # Chinese-market AI accelerators — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 57m45s · model `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508ea1-3b48-83e8-b3cc-651a7dc8bc80)
+> Run 2026-07-09 · 57m45s · model `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · conversation archived privately
 > Headline for the calculator: **910C peak is 1.504 POPS INT8 (the CloudMatrix paper's "1,054" is a typo)**; annual-commit rents H800 ≈ $1.75/hr, H20 ≈ $1.00/hr, 910C ≈ $1.95/hr (Huatai procurement); neutral 910C decode MFU 7% (5–10%); H20 17% (Ant production tiers); and "one China rental rate" is a category error — the same H20 spans ¥5–72/card-hour by rental class.
 > Archived verbatim below (citation-marker artifacts from the source renderer preserved).
 

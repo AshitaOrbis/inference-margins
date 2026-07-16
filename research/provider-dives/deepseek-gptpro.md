@@ -1,6 +1,6 @@
 # DeepSeek — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 50m57s · model `gpt-5-6-pro` (Pro-verified) · [conversation](https://chatgpt.com/c/6a5083ac-29bc-83e8-8ffa-ec9a0abad0fc)
+> Run 2026-07-09 · 50m57s · model `gpt-5-6-pro` (Pro-verified) · conversation archived privately
 > Verdict: **DeepSeek V4-Pro marginal serving gross margin ≈ 69% central, 80% CI ≈ 45–83%** at the July 9 list price (post-75%-cut); announced peak-window 2× tariff would restore ≈ 84.5%.
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).
 

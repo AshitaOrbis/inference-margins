@@ -90,7 +90,7 @@ ${SKIN_BOOT}
 <section class="report">
 ${bodyHtml}
 </section>
-<footer class="footer"><p>Reference material for <a href="${up}index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+<footer class="footer"><p>Reference material for <a href="${up}index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
 </div>
 </body>
 </html>`;

@@ -1,6 +1,6 @@
 # GPT-5.6 Pro Anthropic consult — VERBATIM (recovered original)
 
-> The complete, unedited response of the original Anthropic margin consultation (req_1783636621475, 54m21s, `gpt-5-6-pro`, Pro-verified, 2026-07-09; [conversation](https://chatgpt.com/c/6a50228e-a398-83e8-8445-3c39b76730db)).
+> The complete, unedited response of the original Anthropic margin consultation (req_1783636621475, 54m21s, `gpt-5-6-pro`, Pro-verified, 2026-07-09; conversation archived privately).
 > **Provenance:** recovered 2026-07-11 from the session transcript that received it — these are the original bytes as returned by the API, not a regeneration. `citeturn…` tokens are ChatGPT-internal citation markers and are preserved as received.
 > **SHA-256 (response body below this header):** `16ea77207011d5c7a65e78bc82b483d187c415ba5e5742befb7d7e3a2ec51f50`
 > The [adopted-findings summary](gpt-pro-full-response.html) distills what the site uses; where they differ, the site's §6 states the adopted value.

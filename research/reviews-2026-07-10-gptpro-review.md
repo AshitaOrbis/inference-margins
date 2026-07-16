@@ -1,6 +1,6 @@
 # GPT-5.6 Pro pre-publication review — 2026-07-10
 
-> Run 43m49s · `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a51065d-d18c-83e8-9456-850b4e0c2288)
+> Run 43m49s · `gpt-5-6-pro` (Pro-verified, `completion_path: api`, Ashitaorbis project) · conversation archived privately
 > Verdict: **"Do not publish the page unchanged."** No transcription errors in the six §10 headline numbers — the blockers are definition errors, comparability errors, stale current facts, and caveats that became stronger claims when compressed into cards.
 > Companion review: `reviews-2026-07-10-council-synthesis.md` (4-persona codex council, Opus synthesis — reached the same headline verdict independently and additionally reproduced app.js numerically, finding the preset-merge bug and calculator/§10 divergence).
 

@@ -72,7 +72,7 @@ serving disclosure, Ant Group's H20 deployment, GB200/GB300 benchmarks). The obv
 falsification test was run and published: one effective MFU fitted on the DeepSeek anchor
 mispredicts the other platforms by ~37% mean error, so per-platform fits stay, as a
 documented decision with documented consequences (reproducing an anchor is an identity, not
-out-of-sample validation). Where no anchor exists (TPU v7, Trainium, Rubin), the page says
+out-of-sample validation). Where no anchor is **fitted** — TPU v7 and Trainium2 now have public named-model serving anchors that are not yet incorporated into the roofline, while Trainium3 and Rubin have none at all — the page says
 so and carries lower confidence.
 
 ## Repo shape

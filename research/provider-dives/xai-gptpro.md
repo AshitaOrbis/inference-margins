@@ -1,6 +1,6 @@
 # xAI (Grok) — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 53m24s · model `gpt-5-6-pro` (Pro-verified, Ashitaorbis project) · [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508e7a-c710-83e8-a8d6-7856e52c283c)
+> Run 2026-07-09 · 53m24s · model `gpt-5-6-pro` (Pro-verified, Ashitaorbis project) · conversation archived privately
 > Verdict: **Grok 4.5 marginal serving gross margin ≈ 67% central, 80% CI ≈ 10–85%** at API list price under full-cycle owned TCO; ~92% under strict cash-marginal cost; ~29% at the Anthropic-contract opportunity cost. Zephyr's "not juicing margins" claim is definition-dependent.
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).
 

@@ -1,5 +1,5 @@
 # GPT-5.6 Pro consult — ADOPTED-FINDINGS SUMMARY (req_1783636621475_l5tccc, 54m21s, 2026-07-09)
-# conversation: https://chatgpt.com/c/6a50228e-a398-83e8-8445-3c39b76730db
+# conversation: (conversation archived privately)
 # PROVENANCE NOTE (corrected 2026-07-11): this page is a selected-quotes digest, not the full
 # response — an earlier revision mislabeled it "verbatim". The complete original response
 # (46,417 chars, recovered from the receiving session's transcript, SHA-256-stamped) is now

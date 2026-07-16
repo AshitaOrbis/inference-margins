@@ -1,4 +1,6 @@
-# Methods note: leave-one-anchor-out validation of the effective-MFU abstraction
+# Methods note: single-anchor (H800-trained) cross-platform transfer test of the effective-MFU abstraction
+
+> **Naming note.** This was originally called "leave-one-anchor-out," which is a misnomer: the experiment fits ONE global coefficient on the H800 production anchor and predicts the other platforms — it does not iteratively leave each anchor out and refit on the rest. Read it as a **single-anchor cross-platform transfer test**; the result and its limitations below are unchanged.
 
 > Run 2026-07-10, as prescribed by the external review (the empiricist's "load-bearing experiment").
 > Code: `tests/loao.mjs` in the project tree. Predictions were fixed before comparison.

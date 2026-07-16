@@ -1,6 +1,6 @@
 # Zhipu / Z.ai (GLM) — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 50m23s · model `gpt-5-6-pro` (Pro-verified) · [conversation](https://chatgpt.com/c/6a5083ce-d2bc-83e8-a922-2e07da15036a)
+> Run 2026-07-09 · 50m23s · model `gpt-5-6-pro` (Pro-verified) · conversation archived privately
 > Verdict: **GLM-5.2 marginal serving gross margin ≈ 60% central, 80% CI ≈ 35–77%** at direct API list price. Anchored by audited HK filings: FY2025 cloud/API gross margin 18.9% (H1 2025: −0.4%).
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).
 

@@ -1,6 +1,6 @@
 # OpenAI — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 52m06s · model `gpt-5-6-pro` (Pro-verified) · [conversation](https://chatgpt.com/c/6a508366-a9f0-83e8-ac84-e84bc2bad3e1)
+> Run 2026-07-09 · 52m06s · model `gpt-5-6-pro` (Pro-verified) · conversation archived privately
 > Verdict: **GPT-5.6 Sol marginal serving gross margin ≈ 94% central, 80% CI ≈ 86–97%** at standard short-context list price (7 cached : 2 fresh : 1 output mix).
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).
 

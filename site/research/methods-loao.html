@@ -52,7 +52,10 @@
 <div class="page">
 <p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
 <section class="report">
-<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Methods note: leave-one-anchor-out validation of the effective-MFU abstraction</h1>
+<div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Methods note: single-anchor (H800-trained) cross-platform transfer test of the effective-MFU abstraction</h1>
+<blockquote>
+<p><strong>Naming note.</strong> This was originally called &quot;leave-one-anchor-out,&quot; which is a misnomer: the experiment fits ONE global coefficient on the H800 production anchor and predicts the other platforms — it does not iteratively leave each anchor out and refit on the rest. Read it as a <strong>single-anchor cross-platform transfer test</strong>; the result and its limitations below are unchanged.</p>
+</blockquote>
 <blockquote>
 <p>Run 2026-07-10, as prescribed by the external review (the empiricist&#39;s &quot;load-bearing experiment&quot;).
 Code: <code>tests/loao.mjs</code> in the project tree. Predictions were fixed before comparison.</p>
@@ -113,7 +116,7 @@ Code: <code>tests/loao.mjs</code> in the project tree. Predictions were fixed be
 
 
 </section>
-<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Reports are archived as produced (typos and all); confidence labels are the authoring engine's own.</p></footer>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
 </div>
 </body>
 </html>

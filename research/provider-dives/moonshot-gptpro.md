@@ -1,6 +1,6 @@
 # Moonshot AI (Kimi) — GPT-5.6 Pro deep dive
 
-> Run 2026-07-09 · 46m58s · model `gpt-5-6-pro` (Pro-verified, Ashitaorbis project) · [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46081919a65018455ee56dd/c/6a508ffe-baf4-83e8-bba0-8fb5edfe77bd)
+> Run 2026-07-09 · 46m58s · model `gpt-5-6-pro` (Pro-verified, Ashitaorbis project) · conversation archived privately
 > Verdict: **Kimi K2.7 Code output-token marginal serving gross margin ≈ 81% central, 80% CI ≈ 55–91%** at the $4/M list price (central COGS $0.75/M output).
 > Note: the first Moonshot dive completed but its response expired from the MCP retention window before collection; this is the re-run.
 > Archived verbatim below (DOM-extracted; math notation may render with minor duplication artifacts).

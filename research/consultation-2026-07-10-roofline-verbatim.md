@@ -1,6 +1,6 @@
 # Roofline consultation — VERBATIM full derivation (recovered original)
 
-> The complete, unedited response of the roofline throughput-model consultation (58m52s, `gpt-5-6-pro`, Pro-verified, 2026-07-10; [conversation](https://chatgpt.com/g/g-p-6a42f0b0f46e81919a65018455ee56dd/c/6a516cd6-1834-83e8-a950-20302f616c6d)).
+> The complete, unedited response of the roofline throughput-model consultation (58m52s, `gpt-5-6-pro`, Pro-verified, 2026-07-10; conversation archived privately).
 > **Provenance:** recovered 2026-07-11 from the session transcript that received it — original bytes, not a regeneration. The [adopted-verdict wrapper](consult-roofline.html) states the decision the site took (anchor fits stay); this page is the full derivation behind it. The runnable diagnostic is at [/tests/roofline-diagnostic.mjs](../tests/roofline-diagnostic.mjs).
 > **SHA-256 (response body below this header):** `c3b6e650d6e80e11ff9c7c03b502563401a45fc0d99e9dbac6f2415e37ae891d`
 
