@@ -1,0 +1,66 @@
+{
+  "migration": "im-arc T2 generic electricity default move, 2026-08-22",
+  "preMoveUsdPerKwh": 0.07,
+  "inventorySources": [
+    "site/engine.js:PERSPECTIVES-page-authored-routes",
+    "site/engine.js:EXEC_SUMMARY_ROWS-final-answer",
+    "tests/fixtures-baseline-v22.json",
+    "tests/fixtures-minted-tokens-v211.json",
+    "tests/fixtures-pre-t2-kwh-move.json"
+  ],
+  "entries": [
+    {
+      "id": "perspective:x90-v1",
+      "registry": "PERSPECTIVES",
+      "key": "x90-v1",
+      "pinPath": "set.kwh",
+      "reason": "archived page-authored owned-TCO route"
+    },
+    {
+      "id": "perspective:x90-v2",
+      "registry": "PERSPECTIVES",
+      "key": "x90-v2",
+      "pinPath": "set.kwh",
+      "reason": "vintaged page-authored owned-TCO batch route"
+    },
+    {
+      "id": "exec-summary:owned-tco",
+      "registry": "EXEC_SUMMARY_ROWS",
+      "key": "owned-tco",
+      "pinPath": "electricityRegionRef",
+      "reason": "published final-answer owned-TCO reading. im-arc T4 fold (2026-08-24, memo §2 [F8]): the unsourced $0.07/kWh override is WITHDRAWN — the row now inherits REGIONS['us-industrial'] BY ID, so no literal can go stale against the registry it cites. The pre-move 0.07 is preserved in tests/fixtures-t4-declared-delta.json (before.defaults.execSummaryOwnedTcoKwh) and reproduces through the generated pre-T4 bundle in tests/t4-historical-pins.mjs.",
+      "pinKind": "region-inheritance",
+      "preT4Value": 0.07
+    }
+  ],
+  "fixturePins": [
+    "fixture:baseline-v22:dsr1|x90-v1",
+    "fixture:baseline-v22:dsv4f|x90-v1",
+    "fixture:baseline-v22:dsv4|x90-v1",
+    "fixture:baseline-v22:gemflash|x90-v1",
+    "fixture:baseline-v22:gemini|x90-v1",
+    "fixture:baseline-v22:glm47|x90-v1",
+    "fixture:baseline-v22:glm|x90-v1",
+    "fixture:baseline-v22:gpt|x90-v1",
+    "fixture:baseline-v22:grok|x90-v1",
+    "fixture:baseline-v22:haiku|x90-v1",
+    "fixture:baseline-v22:kimi|x90-v1",
+    "fixture:baseline-v22:luna|x90-v1",
+    "fixture:baseline-v22:opus|x90-v1",
+    "fixture:baseline-v22:sonnet|x90-v1",
+    "fixture:baseline-v22:terra|x90-v1",
+    "fixture:minted-v211:v2-004",
+    "fixture:minted-v211:v3-012",
+    "fixture:minted-v211:v4-042",
+    "fixture:minted-v211:v4-046",
+    "fixture:minted-v211:v4-050",
+    "fixture:minted-v211:v4-062",
+    "fixture:minted-v211:v4-068",
+    "fixture:pre-t2-kwh-move:forced-tco:gptpro-r3",
+    "fixture:pre-t2-kwh-move:forced-tco:median",
+    "fixture:pre-t2-kwh-move:generic",
+    "fixture:pre-t2-kwh-move:perspective:x90-v1",
+    "fixture:pre-t2-kwh-move:perspective:x90-v2"
+  ],
+  "note": "im-arc T4 fold (2026-08-24): the exec-summary owned-TCO entry changed pin KIND — it inherits its region by id instead of pinning a literal. The two perspective entries keep their literal kwh pin and gain the wider T4 bundle in their own `set` blocks (memo §6 [F10])."
+}

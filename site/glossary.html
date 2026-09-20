@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Glossary · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/glossary">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="index.html">← Frontier Inference Margins</a> · <a href="research/index.html">research reports</a></p>
+<section class="report">
+<h2>Glossary</h2>
+<p class="gl-lede">Every term this site uses for its own ideas, in one place, grouped by the question you are asking.
+One plain definition each, then the technical detail only where the numbers need it. 105 entries.
+Terms in <strong>bold</strong> inside a definition are entries of their own.</p>
+<p class="gl-lede"><strong>If you read one entry, read <a href="#serving-margin">serving margin</a></strong> — it is the
+one number this site computes, and it is not a <a href="#company-gross-margin">company gross margin</a>.</p>
+<nav class="gl-nav"><ul>
+<li><a href="#g-A">What number is this page actually giving me?</a></li>
+<li><a href="#g-B">Where do the prices come from?</a></li>
+<li><a href="#g-C">What does it cost to serve a token?</a></li>
+<li><a href="#g-D">How fast does an accelerator serve, and how does the page know?</a></li>
+<li><a href="#g-E">What actually happens when a model serves a token?</a></li>
+<li><a href="#g-F">Whose hardware, and how much of it?</a></li>
+<li><a href="#g-G">What kind of traffic, and why does it matter?</a></li>
+<li><a href="#g-H">How much should I trust this number?</a></li>
+<li><a href="#g-I">Abbreviations that appear on the page</a></li>
+<li><a href="#g-J">Added after session 3 (the entries a first-time reader was missing)</a></li>
+</ul></nav>
+
+<h3 id="g-A">What number is this page actually giving me?</h3>
+<dl class="gl">
+<dt id="serving-margin"><a class="gl-self" href="#serving-margin">serving margin</a></dt>
+<dd>The page's one metric. For one token, at a stated <a href="#traffic-mix"><strong>traffic mix</strong></a>: one minus (<a href="#serving-cost"><strong>serving cost</strong></a> ÷ <a href="#effective-price"><strong>effective price</strong></a>). It answers &quot;of each dollar this provider bills for tokens, how much is left after the direct cost of serving them?&quot; Full technical name, used once in the methods box: <em>unit direct-serving contribution margin</em>. &quot;Unit&quot; = per token; &quot;direct-serving&quot; = only the costs of serving, as the page draws that boundary (see <a href="#serving-cost"><strong>serving cost</strong></a> for what is inside it and what is not); &quot;contribution&quot; = what is left of the price after those costs. It is <em>not</em> a company's gross margin (see <a href="#company-gross-margin"><strong>company gross margin</strong></a>).</dd>
+<dt id="blended"><a class="gl-self" href="#blended">blended</a></dt>
+<dd>Computed across the whole traffic mix: fresh input, cached input and output tokens together, each at its own price and cost. The page's serving margin is blended unless a card says otherwise.</dd>
+<dt id="output-token-margin"><a class="gl-self" href="#output-token-margin">output-token margin</a></dt>
+<dd>The serving margin on output tokens alone. Shown for one provider (Moonshot) whose traffic mix is not public. Not interchangeable with a blended figure: output tokens carry the highest price and the highest cost, so the two are different calculations and are never ranked against each other.</dd>
+<dt id="company-gross-margin"><a class="gl-self" href="#company-gross-margin">company gross margin</a></dt>
+<dd>What a company's own accounts report: (revenue − cost of revenue) ÷ revenue, under that company's accounting policy. Where the object is a product line or a segment, the page says <strong>product gross margin</strong> or <strong>segment gross margin</strong>. Different companies put different things in cost of revenue (cloud commissions, free-tier compute, model training), so comparing two companies' gross margins requires matching those boundaries first; none of them is a serving margin either way. §7 of the report walks from one to the other.</dd>
+<dt id="cohort-margin"><a class="gl-self" href="#cohort-margin">cohort margin</a></dt>
+<dd>A figure some reports give for one group of users, always named with the group and the cost the source counted: &quot;OpenAI's reported 70% compute margin on paying users&quot; is (that group's revenue − the compute cost of serving them) ÷ that revenue. Wider than a token, narrower than the company. Cited; never computed here.</dd>
+<dt id="reading"><a class="gl-self" href="#reading">reading</a></dt>
+<dd>One number the calculator produces at one complete set of settings. The page names three scenarios a reading can belong to, and each has its own entry below: the <a href="#opening-scenario"><strong>opening scenario</strong></a>, the <a href="#planning-baseline"><strong>planning baseline</strong></a> and the <a href="#lead-adjusted-baseline"><strong>lead-adjusted baseline</strong></a>.</dd>
+<dt id="opening-scenario"><a class="gl-self" href="#opening-scenario">opening scenario</a></dt>
+<dd>The settings the calculator loads first. The page's built-in default is the GPT-5.6 Pro estimate's own settings, the built-in opening state since 2026-08-09; a reader can make any other scenario the default for their own browser from the result window, and then that is what their browser loads first. The built-in default's author states 83.1% at <a href="#list-price"><strong>list price</strong></a> for its settings; the calculator reads about 82% at the same settings today, because the calculator has changed since that figure was stated, and the estimate card says how. The built-in default is <em>not</em> the <a href="#planning-baseline"><strong>planning baseline</strong></a>, and it is not the calculator's engine defaults either — those carry no assumed lead. The estimate card that supplies those settings says that it is the built-in default.</dd>
+<dt id="planning-baseline"><a class="gl-self" href="#planning-baseline">planning baseline</a></dt>
+<dd>The page's planning scenario with no assumed efficiency lead: the <a href="#default-fleet"><strong>default fleet</strong></a>, <strong>planning rent</strong>, 50% <a href="#utilization"><strong>utilization</strong></a>, the <a href="#reference-mix"><strong>Reference mix</strong></a>, the adopted 2.5-trillion-parameter Opus, <a href="#algorithmic-lead"><strong>algorithmic lead</strong></a> 0 months, <strong>family multipliers</strong> 1.0. About 58% for Opus at <a href="#effective-price"><strong>effective price</strong></a>, and about 63% at <a href="#list-price"><strong>list price</strong></a>. It removes one assumption and keeps the others — the fleet, the model size, the utilization, the prefill transfer and the analyst-set rents are all still assumed — and it is reproducible by a reader because every one of those assumptions is stated, not because they are all public facts.</dd>
+<dt id="lead-adjusted-baseline"><a class="gl-self" href="#lead-adjusted-baseline">lead-adjusted baseline</a></dt>
+<dd>The <a href="#planning-baseline"><strong>planning baseline</strong></a> plus the adopted 3-month <a href="#algorithmic-lead"><strong>algorithmic lead</strong></a> for the closed labs. About 68% for Opus at <a href="#effective-price"><strong>effective price</strong></a>. It is a labeled assumption, not a measurement, and it is not the page's built-in opening scenario. Older text on this site called it the calculator's &quot;ratified-prior default&quot; or &quot;own default state&quot;; both names are retired, the second because the calculator's engine defaults carry no lead at all.</dd>
+<dt id="estimate"><a class="gl-self" href="#estimate">estimate</a></dt>
+<dd>A number a named <a href="#estimator"><strong>estimator</strong></a> produced, as distinct from a reading the calculator produced. The two estimate cards at the top carry GPT-5.6 Pro's 83.1% (at list) and Fable 5's ≈77% (at effective price), each with the estimator's own <a href="#range"><strong>range</strong></a> — note the two billing bases differ, so the pair is not an interval.</dd>
+<dt id="estimator"><a class="gl-self" href="#estimator">estimator</a></dt>
+<dd>Whoever produced an estimate: a model run (GPT-5.6 Pro, Fable 5) or a named analyst. The page reports estimators' figures at their own settings and does not average them.</dd>
+<dt id="claim"><a class="gl-self" href="#claim">claim</a></dt>
+<dd>A margin figure asserted by somebody outside the page (a post, a podcast, a report). §1 collects the claims; the range explorer lets you see what settings would move toward each one. Note the two axes do not line up one-to-one: <em>claim</em> says the figure came from outside and is under examination, while <a href="#reading"><strong>reading</strong></a> says the calculator computed it here. An outside analyst's <a href="#estimate"><strong>estimate</strong></a> is both — a claim by origin, and an estimate by kind — and the page treats it as a claim when it is being examined and as an estimate when its settings are being loaded.</dd>
+<dt id="range"><a class="gl-self" href="#range">range</a></dt>
+<dd>The span of a number across declared alternatives, always with the alternatives named: an <strong>estimator's stated range</strong> (&quot;GPT-5.6 Pro's 68–92%&quot;), a <strong>price-preset range</strong> (the planning baseline across the page's price presets, 58–83%), a <strong>single-setting sensitivity</strong> (utilization 50%→35%: 58%→40%), a <strong>traffic-mix envelope</strong> (37–66% across the named mixes). None of these carries a stated coverage probability — nobody has asserted &quot;95% of the time&quot; — so none is a confidence interval; where an archived report says &quot;80% credible interval&quot;, that is quoted as that report's own claim.</dd>
+<dt id="sensitivity"><a class="gl-self" href="#sensitivity">sensitivity</a></dt>
+<dd>How far a reading moves when one setting moves and everything else stays. The page's largest: <strong>active parameters</strong>, <a href="#utilization"><strong>utilization</strong></a>, and the <a href="#cost-basis"><strong>cost basis</strong></a>.</dd>
+<dt id="counterfactual"><a class="gl-self" href="#counterfactual">counterfactual</a></dt>
+<dd>A reading at settings the page does not adopt, shown to answer &quot;what if&quot;.</dd>
+<dt id="floor"><a class="gl-self" href="#floor">floor</a></dt>
+<dd>A number a stated fact bounds from below, always with the fact: &quot;the B300 rental floor, $0.289 per million output tokens&quot; means &quot;rent a B300 node at Nebius's public price, run it at its published benchmark speed, and the accelerator cost of an output token is that much — before any overhead, idle time or non-GPU cost&quot;. It bounds <em>that</em> configuration at <em>that</em> price and speed; another operating point can be cheaper. An assumed baseline (the planning baseline) is not a floor in this sense at all.</dd>
+<dt id="markup-versus-margin"><a class="gl-self" href="#markup-versus-margin">markup versus margin</a></dt>
+<dd>A markup is profit ÷ cost; a margin is profit ÷ price. DeepSeek's famous &quot;545% cost-profit ratio&quot; is a markup; the same numbers as a margin are 84.5%.</dd>
+<dt id="percentage-point"><a class="gl-self" href="#percentage-point">percentage point</a></dt>
+<dd>The difference between two percentages. A margin moving from 51% to 30% has fallen 21 percentage points, not 21 percent.</dd>
+</dl><hr>
+
+
+<h3 id="g-B">Where do the prices come from?</h3>
+<dl class="gl">
+<dt id="list-price"><a class="gl-self" href="#list-price">list price</a></dt>
+<dd>The published price per million tokens. The three categories the page's basic example uses are fresh input, cached input and output ($5 / $0.50 / $25 for Claude Opus in mid-2026); providers also publish batch prices, cache-write premiums and context-length tiers, which the page handles where it says so.</dd>
+<dt id="cache-read-price"><a class="gl-self" href="#cache-read-price">cache-read price</a></dt>
+<dd>The list price of a cached input token; for Anthropic, 10% of the fresh-input price. The page assumes serving a cached token costs 5% of a fresh prefill, so under that assumption cached traffic carries a higher margin than fresh traffic — if the customer is billed at the cache price for it (see <a href="#billable-cached-share"><strong>billable cached share</strong></a>) and before the cache storage and transfer costs the page does not model.</dd>
+<dt id="cache-write"><a class="gl-self" href="#cache-write">cache write</a></dt>
+<dd>Some providers charge a premium to <em>create</em> a cache entry (OpenAI 1.25×; Anthropic 1.25× or 2× depending on how long it is kept — its <strong>TTL</strong>, time to live). The page models the premium on the revenue side, off by default; the serving cost is unchanged because the prefill happens either way.</dd>
+<dt id="batch-price"><a class="gl-self" href="#batch-price">batch price</a></dt>
+<dd>The discounted price for requests that can wait (usually half price). The page assumes a <em>batch share</em> of traffic (15% by default) at this price. Not the same &quot;batch&quot; as the serving <a href="#batch"><strong>batch</strong></a> size.</dd>
+<dt id="discount"><a class="gl-self" href="#discount">discount</a></dt>
+<dd>The page's assumed negotiated discount off list for large customers (5% by default). Together with the batch share it turns list price into <a href="#effective-price"><strong>effective price</strong></a>.</dd>
+<dt id="effective-price"><a class="gl-self" href="#effective-price">effective price</a></dt>
+<dd>What the page assumes the provider receives per million tokens at the chosen traffic mix, after the cache-read price, the batch share and the discount. Modeled, not observed revenue; the page says &quot;realized&quot; only for a figure a source reported as received. <a href="#at-list"><strong>At list</strong></a> means batch share and discount both at 0%.</dd>
+<dt id="at-list"><a class="gl-self" href="#at-list">at list</a></dt>
+<dd>Computed with no batch share and no discount. The provider cards and the GPT-5.6 Pro estimate are at list; the planning baseline and the Fable 5 estimate are at effective price.</dd>
+<dt id="token-input-output"><a class="gl-self" href="#token-input-output">token, input, output</a></dt>
+<dd>A token is the unit models read and write, roughly three-quarters of a word of English. Input tokens are what you send (the prompt, the conversation so far); output tokens are what the model writes back. Prices and costs are quoted per million of each.</dd>
+</dl><hr>
+
+
+<h3 id="g-C">What does it cost to serve a token?</h3>
+<dl class="gl">
+<dt id="serving-cost"><a class="gl-self" href="#serving-cost">serving cost</a></dt>
+<dd>The page's modeled direct cost per million tokens: the accelerator time a token needs (from <a href="#throughput"><strong>throughput</strong></a>), priced at the <a href="#cost-basis"><strong>cost basis</strong></a>, divided by <a href="#utilization"><strong>utilization</strong></a>, plus whatever <a href="#serving-stack-overhead"><strong>serving-stack overhead</strong></a> the selected cost basis carries as a separate line. The page does not separately model support, research, sales, revenue shares, free traffic, or unbilled retries and storage.</dd>
+<dt id="cost-of-revenue"><a class="gl-self" href="#cost-of-revenue">cost of revenue</a></dt>
+<dd>The accounting line a company subtracts from revenue before its gross margin. What a given provider puts there is its own accounting policy, and the differences are exactly what makes two companies' figures hard to compare: the compute that served paying traffic is the largest piece, but whether free-tier compute, cloud commissions and model training sit here or elsewhere varies, and where a specific company draws that line is often not disclosed. The page's §7 discussion includes free traffic; the attribution annex records the Anthropic commission-classification question as unverified. Also called COGS.</dd>
+<dt id="accelerator"><a class="gl-self" href="#accelerator">accelerator</a></dt>
+<dd>Any chip built to run AI models: an NVIDIA GPU, a Google TPU, an AWS Trainium, a Huawei Ascend. The page says &quot;accelerator&quot; when the sentence applies to all of them and the product name when it means one.</dd>
+<dt id="accelerator-hour"><a class="gl-self" href="#accelerator-hour">accelerator-hour</a></dt>
+<dd>The unit accelerators are rented in: one accelerator for one hour. Tables write $/GPU-hr or $/chip-hr with the accelerator named in the row.</dd>
+<dt id="cost-basis"><a class="gl-self" href="#cost-basis">cost basis</a></dt>
+<dd>Which <em>kind</em> of price the cost side uses for an accelerator-hour. The page has exactly three, and which one you pick moves the answer more than any slider:</dd>
+<dt id="price-preset"><a class="gl-self" href="#price-preset">price preset</a></dt>
+<dd>A named set of accelerator prices on one cost basis and nothing else (&quot;the China public-cloud prices&quot;). Distinct from a <strong>scenario preset</strong>, which also sets the fleet.</dd>
+<dt id="cash-cost"><a class="gl-self" href="#cash-cost">cash cost</a></dt>
+<dd>The xAI report's short-run lens: power and operations only, nothing toward paying the hardware off. A floor for &quot;what does one more token cost tonight&quot;, not a business cost.</dd>
+<dt id="opportunity-cost"><a class="gl-self" href="#opportunity-cost">opportunity cost</a></dt>
+<dd>The xAI report's third lens: what a GPU-hour would fetch if sold to a customer instead (Anthropic pays xAI about $5.27 per bundled GPU-hour). It applies only to capacity that is actually substitutable for that contract — the ~325,000 contracted GPUs, not every GPU-hour in the fleet.</dd>
+<dt id="tco"><a class="gl-self" href="#tco">TCO</a></dt>
+<dd>Total cost of ownership; see <strong>owned cost</strong> (the hourly cost of an accelerator the lab owns: purchase price spread over its life, power, datacenter, operations).</dd>
+<dt id="searched-range"><a class="gl-self" href="#searched-range">searched range</a></dt>
+<dd>The low–high figure a declared dial range produces. The page finds it by evaluating the corners of the box those ranges describe, and by sampling each axis to check whether the margin moves in one direction along it. That is a <em>search</em>, not a proof: where the modeled fleet changes shape inside the box — a width, batch or membership transition — a setting between two samples can compute outside the range the search found, and the page says so rather than calling the range attainable. A range whose own middle assumption falls outside it is labeled as such, because the two are then not describing the same set of settings.</dd>
+<dt id="utilization"><a class="gl-self" href="#utilization">utilization</a></dt>
+<dd>The share of paid accelerator capacity that is actually serving billed tokens. Fleets are sized for the busiest hour, so much of the time much of the fleet is idle but still paid for. The page's planning default is 50%; no frontier provider's serving occupancy is in this page's evidence record, and the sweep for one returned a rigorous negative. Two cautions: a replay that sets utilization to 100% is using a per-occupied-chip convention from its source, not claiming full occupancy; and utilization (time and capacity in use) is a different thing from the <a href="#efficiency-factor-η"><strong>efficiency factor (η)</strong></a> (how much of a chip's ceiling it reaches while in use).</dd>
+<dt id="utilization-divisor"><a class="gl-self" href="#utilization-divisor">utilization divisor</a></dt>
+<dd>How the page charges idle capacity: serving cost is divided by utilization, so the tokens that were served pay for the time nothing was. At 50% utilization each served token is charged twice the accelerator cost it would carry on a fully busy fleet. Moving utilization from 50% to 35% takes the Opus planning baseline from 58% to 40%.</dd>
+<dt id="serving-stack-overhead"><a class="gl-self" href="#serving-stack-overhead">serving-stack overhead</a></dt>
+<dd>The cost of everything around the accelerator: host CPUs, networking, the control plane, reliability engineering. Where it enters depends on the cost basis: under <strong>owned cost</strong> it is a modeled line; under rent it is assumed inside the rent, except where an estimator declares an add-on (GPT-5.6 Pro adds 10%). Not to be confused with <a href="#serving-stack-efficiency"><strong>serving-stack efficiency</strong></a>, which is about throughput.</dd>
+<dt id="hardware-family"><a class="gl-self" href="#hardware-family">hardware family</a></dt>
+<dd>The four groups the page's <strong>family multipliers</strong> act on: NVIDIA, TPU, Trainium, Ascend.</dd>
+<dt id="pue"><a class="gl-self" href="#pue">PUE</a></dt>
+<dd>Power usage effectiveness: total datacenter power divided by the power the computing equipment draws. 1.25 means a quarter again on top for cooling and distribution.</dd>
+<dt id="tdp"><a class="gl-self" href="#tdp">TDP</a></dt>
+<dd>Thermal design power: the wattage a chip is rated for. The page uses it as a stand-in for operating power because no per-accelerator measurement of real serving draw is in this page's evidence record.</dd>
+</dl><ul>
+<li><strong>on-demand rent</strong> — a cloud&#39;s published hourly rate, no commitment. Publishing a rate does
+not guarantee capacity at that rate; the page uses it as a price, not as a promise.</li>
+<li><strong>planning rent</strong> — the page&#39;s default: for each accelerator, a low or committed-term rate
+the page registered as its planning assumption (an annual-commit, a 3-year, a capacity-block
+rate, each quote keeping its own term). A scenario vector, not one observed invoice. The page
+plans on it because large labs are assumed not to pay on-demand rates; the on-demand case is
+kept as a price preset for readers who want it.</li>
+<li><strong>owned cost</strong> — what it costs to own the accelerator: purchase price spread over its life,
+power, the datacenter, operations. Also called total cost of ownership (<strong>TCO</strong>).</li>
+</ul>
+
+<p>The page does not silently mix bases inside one number; where a fleet declares some legs rented
+and some owned, the section says so. On the xAI card the same GPU-hour is valued at $0.60
+(cash), $2.40 (owned) or $5.27 (what a customer pays for it), and the margin reads about 91%,
+63% or 19% accordingly.</p>
+
+<hr>
+
+
+<h3 id="g-D">How fast does an accelerator serve, and how does the page know?</h3>
+<dl class="gl">
+<dt id="throughput"><a class="gl-self" href="#throughput">throughput</a></dt>
+<dd>Tokens per second one accelerator produces at an <a href="#operating-point"><strong>operating point</strong></a>. It enters the cost identity as a divisor, so doubling it halves the accelerator cost per token. Which input moves a <em>particular</em> reading most depends on the scenario and on how far each is varied — on the xAI card the <a href="#cost-basis"><strong>cost basis</strong></a> moves the answer further than any slider does. Written &quot;tokens/s per accelerator&quot; in prose and tok/s/GPU in tables. Three figures get mixed up in sources: output (generated) tokens only, input tokens only, and both together; the page says which it means.</dd>
+<dt id="operating-point"><a class="gl-self" href="#operating-point">operating point</a></dt>
+<dd>The conditions a throughput number applies at: batch size, context length, precision and how the model is arranged across chips. Either measured (an anchor's conditions) or assumed (an analyst-set row's). A throughput figure quoted without its operating point is not enough for a matched cost comparison.</dd>
+<dt id="batch"><a class="gl-self" href="#batch">batch</a></dt>
+<dd>How many requests an accelerator serves at once (a serving setting, not the Batch API's billing share). A bigger batch spreads the cost of reading the model's weights over more tokens, so cost per token falls; at a fixed hardware speed it can also mean each user's tokens arrive more slowly, which is the trade-off a deployment weighs against its latency target. The page does not model latency targets directly, so it does not compute that side of it. Where the unit is in question the page says so: the open Trainium question is whether its recorded batch is per chip or per replica.</dd>
+<dt id="anchor"><a class="gl-self" href="#anchor">anchor</a></dt>
+<dd>A published, real-world throughput measurement the page's model is fitted to reproduce. The best one: DeepSeek's March 2025 disclosure, 1,850 output tokens/s per H800. Other published measurements the page cites but does not fit (MLPerf's GB300 results, the CloudMatrix paper) are <em>supporting observations</em>, not anchors. There are very few anchors, and none for a model as large as Claude Opus; the page says so.</dd>
+<dt id="calibration-class"><a class="gl-self" href="#calibration-class">calibration class</a></dt>
+<dd>How each accelerator's throughput number was set (a rent has its own source label). Four classes, and the borrowed one always says which kind on the row:</dd>
+<dt id="efficiency-factor-η"><a class="gl-self" href="#efficiency-factor-η">efficiency factor (η)</a></dt>
+<dd>The fraction of the active limit — whichever of compute, memory bandwidth or interconnect is binding — that the model assumes an accelerator reaches at an operating point. Set per accelerator by its calibration class. Not the same quantity as <a href="#mfu"><strong>MFU</strong></a>.</dd>
+<dt id="mfu"><a class="gl-self" href="#mfu">MFU</a></dt>
+<dd>Model FLOPS utilization: the fraction of a chip's <em>peak compute</em> actually used. An older, compute-only quantity; the 2026-07-10 cross-platform transfer test used one global MFU and it failed. The live model does not use it — it uses the <a href="#efficiency-factor-η"><strong>efficiency factor (η)</strong></a>, which is a fraction of the <em>active roofline limit</em> rather than of peak compute. MFU still appears in the methods note and throughout the archived hardware reports and consults, in their own words.</dd>
+<dt id="roofline"><a class="gl-self" href="#roofline">roofline</a></dt>
+<dd>The throughput ceiling set by the slowest of three limits: how fast the chip computes, how fast it reads its memory, how fast it talks to its neighbours. For decoding a large model the memory and interconnect limits usually bind, which is why &quot;inference is a memory problem&quot; and why a chip with more memory bandwidth can beat one with more raw compute.</dd>
+<dt id="cross-platform-transfer-test"><a class="gl-self" href="#cross-platform-transfer-test">cross-platform transfer test</a></dt>
+<dd>The page's published falsification test (2026-07-10): fit one <a href="#mfu"><strong>MFU</strong></a> on the DeepSeek H800 anchor and predict every other accelerator from its spec sheet — mean error 37%, worst 59%; it fails. A roofline follow-up fitted the same way did better at most points but still failed its whole-platform gate (worst −40%, on Ascend at a 15 ms latency point). Consequence for <em>this page</em>: it keeps a separate coefficient per accelerator rather than one shared number, and accelerators without an anchor carry real uncertainty. (The note was originally titled &quot;leave-one-anchor-out&quot;; that name is retired.)</dd>
+<dt id="serving-deployment"><a class="gl-self" href="#serving-deployment">serving deployment</a></dt>
+<dd>Which accelerators actually serve a given closed model, in what shares. No provider's current serving allocation is in this page's evidence record — the public facts are purchase and commitment announcements, which are a different thing. The page's fleet is an assumption, and every reading says so.</dd>
+<dt id="weight-placement"><a class="gl-self" href="#weight-placement">weight placement</a></dt>
+<dd>How a model's weights are spread across the chips of one leg (the <em>replica width</em> the page's capacity solver finds). A modeled arrangement, not a disclosure.</dd>
+<dt id="replica-sharding"><a class="gl-self" href="#replica-sharding">replica, sharding</a></dt>
+<dd>One copy of the model running across a group of chips is a replica; sharding is splitting the weights among those chips. A bigger model needs more chips per replica, and how many is one of the things the page solves for.</dd>
+<dt id="memory-planning-convention-loaded-bytes"><a class="gl-self" href="#memory-planning-convention-loaded-bytes">memory-planning convention (loaded bytes)</a></dt>
+<dd>The page's rule for how much accelerator memory a model's weights occupy at a given precision (1 byte per parameter at FP8 by default). It decides whether a leg is <strong>feasible</strong>, capped, or infeasible; it is a planning convention, firewalled from the throughput calibration.</dd>
+</dl><ul>
+<li><strong>fitted</strong> — the coefficient reproduces a published measurement on that accelerator (the
+H800 from DeepSeek&#39;s disclosure; the GB200 from a published vLLM run). Fitted to a
+measurement, not a measurement: it proves the model can hit the one number it was tuned to.</li>
+<li><strong>borrowed</strong> — <em>within-family</em> (H100 and H200 from the H800); <em>same-platform bridge,
+analyst-set</em> (TPU v7); <em>out-of-family joint fit</em> (Trainium2 and Trainium3, fitted across
+other hardware families, with no serving measurement of their own).</li>
+<li><strong>analyst-set</strong> — set by judgment at an assumed operating point. The GB300 (no anchor); and
+the H20 and Ascend 910C, whose published measurements informed the calibration but whose live
+values are separate judgment-set numbers that do not reproduce them.</li>
+<li><strong>projection</strong> — no public serving measurement and no public price; only the announced shape
+of the chip (Vera Rubin).</li>
+</ul>
+
+<p>The grounding ledger keeps the finer internal names.</p>
+
+<hr>
+
+
+<h3 id="g-E">What actually happens when a model serves a token?</h3>
+<dl class="gl">
+<dt id="prefill"><a class="gl-self" href="#prefill">prefill</a></dt>
+<dd>Reading the input: the model processes the whole prompt in one parallel pass before it writes anything. Compute-heavy. On the page's planning baseline about 70% of modeled cost is prefill, because inputs outnumber outputs 15 to 1.</dd>
+<dt id="decode"><a class="gl-self" href="#decode">decode</a></dt>
+<dd>Writing the output, one token at a time, each step re-reading the model's weights and the <a href="#kv-cache"><strong>KV cache</strong></a>. Memory-heavy. The output price is high partly because decode is the expensive, slow part.</dd>
+<dt id="kv-cache"><a class="gl-self" href="#kv-cache">KV cache</a></dt>
+<dd>The per-request working memory: the keys and values the model computed for every earlier token, kept so decode does not redo them. Grows with context length and eats accelerator memory; together with the weights it is one of the constraints on batch size.</dd>
+<dt id="cache-read"><a class="gl-self" href="#cache-read">cache read</a></dt>
+<dd>Serving an input token whose prefill was already done for an earlier request and stored (the shared start of a long conversation, a system prompt). The page assumes it costs 5% of a fresh prefill; the provider bills it at its <a href="#cache-read-price"><strong>cache-read price</strong></a> (Anthropic: 10% of fresh input) — subject to the <a href="#billable-cached-share"><strong>billable cached share</strong></a>.</dd>
+<dt id="accelerator-memory-hbm"><a class="gl-self" href="#accelerator-memory-hbm">accelerator memory (HBM)</a></dt>
+<dd>The high-bandwidth memory on the accelerator itself, where the weights and KV cache live during serving. Capacity (GB) limits what fits; bandwidth (TB/s) limits decode speed.</dd>
+<dt id="interconnect"><a class="gl-self" href="#interconnect">interconnect</a></dt>
+<dd>The links between accelerators (NVIDIA's NVLink; Google's ICI). A large model is spread across many chips, so decode speed also depends on how fast they exchange data. A <a href="#rack"><strong>rack</strong></a> is the set of chips on one fast interconnect.</dd>
+<dt id="precision"><a class="gl-self" href="#precision">precision</a></dt>
+<dd>The number format the model runs in: FP8 (8-bit floating point), FP4, INT8, BF16. Lower precision means smaller weights, faster memory reads and more throughput, at some quality risk. Which precision a closed model is actually served at is usually not public; the page states its assumption per row.</dd>
+<dt id="parameters-active-and-total"><a class="gl-self" href="#parameters-active-and-total">parameters, active and total</a></dt>
+<dd>A model's weights. In a <strong>mixture of experts</strong> model only some weights (the <em>active</em> parameters) run for each token; the rest (up to the <em>total</em>) sit in memory. Active parameters drive compute per token; total parameters drive memory. Claude Opus's sizes are not public; the page's working assumption is 2.5 trillion total, 300 billion active, and that assumption is the single most consequential slider on the page.</dd>
+<dt id="mixture-of-experts-moe"><a class="gl-self" href="#mixture-of-experts-moe">mixture of experts (MoE)</a></dt>
+<dd>A model whose layers hold many parallel &quot;experts&quot; and route each token to a few of them. It is how a model can be enormous in total and cheap per token.</dd>
+<dt id="context-length"><a class="gl-self" href="#context-length">context length</a></dt>
+<dd>Input length plus output length for one request. The page uses two values: the <strong>terminal context length</strong> (input plus the full output — sizes the working memory) and the <strong>representative decode position</strong> (input plus half the output — sets decode speed).</dd>
+<dt id="speculative-decoding"><a class="gl-self" href="#speculative-decoding">speculative decoding</a></dt>
+<dd>Guessing several output tokens at once with a cheap &quot;draft&quot; and having the real model verify them together, so decode takes fewer expensive steps. <strong>Multi-token prediction (MTP)</strong> is one form, built into the model itself (DeepSeek's). Some published throughput figures already include it; the page adds no <em>additional</em> speculative credit in any reading of its own, and offers a slider for readers who want to.</dd>
+<dt id="disaggregation"><a class="gl-self" href="#disaggregation">disaggregation</a></dt>
+<dd>Running prefill and decode on separate accelerators tuned for each. Part of how SGLang and NVIDIA got five times the throughput on the same GB300 racks between April and June 2026.</dd>
+<dt id="serving-stack"><a class="gl-self" href="#serving-stack">serving stack</a></dt>
+<dd>The software that runs the model: the inference framework (vLLM, SGLang, a lab's private stack), its kernels and scheduling. The same chip served 14× faster under an optimized stack than a naive one in the InferenceX benchmark.</dd>
+<dt id="serving-regime"><a class="gl-self" href="#serving-regime">serving regime</a></dt>
+<dd>The page's setting for how a deployment is tuned: throughput-first, balanced, or interactive. It fixes each leg's batch size and therefore its throughput and cost.</dd>
+<dt id="serving-stack-efficiency"><a class="gl-self" href="#serving-stack-efficiency">serving-stack efficiency</a></dt>
+<dd>The calculator's multiplier on throughput for the serving software, defined as measured stack composition relative to published open practice: 1.0 = open practice, 0.7 = no multi-token prediction and no disaggregation. Editing it while an <a href="#algorithmic-lead"><strong>algorithmic lead</strong></a> is set fires an <strong>overlap warning</strong>, because the two describe overlapping improvements. It is only a warning: the methods box is explicit that explicitly-modelled levers — serving precision, the serving regime, the cache controls, this one — are never locked by that machinery. The hard interlock, which does lock and does leave a banner, is between the <strong>family multipliers</strong> and the algorithmic lead, because those two are both broad and unspecified.</dd>
+<dt id="algorithmic-lead"><a class="gl-self" href="#algorithmic-lead">algorithmic lead</a></dt>
+<dd>A slider for how many months a lab's private serving efficiency is assumed ahead of published open practice, at 3× per year. The lead-adjusted baseline gives Anthropic, OpenAI and Google 3 months (about 1.3×), DeepSeek 1, the other Chinese labs 0. A labeled assumption, not a measurement; the planning baseline sets it to zero.</dd>
+<dt id="family-multiplier"><a class="gl-self" href="#family-multiplier">family multiplier</a></dt>
+<dd>A stress dial: a ±% on the throughput of every accelerator in one <a href="#hardware-family"><strong>hardware family</strong></a> (NVIDIA, TPU, Trainium, Ascend). &quot;Suppose we are 20% wrong about all of Google's chips.&quot;</dd>
+<dt id="latency-target"><a class="gl-self" href="#latency-target">latency target</a></dt>
+<dd>How fast the service must respond. Two measures: <strong>time to first token (TTFT)</strong>, how long before the reply starts; <strong>time per output token (TPOT)</strong>, how fast it streams. Tighter targets mean smaller batches and higher cost — interactive serving costs about 1.4–3× throughput-optimal serving.</dd>
+<dt id="tokens-s-per-accelerator"><a class="gl-self" href="#tokens-s-per-accelerator">tokens/s per accelerator</a></dt>
+<dd>See <a href="#throughput"><strong>throughput</strong></a>.</dd>
+</dl><hr>
+
+
+<h3 id="g-F">Whose hardware, and how much of it?</h3>
+<dl class="gl">
+<dt id="fleet"><a class="gl-self" href="#fleet">fleet</a></dt>
+<dd>The mix of accelerator types assumed to serve a model, each with a share. No provider publishes its current serving allocation; what exists are public commitments (Anthropic's TPU and Trainium deals), historical statements, and one second-hand report of the NVIDIA share. The page's fleet is built from those and is an assumption.</dd>
+<dt id="default-fleet"><a class="gl-self" href="#default-fleet">default fleet</a></dt>
+<dd>The page's assumed Anthropic fleet for the planning baseline: NVIDIA 50% (H100, H200, GB200, GB300), TPU v7 25%, Trainium2/3 25% — seven legs. The <a href="#opening-scenario"><strong>opening scenario</strong></a> declares a different and smaller fleet — five legs, 40% TPU v7, 25% GB200, 20% GB300, 10% H200, 5% H100, with Trainium at zero weight, which its author says was deliberate. (A 40/25/15/15/5 fleet including Trainium2 appears in the July §6 comparison; that is a different, earlier reading and not this one.)</dd>
+<dt id="fleet-leg"><a class="gl-self" href="#fleet-leg">fleet leg</a> (or <strong>leg</strong>)</dt>
+<dd>One component of the fleet: an accelerator type at one price and one share, with its own throughput row. A custom fleet may carry the same accelerator type twice at different prices, so a leg is a component, not necessarily a unique chip.</dd>
+<dt id="fleet-section"><a class="gl-self" href="#fleet-section">fleet section</a></dt>
+<dd>In a fleet that mixes rented and owned capacity, the rented legs and the owned legs as two declared groups, each on its own cost basis.</dd>
+<dt id="fleet-share"><a class="gl-self" href="#fleet-share">fleet share</a></dt>
+<dd>The share of served tokens assumed to run on a leg. The blended serving cost is the share-weighted average of the legs' costs.</dd>
+<dt id="feasible-capped-infeasible"><a class="gl-self" href="#feasible-capped-infeasible">feasible / capped / infeasible</a></dt>
+<dd>Memory feasibility only: whether the model and its working memory fit a leg at its declared batch under the <strong>memory-planning convention</strong> — fully (feasible), only at a smaller batch (capped, and the leg says so), or not at all (infeasible: the leg shows no number). It says nothing about whether the deployment is verified or the throughput anchored.</dd>
+<dt id="rack"><a class="gl-self" href="#rack">rack</a></dt>
+<dd>A cabinet of accelerators sharing one fast interconnect; the unit large deployments are priced in. The example on this page is NVIDIA's NVL72: 72 GPUs (about $3–3.5M to buy a GB200 rack; $762 per hour to reserve one on AWS).</dd>
+<dt id="node"><a class="gl-self" href="#node">node</a></dt>
+<dd>One server; eight accelerators is the common size and the page says so where it matters. A source's own unit is kept as quoted: the ncode deployment counted &quot;15 trays&quot; of 4 GPUs, not nodes.</dd>
+<dt id="h100-h200-h800-h20"><a class="gl-self" href="#h100-h200-h800-h20">H100, H200, H800, H20</a></dt>
+<dd>NVIDIA's Hopper generation (2022–24). H800 and H20 are the export-restricted versions sold into China; DeepSeek's disclosure ran on H800s.</dd>
+<dt id="b200-b300-gb200-nvl72-gb300-nvl72"><a class="gl-self" href="#b200-b300-gb200-nvl72-gb300-nvl72">B200, B300, GB200 NVL72, GB300 NVL72</a></dt>
+<dd>NVIDIA's Blackwell generation (2024–26). &quot;GB&quot; pairs the GPUs with NVIDIA's Grace CPU in a 72-GPU rack; B300/GB300 is &quot;Blackwell Ultra&quot;.</dd>
+<dt id="vera-rubin"><a class="gl-self" href="#vera-rubin">Vera Rubin</a></dt>
+<dd>NVIDIA's next generation (2026–27). No public price and no public serving benchmark as of mid-2026: the page carries it as a <strong>projection</strong> from its announced specifications.</dd>
+<dt id="tpu-v7-ironwood"><a class="gl-self" href="#tpu-v7-ironwood">TPU v7 (Ironwood)</a></dt>
+<dd>Google's current accelerator. Anthropic has committed to up to a million of them.</dd>
+<dt id="trainium2-trainium3"><a class="gl-self" href="#trainium2-trainium3">Trainium2 / Trainium3</a></dt>
+<dd>AWS's accelerators. About half a million Trainium2 run Claude in AWS's Project Rainier; no Claude production economics are public for either, and the only public $/token figures are narrow engineering examples from AWS's own tutorials.</dd>
+<dt id="ascend-910c-cloudmatrix-384"><a class="gl-self" href="#ascend-910c-cloudmatrix-384">Ascend 910C / CloudMatrix 384</a></dt>
+<dd>Huawei's accelerator and its 384-chip system, the Chinese alternative under export controls.</dd>
+</dl><hr>
+
+
+<h3 id="g-G">What kind of traffic, and why does it matter?</h3>
+<dl class="gl">
+<dt id="traffic-mix"><a class="gl-self" href="#traffic-mix">traffic mix</a></dt>
+<dd>The two request-shape settings the page's selector owns: how many input tokens per output token, and what share of input is served from cache. It changes the answer by tens of points, because input, cached input and output have different prices and costs.</dd>
+<dt id="workload"><a class="gl-self" href="#workload">workload</a></dt>
+<dd>The whole request shape: the traffic mix plus the lengths, latency target, precision and batching a deployment runs at. The page models some of it and not the rest, and the methods box says which: input and output lengths feed the roofline directly (they set the KV footprint and the context length), and <a href="#precision"><strong>precision</strong></a> and <a href="#serving-regime"><strong>serving regime</strong></a> are set per scenario. Latency targets (TTFT/TPOT), cache lifecycle and storage billing, speculative-decoding acceptance and unbilled retries are <em>not</em> modelled. &quot;Workload&quot; appears where a source's or benchmark's full shape is meant.</dd>
+<dt id="input-output-ratio"><a class="gl-self" href="#input-output-ratio">input:output ratio</a></dt>
+<dd>Input tokens per output token. Examples the page cites, not a distribution it knows: DeepSeek's disclosed traffic ran about 4:1; SemiAnalysis modeled an agentic Opus workload at about 300:1.</dd>
+<dt id="cache-hit-share"><a class="gl-self" href="#cache-hit-share">cache-hit share</a></dt>
+<dd>The fraction of input tokens served from cache rather than freshly prefilled.</dd>
+<dt id="reference-mix"><a class="gl-self" href="#reference-mix">Reference mix</a></dt>
+<dd>The page's standard traffic mix: 15 input tokens per output token, 60% cache hits. A convention chosen to sit between chat and agentic traffic, not a measured operating point. The report's fixed scenarios (the planning baseline, the same-assumption table) are at the Reference mix; the interactive calculator is at whatever you select.</dd>
+<dt id="billable-cached-share"><a class="gl-self" href="#billable-cached-share">billable cached share</a></dt>
+<dd>The share of <em>all</em> input tokens the customer is billed at the cache-read price. The page assumes it equals the serving-side cache-hit share; if a provider serves more from cache than it bills as cached, its margin is higher than shown. This assumption alone spans 30% to 75% on the Opus planning baseline (billable share 95%, equal to serving, and 0%).</dd>
+<dt id="subscription-economics"><a class="gl-self" href="#subscription-economics">subscription economics</a></dt>
+<dd>Flat-fee plans (Claude Max) versus per-token API billing. Heavy subscribers demonstrably consume 15–40× their fee in list-price value; what that costs to serve, and how many subscribers do it, is not public.</dd>
+</dl><hr>
+
+
+<h3 id="g-H">How much should I trust this number?</h3>
+<dl class="gl">
+<dt id="evidence-label"><a class="gl-self" href="#evidence-label">evidence label</a></dt>
+<dd>On every input the page adopts: what kind of source stands behind it. A provenance label, not a grade of whether the number is true or applies:</dd>
+<dt id="basis-label"><a class="gl-self" href="#basis-label">basis label</a></dt>
+<dd>On every analyst claim on the &quot;which margin&quot; page: did the source say which margin it meant? <strong>STATED</strong> (the source says so), <strong>IMPLIED</strong> (its numbers or method imply it), <strong>OUR READING</strong> (the page's inference, reason given).</dd>
+<dt id="evidence-grade"><a class="gl-self" href="#evidence-grade">evidence grade</a></dt>
+<dd>On each provider card: how much of that provider's economics is publicly observable, per dimension (architecture, pricing, fleet &amp; cost, production throughput, financial perimeter), each high / medium / low. It grades the evidence, not the number.</dd>
+<dt id="grounding-ledger"><a class="gl-self" href="#grounding-ledger">grounding ledger</a></dt>
+<dd>The machine-generated table of every input the calculator uses, with its value, source and evidence label. The authoritative record; the page's prose summarizes it, and its field names get a reader key on the release edit.</dd>
+<dt id="adopted"><a class="gl-self" href="#adopted">adopted</a></dt>
+<dd>A setting the page's maintainer chose and labeled as a choice (the 2.5-trillion model size, the 3-month algorithmic lead). Adopted settings can be moved with a slider; the page never presents one as a measurement.</dd>
+<dt id="analyst-set"><a class="gl-self" href="#analyst-set">analyst-set</a></dt>
+<dd>Set by judgment rather than fitted. Of a throughput number: a <a href="#calibration-class"><strong>calibration class</strong></a> (an assumed operating point; relevant evidence may exist without being reproduced). Of a rent: a rate the page chose where no usable public quote exists.</dd>
+<dt id="scenario"><a class="gl-self" href="#scenario">scenario</a></dt>
+<dd>Any complete set of calculator settings. <strong>Scenario preset</strong> — a named scenario shipped with the page (prices, fleet, utilization, traffic together). <strong>Replay</strong> — a scenario preset that loads a published estimate's assumptions into this page's engine; it translates them into the page's one model and does not reproduce the estimate's own model, so the button says &quot;Load this estimate's assumptions&quot;. <strong>Route</strong> — a what-if scenario preset in the range explorer, built toward a claimed margin range; it states where it lands, which can be short of the range.</dd>
+<dt id="research-report"><a class="gl-self" href="#research-report">research report</a></dt>
+<dd>One of the annex pages: a provider deep dive (one per provider, run on GPT-5.6 Pro), a hardware sweep, an adversarial review, a consultation. Each states its own provenance class: verbatim original, adopted-findings summary, reconstruction, or partial.</dd>
+<dt id="adversarial-review"><a class="gl-self" href="#adversarial-review">adversarial review</a></dt>
+<dd>A review run by a separate model session whose brief is to break the page. The page has had several; the numbers they changed are in the changelog.</dd>
+<dt id="changelog"><a class="gl-self" href="#changelog">changelog</a></dt>
+<dd>The dated revision history, including the internal revision codes that earlier drafts of the page used in body copy.</dd>
+</dl><ul>
+<li><strong>DISCLOSED</strong> — the party itself published it (DeepSeek&#39;s serving statistics, a list price).</li>
+<li><strong>CREDIBLY REPORTED</strong> — reputable press with named sourcing, or a reproducible public
+benchmark.</li>
+<li><strong>COMMUNITY ESTIMATE</strong> — a named outside analyst or the technical community.</li>
+<li><strong>SPECULATION</strong> — the page&#39;s own assumption, labeled as such.</li>
+</ul>
+
+<p>The full report also names the finer <strong>source type</strong> of a figure (first-party disclosure,
+regulatory filing, reputable reporting, reproducible benchmark, market quote, community
+estimate, modeling assumption); the type is stated beside the label, and a market quote is a
+market quote, not promoted to a credibility class.</p>
+
+<hr>
+
+
+<h3 id="g-I">Abbreviations that appear on the page</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ARR</strong></td>
+<td>annual recurring revenue — recurring revenue expressed on a yearly basis. Where a cited figure is a current month multiplied by twelve, that is <em>annualised</em> revenue, which is a different and looser quantity; the page says which is meant</td>
+</tr>
+<tr>
+<td><strong>COGS</strong></td>
+<td>cost of goods sold; see <strong>cost of revenue</strong></td>
+</tr>
+<tr>
+<td><strong>FCF</strong></td>
+<td>free cash flow — cash a company generates after its capital spending; a company can have a positive gross margin and negative free cash flow while it builds datacenters</td>
+</tr>
+<tr>
+<td><strong>FLOPS / PF</strong></td>
+<td>floating-point operations per second; PF = petaflops (10¹⁵ per second) — a chip&#39;s compute rating</td>
+</tr>
+<tr>
+<td><strong>FP8 / FP4 / INT8 / BF16</strong></td>
+<td>number formats; see <strong>precision</strong></td>
+</tr>
+<tr>
+<td><strong>GB / TB/s</strong></td>
+<td>memory capacity / memory bandwidth</td>
+</tr>
+<tr>
+<td><strong>HBM</strong></td>
+<td>high-bandwidth memory; see <strong>accelerator memory</strong></td>
+</tr>
+<tr>
+<td><strong>ICI</strong></td>
+<td>Google&#39;s TPU interconnect</td>
+</tr>
+<tr>
+<td><strong>IDC</strong></td>
+<td>internet data centre — in China pricing, a bare-metal datacenter operator. The term names the <em>provider</em>, not the lease term; the registry carries both monthly and annual quotes from them</td>
+</tr>
+<tr>
+<td><strong>KV</strong></td>
+<td>keys and values; see <strong>KV cache</strong></td>
+</tr>
+<tr>
+<td><strong>MFU</strong></td>
+<td>model FLOPS utilization — a compute-only efficiency; see <strong>MFU</strong>, and note it is not the <strong>efficiency factor (η)</strong></td>
+</tr>
+<tr>
+<td><strong>MLPerf</strong></td>
+<td>the industry&#39;s standardized benchmark suite (MLCommons)</td>
+</tr>
+<tr>
+<td><strong>MoE</strong></td>
+<td>mixture of experts</td>
+</tr>
+<tr>
+<td><strong>MTP</strong></td>
+<td>multi-token prediction; see <strong>speculative decoding</strong></td>
+</tr>
+<tr>
+<td><strong>NVL72</strong></td>
+<td>NVIDIA&#39;s 72-GPU rack; see <strong>rack</strong></td>
+</tr>
+<tr>
+<td><strong>PUE</strong></td>
+<td>power usage effectiveness</td>
+</tr>
+<tr>
+<td><strong>SKU</strong></td>
+<td>a specific product variant (the H20 is NVIDIA&#39;s China SKU)</td>
+</tr>
+<tr>
+<td><strong>SLO / SLA</strong></td>
+<td>service-level objective / agreement — a latency target a deployment aims at (objective) or contractually promises (agreement). The calculator&#39;s serving regimes are neither; they are assumed operating conditions</td>
+</tr>
+<tr>
+<td><strong>TCO</strong></td>
+<td>total cost of ownership; see <strong>owned cost</strong></td>
+</tr>
+<tr>
+<td><strong>TDP</strong></td>
+<td>thermal design power</td>
+</tr>
+<tr>
+<td><strong>tok/s</strong></td>
+<td>tokens per second</td>
+</tr>
+<tr>
+<td><strong>TPOT / TTFT</strong></td>
+<td>time per output token / time to first token; see <strong>latency target</strong></td>
+</tr>
+<tr>
+<td><strong>TTL</strong></td>
+<td>time to live — how long a cache entry is kept; see <strong>cache write</strong></td>
+</tr>
+<tr>
+<td><strong>Wh per M tokens</strong></td>
+<td>watt-hours of accelerator energy per million tokens served, at the page&#39;s scope of accelerator power × PUE — not the full datacenter stack, which one published telemetry anchor puts about 1.4× higher</td>
+</tr>
+</tbody></table>
+
+
+<h3 id="g-J">Added after session 3 (the entries a first-time reader was missing)</h3>
+<p><strong>serving regime</strong>, <strong>replica / sharding</strong>, <strong>memory-planning convention (loaded bytes)</strong>,
+<strong>fleet section</strong>, <strong>hardware family</strong>, <strong>cache write</strong> and <strong>TTL</strong>, <strong>percentage point</strong>,
+<strong>markup versus margin</strong>, <strong>cost of revenue</strong>, <strong>token / input / output</strong> — each is in its group
+above.</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

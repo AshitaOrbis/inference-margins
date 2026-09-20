@@ -1,0 +1,34 @@
+# inference-margins MCP — remote streamable-HTTP connector on Cloudflare Workers.
+# Stateless plain Worker (createMcpHandler + WorkerTransport from agents/mcp): no Durable
+# Object, a fresh McpServer per request (required by MCP SDK >=1.26). Read-only, no auth,
+# no secrets — same exposure as the public site. Request bodies are never logged
+# (observability stays disabled; they may contain a caller's private negotiated rates).
+name = "inference-margins-mcp"
+main = "src/index.ts"
+compatibility_date = "2026-06-11"
+compatibility_flags = ["nodejs_compat"]
+# Owner ruling 2026-08-03 (q-cf-workersdev-realname-subdomain): the account's
+# workers.dev subdomain is the owner's real name, so every worker with a custom
+# domain stops answering there. Disabled at the account API on 2026-08-03 and
+# pinned here so a later `wrangler deploy` cannot silently re-enable it.
+workers_dev = false
+preview_urls = false
+
+# --- Per-invocation CPU ceiling (commission im-t5-cpu-limits-20260901) -------
+# The account moved to Workers Paid on 2026-09-01. Paid's DEFAULT allowance is
+# 30,000 ms of CPU per invocation (configurable up to 300,000). This endpoint is
+# public and unauthenticated, so that default is also the per-request cost a
+# hostile or looping caller can impose, and the plan has no spend cap behind it.
+#
+# Measured, not guessed — workersInvocationsAdaptive over the 30 days to
+# 2026-09-01, 645 successful invocations of the LIVE (un-optimised) bytes:
+#   cpu p50 0.79 ms · p99 906 ms · p999 1,891 ms · wall p99 948 ms
+# The p999 is adjust_rental_rate; note it is 2.1x the "900 ms observed max" the
+# 08-29 card quoted, because 900 ms is the p99, not the maximum.
+#
+# 5,000 ms is 2.6x the worst value anywhere in that data and 6x tighter than the
+# platform default. It caps one request at 5 CPU-seconds (~$0.0001 at $0.02 per
+# million CPU-ms) and still leaves ~14x headroom over adjust_rental_rate's
+# ~350 ms optimised typical, so the staged T5 release inherits a working ceiling.
+[limits]
+cpu_ms = 5000

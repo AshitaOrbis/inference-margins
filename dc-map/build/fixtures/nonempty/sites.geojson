@@ -1,0 +1,70 @@
+{
+ "assessment_as_of": "2026-09-05",
+ "contract_digest": "sha256:801e26cc9af80ee169d26cb752203dd101fc42fa7b20bb311b6d591fc3e97138",
+ "contract_version": "dc-map/v0.3",
+ "features": [
+  {
+   "geometry": {
+    "coordinates": [
+     -90,
+     30
+    ],
+    "type": "Point"
+   },
+   "properties": {
+    "capacity_evidence_ids": [
+     "ev-fixture-nonempty-0013"
+    ],
+    "capacity_marker": "eligible",
+    "central_estimate": "present",
+    "entity_type": "campus",
+    "estimate_only": false,
+    "mw": 200,
+    "mw_bounds": {
+     "hi": 200,
+     "lo": 200,
+     "mid": 200
+    },
+    "mw_kind": "it",
+    "name": "test-alpha",
+    "observation_date_range": {
+     "end": "2026-09-01",
+     "start": "2026-09-01"
+    },
+    "pin": "eligible",
+    "precision": "campus",
+    "slug": "test-alpha"
+   },
+   "type": "Feature"
+  },
+  {
+   "geometry": {
+    "coordinates": [
+     -90,
+     30
+    ],
+    "type": "Point"
+   },
+   "properties": {
+    "capacity_evidence_ids": [],
+    "capacity_marker": "excluded(no factual capacity)",
+    "central_estimate": null,
+    "entity_type": "campus",
+    "estimate_only": true,
+    "mw": null,
+    "mw_bounds": null,
+    "mw_kind": null,
+    "name": "test-beta",
+    "observation_date_range": null,
+    "pin": "eligible",
+    "precision": "campus",
+    "slug": "test-beta"
+   },
+   "type": "Feature"
+  }
+ ],
+ "presentation_version": "dc-map/site-data/v2",
+ "release_id": "rel-49b67fc067f5bc90db4501f2",
+ "schema_version": 1,
+ "type": "FeatureCollection"
+}

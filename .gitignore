@@ -1,0 +1,24 @@
+node_modules/
+.wrangler/
+ORCHESTRATION-BRIEF-*.md
+logs/
+scripts/sweep-state/
+
+# Third-party reference copies — local research use only, never committed or published
+reference/*
+!reference/README.md
+
+# Local pre-edit archive copies (Archive-instead-of-delete convention) — redundant with git
+# history once the edit lands, so kept on disk but never tracked.
+scripts/*.bak-*
+
+# row 499 (review finding): node_modules must never be committed — a worktree symlink here became
+# an absolute-path dangling link on any other machine and in CI.
+node_modules/
+node_modules
+mcp-server/node_modules
+# im-release-edit-r3 (2026-09-10), fallback-review finding F12: the SYNCED TWIN under site/tests/
+# writes the same dump, and site/ is what `wrangler pages deploy site` uploads — so a path-anchored
+# rule ignored the copy that cannot be published and tracked the copy that could, while the twin's
+# own comment said "(gitignored)". Match both.
+**/.answer-surface-dump.txt

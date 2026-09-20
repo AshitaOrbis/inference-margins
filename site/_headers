@@ -1,0 +1,6 @@
+/*
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'sha256-w2Cf7l3VXuSHM/egSfa+rwViFlX92oxucarggJ7RF9o=' 'sha256-uAFjbX1MiN68RJqKCDippd+1Xpz0Armd4aSMZSwM5Z4=' https://challenges.cloudflare.com; style-src 'self' 'sha256-5EP55QxCCERsCRddWDR8ZCz7UB70i3bTmFgpm/GeulM=' 'sha256-bTXKiV1l0FgQPGB4M31VKDNuiIBs1IehEMwAerC4RQk='; connect-src 'self' https://feedback.ashitaorbis.com; frame-src https://challenges.cloudflare.com; form-action 'self' https://feedback.ashitaorbis.com; img-src 'self' data:; font-src 'self'
+  Permissions-Policy: camera=(), geolocation=(), microphone=(), payment=()
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY

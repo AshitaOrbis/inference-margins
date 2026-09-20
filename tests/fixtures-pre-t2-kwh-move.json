@@ -1,0 +1,48 @@
+{
+ "asOf": "2026-08-22-pre-im-arc-t2-default-move",
+ "generic": {
+  "marginPct": 86.60091668532016,
+  "kwh": 0.07
+ },
+ "forcedTco": {
+  "median": {
+   "marginPct": 89.95086089736748,
+   "kwh": 0.07
+  },
+  "gptpro-r3": {
+   "marginPct": 92.93419994779752,
+   "kwh": 0.07
+  }
+ },
+ "perspectives": {
+  "median": {
+   "marginPct": 68.98395363429421,
+   "kwh": 0.07,
+   "hwMode": "rent"
+  },
+  "gptpro-r3": {
+   "marginPct": 83.05614622674916,
+   "kwh": 0.07,
+   "hwMode": "rent"
+  },
+  "x90-v1": {
+   "marginPct": 91.69492636146073,
+   "kwh": 0.07,
+   "hwMode": "tco"
+  },
+  "x90-v2": {
+   "marginPct": 92.89421757044589,
+   "kwh": 0.07,
+   "hwMode": "tco"
+  }
+ },
+ "rentStateCount": 240,
+ "rentStatesSha256": "cd322296483e526f1df0398d3c1b1002020c691f4e97ea74e4986248f3f2033b",
+ "rentStatesSha256History": [
+  {
+   "value": "7237d4eb394cfba00d5a8060885bf9d161ec41c148d642bde5c8bfbcc4dd1de3",
+   "until": "2026-09-19",
+   "supersededBy": "leg im-vet-model-estimates \u2014 five corrected list prices and the Zhipu traffic default; this grid is the CURRENT engine re-rendered under pre-T4 SETTINGS, so live presets reach it by construction"
+  }
+ ]
+}

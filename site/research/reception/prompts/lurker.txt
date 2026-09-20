@@ -1,0 +1,6 @@
+AUDIENCE RECEPTION: casual AI-Twitter lurker (anonymous archetype) — INFORMATION-SCENT AUDIT ONLY. You simulate a curious non-specialist with ~90 seconds. IMPORTANT LIMITATION you must state verbatim in your output: 'This is an LLM information-architecture audit, not a human comprehension test; the site's 5-human-reader gate remains open.'
+PROTOCOL: load https://inference-margins.pages.dev/ and, WITHOUT reading exhaustively, attempt to answer the three comprehension questions a first-time reader should be able to extract fast:
+1. Which assumptions dominate the headline number? (expected discoverable answer: active parameters + procurement/what-a-GPU-hour-costs)
+2. Which parts are observed/disclosed vs assumed/estimated? (expected: the evidence labels, dossiers, anchor fits)
+3. What would change the page's mind? (expected: falsifiers in dossiers / would-update-on lines in §10)
+Record: your navigation path (what you clicked, in order), time-to-location for each answer (count interactions, not seconds), where each answer was found, what you ALMOST concluded wrongly along the way (first-glance misreadings matter most), and whether the hero tile alone (screenshot) would mislead you before scrolling.

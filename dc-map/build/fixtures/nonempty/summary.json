@@ -1,0 +1,114 @@
+{
+ "aggregation_receipts": [
+  {
+   "bounds": {
+    "hi": 200,
+    "lo": 200,
+    "mid": 200
+   },
+   "central_estimate": "present",
+   "evidence_id": "ev-fixture-nonempty-0013",
+   "observation_date_range": {
+    "end": "2026-09-01",
+    "start": "2026-09-01"
+   },
+   "observation_kind": "point",
+   "presentation_campus_id": "test-alpha"
+  }
+ ],
+ "assessment_as_of": "2026-09-05",
+ "bounded_capacity_sites": 0,
+ "by_country": {
+  "United States": {
+   "bounded_capacity_sites": 0,
+   "estimate_only_sites": 1,
+   "mw": 200,
+   "mw_bounds": {
+    "hi": 200,
+    "lo": 200,
+    "mid": 200
+   },
+   "mw_known_sites": 1,
+   "observation_date_range": {
+    "end": "2026-09-01",
+    "start": "2026-09-01"
+   },
+   "sites": 2,
+   "unknown_capacity_sites": 1
+  }
+ },
+ "by_owner": {
+  "unknown": {
+   "bounded_capacity_sites": 0,
+   "estimate_only_sites": 1,
+   "mw": 200,
+   "mw_bounds": {
+    "hi": 200,
+    "lo": 200,
+    "mid": 200
+   },
+   "mw_known_sites": 1,
+   "observation_date_range": {
+    "end": "2026-09-01",
+    "start": "2026-09-01"
+   },
+   "sites": 2,
+   "unknown_capacity_sites": 1
+  }
+ },
+ "by_status": {
+  "operational": {
+   "bounded_capacity_sites": 0,
+   "estimate_only_sites": 0,
+   "mw": 200,
+   "mw_bounds": {
+    "hi": 200,
+    "lo": 200,
+    "mid": 200
+   },
+   "mw_known_sites": 1,
+   "observation_date_range": {
+    "end": "2026-09-01",
+    "start": "2026-09-01"
+   },
+   "sites": 1,
+   "unknown_capacity_sites": 0
+  },
+  "unknown": {
+   "bounded_capacity_sites": 0,
+   "estimate_only_sites": 1,
+   "mw": 0,
+   "mw_bounds": {
+    "hi": 0,
+    "lo": 0,
+    "mid": 0
+   },
+   "mw_known_sites": 0,
+   "observation_date_range": null,
+   "sites": 1,
+   "unknown_capacity_sites": 1
+  }
+ },
+ "campus_pin_eligible": 2,
+ "contract_digest": "sha256:801e26cc9af80ee169d26cb752203dd101fc42fa7b20bb311b6d591fc3e97138",
+ "contract_version": "dc-map/v0.3",
+ "coverage_overlaps": [],
+ "entity_details": 3,
+ "estimate_only_entities": 2,
+ "estimate_only_sites": 1,
+ "identity_resolved": 2,
+ "identity_unresolved": 1,
+ "mw_known_sites": 1,
+ "nonphysical_entities": 0,
+ "note": "Current promoted IT capacity only; overlapping coverage and estimates excluded. Not a world total.",
+ "observation_date_range": {
+  "end": "2026-09-01",
+  "start": "2026-09-01"
+ },
+ "presentation_version": "dc-map/site-data/v2",
+ "release_id": "rel-49b67fc067f5bc90db4501f2",
+ "schema_version": 1,
+ "sites": 2,
+ "unknown_capacity_sites": 1,
+ "with_coordinates": 2
+}

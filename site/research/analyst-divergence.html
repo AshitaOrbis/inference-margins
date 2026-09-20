@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why analyst margin figures diverge — which margin each source is talking about · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/analyst-divergence">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — The labels on this page grade the ATTRIBUTION — which margin an analyst is talking about — not whether the analyst's number is true. They were renamed STATED / IMPLIED / OUR READING in this release for exactly that reason.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Why analyst margin figures diverge — which margin each source is talking about, verified claim by claim</h1>
+<p><strong>Status:</strong> VERIFIED 2026-08-23 (America/Dawson_Creek 2026-08-22). Attributions below were established by two independent, blind research arms over the same brief — a GPT-5.6 Pro deep dive (broker request <code>pr-20260823T020913Z-d0fe55</code>, 2026-08-23) and a Fable 5 native-search arm (WebSearch / WebFetch / Brave; the Exa index was out of credits on this host and is stated as such in the arm&#39;s provenance header) — then merged by the director. Both arms quote the sources&#39; own words with dates; where the arms disagree the disagreement is shown. Labels: <strong>STATED</strong> = the source states the object or basis in its own words · <strong>IMPLIED</strong> = the source&#39;s own numbers or method imply it, but it does not say so · <strong>OUR READING</strong> = our attribution, with the reason given. This ladder grades the ATTRIBUTION — which margin a source is talking about — not whether the source&#39;s figure is true. Arithmetic in §2 was re-derived independently by both arms. The owner&#39;s reading that prompted this page was stated as <em>probable</em>, not as fact; the verdict on it is in §4.</p>
+<h2>1. Four different objects get called &quot;margin&quot;</h2>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>What is in the cost side</th>
+<th>What this page shows it as</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Rental-inclusive unit serving margin</strong></td>
+<td>the price a lab pays to RENT accelerator-hours (the lessor&#39;s economics sit inside the rent), plus the serving stack</td>
+<td><strong>card 1</strong> (&quot;rental-inclusive&quot;)</td>
+</tr>
+<tr>
+<td><strong>Own-accelerator unit serving margin</strong></td>
+<td>the lab&#39;s own TCO for the accelerator-hour: capex amortisation, datacenter shell, electricity × PUE, opex — no lessor</td>
+<td><strong>card 2</strong> (&quot;owned / TCO&quot;)</td>
+</tr>
+<tr>
+<td><strong>Cohort contribution margin</strong> (e.g. &quot;paid-user compute margin&quot;)</td>
+<td>a cohort&#39;s revenue minus the inference cost of serving that cohort, over that cohort&#39;s revenue — broader than a token, narrower than the company</td>
+<td>not this page&#39;s metric; cited in §3 with its definition</td>
+</tr>
+<tr>
+<td><strong>Company or product gross margin</strong></td>
+<td>whatever the company&#39;s disclosed accounting policy classifies in COGS or contra-revenue — definitions differ and control comparability</td>
+<td><strong>not this page&#39;s metric</strong> (every tile says &quot;not a company gross margin&quot;)</td>
+</tr>
+</tbody></table>
+<p>The first two are the same unit (a token served) on two <strong>procurement bases</strong>, comparable only when model, token mix, cache rate, latency target, batch, utilisation, fleet membership and retained serving overhead are held fixed — which is what the two cards do. The third and fourth are different objects. <strong>The durable editorial rule this page adopts: never inherit a basis from an analyst&#39;s name; attach the basis to the individual claim, and where the source is silent say &quot;basis not stated by the source; shown under both bases.&quot;</strong></p>
+<h2>2. The arithmetic that links the two unit bases</h2>
+<p>Let <code>C</code> be the lab&#39;s own all-in cost per token on owned accelerators and <code>P</code> the price per token. Own-accelerator margin <code>m_own = 1 − C/P</code>. A lessor whose cost for the same capacity is <code>C</code> and who earns margin <code>m_L</code> on its revenue charges <code>R = C / (1 − m_L)</code>, so the renting lab&#39;s margin is</p>
+<p><code>m_rent = 1 − R/P = 1 − (1 − m_own) / (1 − m_L)</code>, equivalently <code>(1 − m_rent) = k · (1 − m_own)</code> with <code>k = 1/(1 − m_L)</code> the <strong>rent-over-cost multiple</strong>; and in reverse <code>m_own = 1 − (1 − m_rent)(1 − m_L)</code>.</p>
+<p>Worked at <code>m_own = 95%</code> (<code>P = 20 C</code>):</p>
+<table>
+<thead>
+<tr>
+<th>lessor margin <code>m_L</code></th>
+<th>rent multiple <code>k</code></th>
+<th>rental-inclusive margin <code>m_rent</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0%</td>
+<td>1.00×</td>
+<td>95.0%</td>
+</tr>
+<tr>
+<td>40%</td>
+<td>1.67×</td>
+<td><strong>91.7%</strong></td>
+</tr>
+<tr>
+<td>50%</td>
+<td>2.00×</td>
+<td><strong>90.0%</strong> — price is 10× the <em>rental</em> cost; rent is 2× the <em>owned</em> cost</td>
+</tr>
+<tr>
+<td>60%</td>
+<td>2.50×</td>
+<td>87.5%</td>
+</tr>
+<tr>
+<td>67.6% (exact)</td>
+<td>3.09×</td>
+<td>84.6% (84.5% if 67.6% is itself a rounded, back-solved figure)</td>
+</tr>
+</tbody></table>
+<p>So the framing &quot;a 95% own-accelerator margin survives a lessor&#39;s cut at ~90%&quot; is right: the markup multiplies the small cost side, not the price side. Two conditions the identity rests on, stated so nobody reads <code>m_L</code> as a named lessor&#39;s accounting gross margin: (i) it assumes the lessor&#39;s relevant cost base equals the modelled owned-capacity cost <code>C</code> — real lessors and self-owners differ in procurement discounts, financing, useful life, utilisation, residual value, PUE and shared overhead, so in practice <code>k</code> is <strong>rent ÷ the lab&#39;s modelled TCO</strong>, and &quot;<code>m_L</code>&quot; is <code>1 − 1/k</code>, an <em>implied</em> quantity; (ii) the multiple applies only to the cost the lessor replaces — retained serving costs (orchestration, networking, support) should be added separately rather than scaled.</p>
+<p>This page&#39;s own numbers, read that way: at the page&#39;s defaults the rental-inclusive stress case reads ≈58% and the same state owned reads ≈88%, i.e. <code>k = 0.4157/0.1169 ≈ 3.55</code> — a <strong>3.55× rent/TCO multiple</strong>, equivalent to a 72% <em>implied</em> lessor margin or a 255% markup over the page&#39;s modelled TCO. Card 1 prints it as an implied spread over modelled TCO, never as an observed lessor margin. (Re-measured from the shipped engine at each release.)</p>
+<h2>3. The cited claims, attributed one by one</h2>
+<table>
+<thead>
+<tr>
+<th>Claim (≤30 words)</th>
+<th>Source · date</th>
+<th>Object</th>
+<th>Basis statement</th>
+<th>Label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;600K rented TPUs … we estimate the cost to Anthropic to be $1.60 per TPU-hour from GCP&quot;</td>
+<td>SemiAnalysis, <em>TPUv7: Google Takes a Swing at the King</em>, 2025-11-28</td>
+<td>rental-inclusive accelerator-hour input</td>
+<td>explicit: &quot;inclusive of Google&#39;s margin stacking&quot;</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;~52% lower TCO per effective PFLOP compared to GB300 NVL72&quot; (the 400k bought TPUs, same article)</td>
+<td>SemiAnalysis, 2025-11-28</td>
+<td>own-accelerator (TCO)</td>
+<td>explicit: the directly purchased phase</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>InferenceMAX: the TCO model &quot;provides both total cost of ownership per GPU as well as Neocloud rental market prices&quot;; the displayed $/M analysis is for &quot;operators that are owning chips&quot;</td>
+<td>SemiAnalysis, 2025-10-09</td>
+<td>method spans BOTH bases; the shown curves are own-accelerator</td>
+<td>explicit</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>InferenceX glossary: <code>$/M = TCO($/chip-hour) × 1,000,000 / (3600 × tok/s/chip)</code>; Rubin-vs-GB200 article: &quot;operator ownership scenario (not rental prices)&quot;</td>
+<td>SemiAnalysis / InferenceX, 2026-07-23 and glossary</td>
+<td>own-accelerator unit</td>
+<td>explicit</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;GB300 NVL72 delivers ~17× the best H100 config in FP8 and ~32× in FP4 … software alone 14×&quot;</td>
+<td>@SemiAnalysis_, 2026-06-27</td>
+<td><strong>throughput only</strong> — acquires a basis only when divided by a rental or TCO hourly rate</td>
+<td>n/a</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>Opus API-token margins &quot;north of 80 percent&quot;</td>
+<td>Dylan Patel, Sequoia podcast transcript, 2026-06-30</td>
+<td>unit API-token margin, rental-capacity framing (&quot;every GPU I rent…&quot;)</td>
+<td>immediate context only; worksheet unpublished</td>
+<td>IMPLIED</td>
+</tr>
+<tr>
+<td>&quot;Anthropic&#39;s gross margins were −94% in 2024&quot; (later &quot;38% in 2025 … mid 60s&quot;)</td>
+<td>@SemiAnalysis_, 2026-03-27 / 2026-05-27</td>
+<td>company <strong>inference gross margin</strong> line (a business line&#39;s GM)</td>
+<td>SemiAnalysis&#39;s own label</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;Anthropic … first gross profit in Q2 … slightly over $1B of operating profit in Q3&quot;</td>
+<td>Dylan Patel, RAISE Summit, rec. 2026-07-09, pub. 2026-07-16 — the only retrievable text is a session <strong>summary</strong>; the transcript could not be retrieved by either arm</td>
+<td>company financials (gross profit / operating profit), not a unit margin</td>
+<td>—</td>
+<td>OUR READING; see §5 correction 2</td>
+</tr>
+<tr>
+<td>&quot;OpenAI&#39;s company-wide gross margin … ~55% … ~65% excluding free tier&quot;</td>
+<td>same appearance (summary)</td>
+<td>company GM + a cohort-adjusted company cut</td>
+<td>&quot;company-wide&quot;, &quot;free tier&quot;</td>
+<td>OUR READING; the &quot;~30%&quot; and &quot;~50%&quot; starting points on the main page are NOT in any retrievable source — see §5</td>
+</tr>
+<tr>
+<td>&quot;I see 70–90 tps … ≈$4.4 at $0.87/Mt. H100 <em>spot prices</em> are now $2.4/hr. DS has at least 50% margin.&quot;</td>
+<td>@teortaxesTex, 2026-06-27</td>
+<td>rental-inclusive unit serving (spot $/GPU-hr)</td>
+<td>explicit spot price</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;math for DeepSeek / Serving Opus is at most $4/1Mt&quot;</td>
+<td>@teortaxesTex, 2026-06-28 (quoting the post above)</td>
+<td>unit serving cost; <strong>best read as DeepSeek-anchored, rental-priced arithmetic</strong>; the exact Opus rate is unstated</td>
+<td>basis-silent; indexed as &quot;math for DeepSeek&quot;</td>
+<td>IMPLIED</td>
+</tr>
+<tr>
+<td>&quot;they&#39;ll just increase the batch size … drive margins from 90% to 95%&quot;</td>
+<td>@teortaxesTex, 2026-06-27 (about &quot;every western provider&quot;, not Opus)</td>
+<td>unit serving margin, <strong>procurement basis absent</strong></td>
+<td>none</td>
+<td>OUR READING → &quot;basis not stated by the source; shown under both bases&quot;</td>
+</tr>
+<tr>
+<td>&quot;What they technically mean is that they have a markup of 545%&quot;</td>
+<td>@teortaxesTex, 2025-03-02</td>
+<td>markup on cost, not margin on revenue</td>
+<td>DeepSeek&#39;s lease-cost arithmetic</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;At least xAI isn&#39;t juicing up the gross margins to 90%-95% and scamming consumers / Although the cached token could be cheaper&quot;</td>
+<td>@zephyr_z9, 2026-07-08 (quoting the Grok 4.5 pricing page)</td>
+<td>likely token/product margin; a NEGATIVE claim about xAI; names no comparison lab; no rent/TCO basis</td>
+<td>none</td>
+<td>OUR READING → &quot;basis not stated by the source; shown under both bases&quot;</td>
+</tr>
+<tr>
+<td>&quot;To hit $10B/yr they will need to adopt Anthropic/OAI tactics and serve tokens at 5x the current price (95% GM)&quot;</td>
+<td>@zephyr_z9, 2026-06-24</td>
+<td>token pricing vs cost; names Anthropic/OpenAI; basis unstated</td>
+<td>none</td>
+<td>OUR READING (the Fable arm surfaced this post; the main page&#39;s &quot;not Anthropic-specific&quot; sentence is corrected in §5)</td>
+</tr>
+<tr>
+<td>&quot;70% GM and 15%–20% FCF margin / Anthropic is printing cash now&quot;</td>
+<td>@zephyr_z9, 2026-06-24</td>
+<td>company GM</td>
+<td>pairing with FCF margin</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;Anthropic lowered its projected 2025 gross margin to 40% …&quot; (38% including free-chatbot inference)</td>
+<td>The Information, 2026-01-21 (paywalled; public metadata)</td>
+<td>company / paid-product GM</td>
+<td>&quot;subtracting inference costs and other costs of selling its products&quot;</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>OpenAI &quot;compute margin … 70% as of October&quot;</td>
+<td>The Information, 2025-12-21</td>
+<td><strong>paid-user compute margin</strong> = (paid-user revenue − paid-user inference cost) / paid-user revenue</td>
+<td>chart note, verbatim</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>OpenAI &quot;adjusted gross margin … 33% in 2025 … 46% forecast&quot;</td>
+<td>The Information, 2026-02-24</td>
+<td>company-wide &quot;adjusted GM&quot; = revenue − inference cost, over revenue; training reported separately</td>
+<td>reproduced definition</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;frontier lab inference margins are like 40–50% … Anthropic labels cloud provider commissions as a sales and marketing expense&quot;</td>
+<td>@fleetingbits, 2026-07-04</td>
+<td>company GM used as a proxy for inference economics; the S&amp;M-classification claim is unverified</td>
+<td>none</td>
+<td>OUR READING</td>
+</tr>
+<tr>
+<td>&quot;Assuming the leasing cost of one H800 GPU is $2 per hour … cost profit margin of 545%&quot;</td>
+<td>DeepSeek, 2025-03-01 (official disclosure)</td>
+<td><strong>rental-inclusive unit serving by construction</strong> (an assumed lease rate is the cost basis); 545% is profit/cost, 84.5% the margin on theoretical list revenue</td>
+<td>explicit</td>
+<td>STATED</td>
+</tr>
+<tr>
+<td>&quot;DeepSeek&#39;s gross margin from selling v4 API access is … 70% to 80%&quot;</td>
+<td>The Information via @jingyanghk, 2026-07-15</td>
+<td><strong>API-product</strong> gross margin, cost basis undisclosed — not company GM</td>
+<td>none</td>
+<td>OUR READING</td>
+</tr>
+<tr>
+<td>&quot;Anthropic&#39;s gross margins of roughly 44%&quot; / &quot;$0.71 on computing power per dollar of revenue&quot;</td>
+<td>PitchBook / Morningstar, 2026-06-10/16</td>
+<td>company GM estimate (the 44% matches the projected Q2 cut)</td>
+<td>method indicator only</td>
+<td>IMPLIED</td>
+</tr>
+<tr>
+<td>&quot;$2.60 per GPU-hour (weighted average lease rate)&quot;; &quot;$5B of spend → $15B of ARR&quot;; &quot;NVIDIA share nearly 50%&quot;</td>
+<td>@jukan05 relays, 2026-05-09 / 07-10 / 07-11</td>
+<td>a rental datum; a spend-to-ARR multiple; a fleet share — <strong>none is a margin</strong></td>
+<td>—</td>
+<td>STATED (object)</td>
+</tr>
+</tbody></table>
+<h2>4. The owner&#39;s reading, verdict by analyst</h2>
+<table>
+<thead>
+<tr>
+<th>Analyst</th>
+<th>Verdict (both arms)</th>
+<th>What this page says from now on</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SemiAnalysis</strong></td>
+<td><strong>Refuted as a blanket attribution; confirmed per citation.</strong> The Anthropic-specific figures (the $1.60/TPU-hr, the Opus &quot;north of 80%&quot;) are rental-inclusive; but SemiAnalysis is dual-basis by design — InferenceMAX/InferenceX price $/M from owned TCO, the TPUv7 article runs owned-TCO for the bought racks and rental-inclusive for the rented ones, and its company-GM series is an accounting object</td>
+<td>&quot;SemiAnalysis&#39;s basis varies by analysis; this citation uses [rental-inclusive / operator-ownership TCO / throughput only / company financials], as stated in the source.&quot;</td>
+</tr>
+<tr>
+<td><strong>TeorTaxes</strong></td>
+<td><strong>Refuted for the own-GPU reading of the $4 post; undetermined for the 90→95 batch remark.</strong> He never mentions owned GPUs; his only cost anchor is an H100 <em>spot rental</em> price, and the Opus figure is &quot;math for DeepSeek&quot; extending that chain. The batch remark is a separate, earlier post about &quot;every western provider&quot; — the site&#39;s key-findings line had fused the two</td>
+<td>&quot;$4/1Mt: best read as DeepSeek-anchored, rental-priced arithmetic; exact rate unstated. 90→95 via batch: basis not stated by the source; shown under both bases.&quot;</td>
+</tr>
+<tr>
+<td><strong>Zephyr</strong></td>
+<td><strong>Undetermined for 90–95% (unit at list price, basis never stated); confirmed company GM for ~70%.</strong> The Jul-8 post says xAI is <em>not</em> doing it and names no lab; the Jun-24 post does name Anthropic/OpenAI (&quot;serve tokens at 5x the current price (95% GM)&quot;) — so the allegation is lab-specific in his own words, but its <em>basis</em> still is not</td>
+<td>&quot;basis not stated by the source; shown under both bases. A separate post puts Anthropic&#39;s company gross margin at ~70%.&quot;</td>
+</tr>
+<tr>
+<td><strong>The Information</strong></td>
+<td>not applicable to the hypothesis — three different accounting cuts (company/product GM; paid-user compute margin; company-wide adjusted GM) with explicitly different numerators and denominators</td>
+<td>the definitions above, verbatim, and never one unlabelled &quot;reported margin&quot; series</td>
+</tr>
+<tr>
+<td><strong>@fleetingbits</strong></td>
+<td>a company-GM-as-proxy argument resting on an unverified expense-classification claim</td>
+<td>label as company GM; present the S&amp;M claim as his</td>
+</tr>
+<tr>
+<td><strong>DeepSeek</strong></td>
+<td><strong>Confirmed rental-inclusive by construction</strong></td>
+<td>&quot;$2/H800-hour lease basis (an assumption in DeepSeek&#39;s own words); 545% profit/cost = 84.5% margin on theoretical list revenue; the owned-TCO version would replace the lease rate with DeepSeek&#39;s undisclosed TCO&quot;</td>
+</tr>
+</tbody></table>
+<p><strong>So the divergence is not different analysts disagreeing about one margin. It is different sources switching among four objects</strong> — a rented-hour token margin, an owned-TCO token margin, a cohort contribution margin, and company or product accounting GM — and the same source (SemiAnalysis) legitimately using more than one. The two cards on the front page exist so that the first two can be seen side by side; the rest must stay labelled as what they are.</p>
+<h2>5. Corrections to the main page queued by this verification</h2>
+<ol>
+<li><em>&quot;this corpus does not establish that the 90–95% allegation is Anthropic-specific&quot;</em> (§1 passage on Zephyr) — contradicted by his 2026-06-24 post (&quot;adopt Anthropic/OAI tactics … (95% GM)&quot;); the page should say the allegation IS lab-specific in his words and that its <strong>basis</strong> is what remains unstated.</li>
+<li><em>&quot;Anthropic turned its first gross profit in Q2 (June 2026)&quot;</em> (RAISE update) — the only retrievable text is a session summary; it conflicts with SemiAnalysis&#39;s own written record (38% inference GM in 2025, &quot;mid 60s&quot; by 2026-05-27, &quot;Operating Income profitable in 2Q after adjusting for stock-based compensation&quot;) and with Patel on the Sequoia podcast (&quot;net income profitable excluding stock-based compensation&quot;). Relabel as an unverified summary-level claim or drop the &quot;first gross profit&quot; phrase.</li>
+<li><em>&quot;~30% (late 2025) to ~55% today … ~50% to ~65%&quot;</em> — only the endpoints (~55%, ~65%) appear in the retrievable summary; the starting points were found in no source by either arm. Cite them or drop them (The Information&#39;s 33% is a different, &quot;adjusted&quot; cut and cannot stand in for &quot;~30%&quot;).</li>
+<li>The Opus &quot;north of 80%&quot; citation can be upgraded from &quot;quoted-secondary&quot; to the Sequoia transcript, which specifies the object (&quot;for the API price&quot;, on an Opus token) and the rent framing.</li>
+<li>The −94% / 38% / mid-60s series should carry SemiAnalysis&#39;s own label (&quot;inference gross margins&quot; — a business line&#39;s GM, not a unit figure).</li>
+<li>Two Zephyr posts in the corpus (&quot;75–80% GM&quot;, 2026-06-27) answer a reply about <strong>CXMT</strong>, not Anthropic; nothing on the page may derive an Anthropic figure from them.</li>
+<li>The site&#39;s key-findings line <em>&quot;TeorTaxes: Serving Opus ≤ $4/1Mt, 90→95% via batch&quot;</em> fuses two posts; record them separately with their bases as above.</li>
+<li>DeepSeek V4 &quot;70–80%&quot; is an API-product margin with an undisclosed cost basis, not &quot;company-side&quot;.</li>
+</ol>
+<p>These are queued for the release-notes pass (tranche 5) because they move pinned front-page bytes; the research page above is the record until then.</p>
+<h2>6. Method and provenance</h2>
+<p>Brief: <code>im-arc/dives/analyst-basis-brief.md</code> (seven questions; the page&#39;s fifteen cited passages and the prior draft attached as content). GPT Pro arm: broker request <code>pr-20260823T020913Z-d0fe55</code>, gpt-5-6-pro, 2026-08-23, full report archived as <code>im-arc/dives/analyst-basis-gptpro.md</code>. Fable arm: <code>im-arc/dives/analyst-basis-fable.md</code>, 2026-08-23, WebSearch/WebFetch/Brave (Exa out of credits — stated), X posts via the fxtwitter mirror with UTC timestamps. Convergence: every verdict above is shared by both arms; the only differences were coverage (the Fable arm surfaced the 2026-06-24 Zephyr post and the CXMT contamination; the Pro arm supplied the InferenceX/Rubin method statements, The Information&#39;s chart-note definitions and the PitchBook cut) and the 67.6%-row rounding (Pro: 84.6% at exact inputs). Two X posts and one Morgan Stanley note could not be retrieved by either arm and are labelled accordingly. SP-real-terms-comparisons: no dollar comparison across years is made on this page.</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

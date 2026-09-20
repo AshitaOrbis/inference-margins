@@ -1,0 +1,7 @@
+node_modules/
+dist/
+# Generated verbatim copy of dc-map/economics/src (scripts/sync-economics.mjs); never edited, never committed.
+src/dcmap/economics/
+src/dcmap/economics-node/
+# Synthetic substrate releases minted by the dc-map suites.
+.dcmap-test-releases/

@@ -1,0 +1,36 @@
+{
+  "name": "inference-margins",
+  "version": "3.0.0",
+  "private": true,
+  "description": "Interactive model of frontier-LLM serving costs and unit direct-serving contribution margins — margins.ashitaorbis.com",
+  "license": "MIT",
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node scripts/sync-site-tests.mjs --check && node scripts/asset-manifest.mjs --check && node tests/site-links.test.mjs && node tests/tag-balance.test.mjs && node tests/grounding-ledger.test.mjs && node tests/snapshots.test.mjs && node tests/traffic-contract.test.mjs && node tests/epoch-deprecation.test.mjs && node tests/permalink-defaults-move.test.mjs && node tests/margin-band.test.mjs && node tests/face-vs-registry.test.mjs && node tests/mix-band.test.mjs && node tests/mix-centroid.test.mjs && node tests/evidence-schema.test.mjs && node tests/uncertainty-finite-guards.test.mjs && node tests/eligibility-strictness.test.mjs && node tests/discontinuity-key-match.test.mjs && node tests/asset-manifest-symlink.test.mjs && node tests/fleets.test.mjs && node tests/share-bound-engine.test.mjs && node tests/render-parity-r1.test.mjs && node tests/t4-receipt-reproduction.test.mjs && node tests/calibration-invariant-r1.test.mjs && node tests/capacity-solver-r1.test.mjs && node tests/contract-harness.test.mjs && node tests/contract-boundary-guards.test.mjs && node tests/link-policy-invariant.test.mjs && node tests/sink-coverage.test.mjs && node tests/fa-justifications.test.mjs && node tests/form-equivalence-b9.test.mjs && node tests/energy-model-b9.test.mjs && node tests/fleet-sections-t2.test.mjs && node tests/dc-registry-t2.test.mjs && node tests/dc-registry-schema-t4.test.mjs && node tests/rent-quotes-t4.test.mjs && node tests/defaults-capex-scope-t4.test.mjs && node tests/capex-scope-reader-t4.test.mjs && node tests/capital-recovery-t4.test.mjs && node tests/dc-coverage-resolver-t4.test.mjs && node tests/electricity-default-t2.test.mjs && node tests/rent-absolute-t1.test.mjs && node tests/two-card-t1.test.mjs && node tests/fleet-mode-t3.test.mjs && node tests/custom-fleets-b9.test.mjs && node tests/trendline-interlock-b9.test.mjs && node tests/spec-decode-lever-b9.test.mjs && node tests/nvlink-cap-lever.test.mjs && node tests/fa-m6-b9.test.mjs && node tests/contrast-check.mjs && node tests/roofline-core.test.mjs && node tests/dense-tp-prefill-basis.test.mjs && node tests/vetting-0919-robustness.test.mjs && node tests/margin-band-searched-label.test.mjs && node tests/vocabulary-consistency.test.mjs && node tests/public-links-resolve.test.mjs && node tests/claims-contract-v2.test.mjs && node tests/publish-deny-scan.test.mjs && node tests/browser-suite-exit-status.test.mjs && node tests/roofline-parallel-diff.mjs && node tests/im4-fleet-policy-harness.mjs && node tests/gate-composition.test.mjs",
+    "sync:site-tests": "node scripts/sync-site-tests.mjs",
+    "manifest:check": "node scripts/asset-manifest.mjs --check",
+    "manifest:update": "node scripts/asset-manifest.mjs --write",
+    "test:served-node": "node scripts/sync-site-tests.mjs --check && for t in site-links fleets render-parity-r1 calibration-invariant-r1 capacity-solver-r1 evidence-schema snapshots traffic-contract epoch-deprecation permalink-defaults-move margin-band mix-band fa-justifications fa-m6-b9 roofline-core; do node \"site/tests/$t.test.mjs\" || exit 1; done && node site/tests/roofline-parallel-diff.mjs && node site/tests/im4-fleet-policy-harness.mjs",
+    "test:contract": "node tests/contract-harness.test.mjs",
+    "test:ops": "bash tests/test-pro-fallback-policy.sh && bash tests/test-weekly-success-assert.sh",
+    "test:migration-differential": "node tests/contract-migration-differential.test.mjs",
+    "test:browser": "node tests/inert-filter-dom-equivalence.test.mjs && node tests/preset-pairs-cdp.test.mjs && node tests/turnstile-loader-cdp.test.mjs && node tests/localstorage-epoch.test.mjs && node tests/rejected-link-and-store-cdp.test.mjs && node tests/landing-hero-modes.test.mjs && node tests/custom-fleets-cdp.test.mjs && node tests/fleet-mode-cdp.test.mjs && node tests/fa-dual-default-r1.test.mjs && node tests/fa-explain-cdp.test.mjs && node tests/spec-decode-cdp.test.mjs && node tests/ux-a-cdp.test.mjs && node tests/ux-b-cdp.test.mjs && node tests/ux-c-cdp.test.mjs && node tests/band-lock-cdp.test.mjs && node tests/two-card-cdp.test.mjs && node tests/default-window-cdp.test.mjs && bash tests/run-app-tests.sh",
+    "test:served-browser": "node site/tests/turnstile-loader-cdp.test.mjs && node site/tests/localstorage-epoch.test.mjs && node site/tests/landing-hero-modes.test.mjs && node site/tests/fa-dual-default-r1.test.mjs && node site/tests/fa-explain-cdp.test.mjs && node site/tests/ux-a-cdp.test.mjs && node site/tests/ux-b-cdp.test.mjs && node site/tests/ux-c-cdp.test.mjs && bash site/tests/run-app-tests.sh",
+    "diagnostic:im4": "node tests/im4-fleet-policy-harness.mjs",
+    "test:mcp-surface": "node tests/lexical-identity.test.mjs && node tests/final-answer-vocabulary.test.mjs && node tests/mcp-policy-vocabulary-t3.test.mjs",
+    "test:feedback": "node tests/assert-suite-nonempty.mjs feedback/test 1 && node --import ./feedback/test/preload-html-loader.mjs --test \"feedback/test/*.test.mjs\"",
+    "gate:site": "npm test && npm run test:served-node && npm run test:browser && npm run test:served-browser",
+    "gate:mcp": "npm --prefix mcp-server test",
+    "gate:worker": "npm --prefix mcp-server/worker run typecheck && npm --prefix mcp-server/worker test",
+    "gate:artifacts": "npm run build && npm run manifest:check && git diff --exit-code",
+    "gate": "npm run gate:site && npm run gate:mcp && npm run gate:worker && npm run test:feedback && npm run gate:artifacts",
+    "test:all": "npm test && npm --prefix mcp-server test && npm run test:browser",
+    "build": "node build-grounding-ledger.mjs && node build-dc-ledger.mjs && node build-research-html.mjs"
+  },
+  "devDependencies": {
+    "marked": "17.0.3"
+  }
+}

@@ -1,0 +1,52 @@
+{
+ "purpose": "RAW (un-normalized) htmlToText output for the same eleven ids as fixtures-mcp-report-sections-bedcc23.json. U-16 asserts BOTH: normalized text against the capture, and raw text against this sidecar. Needed because the capture stores whitespace-normalized text (\\s+ -> \" \") and therefore cannot see a newline-only change.",
+ "provenance": "NOT a re-capture. RE-DERIVED at UX-B implementation time by running the same htmlToText helper over the bedcc23 revision of site/index.html, whose sha256 was verified against the capture's own indexHtmlSha256 before these hashes were written. The capture file itself is byte-unchanged: extending it in place would blur captured evidence with later-derived evidence (UX-B design gate P1-7).",
+ "commit": "bedcc23252c605ce2dad57f4805195ff43eec6d6",
+ "indexHtmlSha256": "1a45aec125ce3d027592dab322991c53e8592c37beb0bf0cbff76e98f9a2abbb",
+ "sections": {
+  "report-s1": {
+   "chars": 2666,
+   "textRawSha256": "1b893ec6c48512006a6d417c5b54cb23869777d4b11a08ea9c4b9523c072a8a1"
+  },
+  "report-s2": {
+   "chars": 7022,
+   "textRawSha256": "78e5e0f37162bed91b7abb2c761a9ac51b2a45137e57ca6c7856a68b3b413e18"
+  },
+  "report-s3": {
+   "chars": 4968,
+   "textRawSha256": "eae6f1e552087e3d80f53a95de85af344ed5ed94894d0cf77c275a4e172e6a0c"
+  },
+  "report-s4": {
+   "chars": 10697,
+   "textRawSha256": "f2030f944bfa8298cb823aeee8608f49b5f4dcfeee4d42842b8855e81ddeeb2b"
+  },
+  "report-s5": {
+   "chars": 7525,
+   "textRawSha256": "4abb038ff159f483714fcbb7b62e95743e0674b27d53ea94f3d20fc1a89fb6ce"
+  },
+  "report-s6": {
+   "chars": 6470,
+   "textRawSha256": "650d4636b29010cefbb52326ce6694d7c8abf66e1116bbc0275bc57f1ee15a51"
+  },
+  "report-s7": {
+   "chars": 5599,
+   "textRawSha256": "d7e303325e5906691ee930dadce20af68151f947b3840d13f3c083822df13e5e"
+  },
+  "report-s8": {
+   "chars": 1660,
+   "textRawSha256": "c3bf875465991c3e9e365cbfc7b2cc1e00becef2b91c81b48ee60dd58bc2c371"
+  },
+  "report-s9": {
+   "chars": 2434,
+   "textRawSha256": "71adf45d67f9c3c6216157e3696d95cbf47dc914ece34d318e7b850688b9f23d"
+  },
+  "report-s10": {
+   "chars": 25293,
+   "textRawSha256": "f04865db982cf5578240a498f4339816bc21b7c7347fca86c5fd8fb62d47dd8a"
+  },
+  "front-page": {
+   "chars": 97037,
+   "textRawSha256": "7af8ac27d8b7798d5a1f9457459f09a136a6c293cebe73ccb85632ea3176e0b2"
+  }
+ }
+}

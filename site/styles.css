@@ -1,0 +1,1325 @@
+/* Frontier Inference Margins — skin system + layout
+   Two visual identities (Ashita Orbis tiers), selected via data-skin on <html>:
+     app       — tier-3 Next.js identity (DEFAULT; its native theme is dark)
+     editorial — tier-2 Astro identity (its native theme is light)
+   crossed with data-theme="dark|light". Every color flows through the token
+   layer below; component rules never hardcode color. Skin/theme resolution
+   (URL params → referrer → localStorage → app+dark default) runs in a
+   pre-paint head script in index.html. Pages that do not run that script
+   (research annex, 404) get the app skin following prefers-color-scheme.
+   Dataviz rule preserved: text never wears series color; --accent-ink is the
+   AA-safe accent for text (differs from --accent only where needed). */
+
+/* ---------- self-hosted fonts (latin subsets, variable-weight woff2) ---------- */
+@font-face {
+  font-family: "Inter"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/inter-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+   fleet mode, prominent coverage denominator and middle/bottom–top band grammar. */
+.fleet-mode-toggle {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  margin: 8px 0;
+}
+.fleet-mode-button {
+  border: 1px solid var(--grid);
+  border-radius: 7px;
+  background: var(--paper);
+  color: var(--ink-2);
+  padding: 8px 10px;
+  font: inherit;
+  cursor: pointer;
+}
+.fleet-mode-button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--ink-1);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.fleet-mode-note { grid-column: 1 / -1; margin: 2px 0 0; color: var(--ink-3); font-size: 12px; line-height: 1.4; }
+.fleet-coverage-line {
+  margin: 9px 0;
+  padding: 9px 10px;
+  border-left: 3px solid var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  color: var(--ink-1);
+  font-size: 12.5px;
+  line-height: 1.45;
+  font-weight: 600;
+}
+.cf-dc-row-list { display: grid; gap: 7px; margin: 8px 0 14px; }
+.cf-dc-row { display: flex; gap: 5px; align-items: flex-start; color: var(--ink-2); font-size: 13px; }
+.section-band { margin-top: 3px; }
+.section-band-cell { display: inline-flex; flex-direction: column; gap: 1px; }
+.section-band-middle { color: var(--ink-1); font-size: 1.06em; }
+.section-band-range { color: var(--ink-3); font-size: 11px; line-height: 1.35; }
+.chart-section-band { margin: 4px 0 8px; color: var(--ink-2); }
+@media (max-width: 520px) {
+  .fleet-mode-toggle { grid-template-columns: 1fr; }
+  .fleet-mode-note { grid-column: 1; }
+  .fleet-mode-button { text-align: left; }
+}
+@font-face {
+  font-family: "Space Grotesk"; font-style: normal; font-weight: 500 700; font-display: swap;
+  src: url("fonts/space-grotesk-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Playfair Display"; font-style: normal; font-weight: 500 800; font-display: swap;
+  src: url("fonts/playfair-display-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Source Serif 4"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/source-serif-4-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "JetBrains Mono"; font-style: normal; font-weight: 400 700; font-display: swap;
+  src: url("fonts/jetbrains-mono-latin-var.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ---------- app skin (tier-3), dark — the site default ---------- */
+:root {
+  color-scheme: dark;
+  --font-head: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-data: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+
+  --page: #050505;
+  --surface-1: rgba(255,255,255,0.03);
+  --tile: rgba(255,255,255,0.06);
+  --overlay: #1c1c1e;          /* opaque pop-over surface (tooltips) */
+  --ink-1: #E8E8E8;
+  --ink-2: #B4B4B4;
+  --ink-3: #888888;
+  --grid: rgba(255,255,255,0.08);
+  --baseline: rgba(255,255,255,0.28);
+  --border: rgba(255,255,255,0.12);
+  --accent: #7B61FF;
+  --accent-ink: #9885FF;       /* accent as small text: lightened to clear 4.5:1 on washed tiles */
+  --accent-2: #00F0FF;
+  --on-accent: #050505;
+  --good: #3FB950;
+  --warn: #FAB219;
+  --bad: #F87171;
+  --wash: rgba(123,97,255,0.14);
+  --series-1: #7B61FF;
+  --series-2: #00F0FF;
+  --series-3: #F59E0B;
+  --series-4: #4CC38A;
+  --series-5: #FF2E86;
+  --series-6: #FF6B6B;
+  --ord-1: #C9BBFF; --ord-2: #A48FFF; --ord-3: #7B61FF; --ord-4: #5B3FD9; --ord-5: #4025A8;
+  --shadow: 0 1px 3px rgba(0,0,0,0.5);
+  --shadow-pop: 0 4px 16px rgba(0,0,0,0.55);
+}
+
+/* app skin, light */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --page: #F8F9FA;
+  --surface-1: rgba(0,0,0,0.03);
+  --tile: rgba(0,0,0,0.055);
+  --overlay: #FFFFFF;
+  --ink-1: #1A1A2E;
+  --ink-2: #44445C;
+  --ink-3: #61617A;
+  --grid: rgba(0,0,0,0.08);
+  --baseline: rgba(0,0,0,0.30);
+  --border: rgba(0,0,0,0.13);
+  --accent: #6644BB;
+  --accent-ink: #6644BB;
+  --accent-2: #0088CC;
+  --on-accent: #FFFFFF;
+  --good: #116329;
+  --warn: #8A5A00;
+  --bad: #B03030;
+  --wash: rgba(102,68,187,0.09);
+  --series-1: #6644BB;
+  --series-2: #0088CC;
+  --series-3: #B45309;
+  --series-4: #2DA44E;
+  --series-5: #B8005C;
+  --series-6: #B03030;
+  --ord-1: #B49BE8; --ord-2: #9678D6; --ord-3: #6644BB; --ord-4: #4E3392; --ord-5: #3A2470;
+  --shadow: 0 1px 3px rgba(26,26,46,0.08);
+  --shadow-pop: 0 4px 16px rgba(26,26,46,0.16);
+}
+
+/* Pages that never run the head script (research annex, 404) carry no
+   data-theme attribute: give them the app skin following the OS preference. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --page: #F8F9FA;
+    --surface-1: rgba(0,0,0,0.03);
+    --tile: rgba(0,0,0,0.055);
+    --overlay: #FFFFFF;
+    --ink-1: #1A1A2E;
+    --ink-2: #44445C;
+    --ink-3: #61617A;
+    --grid: rgba(0,0,0,0.08);
+    --baseline: rgba(0,0,0,0.30);
+    --border: rgba(0,0,0,0.13);
+    --accent: #6644BB;
+    --accent-ink: #6644BB;
+    --accent-2: #0088CC;
+    --on-accent: #FFFFFF;
+    --good: #116329;
+    --warn: #8A5A00;
+    --bad: #B03030;
+    --wash: rgba(102,68,187,0.09);
+    --series-1: #6644BB;
+    --series-2: #0088CC;
+    --series-3: #B45309;
+    --series-4: #2DA44E;
+    --series-5: #B8005C;
+    --series-6: #B03030;
+    --ord-1: #B49BE8; --ord-2: #9678D6; --ord-3: #6644BB; --ord-4: #4E3392; --ord-5: #3A2470;
+    --shadow: 0 1px 3px rgba(26,26,46,0.08);
+    --shadow-pop: 0 4px 16px rgba(26,26,46,0.16);
+  }
+}
+
+/* ---------- editorial skin (tier-2 Astro identity) ---------- */
+:root[data-skin="editorial"] {
+  --font-head: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-data: system-ui, -apple-system, "Segoe UI", sans-serif; /* charts stay sans for tick/label legibility */
+  --font-code: "JetBrains Mono", ui-monospace, "Cascadia Mono", Menlo, monospace;
+}
+
+/* editorial, light — the tier's native theme */
+:root[data-skin="editorial"][data-theme="light"] {
+  color-scheme: light;
+  --page: #FDF6E3;
+  --surface-1: #F5ECD7;
+  --tile: #FAF2DC;
+  --overlay: #FFFBEF;
+  --ink-1: #2D2926;
+  --ink-2: #4E463E;
+  --ink-3: #6B6157;  /* tier muted #7A7067 darkened one step to clear 4.5:1 on the tier surfaces */
+  --grid: #E7DCC4;
+  --baseline: #B5A88C;
+  --border: #DDD0B8;
+  --accent: #1B4965;
+  --accent-ink: #1B4965;
+  --accent-2: #C44536;
+  --on-accent: #FFFFFF;
+  --good: #386641;
+  --warn: #8A5A00;
+  --bad: #9E3527;
+  --wash: rgba(27,73,101,0.08);
+  --series-1: #1B4965;
+  --series-2: #4A8B8C;
+  --series-3: #A9762B;
+  --series-4: #386641;
+  --series-5: #6D4C7D;
+  --series-6: #9E3527;
+  --ord-1: #8FB3C7; --ord-2: #5E8CA7; --ord-3: #3D6B88; --ord-4: #1B4965; --ord-5: #0F3049;
+  --shadow: 0 1px 3px rgba(45,41,38,0.08);
+  --shadow-pop: 0 4px 16px rgba(45,41,38,0.18);
+}
+
+/* editorial, dark */
+:root[data-skin="editorial"][data-theme="dark"] {
+  color-scheme: dark;
+  --page: #1A1412;
+  --surface-1: #261E1A;
+  --tile: #2E241F;
+  --overlay: #2B221D;
+  --ink-1: #E8DDD4;
+  --ink-2: #C2B3A6;
+  --ink-3: #9C8A7D;
+  --grid: #3A2E28;
+  --baseline: #6B584A;
+  --border: #4A3B32;
+  --accent: #D4A574;
+  --accent-ink: #D4A574;
+  --accent-2: #D4785A;
+  --on-accent: #1A1412;
+  --good: #7FB069;
+  --warn: #E0B050;
+  --bad: #E08A6E;
+  --wash: rgba(212,165,116,0.10);
+  --series-1: #7FA8C9;
+  --series-2: #6BB5A0;
+  --series-3: #C9A96E;
+  --series-4: #7FB069;
+  --series-5: #B594D6;
+  --series-6: #DE8668;
+  --ord-1: #E8CBA4; --ord-2: #D4A574; --ord-3: #B98A55; --ord-4: #976F41; --ord-5: #755430;
+  --shadow: 0 1px 3px rgba(0,0,0,0.45);
+  --shadow-pop: 0 4px 16px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink-1);
+  font-size: 15px; line-height: 1.55;
+  font-family: var(--font-body);
+}
+h1, h2, h3, h4 { font-family: var(--font-head); }
+code { font-family: var(--font-code); font-size: 0.92em; }
+.page { max-width: 1240px; margin: 0 auto; padding: 24px 20px 60px; }
+.page.not-found-page { max-width: 640px; margin: 80px auto; font-family: inherit; }
+.method-note { font-size: 12.5px; color: var(--ink-3); }
+a { color: var(--accent-ink); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* Masthead */
+.masthead-row { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
+.subtitle { color: var(--ink-2); max-width: 900px; margin: 6px 0 18px; }
+/* Release edit 2026-09-09: the opener is three paragraphs — what the metric is, where the numbers
+   stand, and how to read the rows — so consecutive subtitles close up, and the middle one (which
+   carries the answer) is set slightly stronger. The fact comes first; the explanation follows it. */
+.subtitle + .subtitle { margin-top: -6px; }
+.subtitle-numbers { color: var(--ink-1); }
+.masthead-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.ghost-btn {
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--ink-2); padding: 5px 12px; font: inherit; font-size: 13px;
+  cursor: pointer; white-space: nowrap;
+}
+.ghost-btn:hover { background: var(--wash); color: var(--ink-1); }
+@media (max-width: 700px) {
+  .masthead-actions { width: 100%; justify-content: flex-start; }
+}
+
+/* Preset / scenario identity note (lives in the dossier summary) */
+.preset-note { font-size: 12px; color: var(--ink-3); }
+
+/* Persistent state-identity strip (public-release P0): reads model · traffic · lens/replay · state, on
+   the result surface. Colour-coded by state so a modified/crafted/counterfactual state is unmistakable. */
+.identity-strip {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px;
+  border: 1px solid var(--border); border-left-width: 4px; border-radius: 10px;
+  padding: 8px 12px; margin: 0 0 10px; font-size: 12.5px; background: var(--surface-1); min-width: 0;
+}
+.identity-strip .id-chip { color: var(--ink-2); }
+.identity-strip .id-lead { color: var(--ink-3); }
+.identity-strip .id-model { font-weight: 700; color: var(--ink-1); }
+.identity-strip .id-state { font-weight: 600; }
+.identity-strip .id-epistemic { flex-basis: 100%; color: var(--ink-2); font-style: italic; font-size: 12.5px; max-width: 68ch; } /* b9 UX-C §18.4: promoted IN PLACE — an anti-conclusion-shopping label, never hidden */
+.identity-strip .id-reset { margin-left: auto; font-size: 12px; }
+.identity-strip.id-central { border-left-color: var(--good); }
+.identity-strip.id-central .id-state { color: var(--good); }
+.identity-strip.id-lens { border-left-color: var(--accent); }
+.identity-strip.id-custom { border-left-color: var(--series-5); }
+.identity-strip.id-custom .id-state { color: var(--series-5); }
+.identity-strip.id-counterfactual { border-left-color: var(--warn); }
+.identity-strip.id-counterfactual .id-state { color: var(--warn); }
+.identity-strip.id-modified { border-left-color: var(--series-6); background: var(--wash); }
+.identity-strip.id-modified .id-state { color: var(--series-6); }
+
+/* Epoch deprecation banner (IM1 / v2.2): loud, top-of-page notice when a pre-v5 shared link or a
+   pre-v22 saved scenario is opened. [hidden] keeps it out of the flow until raised. */
+.epoch-deprecation-notice {
+  border: 1px solid var(--warn); border-left-width: 4px; border-radius: 10px;
+  padding: 10px 14px; margin: 0 0 14px; background: var(--wash);
+  color: var(--ink-1); font-size: 13px; font-weight: 600; line-height: 1.4;
+}
+.epoch-deprecation-notice[hidden] { display: none; }
+/* SHARED-LINK BANNER (row 499): deliberately louder than the epoch notice — bigger type, a full
+   accent border and its own background — because it answers a question the reader does not know
+   to ask ("whose numbers am I looking at?"). Same hidden-attribute discipline. */
+.shared-link-banner {
+  border: 2px solid var(--accent); border-radius: 10px;
+  padding: 14px 16px; margin: 0 0 16px; background: var(--wash);
+  color: var(--ink-1); font-size: 15px; font-weight: 600; line-height: 1.45;
+}
+.shared-link-banner .slb-lead { display: block; font-size: 17px; margin-bottom: 6px; }
+.shared-link-banner .slb-detail { display: block; font-weight: 400; font-size: 13px; color: var(--ink-2); }
+.shared-link-banner .slb-title { display: block; font-style: italic; font-size: 14px; margin-bottom: 4px; color: var(--ink-2); }
+.shared-link-banner .slb-reset { margin-top: 10px; }
+.shared-link-banner[hidden] { display: none; }
+/* row 499: the 1/2/3-point toggle, its extra handles, and the band readout. */
+.point-mode { margin: 0 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
+.point-mode-label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
+.range-handles { margin: 4px 0 2px 12px; padding-left: 8px; border-left: 2px solid var(--line); }
+/* Owner annotation n9c61af (2026-08-16): ONE line carrying the three dots, replacing the three
+   stacked slider rows. The inputs are still native ranges (see rangeHandlesFor for why); they are
+   stacked in the same grid cell with transparent tracks so only their thumbs show, and each input
+   is pointer-transparent EXCEPT its thumb — otherwise the topmost input would swallow every press
+   aimed at a dot underneath it, and the lower handle would become undraggable wherever the three
+   overlap, which is exactly the state they start in. */
+.range-band { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.range-end { font-size: 10.5px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.range-line { position: relative; display: grid; height: 20px; align-items: center; }
+.range-line::before { content: ""; position: absolute; left: 0; right: 0; height: 3px; border-radius: 2px; background: var(--line); }
+.range-fill { position: absolute; height: 3px; border-radius: 2px; background: var(--series-1); opacity: .55; }
+.range-dot { grid-area: 1 / 1; width: 100%; margin: 0; background: transparent; -webkit-appearance: none; appearance: none; pointer-events: none; height: 20px; }
+.range-dot:focus-visible { outline: 2px solid var(--series-1); outline-offset: 2px; border-radius: 4px; }
+.range-dot::-webkit-slider-runnable-track { background: transparent; border: 0; height: 20px; }
+.range-dot::-moz-range-track { background: transparent; border: 0; height: 20px; }
+.range-dot::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; pointer-events: auto; cursor: grab;
+  width: 13px; height: 13px; border-radius: 50%; background: var(--series-1); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--line); }
+.range-dot::-moz-range-thumb { pointer-events: auto; cursor: grab;
+  width: 13px; height: 13px; border-radius: 50%; background: var(--series-1); border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--line); }
+/* The median dot is a different statement from the two bounds and says so, rather than being a
+   third identical dot the reader has to count positions to identify. */
+.range-dot-mid::-webkit-slider-thumb { background: var(--bg); border-color: var(--series-1); }
+.range-dot-mid::-moz-range-thumb { background: var(--bg); border-color: var(--series-1); }
+.range-readout { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; margin-top: 2px; }
+/* The quoted pair sits directly under the headline number and must read as a QUOTATION rather than
+   as a second output of this page — hence the rule beside it and the quieter basis line. */
+.tile-stated { margin: -2px 0 6px; padding-left: 8px; border-left: 3px solid var(--line); font-size: 13px; }
+.tile-stated[hidden] { display: none; }
+.tile-stated .stated-headline { font-size: 15px; font-variant-numeric: tabular-nums; }
+.tile-stated .stated-basis { font-size: 12px; color: var(--ink-2); }
+#out-margin-band { font-size: 13px; }
+#out-margin-band[hidden] { display: none; }
+#out-margin-band .band-range { font-size: 15px; }
+#out-margin-band .band-refused { font-style: italic; color: var(--ink-2); }
+/* Per-dial bands are the DEFAULT reading and get the visual weight; the compounded box is a
+   deliberate second act, so it sits below a rule and behind its own control. */
+#out-margin-band .band-head { margin: 0 0 4px; font-size: 12px; color: var(--ink-2); }
+#out-margin-band .band-per-dial { margin: 0 0 6px; padding-left: 18px; }
+#out-margin-band .band-per-dial li { margin: 2px 0; }
+#out-margin-band .band-dial-name { color: var(--ink-2); }
+#out-margin-band .band-width { font-size: 12px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+#out-margin-band .band-flat { font-size: 12px; color: var(--ink-3); }
+#out-margin-band .band-note { margin: 4px 0; font-size: 12px; color: var(--ink-2); }
+/* A band whose width includes the algorithmic-lead prior moving is a different kind of statement
+   from the others, so it does not look like the rest of the notes. */
+#out-margin-band .band-lead-moved { color: var(--ink); border-left: 3px solid var(--line); padding-left: 8px; }
+#out-margin-band .band-compounded { margin-top: 6px; padding-top: 6px; border-top: 1px solid var(--line); }
+#out-margin-band .band-toggle { font: inherit; font-size: 12px; background: none; border: 1px solid var(--line);
+  border-radius: 6px; padding: 3px 8px; color: var(--ink-2); cursor: pointer; }
+#out-margin-band .band-compounded-value { margin: 6px 0 0; font-size: 12px; }
+/* row 499: procurement-discount rows reuse the hw-row LOOK but never its class — composition and
+   procurement are different questions and must stay separately selectable (custom-fleet suite). */
+.disc-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center; margin: 4px 0; }
+.disc-row .hw-name { font-size: 12px; color: var(--ink-2); }
+.disc-row .hw-pct { font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
+.disc-fam, .disc-legs { margin: 6px 0 10px; }
+/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): nullable
+   absolute-rent inputs are values, not multiplier sliders. */
+.abs-row { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(92px, 130px) auto; gap: 8px; align-items: center; margin: 5px 0; }
+.abs-row .hw-name { font-size: 12px; color: var(--ink-2); }
+.abs-clear { font: inherit; font-size: 11px; color: var(--ink-3); background: none; border: 1px solid var(--border); border-radius: 7px; padding: 4px 7px; cursor: pointer; }
+.abs-clear:hover { color: var(--ink-1); border-color: var(--accent); }
+/* A saved scenario predating the current epoch: listed but visibly inert (never deleted). */
+.saved-row.saved-deprecated .saved-load { color: var(--ink-3); font-style: italic; }
+
+/* Hero tiles */
+.hero-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px; }
+.tile {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px 16px; box-shadow: var(--shadow);
+  min-width: 0; overflow-wrap: anywhere; /* grid items must shrink inside the narrow controls column, never overflow it */
+}
+/* Output tiles relocated into .controls-col (layout feedback 2026-07-12): responsive tile row as
+   before; in the narrow controls column it wraps to a 2-up grid. It is the column's last child, so
+   drop the trailing margin (the column's own gap handles spacing). .tile-hero emphasis preserved. */
+.controls-col .hero-row { margin-bottom: 0; }
+.tile-hero { background: var(--wash); }
+.tile-owned { border-left: 3px solid var(--series-3); background: var(--surface-1); }
+.tile-label { font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.tile-value { font-size: 34px; font-weight: 600; margin-top: 2px; letter-spacing: -0.02em; font-family: var(--font-head); font-variant-numeric: tabular-nums; }
+.tile-hero .tile-value { font-size: 48px; }
+.tile-small { font-size: 20px; }
+.tile-delta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
+/* Persistent metric-identity qualifier on the hero tile (persona RL3: the "not company GM" caveat
+   must survive a screenshot). Bolded lead in full-contrast ink so it isn't dropped when skimmed. */
+.tile-gm { color: var(--ink-2); }
+.tile-gm strong { color: var(--ink-1); }
+.rent-segment { color: var(--ink-2); line-height: 1.45; }
+.rent-bar { display: flex; width: 100%; height: 8px; margin-top: 7px; overflow: hidden; border-radius: 999px; background: var(--grid); }
+.rent-bar-tco { flex: 1 1 auto; background: var(--series-3); }
+.rent-bar-cut { flex: 0 0 0%; background: var(--series-5); }
+.rent-share-0 { flex-basis: 0%; } .rent-share-1 { flex-basis: 10%; }
+.rent-share-2 { flex-basis: 20%; } .rent-share-3 { flex-basis: 30%; }
+.rent-share-4 { flex-basis: 40%; } .rent-share-5 { flex-basis: 50%; }
+.rent-share-6 { flex-basis: 60%; } .rent-share-7 { flex-basis: 70%; }
+.rent-share-8 { flex-basis: 80%; } .rent-share-9 { flex-basis: 90%; }
+.rent-share-10 { flex-basis: 100%; }
+.owned-band { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--grid); color: var(--ink-2); }
+/* The hero's identity/counterfactual banner (PAGE-AUTHORED / MODIFIED / CRAFTED wording) is the
+   most honesty-critical line on the tile: hold it at secondary ink, not faint ink, in every skin. */
+#out-margin-note { color: var(--ink-2); }
+.form-debt-disclosure {
+  border: 1px solid var(--warn); border-left-width: 4px; border-radius: 10px;
+  background: var(--surface-1); color: var(--ink-2);
+  padding: 10px 12px; font-size: 12px; line-height: 1.45;
+}
+.form-debt-disclosure strong { color: var(--ink-1); }
+
+/* Layout */
+.layout { display: grid; grid-template-columns: 390px 1fr; gap: 18px; align-items: start; }
+@media (max-width: 980px) { .layout { grid-template-columns: 1fr; } }
+
+/* Controls */
+.controls-col { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.controls { display: flex; flex-direction: column; gap: 12px; }
+
+/* Static cards in the controls column (layout restructure 2026-07-11):
+   Save scenario, then the Model / Perspective / Traffic-mix selectors — below all sliders. */
+.ctl-static {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); padding: 12px 14px;
+  display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.ctl-static-title { margin: 0; font-size: 14px; font-weight: 600; }
+.ctl-static label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.ctl-static select, .ctl-static input[type="text"] {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%; text-overflow: ellipsis;
+}
+.ctl-hint { font-size: 11.5px; color: var(--ink-3); margin: 0; }
+
+/* Model dossier card (layout feedback 2026-07-11 → collapsed <details> 2026-07-12): the selected
+   model's own parameter cards under the Model selector. Now reuses the .dossier collapse frame +
+   summary styling and the .dossier-body separator; collapsed by default, never auto-opened. */
+.model-dossier-card .model-note { font-size: 12.5px; color: var(--ink-2); margin: 0 0 6px; }
+
+/* Save-scenario collapsible (layout feedback 2026-07-12): same blue-link treatment as
+   .saved-scenarios; the expanded .saved-panel carries the name field + Save/Copy buttons. */
+.save-scenario .saved-panel { display: flex; flex-direction: column; gap: 6px; }
+.save-scenario .saved-panel label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.save-scenario .saved-panel input[type="text"] {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%;
+}
+.save-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.save-note { color: var(--ink-2); }
+.save-note:empty { display: none; }
+.ctl-section {
+  background: var(--surface-1); border: 1px solid var(--border); border-radius: 12px;
+  box-shadow: var(--shadow); overflow: hidden;
+}
+.ctl-section > summary {
+  cursor: pointer; padding: 11px 14px; font-weight: 600; font-size: 14px;
+  list-style: none; display: flex; justify-content: space-between; align-items: center;
+  user-select: none;
+}
+.ctl-section > summary::-webkit-details-marker { display: none; }
+.ctl-section > summary::after { content: "▾"; color: var(--ink-3); font-size: 12px; transition: transform .15s; }
+.ctl-section:not([open]) > summary::after { transform: rotate(-90deg); }
+.ctl-body { padding: 2px 14px 14px; display: flex; flex-direction: column; gap: 14px; }
+.ctl-advanced { border-top: 1px solid var(--grid); padding-top: 8px; }
+.ctl-advanced > summary { cursor: pointer; color: var(--accent-ink); font-size: 12.5px; font-weight: 600; list-style: none; }
+.ctl-advanced > summary::-webkit-details-marker { display: none; }
+.ctl-advanced > summary::before { content: "▸"; margin-right: 5px; color: var(--ink-3); }
+.ctl-advanced[open] > summary::before { content: "▾"; }
+.ctl-advanced-body { display: flex; flex-direction: column; gap: 14px; padding-top: 12px; }
+
+/* Injected selector groups (selector dissolve 2026-07-12): the Model / Traffic-mix pickers rendered
+   at the top of their sections. #picker-holder parks them (hidden) between rebuilds. */
+#picker-holder[hidden] { display: none; }
+.ctl-picker-group { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ctl-picker-group label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-3); }
+.ctl-picker-group select {
+  font: inherit; font-size: 14px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px;
+  width: 100%; min-width: 0; max-width: 100%; text-overflow: ellipsis;
+}
+.ctl-picker-group .ctl-hint { font-size: 11.5px; color: var(--ink-3); margin: 0; }
+
+.param { display: flex; flex-direction: column; gap: 4px; }
+.param-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.param-name { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.param-val { font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.param input[type="range"] { width: 100%; accent-color: var(--accent); margin: 0; height: 22px; }
+.param select, .param input[type="text"], .param input[type="number"] {
+  font: inherit; font-size: 13.5px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px;
+}
+.ticks { position: relative; height: 26px; margin-top: -3px; }
+.tick {
+  position: absolute; transform: translateX(-50%); top: 0; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+  background: none; border: none; padding: 0; font: inherit;
+}
+.tick i { display: block; width: 1px; height: 5px; background: var(--baseline); }
+.tick span {
+  font-size: 10px; color: var(--ink-3); white-space: nowrap; line-height: 1.15;
+  max-width: 86px; overflow: hidden; text-overflow: ellipsis;
+}
+.tick:hover span { color: var(--accent-ink); }
+.tick.tk-alt { top: 13px; }
+.tick.tk-alt i { display: none; }
+
+.info {
+  background: none; border: none; color: var(--ink-3); cursor: help; font-size: 12px;
+  padding: 0 2px; line-height: 1;
+}
+.info:hover, .info:focus { color: var(--accent-ink); }
+.info:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* b9 UX-A: on coarse pointers the .info hit box was 16x12 CSS px across all 48 controls — the only
+   route to the tooltip channel, since no hover exists there. Held to the >=44x44 M6 already applies
+   to `.explain-trigger` and the dialog X. Coarse ONLY: enlarging 48 inline glyphs on desktop would
+   move layout for no accessibility gain, because pointer users have hover AND click. */
+@media (pointer: coarse) {
+  .info {
+    min-width: 44px; min-height: 44px; padding: 0 6px;
+    display: inline-flex; align-items: center; justify-content: center; vertical-align: middle;
+  }
+}
+
+/* Hardware blend rows */
+.hw-row { display: grid; grid-template-columns: 118px 1fr 44px; gap: 8px; align-items: center; }
+.hw-name { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
+.hw-pct { font-size: 12.5px; font-weight: 600; text-align: right; font-variant-numeric: tabular-nums; }
+.hw-meta { grid-column: 1 / -1; font-size: 11px; color: var(--ink-3); margin: -4px 0 2px; }
+
+.radio-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.radio-row button {
+  font: inherit; font-size: 12.5px; padding: 5px 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--tile); color: var(--ink-2); cursor: pointer;
+}
+.radio-row button[aria-pressed="true"] { background: var(--wash); color: var(--ink-1); border-color: var(--accent); }
+
+/* Charts */
+.results { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.chart-card {
+  margin: 0; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px 10px; box-shadow: var(--shadow);
+}
+.chart-card figcaption { display: flex; flex-direction: column; gap: 1px; margin-bottom: 6px; }
+.chart-title { font-weight: 600; font-size: 14.5px; }
+.chart-sub { font-size: 12px; color: var(--ink-3); }
+.stack-rent-toggle { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: var(--ink-2); cursor: pointer; }
+.stack-rent-toggle input { accent-color: var(--series-5); }
+/* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): distinct rental-basis
+   total when the reader-stated rent sits below the modelled TCO counterfactual. */
+.stack-rent-below { fill: var(--series-6); }
+.hw-two-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 10px; }
+.hw-basis-table { min-width: 0; }
+.hw-basis-table h3 { margin: 0 0 5px; font-size: 13px; color: var(--ink-1); }
+.hw-two-note { grid-column: 1 / -1; margin: 0; font-size: 11.5px; color: var(--ink-3); }
+@media (max-width: 720px) { .hw-two-tables { grid-template-columns: 1fr; } }
+/* An operating-point disclosure printed UNDER the chart whose shape it explains
+   (q-im-fp4-gb300-batch-disclosure). Deliberately not a tooltip: the finding was that the
+   assumption was invisible on the surface that renders its consequence, and a disclosure you
+   have to hover to find reproduces that. */
+.chart-note { font-size: 12px; line-height: 1.5; color: var(--ink-2); margin: 8px 0 0;
+  padding: 8px 10px; border-left: 3px solid var(--accent, var(--ink-3)); background: var(--surface-2, transparent); }
+.chart-note strong { color: var(--ink-1); }
+.chart { width: 100%; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { font-family: var(--font-data); }
+
+/* Tooltip */
+/* b9 UX-A (§20 R-1; memo §16.3). `max-width: 320px` with NO max-height and NO overflow let
+   TIPS.specDec (3,352 chars) render a 1,328px box in an 844px viewport — and the JS clamp then
+   placed it at top:-494px, off the TOP, so the BEGINNING of the note was unreachable. At a 320px
+   viewport the width bound went negative too (320 - 320 - 10) and every tooltip sat 10px off.
+   `max-width: calc(100vw - 16px)` is what makes the 8px gutter in showTip() achievable; global
+   box-sizing: border-box makes it exact.
+   `pointer-events: none` is RETAINED DELIBERATELY: overflow-y here does NOT make the box
+   user-scrollable, and pretending otherwise would be the same illegibility with a scrollbar drawn
+   on it. This is a non-interactive quick preview — clicking the control opens the dialog, which is
+   the scrollable full read. */
+.tooltip {
+  position: fixed; z-index: 50; max-width: min(320px, calc(100vw - 16px)); pointer-events: none;
+  max-height: min(60vh, 520px); overflow-y: auto;
+  background: var(--overlay); color: var(--ink-1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 9px 11px; font-size: 12.5px; line-height: 1.45;
+  box-shadow: var(--shadow-pop);
+}
+.tooltip .tt-title { font-weight: 600; margin-bottom: 3px; }
+.tooltip .tt-src { color: var(--ink-3); font-size: 11.5px; margin-top: 4px; }
+.tooltip .tt-row { display: flex; justify-content: space-between; gap: 14px; }
+.tooltip .tt-row b { font-variant-numeric: tabular-nums; }
+.tt-key { display: inline-block; width: 12px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+
+/* Subscription card */
+#sub-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; margin-bottom: 8px; }
+@media (max-width: 700px) { #sub-controls { grid-template-columns: 1fr; } }
+
+/* Report */
+.report {
+  margin-top: 34px; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 28px clamp(18px, 4vw, 44px); box-shadow: var(--shadow);
+}
+.report h2 { font-size: 24px; margin: 8px 0 4px; letter-spacing: -0.01em; }
+.report h3 { font-size: 18px; margin: 26px 0 6px; }
+.report h4 { font-size: 15px; margin: 18px 0 4px; }
+.report p, .report li { color: var(--ink-2); font-size: 14.5px; }
+.report strong { color: var(--ink-1); }
+.report .byline { color: var(--ink-3); font-size: 13px; margin-bottom: 14px; }
+.report table {
+  border-collapse: collapse; width: 100%; font-size: 13px; margin: 10px 0 16px;
+  display: block; overflow-x: auto;
+}
+.report th, .report td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--grid); vertical-align: top; }
+.report th { color: var(--ink-3); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.report td { color: var(--ink-2); }
+.report td b, .report td strong { color: var(--ink-1); }
+.report blockquote {
+  margin: 10px 0; padding: 8px 14px; border-left: 3px solid var(--accent);
+  background: var(--wash); border-radius: 0 8px 8px 0; color: var(--ink-2); font-size: 14px;
+}
+.report code { background: var(--wash); border-radius: 4px; padding: 1px 5px; font-size: 13px; }
+.report .toc { columns: 2; font-size: 13.5px; }
+@media (max-width: 700px) { .report .toc { columns: 1; } }
+.report .verdict {
+  border: 1px solid var(--accent); background: var(--wash); border-radius: 10px;
+  padding: 12px 16px; margin: 12px 0;
+}
+.report .scope-note {
+  border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px;
+  padding: 10px 14px; margin: 10px 0 14px; font-size: 13.5px; color: var(--ink-2);
+}
+.report details { margin: 8px 0; }
+.report details summary { cursor: pointer; color: var(--ink-1); font-weight: 600; font-size: 14px; }
+
+/* ---- §5 ESTIMATE CARDS (owner rulings q-margins-estimates-legibility-rebuild = A and
+   q-margins-estimates-headline-basis = A, 2026-08-13; spec estimates-cards-SPEC-2026-08-13.md).
+   Two QUOTED adjudicator readings SIDE BY SIDE at equal weight — this page does not adjudicate
+   between them, so neither card may out-weigh the other in any dimension. The headline median is
+   large, the range sits directly beneath it and is visibly subordinate, and the basis + range-type
+   labels are present but quiet. The collapsed face carries NO prose: if a reader has to read a
+   sentence to see the number, the card has failed. The ≈51% stress row sits below the pair as
+   visually a third thing — a scenario of this page, not a third adjudicator. ---- */
+/* ---- DE-SCOPED 2026-08-18 (owner notes 11b102 / bb3f19). These rules used to read
+   `.report .est-*`. The estimate cards now render in the full-width #projections band ABOVE the
+   calculator as well as being referenced from section 5, and a style that only fires inside
+   #report is how the 2026-08-16 hoist shipped a pair of unstyled, border-less cards to both
+   viewports without a single test noticing. Class-scoped, so the markup renders the same
+   wherever it sits. ---- */
+.est-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 14px 0 10px; }
+/* Below the mobile breakpoint the pair STACKS rather than shrinking — two 44px numerals side by
+   side on a phone is how "equal weight" turns into "both illegible". */
+@media (max-width: 700px) { .est-pair { grid-template-columns: 1fr; } }
+.est-card {
+  border: 1px solid var(--border); background: var(--tile); border-radius: 12px;
+  padding: 14px 16px 6px; box-shadow: var(--shadow); min-width: 0;
+}
+.est-who {
+  font-family: var(--font-head); font-size: 14px; font-weight: 600; letter-spacing: .02em;
+  color: var(--ink-2); margin: 0;
+}
+.est-median {
+  font-family: var(--font-data); font-size: 44px; line-height: 1.05; font-weight: 700;
+  font-variant-numeric: tabular-nums; color: var(--ink-1); margin: 10px 0 0;
+}
+.est-range {
+  font-family: var(--font-data); font-size: 18px; font-variant-numeric: tabular-nums;
+  color: var(--ink-2); margin: 3px 0 0;
+}
+/* Honesty labels are not decoration: --ink-2, per the R-1 provenance-text ruling. */
+.est-basis { font-size: 12px; letter-spacing: .03em; color: var(--ink-2); margin: 9px 0 0; }
+.est-more { margin: 8px 0 0; border-top: 1px solid var(--grid); }
+.est-more > summary { font-size: 12.5px; font-weight: 600; color: var(--ink-2); padding: 7px 0 6px; }
+.est-more > summary:hover { color: var(--ink-1); }
+.est-more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.est-more[open] > summary { color: var(--ink-1); }
+.est-body { padding: 0 0 8px; }
+.est-body p { font-size: 13.5px; line-height: 1.65; max-width: 68ch; color: var(--ink-2); margin: 8px 0; }
+.est-body strong { color: var(--ink-1); }
+.est-prov { color: var(--ink-2); }
+/* The range-type label travels with the numbers, immediately under the pair — a range rendered
+   without it makes the page claim a rigour it does not have. */
+.est-label { font-size: 13px; color: var(--ink-2); margin: 0 0 12px; max-width: 68ch; }
+.est-stress {
+  border: 1px dashed var(--ink-3); border-radius: 10px; background: var(--surface-1);
+  padding: 9px 14px 4px; margin: 0 0 14px;
+}
+.est-stress-head { margin: 0; font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.est-stress-label {
+  font-family: var(--font-head); font-size: 11.5px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink-3);
+}
+.est-stress-value {
+  font-family: var(--font-data); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums;
+  color: var(--ink-1); margin: 0 4px 0 6px; vertical-align: -1px;
+}
+.est-stress-note { color: var(--ink-2); }
+.est-stress .est-more { border-top: none; margin: 2px 0 0; }
+
+/* per-provider evidence cards */
+.report details.prov {
+  border: 1px solid var(--grid); border-radius: 10px; background: var(--tile);
+  margin: 10px 0; padding: 0 14px; box-shadow: var(--shadow);
+}
+.report .prov > summary {
+  display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+  padding: 10px 0; font-size: 14.5px; list-style: none;
+}
+.report .prov > summary::-webkit-details-marker { display: none; }
+.report .prov > summary::before { content: "▸"; color: var(--ink-3); font-size: 12px; align-self: center; }
+.report .prov[open] > summary::before { content: "▾"; }
+.report .prov .prov-margin { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink-1); }
+.report .prov .prov-ci { font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
+.report .prov .prov-body { border-top: 1px solid var(--grid); padding: 8px 0 12px; }
+.report .prov .prov-body p { font-size: 13.5px; }
+.report .prov .prov-body li { font-size: 13px; }
+.report .prov .kk { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+@media (max-width: 700px) { .report .prov .kk { grid-template-columns: 1fr; } }
+.report .prov .kk h5 { margin: 8px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
+.badge { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; border: 1px solid; white-space: nowrap; }
+.badge-high { color: var(--good); border-color: var(--good); }
+.badge-med { color: var(--warn); border-color: var(--warn); }
+.badge-low { color: var(--ink-3); border-color: var(--ink-3); }
+.badge-mixed { color: var(--series-5); border-color: var(--series-5); }
+.report .evprofile { font-size: 12px; color: var(--ink-3); border-bottom: 1px solid var(--grid); padding-bottom: 6px; }
+.report .evprofile .ev-h { color: var(--good); } .report .evprofile .ev-m { color: var(--warn); } .report .evprofile .ev-l { color: var(--ink-3); }
+.methods-box summary { cursor: pointer; font-size: 13.5px; }
+.methods-box li { font-size: 13px; color: var(--ink-2); margin: 4px 0; }
+
+/* §10/§6 "Load this operating point ↑" preserve-links (selector dissolve 2026-07-12) */
+.report .load-op-row { font-size: 13px; margin: 8px 0 4px; color: var(--ink-2); }
+.report .load-op-row .load-op-lead { color: var(--ink-3); }
+.report a.load-op { font-weight: 600; color: var(--accent-ink); cursor: pointer; }
+.report a.load-op:hover { text-decoration: underline; }
+
+.footer { margin-top: 22px; color: var(--ink-3); font-size: 12.5px; text-align: center; }
+
+/* position dossier panel */
+.dossier { max-width: 100%; margin: 6px 0 14px; border: 1px solid var(--grid); border-radius: 10px; background: var(--tile); padding: 6px 14px; }
+/* q-im-desktop-followups (2026-08-18) item 1: the frame moves OUT to a wrapper so the scenario
+   identity note can sit beside the disclosure instead of inside its control. The wrapper draws
+   exactly what .dossier used to draw and the nested .dossier draws nothing, so the rendered box
+   is unchanged — the note simply stops being part of the affordance that the coarse-pointer rule
+   hides. Scoped to the wrapper: #model-dossier-card shares the .dossier class and is untouched. */
+.dossier-block { max-width: 100%; margin: 6px 0 14px; border: 1px solid var(--grid); border-radius: 10px; background: var(--tile); padding: 6px 14px; }
+.dossier-block > .dossier { margin: 0; border: 0; border-radius: 0; background: none; padding: 0; }
+.dossier-block > .preset-note { display: block; color: var(--ink-2); }
+.dossier > summary { cursor: pointer; font-size: 12.5px; color: var(--ink-3); list-style: none; }
+.dossier > summary::-webkit-details-marker { display: none; }
+.dossier .preset-note { color: var(--ink-2); }
+.dossier-hint { color: var(--ink-3); font-style: italic; }
+.dossier-body { border-top: 1px solid var(--grid); margin-top: 8px; padding: 4px 0 8px; }
+.dossier-body h4 { font-size: 13.5px; margin: 10px 0 2px; }
+.dossier-who { font-size: 13px; color: var(--ink-2); margin: 2px 0 6px; }
+.dossier-body blockquote { margin: 6px 0; padding: 6px 12px; border-left: 3px solid var(--accent); background: var(--wash); border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); }
+.dossier-params { border-collapse: collapse; width: 100%; font-size: 12px; margin: 6px 0; }
+.dossier-params th { text-align: left; color: var(--ink-3); text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.04em; padding: 3px 8px; border-bottom: 1px solid var(--grid); }
+.dossier-params td { padding: 3px 8px; border-bottom: 1px solid var(--grid); color: var(--ink-2); vertical-align: top; }
+.dossier-params .ev-disc { color: var(--good); font-weight: 600; }
+.dossier-params .ev-cred { color: var(--accent-ink); font-weight: 600; }
+.dossier-params .ev-comm { color: var(--warn); font-weight: 600; }
+.dossier-params .ev-spec { color: var(--ink-3); font-weight: 600; }
+.dossier-cap { font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); margin: 8px 0 0; }
+.dossier-body ul { margin: 2px 0 6px; padding-left: 20px; }
+.dossier-body li { font-size: 12.5px; color: var(--ink-2); }
+
+.dossier-attr { font-size: 12px; color: var(--warn); margin: 0 0 6px; font-style: italic; }
+
+/* model-sizing provenance panel (v2.1.3, D3): a separately-collapsed sibling of the dossier,
+   shown only while a range-exploration route is loaded — visibly its own panel, not route content */
+.model-context { border-style: dashed; }
+
+/* traffic-mix axis (v2.1.2) */
+.param.locked input[type="range"] { opacity: .45; }
+.lock-note { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.dossier-traffic { font-size: 12.5px; color: var(--ink-2); border-top: 1px dashed var(--grid); padding-top: 8px; margin-top: 10px; }
+#traffic-preset:disabled { opacity: .55; cursor: not-allowed; }
+.cardmeta { font-size: 12.5px; color: var(--ink-2); border-left: 3px solid var(--grid); padding-left: 10px; margin: 6px 0 10px; }
+
+.verdict-provenance { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px; }
+
+/* margin-range evidence board (v2.1.3 preset redesign, M3).
+   First-class but causally secondary: it renders the claims registry and page-authored routes;
+   it never sets the hero. Mobile (P0-9): grid collapses to one column, every child min-width:0,
+   quotes wrap, buttons wrap — no horizontal overflow (LUR-1 class). */
+.evidence-board {
+  margin: 4px 0 18px; background: var(--surface-1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 18px clamp(14px, 3vw, 28px) 20px; box-shadow: var(--shadow);
+  min-width: 0; overflow-wrap: anywhere;
+}
+.evidence-board h2 { font-size: 20px; margin: 0 0 4px; letter-spacing: -0.01em; }
+/* Skimmer clarifier under the range-explorer H2 (persona: a 60–90s skimmer must register the ranges
+   as what-if questions, not a claim). Prominent, accented left rule, but not a card. */
+.board-skim { color: var(--ink-1); font-size: 14px; margin: 6px 0 8px; max-width: 1000px;
+  border-left: 3px solid var(--accent); padding-left: 10px; }
+.board-sub { color: var(--ink-2); font-size: 13.5px; margin: 4px 0 6px; max-width: 1000px; }
+.board-note { color: var(--ink-3); font-size: 12.5px; margin: 8px 0 12px; max-width: 1000px; }
+
+/* range-explorer front door (v2.1.3): the four ranges as entry affordances; a selected range
+   surfaces its route cards; the full catalog is one expansion below. */
+.front-door { display: flex; flex-direction: column; gap: 10px; margin: 6px 0 12px; min-width: 0; }
+.range-chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 900px) { .range-chips { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.range-chip {
+  font: inherit; text-align: left; cursor: pointer; min-width: 0;
+  background: var(--tile); border: 1px solid var(--border); border-radius: 12px;
+  padding: 10px 12px; display: flex; flex-direction: column; gap: 2px; box-shadow: var(--shadow);
+}
+.range-chip:hover { border-color: var(--accent); background: var(--wash); }
+.range-chip[aria-pressed="true"] { border-color: var(--accent); background: var(--wash); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.range-chip .chip-range { font-size: 22px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink-1); font-family: var(--font-head); }
+.range-chip .chip-meta { font-size: 11.5px; color: var(--ink-3); line-height: 1.35; }
+.range-chip .chip-current { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); line-height: 1.35; }
+.front-door-detail { border: 1px solid var(--grid); border-radius: 12px; background: var(--tile); padding: 10px 14px 12px; min-width: 0; }
+.fd-question { font-size: 14px; font-weight: 600; margin: 2px 0 4px; color: var(--ink-1); }
+.fd-null { font-size: 12.5px; color: var(--ink-2); margin: 4px 0; }
+.fd-claims-line { font-size: 12.5px; color: var(--ink-3); margin: 8px 0 2px; }
+
+/* saved scenarios (layout restructure 2026-07-11): a link/label-style dropdown under the
+   front-door cards — deliberately NO card of its own; only the expanded panel gets a border. */
+.saved-scenarios { margin: 2px 0 10px; }
+.saved-scenarios > summary {
+  cursor: pointer; list-style: none; display: inline-flex; align-items: baseline; gap: 6px;
+  color: var(--accent-ink); font-size: 13px; font-weight: 600; user-select: none;
+}
+.saved-scenarios > summary::-webkit-details-marker { display: none; }
+.saved-scenarios > summary::before { content: "▸"; font-size: 11px; }
+.saved-scenarios[open] > summary::before { content: "▾"; }
+.saved-scenarios > summary:hover { text-decoration: underline; }
+.saved-panel {
+  margin-top: 8px; border: 1px solid var(--grid); border-radius: 12px; background: var(--tile);
+  padding: 10px 14px 8px; max-width: 560px; min-width: 0;
+}
+.saved-hint { font-size: 12px; color: var(--ink-3); margin: 0 0 6px; }
+.saved-empty { font-size: 12.5px; color: var(--ink-3); font-style: italic; margin: 2px 0 6px; }
+.saved-row { display: flex; align-items: center; gap: 8px; padding: 4px 0; border-bottom: 1px dashed var(--grid); min-width: 0; }
+.saved-row:last-child { border-bottom: none; }
+.saved-load {
+  background: none; border: none; padding: 2px 0; font: inherit; font-size: 13px;
+  color: var(--ink-1); cursor: pointer; text-align: left; flex: 1; min-width: 0;
+  overflow-wrap: anywhere;
+}
+.saved-load:hover { color: var(--accent-ink); text-decoration: underline; }
+.saved-act {
+  background: none; border: 1px solid var(--border); border-radius: 6px; cursor: pointer;
+  font: inherit; font-size: 11px; color: var(--ink-3); padding: 1px 8px; white-space: nowrap;
+}
+.saved-act:hover { color: var(--ink-1); background: var(--wash); }
+.saved-act.saved-del:hover { color: var(--series-6); border-color: var(--series-6); background: none; }
+.saved-rename {
+  font: inherit; font-size: 13px; color: var(--ink-1); background: var(--tile);
+  border: 1px solid var(--accent); border-radius: 6px; padding: 2px 6px; flex: 1; min-width: 0;
+}
+
+/* collapsed evidence catalog (one expansion away, never removed) */
+.board-catalog { border-top: 1px solid var(--grid); margin-top: 12px; padding-top: 8px; }
+.board-catalog > summary { cursor: pointer; font-size: 13px; font-weight: 600; color: var(--ink-2); list-style: none; display: flex; align-items: baseline; gap: 6px; }
+.board-catalog > summary::-webkit-details-marker { display: none; }
+.board-catalog > summary::before { content: "▸"; color: var(--ink-3); font-size: 12px; }
+.board-catalog[open] > summary::before { content: "▾"; }
+.board-catalog > summary:hover { color: var(--ink-1); }
+
+/* intentional 2×2 at desktop widths (P1: auto-fit stranded the 4th card 3+1 at 1440px);
+   single column on narrow screens (no horizontal overflow at 390px). */
+.board-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; align-items: start; }
+@media (max-width: 720px) { .board-grid { grid-template-columns: 1fr; } }
+.bucket {
+  min-width: 0; background: var(--tile); border: 1px solid var(--grid); border-radius: 12px;
+  padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; box-shadow: var(--shadow);
+}
+.bucket.bucket-current { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), var(--shadow); }
+.bucket-head { display: flex; flex-direction: column; gap: 3px; }
+.bucket-head h3 { margin: 0; font-size: 16.5px; letter-spacing: -0.01em; }
+.bucket-current-note { font-size: 12px; font-weight: 600; color: var(--accent-ink); }
+.claim-group { border-left: 3px solid var(--grid); padding-left: 10px; min-width: 0; }
+.claim-group.g-unit { border-left-color: var(--accent); }
+.claim-group.g-unnamed { border-left-color: var(--series-5); }
+.claim-group.g-diff { border-left-color: var(--series-3); }
+.claim-group.g-anchor { border-left-color: var(--series-2); }
+.claim-group.g-model { border-left-color: var(--ink-3); border-left-style: dashed; }
+.claim-group > h4 { margin: 2px 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.claim-row { padding: 3px 0 8px; border-bottom: 1px dashed var(--grid); min-width: 0; }
+.claim-row:last-child { border-bottom: none; padding-bottom: 4px; }
+.claim-who { font-size: 13px; color: var(--ink-1); font-weight: 600; }
+.claim-badges { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; }
+.claim-badges .badge, .config-head .badge { white-space: normal; line-height: 1.35; text-align: left; } /* P0-9: long typed badges (floor/compatible-with) must wrap on mobile, never widen the page */
+.claim-row blockquote {
+  margin: 5px 0; padding: 5px 10px; border-left: 3px solid var(--accent); background: var(--wash);
+  border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); overflow-wrap: anywhere;
+}
+.claim-reported { font-size: 12.5px; color: var(--ink-2); font-style: italic; margin: 5px 0; }
+.claim-src, .claim-scope, .claim-notclaimed { font-size: 12px; color: var(--ink-3); margin: 2px 0; }
+.bucket-empty { font-size: 12.5px; color: var(--ink-3); font-style: italic; margin: 2px 0 4px; }
+.bucket-configs { border-top: 1px solid var(--grid); padding-top: 8px; margin-top: 2px; min-width: 0; }
+.bucket-configs > h4 { margin: 0 0 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-3); }
+.config-row { border: 1px dashed var(--baseline); border-radius: 10px; padding: 8px 10px; margin: 6px 0; min-width: 0; }
+.config-row.config-loaded { border-style: solid; border-color: var(--accent); background: var(--wash); }
+.config-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px; }
+.config-name { font-size: 13px; color: var(--ink-1); }
+.config-loaded-tag { font-size: 11.5px; font-weight: 600; color: var(--accent-ink); }
+.config-meta { font-size: 12px; color: var(--ink-3); margin: 4px 0 2px; }
+.config-changes { font-size: 12px; color: var(--ink-2); margin: 2px 0 4px; }
+.config-row details { margin: 2px 0 4px; }
+.config-row details summary { font-size: 11.5px; color: var(--ink-3); cursor: pointer; }
+.config-note { font-size: 12px; color: var(--ink-2); margin: 4px 0; }
+.ghost-btn.btn-wrap { white-space: normal; text-align: left; }
+
+/* b9 M3 (energy/electricity dimension): the two info chips — the blended-$/kWh chip on named
+   fleets and the embedded-in-rent chip above the TCO-counterfactual stack chart. */
+.fleet-kwh-chip { font-size: 12px; color: var(--ink-3); margin: 4px 0; }
+.energy-rent-chip { font-size: 12px; color: var(--ink-2); margin: 2px 0 8px; }
+
+/* ============================ b9 M4: custom fleet builder ============================
+   (memo research/b9-m45-ui-memo.md §4/§5/§13 — chips, management row, per-leg panel,
+   the <dialog> builder, and the mobile sheet behavior.) */
+.cf-manage-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
+.cf-manage-item { display: inline-flex; gap: 4px; align-items: center; border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; }
+.cf-manage-name { font-size: 12px; color: var(--ink-2); max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cf-chip { font-size: 12px; padding: 6px 10px; min-height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg-2, transparent); color: var(--ink-2); cursor: pointer; }
+.cf-chip:hover { border-color: var(--accent-ink); }
+.cf-primary { font-weight: 600; color: var(--accent-ink); border-color: var(--accent-ink); }
+.cf-danger { color: #b23b3b; }
+.fleet-class-user-custom { background: rgba(120,120,180,0.12); }
+.cf-leg-panel { margin: 6px 0; }
+.cf-leg-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; padding: 4px 0; border-top: 1px solid var(--line); font-size: 12.5px; }
+.cf-leg-ident { color: var(--ink-1, inherit); }
+.cf-leg-share { font-weight: 600; }
+.cf-leg-ov, .cf-leg-cal { font-size: 11.5px; color: var(--ink-3); margin: 0 0 4px; }
+/* ===== b9 M6 (§20 owner rulings R-1..R-4): legible explanation typography + the popup =====
+   R-1 was DIAGNOSED BY MEASUREMENT, not guessed: the FA card is `.tile` -> `--surface-1`, on which
+   --ink-3 computes 5.50:1 and --ink-2 9.40:1 against --page in the default dark skin. The current
+   text therefore PASSES WCAG AA today — the defect is TYPOGRAPHIC and STRUCTURAL (12px, no measure,
+   no line-height of its own, 3,204-character bodies in one undifferentiated div), not contrast.
+   "Raise the contrast" would have been the wrong fix. `.explain-body` is the right one, and
+   tests/contrast-check.mjs gates its ink over BOTH backgrounds it can sit on (the tile surface and
+   the popup's page-like surface) in every skin x theme combo. */
+.explain-body { font-size: 14.5px; line-height: 1.65; color: var(--ink-2); max-width: 68ch; margin-top: 8px; }
+.explain-body + .explain-body { margin-top: 10px; }
+.explain-body p { margin: 0 0 10px; }
+.explain-body p:last-child { margin-bottom: 0; }
+.explain-seg-label { display: block; font-weight: 600; color: var(--ink-1); margin-bottom: 2px; }
+/* R-2(a): a HYPERLINK-STYLED trigger — asserted by CDP on getComputedStyle (underline + pointer +
+   the page's link colour), never by class-name presence. */
+.explain-trigger {
+  display: inline-block; background: none; border: 0; padding: 4px 0; margin-top: 8px;
+  font: inherit; font-size: 13.5px; color: var(--accent-ink);
+  text-decoration-line: underline; cursor: pointer; min-height: 44px;
+}
+.explain-trigger:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* R-2(b): near-fullscreen, OPAQUE, page-like. Deliberately NOT `.cf-dialog`'s rgba(0,0,0,0.45)
+   dim — "not the sort of grayed-out background" names exactly that dim. */
+.fa-explain-dialog {
+  width: 100vw; height: 100vh; max-width: none; max-height: 100vh;
+  border: 0; border-radius: 0; padding: 0; background: var(--page); color: var(--ink-1);
+}
+.fa-explain-dialog::backdrop { background: var(--page); opacity: 1; }
+.fa-explain-head {
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  padding: 14px 16px; border-bottom: 1px solid var(--border); background: var(--page);
+}
+.fa-explain-title { margin: 0; font-size: 16px; }
+/* R-2(c): the X sits TOP-RIGHT and is a >=44x44 CSS-px touch target. */
+.fa-explain-close {
+  flex: 0 0 auto; min-width: 44px; min-height: 44px; font-size: 20px; line-height: 1;
+  background: none; border: 1px solid var(--border); border-radius: 8px;
+  color: var(--ink-1); cursor: pointer;
+}
+/* R-2(d): the BODY scrolls internally; the page's own scroll is locked while open and restored on close. */
+.fa-explain-body { overflow-y: auto; max-height: calc(100vh - 72px); padding: 14px 16px 28px; }
+.fa-exec { margin-top: 18px; border-top: 1px solid var(--border); padding-top: 12px; }
+.fa-exec-summary-line { cursor: pointer; font-size: 13.5px; color: var(--ink-1); }
+.fa-exec-row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
+.fa-exec-row-value { font-size: 15px; color: var(--ink-1); }
+/* The low-evidence affordance (owner ruling 2026-07-30; memo §16.2 A-3, §17.4). Two typed states:
+   `jump` scrolls its control into view and focuses it; `no-control` says plainly that no control
+   exists yet rather than rendering a dead link. */
+.low-evidence { margin-top: 6px; font-size: 13px; color: var(--ink-2); }
+.low-evidence-jump { background: none; border: 0; padding: 4px 0; font: inherit; color: var(--accent-ink);
+  text-decoration-line: underline; cursor: pointer; min-height: 44px; }
+/* R-1 corroboration: `.fa-higher*` had NO rules at all — the justification entries were unstyled
+   `<details>`. They are styled here for the first time. */
+.fa-higher { margin-top: 16px; }
+.fa-higher-entry { margin-top: 10px; border-top: 1px solid var(--border); padding-top: 8px; }
+.fa-higher-entry > summary { cursor: pointer; font-size: 13.5px; color: var(--ink-1); }
+.fa-higher-links { margin-top: 6px; }
+.cf-dialog { max-width: 720px; width: 92vw; max-height: 88vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px; padding: 14px; }
+.cf-dialog::backdrop { background: rgba(0,0,0,0.45); }
+.cf-dialog-title { margin: 0 0 8px; font-size: 15px; }
+.cf-dialog-bar { display: flex; gap: 8px; justify-content: flex-end; position: sticky; bottom: 0; padding-top: 8px; background: inherit; }
+.cf-banner { font-size: 12.5px; color: var(--ink-2); border-left: 3px solid var(--accent-ink); padding-left: 8px; }
+.fleet-composition-line { margin: 6px 0; font-size: 12px; color: var(--ink-2); }
+.cf-section-readout { display: flex; flex-wrap: wrap; gap: 6px 12px; margin: 10px 0 4px;
+  padding-top: 8px; border-top: 1px solid var(--line); font-size: 12px; }
+.cf-section-basis { color: var(--ink-2); }
+.cf-section-editor { border: 2px solid var(--line); border-radius: 10px; margin: 12px 0; padding: 10px; }
+.cf-section-editor > legend { font-size: 13px; font-weight: 650; padding: 0 5px; }
+.cf-section-legs { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--line); }
+.cf-range-row { display: grid; grid-template-columns: repeat(3, minmax(90px, 1fr)); gap: 6px; }
+.cf-range-row label { display: flex; flex-direction: column; gap: 2px; }
+.cf-range-label, .cf-range-toggle { font-size: 11px; color: var(--ink-3); }
+.cf-range-toggle { display: flex; align-items: center; gap: 5px; margin-top: 3px; }
+.cf-dc-stub { color: var(--ink-3); }
+.cf-leg-editor { border: 1px solid var(--line); border-radius: 8px; margin: 8px 0; padding: 8px; }
+.cf-leg-editor legend { font-size: 12px; color: var(--ink-3); padding: 0 4px; }
+.cf-field { display: flex; flex-direction: column; gap: 2px; margin: 6px 0; font-size: 12.5px; }
+.cf-field-label { color: var(--ink-3); font-size: 11.5px; }
+.cf-field input, .cf-field select { min-height: 32px; font-size: 13px; }
+.cf-field-why { font-size: 11px; color: var(--ink-3); font-style: italic; }
+.cf-spec-table { margin-top: 6px; border-top: 1px dashed var(--line); padding-top: 4px; overflow-x: auto; }
+.cf-spec-row { font-size: 11.5px; color: var(--ink-3); }
+.cf-spec-lock { font-size: 11px; color: var(--ink-3); font-style: italic; }
+.cf-errors { font-size: 12px; color: #b23b3b; min-height: 1em; }
+@media (max-width: 720px) {
+  /* memo §13: full-screen sheet, stacked legs, 44px targets, sticky action bar. */
+  .cf-dialog { width: 100vw; height: 100vh; max-height: 100vh; max-width: none; border-radius: 0; border: 0; }
+  .cf-chip { min-height: 44px; min-width: 44px; }
+  .cf-leg-row { flex-direction: column; gap: 2px; }
+  .cf-range-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .cf-manage-name { max-width: 110px; }
+}
+
+/* ---------- b9 M5: broad-lever interlock + touch scroll-lock (memo §§10, 12, 13) ---------- */
+.lever-panel { margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--line); }
+.lever-head { font-size: 11.5px; color: var(--ink-3); display: flex; flex-wrap: wrap; align-items: center; gap: 2px; }
+.lever-readout { font-size: 13px; font-weight: 600; color: var(--ink-1, inherit); margin-top: 2px; }
+.lever-lab, .lever-cite, .lever-refusal { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
+.lever-warn, .lever-overlap { font-size: 11.5px; color: #b23b3b; margin-top: 3px; }
+/* The two locks read differently ON PURPOSE (§12.4): the interlock is a correctness guard, the
+   scroll-lock is an input-safety guard. Same icon, different copy and different placement. */
+.lever-lock { font-size: 12px; color: var(--ink-2); border-left: 3px solid var(--accent-ink); padding-left: 8px; margin-top: 4px; }
+.lever-transition { font-size: 12px; font-weight: 600; color: var(--ink-1, inherit); border-left: 3px solid var(--accent-ink); padding-left: 8px; margin-top: 4px; }
+.lever-banner { font-size: 12.5px; color: #b23b3b; border-left: 3px solid #b23b3b; padding-left: 8px; margin-top: 4px; }
+.lever-unlock { margin-top: 6px; font-size: 12px; padding: 6px 10px; min-height: 32px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg-2, transparent); color: var(--ink-2); cursor: pointer; }
+.lever-unlock:hover { border-color: var(--accent-ink); }
+.slider-lock-row { margin-bottom: 6px; }
+.slider-lock-chip { font-size: 12px; padding: 6px 10px; min-height: 32px; width: 100%; text-align: left; border: 1px solid var(--accent-ink); border-radius: 6px; background: var(--bg-2, transparent); color: var(--ink-2); cursor: pointer; }
+@media (max-width: 720px) {
+  .lever-unlock, .slider-lock-chip { min-height: 44px; }
+}
+
+/* ===== b9 UX-B (§20 owner rulings R-1/R-3/R-4): the document explainers =====
+   R-4 enacted: the ten report sections collapse. The <h3 id="sN"> deliberately stays OUTSIDE its
+   <details> (both MCP slicers cut h3 -> next h3), so the page still reads as a ten-section report
+   when collapsed and every deep link lands on a visible heading. */
+.report-section { margin: 4px 0 18px; }
+.report-section > summary {
+  cursor: pointer; list-style: none; display: inline-flex; align-items: baseline; gap: 6px;
+  font-size: 13px; font-weight: 600; color: var(--ink-2); padding: 2px 0;
+}
+.report-section > summary::-webkit-details-marker { display: none; }
+.report-section > summary::before { content: "▸"; color: var(--ink-3); font-size: 12px; }
+.report-section[open] > summary::before { content: "▾"; }
+.report-section > summary:hover { color: var(--ink-1); }
+.report-section > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+/* Both strings stay in the DOM so the label is true in either state and assistive technology can
+   read the current one; the hidden half contributes nothing to the accessible name (accname skips
+   hidden descendants of an aria-labelledby target — measured against Chrome's own AX tree). */
+.rs-less { display: none; }
+.report-section[open] > summary .rs-more { display: none; }
+.report-section[open] > summary .rs-less { display: inline; }
+/* R-2 for the document surfaces: on a COARSE pointer the inline disclosure is replaced by the popup
+   route rather than offered alongside it. Gated on data-explain-ready — set only once
+   wireExplainTriggers() has actually injected the triggers — because keying this on the media query
+   alone would, on a JS failure, hide the control while no trigger exists and make the whole report
+   body unreachable. Desktop keeps the disclosure (R-3 says so explicitly). */
+@media (pointer: coarse) {
+  html[data-explain-ready] .report-section > summary,
+  /* The methods box was never brought under R-2, so it offered BOTH routes on BOTH pointer
+     types — owner annotation 2026-08-16, verbatim: "this is a duplicate of the expansion right
+     below it". It joins the rule here (coarse: popup only) and its trigger is suppressed on
+     fine pointers below, so exactly one route to this content exists on any device. */
+  html[data-explain-ready] details.scope-note.methods-box > summary,
+  /* q-im-desktop-followups (2026-08-18) item 1: #dossier joins on the same terms. Its <summary>
+     is now the affordance ALONE — #preset-note, which carries the loaded-link identity warnings,
+     was promoted out of it into .dossier-block and stays visible at every pointer type. */
+  html[data-explain-ready] #dossier > summary { display: none; }
+}
+/* The other half of the same fix: on a pointer that can comfortably use a disclosure, the
+   disclosure IS the route and the popup trigger beside it is the duplicate. R-3 keeps the
+   disclosure on desktop; this stops it being offered twice. */
+@media (pointer: fine) {
+  html[data-explain-ready] #explain-trigger-methods,
+  /* q-im-desktop-followups (2026-08-18) item 1 — the SAME ruled treatment for #dossier, which
+     the 2026-08-18 dual-viewport probe measured at dossierRoutesVisible = 2 on BOTH viewports:
+     the injected popup trigger and the inline <summary> both rendered. Owner: "dedupe #dossier
+     to ONE route … match the treatment he ruled for the methods box one element higher." The
+     scenario-identity note is no longer inside that <summary> (see index.html), so the coarse
+     rule above hides an affordance and never an honesty label. */
+  html[data-explain-ready] #explain-trigger-dossier { display: none; }
+}
+/* R-1/R-3: the long collapsed bodies get the .explain-body measure and line-height. Applied to the
+   exact nodes asserted, never to a container — measuring the container instead of the child is the
+   error that nearly dropped commissioned scope at the identity strip. */
+.report-section-body p, .report-section-body li,
+.prov-body p, .prov-body li,
+.methods-box li,
+.dossier-body li, .dossier-body p, .dossier-body blockquote,
+.board-catalog-body .board-note, .bucket-configs p, .bucket p,
+.front-door-detail p { line-height: 1.65; max-width: 68ch; }
+/* Scenario-honesty and provenance text is not decoration: --ink-3 -> --ink-2 on the surfaces owner
+   ruling R-1 named. (The result-tile tails and .id-epistemic are UX-C and are NOT touched here.) */
+.report .prov .prov-body p, .report .prov .prov-body li { color: var(--ink-2); }
+.board-note { color: var(--ink-2); }
+.fd-claims-line { color: var(--ink-2); }
+/* The trigger sits BEFORE its disclosure so its position is stable whether the section is open or
+   closed — after it, an expanded §10 puts the affordance 33,472 characters further down. */
+.explain-trigger + details, .explain-trigger + .front-door-detail { margin-top: 2px; }
+.report .explain-trigger { margin-top: 2px; }
+/* Inside the dialog the payload keeps its own ancestor context (the wrapper carries the payload's
+   scope class). What it must NOT keep is .explain-body's --ink-2 leaking onto headings: dimming a
+   heading inside the surface that exists to make text legible is the opposite of the ruling. */
+.fa-explain-body .explain-body h3, .fa-explain-body .explain-body h4,
+.fa-explain-body .explain-body h5, .fa-explain-body .explain-body strong { color: var(--ink-1); }
+.fa-explain-body .explain-body table { max-width: none; }
+.fa-explain-body .explain-body p, .fa-explain-body .explain-body li { max-width: 68ch; }
+
+/* THE DERIVED-FLEETS OVERLAY (owner ruling 2026-08-09, note 52e1be). Colour carries the owner's own
+   assignment — green high margin, yellow reference, red low margin — but it is never the only
+   channel: every dot is repeated as a labelled row with its percentage and its fleet, so the
+   information survives for a reader who cannot separate the hues, and the track is aria-labelled. */
+.mix-overlay { margin: 0.5rem 0 0.25rem; }
+.mix-track { position: relative; height: 0.75rem; border-radius: 999px;
+  background: linear-gradient(90deg, var(--warn, #c0392b) 0%, var(--muted, #888) 50%, var(--ok, #2e7d32) 100%);
+  opacity: 0.28; margin: 0.35rem 0 0.9rem; }
+.mix-dot { position: absolute; top: 50%; width: 0.7rem; height: 0.7rem; border-radius: 50%;
+  transform: translate(-50%, -50%); border: 2px solid var(--bg, #fff); box-shadow: 0 0 0 1px rgba(0,0,0,.25); }
+.mix-dot-low { background: #c0392b; }
+.mix-dot-mid { background: #d4a017; }
+.mix-dot-high { background: #2e7d32; }
+.mix-dot-inline { position: static; display: inline-block; transform: none; margin-right: 0.4rem;
+  vertical-align: baseline; }
+.mix-overlay-list { list-style: none; padding-left: 0; margin: 0; }
+.mix-overlay-row { margin: 0.2rem 0; }
+
+/* ================= b9 UX-C (memo §18.4/§18.10 P0-c/P1-c): the typed hero tail ================= */
+/* Every rule below is keyed on this leg's own classes; in-dialog rendering equals in-page
+   (U-3b asserts both sides, both skins). The wrappers are block elements so the measure is
+   real — max-width on an inline span is inert. */
+.tile-explain { font-size: 13.5px; line-height: 1.55; color: var(--ink-2); max-width: 68ch; }
+/* the wrappers carry their OWN typography on their OWN class — so the relocated receipts
+   render identically inside the dialog, where no .tile-explain ancestor exists (U-3b) */
+.tile-mandatory, .tile-receipts, .tile-actions {
+  font-size: 13.5px; line-height: 1.55; color: var(--ink-2); max-width: 68ch; }
+/* §18.10 P0-c: the at-rest coarse-pointer hide is PAGE-PARENT-SCOPED, so it stops matching
+   the moment the receipts relocate into a dialog (relocation changes parentage only), and it
+   is gated on the JS-readiness flag exactly like the report sections — no JS, nothing hides
+   (owner R-2 enacted only when the replacement demonstrably exists). Mandatory regions never
+   hide on any pointer class. */
+@media (pointer: coarse) {
+  html[data-explain-ready] .tile > .tile-receipts,
+  html[data-explain-ready] .tile-delta > .tile-receipts { display: none; }
+}
+/* the explicit in-dialog restore (belt to the scoping's braces) and the print restore (P1-c) —
+   the print selectors MATCH the coarse hide's specificity and are declared later, so a coarse
+   device printing still renders its receipts */
+dialog[data-explain-dialog] .tile-receipts { display: block; }
+@media print {
+  .tile-receipts,
+  html[data-explain-ready] .tile > .tile-receipts,
+  html[data-explain-ready] .tile-delta > .tile-receipts { display: block; }
+}
+
+/* The projections block hoisted to the top of the page, 2026-08-16 (owner annotations: the
+   estimates "should be at the top", "collapsed, not fully expanded and rambling"). It is a
+   <details> because that is the only honest way to have it be both first and short. */
+/* PROJECTIONS BAND (owner notes 11b102 + bb3f19, 2026-08-18; ruling q-im-tile-position).
+   FULL PAGE WIDTH, above .layout — not inside the 390 px controls rail. On a desktop screen the
+   83% tile and the two estimates sit ALONGSIDE each other, which is what his ruling asked for and
+   what a 390 px sidebar made impossible. Below 980 px it stacks, matching .layout's own collapse,
+   so the phone gets the cards full-bleed instead of two 160 px numerals side by side. */
+.projections { display: grid; grid-template-columns: minmax(340px, 390px) 1fr; gap: 18px; align-items: start; margin: 0 0 22px; }
+@media (max-width: 980px) { .projections { grid-template-columns: 1fr; } }
+.projections .hero-lead { margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.projections .tile-hero { height: auto; }
+/* The answer tile joins its own projections (annotation nbc7fc1, "needs to be top with other
+   projections"). It goes in the RIGHT column under the estimates rather than taking a second row
+   under the tile: the tile is the tall element, so auto-placement would drop the answer into a new
+   row and leave the estimates column half empty. Below 980 px the single column carries all three
+   in source order, which is the order he reads them in. */
+.projections .final-answer { margin: 0; }
+/* Explicit placement, because auto-placement is what leaves the hole: the ≈83% tile is the tall
+   element, so a row whose height it sets would strand the answer tile ~500 px below the stress
+   test with nothing between them. The tile spans both rows in column 1; the estimates and the
+   answer stack tightly in column 2. */
+.projections .hero-lead   { grid-column: 1; grid-row: 1 / span 2; }
+.projections .est-top     { grid-column: 2; grid-row: 1; }
+.projections .final-answer{ grid-column: 2; grid-row: 2; }
+/* T5 rec 5: the analyst-hypothesis section is a FOURTH child of this band, added when the
+   external claim moved out of the answer tile. It needs explicit placement for the same reason
+   the other three do — every cell in rows 1-2 is already claimed, so auto-placement drops it
+   into row 3 COLUMN 1, the 340-390 px column, and leaves column 2 empty beside it. An
+   independent review caught that; the ancestry tests assert containment and say nothing about
+   layout. It spans the full width on its own row: it is a prose block, not a numeral, and the
+   narrow column is the wrong shape for it. */
+.projections .fa-analyst-hypothesis { grid-column: 1 / -1; grid-row: 3; margin: 0; }
+@media (max-width: 980px) {
+  .projections .hero-lead, .projections .est-top, .projections .final-answer,
+  .projections .fa-analyst-hypothesis {
+    grid-column: 1; grid-row: auto;
+  }
+}
+
+/* The estimates are DISPLAYED, never behind a summary line. Annotation n95f678 approved this pair
+   as it RENDERED in section 5 ("this is almost exactly what I wanted"); the 2026-08-16 hoist put it
+   behind a closed <details> and the Fable card stopped being on the page at all. The "collapsed,
+   not rambling" instruction it borrowed is nbc7fc1's, and nbc7fc1 is the ANSWER TILE. */
+.est-top { margin: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2, transparent); padding: 0 14px; }
+.est-top-head { margin: 12px 0 0; font-family: var(--font-head); font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--ink-2); }
+.est-top-head strong { color: var(--ink-1); font-weight: 700; }
+.est-top > .est-pair { margin-top: 12px; }
+.est-top > .est-stress { margin-bottom: 14px; }
+.est-moved { font-size: 14px; color: var(--ink-2); }
+/* Owner annotation nd4f4c7 (2026-08-16): the load ops under each higher-justification entry. The
+   provenance line is quieter than the button deliberately — the button is the action, the line is
+   the standing caveat that the claim is theirs and the vector is ours. */
+.fa-higher-loadops { margin-top: 6px; font-size: 12.5px; }
+.fa-higher-loadops .loadop-lead { color: var(--ink-3); }
+.fa-higher-loadops-none { color: var(--ink-3); font-style: italic; }
+.fa-higher-loadops .loadop-provenance { margin-top: 3px; font-size: 11.5px; color: var(--ink-3); }
+/* Owner annotation nbc7fc1 (2026-08-16): the answer tile collapses to number + short subject +
+   the reading the page opens on; the full scope declaration and every band/span line sit behind
+   this one summary line rather than running down the page. */
+.fa-full { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; }
+.fa-full > .fa-full-summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 2px 0; list-style: revert; }
+.fa-full[open] > .fa-full-summary { margin-bottom: 6px; }
+/* The hoisted headline tile's own tail collapse (owner ruling q-im-tile-position, 2026-08-18) —
+   deliberately the SAME treatment .fa-full got for annotation nbc7fc1, so the two collapsed
+   projections at the top of the column read as one pattern rather than two inventions. */
+.hero-full { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; }
+.hero-full > .hero-full-summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 2px 0; list-style: revert; }
+.hero-full[open] > .hero-full-summary { margin-bottom: 6px; }
+#fa-subject-short { font-size: 13px; color: var(--ink-2); }
+
+/* ---------- /glossary (release edit 2026-09-09) ----------
+   The glossary is generated from style/GLOSSARY.md by build-research-html.mjs. Its rules live
+   here rather than in an inline <style> so every generated page keeps ONE inline style body —
+   the CSP inventory in tests/snapshots.test.mjs pins each inline body exactly, and a second
+   body on one page would mean a second hash in _headers for no reader-visible gain. */
+.gl-lede { font-size: 15px; color: var(--ink-2); max-width: 66ch; }
+.gl-nav ul { list-style: none; padding: 0; margin: 14px 0 24px; display: grid; gap: 6px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.gl-nav a { display: block; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--wash); font-size: 13px; text-decoration: none; color: var(--ink-2); }
+.gl-nav a:hover { color: var(--ink-1); }
+.gl dt { font-weight: 600; margin: 16px 0 3px; color: var(--ink-1); }
+.gl dt a.gl-self { text-decoration: none; color: inherit; }
+.gl dt a.gl-self:hover { text-decoration: underline; }
+.gl dd { margin: 0 0 2px; max-width: 74ch; }
+.gl dt:target { scroll-margin-top: 12px; }
+.gl dt:target a.gl-self { text-decoration: underline; }
+
+/* THE ONE WINDOW (owner voice note note-20260912T180812Z-c9eaac, 2026-09-12): the headline tile names its
+   scenario, is highlighted when that scenario is the default, swaps in place, and carries the calculation
+   (bq-2345). Wraps at every width; nothing here scrolls horizontally. */
+.tile-hero.win-default { box-shadow: inset 0 0 0 2px var(--accent); }
+.win-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; font-size: 13.5px; color: var(--ink-2); }
+.win-kicker { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.win-badge { text-transform: none; letter-spacing: 0; font-size: 12.5px; font-weight: 700; color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: 1px 8px; }
+.win-name { font-size: 15px; color: var(--ink-1); overflow-wrap: anywhere; }
+.win-facts, .win-modified, .win-default-row { font-size: 13px; overflow-wrap: anywhere; }
+.win-modified { color: var(--series-6); font-weight: 600; }
+.win-default-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.win-swap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.win-swap-lead { font-size: 13px; }
+.win-swap-btn[aria-pressed="true"] { border-color: var(--accent); color: var(--ink-1); font-weight: 700; }
+.win-all-summary { cursor: pointer; font-size: 13px; }
+.win-all-list { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.win-all-item { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 13px; overflow-wrap: anywhere; }
+.win-is-default { font-weight: 700; color: var(--accent); }
+.win-note { margin: 0; font-size: 12.5px; color: var(--ink-2); }
+.tile-calc { display: flex; flex-direction: column; gap: 4px; margin: 10px 0 6px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface-1); }
+.calc-unit { font-size: 12.5px; color: var(--ink-3); }
+.calc-operands { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+.calc-op { display: flex; flex-direction: column; }
+.calc-op-label { font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink-3); }
+.calc-op-value { font-size: 24px; font-weight: 600; font-family: var(--font-head); font-variant-numeric: tabular-nums; color: var(--ink-1); }
+.calc-eq { font-size: 15px; font-variant-numeric: tabular-nums; color: var(--ink-1); overflow-wrap: anywhere; }
+.calc-engine { font-size: 13.5px; font-weight: 600; color: var(--ink-1); }
+.calc-warn { font-size: 12.5px; color: var(--warn); }
+.set-default-btn { margin-left: 6px; font-size: 12px; }
+.set-default-btn[aria-pressed="true"] { color: var(--accent); font-weight: 700; }

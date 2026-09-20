@@ -1,0 +1,105 @@
+name: ci
+
+# Runs against the exported public snapshot on every push/PR — the point is that a fresh
+# checkout of THIS tree passes every advertised build and test (GPT-5.6 Pro repo review,
+# 2026-07-15: the mirror must be self-verifying, not vouched for by a private script).
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# CI only reads the tree — nothing here writes to the repo, publishes, or needs an
+# OIDC token. Declared explicitly so the jobs keep a read-only GITHUB_TOKEN even if
+# the repo/org default workflow permission is ever widened (gh audit 2026-07-26, F5).
+# CARRIED FORWARD from master a7124f6 — the ONLY part of master's ci.yml hardening the
+# dev branch does not already supersede (master's wrangler@3.114.17 pin is superseded by
+# the dev branch's stronger lockfile-installed wrangler in the `feedback` job below).
+permissions:
+  contents: read
+
+jobs:
+  site:
+    name: engine + contract + browser suites
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - uses: pnpm/action-setup@a15d269cd4658e1107c09f1fabf4cbd7bd1f308a # v4.4.0
+        with:
+          version: 9.15.9
+          run_install: false
+      - name: Install pinned root build dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      # ONE CANONICAL GATE (GPT Pro 2026-07-29 rec 9). CI used to enumerate its own subset of
+      # suites, so "CI is green" and "the gate passed" were different claims that could drift apart
+      # silently. `npm run gate` is the single composition: gate:site + gate:mcp + gate:worker +
+      # gate:artifacts.
+      #
+      # THE NESTED INSTALLS BELOW ARE LOAD-BEARING, not tidiness (GPT Pro review
+      # pr-20260902T173936Z-a81123, BLOCKER). mcp-server and mcp-server/worker are SEPARATE
+      # dependency trees with their own lockfiles; this job installed only the root one. The first
+      # cut of the canonical gate called `npm --prefix mcp-server test` from here and would have
+      # failed on a fresh checkout — it passed locally only because a developed tree already has
+      # mcp-server/node_modules. That is exactly the defect CI exists to catch, hidden by the
+      # developer environment. The `gate:no-nested-modules` step below is the negative control: it
+      # proves the failure is reachable, so this cannot silently regress.
+      - name: Install MCP package dependencies (the gate crosses package boundaries)
+        run: npm --prefix mcp-server ci --ignore-scripts --no-audit --no-fund
+      - name: Install Worker dependencies
+        run: npm --prefix mcp-server/worker ci --ignore-scripts --no-audit --no-fund
+      - name: Canonical gate (npm run gate)
+        run: pnpm run gate
+      # bq-293: `test ! -d harness || npm run ...` reported SUCCESS on the public
+      # snapshot, where harness/ is deliberately excluded by scripts/publish.sh —
+      # the test succeeded, the `||` short-circuited, and a check named "migration
+      # differential" went green having executed nothing. The skip is now explicit
+      # in the log and as a job annotation, so a green tick cannot be read as an
+      # attestation the differential ran.
+      - name: Pre-R2 migration differential (runs only where the private harness is present)
+        run: |
+          if [ -d harness ]; then
+            npm run test:migration-differential
+          else
+            echo "::warning title=Migration differential NOT RUN::harness/ is deliberately unpublished on this snapshot, so this step executed nothing. A passing check here does NOT attest the pre-R2 migration differential."
+            echo "SKIPPED: harness/ absent — migration differential not executed on this snapshot."
+          fi
+
+  mcp:
+    name: MCP package build + tests, worker typecheck + tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - name: MCP package tests (self-building)
+        working-directory: mcp-server
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm test
+      - name: Worker build + typecheck + tests
+        working-directory: mcp-server/worker
+        run: |
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm run typecheck
+          npm test
+
+  feedback:
+    name: feedback worker bundles cleanly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - name: Install pinned Wrangler
+        working-directory: mcp-server/worker
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Wrangler dry-run bundle (verifies admin.html import resolves)
+        run: |
+          WRANGLER_SEND_METRICS=false WRANGLER_LOG_PATH=/tmp/im-feedback-wrangler.log \
+            npm --prefix mcp-server/worker exec -- wrangler deploy --dry-run \
+              --config "$GITHUB_WORKSPACE/feedback/wrangler.toml" \
+              --outdir /tmp/feedback-bundle

@@ -1,0 +1,5420 @@
+{
+ "_comment": "im-arc T4 fold (2026-08-24, spec research/im-arc-t4-fold-memo.md §§1.5, 4): re-minted one-to-one after the coverage line gained its subordinate NON-ADDITIVE SKU/workload count-backed row and the rent controls learned to say a row has no admissible public planning rate instead of formatting a null; 522 claim sinks, same ten classes, no new eligible file | T5 round 4 (2026-08-27): re-minted for ONE new eligible file, mcp-server/worker/scripts/release-gate.mjs — the executable release-artifact gate added after a release-gate review found the contract in RELEASE-ARTIFACT.md was enforced by nothing. It is classified EXEMPT by its own rule (worker-release-gate), placed before worker-report-overrides so a build tool is not counted as a report emitter. claimSinks is UNCHANGED at 522: the gate emits a digest and a verdict, no claim value. | im-share-finalization (2026-09-02): re-minted for ONE sink, mcp-server/src/server.ts's mcp-build text, after GPT Pro 2026-07-29 rec 13 replaced the raw Error.message returned to callers with a closed error-code enum and a fixed sentence per code. 522 claim sinks and the same ten classes — the count, the class set and every other sink id are BYTE-UNCHANGED; only this one text hash and the digest move, which is the evidence the change is confined to the transport's failure surface. | im-share-finalization round 2 (2026-09-02): re-minted for mcp-server/src/server.ts under GPT Pro pr-20260902T173936Z-a81123 finding 2. The mcp-build TEXT sink re-hashes (the public failure sentence changed) and ONE NEW mcp-json sink appears — the machine-readable structuredContent.error the review asked for, so a client can branch on a field instead of parsing an English sentence. 522 -> 524 claim sinks, same ten classes; no other sink id moves, which is the evidence the change is confined to the transport's failure surface. Plus ONE sink in mcp-server/worker/overrides/get_report.ts: the bounded server-side log that replaced handing the caller a raw archive-read message (same finding). 524 total. | im-release-edit (2026-09-09): re-minted for THIRTEEN eligible files the dc-map stage-3 integration (commit b216807) added to mcp-server and never pinned — three dcmap modules, seven datacenter tools, the worker substrate override, the worker deploy gate and the worker globals. The gate was ALREADY red on master before this leg: 52 eligible files against 39 pinned. claimSinks 524 -> 533 (ten added from dcmap/layer.ts and worker/scripts/build.mjs, one build.mjs log line changed); classes UNCHANGED at ten; unmatched 0, so nothing is exempted by silence. SEPARATELY, tests/sink-scanner.mjs now excludes the vendored economics/ and economics-node/ directories: they are gitignored build output written by sync-economics.mjs, and counting them made this scan return 52 or 64 for the SAME commit depending on whether mcp-server had been built. No claim value on this page moves under either change. | im-release-edit-r2 (2026-09-10): re-minted for ONE sink id in mcp-server/src/dcmap/layer.ts, closing bq-2188. runDatacenterTool used to return `structuredContent: envelope.structuredContent as ...` on one line; it now builds the object so it can attach `release_binding`, the field naming WHERE the served bytes came from, which releaseRefusal already attached and the success path did not. So the file now holds TWO `structuredContent: {` sites instead of one, and the moved id is exactly that: 2ef7b3cb…|0 -> 7578a9a8…|1. 533 claim sinks UNCHANGED, 52 eligible files UNCHANGED, the same ten classes, unmatched 0, and no other sink id moves — which is the evidence the change is confined to the connector's own provenance field. No claim value on this page moves. | im-default-window-and-mcp-discrepancy (2026-09-12): re-minted for the one-window head, the headline calculation and the Astra round-2 and round-3 folds (owner voice note note-20260912T180812Z-c9eaac, bq-2345). Against the pre-leg registry (f13afda): 61 claim sinks added (scenario-window 48, hero-calculation 12, hero-margin-cost-price-block 1), 0 removed. Two new function-anchored rules, scenario-window (identity-strip) and hero-calculation (hero-tile). Same eligible files, same ten classes, 0 unmatched. | im-default-controls-tail (2026-09-12, successor on commission im-default-window-and-mcp-discrepancy-20260912 after gate verdict 20260912T212606Z): re-minted for the set-as-default control on every scenario on every model, the Custom model included. 594 -> 593 claim sinks, all five moved ids in the scenario-window rule. REMOVED 3: the Custom-model refusal sentence appended to the window row (append-call ef0f5309), the withheld-control traffic-mix sentence (append-call a001adee), and the row control built with one fixed label (mkel-call b9ce829e). ADDED 2: the sentence naming the mix the opening scenario reopens with when only the traffic mix on screen differs (append-call d748af59), and the row control whose label names that mix when it differs (mkel-call f03b3f19). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-default-controls-tail, Astra round-6 fold (2026-09-12): re-minted again for the whole-reopening-state comparison and the edited-scenario control. 593 -> 594 claim sinks, all moved ids in the scenario-window rule. REMOVED 3: the opening-scenario traffic sentence (append-call d748af59), the row control with a traffic-only label (mkel-call f03b3f19) and its dataset write on p (dataset-attr 4e35bbca). ADDED 4: the opening-scenario sentence naming what the screen holds that the default does not keep (append-call 7eb8bd3d), the row control whose label names it (mkel-call a89ec8b7), its dataset write on the named base scenario (dataset-attr cbf99c8d), and the sentence for an edited state that names no scenario of the page (append-call 35c70c7d). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-vet-0919 (2026-09-19): re-minted for ONE new exempt sink — showRejectedLinkNotice, the rejected-shared-link notice folded for Astra pack B P0-1. It renders no computed quantity, so the claim-sink set and the digest are UNCHANGED (594 claim sinks, digest da747d941259fff4); only the classified total moves, 1072 -> 1075. | im-vet-0919 round-2 (2026-09-19, Polaris ruling on Astra pack A P0-2): re-minted for ONE claim sink whose CONTENT changed, not its class — the per-dial band basis line now renders on every band instead of only a non-exact one, so its mkEl call text moved (dd8ae3b2 -> d3ab2139) at the same occurrence index. Same rule, same class, 594 claim sinks and 1075 classified, unchanged. | im-vet-0919 round-2b (2026-09-19, Polaris ruling on Astra pack B P0-4): re-minted for the saved-record identity notice, one new EXEMPT sink under its own rule — it states which parts of the scenario came from the save and which from the page, and renders no computed quantity. Claim sinks 594 -> 594, classified 1075 -> 1076. | im-vet-six-repairs ASTRA FOLD (2026-09-20): re-minted for EXACTLY 2 sink id(s) in site/app.js whose content hash moved when the fold renamed reader strings the vocabulary checker's old scope had hidden — the hero label, which index.html rendered as \"Serving margin\" while app.js rewrote it to \"Unit serving margin\", and the thesis-baseline sentence's \"clean flagship default\". The sink COUNT is unchanged at 594, the ten emitter classes are unchanged, and nothing is unmatched: no sink was added, removed or reclassified, which is what makes this a re-mint rather than a surface change. Run from outside the repository, because every .mjs inside it is an eligible file and a re-mint script in tests/ would change the manifest it is re-minting.",
+ "files": [
+  "build-dc-ledger.mjs",
+  "build-grounding-ledger.mjs",
+  "build-research-html.mjs",
+  "mcp-server/src/claims-types.ts",
+  "mcp-server/src/claims.ts",
+  "mcp-server/src/dcmap/layer.ts",
+  "mcp-server/src/dcmap/space.ts",
+  "mcp-server/src/dcmap/substrate.ts",
+  "mcp-server/src/engine-types.d.ts",
+  "mcp-server/src/engine.ts",
+  "mcp-server/src/http.ts",
+  "mcp-server/src/labels.ts",
+  "mcp-server/src/reports.ts",
+  "mcp-server/src/server.ts",
+  "mcp-server/src/shape.ts",
+  "mcp-server/src/stdio.ts",
+  "mcp-server/src/tools/adjust_rental_rate.ts",
+  "mcp-server/src/tools/datacenter_impact.ts",
+  "mcp-server/src/tools/datacenter_schedule.ts",
+  "mcp-server/src/tools/datacenter_stakeholders.ts",
+  "mcp-server/src/tools/explore_range.ts",
+  "mcp-server/src/tools/get_datacenter.ts",
+  "mcp-server/src/tools/get_dossier.ts",
+  "mcp-server/src/tools/get_report.ts",
+  "mcp-server/src/tools/list_datacenters.ts",
+  "mcp-server/src/tools/list_scenario_space.ts",
+  "mcp-server/src/tools/price_token_from_site.ts",
+  "mcp-server/src/tools/query_margin_claims.ts",
+  "mcp-server/src/tools/rank_datacenters.ts",
+  "mcp-server/src/tools/run_fleet_sections.ts",
+  "mcp-server/src/tools/run_scenario.ts",
+  "mcp-server/worker/overrides/claims.ts",
+  "mcp-server/worker/overrides/dcmap-substrate.ts",
+  "mcp-server/worker/overrides/engine.ts",
+  "mcp-server/worker/overrides/get_report.ts",
+  "mcp-server/worker/overrides/reports.ts",
+  "mcp-server/worker/scripts/build.mjs",
+  "mcp-server/worker/scripts/dcmap-deploy-gate.mjs",
+  "mcp-server/worker/scripts/release-gate.mjs",
+  "mcp-server/worker/src/body-cap.ts",
+  "mcp-server/worker/src/globals.d.ts",
+  "mcp-server/worker/src/index.ts",
+  "site/app.js",
+  "site/custom-fleets.js",
+  "site/engine-contracts-v22.js",
+  "site/engine-data-dc-v1.js",
+  "site/engine-data-v22.js",
+  "site/engine-roofline-v22.js",
+  "site/engine.js",
+  "site/evidence-schema.js",
+  "site/index.html",
+  "site/uncertainty-contract.js"
+ ],
+ "unmatched": [],
+ "classifiedCount": 1076,
+ "claimSinks": [
+  {
+   "id": "mcp-server/src/dcmap/layer.ts|mcp-build|50d2579283ff6c1f|0",
+   "file": "mcp-server/src/dcmap/layer.ts",
+   "kind": "mcp-build",
+   "hash16": "50d2579283ff6c1f",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/dcmap/layer.ts|mcp-build|7578a9a8a2bc83e0|0",
+   "file": "mcp-server/src/dcmap/layer.ts",
+   "kind": "mcp-build",
+   "hash16": "7578a9a8a2bc83e0",
+   "occ": 0,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/dcmap/layer.ts|mcp-build|7578a9a8a2bc83e0|1",
+   "file": "mcp-server/src/dcmap/layer.ts",
+   "kind": "mcp-build",
+   "hash16": "7578a9a8a2bc83e0",
+   "occ": 1,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/dcmap/layer.ts|mcp-build|dbfb3349176541aa|0",
+   "file": "mcp-server/src/dcmap/layer.ts",
+   "kind": "mcp-build",
+   "hash16": "dbfb3349176541aa",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/server.ts|mcp-build|2b1ae1215eba08dd|0",
+   "file": "mcp-server/src/server.ts",
+   "kind": "mcp-build",
+   "hash16": "2b1ae1215eba08dd",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/server.ts|mcp-build|e87a4d6c03a277ba|0",
+   "file": "mcp-server/src/server.ts",
+   "kind": "mcp-build",
+   "hash16": "e87a4d6c03a277ba",
+   "occ": 0,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|boundary-emit|3996e3f30bcb2186|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "boundary-emit",
+   "hash16": "3996e3f30bcb2186",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-boundary-emit"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|boundary-emit|41cd24523de3f908|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "boundary-emit",
+   "hash16": "41cd24523de3f908",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-boundary-emit"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|27b95a46ab59a3ea|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "27b95a46ab59a3ea",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|3141d5a955160387|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "3141d5a955160387",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|7578a9a8a2bc83e0|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "7578a9a8a2bc83e0",
+   "occ": 0,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|9090f078eedff438|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "9090f078eedff438",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|c5fc7ad8f3c88397|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "c5fc7ad8f3c88397",
+   "occ": 0,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/shape.ts|mcp-build|d3452b7d04b2bd97|0",
+   "file": "mcp-server/src/shape.ts",
+   "kind": "mcp-build",
+   "hash16": "d3452b7d04b2bd97",
+   "occ": 0,
+   "class": "mcp-json",
+   "rule": "mcp-structured"
+  },
+  {
+   "id": "mcp-server/src/tools/get_report.ts|mcp-build|f1ae8345f4ac4026|0",
+   "file": "mcp-server/src/tools/get_report.ts",
+   "kind": "mcp-build",
+   "hash16": "f1ae8345f4ac4026",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/worker/overrides/get_report.ts|mcp-build|f1ae8345f4ac4026|0",
+   "file": "mcp-server/worker/overrides/get_report.ts",
+   "kind": "mcp-build",
+   "hash16": "f1ae8345f4ac4026",
+   "occ": 0,
+   "class": "mcp-text",
+   "rule": "mcp-content-text"
+  },
+  {
+   "id": "mcp-server/worker/overrides/get_report.ts|stdout-log|28e1904d23cb6b88|0",
+   "file": "mcp-server/worker/overrides/get_report.ts",
+   "kind": "stdout-log",
+   "hash16": "28e1904d23cb6b88",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|build-write|588aafb4eb22fedb|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "build-write",
+   "hash16": "588aafb4eb22fedb",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|build-write|b0bda50fa1e49123|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "build-write",
+   "hash16": "b0bda50fa1e49123",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|build-write|dc2ef8c0aa22e5d6|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "build-write",
+   "hash16": "dc2ef8c0aa22e5d6",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|2c18dc05de9ae57c|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "2c18dc05de9ae57c",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|3b24c38bf551db31|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "3b24c38bf551db31",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|47832197279965d9|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "47832197279965d9",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|68da1af152b121cb|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "68da1af152b121cb",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|8661b798ff2055de|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "8661b798ff2055de",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|aab238e25ea53cca|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "aab238e25ea53cca",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/build.mjs|stdout-log|b73fe926ebdbb4b2|0",
+   "file": "mcp-server/worker/scripts/build.mjs",
+   "kind": "stdout-log",
+   "hash16": "b73fe926ebdbb4b2",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/dcmap-deploy-gate.mjs|stdout-log|2d984130bb8ad672|0",
+   "file": "mcp-server/worker/scripts/dcmap-deploy-gate.mjs",
+   "kind": "stdout-log",
+   "hash16": "2d984130bb8ad672",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "mcp-server/worker/scripts/dcmap-deploy-gate.mjs|stdout-log|40a1335d7afd5d91|0",
+   "file": "mcp-server/worker/scripts/dcmap-deploy-gate.mjs",
+   "kind": "stdout-log",
+   "hash16": "40a1335d7afd5d91",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "worker-report-overrides"
+  },
+  {
+   "id": "site/app.js|append-call|089c6491aeb4d796|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "089c6491aeb4d796",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|0ff19d1b8eef2847|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "0ff19d1b8eef2847",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-dc-registry-row"
+  },
+  {
+   "id": "site/app.js|append-call|124f29058f7094ff|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "124f29058f7094ff",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|1874d25de42508e7|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "1874d25de42508e7",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|1c42ac10900364ec|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "1c42ac10900364ec",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|append-call|2374acb623936e6c|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "2374acb623936e6c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|2521d099edf29edf|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "2521d099edf29edf",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|append-call|2747a014b8f08d5d|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "2747a014b8f08d5d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|2747a014b8f08d5d|1",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "2747a014b8f08d5d",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|28461d3b97ddfe87|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "28461d3b97ddfe87",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|append-call|29e15cca8d0c0d4b|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "29e15cca8d0c0d4b",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|append-call|35c70c7d67a1f504|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "35c70c7d67a1f504",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|3d9099b63d8f6474|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "3d9099b63d8f6474",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|append-call|3dc271be8a6b90bb|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "3dc271be8a6b90bb",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|440e96c63d271726|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "440e96c63d271726",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|4685df6a0d9f6ca2|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4685df6a0d9f6ca2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|append-call|4713bded22659af1|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4713bded22659af1",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|472238429785c0d5|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "472238429785c0d5",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|append-call|4b8727ee3b456bda|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4b8727ee3b456bda",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|4d546cefb7ad6f42|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4d546cefb7ad6f42",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|4f2e67855f3fb456|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4f2e67855f3fb456",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|55dc41343388fc18|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "55dc41343388fc18",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|5ade04f17e4f67a4|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "5ade04f17e4f67a4",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|6e98c70cc7f42270|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "6e98c70cc7f42270",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|7313b749d7e0f3a1|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "7313b749d7e0f3a1",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|append-call|74ec9fb60745b021|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "74ec9fb60745b021",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|append-call|75175bef0ff98444|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "75175bef0ff98444",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|7584488c71f541ae|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "7584488c71f541ae",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|append-call|75e139718072b12d|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "75e139718072b12d",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|79c42630cd8bd394|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "79c42630cd8bd394",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|append-call|79c42630cd8bd394|1",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "79c42630cd8bd394",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|append-call|7c438672f49362ed|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "7c438672f49362ed",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|append-call|7eb8bd3daf9bc07c|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "7eb8bd3daf9bc07c",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|7f9b3c8878b52bb3|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "7f9b3c8878b52bb3",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|append-call|81d35e0db81a7a27|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "81d35e0db81a7a27",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|8265aebb022dacb9|1",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "8265aebb022dacb9",
+   "occ": 1,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|8696683c5df376cc|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "8696683c5df376cc",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|append-call|9a89f36a6b9c4572|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "9a89f36a6b9c4572",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|9e2ce60d7c84635b|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "9e2ce60d7c84635b",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|append-call|ab725ffebf825d41|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "ab725ffebf825d41",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|ac8d94f8b59db641|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "ac8d94f8b59db641",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|append-call|adacf1b0d8571925|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "adacf1b0d8571925",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|append-call|b4a8817a1aba32eb|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "b4a8817a1aba32eb",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|b5803c9c3886dd00|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "b5803c9c3886dd00",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|append-call|ba0b6cf560916a17|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "ba0b6cf560916a17",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|bca0e816d383fa6e|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "bca0e816d383fa6e",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|bf86eadce21fe360|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "bf86eadce21fe360",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|c9164b2b0c991181|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "c9164b2b0c991181",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|append-call|cc0379e773c9b959|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "cc0379e773c9b959",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|cda3a461e5da0d76|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "cda3a461e5da0d76",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|d1352ee964984943|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "d1352ee964984943",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|d9f8865e4a2bc3e0|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "d9f8865e4a2bc3e0",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-nvlink-cap-disclosure"
+  },
+  {
+   "id": "site/app.js|append-call|dfee3aaacd7e04d4|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "dfee3aaacd7e04d4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "form-correction-debt"
+  },
+  {
+   "id": "site/app.js|append-call|e2601738e3ddcb2c|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "e2601738e3ddcb2c",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|e3147c90554d3ecc|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "e3147c90554d3ecc",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|efa0f1cb0d09e9b3|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "efa0f1cb0d09e9b3",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|f296686a0a7803f3|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "f296686a0a7803f3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|append-call|f3eb165753415a4e|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "f3eb165753415a4e",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|append-call|f9a8b99a2f5044ec|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "f9a8b99a2f5044ec",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|append-call|fde813145c940eb3|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "fde813145c940eb3",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|aria-label|01042f5f02512eed|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "01042f5f02512eed",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|aria-label|0d9974c9357e2fe8|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "0d9974c9357e2fe8",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|aria-label|410e8d280415ba54|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "410e8d280415ba54",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|aria-label|8b65924fd835e8f6|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "8b65924fd835e8f6",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-jump-affordance"
+  },
+  {
+   "id": "site/app.js|aria-label|8f8ba1795da8573c|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "8f8ba1795da8573c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|aria-label|a7e05e79e9e8ecf9|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "a7e05e79e9e8ecf9",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|aria-label|b4d6a07df7dafaf4|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "b4d6a07df7dafaf4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|aria-label|b4eb87fbf4714e76|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "b4eb87fbf4714e76",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|aria-label|be761c7d1657d8ad|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "be761c7d1657d8ad",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|aria-label|d5e31f3b6987a75e|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "d5e31f3b6987a75e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|aria-label|dde48328d8058b4e|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "dde48328d8058b4e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|aria-label|df0530e89362ed28|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "df0530e89362ed28",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|aria-label|ecfaf24e18ee4bd9|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "ecfaf24e18ee4bd9",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|chart-text|08e6b4de868ff6ed|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "08e6b4de868ff6ed",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|1ede4c03aea9e8a5|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "1ede4c03aea9e8a5",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|2cbfb351722c424b|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "2cbfb351722c424b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|5094bc873fa3cab1|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "5094bc873fa3cab1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|5094bc873fa3cab1|1",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "5094bc873fa3cab1",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|5094bc873fa3cab1|2",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "5094bc873fa3cab1",
+   "occ": 2,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|7c9be9db7e82f479|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "7c9be9db7e82f479",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|828852f9e60bc3dc|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "828852f9e60bc3dc",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|828852f9e60bc3dc|1",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "828852f9e60bc3dc",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|828852f9e60bc3dc|2",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "828852f9e60bc3dc",
+   "occ": 2,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|845151ed6ca20e3b|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "845151ed6ca20e3b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|8ffdf9c332b87b90|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "8ffdf9c332b87b90",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|92d03307adf37386|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "92d03307adf37386",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|9de8e4664deb624d|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "9de8e4664deb624d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|a120c3e98984daed|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "a120c3e98984daed",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|bf2edf090a557e50|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "bf2edf090a557e50",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|cd52b480c764f5ae|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "cd52b480c764f5ae",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|d234daf0a513446c|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "d234daf0a513446c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|dce74b2e843c45d4|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "dce74b2e843c45d4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|e8b2bea703c3d64b|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "e8b2bea703c3d64b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|ea298a5e5b6e880a|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "ea298a5e5b6e880a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|ea9c1a20f4810611|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "ea9c1a20f4810611",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|eaf1a643eeb75d80|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "eaf1a643eeb75d80",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|f69725fbb1b85eb0|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "f69725fbb1b85eb0",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|f7e88486a8063be3|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "f7e88486a8063be3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|class-style|0350fa0cf4abd896|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "0350fa0cf4abd896",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "energy-rent-chip"
+  },
+  {
+   "id": "site/app.js|class-style|08f9e7e46212c609|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "08f9e7e46212c609",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|class-style|0f821a88500cfbfd|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "0f821a88500cfbfd",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|15a5811d882143f9|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "15a5811d882143f9",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|class-style|18c3c0957417b886|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "18c3c0957417b886",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|class-style|19e6ff4a4f48b0f2|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "19e6ff4a4f48b0f2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|class-style|1a6d3fb1be050d62|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "1a6d3fb1be050d62",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|class-style|1c31fc76242685e3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "1c31fc76242685e3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|class-style|2591d1a5f763ea90|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "2591d1a5f763ea90",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|class-style|2d81d68dcce76bbc|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "2d81d68dcce76bbc",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|class-style|2fdfc6e279ed5d95|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "2fdfc6e279ed5d95",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|class-style|3145a50814401c98|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "3145a50814401c98",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|class-style|36c5741de02a4c21|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "36c5741de02a4c21",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|class-style|36f5a15cbdcc9ec1|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "36f5a15cbdcc9ec1",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|class-style|3928bb463c549323|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "3928bb463c549323",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|class-style|3ae8ab94393a1c56|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "3ae8ab94393a1c56",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|3f5bf39d2c061240|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "3f5bf39d2c061240",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|class-style|400cc2a574dea90b|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "400cc2a574dea90b",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|class-style|458aec50c13747e9|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "458aec50c13747e9",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|class-style|458aec50c13747e9|1",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "458aec50c13747e9",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|class-style|4ea090988ebf6a9b|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "4ea090988ebf6a9b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|class-style|51b5b9d057fb22b3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "51b5b9d057fb22b3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "computed-presentation-state"
+  },
+  {
+   "id": "site/app.js|class-style|52880a189557f6fc|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "52880a189557f6fc",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|5957294d00da808e|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "5957294d00da808e",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|class-style|613c6db7dca57c79|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "613c6db7dca57c79",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|69654447dfce3e7a|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "69654447dfce3e7a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|class-style|6a251036d11d3fb1|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "6a251036d11d3fb1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|class-style|6b11dca2439351cb|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "6b11dca2439351cb",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|class-style|6d0d942a3f8e1dd2|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "6d0d942a3f8e1dd2",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|7100d570bb796fbc|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "7100d570bb796fbc",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|class-style|71af81302b52026f|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "71af81302b52026f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|770127a78797e856|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "770127a78797e856",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|class-style|8206e06c0f2796bc|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "8206e06c0f2796bc",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "blend-exclusion-marker"
+  },
+  {
+   "id": "site/app.js|class-style|840222ecc94ff1e5|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "840222ecc94ff1e5",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "energy-rent-chip"
+  },
+  {
+   "id": "site/app.js|class-style|8600a15dd36c6d00|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "8600a15dd36c6d00",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|88630f49bb603f18|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "88630f49bb603f18",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|class-style|8b4a5398a4931c94|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "8b4a5398a4931c94",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|8c120a972241dc71|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "8c120a972241dc71",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "normalized-table"
+  },
+  {
+   "id": "site/app.js|class-style|9036aba5f4f359df|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "9036aba5f4f359df",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|91f22179df3126b6|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "91f22179df3126b6",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|class-style|9a590db315a9c000|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "9a590db315a9c000",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|class-style|9afdf1659163953c|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "9afdf1659163953c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|class-style|a7246ac6968bad9a|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "a7246ac6968bad9a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|class-style|a9d0988ce45ac87c|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "a9d0988ce45ac87c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|class-style|ab97094daadb6ab8|1",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ab97094daadb6ab8",
+   "occ": 1,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|add63113183cf3e1|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "add63113183cf3e1",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|class-style|afed87462340d3c6|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "afed87462340d3c6",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|b67f3d90b0c22dc5|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "b67f3d90b0c22dc5",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "computed-presentation-state"
+  },
+  {
+   "id": "site/app.js|class-style|b7228bb0a6eb7e0f|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "b7228bb0a6eb7e0f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|class-style|b776ca1e1278e6b3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "b776ca1e1278e6b3",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|class-style|b92be067b8ba6b6c|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "b92be067b8ba6b6c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|bc732064ba20252f|1",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "bc732064ba20252f",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|c9e9045a9e648f0c|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "c9e9045a9e648f0c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|class-style|ca13ad330d7e3431|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ca13ad330d7e3431",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|ca21d9096b62f676|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ca21d9096b62f676",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|class-style|ca7e4ce194476a05|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ca7e4ce194476a05",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|ccef79c562576cb3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ccef79c562576cb3",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|class-style|d3f09726408b4fd0|1",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "d3f09726408b4fd0",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|db4fc7a5dadb85c4|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "db4fc7a5dadb85c4",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|class-style|dda243dfd4f748f1|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "dda243dfd4f748f1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "nvlink-cap-lever-lines"
+  },
+  {
+   "id": "site/app.js|class-style|e12db39dd92747ea|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "e12db39dd92747ea",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|class-style|e183383bef44faa1|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "e183383bef44faa1",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|class-style|e3e8f37739d2f2f3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "e3e8f37739d2f2f3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|class-style|e8242093b384fe96|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "e8242093b384fe96",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|class-style|eef98983071ca604|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "eef98983071ca604",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "fleet-renderability-chip"
+  },
+  {
+   "id": "site/app.js|class-style|eef9c4e32445f2a0|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "eef9c4e32445f2a0",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|class-style|ef18357e8660528f|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "ef18357e8660528f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-jump-affordance"
+  },
+  {
+   "id": "site/app.js|class-style|eff6db234dcaf471|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "eff6db234dcaf471",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|class-style|f1770cfe6c95e216|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "f1770cfe6c95e216",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|f1d0e89f580bfac3|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "f1d0e89f580bfac3",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|class-style|f28503b22db47727|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "f28503b22db47727",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|f78c6b96e88e9225|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "f78c6b96e88e9225",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|class-style|f98596f068b4f453|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "f98596f068b4f453",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|dataset-attr|2197eeb4cfbfa49e|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "2197eeb4cfbfa49e",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dataset-attr|263d441d48fca8cf|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "263d441d48fca8cf",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-jump-affordance"
+  },
+  {
+   "id": "site/app.js|dataset-attr|42da79c219646f2a|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "42da79c219646f2a",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|dataset-attr|47ff940cdc3b7a2e|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "47ff940cdc3b7a2e",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dataset-attr|50410b3777238df6|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "50410b3777238df6",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|dataset-attr|5ba45082248ab0ca|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "5ba45082248ab0ca",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "dataset-claim-refs"
+  },
+  {
+   "id": "site/app.js|dataset-attr|6a845fe8bea3a182|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "6a845fe8bea3a182",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dataset-attr|799cd58b9286b0dc|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "799cd58b9286b0dc",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dataset-attr|79a307c1b1f2de24|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "79a307c1b1f2de24",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dataset-attr|886150f9dc4c5f52|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "886150f9dc4c5f52",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "dataset-claim-refs"
+  },
+  {
+   "id": "site/app.js|dataset-attr|8dd8af166ca486a2|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "8dd8af166ca486a2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|dataset-attr|cbf99c8dc2624d21|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "cbf99c8dc2624d21",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dataset-attr|ce022155a17fbecc|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "ce022155a17fbecc",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dataset-attr|f823d4d7b01726d3|0",
+   "file": "site/app.js",
+   "kind": "dataset-attr",
+   "hash16": "f823d4d7b01726d3",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|dom-write|02f0b65b18b1eefe|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "02f0b65b18b1eefe",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|040e6401045eb3a8|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "040e6401045eb3a8",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|04c039cf1bc1f9d2|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "04c039cf1bc1f9d2",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|050dd50b6222c301|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "050dd50b6222c301",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|dom-write|091158e71b29134a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "091158e71b29134a",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|09121922e9330853|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "09121922e9330853",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|09f5bc702dcbab72|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "09f5bc702dcbab72",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|0f5c21e8c04c90b8|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "0f5c21e8c04c90b8",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|1007674045e2127f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "1007674045e2127f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|119f3a5303f8441c|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "119f3a5303f8441c",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|15b5a113be82c0e2|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "15b5a113be82c0e2",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|dom-write|161a87dc145c642c|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "161a87dc145c642c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|164c0db77bc4a377|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "164c0db77bc4a377",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "board-current-scenario-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|166adcb23cab0f99|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "166adcb23cab0f99",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "identity-strip"
+  },
+  {
+   "id": "site/app.js|dom-write|1b8977d1aae861c4|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "1b8977d1aae861c4",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|26120aec93b95f39|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "26120aec93b95f39",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|2a2b8fd9271fb60d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "2a2b8fd9271fb60d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|2c4e836888b7ffa3|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "2c4e836888b7ffa3",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|2c97fb941d64a39d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "2c97fb941d64a39d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "subscription-verdict"
+  },
+  {
+   "id": "site/app.js|dom-write|331ac971b3e8a941|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "331ac971b3e8a941",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|331e4437aec1d6db|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "331e4437aec1d6db",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|334f0dcf4dc168b7|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "334f0dcf4dc168b7",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|33915d8abefe8d93|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "33915d8abefe8d93",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|355eed4ff123ea98|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "355eed4ff123ea98",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|35ebb64f541c3177|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "35ebb64f541c3177",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|363c02c1447a5fe7|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "363c02c1447a5fe7",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|399fada5c27519ef|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "399fada5c27519ef",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|3c5444ffaa3002c4|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "3c5444ffaa3002c4",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|3e083505f92d517a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "3e083505f92d517a",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|3f413e3c9480c74f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "3f413e3c9480c74f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|dom-write|3f97d8f4f3e6c32f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "3f97d8f4f3e6c32f",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|3fcd6d433e521d49|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "3fcd6d433e521d49",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-table-cells"
+  },
+  {
+   "id": "site/app.js|dom-write|40760c3626f009c7|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "40760c3626f009c7",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|4120c12f5bc4dd4e|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "4120c12f5bc4dd4e",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|4733e8256d45b7b9|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "4733e8256d45b7b9",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|47adee06412a0311|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "47adee06412a0311",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "board-current-scenario-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|487c530dc27a843d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "487c530dc27a843d",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|489803effdad0981|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "489803effdad0981",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|dom-write|497066cda4ab397c|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "497066cda4ab397c",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|dom-write|4cc8b1ab99f941c3|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "4cc8b1ab99f941c3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|4fc9bb15636f9114|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "4fc9bb15636f9114",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|dom-write|4ffde8a3f01edaa2|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "4ffde8a3f01edaa2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "nvlink-cap-lever-lines"
+  },
+  {
+   "id": "site/app.js|dom-write|5150f9a8c55a3920|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "5150f9a8c55a3920",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|dom-write|51c4afe05fee5082|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "51c4afe05fee5082",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|dom-write|541901187c2e7965|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "541901187c2e7965",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|55a8cd8b0ebe3751|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "55a8cd8b0ebe3751",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|57234272add8a3be|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "57234272add8a3be",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|57234272add8a3be|1",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "57234272add8a3be",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|57234272add8a3be|2",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "57234272add8a3be",
+   "occ": 2,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|58e399b0fa6346c0|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "58e399b0fa6346c0",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|5929b981ab40a8b4|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "5929b981ab40a8b4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|5a9518a2fae6be84|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "5a9518a2fae6be84",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|5c87339b79975643|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "5c87339b79975643",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|5efd60728816768d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "5efd60728816768d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|622a4832a44c7c18|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "622a4832a44c7c18",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|625290bd0e2fa67d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "625290bd0e2fa67d",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|639c5d1a30118d69|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "639c5d1a30118d69",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|6f2faf3f70d37496|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "6f2faf3f70d37496",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|dom-write|705482c5bc7f9f2f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "705482c5bc7f9f2f",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|70f61f6bca8249df|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "70f61f6bca8249df",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "form-correction-debt"
+  },
+  {
+   "id": "site/app.js|dom-write|7555e3bd5452c041|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7555e3bd5452c041",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|dom-write|7627f1f609e978d2|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7627f1f609e978d2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-helper-values"
+  },
+  {
+   "id": "site/app.js|dom-write|7676adde3fded956|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7676adde3fded956",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|78406091bee4fe7a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "78406091bee4fe7a",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "fleet-renderability-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|78eae3b48442d488|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "78eae3b48442d488",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|dom-write|7d2c25ae66735727|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7d2c25ae66735727",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|7d4084337bdb081a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7d4084337bdb081a",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|8050a162459c29bf|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "8050a162459c29bf",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|8548c6132db2e467|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "8548c6132db2e467",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|87acc722e169fb8a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "87acc722e169fb8a",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|87b33c59cfe1012e|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "87b33c59cfe1012e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|88594ee9e9dceb1c|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "88594ee9e9dceb1c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|88aa292cf298e9b1|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "88aa292cf298e9b1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|88d2be86529e2f14|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "88d2be86529e2f14",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "typed-tail-commit"
+  },
+  {
+   "id": "site/app.js|dom-write|8ccfd1343862a08b|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "8ccfd1343862a08b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|8ed42af2aa6c3a16|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "8ed42af2aa6c3a16",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|90ac20ceb8b92057|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "90ac20ceb8b92057",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|dom-write|94ed00ca854a328a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "94ed00ca854a328a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|dom-write|965b4e0f346be91d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "965b4e0f346be91d",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|994ecd1b650e4368|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "994ecd1b650e4368",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|99ddff049eeb4d5b|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "99ddff049eeb4d5b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|dom-write|99dfc13d81144b54|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "99dfc13d81144b54",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|9aceb8cb2ff52022|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "9aceb8cb2ff52022",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|dom-write|9ad417f75d1867df|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "9ad417f75d1867df",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|9b950ec20fe30b58|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "9b950ec20fe30b58",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|9e9f0b15a85363a2|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "9e9f0b15a85363a2",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|9f3958807c4fd76a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "9f3958807c4fd76a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|a03dbeab57ecb3b8|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "a03dbeab57ecb3b8",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "energy-rent-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|a28759d16f2f3569|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "a28759d16f2f3569",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|a554b853023c8688|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "a554b853023c8688",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|a7705061da88d988|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "a7705061da88d988",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|a930e1eb0c0e1b5e|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "a930e1eb0c0e1b5e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|ac4454b12db4d2b4|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ac4454b12db4d2b4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|dom-write|aee3b0aaef26d6e7|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "aee3b0aaef26d6e7",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|b0539b3c4c16c980|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b0539b3c4c16c980",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|b0883fc8f5e843ab|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b0883fc8f5e843ab",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|dom-write|b33bb85e2fb2b568|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b33bb85e2fb2b568",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|b33bb85e2fb2b568|1",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b33bb85e2fb2b568",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|b41d598bf6131648|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b41d598bf6131648",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|b72876b765c0d1f4|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b72876b765c0d1f4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|b83c77fad6285221|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b83c77fad6285221",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t3-hero-section-band"
+  },
+  {
+   "id": "site/app.js|dom-write|b99c6028876ba115|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b99c6028876ba115",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "energy-rent-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|b9b394d34caa18fb|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b9b394d34caa18fb",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|b9dfaffd4f1a905d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "b9dfaffd4f1a905d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-nvlink-cap-disclosure"
+  },
+  {
+   "id": "site/app.js|dom-write|babe5039efb78831|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "babe5039efb78831",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|bb848a5922dfaa64|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "bb848a5922dfaa64",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|bbc5dd0678ea24fc|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "bbc5dd0678ea24fc",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|bbdfdb167c423f6b|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "bbdfdb167c423f6b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|be80a03a292bcb69|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "be80a03a292bcb69",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|c0579d270b6b7661|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c0579d270b6b7661",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|dom-write|c06ac100bc73d11f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c06ac100bc73d11f",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|c1584cde3d94541f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c1584cde3d94541f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|c4bd3f727339596a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c4bd3f727339596a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "normalized-table"
+  },
+  {
+   "id": "site/app.js|dom-write|c4f299b51f0b0ac1|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c4f299b51f0b0ac1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|dom-write|c58e99e5e8ab7873|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c58e99e5e8ab7873",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dom-write|c7390e2e6456dd7b|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c7390e2e6456dd7b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-nvlink-cap-disclosure"
+  },
+  {
+   "id": "site/app.js|dom-write|c798503dfbcafb00|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c798503dfbcafb00",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|c7d19986d43f5574|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "c7d19986d43f5574",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|ca89769dd15ebd16|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ca89769dd15ebd16",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "fleet-renderability-chip"
+  },
+  {
+   "id": "site/app.js|dom-write|cb9b65a72448f239|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cb9b65a72448f239",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "form-correction-debt"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|1",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "stated-adjudicator-reading"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|2",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 2,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|3",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 3,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|6",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 6,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|7",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 7,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|cbd1191506342232|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cbd1191506342232",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t1-hardware-tables"
+  },
+  {
+   "id": "site/app.js|dom-write|cf8dddc211a73ea3|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cf8dddc211a73ea3",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|d0e5669b0781bd33|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d0e5669b0781bd33",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|d444dbb168f46f3a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d444dbb168f46f3a",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "identity-strip"
+  },
+  {
+   "id": "site/app.js|dom-write|d4ca7f0e34c4f07a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d4ca7f0e34c4f07a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|d4db69709d69e660|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d4db69709d69e660",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-nvlink-cap-disclosure"
+  },
+  {
+   "id": "site/app.js|dom-write|d4e6f070ed9cc10d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d4e6f070ed9cc10d",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dom-write|d94358b7fb0dfb62|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "d94358b7fb0dfb62",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|dc03f80e806eaf9a|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "dc03f80e806eaf9a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "feasibility-tile"
+  },
+  {
+   "id": "site/app.js|dom-write|ddbfe4556a4e8602|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ddbfe4556a4e8602",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|ddbfe4556a4e8602|1",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ddbfe4556a4e8602",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|ddbfe4556a4e8602|2",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ddbfe4556a4e8602",
+   "occ": 2,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|de8ec55a827a889d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "de8ec55a827a889d",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|e0500e0fdef91450|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e0500e0fdef91450",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|e0880ef906281e31|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e0880ef906281e31",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|dom-write|e0b51e6f7dd91d7f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e0b51e6f7dd91d7f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|e115504a49787581|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e115504a49787581",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|e21c1982183074eb|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e21c1982183074eb",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-operating-point-disclosure"
+  },
+  {
+   "id": "site/app.js|dom-write|e3315014d99ebd56|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e3315014d99ebd56",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "blend-exclusion-marker"
+  },
+  {
+   "id": "site/app.js|dom-write|e41edbb2781c51ab|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e41edbb2781c51ab",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|e72fd61e8c800a34|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e72fd61e8c800a34",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|e8acb4bd0b4cd4d7|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e8acb4bd0b4cd4d7",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|e8acb4bd0b4cd4d7|1",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e8acb4bd0b4cd4d7",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|e9dfc15326b47e71|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "e9dfc15326b47e71",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|eb2876d6a6169159|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "eb2876d6a6169159",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-nvlink-cap-disclosure"
+  },
+  {
+   "id": "site/app.js|dom-write|eb8dffdb3406cd26|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "eb8dffdb3406cd26",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|dom-write|ebe434869fcdd9fd|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ebe434869fcdd9fd",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|ee75024c59510e3c|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "ee75024c59510e3c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|f78ac0d88649e68f|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "f78ac0d88649e68f",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|dom-write|fae2833f27333d8d|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "fae2833f27333d8d",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|dom-write|fcde266829fde373|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "fcde266829fde373",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "interlock-lever-panel"
+  },
+  {
+   "id": "site/app.js|dom-write|fd88bf166c66b834|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "fd88bf166c66b834",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|dom-write|fed1964dceb36597|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "fed1964dceb36597",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t3-hero-section-band"
+  },
+  {
+   "id": "site/app.js|mkel-call|00f7c1552c239ef2|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "00f7c1552c239ef2",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|0134d94a16f2015c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "0134d94a16f2015c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t3-hero-section-band"
+  },
+  {
+   "id": "site/app.js|mkel-call|02e83dcef17e8a93|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "02e83dcef17e8a93",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|046ba95d8e97d658|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "046ba95d8e97d658",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|05f33055b57943a3|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "05f33055b57943a3",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|069ec3ab1fc69f52|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "069ec3ab1fc69f52",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|08c8d9daa8dea5b0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "08c8d9daa8dea5b0",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|0c41dadadc1b3fcf|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "0c41dadadc1b3fcf",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|0e749c4badb829c9|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "0e749c4badb829c9",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|0f739fc5d327d541|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "0f739fc5d327d541",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|102b05501748b20c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "102b05501748b20c",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|10ad62be121f7484|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "10ad62be121f7484",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|12844f31310c79f1|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "12844f31310c79f1",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|12844f31310c79f1|1",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "12844f31310c79f1",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|183e5840811467ab|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "183e5840811467ab",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|194ede05b9c5c790|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "194ede05b9c5c790",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|1bfa935c175de055|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "1bfa935c175de055",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|1d9a8204f7964f52|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "1d9a8204f7964f52",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|209a2be3135d3bdc|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "209a2be3135d3bdc",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|25d5abbfda1c2f2c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "25d5abbfda1c2f2c",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|27e704e184464d9e|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "27e704e184464d9e",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|27f031d28f9272ef|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "27f031d28f9272ef",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|291b7cedbfe139c7|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "291b7cedbfe139c7",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|2987e1ee6a219d48|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2987e1ee6a219d48",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "stated-adjudicator-reading"
+  },
+  {
+   "id": "site/app.js|mkel-call|2b8f649faf8a3258|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2b8f649faf8a3258",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|2e0bca72b73671b0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2e0bca72b73671b0",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|2f7a25926b03166f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2f7a25926b03166f",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|2f8ac3c7c4060760|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2f8ac3c7c4060760",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|2faecb871cde705d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "2faecb871cde705d",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|31e42d9730826b04|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "31e42d9730826b04",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|35669482585d157b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "35669482585d157b",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|36f7baf35f4bc95f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "36f7baf35f4bc95f",
+   "occ": 0,
+   "class": "report-dossier",
+   "rule": "dossier-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|377ee70dc5e9cc0f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "377ee70dc5e9cc0f",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|388d373cb8a52f0c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "388d373cb8a52f0c",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|38da022006b5d5bc|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "38da022006b5d5bc",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|3a2b5a725f1c74f9|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3a2b5a725f1c74f9",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|3a7fb27014fbb802|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3a7fb27014fbb802",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|3ce5914660dda335|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3ce5914660dda335",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|3d3499f72e89725a|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3d3499f72e89725a",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|3e29f38ef52420fa|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3e29f38ef52420fa",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|3e4c7aa300fe6277|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3e4c7aa300fe6277",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t1-hardware-tables"
+  },
+  {
+   "id": "site/app.js|mkel-call|3e79c27ce6d6a69c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3e79c27ce6d6a69c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|3fc0350b79ed054c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "3fc0350b79ed054c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|406253629347824b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "406253629347824b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|47a9c5c602ded0ce|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "47a9c5c602ded0ce",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|487a7e4911c80358|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "487a7e4911c80358",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|48a6938a653e22a9|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "48a6938a653e22a9",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|4912ea8375965d5a|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "4912ea8375965d5a",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|4a07fe429b0cd14f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "4a07fe429b0cd14f",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|4f77d87e59d62a19|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "4f77d87e59d62a19",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|4fa9accd3b58d358|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "4fa9accd3b58d358",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|537cafa469b9d8f8|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "537cafa469b9d8f8",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|5520f9991bbae4c1|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5520f9991bbae4c1",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|5584f722b89f2d27|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5584f722b89f2d27",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|56ebd6955f57d1d5|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "56ebd6955f57d1d5",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|56efc1797207a1dc|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "56efc1797207a1dc",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|589b793e752dc9ea|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "589b793e752dc9ea",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-section-band-cells"
+  },
+  {
+   "id": "site/app.js|mkel-call|59d495b63017a9d8|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "59d495b63017a9d8",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|5bde756121ca7486|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5bde756121ca7486",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|5c0f06a11daa4744|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5c0f06a11daa4744",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|5e20a551545da4f1|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5e20a551545da4f1",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|5e84e49a188a1092|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "5e84e49a188a1092",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|60013ab9b5f63493|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "60013ab9b5f63493",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|60d92f105dde94d9|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "60d92f105dde94d9",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t1-hardware-tables"
+  },
+  {
+   "id": "site/app.js|mkel-call|6138508f634c7659|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6138508f634c7659",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|62bc884107dcb600|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "62bc884107dcb600",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|662e4e96fa24f5e2|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "662e4e96fa24f5e2",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|6a490f0a25aa9874|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6a490f0a25aa9874",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|6a4f8ff4b45a4f89|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6a4f8ff4b45a4f89",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|6ab876903018297c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6ab876903018297c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|6b3a9572f2ace118|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6b3a9572f2ace118",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|6b3f6328c996e284|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6b3f6328c996e284",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|6bdad4b04658df54|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6bdad4b04658df54",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|mkel-call|6e9562a532c0a2a1|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "6e9562a532c0a2a1",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|71a80e5451b82f8a|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "71a80e5451b82f8a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "nvlink-cap-lever-lines"
+  },
+  {
+   "id": "site/app.js|mkel-call|71cb68b716feb6f0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "71cb68b716feb6f0",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|71e9cc491cac1038|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "71e9cc491cac1038",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "specdec-per-leg-disclosure"
+  },
+  {
+   "id": "site/app.js|mkel-call|73b6b7968cd74923|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "73b6b7968cd74923",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|7447db2d0ca26efb|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7447db2d0ca26efb",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|7c40f0a6b5c260f4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7c40f0a6b5c260f4",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|7e1f3c2b0e0d928b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7e1f3c2b0e0d928b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|7e35abd5b150569b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7e35abd5b150569b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|7edfcd2f79edf320|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7edfcd2f79edf320",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-section-band-cells"
+  },
+  {
+   "id": "site/app.js|mkel-call|7f9ede8abf7f7f07|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7f9ede8abf7f7f07",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|mkel-call|7fdb79ee2391d25c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "7fdb79ee2391d25c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "blend-provider-range-note"
+  },
+  {
+   "id": "site/app.js|mkel-call|82b990d76a192af4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "82b990d76a192af4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|83bbbf0d30854ee3|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "83bbbf0d30854ee3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|86b7ae694f3bcd32|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "86b7ae694f3bcd32",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|879c6633a2b4839b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "879c6633a2b4839b",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|886a649d4b882def|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "886a649d4b882def",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|89826ea72eff2b60|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "89826ea72eff2b60",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|8f34ac5a851bc475|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "8f34ac5a851bc475",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|8ffb5d6661830b97|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "8ffb5d6661830b97",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|926cd6c164c0271c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "926cd6c164c0271c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|935851b7985d8f0f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "935851b7985d8f0f",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|96ba68ce9ba01c57|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "96ba68ce9ba01c57",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|96e5693fc9385540|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "96e5693fc9385540",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|9c0d2dbeea3aac3b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "9c0d2dbeea3aac3b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|9c107dcf2812b8e2|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "9c107dcf2812b8e2",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|9e0c3bef0f4694bd|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "9e0c3bef0f4694bd",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|9e691f9dd394e8a8|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "9e691f9dd394e8a8",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|9f36ebed09d5a21a|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "9f36ebed09d5a21a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|a0454bd6e9faf172|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a0454bd6e9faf172",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|a0c67adff66bfb40|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a0c67adff66bfb40",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|a16e4c9ab988819d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a16e4c9ab988819d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|a212d184cabc7967|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a212d184cabc7967",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|a2c017076967f885|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a2c017076967f885",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "stated-adjudicator-reading"
+  },
+  {
+   "id": "site/app.js|mkel-call|a3609f467ec6c1aa|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a3609f467ec6c1aa",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|a80d6200e7d5826b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a80d6200e7d5826b",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|a89ec8b74b83e79f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a89ec8b74b83e79f",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|a95de7f0d267a174|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a95de7f0d267a174",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|ab87a284a80a66c0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "ab87a284a80a66c0",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|addc7c665143758d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "addc7c665143758d",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|af42a1a9be1fe3f0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "af42a1a9be1fe3f0",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-fleet-mode"
+  },
+  {
+   "id": "site/app.js|mkel-call|af959ac41fedad50|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "af959ac41fedad50",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|af959ac41fedad50|1",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "af959ac41fedad50",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|b23d6eb135077544|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b23d6eb135077544",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|b3a1e7259333a52f|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b3a1e7259333a52f",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|b5ae6a4cd8a9f030|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b5ae6a4cd8a9f030",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|b65ae70f1ad6bdfb|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b65ae70f1ad6bdfb",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|b757b04899d30b67|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b757b04899d30b67",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|b7dab59c2071123d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b7dab59c2071123d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|b872899793814da0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "b872899793814da0",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|baa2fecedbc20be7|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "baa2fecedbc20be7",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|beefd31e3a20b058|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "beefd31e3a20b058",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|c177110c22a37fc7|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c177110c22a37fc7",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|c3a8d535012e7473|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c3a8d535012e7473",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|c3a8d535012e7473|1",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c3a8d535012e7473",
+   "occ": 1,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|c5c1825e87912a40|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c5c1825e87912a40",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|c7543c6911be8536|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c7543c6911be8536",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|c7a8ba7aa4ba01d4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c7a8ba7aa4ba01d4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|mkel-call|c7a8ba7aa4ba01d4|1",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c7a8ba7aa4ba01d4",
+   "occ": 1,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|mkel-call|c7ee2b6879c15527|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c7ee2b6879c15527",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|c88ee070066d014d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c88ee070066d014d",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|c93df7db6945f76d|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "c93df7db6945f76d",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|mkel-call|ca251907d29b1bba|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "ca251907d29b1bba",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|ca790d3c3f700c17|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "ca790d3c3f700c17",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|cc9ed7b32dddcee1|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "cc9ed7b32dddcee1",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|cddd4649eab4e123|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "cddd4649eab4e123",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|cde9505a0c080ac5|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "cde9505a0c080ac5",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|ced9e2ec916e6a95|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "ced9e2ec916e6a95",
+   "occ": 0,
+   "class": "executive-summary",
+   "rule": "executive-summary-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|cf066c4070e4780a|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "cf066c4070e4780a",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|d2025f075e806dbc|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "d2025f075e806dbc",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|d3584a335cdf0847|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "d3584a335cdf0847",
+   "occ": 0,
+   "class": "final-answer",
+   "rule": "final-answer-block"
+  },
+  {
+   "id": "site/app.js|mkel-call|d3ab213969fa9d9c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "d3ab213969fa9d9c",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|d8ff9dc1112babe4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "d8ff9dc1112babe4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|dcdef9c1c77a60da|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "dcdef9c1c77a60da",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|dd88d985d57391e4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "dd88d985d57391e4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t1-hardware-tables"
+  },
+  {
+   "id": "site/app.js|mkel-call|de753b1b7163759b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "de753b1b7163759b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|df2efea92cc00925|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "df2efea92cc00925",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|df96c30c2a31e90c|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "df96c30c2a31e90c",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|dfd936b2bb312a55|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "dfd936b2bb312a55",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|e0525be701c54255|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e0525be701c54255",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-chart-section-band"
+  },
+  {
+   "id": "site/app.js|mkel-call|e185f54097495d64|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e185f54097495d64",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|e3acc1bf453bc143|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e3acc1bf453bc143",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|e4e24f5773457fdd|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e4e24f5773457fdd",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|mkel-call|e751206ad9590748|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e751206ad9590748",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|e97ccc5a183ca150|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "e97ccc5a183ca150",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|ec3220118e31f338|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "ec3220118e31f338",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|mkel-call|f0bbe75119e97601|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f0bbe75119e97601",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|f2bffa5bb1a381ff|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f2bffa5bb1a381ff",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|f3161bda479bfb5e|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f3161bda479bfb5e",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|mkel-call|f4ee3014f43e1cc4|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f4ee3014f43e1cc4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|f5e050e7760e3adb|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f5e050e7760e3adb",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-calculation"
+  },
+  {
+   "id": "site/app.js|mkel-call|f68c016c9a7f72c3|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f68c016c9a7f72c3",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|f706e7c492767cb0|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "f706e7c492767cb0",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|fa73fcef11137758|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "fa73fcef11137758",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|mkel-call|fbafc490189bcf65|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "fbafc490189bcf65",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "im-arc-t3-section-band-cells"
+  },
+  {
+   "id": "site/app.js|mkel-call|fed7a5917accca54|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "fed7a5917accca54",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|share-url|7af1c80daedbc91a|0",
+   "file": "site/app.js",
+   "kind": "share-url",
+   "hash16": "7af1c80daedbc91a",
+   "occ": 0,
+   "class": "share-string",
+   "rule": "share-permalink"
+  },
+  {
+   "id": "site/app.js|share-url|7f075ee95f29390d|0",
+   "file": "site/app.js",
+   "kind": "share-url",
+   "hash16": "7f075ee95f29390d",
+   "occ": 0,
+   "class": "share-string",
+   "rule": "share-permalink"
+  },
+  {
+   "id": "site/app.js|share-url|bd507ded7e733f5c|0",
+   "file": "site/app.js",
+   "kind": "share-url",
+   "hash16": "bd507ded7e733f5c",
+   "occ": 0,
+   "class": "share-string",
+   "rule": "share-permalink"
+  },
+  {
+   "id": "site/app.js|share-url|f877d50734cbedf2|0",
+   "file": "site/app.js",
+   "kind": "share-url",
+   "hash16": "f877d50734cbedf2",
+   "occ": 0,
+   "class": "share-string",
+   "rule": "share-permalink"
+  },
+  {
+   "id": "site/app.js|svg-geometry|0268d229ca584f6b|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "0268d229ca584f6b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|099bc39445836a3f|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "099bc39445836a3f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|2085766b86d19455|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "2085766b86d19455",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|33bb79e215faf2eb|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "33bb79e215faf2eb",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|51d779c3a50d9373|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "51d779c3a50d9373",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|545663912fbc6d4f|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "545663912fbc6d4f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|76f5a05fc81cb508|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "76f5a05fc81cb508",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|9389433a89f87995|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "9389433a89f87995",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|96d98172ff4be576|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "96d98172ff4be576",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|a2c6247178862ba9|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "a2c6247178862ba9",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|ab8820215b5e484a|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "ab8820215b5e484a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|d7004bb721f6f169|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "d7004bb721f6f169",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|svg-geometry|e85e0ded38cb2854|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "e85e0ded38cb2854",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|title-attr|2532ddd8fd1b1555|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "2532ddd8fd1b1555",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|title-attr|2591161f34bff2e7|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "2591161f34bff2e7",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "energy-rent-chip"
+  },
+  {
+   "id": "site/app.js|title-attr|306cb99cf1126154|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "306cb99cf1126154",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|title-attr|306cb99cf1126154|1",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "306cb99cf1126154",
+   "occ": 1,
+   "class": "evidence-board",
+   "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|title-attr|363d79243966bc63|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "363d79243966bc63",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|title-attr|36b7e30b97a78ee4|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "36b7e30b97a78ee4",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "mix-band-readout"
+  },
+  {
+   "id": "site/app.js|title-attr|60611bb0d9e831c8|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "60611bb0d9e831c8",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|title-attr|9e7063b59b7f7063|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "9e7063b59b7f7063",
+   "occ": 0,
+   "class": "evidence-board",
+   "rule": "fa-higher-load-ops"
+  },
+  {
+   "id": "site/app.js|title-attr|aa9ea2a8db7a3c6d|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "aa9ea2a8db7a3c6d",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|title-attr|b09e4ff52e2f6916|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "b09e4ff52e2f6916",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-surfaces"
+  },
+  {
+   "id": "site/app.js|title-attr|ce6c40bfa42cb5dd|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "ce6c40bfa42cb5dd",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "blend-exclusion-marker"
+  },
+  {
+   "id": "site/app.js|title-attr|f07a0416bb37b58f|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "f07a0416bb37b58f",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|title-attr|f07a0416bb37b58f|1",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "f07a0416bb37b58f",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "fleet-switcher-block"
+  },
+  {
+   "id": "site/app.js|title-attr|f4bb9dcf718ccf78|0",
+   "file": "site/app.js",
+   "kind": "title-attr",
+   "hash16": "f4bb9dcf718ccf78",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "total-case-bookmarks"
+  },
+  {
+   "id": "site/app.js|tooltip-call|2581fea44f68e993|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "2581fea44f68e993",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|39ce882be8affbce|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "39ce882be8affbce",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|3dbbc0132685dc75|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "3dbbc0132685dc75",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|44b76746d30d565e|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "44b76746d30d565e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|49cb74f49f9f87fa|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "49cb74f49f9f87fa",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|5279f9bd8bdc6033|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "5279f9bd8bdc6033",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|546421093d132ab9|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "546421093d132ab9",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|57ecbcb113974e23|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "57ecbcb113974e23",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|5e19cdc67d5ad0e6|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "5e19cdc67d5ad0e6",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|7274248517134848|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "7274248517134848",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|7e85d05de72db289|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "7e85d05de72db289",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|945c42e412dbc16b|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "945c42e412dbc16b",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|979039f0bc1f62eb|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "979039f0bc1f62eb",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|a4e3eee288c475e7|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "a4e3eee288c475e7",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|ac2946e7308e28a2|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "ac2946e7308e28a2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|b795b4884fa47351|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "b795b4884fa47351",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|ccc15826a2375c29|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "ccc15826a2375c29",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|e00fa67481c562e8|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "e00fa67481c562e8",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|e1c3f41af1f6dda4|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "e1c3f41af1f6dda4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|f7c9b0a24527cbae|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "f7c9b0a24527cbae",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|tooltip-call|fc3b518ccf24cf6c|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "fc3b518ccf24cf6c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  }
+ ],
+ "classes": [
+  "evidence-board",
+  "executive-summary",
+  "final-answer",
+  "hardware-lens-tile",
+  "hero-tile",
+  "identity-strip",
+  "mcp-json",
+  "mcp-text",
+  "report-dossier",
+  "share-string"
+ ],
+ "digest": "d8e126d781a785d9"
+}

@@ -1,0 +1,6 @@
+AUDIENCE RECEPTION: calibration pedant (anonymous archetype; think LessWrong-style forecasting-norms reviewer).
+Read https://inference-margins.pages.dev/ hunting exclusively for probability-shaped language and uncertainty malpractice:
+- Every interval on the page: the §10 'judgmental uncertainty ranges intended to contain roughly 80% of plausible modeled outcomes' — is that phrasing used consistently, never sliding into 'confidence interval' or 'CI' or implied calibration? Check every card, the normalized table, §5's verdict, tooltips (the TIPS text in engine.js), dossiers, and the annex wrappers.
+- Point estimates: where does the page state a number without a range where a range is epistemically owed (e.g. '~77%', '~93%', preset values)? Where does it round in ways that manufacture false precision (e.g. '26.9%')?
+- The anti-lens-shopping span: 'cost-lens span at [profile] ... excludes traffic-mix uncertainty' — is the exclusion stated at point of use every time?
+- Verbal probability words ('plausible', 'likely', 'roughly', 'can', 'would') doing load-bearing work without quantification; any place where a model-generated estimate is presented with more authority than its provenance class supports.

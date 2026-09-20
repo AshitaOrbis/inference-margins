@@ -1,0 +1,630 @@
+{
+  "mintedAt": "42e404a",
+  "generator": "research/b9-ux-survey/ux-c-fixture-mint.mjs",
+  "settleMs": 300,
+  "armsCovered": [
+    "50-80",
+    "80-90",
+    "<=50",
+    ">95"
+  ],
+  "states": {
+    "landing": {
+      "driveKind": "none",
+      "params": [],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). within the cited >80% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈82% · 0.65 B/param → ≈82% · 1.05 B/param → ≈82% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 40% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 20% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈82% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 82.3331682214368,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "bucket-50_80": {
+      "driveKind": "persp",
+      "params": [
+        "median"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": true,
+      "capture": {
+        "outMarginNote": "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). default membership: 5 of 7 declared legs — Trainium2 withdrawn from the default on evidence grounds: WITHDRAWN from the default reading, not deleted: its operating point declares batch replica-global while this engine consumes it per chip, an unresolved unit ambiguity worth about 15.2x in throughput, and this page's own hardware ledger already rules that coefficient out of any headline Trainium margin; the row, its rent and its scenarios are kept and selectable — declared 8% renormalized over the remaining 5; Trainium3 withdrawn from the default on evidence grounds: WITHDRAWN from the default reading, not deleted: it inherits Trainium2's unresolved batch-form ambiguity and adds no matched serving anchor and no public numeric price of its own; the row, its rent and its scenarios are kept and selectable — declared 17% renormalized over the remaining 5. between the cited bull and reported-margin ranges; calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈68% · 0.65 B/param → ≈68% · 1.05 B/param → ≈68% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈68% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 68.41398315513409,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "median",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "bucket-80_90": {
+      "driveKind": "persp",
+      "params": [
+        "gptpro-r3"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": true,
+      "capture": {
+        "outMarginNote": "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). within the cited >80% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈82% · 0.65 B/param → ≈82% · 1.05 B/param → ≈82% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 40% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 20% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈82% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 82.3331682214368,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "bucket-_50": {
+      "driveKind": "persp",
+      "params": [
+        "chinacloud"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": true,
+      "capture": {
+        "outMarginNote": "at or below the cited reported-margin range; calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈-144% · 0.65 B/param → ≈-144% · 1.05 B/param → ≈-144% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from an analyst-estimated $6/GPU-hr base × the current cost multiplier (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈-144% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": -143.85815094274204,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "chinacloud",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "bucket-_95": {
+      "driveKind": "model",
+      "params": [
+        "gpt"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": true,
+      "capture": {
+        "outMarginNote": "within the cited 90–95% unit-serving claim range; this value is calculator-generated · only one scenario preset is compatible at this scope (89.3%) — see the valuation replays for the invoice question · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈92% · 0.65 B/param → ≈92% · 1.05 B/param → ≈92% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 10% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 120 · H200: finite at declared b=96 (analyst-declared) @ solved width 56 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 38 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 22",
+        "outFeas": "4 of 4 legs renderable",
+        "outMargin": "≈92% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 92.49601675439764,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "gpt",
+        "driveError": null
+      }
+    },
+    "custom-model": {
+      "driveKind": "model",
+      "params": [
+        "custom"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "USER-DEFINED SCENARIO — Custom is a scratch model with no provider and no sourced parameters; this ≈89% is not a provider estimate and is not compared to any cited claim range. It inherits the Strategic/owned expectation (GPT-5.6 Pro, contextual) scenario preset + the model-default hardware blend. · only one scenario preset is compatible at this scope (73.2%) — see the valuation replays for the invoice question · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈89% · 0.65 B/param → ≈89% · 1.05 B/param → ≈89% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 40% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 20% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 48 · H200: finite at declared b=96 (analyst-declared) @ solved width 16 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 10 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 6 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 8",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈89% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 88.59332633554843,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "custom",
+        "driveError": null
+      }
+    },
+    "modified-from": {
+      "driveKind": "perspThenNudge",
+      "params": [
+        "dive",
+        "active",
+        "min"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "MODIFIED SCENARIO (derived from [replay] §10 dive (this model)) — not the published operating point; replay attribution removed. within the cited 90–95% unit-serving claim range; this value is calculator-generated · scenario-preset span at Custom: 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈91% · 0.65 B/param → ≈91% · 1.05 B/param → ≈91% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈91% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 90.52615959674483,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": "[replay] §10 dive (this model)",
+        "explorationOrigin": null,
+        "persp": "__modified",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "crafted-modified": {
+      "driveKind": "perspThenNudge",
+      "params": [
+        "median",
+        "active",
+        "min"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "MODIFIED — fields deviate from the “Central scenario (Claude)” preset default, NOT the clean central scenario. within the cited 90–95% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈93% · 0.65 B/param → ≈93% · 1.05 B/param → ≈93% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈93% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 92.80143798143884,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "median",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "tariff": {
+      "driveKind": "model",
+      "params": [
+        "terra"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "TARIFF SCENARIO — architecture unidentified; this borrows the selected serving assumptions and is NOT a provider estimate. within the cited 90–95% unit-serving claim range; this value is calculator-generated · only one scenario preset is compatible at this scope (89.4%) — see the valuation replays for the invoice question · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈93% · 0.65 B/param → ≈93% · 1.05 B/param → ≈93% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 10% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 24 · H200: finite at declared b=96 (analyst-declared) @ solved width 16 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 8 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 6",
+        "outFeas": "4 of 4 legs renderable",
+        "outMargin": "≈93% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 92.56668764676611,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "terra",
+        "driveError": null
+      }
+    },
+    "named-fleet": {
+      "driveKind": "fleet",
+      "params": [
+        "declared-topology"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). within the cited >80% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈82% · 0.65 B/param → ≈82% · 1.05 B/param → ≈82% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 40% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 20% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈82% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 82.3331682214368,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "incompatible": {
+      "driveKind": "pair",
+      "params": [
+        "opus",
+        "xaicash"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "INCOMPATIBLE PAIR — this perspective is scoped to a different provider; no headline is computed. Compute anyway (exploratory)",
+        "outMarginUnanchored": "",
+        "outFeasNote": "",
+        "outFeas": "—",
+        "outMargin": "n/a",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [
+          "Compute anyway (exploratory)"
+        ],
+        "marginPct": 96.01517558014987,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "xaicash",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "forced-warn": {
+      "driveKind": "pairForced",
+      "params": [
+        "opus",
+        "xaicash"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "⚠ EXPLORATORY (forced incompatible pairing) — above the cited 90–95% unit-serving claim interval (≥90% bucket); this value is calculator-generated · scenario-preset span at locked by [valuation replay] xAI cash-marginal (dive operating point): 73.0%–90.0% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈96% · 0.65 B/param → ≈96% · 1.05 B/param → ≈96% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from an analyst-estimated $6/GPU-hr base × the current cost multiplier (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=192 (analyst-declared) @ solved width 144 · H200: finite at declared b=192 (analyst-declared) @ solved width 144 · GB200 NVL72: finite at declared b=256 (analyst-declared) @ solved width 72 · GB300 NVL72: finite at declared b=128 (analyst-declared) @ solved width 72 · TPU v7 Ironwood: finite at declared b=32 (analyst-declared) @ solved width 2048",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈96% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 96.01517558014987,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "xaicash",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "permalink-incompatible": {
+      "driveKind": "pair",
+      "params": [
+        "opus",
+        "xaicash"
+      ],
+      "injected": false,
+      "permalink": {
+        "token": "v6.eyJfbWV0YSI6eyJkYXRhQXNPZiI6IjIwMjYtMDctMjYiLCJzY2hlbWEiOiJ2NiIsImVuZ2luZSI6InYyLjIuMC0yMDI2LTA4LTA2IiwiZXBvY2giOiJ2MjNyNDk5IiwiZGlzcGxheWVkTWFyZ2luIjo5Ni4yNzIsIm1vZGVsIjoib3B1cyIsInBlcnNwIjoieGFpY2FzaCIsImZsZWV0Ijp7ImlkIjoicHJlc2V0In0sInRvdGFsQ2FzZSI6InJldmlzZWQtYmFuZC1jZW50cmFsLTIuNSIsImludGVybG9jayI6ImZyZWUiLCJ0cmFmZmljIjp7Im1vZGUiOiJyZXBsYXktbG9ja2VkIiwicHJvZmlsZUlkIjpudWxsLCJpb1JhdGlvIjozLCJjYWNoZUhpdCI6MH19fQ=="
+      },
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "INCOMPATIBLE PAIR — this perspective is scoped to a different provider; no headline is computed. Compute anyway (exploratory)",
+        "outMarginUnanchored": "",
+        "outFeasNote": "",
+        "outFeas": "—",
+        "outMargin": "n/a",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [
+          "Compute anyway (exploratory)"
+        ],
+        "marginPct": 96.01517558014987,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "xaicash",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "exploration-in-scope": {
+      "driveKind": "explorationAt",
+      "params": [
+        "x90-v1",
+        "opus"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "RANGE EXPLORATION — page-authored counterfactual; not an estimate. A page-authored reconstruction of one route to the ≥90% range (authored at the flagship scope: Claude Opus 4.x @ Reference 15:1/60%), not any claimant's model. At the current selection it lands at ≈92% with the broad levers live (algorithmic-lead prior and family multipliers); the route's own construction at the public-evidence reference computes ≈89% — OUTSIDE the range it was authored for. within the cited 90–95% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈92% · 0.65 B/param → ≈92% · 1.05 B/param → ≈92% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from analyst-estimated capex/TCO (no public GB300 purchase price).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈92% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 91.83196280844096,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "x90-v1",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "exploration-off-scope": {
+      "driveKind": "explorationAt",
+      "params": [
+        "x90-v1",
+        "sonnet"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "RANGE EXPLORATION — page-authored counterfactual; not an estimate. A page-authored reconstruction of one route to the ≥90% range (authored at the flagship scope: Claude Opus 4.x @ Reference 15:1/60%), not any claimant's model. VIEWED OFF AUTHORED SCOPE — currently Claude Sonnet 5 · 15:1/60%; range membership was defined at the flagship scope and is recomputed live here. At the current selection it lands at ≈91% with the broad levers live (algorithmic-lead prior and family multipliers); the route's own construction at the public-evidence reference computes ≈88% — OUTSIDE the range it was authored for. within the cited 90–95% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 64.9%–85.7% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 7/7 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight — fleet membership differs across endpoints; this is not one continuous same-fleet interval · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈91% · 0.65 B/param → ≈91% · 1.05 B/param → ≈91% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 35% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 15% on GB300, priced from analyst-estimated capex/TCO (no public GB300 purchase price).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 48 · H200: finite at declared b=96 (analyst-declared) @ solved width 16 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 10 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 6 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 8 · Trainium2: finite at declared b=32 (analyst-declared) @ solved width 16 · Trainium3: finite at declared b=32 (analyst-declared) @ solved width 16",
+        "outFeas": "7 of 7 legs renderable",
+        "outMargin": "≈91% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 90.65816767274552,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "x90-v1",
+        "model": "sonnet",
+        "driveError": null
+      }
+    },
+    "modified-exploration": {
+      "driveKind": "perspThenNudge",
+      "params": [
+        "x90-v1",
+        "active",
+        "min"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "MODIFIED RANGE EXPLORATION — derived from the page-authored route “owned-TCO estate route” but since edited; route identity and ranking metadata removed; not an estimate. above the cited 90–95% unit-serving claim interval (≥90% bucket); this value is calculator-generated · scenario-preset span at Custom: 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈98% · 0.65 B/param → ≈98% · 1.05 B/param → ≈98% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links Restore route “owned-TCO estate route”",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 33% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 16% on GB300, priced from analyst-estimated capex/TCO (no public GB300 purchase price).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈98% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [
+          "Restore route “owned-TCO estate route”"
+        ],
+        "marginPct": 98.32106430071919,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": "x90-v1",
+        "persp": "__modified-exploration",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "permalink-modified-exploration": {
+      "driveKind": "perspThenNudge",
+      "params": [
+        "x90-v1",
+        "active",
+        "min"
+      ],
+      "injected": false,
+      "permalink": {
+        "token": "v6.eyJhY3RpdmUiOjE1LCJod01vZGUiOiJ0Y28iLCJ1dGlsIjo1NSwic3RhY2tNdWx0IjoxLjEsInRyZW5kTW9udGhzIjozLCJibGVuZCI6eyJoMTAwIjo4LCJoMjAwIjoxMSwiZ2IyMDAiOjE5LCJnYjMwMCI6MTIsImg4MDAiOjAsImgyMCI6MCwidHB1NyI6MjUsInRybjIiOjgsInRybjMiOjE3LCJhc2NlbmQiOjB9LCJfbWV0YSI6eyJkYXRhQXNPZiI6IjIwMjYtMDctMjYiLCJzY2hlbWEiOiJ2NiIsImVuZ2luZSI6InYyLjIuMC0yMDI2LTA4LTA2IiwiZXBvY2giOiJ2MjNyNDk5IiwiZGlzcGxheWVkTWFyZ2luIjo5OC41NDEsIm1vZGVsIjoib3B1cyIsInBlcnNwIjpudWxsLCJmbGVldCI6eyJpZCI6InByZXNldCJ9LCJ0b3RhbENhc2UiOiJyZXZpc2VkLWJhbmQtY2VudHJhbC0yLjUiLCJpbnRlcmxvY2siOiJmcmVlIiwidHJhZmZpYyI6eyJtb2RlIjoiY3VzdG9tIiwicHJvZmlsZUlkIjpudWxsLCJpb1JhdGlvIjoxNSwiY2FjaGVIaXQiOjYwfSwibW9kaWZpZWQiOnsia2luZCI6ImV4cGxvcmF0aW9uIiwiZnJvbSI6Ing5MC12MSJ9fX0="
+      },
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "MODIFIED RANGE EXPLORATION — derived from the page-authored route “owned-TCO estate route” but since edited; route identity and ranking metadata removed; not an estimate. above the cited 90–95% unit-serving claim interval (≥90% bucket); this value is calculator-generated · scenario-preset span at Custom: 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈99% · 0.65 B/param → ≈99% · 1.05 B/param → ≈99% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links Restore route “owned-TCO estate route”",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 50% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 12% on GB300, priced from analyst-estimated capex/TCO (no public GB300 purchase price).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16 · Trainium2: finite at declared b=32 (analyst-declared) @ solved width 48 · Trainium3: finite at declared b=32 (analyst-declared) @ solved width 32",
+        "outFeas": "7 of 7 legs renderable",
+        "outMargin": "≈99% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [
+          "Restore route “owned-TCO estate route”"
+        ],
+        "marginPct": 98.7768042774564,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": "x90-v1",
+        "persp": "__modified-exploration",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "lens-span-multi": {
+      "driveKind": "model",
+      "params": [
+        "opus"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). within the cited >80% unit-serving claim range; this value is calculator-generated · scenario-preset span at Reference 15:1 / 60% (model default): 68.4%–87.1% across 7 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 5/5 legs, 100% of declared weight; high endpoint 5/5 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈82% · 0.65 B/param → ≈82% · 1.05 B/param → ≈82% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 40% on TPU/Trainium (TPU v7 & Trainium2 have public serving anchors in the operating-point registry; Trainium3 remains analyst-declared); 20% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "≈82% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 82.3331682214368,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "lens-span-single": {
+      "driveKind": "model",
+      "params": [
+        "gpt"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "within the cited 90–95% unit-serving claim range; this value is calculator-generated · only one scenario preset is compatible at this scope (89.3%) — see the valuation replays for the invoice question · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈92% · 0.65 B/param → ≈92% · 1.05 B/param → ≈92% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "Analyst-input share of this fleet — 10% on GB300, priced from an analyst-estimated $6/GPU-hr base (no public rack rate).",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 120 · H200: finite at declared b=96 (analyst-declared) @ solved width 56 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 38 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 22",
+        "outFeas": "4 of 4 legs renderable",
+        "outMargin": "≈92% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 92.49601675439764,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "gpt",
+        "driveError": null
+      }
+    },
+    "dive-output": {
+      "driveKind": "pair",
+      "params": [
+        "kimi",
+        "dive"
+      ],
+      "injected": false,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "between the cited bull and reported-margin ranges; calculator-generated · OUTPUT-TOKEN margin (the §10 metric): 85.2% · scenario-preset span at locked by [replay] §10 dive (this model): <−100%–71.8% across 2 lenses (traffic held fixed; excludes traffic-mix uncertainty; analysts, replays and out-of-scope lenses excluded) — low endpoint 2/2 legs, 100% of declared weight; high endpoint 2/2 legs, 100% of declared weight · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈75% · 0.65 B/param → ≈75% · 1.05 B/param → ≈75% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "",
+        "outFeasNote": "H800 (China): finite at declared b=96 (anchor-stated) @ solved width 32 · H20 (China): finite at declared b=48 (anchor-stated) @ solved width 16",
+        "outFeas": "2 of 2 legs renderable",
+        "outMargin": "≈75% — policy-labeled scenario",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 75.11584247311355,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "dive",
+        "model": "kimi",
+        "driveError": null
+      }
+    },
+    "suppressed-injected": {
+      "driveKind": "forceSuppressed",
+      "params": [],
+      "injected": true,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "HERO SUPPRESSED — no landing headline under the declared loaded-bytes policy (gate-6): the landing fleet does not fully render under the declared policy. A partially policy-clean fleet is not shown as this page's flagship claim; adjust any assumption to see the disclosed, policy-labeled scenario number with its welded clause. · sampled 3-point loaded-bytes policy sensitivity (no continuity implied): 0.55 B/param → ≈82% · 0.65 B/param → ≈82% · 1.05 B/param → ≈82% · sampled min at 0.55, max at 0.55 — solver output, never an observed deployment; the policy value is an engine constant and is never encoded into share links",
+        "outMarginUnanchored": "",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "—",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": 82.3331682214368,
+        "heroSuppressed": true,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    },
+    "infeasible-injected": {
+      "driveKind": "forceInfeasible",
+      "params": [],
+      "injected": true,
+      "permalink": null,
+      "bucketEligible": false,
+      "capture": {
+        "outMarginNote": "DECLARED FLEET INFEASIBLE — zero declared fleet legs are renderable at the declared serving topology; no numeric result is synthesized.",
+        "outMarginUnanchored": "",
+        "outFeasNote": "H100 SXM: finite at declared b=96 (analyst-declared) @ solved width 112 · H200: finite at declared b=96 (analyst-declared) @ solved width 32 · GB200 NVL72: finite at declared b=128 (anchor-stated) @ solved width 24 · GB300 NVL72: finite at declared b=64 (analyst-declared) @ solved width 12 · TPU v7 Ironwood: finite at declared b=16 (analyst-declared) @ solved width 16",
+        "outFeas": "5 of 5 legs renderable",
+        "outMargin": "—",
+        "idEpistemic": "policy-labeled scenario output — not a verified or central estimate, not a probability interval",
+        "noteButtons": [],
+        "marginPct": null,
+        "heroSuppressed": false,
+        "fleetId": "preset",
+        "modifiedFrom": null,
+        "explorationOrigin": null,
+        "persp": "gptpro-r3",
+        "model": "opus",
+        "driveError": null
+      }
+    }
+  },
+  "mintedUnder": "UNLABELLED MINT — the minter did not set UX_C_MINT_LABEL; provenance unknown",
+  "remintLog": [
+    {
+      "at": "2026-09-19",
+      "by": "im-vet-model-estimates",
+      "tool": "UX_C_MINT=1 (the fixture's own mint aid, through the same drive module the replay uses)",
+      "movedStates": 5,
+      "mine": {
+        "states": [
+          "bucket-_95",
+          "lens-span-single",
+          "tariff"
+        ],
+        "cause": "the 2026-09-19 list-price corrections: gpt $5/$30 -> $4/$20 moves the gpt-driven states 94.6883 -> 92.4960, terra $2.50/$15 -> $2/$12 moves the terra-driven state 94.0534 -> 92.5667"
+      },
+      "notMine": {
+        "states": [
+          "incompatible",
+          "forced-warn"
+        ],
+        "cause": "driveError 'RooflineDataError: row rubin declares no batch regime' -> null on the opus/xaicash pair. NOT this leg's change: neither this leg's commits nor the sibling's mention rubin, and no price or traffic input reaches that pair. It is the behaviour im-vet-code shipped in 3a0a38f, 'Price dense-TP prefill per accelerator, and stop four ways of rendering nothing' - the pair now CLEARS as a pair, which is what this fixture's own declaredDelta entry for 'incompatible' says it should do, instead of throwing. The fixture was left stale by that round and surfaces here at the first re-mint. Declared rather than absorbed."
+      },
+      "note": "Recorded because a blind re-mint would have buried a delta belonging to another leg inside this one's commit."
+    }
+  ]
+}

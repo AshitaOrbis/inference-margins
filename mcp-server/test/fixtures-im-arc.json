@@ -1,0 +1,43 @@
+{
+  "rental_adjust_calls": [
+    { "company": "anthropic", "model": "opus", "rent_usd_per_hr": 1.5 },
+    { "company": "anthropic", "model": "opus", "rent_usd_per_hr": 2.4 },
+    { "company": "anthropic", "model": "opus", "rent_usd_per_hr": 5.27 }
+  ],
+  "fleet_sections_call": {
+    "model": "opus",
+    "perspective": "gptpro-r3",
+    "sections": [
+      {
+        "id": "s1",
+        "label": "Generic H100 section",
+        "sharePct": 60,
+        "basis": "committed-planning-rent",
+        "rent": { "mode": "registered", "mult": 1 },
+        "electricity": null,
+        "pue": null,
+        "tco": null,
+        "dcRef": null,
+        "provenance": "generic-fill",
+        "legs": [
+          { "donorKey": "h100", "label": "H100", "sharePct": 100, "overrides": {}, "family": "nvidia" }
+        ]
+      },
+      {
+        "id": "s2",
+        "label": "Generic H200 section",
+        "sharePct": 40,
+        "basis": "committed-planning-rent",
+        "rent": { "mode": "registered", "mult": 1 },
+        "electricity": null,
+        "pue": null,
+        "tco": null,
+        "dcRef": null,
+        "provenance": "generic-fill",
+        "legs": [
+          { "donorKey": "h200", "label": "H200", "sharePct": 100, "overrides": {}, "family": "nvidia" }
+        ]
+      }
+    ]
+  }
+}

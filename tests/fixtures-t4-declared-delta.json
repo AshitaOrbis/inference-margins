@@ -1,0 +1,2157 @@
+{
+  "migration": "im-arc T4 fold — the registry and the generic defaults come onto the four evidence clusters",
+  "commission": "im-arc-t4-fold-20260824",
+  "spec": "research/im-arc-t4-fold-memo.md",
+  "asOf": "2026-08-24",
+  "before": {
+    "receipt": "22baff3775438ce937d186721f0768e82c5071e4c887ccf985ca521308df5003",
+    "states": 273,
+    "ref": "merged master ad7a214 (TRANCHE-3 DONE)",
+    "baseCommit": "ad7a214",
+    "defaults": {
+      "kwh": 0.0871,
+      "pue": 1.25,
+      "dcPerW": 12,
+      "dcLifeYears": 12,
+      "lifeYears": 5,
+      "clusterOh": 1.3,
+      "opexPct": 8,
+      "capitalRecovery": "absent",
+      "rent": {
+        "h100": 2.4,
+        "h200": 2.9,
+        "gb200": 4.5,
+        "gb300": 6,
+        "h800": 1.75,
+        "h20": 1,
+        "tpu7": 5.4,
+        "trn2": 2.235,
+        "trn3": 2.2,
+        "ascend": 1.95
+      },
+      "capex": {
+        "h100": 25000,
+        "h200": 32000,
+        "gb200": 45000,
+        "gb300": 55000,
+        "h800": 40000,
+        "h20": 20000,
+        "tpu7": 35000,
+        "trn2": 15000,
+        "trn3": 20000,
+        "ascend": 23000
+      },
+      "regions": {
+        "us-industrial": {
+          "lo": 0.06,
+          "mid": 0.0871,
+          "hi": 0.12
+        },
+        "cn-coastal": {
+          "lo": 0.083,
+          "mid": 0.097,
+          "hi": 0.108
+        },
+        "cn-western": {
+          "lo": 0.05,
+          "mid": 0.056,
+          "hi": 0.064
+        }
+      },
+      "execSummaryOwnedTcoKwh": 0.07
+    }
+  },
+  "entries": [
+    {
+      "sink": "DEFAULTS.dcPerW",
+      "old": 12,
+      "new": 12.5,
+      "cluster": "tco-inputs",
+      "evidence": "analyst-set {9.5, 12.5, 17} frontier liquid-ready shell + MEP per delivered IT watt over dated JLL / Turner & Townsend / Epoch / Abilene anchors; both arms. The prior tooltip attribution could not be attributed to a public statement by either arm."
+    },
+    {
+      "sink": "DEFAULTS.dcLifeYears",
+      "old": 12,
+      "new": 15,
+      "cluster": "tco-inputs",
+      "evidence": "The facility life was a hard-coded literal 12 inside the shell term. It becomes a named default with an analyst-set {10, 15, 20} band from dated audited asset lives; 12 was a short-M&E case, not a defensible universal middle. Cost corners reversed."
+    },
+    {
+      "sink": "DEFAULTS.lifeYears band",
+      "old": "point 5",
+      "new": "{4, 5, 6}, cost corners {6, 5, 4}",
+      "cluster": "tco-inputs",
+      "evidence": "Audited issuer accounting policies (Nebius 4 -> 5 on 2026-01-01; MSFT/GOOG/ORCL/CRWV 6; Amazon AI subset 5). The MIDDLE is unchanged at 5; the band and its reversed cost corners are new."
+    },
+    {
+      "sink": "HW.h100.capex",
+      "old": 25000,
+      "new": 23750,
+      "cluster": "tco-inputs",
+      "evidence": "analyst-set {22000, 23750, 28000} per GPU, one eighth of a dated public analyst model's base 8-GPU server; both arms."
+    },
+    {
+      "sink": "HW.h200.capex",
+      "old": 32000,
+      "new": 36000,
+      "cluster": "tco-inputs",
+      "evidence": "analyst-set {32000, 36000, 40000} per GPU, module/base-system allocation over the dated public market range both arms carry."
+    },
+    {
+      "sink": "HW.gb200.capex",
+      "old": 45000,
+      "new": 43056,
+      "cluster": "tco-inputs",
+      "evidence": "analyst-set {41667, 43056, 47222} per GPU = one seventy-second of a $3.0m/$3.1m/$3.4m NVL72 BASE rack; both arms share the $3.1m base middle."
+    },
+    {
+      "sink": "HW.tpu7.capex",
+      "old": 35000,
+      "new": 25000,
+      "cluster": "tco-inputs",
+      "evidence": "$10bn / 400,000 finished racks = $25,000 per chip (SemiAnalysis 2025-11-28), carried by both arms. Already at installed-system scope."
+    },
+    {
+      "sink": "clusterOh(tpu7)",
+      "old": 1.3,
+      "new": 1,
+      "cluster": "tco-inputs",
+      "evidence": "capexScope installed-system: the finished-rack observation already contains its overhead, so multiplying it again double-counts."
+    },
+    {
+      "sink": "clusterOh(h800)",
+      "old": 1.3,
+      "new": 1,
+      "cluster": "tco-inputs",
+      "evidence": "capexScope installed-system: the registered $40,000 is an installed/all-in observation and was rendering as $52.0k."
+    },
+    {
+      "sink": "clusterOh(h20)",
+      "old": 1.3,
+      "new": 1,
+      "cluster": "tco-inputs",
+      "evidence": "capexScope installed-system: the registered $20,000 is an installed/all-in observation and was rendering as $26.0k."
+    },
+    {
+      "sink": "clusterOh(gb200)",
+      "old": 1.3,
+      "new": 1.26,
+      "cluster": "tco-inputs",
+      "evidence": "capexScope base-rack: the directly derived middle is $3.9m all-in / $3.1m base = 1.2581; both arms."
+    },
+    {
+      "sink": "EXEC_SUMMARY_ROWS.owned-tco.override.kwh",
+      "old": 0.07,
+      "new": "inherit REGIONS['us-industrial'] by id (0.0871)",
+      "cluster": "tco-inputs",
+      "evidence": "The 0.07 override has no dated source in any arm; both arms compute US rows at the registered EIA middle. The row now references the region BY ID so no literal can go stale."
+    },
+    {
+      "sink": "DEFAULTS.capitalRecovery",
+      "old": "absent",
+      "new": "\"off\"",
+      "cluster": "tco-inputs",
+      "evidence": "A new named basis with ONE canonical default, off, identical in the basic UI, the advanced UI, the codec and MCP. Inert at the default: the increment is zero at a zero rate."
+    },
+    {
+      "sink": "DEFAULTS.capexScopeMode",
+      "old": "absent",
+      "new": "\"scoped\"",
+      "cluster": "tco-inputs",
+      "evidence": "The switch that selects capexScope-derived clustering overhead over the single global multiplier. This is the MECHANISM behind the four clusterOh(...) entries above: at \"scoped\" each hardware row takes the overhead its capex scope implies, at \"legacy-global\" every row takes the scenario value, which is how a pre-fold reading is restored. An arithmetic move in its own right."
+    },
+    {
+      "sink": "DEFAULTS.capexAbsLeg",
+      "old": "absent",
+      "new": null,
+      "cluster": "tco-inputs",
+      "evidence": "A donor-keyed absolute capex pin, the exact mirror of the existing rentAbsLeg. INERT at its null default: it prices nothing unless a state sets it. It exists so a published historical reading can pin the pre-fold capex points it was taken at, which is what the x90-v1/x90-v2 routes now do."
+    },
+    {
+      "sink": "DEFAULTS.rentRegistryPin",
+      "old": "absent",
+      "new": null,
+      "cluster": "rental-rates",
+      "evidence": "A donor-keyed pin of the REGISTERED planning-rent vector, applied below the reader controls so a route's own multipliers still apply. INERT at its null default. It exists because two rent middles moved and three rows lost their default to the unavailable-rate path, and a historical permalink must still resolve the vector it was taken at."
+    },
+    {
+      "sink": "DEFAULTS.costOfCapitalPct",
+      "old": "absent",
+      "new": 8.5,
+      "cluster": "tco-inputs",
+      "evidence": "analyst-set {6, 8.5, 13} %; both arms converge on the endpoints and bracket the middle. Consumed ONLY when capitalRecovery is on."
+    },
+    {
+      "sink": "HW.h200.rent",
+      "old": 2.9,
+      "new": 3.68,
+      "cluster": "rental-rates",
+      "evidence": "Public neocloud reserved, roughly one to two years: {3.00, 3.68, 3.99} from the Pro arm's primary Verda/Together derivation, not contradicted by the Fable arm's comparables."
+    },
+    {
+      "sink": "HW.h20.rent",
+      "old": 1,
+      "new": 0.82,
+      "cluster": "rental-rates",
+      "evidence": "China specialist monthly/term bare metal {0.71, 0.82, 1.02}; both arms overlap once the 96 GB / 141 GB configuration and term are named. Alibaba managed on-demand is a separate class."
+    },
+    {
+      "sink": "HW.gb200.rent",
+      "old": 4.5,
+      "new": null,
+      "cluster": "rental-rates",
+      "evidence": "GB200 CONDITIONAL, branch B. No checked-in dive resolves the dated Jul-2026 neocloud $3.50-6/hr range the live note cited: the Pro arm carries no $3.50 figure at all and recommends registering null over $4.50; the Fable arm's GB200 section carries on-demand {8.00, 10.50, 27.04}, capacity block {10.58} and a one-arm committed band the synthesis holds out of registry rows. The only carriers of the cited range are this project's own restatements of the same authored note. The row takes the unavailable path; $4.50 survives as a declared provisional replay."
+    },
+    {
+      "sink": "HW.gb300.rent",
+      "old": 6,
+      "new": null,
+      "cluster": "rental-rates",
+      "evidence": "The arms conflict directly (a one-arm Oracle $18 PAYG list against the Pro arm's finding that no NVL72 GB300 rack rate is published). $6 survives only as a declared provisional replay."
+    },
+    {
+      "sink": "HW.trn3.rent",
+      "old": 2.2,
+      "new": null,
+      "cluster": "rental-rates",
+      "evidence": "Both arms agree no public Trainium3 instance or UltraServer price exists. $2.20 survives only as a declared provisional replay."
+    },
+    {
+      "sink": "HW.h100.rent band",
+      "old": "point 2.40",
+      "new": "{2.35, 2.40, 3.19}",
+      "cluster": "rental-rates",
+      "evidence": "One-year / low-committed planning span; both arms. The MIDDLE is unchanged."
+    },
+    {
+      "sink": "HW.tpu7.rent band",
+      "old": "point 5.40",
+      "new": "{5.40, 5.40, 5.94}",
+      "cluster": "rental-rates",
+      "evidence": "Google published three-year committed regional list tariff; the middle deliberately selects Iowa. The MIDDLE is unchanged."
+    },
+    {
+      "sink": "HW.ascend.rent label",
+      "old": "procurement-award class",
+      "new": "provisional tender-candidate quote",
+      "cluster": "rental-rates",
+      "evidence": "The Pro arm reports tender candidates, not a final executed award; the Fable arm could not verify the notice at all. Value HELD, label downgraded."
+    },
+    {
+      "sink": "REGIONS.us-industrial.usdPerKwh",
+      "old": {
+        "lo": 0.06,
+        "mid": 0.0871,
+        "hi": 0.12
+      },
+      "new": {
+        "lo": 0.0617,
+        "mid": 0.0871,
+        "hi": 0.1053
+      },
+      "cluster": "electricity",
+      "evidence": "EIA Electric Power Monthly Tables 5.3/5.6.A, May-2026 data released 2026-07-23: a declared host-state selection (Oklahoma 6.17c to Virginia 10.53c) around the unchanged US-weighted middle. The MIDDLE does not move, so the page-open scalar is unchanged — but every advanced-band and region-selected state moves."
+    },
+    {
+      "sink": "REGIONS.cn-coastal.usdPerKwh",
+      "old": {
+        "lo": 0.083,
+        "mid": 0.097,
+        "hi": 0.108
+      },
+      "new": {
+        "lo": 0.089,
+        "mid": 0.098,
+        "hi": 0.11
+      },
+      "cluster": "electricity",
+      "evidence": "August-2026 grid tables + TOU calendar at 0.90 load factor, 657 kWh per kW-month, FX stated; both arms and the China source report's primary tables."
+    },
+    {
+      "sink": "REGIONS.cn-western.usdPerKwh",
+      "old": {
+        "lo": 0.05,
+        "mid": 0.056,
+        "hi": 0.064
+      },
+      "new": {
+        "lo": 0.06,
+        "mid": 0.071,
+        "hi": 0.087
+      },
+      "cluster": "electricity",
+      "evidence": "Standard 110 kV delivered grid tariffs (Gansu 0.0596, Ningxia 0.0685, western Inner Mongolia 0.0737, Guizhou 0.0871). The cheaper data-centre PACKAGE quotes are structured provisional notes, never a second peer region."
+    },
+    {
+      "sink": "DATACENTERS.xai-colossus-c1.electricity",
+      "old": {
+        "lo": 0.06,
+        "mid": 0.0625,
+        "hi": 0.065
+      },
+      "new": "point(0.0645), region-fill",
+      "cluster": "electricity",
+      "evidence": "The MLGW GSA energy charge applies below 5 MW and omits fuel and demand components; neither arm's Memphis envelope is xAI's bill. The row takes an explicitly labelled Tennessee industrial region fill."
+    },
+    {
+      "sink": "DATACENTERS.xai-colossus-ii.electricity",
+      "old": {
+        "lo": 0.06,
+        "mid": 0.0625,
+        "hi": 0.065
+      },
+      "new": "inherit us-industrial (0.0871)",
+      "cluster": "electricity",
+      "evidence": "MLGW does not supply Colossus 2 and the onsite gas cost and dispatch share are not public, so the row takes a typed generic-US inheritance — an explicit fallback, never a facility claim."
+    },
+    {
+      "sink": "DATACENTERS.xai-colossus-c1.accelerators",
+      "old": "[{ h100, point(200000) }]",
+      "new": "[] + mixedAggregate {220000, 225000, 230000} across h100/h200/gb200, unsplit",
+      "cluster": "fleet-composition",
+      "evidence": "Both arms contradict the 200,000-H100 point: it was a historical H100-focused marketing snapshot, and later public statements describe a mixed site. No per-SKU split is public, so none is fabricated — which also means the row allocates NO fleet weights and composes no section."
+    },
+    {
+      "sink": "coverage(xai/grok)",
+      "old": "95 / 0 / 5",
+      "new": "0 / 0 / 100 + a separate physical-inventory sentence",
+      "cluster": "fleet-composition",
+      "evidence": "The Colossus rows answer 'do typed accelerator keys appear at a facility?', not 'what share of the modeled Grok blend rests on site-specific SERVING evidence?'. No current site/SKU Grok serving allocation is disclosed. Physical inventory is reported separately and is not coverage."
+    },
+    {
+      "sink": "coverage(anthropic/opus)",
+      "old": "0 / 33 / 67 (company-keyed)",
+      "new": "38 / 33 / 29, count-backed 0 (preset-keyed, derived)",
+      "cluster": "fleet-composition",
+      "evidence": "Named-site serving evidence at Colossus C1 covers h100+h200+gb200 of the na-blend; Rainier and the TPU commitment stay PROGRAMME evidence (a multi-data-center milestone is not a named site). Percentages are derived, never stored."
+    },
+    {
+      "sink": "PROGRAMMES.anthropic-rainier-trainium.count",
+      "old": {
+        "lo": 500000,
+        "mid": 500000,
+        "hi": 1000000
+      },
+      "new": "point(500000), milestone; the 1M floor becomes its own row",
+      "cluster": "fleet-composition",
+      "evidence": "Two dated milestones were encoded as one uncertainty interval. They are separate observations with different scopes and must never be added."
+    },
+    {
+      "sink": "PROGRAMMES.anthropic-tpu-commitment.asOf",
+      "old": "2025-10-31",
+      "new": "2025-10-23",
+      "cluster": "fleet-composition",
+      "evidence": "The live date was a month-end placeholder; the announcement date is authoritative."
+    },
+    {
+      "sink": "PROGRAMMES.deepseek-h800-serving-2025.basis",
+      "old": "disclosed average-to-peak deployment in a two-day historical trace",
+      "new": "measured/credibly-reported + observationKind load-state-average-peak, 24-hour window",
+      "cluster": "fleet-composition",
+      "evidence": "The trace runs 2025-02-27 12:00 to 2025-02-28 12:00 UTC+8 — 24 hours, not two days. Average and peak are two LOAD STATES, not uncertainty endpoints."
+    }
+  ],
+  "evidenceOnly": [
+    "Coverage prose is now derived per {company, preset} and renders a three-part partition plus a subordinate non-additive SKU/workload count-backed line.",
+    "Programme notes added with no accelerator counts: anthropic-colossus-c1-capacity, anthropic-spacexai-capacity-contract, google-spacexai-capacity-contract, deepseek-v4-ascend950-serving, zai-third-party-cloud-inference, moonshot-kimi-k2-h800-training, moonshot-alibaba-hopper-2026, alibaba-ulanqab-m890, anthropic-trn2-in-use-2026, anthropic-tpu7-direct-purchase-estimate, anthropic-tpu7-gcp-rented-estimate.",
+    "The two bundled capacity contracts record their implied all-in rates ($5.27 and $11.46 per GPU-hour) OUTSIDE the planning-rent vector.",
+    "The Colossus 2 site label distinguishes the Tennessee compute site from the Southaven, Mississippi power assets and the separate MACROHARDRR project.",
+    "The three ad-hoc registry basis strings are migrated to the closed enum plus an explicit observationKind.",
+    "opexPct is relabelled only: the numeric semantics and the band are HELD, and the tooltip now states 2.0 %/yr at 4 years, 1.6 % at 5 and about 1.33 % at 6."
+  ],
+  "contractPairsMoved": 128,
+  "contractPairs": [
+    {
+      "pair": "opus|median",
+      "old": {
+        "margin": 68.984,
+        "cOut": 4.84169,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 62.9038,
+        "cOut": 5.50722,
+        "renderableLegs": 4
+      },
+      "deltaPp": -6.0802
+    },
+    {
+      "pair": "opus|dive",
+      "old": {
+        "margin": 59.1806,
+        "cOut": 6.37202,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 51.1786,
+        "cOut": 7.24791,
+        "renderableLegs": 4
+      },
+      "deltaPp": -8.002
+    },
+    {
+      "pair": "opus|x80-v3",
+      "old": {
+        "margin": 86.068,
+        "cOut": 1.3749,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 82.9861,
+        "cOut": 1.68065,
+        "renderableLegs": 4
+      },
+      "deltaPp": -3.0819
+    },
+    {
+      "pair": "opus|x80-v4",
+      "old": {
+        "margin": 85.3225,
+        "cOut": 1.44847,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 82.0757,
+        "cOut": 1.77058,
+        "renderableLegs": 4
+      },
+      "deltaPp": -3.2468
+    },
+    {
+      "pair": "opus|x60-v3",
+      "old": {
+        "margin": -4.7024,
+        "cOut": 13.01966,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -25.2276,
+        "cOut": 14.80933,
+        "renderableLegs": 4
+      },
+      "deltaPp": -20.5252
+    },
+    {
+      "pair": "opus|gptpro",
+      "old": {
+        "margin": 87.3359,
+        "cOut": 1.44252,
+        "renderableLegs": 5
+      },
+      "new": {
+        "margin": 86.1139,
+        "cOut": 1.52462,
+        "renderableLegs": 3
+      },
+      "deltaPp": -1.222
+    },
+    {
+      "pair": "opus|xaicash",
+      "old": {
+        "margin": 96.2725,
+        "cOut": 0.41273,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 95.4719,
+        "cOut": 0.49471,
+        "renderableLegs": 4
+      },
+      "deltaPp": -0.8006
+    },
+    {
+      "pair": "opus|xaiopp",
+      "old": {
+        "margin": 67.2645,
+        "cOut": 3.62463,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 60.2336,
+        "cOut": 4.34455,
+        "renderableLegs": 4
+      },
+      "deltaPp": -7.0309
+    },
+    {
+      "pair": "opus|chinacloud",
+      "old": {
+        "margin": -139.4577,
+        "cOut": 42.53768,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -186.3993,
+        "cOut": 48.38485,
+        "renderableLegs": 4
+      },
+      "deltaPp": -46.9416
+    },
+    {
+      "pair": "opus|anth20",
+      "old": {
+        "margin": 58.1898,
+        "cOut": 2.92943,
+        "renderableLegs": 1
+      },
+      "new": {
+        "margin": 65.7157,
+        "cOut": 2.40213,
+        "renderableLegs": 1
+      },
+      "deltaPp": 7.5259
+    },
+    {
+      "pair": "sonnet|median",
+      "old": {
+        "margin": 66.5693,
+        "cOut": 2.0345,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 59.4623,
+        "cOut": 2.28981,
+        "renderableLegs": 4
+      },
+      "deltaPp": -7.107
+    },
+    {
+      "pair": "sonnet|dive",
+      "old": {
+        "margin": 56.0027,
+        "cOut": 2.67756,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 46.6494,
+        "cOut": 3.01356,
+        "renderableLegs": 4
+      },
+      "deltaPp": -9.3533
+    },
+    {
+      "pair": "sonnet|x80-v3",
+      "old": {
+        "margin": 84.4971,
+        "cOut": 0.67248,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 80.95,
+        "cOut": 0.77102,
+        "renderableLegs": 4
+      },
+      "deltaPp": -3.5471
+    },
+    {
+      "pair": "sonnet|x80-v4",
+      "old": {
+        "margin": 83.6675,
+        "cOut": 0.70846,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 79.9306,
+        "cOut": 0.81228,
+        "renderableLegs": 4
+      },
+      "deltaPp": -3.7369
+    },
+    {
+      "pair": "sonnet|x60-v3",
+      "old": {
+        "margin": -12.8538,
+        "cOut": 5.47093,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -36.8451,
+        "cOut": 6.15748,
+        "renderableLegs": 4
+      },
+      "deltaPp": -23.9913
+    },
+    {
+      "pair": "sonnet|gptpro",
+      "old": {
+        "margin": 85.9625,
+        "cOut": 0.68896,
+        "renderableLegs": 5
+      },
+      "new": {
+        "margin": 84.7983,
+        "cOut": 0.68528,
+        "renderableLegs": 3
+      },
+      "deltaPp": -1.1642
+    },
+    {
+      "pair": "sonnet|xaicash",
+      "old": {
+        "margin": 96.1732,
+        "cOut": 0.17246,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 95.3141,
+        "cOut": 0.20069,
+        "renderableLegs": 4
+      },
+      "deltaPp": -0.8591
+    },
+    {
+      "pair": "sonnet|xaiopp",
+      "old": {
+        "margin": 66.3931,
+        "cOut": 1.51456,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 58.8485,
+        "cOut": 1.7625,
+        "renderableLegs": 4
+      },
+      "deltaPp": -7.5446
+    },
+    {
+      "pair": "sonnet|chinacloud",
+      "old": {
+        "margin": -158.1003,
+        "cOut": 17.87456,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -212.9691,
+        "cOut": 20.11765,
+        "renderableLegs": 4
+      },
+      "deltaPp": -54.8688
+    },
+    {
+      "pair": "sonnet|anth20",
+      "old": {
+        "margin": 54.0925,
+        "cOut": 1.37273,
+        "renderableLegs": 1
+      },
+      "new": {
+        "margin": 62.3559,
+        "cOut": 1.12564,
+        "renderableLegs": 1
+      },
+      "deltaPp": 8.2634
+    },
+    {
+      "pair": "haiku|median",
+      "old": {
+        "margin": 70.5961,
+        "cOut": 0.976,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 64.6674,
+        "cOut": 1.07476,
+        "renderableLegs": 4
+      },
+      "deltaPp": -5.9287
+    },
+    {
+      "pair": "haiku|dive",
+      "old": {
+        "margin": 61.3023,
+        "cOut": 1.28448,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 53.4997,
+        "cOut": 1.41447,
+        "renderableLegs": 4
+      },
+      "deltaPp": -7.8026
+    },
+    {
+      "pair": "haiku|x80-v3",
+      "old": {
+        "margin": 85.931,
+        "cOut": 0.39118,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 82.965,
+        "cOut": 0.42866,
+        "renderableLegs": 4
+      },
+      "deltaPp": -2.966
+    },
+    {
+      "pair": "haiku|x80-v4",
+      "old": {
+        "margin": 85.1782,
+        "cOut": 0.41211,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 82.0534,
+        "cOut": 0.4516,
+        "renderableLegs": 4
+      },
+      "deltaPp": -3.1248
+    },
+    {
+      "pair": "haiku|x60-v3",
+      "old": {
+        "margin": 0.7397,
+        "cOut": 2.62453,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -19.274,
+        "cOut": 2.89012,
+        "renderableLegs": 4
+      },
+      "deltaPp": -20.0137
+    },
+    {
+      "pair": "haiku|gptpro",
+      "old": {
+        "margin": 87.3536,
+        "cOut": 0.38214,
+        "renderableLegs": 5
+      },
+      "new": {
+        "margin": 86.5487,
+        "cOut": 0.35906,
+        "renderableLegs": 3
+      },
+      "deltaPp": -0.8049
+    },
+    {
+      "pair": "haiku|xaicash",
+      "old": {
+        "margin": 97.1527,
+        "cOut": 0.0723,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 96.5388,
+        "cOut": 0.0828,
+        "renderableLegs": 4
+      },
+      "deltaPp": -0.6139
+    },
+    {
+      "pair": "haiku|xaiopp",
+      "old": {
+        "margin": 74.9946,
+        "cOut": 0.63493,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": 69.6032,
+        "cOut": 0.72715,
+        "renderableLegs": 4
+      },
+      "deltaPp": -5.3914
+    },
+    {
+      "pair": "haiku|chinacloud",
+      "old": {
+        "margin": -127.0114,
+        "cOut": 8.57482,
+        "renderableLegs": 7
+      },
+      "new": {
+        "margin": -172.7835,
+        "cOut": 9.44257,
+        "renderableLegs": 4
+      },
+      "deltaPp": -45.7721
+    },
+    {
+      "pair": "haiku|anth20",
+      "old": {
+        "margin": 60.2899,
+        "cOut": 0.68086,
+        "renderableLegs": 1
+      },
+      "new": {
+        "margin": 67.4377,
+        "cOut": 0.55831,
+        "renderableLegs": 1
+      },
+      "deltaPp": 7.1478
+    },
+    {
+      "pair": "gpt|median",
+      "old": {
+        "margin": 92.9927,
+        "cOut": 1.19803,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 90.8895,
+        "cOut": 1.4308,
+        "renderableLegs": 2
+      },
+      "deltaPp": -2.1032
+    },
+    {
+      "pair": "gpt|dive",
+      "old": {
+        "margin": 93.7092,
+        "cOut": 1.22392,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 91.8212,
+        "cOut": 1.46172,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.888
+    },
+    {
+      "pair": "gpt|x80-v3",
+      "old": {
+        "margin": 96.8402,
+        "cOut": 0.4602,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 95.749,
+        "cOut": 0.58478,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.0912
+    },
+    {
+      "pair": "gpt|x80-v4",
+      "old": {
+        "margin": 96.6711,
+        "cOut": 0.48483,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 95.5215,
+        "cOut": 0.61607,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.1496
+    },
+    {
+      "pair": "gpt|x60-v3",
+      "old": {
+        "margin": 76.345,
+        "cOut": 3.22159,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 69.2453,
+        "cOut": 3.84753,
+        "renderableLegs": 2
+      },
+      "deltaPp": -7.0997
+    },
+    {
+      "pair": "gpt|gptpro",
+      "old": {
+        "margin": 97.3734,
+        "cOut": 0.40268,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 96.4664,
+        "cOut": 0.51168,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.907
+    },
+    {
+      "pair": "gpt|xaicash",
+      "old": {
+        "margin": 98.8892,
+        "cOut": 0.12006,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 98.511,
+        "cOut": 0.14358,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.3782
+    },
+    {
+      "pair": "gpt|xaiopp",
+      "old": {
+        "margin": 90.2448,
+        "cOut": 1.05434,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 86.9238,
+        "cOut": 1.26095,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.321
+    },
+    {
+      "pair": "gpt|chinacloud",
+      "old": {
+        "margin": 45.9003,
+        "cOut": 10.52554,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 29.663,
+        "cOut": 12.5706,
+        "renderableLegs": 2
+      },
+      "deltaPp": -16.2373
+    },
+    {
+      "pair": "gpt|anth20",
+      "old": {
+        "margin": 96.5432,
+        "cOut": 0.52996,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 95.3495,
+        "cOut": 0.67341,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.1937
+    },
+    {
+      "pair": "gpt|deepseek",
+      "old": {
+        "margin": 96.0593,
+        "cOut": 0.60415,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 94.6984,
+        "cOut": 0.76769,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.3609
+    },
+    {
+      "pair": "grok|median",
+      "old": {
+        "margin": 8.6132,
+        "cOut": 8.37805,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": -7.4676,
+        "cOut": 10.42991,
+        "renderableLegs": 2
+      },
+      "deltaPp": -16.0808
+    },
+    {
+      "pair": "grok|dive",
+      "old": {
+        "margin": 63.7153,
+        "cOut": 1.53127,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 60.0589,
+        "cOut": 1.64156,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.6564
+    },
+    {
+      "pair": "grok|x80-v3",
+      "old": {
+        "margin": 53.2218,
+        "cOut": 4.46124,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 43.1957,
+        "cOut": 5.95995,
+        "renderableLegs": 2
+      },
+      "deltaPp": -10.0261
+    },
+    {
+      "pair": "grok|x80-v4",
+      "old": {
+        "margin": 50.7186,
+        "cOut": 4.69996,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 40.156,
+        "cOut": 6.27887,
+        "renderableLegs": 2
+      },
+      "deltaPp": -10.5626
+    },
+    {
+      "pair": "grok|x60-v3",
+      "old": {
+        "margin": -208.4989,
+        "cOut": 22.52922,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": -262.7839,
+        "cOut": 28.04681,
+        "renderableLegs": 2
+      },
+      "deltaPp": -54.285
+    },
+    {
+      "pair": "grok|gptpro",
+      "old": {
+        "margin": 61.1156,
+        "cOut": 3.90358,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 52.7814,
+        "cOut": 5.21495,
+        "renderableLegs": 2
+      },
+      "deltaPp": -8.3342
+    },
+    {
+      "pair": "grok|xaicash",
+      "old": {
+        "margin": 90.8703,
+        "cOut": 0.38529,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 89.9503,
+        "cOut": 0.41304,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.92
+    },
+    {
+      "pair": "grok|xaiopp",
+      "old": {
+        "margin": 19.8226,
+        "cOut": 3.3836,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 11.7431,
+        "cOut": 3.62731,
+        "renderableLegs": 2
+      },
+      "deltaPp": -8.0795
+    },
+    {
+      "pair": "grok|chinacloud",
+      "old": {
+        "margin": -605.5466,
+        "cOut": 73.60718,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": -729.6982,
+        "cOut": 91.63418,
+        "renderableLegs": 2
+      },
+      "deltaPp": -124.1516
+    },
+    {
+      "pair": "grok|anth20",
+      "old": {
+        "margin": 61.1156,
+        "cOut": 3.90358,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 52.7814,
+        "cOut": 5.21495,
+        "renderableLegs": 2
+      },
+      "deltaPp": -8.3342
+    },
+    {
+      "pair": "grok|deepseek",
+      "old": {
+        "margin": 55.6718,
+        "cOut": 4.45008,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 46.1708,
+        "cOut": 5.94505,
+        "renderableLegs": 2
+      },
+      "deltaPp": -9.501
+    },
+    {
+      "pair": "kimi|median",
+      "old": {
+        "margin": 64.2153,
+        "cOut": 0.83546,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 67.7622,
+        "cOut": 0.78748,
+        "renderableLegs": 2
+      },
+      "deltaPp": 3.5469
+    },
+    {
+      "pair": "kimi|dive",
+      "old": {
+        "margin": 72.3629,
+        "cOut": 0.63323,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 75.1158,
+        "cOut": 0.59326,
+        "renderableLegs": 2
+      },
+      "deltaPp": 2.7529
+    },
+    {
+      "pair": "kimi|x80-v3",
+      "old": {
+        "margin": 81.1522,
+        "cOut": 0.47014,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 83.027,
+        "cOut": 0.44273,
+        "renderableLegs": 2
+      },
+      "deltaPp": 1.8748
+    },
+    {
+      "pair": "kimi|x80-v4",
+      "old": {
+        "margin": 80.1436,
+        "cOut": 0.4953,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 82.1187,
+        "cOut": 0.46642,
+        "renderableLegs": 2
+      },
+      "deltaPp": 1.9751
+    },
+    {
+      "pair": "kimi|x60-v3",
+      "old": {
+        "margin": -20.8001,
+        "cOut": 2.24661,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": -8.8269,
+        "cOut": 2.1176,
+        "renderableLegs": 2
+      },
+      "deltaPp": 11.9732
+    },
+    {
+      "pair": "kimi|gptpro",
+      "old": {
+        "margin": 84.3328,
+        "cOut": 0.41138,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 85.8912,
+        "cOut": 0.38739,
+        "renderableLegs": 2
+      },
+      "deltaPp": 1.5584
+    },
+    {
+      "pair": "kimi|xaicash",
+      "old": {
+        "margin": 96.615,
+        "cOut": 0.06117,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 96.9735,
+        "cOut": 0.05565,
+        "renderableLegs": 2
+      },
+      "deltaPp": 0.3585
+    },
+    {
+      "pair": "kimi|xaiopp",
+      "old": {
+        "margin": 70.2726,
+        "cOut": 0.5372,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 73.4213,
+        "cOut": 0.48872,
+        "renderableLegs": 2
+      },
+      "deltaPp": 3.1487
+    },
+    {
+      "pair": "kimi|chinacloud",
+      "old": {
+        "margin": -176.2737,
+        "cOut": 7.34009,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": -148.8905,
+        "cOut": 6.9186,
+        "renderableLegs": 2
+      },
+      "deltaPp": 27.3832
+    },
+    {
+      "pair": "kimi|anth20",
+      "old": {
+        "margin": 84.3328,
+        "cOut": 0.41138,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 85.8912,
+        "cOut": 0.38739,
+        "renderableLegs": 2
+      },
+      "deltaPp": 1.5584
+    },
+    {
+      "pair": "kimi|deepseek",
+      "old": {
+        "margin": 82.1394,
+        "cOut": 0.46897,
+        "renderableLegs": 2
+      },
+      "new": {
+        "margin": 83.9159,
+        "cOut": 0.44162,
+        "renderableLegs": 2
+      },
+      "deltaPp": 1.7765
+    },
+    {
+      "pair": "dsv4|median",
+      "old": {
+        "margin": -18.6296,
+        "cOut": 0.6298,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -9.0755,
+        "cOut": 0.57928,
+        "renderableLegs": 3
+      },
+      "deltaPp": 9.5541
+    },
+    {
+      "pair": "dsv4|x80-v3",
+      "old": {
+        "margin": 38.821,
+        "cOut": 0.33604,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 43.871,
+        "cOut": 0.30718,
+        "renderableLegs": 3
+      },
+      "deltaPp": 5.05
+    },
+    {
+      "pair": "dsv4|x80-v4",
+      "old": {
+        "margin": 35.5472,
+        "cOut": 0.35403,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 40.8674,
+        "cOut": 0.32362,
+        "renderableLegs": 3
+      },
+      "deltaPp": 5.3202
+    },
+    {
+      "pair": "dsv4|x60-v3",
+      "old": {
+        "margin": -300.4638,
+        "cOut": 1.69357,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -268.2118,
+        "cOut": 1.55774,
+        "renderableLegs": 3
+      },
+      "deltaPp": 32.252
+    },
+    {
+      "pair": "dsv4|gptpro",
+      "old": {
+        "margin": 49.1449,
+        "cOut": 0.29404,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 53.3427,
+        "cOut": 0.26878,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.1978
+    },
+    {
+      "pair": "dsv4|xaicash",
+      "old": {
+        "margin": 83.1577,
+        "cOut": 0.08321,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 84.5666,
+        "cOut": 0.07542,
+        "renderableLegs": 3
+      },
+      "deltaPp": 1.4089
+    },
+    {
+      "pair": "dsv4|xaiopp",
+      "old": {
+        "margin": -47.9099,
+        "cOut": 0.73076,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -35.5365,
+        "cOut": 0.66235,
+        "renderableLegs": 3
+      },
+      "deltaPp": 12.3734
+    },
+    {
+      "pair": "dsv4|chinacloud",
+      "old": {
+        "margin": -815.8733,
+        "cOut": 5.53322,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -742.1119,
+        "cOut": 5.08942,
+        "renderableLegs": 3
+      },
+      "deltaPp": 73.7614
+    },
+    {
+      "pair": "dsv4|anth20",
+      "old": {
+        "margin": 44.2693,
+        "cOut": 0.32223,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 48.8696,
+        "cOut": 0.29455,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.6003
+    },
+    {
+      "pair": "dsv4|deepseek",
+      "old": {
+        "margin": 36.467,
+        "cOut": 0.36734,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 41.7113,
+        "cOut": 0.33579,
+        "renderableLegs": 3
+      },
+      "deltaPp": 5.2443
+    },
+    {
+      "pair": "dsv4f|median",
+      "old": {
+        "margin": -20.1789,
+        "cOut": 0.24944,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -11.4938,
+        "cOut": 0.23406,
+        "renderableLegs": 3
+      },
+      "deltaPp": 8.6851
+    },
+    {
+      "pair": "dsv4f|dive",
+      "old": {
+        "margin": -31.7008,
+        "cOut": 0.27335,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -22.183,
+        "cOut": 0.2565,
+        "renderableLegs": 3
+      },
+      "deltaPp": 9.5178
+    },
+    {
+      "pair": "dsv4f|x80-v3",
+      "old": {
+        "margin": 39.2752,
+        "cOut": 0.12838,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 43.8659,
+        "cOut": 0.11959,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.5907
+    },
+    {
+      "pair": "dsv4f|x80-v4",
+      "old": {
+        "margin": 36.0257,
+        "cOut": 0.13524,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 40.8621,
+        "cOut": 0.12599,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.8364
+    },
+    {
+      "pair": "dsv4f|x60-v3",
+      "old": {
+        "margin": -305.694,
+        "cOut": 0.67076,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -276.3753,
+        "cOut": 0.62941,
+        "renderableLegs": 3
+      },
+      "deltaPp": 29.3187
+    },
+    {
+      "pair": "dsv4f|gptpro",
+      "old": {
+        "margin": 49.5225,
+        "cOut": 0.11233,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 53.3385,
+        "cOut": 0.10464,
+        "renderableLegs": 3
+      },
+      "deltaPp": 3.816
+    },
+    {
+      "pair": "dsv4f|xaicash",
+      "old": {
+        "margin": 84.0684,
+        "cOut": 0.03156,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 85.3211,
+        "cOut": 0.02925,
+        "renderableLegs": 3
+      },
+      "deltaPp": 1.2527
+    },
+    {
+      "pair": "dsv4f|xaiopp",
+      "old": {
+        "margin": -39.9119,
+        "cOut": 0.27715,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -28.911,
+        "cOut": 0.25683,
+        "renderableLegs": 3
+      },
+      "deltaPp": 11.0009
+    },
+    {
+      "pair": "dsv4f|chinacloud",
+      "old": {
+        "margin": -827.8349,
+        "cOut": 2.19149,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -760.782,
+        "cOut": 2.05639,
+        "renderableLegs": 3
+      },
+      "deltaPp": 67.0529
+    },
+    {
+      "pair": "dsv4f|anth20",
+      "old": {
+        "margin": 44.6831,
+        "cOut": 0.1231,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 48.865,
+        "cOut": 0.11467,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.1819
+    },
+    {
+      "pair": "dsv4f|deepseek",
+      "old": {
+        "margin": 36.9388,
+        "cOut": 0.14033,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 41.7061,
+        "cOut": 0.13073,
+        "renderableLegs": 3
+      },
+      "deltaPp": 4.7673
+    },
+    {
+      "pair": "glm|median",
+      "old": {
+        "margin": -43.1958,
+        "cOut": 8.09303,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -36.4847,
+        "cOut": 7.93115,
+        "renderableLegs": 3
+      },
+      "deltaPp": 6.7111
+    },
+    {
+      "pair": "glm|dive",
+      "old": {
+        "margin": -165.6481,
+        "cOut": 17.08528,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -153.1981,
+        "cOut": 16.74355,
+        "renderableLegs": 3
+      },
+      "deltaPp": 12.45
+    },
+    {
+      "pair": "glm|x80-v3",
+      "old": {
+        "margin": 24.3108,
+        "cOut": 4.62459,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 27.8581,
+        "cOut": 4.53209,
+        "renderableLegs": 3
+      },
+      "deltaPp": 3.5473
+    },
+    {
+      "pair": "glm|x80-v4",
+      "old": {
+        "margin": 20.2605,
+        "cOut": 4.87206,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 23.9977,
+        "cOut": 4.77461,
+        "renderableLegs": 3
+      },
+      "deltaPp": 3.7372
+    },
+    {
+      "pair": "glm|x60-v3",
+      "old": {
+        "margin": -383.3932,
+        "cOut": 21.76277,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -360.7382,
+        "cOut": 21.32747,
+        "renderableLegs": 3
+      },
+      "deltaPp": 22.655
+    },
+    {
+      "pair": "glm|gptpro",
+      "old": {
+        "margin": 37.0834,
+        "cOut": 4.04651,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 40.032,
+        "cOut": 3.96558,
+        "renderableLegs": 3
+      },
+      "deltaPp": 2.9486
+    },
+    {
+      "pair": "glm|xaicash",
+      "old": {
+        "margin": 96.5467,
+        "cOut": 0.08795,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 96.7953,
+        "cOut": 0.083,
+        "renderableLegs": 3
+      },
+      "deltaPp": 0.2486
+    },
+    {
+      "pair": "glm|xaiopp",
+      "old": {
+        "margin": 69.6728,
+        "cOut": 0.77238,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 71.8558,
+        "cOut": 0.72888,
+        "renderableLegs": 3
+      },
+      "deltaPp": 2.183
+    },
+    {
+      "pair": "glm|chinacloud",
+      "old": {
+        "margin": -1005.5354,
+        "cOut": 71.10305,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -953.7228,
+        "cOut": 69.68085,
+        "renderableLegs": 3
+      },
+      "deltaPp": 51.8126
+    },
+    {
+      "pair": "glm|anth20",
+      "old": {
+        "margin": 37.0834,
+        "cOut": 4.04651,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 40.032,
+        "cOut": 3.96558,
+        "renderableLegs": 3
+      },
+      "deltaPp": 2.9486
+    },
+    {
+      "pair": "glm|deepseek",
+      "old": {
+        "margin": 28.275,
+        "cOut": 4.61303,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 31.6365,
+        "cOut": 4.52076,
+        "renderableLegs": 3
+      },
+      "deltaPp": 3.3615
+    },
+    {
+      "pair": "glm47|median",
+      "old": {
+        "margin": -687.2809,
+        "cOut": 31.35953,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -666.4718,
+        "cOut": 30.83849,
+        "renderableLegs": 3
+      },
+      "deltaPp": 20.8091
+    },
+    {
+      "pair": "glm47|dive",
+      "old": {
+        "margin": -687.2809,
+        "cOut": 31.35953,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -666.4718,
+        "cOut": 30.83849,
+        "renderableLegs": 3
+      },
+      "deltaPp": 20.8091
+    },
+    {
+      "pair": "glm47|x80-v3",
+      "old": {
+        "margin": -316.1342,
+        "cOut": 17.91973,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -305.1351,
+        "cOut": 17.62199,
+        "renderableLegs": 3
+      },
+      "deltaPp": 10.9991
+    },
+    {
+      "pair": "glm47|x80-v4",
+      "old": {
+        "margin": -338.4023,
+        "cOut": 18.87865,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -326.8145,
+        "cOut": 18.56498,
+        "renderableLegs": 3
+      },
+      "deltaPp": 11.5878
+    },
+    {
+      "pair": "glm47|x60-v3",
+      "old": {
+        "margin": -2557.6639,
+        "cOut": 84.32815,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -2487.4172,
+        "cOut": 82.92703,
+        "renderableLegs": 3
+      },
+      "deltaPp": 70.2467
+    },
+    {
+      "pair": "glm47|gptpro",
+      "old": {
+        "margin": -245.9116,
+        "cOut": 15.67977,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -236.7685,
+        "cOut": 15.41924,
+        "renderableLegs": 3
+      },
+      "deltaPp": 9.1431
+    },
+    {
+      "pair": "glm47|xaicash",
+      "old": {
+        "margin": 90.4986,
+        "cOut": 0.21052,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 90.9311,
+        "cOut": 0.20648,
+        "renderableLegs": 3
+      },
+      "deltaPp": 0.4325
+    },
+    {
+      "pair": "glm47|xaiopp",
+      "old": {
+        "margin": 16.5581,
+        "cOut": 1.8488,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": 20.3564,
+        "cOut": 1.81333,
+        "renderableLegs": 3
+      },
+      "deltaPp": 3.7983
+    },
+    {
+      "pair": "glm47|chinacloud",
+      "old": {
+        "margin": -5978.1603,
+        "cOut": 275.51588,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -5817.5041,
+        "cOut": 270.93815,
+        "renderableLegs": 3
+      },
+      "deltaPp": 160.6562
+    },
+    {
+      "pair": "glm47|anth20",
+      "old": {
+        "margin": -245.9116,
+        "cOut": 15.67977,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -236.7685,
+        "cOut": 15.41924,
+        "renderableLegs": 3
+      },
+      "deltaPp": 9.1431
+    },
+    {
+      "pair": "glm47|deepseek",
+      "old": {
+        "margin": -294.3392,
+        "cOut": 17.87493,
+        "renderableLegs": 3
+      },
+      "new": {
+        "margin": -283.9161,
+        "cOut": 17.57794,
+        "renderableLegs": 3
+      },
+      "deltaPp": 10.4231
+    },
+    {
+      "pair": "terra|median",
+      "old": {
+        "margin": 92.1489,
+        "cOut": 0.72034,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 89.8615,
+        "cOut": 0.85658,
+        "renderableLegs": 2
+      },
+      "deltaPp": -2.2874
+    },
+    {
+      "pair": "terra|dive",
+      "old": {
+        "margin": 89.6674,
+        "cOut": 0.94802,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 86.6569,
+        "cOut": 1.12732,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.0105
+    },
+    {
+      "pair": "terra|x80-v3",
+      "old": {
+        "margin": 96.4519,
+        "cOut": 0.28755,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 95.3644,
+        "cOut": 0.34032,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.0875
+    },
+    {
+      "pair": "terra|x80-v4",
+      "old": {
+        "margin": 96.262,
+        "cOut": 0.30293,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 95.1163,
+        "cOut": 0.35853,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.1457
+    },
+    {
+      "pair": "terra|x60-v3",
+      "old": {
+        "margin": 73.4966,
+        "cOut": 1.93704,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 65.7748,
+        "cOut": 2.3034,
+        "renderableLegs": 2
+      },
+      "deltaPp": -7.7218
+    },
+    {
+      "pair": "terra|gptpro",
+      "old": {
+        "margin": 97.0506,
+        "cOut": 0.2516,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 96.1466,
+        "cOut": 0.29778,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.904
+    },
+    {
+      "pair": "terra|xaicash",
+      "old": {
+        "margin": 98.8591,
+        "cOut": 0.06898,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 98.4783,
+        "cOut": 0.08218,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.3808
+    },
+    {
+      "pair": "terra|xaiopp",
+      "old": {
+        "margin": 89.9809,
+        "cOut": 0.60575,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 86.6366,
+        "cOut": 0.72171,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.3443
+    },
+    {
+      "pair": "terra|chinacloud",
+      "old": {
+        "margin": 39.386,
+        "cOut": 6.32868,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 21.726,
+        "cOut": 7.52563,
+        "renderableLegs": 2
+      },
+      "deltaPp": -17.66
+    },
+    {
+      "pair": "terra|anth20",
+      "old": {
+        "margin": 96.1184,
+        "cOut": 0.33113,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 94.9287,
+        "cOut": 0.3919,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.1897
+    },
+    {
+      "pair": "terra|deepseek",
+      "old": {
+        "margin": 95.575,
+        "cOut": 0.37749,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 94.2187,
+        "cOut": 0.44677,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.3563
+    },
+    {
+      "pair": "luna|median",
+      "old": {
+        "margin": 88.7771,
+        "cOut": 0.45978,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 85.6752,
+        "cOut": 0.54336,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.1019
+    },
+    {
+      "pair": "luna|dive",
+      "old": {
+        "margin": 85.2298,
+        "cOut": 0.6051,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 81.1475,
+        "cOut": 0.71511,
+        "renderableLegs": 2
+      },
+      "deltaPp": -4.0823
+    },
+    {
+      "pair": "luna|x80-v3",
+      "old": {
+        "margin": 94.6696,
+        "cOut": 0.2131,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 93.1516,
+        "cOut": 0.25083,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.518
+    },
+    {
+      "pair": "luna|x80-v4",
+      "old": {
+        "margin": 94.3844,
+        "cOut": 0.2245,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 92.7852,
+        "cOut": 0.26426,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.5992
+    },
+    {
+      "pair": "luna|x60-v3",
+      "old": {
+        "margin": 62.1143,
+        "cOut": 1.23638,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 51.6429,
+        "cOut": 1.46114,
+        "renderableLegs": 2
+      },
+      "deltaPp": -10.4714
+    },
+    {
+      "pair": "luna|gptpro",
+      "old": {
+        "margin": 95.5691,
+        "cOut": 0.18646,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 94.3073,
+        "cOut": 0.21948,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.2618
+    },
+    {
+      "pair": "luna|xaicash",
+      "old": {
+        "margin": 98.6216,
+        "cOut": 0.04111,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 98.1816,
+        "cOut": 0.04869,
+        "renderableLegs": 2
+      },
+      "deltaPp": -0.44
+    },
+    {
+      "pair": "luna|xaiopp",
+      "old": {
+        "margin": 87.8949,
+        "cOut": 0.36107,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 84.0311,
+        "cOut": 0.42758,
+        "renderableLegs": 2
+      },
+      "deltaPp": -3.8638
+    },
+    {
+      "pair": "luna|chinacloud",
+      "old": {
+        "margin": 13.3542,
+        "cOut": 4.03948,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": -10.5941,
+        "cOut": 4.77383,
+        "renderableLegs": 2
+      },
+      "deltaPp": -23.9483
+    },
+    {
+      "pair": "luna|anth20",
+      "old": {
+        "margin": 94.1686,
+        "cOut": 0.2454,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 92.508,
+        "cOut": 0.28885,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.6606
+    },
+    {
+      "pair": "luna|deepseek",
+      "old": {
+        "margin": 93.3523,
+        "cOut": 0.27975,
+        "renderableLegs": 4
+      },
+      "new": {
+        "margin": 91.4591,
+        "cOut": 0.32929,
+        "renderableLegs": 2
+      },
+      "deltaPp": -1.8932
+    }
+  ]
+}

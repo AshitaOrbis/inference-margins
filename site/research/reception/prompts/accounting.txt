@@ -1,0 +1,6 @@
+AUDIENCE RECEPTION: cost-accounting / financial-reporting reader (anonymous archetype; you audit revenue and cost recognition for a living).
+The page's core hazard for your reader-type: conflating UNIT SERVING CONTRIBUTION MARGIN with COMPANY GROSS MARGIN. Read https://inference-margins.pages.dev/ specifically for perimeter discipline:
+- The headline metric 'list-price direct-serving contribution margin': is its definition (methods box, margin tooltip) an internally consistent cost perimeter? What does 'direct serving cost' include/exclude, and is that perimeter held constant across §5, §6, §7, §10 and the calculator tiles?
+- §7's bridge (illustrative, non-additive — it says): do the bridge buckets double-count (utilization appears both in the unit math and as a bridge item?); is 'non-additive' honest or a dodge; does the $/Mtok bridge framing work?
+- The reported figures (The Information 40%, PitchBook 44%, Zephyr 70%, SemiAnalysis −94%): are their metric definitions (gross margin? compute margin? adjusted?) kept distinct, or blurred into one 'reported margin' soup? Is the xAI Q1 'segment GM' handled at the right perimeter? Is the '$5B spend → $15B ARR' item correctly labeled a spend-to-revenue multiple, not a margin?
+- Anywhere the page lets a unit number be read as a business number (screenshot risk especially — hero tile, §10 headlines).

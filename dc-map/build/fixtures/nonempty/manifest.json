@@ -1,0 +1,16 @@
+{
+ "artifacts": {
+  "site-data.json": "sha256:29ffdba2d9217fa05ccba5fa2b7eee00fecba1834d6dfbd80e25a50cd2556748",
+  "sites.geojson": "sha256:a4aa9ccc842f0d0bad37c7296846cb726e6b28dae1351dc33ddc810aa140b00f",
+  "summary.json": "sha256:79f19cd5facb8ca0fafa910d6a16405d2e89aba37f75f95b4675b87741a6d28a"
+ },
+ "assessment_as_of": "2026-09-05",
+ "contract_digest": "sha256:801e26cc9af80ee169d26cb752203dd101fc42fa7b20bb311b6d591fc3e97138",
+ "contract_version": "dc-map/v0.3",
+ "fixture_format": "dc-map/site-fixture/v1",
+ "fixture_name": "nonempty",
+ "fixture_only": true,
+ "presentation_version": "dc-map/site-data/v2",
+ "release_id": "rel-49b67fc067f5bc90db4501f2",
+ "schema_version": 1
+}

@@ -1,0 +1,2203 @@
+{
+ "_meta": {
+  "title": "Evidence instances (IM2) — current anchors expressed through the WS-B phase-evidence schema + WS-C uncertainty contract",
+  "governingPlan": "orchestration/plans/im-reengineer-defaults-2026-07-16.md (IM2: contracts before D2)",
+  "schema": "site/evidence-schema.js (WS-B) + site/uncertainty-contract.js (WS-C)",
+  "sources": [
+   "research/validation-ledger.md (anchor registry; three-status; primary-source verification)",
+   "research/d2-validation-protocol.md (§2 eligibility, §3 status, §8 reporting invariants)",
+   "site/engine.js (HW rows; existing analyst estimates)"
+  ],
+  "note": "IM2 is data-structures-and-docs only. No engine numbers changed. Every figure below is transcribed verbatim from the ledger/engine (no new claims, no re-derivation). Uncertainty bands are left unfilled (low/high null, derived:false): IM2 defines the composition algebra; the propagation that fills a band is D2/IM5.",
+  "seeded": "2026-07-16 (IM0/IM2)"
+ },
+ "anchors": [
+  {
+   "id": "h800-deepseek-prod-dec",
+   "status": "FITTED",
+   "platform": "H800 (China)",
+   "platformKey": "h800",
+   "phase": "decode",
+   "throughput": {
+    "value": 1850,
+    "unit": "tok/s/GPU",
+    "denominator": "14.8k out tok/s per 8xH800 node => 1,850/GPU",
+    "deviceCount": 8,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek V3/R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "FP8",
+     "activations": "FP8",
+     "kvCache": "unknown",
+     "note": ""
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode leg of the production disclosure (output tok/s)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "production R1",
+    "stackVersion": "DeepSeek production (Feb 2025 disclosure)",
+    "topology": "8xH800 node"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://x.com/deepseek_ai/status/1895688300574462431",
+    "retrievedDate": "2026-09-02",
+    "verbatimValue": "14.8k out tok/s per 8xH800 node => 1,850/GPU",
+    "verifier": "im-finalize (transcribed from this repository's own sourced record)",
+    "verifierRef": "research/grok-sweep-margin-claims.md:38 — the same @deepseek_ai post, quoted verbatim with its date",
+    "note": "RECOVERED 2026-09-02 (GPT Pro 2026-07-29 rec 8). This was 'inherited from the grounding ledger' with a null URL. The source was never actually missing: the project already carried the primary post verbatim — Day 6 of #OpenSourceWeek, '73.7k/14.8k input/output tokens per second per H800 node', dated 2025-03-01 — in research/grok-sweep-margin-claims.md. Transcribed, not guessed."
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.313491,
+    "etaPre": null,
+    "fitClass": "fitted",
+    "prefillProvenance": null,
+    "calibrationRef": "CALIBRATION.h800",
+    "legacyScalar": {
+     "effDec": 0.07,
+     "effPre": null
+    },
+    "deployed": true,
+    "analystSetLegs": [],
+    "note": "H100-class compute; the h100 row inherits this fit; h200 is analyst-extrapolated from it. rent = IDC annual-commit rate (market-derived)"
+   },
+   "uncertainty": null,
+   "provenance": "DeepSeek V3/R1 production disclosure (Feb 2025): 14.8k out tok/s per 8xH800 node => 1,850/GPU, 37B active, FP8 => effDec ~=7% -- THE primary anchor (engine.js:5,28; index.html:312).",
+   "notes": "The single load-bearing decode anchor. h100 shares this fit."
+  },
+  {
+   "id": "h800-deepseek-prod-pre",
+   "status": "FITTED",
+   "platform": "H800 (China)",
+   "platformKey": "h800",
+   "phase": "prefill",
+   "throughput": {
+    "value": 4026,
+    "unit": "tok/s/GPU",
+    "denominator": "fresh-only reconstruction net of the 56.3% disk-cache share (raw 9,212 aggregate)",
+    "deviceCount": 8,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek V3/R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "FP8",
+     "activations": "FP8",
+     "kvCache": "unknown",
+     "note": ""
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "prefill leg; fresh-input reconstruction (the disclosed 73.7k/node input flow INCLUDES the 56.3% disk-cache-hit share)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "production R1",
+    "stackVersion": "DeepSeek production (Feb 2025 disclosure)",
+    "topology": "8xH800 node"
+   },
+   "eligibility": {
+    "tier": "reconstruction",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://x.com/deepseek_ai/status/1895688300574462431",
+    "retrievedDate": "2026-09-02",
+    "verbatimValue": "~4,026 tok/s/GPU (raw 9,212 aggregate incl. 56.3% disk-cache share)",
+    "verifier": "im-finalize (transcribed from this repository's own sourced record)",
+    "verifierRef": "research/grok-sweep-margin-claims.md:38 — the same @deepseek_ai post, quoted verbatim with its date",
+    "note": "RECOVERED 2026-09-02 (GPT Pro 2026-07-29 rec 8). This was 'inherited from the grounding ledger' with a null URL. The source was never actually missing: the project already carried the primary post verbatim — Day 6 of #OpenSourceWeek, '73.7k/14.8k input/output tokens per second per H800 node', dated 2025-03-01 — in research/grok-sweep-margin-claims.md. Transcribed, not guessed."
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": null,
+    "etaPre": 0.17581,
+    "fitClass": "fitted",
+    "prefillProvenance": "fitted",
+    "calibrationRef": "PREFILL_CAL",
+    "legacyScalar": {
+     "effDec": null,
+     "effPre": 0.15
+    },
+    "deployed": true,
+    "analystSetLegs": [],
+    "note": "the ONLY prefill fit in the engine -- every other row's effPre is analyst-set (B2's root)"
+   },
+   "uncertainty": null,
+   "provenance": "Same disclosure, prefill fresh-only reconstruction ~4,026 tok/s/GPU => effPre 15% (raw 9,212 aggregate incl. 56.3% disk-cache share) (index.html:313).",
+   "notes": "A reconstruction, not a directly-published prefill number -- the sole prefill anchor, and B2's root: ~57.7% of default modeled serving cost is input-side but prefill efficiencies elsewhere are analyst-set."
+  },
+  {
+   "id": "gb200-vllm-r1",
+   "status": "FITTED",
+   "platform": "GB200 NVL72",
+   "platformKey": "gb200",
+   "phase": "decode",
+   "throughput": {
+    "value": 10100,
+    "unit": "tok/s/GPU",
+    "denominator": "per GPU (72-GPU NVL72 domain)",
+    "deviceCount": 72,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "the source run's precision basis is possibly NVFP4 but is not fully pinned -- treat as an upper anchor"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode (output tok/s)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "unknown",
+    "stackVersion": "vLLM",
+    "topology": "GB200 NVL72 (72-GPU NVLink domain)"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "inherited",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": "vLLM ~10.1k decode tok/s/GPU on R1",
+    "verifier": "grounding-ledger",
+    "verifierRef": "research/grounding-ledger",
+    "note": "inherited from the grounding ledger"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.315997,
+    "etaPre": null,
+    "fitClass": "fitted",
+    "prefillProvenance": null,
+    "calibrationRef": "CALIBRATION.gb200",
+    "legacyScalar": {
+     "effDec": 0.15,
+     "effPre": null
+    },
+    "deployed": true,
+    "analystSetLegs": [],
+    "note": "rent $4.50 neocloud estimate (neocloud rates $3.50-6/hr observed -- market-derived, not a bare analyst set); AWS $761.904/rack-hr Capacity-Block bridge documented but not fitted"
+   },
+   "uncertainty": null,
+   "provenance": "vLLM R1 decode ~10,100 tok/s/GPU => effDec 15% (precision basis possibly NVFP4 -- decomposition receipt needed) (index.html:314). rent $4.50 neocloud estimate; AWS $761.904/rack-hr Capacity-Block bridge documented but not fitted.",
+   "notes": "The precision-by-component honesty case: weights precision is marked unknown (possibly NVFP4), never guessed -- cold-review #6/#11 warn a fitted MFU may already absorb an FP4 gain.",
+   "provenanceDebt": {
+    "missing": [
+     "url",
+     "retrievedDate",
+     "primarySource"
+    ],
+    "deployedOnInheritedProvenance": true,
+    "recoveryPath": "Locate and archive the primary vLLM/GB200 DeepSeek-R1 decode disclosure behind '~10.1k decode tok/s/GPU'. Unlike the two h800-deepseek rows recovered on 2026-09-02, this one is NOT recoverable by transcription: the figure appears across the repository (d2-equation-set F4 10,108 tok/s/GPU; d2-receipt-pack) always marked 'vLLM R1 (inherited)', with no URL anywhere. It needs real source recovery, and attaching a plausible-looking URL without verifying it would be worse than the null this records.",
+    "recordedOn": "2026-09-02",
+    "recordedBy": "GPT Pro 2026-07-29 rec 8, enforced after review pr-20260902T173936Z-a81123",
+    "note": "This row is DEPLOYED (engineFit.deployed=true) and eligible=true, which is exactly what makes the debt material rather than cosmetic. Forcing eligibility=false would drop the GB200 decode anchor and MOVE THE MODEL — an owner-court change, not a provenance repair, so it is recorded in BACKLOG.md instead of being made here."
+   }
+  },
+  {
+   "id": "gb300-sglang-v4",
+   "status": "RETRO",
+   "platform": "GB300 NVL72",
+   "platformKey": "gb300",
+   "phase": "decode",
+   "throughput": {
+    "value": 12000,
+    "unit": "tok/s/GPU",
+    "denominator": ">12,000 tok/s/GPU (72-GPU NVL72); 12,000 used as the anchor floor",
+    "deviceCount": 72,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "V4 Pro (1.6T)",
+    "activeParamsB": 49,
+    "totalParamsB": 1600,
+    "precisionPath": {
+     "weights": "FP4",
+     "activations": "FP4",
+     "kvCache": "unknown",
+     "note": "FP4 + MTP; the fit reproduces at 12.7% x 1.85 FP4 using the now-disclosed 49B active (v1 assumed ~66B)"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode (output tok/s)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "unknown",
+    "stackVersion": "SGLang V4",
+    "topology": "GB300 NVL72 (72-GPU)"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "inherited",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": "SGLang >12k tok/s/GPU on V4 Pro (FP4+MTP)",
+    "verifier": "grounding-ledger",
+    "verifierRef": "research/grounding-ledger",
+    "note": "inherited from the grounding ledger"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "SGLang V4 Pro (1.6T FP4+MTP, 49B active disclosed) >12,000 tok/s/GPU (index.html:315).",
+   "notes": "RETRO observation only. It is excluded from the fit set because batch and MTP acceptance are undisclosed; the separate gb300-analyst-set-dec record carries the live assumed-operating-point coefficient and analyst-set price."
+  },
+  {
+   "id": "h20-ant-sglang-pro",
+   "status": "FITTED",
+   "platform": "H20 (China)",
+   "platformKey": "h20",
+   "phase": "decode",
+   "throughput": {
+    "value": 675,
+    "unit": "tok/s/GPU",
+    "denominator": "Ant/SGLang production R1 decode, InferX Pro <50ms tier",
+    "deviceCount": 16,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "FP8",
+     "kvCache": "FP8",
+     "note": "the source discloses FP8 attention but does not fully identify the weight path"
+    },
+    "mtpAcceptance": "about 1.8-1.9 accepted tokens for the published one-step/two-draft-token configuration",
+    "batch": 32,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode (output tok/s)",
+    "ttftMs": 1500,
+    "tpotMs": 50,
+    "sloClass": "<50ms TPOT / <1.5s TTFT (Ant InferX Pro tier)",
+    "stackVersion": "SGLang v0.5.2 (Ant production)",
+    "topology": "two-node, 16x H20; Attention-DP16 + MoE-EP16"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": true,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/",
+    "retrievedDate": "2026-07-27",
+    "verbatimValue": "InferX Pro: batch-size/GPU 32, steps 1, Eagle-topk 1, draft-tokens 2, throughput/GPU 675 tokens/s; TPOT <50 ms",
+    "verifier": "Sol adversarial review 2026-07-27",
+    "verifierRef": "primary LMSYS/Ant production post, Tiered Online Inference Serving table",
+    "note": "F2 in the frozen F1-F6 joint-decode fit"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "Primary LMSYS/Ant production post, verified 2026-07-27; this was F2 in the frozen joint fit.",
+   "notes": "FITTED input observation only. It contributes to the frozen joint calibration but is not the deployed H20 row identity."
+  },
+  {
+   "id": "h20-ant-sglang",
+   "status": "FITTED",
+   "platform": "H20 (China)",
+   "platformKey": "h20",
+   "phase": "decode",
+   "throughput": {
+    "value": 714,
+    "unit": "tok/s/GPU",
+    "denominator": "Ant/SGLang production R1 decode, <70ms (relaxed production anchor)",
+    "deviceCount": null,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "the Ant/SGLang run's precision path is not stated"
+    },
+    "mtpAcceptance": "about 1.8-1.9 accepted tokens for the published one-step/two-draft-token configuration",
+    "batch": 48,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode (output tok/s)",
+    "ttftMs": 2000,
+    "tpotMs": 70,
+    "sloClass": "<70ms (Ant Base tier)",
+    "stackVersion": "SGLang v0.5.2 (Ant production)",
+    "topology": "two-node, 16x H20; Attention-DP16 + MoE-EP16"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": true,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://www.lmsys.org/blog/2025-09-26-sglang-ant-group/",
+    "retrievedDate": "2026-07-27",
+    "verbatimValue": "InferX Base: batch-size/GPU 48, steps 1, Eagle-topk 1, draft-tokens 2, throughput/GPU 714 tokens/s; TPOT <70 ms",
+    "verifier": "Sol adversarial review 2026-07-27",
+    "verifierRef": "primary LMSYS/Ant production post, Tiered Online Inference Serving table",
+    "note": "F3 in the frozen F1-F6 joint-decode fit"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "Ant/SGLang production R1 decode observation: 714 tok/s (<70ms), distinct from the published 675 tok/s <50ms point.",
+   "notes": "FITTED input observation only. It informed the frozen joint calibration but does not carry the live engine identity: the separate h20-neutral-live-dec record documents the analyst-selected 680 tok/s neutral coefficient."
+  },
+  {
+   "id": "ascend-cminfer-decode",
+   "status": "FITTED",
+   "platform": "Ascend 910C",
+   "platformKey": "ascend",
+   "phase": "decode",
+   "throughput": {
+    "value": 1943,
+    "unit": "tok/s/NPU",
+    "denominator": "per NPU (384-NPU CloudMatrix, isolated-decode)",
+    "deviceCount": 384,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "INT8",
+     "activations": "INT8",
+     "kvCache": "unknown",
+     "note": "Ascend has NO native FP8 -- 8-bit here means INT8"
+    },
+    "mtpAcceptance": "70% for one speculative token (paper assumption)",
+    "batch": 96,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "isolated decode (output tok/s)",
+    "ttftMs": "unknown",
+    "tpotMs": 49.4,
+    "sloClass": "<50ms TPOT isolated-decode target (no full-system TTFT constraint)",
+    "stackVersion": "CloudMatrix-Infer (Huawei optimized, stack ~=1.36)",
+    "topology": "384-NPU CloudMatrix supernode"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://arxiv.org/html/2506.12708",
+    "retrievedDate": "2026-07-27",
+    "verbatimValue": "CloudMatrix-Infer: batch 96, KV cache length 4,096, achieved TPOT 49.4 ms, throughput 1,943 tokens/s/NPU",
+    "verifier": "Sol adversarial review 2026-07-27",
+    "verifierRef": "arXiv 2506.12708, Tables 3-4",
+    "note": "F5 in the frozen F1-F6 joint-decode fit"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "CloudMatrix-Infer R1 INT8 isolated-decode observation: 1,943 tok/s/NPU on the optimized 384-NPU supernode.",
+   "notes": "FITTED input observation only. It informed the frozen joint calibration but does not carry the live engine identity: the separate ascend-neutral-live-dec record documents the analyst-selected 1,422.7 tok/s neutral coefficient. The CM384 FlexNPU rows use a different full-system SLO-constrained measurement basis."
+  },
+  {
+   "id": "ascend-cminfer-15ms",
+   "status": "FITTED",
+   "platform": "Ascend 910C",
+   "platformKey": "ascend",
+   "phase": "decode",
+   "throughput": {
+    "value": 538,
+    "unit": "tok/s/NPU",
+    "denominator": "per NPU (384-NPU CloudMatrix, isolated decode under 15ms TPOT SLO)",
+    "deviceCount": 384,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "INT8",
+     "activations": "INT8",
+     "kvCache": "unknown",
+     "note": "Ascend has no native FP8; the paper's deployed model is INT8"
+    },
+    "mtpAcceptance": "70% for one speculative token (paper assumption)",
+    "batch": 8,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "isolated decode (output tok/s)",
+    "ttftMs": "unknown",
+    "tpotMs": 14.9,
+    "sloClass": "<15ms TPOT isolated-decode target (no full-system TTFT constraint)",
+    "stackVersion": "CloudMatrix-Infer",
+    "topology": "384-NPU CloudMatrix supernode"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://arxiv.org/html/2506.12708",
+    "retrievedDate": "2026-07-27",
+    "verbatimValue": "TPOT SLO 15 ms; prompt length 4,096; output length 256; batch 8; achieved TPOT 14.9 ms; throughput 538 tokens/s/NPU",
+    "verifier": "Sol adversarial review 2026-07-27",
+    "verifierRef": "arXiv 2506.12708, Table 4",
+    "note": "F6 in the frozen F1-F6 joint-decode fit"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "Primary CloudMatrix-Infer paper, verified 2026-07-27; this was F6 in the frozen joint fit.",
+   "notes": "FITTED input observation only. It contributes the low-batch endpoint of the frozen joint calibration but is not the deployed Ascend row identity."
+  },
+  {
+   "id": "h20-neutral-live-dec",
+   "status": "ANALYST_SET",
+   "platform": "H20 (China)",
+   "platformKey": "h20",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "live source-informed neutral coefficient; the separate h20-ant-sglang record carries the measured 714 tok/s observation",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "FP8",
+     "activations": "unknown",
+     "kvCache": "FP8",
+     "note": "live H20 tuple; the Ant observation's full precision path is not stated"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": 48,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode scenario",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "not enforced; published latency tiers are evidence annotations",
+    "stackVersion": "source-informed neutral scenario",
+    "topology": "H20, registered 16-device domain"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "the live 680 tok/s neutral point intentionally differs from the 714 tok/s observation and therefore is not a fit"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst-selected live coefficient; the separate observation record carries the external source"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.217022,
+    "etaPre": null,
+    "fitClass": "source-informed-neutral",
+    "prefillProvenance": null,
+    "calibrationRef": "CALIBRATION.h20",
+    "legacyScalar": {
+     "effDec": 0.17,
+     "effPre": null
+    },
+    "deployed": true,
+    "analystSetLegs": [],
+    "note": "live neutral coefficient produces 680 tok/s at F3 rather than reproducing the 714 tok/s observation; rent has named IDC provenance"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.217022,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live source-informed neutral identity for CALIBRATION.h20"
+    },
+    "components": [
+     {
+      "component": "topology-SLO",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.622,
+       "highMult": 1.05,
+       "note": "selected source-tier span: 423/680 at the strictest published latency tier through 714/680 at the loosest tier; not an identified distribution"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "research/provider-dives/chinese-accel-gptpro.md:134-136,181 (H20 423/675/714 source tiers)"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "selected span",
+     "derived": false
+    }
+   },
+   "provenance": "The Ant/SGLang observation informs but does not identify the deployed neutral coefficient. The observation and live analyst choice are separate records.",
+   "notes": "ANALYST_SET representation of the live H20 row; no fitted-cluster credit."
+  },
+  {
+   "id": "ascend-neutral-live-dec",
+   "status": "ANALYST_SET",
+   "platform": "Ascend 910C",
+   "platformKey": "ascend",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "live source-informed neutral coefficient; the separate ascend-cminfer-decode record carries the measured 1,943 tok/s observation",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek R1",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "INT8",
+     "activations": "INT8",
+     "kvCache": "unknown",
+     "note": "live registered 8-bit tuple; Ascend has no native FP8"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": 96,
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode scenario",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "not enforced; the source is optimized isolated decode",
+    "stackVersion": "source-informed neutral scenario",
+    "topology": "registered 128-device worker inside the 384-NPU CloudMatrix domain"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "the live 1,422.7 tok/s neutral point intentionally differs from the 1,943 tok/s observation and therefore is not a fit"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst-selected live coefficient; the separate observation record carries the external source"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.299324,
+    "etaPre": null,
+    "fitClass": "source-informed-neutral",
+    "prefillProvenance": null,
+    "calibrationRef": "CALIBRATION.ascend",
+    "legacyScalar": {
+     "effDec": 0.07,
+     "effPre": null
+    },
+    "deployed": true,
+    "analystSetLegs": [],
+    "note": "live neutral coefficient produces 1,422.7 tok/s at F5 rather than reproducing the 1,943 tok/s observation; rent has named procurement provenance"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.299324,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live source-informed neutral identity for CALIBRATION.ascend"
+    },
+    "components": [
+     {
+      "component": "topology-SLO",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.378,
+       "highMult": 1.366,
+       "note": "selected source-tier span: 538/1,422.7 at ~15ms TPOT through 1,943/1,422.7 at the optimized decode point; not an identified distribution"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "research/provider-dives/chinese-accel-gptpro.md:137-139,182 (Ascend 538/974/1,943 source tiers)"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "selected span",
+     "derived": false
+    }
+   },
+   "provenance": "The CloudMatrix observation informs but does not identify the deployed neutral coefficient. The observation and live analyst choice are separate records.",
+   "notes": "ANALYST_SET representation of the live Ascend row; no fitted-cluster credit."
+  },
+  {
+   "id": "gb300-mlperf-v6-interactive",
+   "status": "RETRO",
+   "platform": "GB300 NVL72",
+   "platformKey": "gb300",
+   "phase": "decode",
+   "throughput": {
+    "value": 250633.67,
+    "unit": "tok/s/rack",
+    "denominator": "single 72-GPU GB300 NVL72 rack, aggregate generated tok/s (Interactive)",
+    "deviceCount": 72,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 (671B)",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "TensorRT (TRT) engine, MLPerf Inference v6.0 closed division; precision path not separately stated"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "generated-token throughput (decode-side); MLPerf reports generated tokens",
+    "ttftMs": 1500,
+    "tpotMs": 15,
+    "sloClass": "Interactive (TTFT 1500ms / TPOT 15ms)",
+    "stackVersion": "TensorRT (TRT), MLPerf Inference v6.0 closed",
+    "topology": "GB300-NVL72_GB300-288GB_aarch64x72_TRT, single 72-GPU rack"
+   },
+   "eligibility": {
+    "tier": "audited",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Interactive/performance/run_1/mlperf_log_summary.txt",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Interactive 250,633.67 tok/s (Result is: VALID)",
+    "verifier": "IM0-retro-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "note": "Interactive additionally on NVIDIA's results page. Site's rounded 250,634 is an exact rounding of the log value."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": false,
+   "e1IneligibleReason": "MLPerf v6.0 MANDATES EAGLE MTP-3 speculative decoding in the Interactive scenario (disaggregated Dynamo, num_nextn_predict_layers=3) with the achieved draft-acceptance rate unpublished -- the dominant unmeasured determinant of delivered decode throughput -- so this observation is ineligible for E1 (decode-throughput) scoring (same rule as the Trn2 fused-spec rows; validation-ledger gb300-mlperf-v6 E1-eligibility ruling). It stays a valid audited §2 anchor (Result VALID); Server/Offline carry no spec mandate and are E1-scoreable.",
+   "provenance": "MLPerf Inference v6.0 audited, DeepSeek-R1 (671B), system GB300-NVL72_GB300-288GB_aarch64x72_TRT (single 72-GPU rack): Interactive 250,633.67 (TTFT 1500ms/TPOT 15ms) -- Result is: VALID (arrived 2026-07-15, additive, never fitted).",
+   "notes": "RETRO pseudo-holdout, additive, never fitted (supports retrospective-only claims). Price leg analyst-set ($6/GPU-hr) -- throughput anchor only. G2 note: this is generated-token (decode) throughput, not a measured prefill figure."
+  },
+  {
+   "id": "gb300-mlperf-v6-server",
+   "status": "RETRO",
+   "platform": "GB300 NVL72",
+   "platformKey": "gb300",
+   "phase": "decode",
+   "throughput": {
+    "value": 400436.77,
+    "unit": "tok/s/rack",
+    "denominator": "single 72-GPU GB300 NVL72 rack, aggregate generated tok/s (Server)",
+    "deviceCount": 72,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 (671B)",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "TensorRT (TRT) engine, MLPerf Inference v6.0 closed division"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "generated-token throughput (decode-side)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "Server (MLPerf latency-bounded; per-query TTFT/TPOT not restated in the ledger)",
+    "stackVersion": "TensorRT (TRT), MLPerf Inference v6.0 closed",
+    "topology": "GB300-NVL72_GB300-288GB_aarch64x72_TRT, single 72-GPU rack"
+   },
+   "eligibility": {
+    "tier": "audited",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Server/performance/run_1/mlperf_log_summary.txt",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Server 400,436.77 tok/s (Result is: VALID)",
+    "verifier": "IM0-retro-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "note": "Site's rounded 400,437 is an exact rounding of the log value."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": true,
+   "provenance": "MLPerf Inference v6.0 audited, DeepSeek-R1 (671B), GB300-NVL72_GB300-288GB_aarch64x72_TRT single rack: Server 400,436.77 tok/s -- Result is: VALID.",
+   "notes": "RETRO; generated-token throughput. Price leg analyst-set -- throughput anchor only."
+  },
+  {
+   "id": "gb300-mlperf-v6-offline",
+   "status": "RETRO",
+   "platform": "GB300 NVL72",
+   "platformKey": "gb300",
+   "phase": "decode",
+   "throughput": {
+    "value": 647076,
+    "unit": "tok/s/rack",
+    "denominator": "single 72-GPU GB300 NVL72 rack, aggregate generated tok/s (Offline)",
+    "deviceCount": 72,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 (671B)",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "TensorRT (TRT) engine, MLPerf Inference v6.0 closed division"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "generated-token throughput (decode-side)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "Offline (no interactivity constraint -- throughput-max)",
+    "stackVersion": "TensorRT (TRT), MLPerf Inference v6.0 closed",
+    "topology": "GB300-NVL72_GB300-288GB_aarch64x72_TRT, single 72-GPU rack"
+   },
+   "eligibility": {
+    "tier": "audited",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Offline/performance/run_1/mlperf_log_summary.txt",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Offline 647,076 tok/s (Result is: VALID)",
+    "verifier": "IM0-retro-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "note": "Site's rounded 647,076 matches the log value."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": true,
+   "provenance": "MLPerf Inference v6.0 audited, DeepSeek-R1 (671B), GB300-NVL72_GB300-288GB_aarch64x72_TRT single rack: Offline 647,076 tok/s -- Result is: VALID.",
+   "notes": "RETRO; Offline scenario -- highest throughput, no interactivity constraint. The three scenarios (Interactive/Server/Offline) are three operating points of one audited submission."
+  },
+  {
+   "id": "cm384-flexnpu",
+   "status": "RETRO",
+   "platform": "Ascend CM384/910C",
+   "platformKey": "ascend",
+   "phase": "decode",
+   "throughput": {
+    "value": 1646,
+    "unit": "tok/s/card",
+    "denominator": "~633,000 gen tok/s system / ~1,646 per card (384-card CloudMatrix, full-system SLO)",
+    "deviceCount": 384,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 W8A8",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "W8A8",
+     "activations": "W8A8",
+     "kvCache": "unknown",
+     "note": "8-bit weight + 8-bit activation (INT8)"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "generated (decode) tok/s, full-system SLO-constrained",
+    "ttftMs": 1000,
+    "tpotMs": 50,
+    "sloClass": "full-system SLO (TTFT<=1s, TPOT<=50ms)",
+    "stackVersion": "FlexNPU (arXiv:2606.04415)",
+    "topology": "384-card CloudMatrix system"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "confirmed-at-primaries",
+    "url": "https://arxiv.org/abs/2606.04415",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "~633,000 generated tok/s system-wide (~1,646/card) at TTFT<=1s, TPOT<=50ms",
+    "verifier": "council-empiricist",
+    "verifierRef": "reports/codex-council/2026-07-16-im-reengineer-plan-20260716T141016Z/persona-empiricist.md",
+    "note": "confirmed at primaries by the council empiricist (2026-07-16)"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": true,
+   "provenance": "FlexNPU full-system SLO-constrained: ~=633,000 gen tok/s system / ~=1,646 per card at TTFT<=1s, TPOT<=50ms (arrived 2026-07-15, additive).",
+   "notes": "RETRO; a DIFFERENT measurement basis from the FITTED isolated-decode point (ascend-cminfer-decode) -- the CM384-REFIT question (Q-AUTO-2026-07-15-CM384-REFIT). No public CM384 hourly rental price exists -- throughput anchored, cost unanchored. CLOSED (owner ruling 2026-07-18, memo research/im3-integration-design.md §9 'CM384 ruling'): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point (§4 registry), or calibration input. Closure label (verbatim, §9): 'delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged'. Corroboration: this and sibling full-system bases (6.43/8.11/8.57%) bracket the deployed ascend row's 7% default -- supportive context, not a fit input."
+  },
+  {
+   "id": "cm384-flexnpu-6p2d-decode",
+   "status": "RETRO",
+   "platform": "Ascend CM384/910C",
+   "platformKey": "ascend",
+   "phase": "decode",
+   "throughput": {
+    "value": 2885.4,
+    "unit": "tok/s/decode-card",
+    "denominator": "STANDALONE decode-pool capacity: 811.52 req/s x 1,024 OSL / 288 decode-cards (static 6P2D PD disaggregation, 2 decode instances x 144 cards) = 2,885.4",
+    "deviceCount": 288,
+    "derivation": "derived-from-aggregate"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 W8A8",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "W8A8",
+     "activations": "W8A8",
+     "kvCache": "unknown",
+     "note": "8-bit weight + 8-bit activation (INT8)"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "STANDALONE decode-pool throughput (Table 3 Decode column, 811.52 req/s @1K/1K); NOT the integrated-system delivered rate (6P2D is prefill-bound at Total 489.84 req/s -- decode pool is 75% time-slice / 77% memory redundant here)",
+    "ttftMs": 1000,
+    "tpotMs": 50,
+    "sloClass": "full-system SLO bound (TTFT<=1s, TPOT<=50ms) -- a bound, not an achieved distribution (delivered TPOT for DeepSeek-R1 not stated in the paper)",
+    "stackVersion": "FlexNPU (arXiv:2606.04415), static 6P2D PD disaggregation",
+    "topology": "384-card CloudMatrix; decode pool = 2 instances x 144 cards = 288 cards, DP288-EP288"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": true,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "e1Eligible": true,
+   "verification": {
+    "state": "confirmed-at-primaries",
+    "url": "https://arxiv.org/abs/2606.04415",
+    "retrievedDate": "2026-07-17",
+    "verbatimValue": "Table 3 (6P2D, P16-D144, 1024/1024): Decode throughput 811.52 req/s (standalone decode-pool capacity); Total 489.84 req/s (prefill-bound)",
+    "verifier": "IM2-cm384-6p2d-verification-2026-07-17",
+    "verifierRef": "research/cycle2-evidence/cm384-flexnpu-operating-point.md (§3 Table 3, §7a); research/validation-ledger.md (cm384-flexnpu row, second operating point)",
+    "note": "STANDALONE decode-pool capacity from Table 3, re-confirmed at the primary PDF in the cycle2 dive (2026-07-17). Value corrected round-2 pre-freeze: the first-registered 489.84 req/s was the prefill-BOTTLENECKED system rate (wrong target for a decode observation); the decode observation is 811.52 x 1,024 / 288 = 2,885.4 tok/s/decode-card. Decode-pool per-card batch UNKNOWN (only DP288-EP288 stated)."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "FlexNPU static 6P2D baseline (96 prefill + 288 decode cards): decode pool STANDALONE throughput 811.52 req/s @1K/1K x 1,024 OSL / 288 = 2,885.4 tok/s/decode-card (arXiv:2606.04415 Table 3; second operating point of the CM384 family, registered/corrected pre-freeze 2026-07-16/17, additive).",
+   "notes": "RETRO; the STATIC 6P2D decode-pool observation -- a decode-pool STANDALONE CAPACITY ceiling, distinct from the DYNAMIC co-location delivered rate (cm384-flexnpu, ~1,646/card). Using 811.52 as the decode operating point overstates delivered load ~1.66x vs the 489.84 req/s the integrated 6P2D system actually sustains (prefill-bound). Same platform, different measurement basis -- the CM384-REFIT question. CLOSED (owner ruling 2026-07-18, memo §9): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point, or calibration input. Closure label (verbatim, §9): 'decode-pool standalone ceiling: 2,885 tok/s/decode-card ⇒ 14.2%, capacity ceiling, prefill hardware excluded'. A standalone ceiling with a 1.485x unexplained cross-paper gap to the full-system point -- not corroborating, not contradicting, a different measurand."
+  },
+  {
+   "id": "cm384-flexnpu-prefill-projection",
+   "status": "RETRO",
+   "platform": "Ascend CM384/910C",
+   "platformKey": "ascend",
+   "phase": "prefill",
+   "throughput": {
+    "value": 6688,
+    "unit": "tok/s/card",
+    "denominator": "projected prefill (not a measured throughput)",
+    "deviceCount": 384,
+    "derivation": "projection"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "DeepSeek-R1 W8A8",
+    "activeParamsB": 37,
+    "totalParamsB": 671,
+    "precisionPath": {
+     "weights": "W8A8",
+     "activations": "W8A8",
+     "kvCache": "unknown",
+     "note": "projected figure from the FlexNPU paper, not a measurement"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "prefill leg (projection)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "full-system (projection)",
+    "stackVersion": "FlexNPU (arXiv:2606.04415)",
+    "topology": "384-card CloudMatrix system"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": false,
+    "exclusionReason": "projection, not a measured prefill throughput -- protocol §2 hard exclusion; the D2 protocol §5 G2 note names CM384's 6,688 tok/s prefill figure explicitly as ineligible, which is why G2 is UNSCOREABLE at IM2.5"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": "6,688 tok/s prefill (projection)",
+    "verifier": null,
+    "verifierRef": "research/d2-validation-protocol.md (§5 G2 note)",
+    "note": "a projection, not a measurement -- nothing to verify as an anchor; excluded under §2"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "D2 protocol §5 G2 note: none of the four seeded RETRO anchors carries a measured prefill throughput; CM384's 6,688 tok/s prefill figure is a projection and ineligible under §2.",
+   "notes": "Included to exercise the §2 hard-exclusion path (eligible=false + exclusionReason). This is why G2 (prefill accuracy) is UNSCOREABLE at IM2.5 and the blended-margin estimator claim additionally needs a prefill-bearing anchor."
+  },
+  {
+   "id": "tpu7-ironwood-qwen3",
+   "status": "RETRO",
+   "platform": "TPU v7 Ironwood",
+   "platformKey": "tpu7",
+   "phase": "decode",
+   "throughput": {
+    "value": 518.86,
+    "unit": "tok/s/chip",
+    "denominator": "per chip (Qwen3-Coder-480B-A35B-FP8 on 4 chips, 1K/8K workload; 2,075.47 aggregate / 4)",
+    "deviceCount": 4,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "Qwen3-Coder-480B-A35B",
+    "activeParamsB": 35,
+    "totalParamsB": 480,
+    "precisionPath": {
+     "weights": "FP8",
+     "activations": "FP8",
+     "kvCache": "FP8",
+     "note": "FP8 model checkpoint (Qwen3-Coder-480B-A35B-Instruct-FP8) + FP8 KV cache (--kv-cache-dtype=fp8) end-to-end"
+    },
+    "mtpAcceptance": "none",
+    "batch": "unknown",
+    "concurrency": 64,
+    "prefillDecodeAllocation": "output (decode) tok/s, 1K/8K workload; --max-concurrency=64 total (~16/chip), --request-rate=inf (fixed-concurrency saturation run, all 320 prompts at t=0)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "no SLO applied (throughput-max at fixed concurrency 64; achieved latency measured by the InferenceX harness but published as xxx placeholders, not disclosed)",
+    "stackVersion": "vLLM (vllm-tpu nightly-20260624 image); TP8/DP1, expert-parallel, prefix-caching off, async scheduling",
+    "topology": "4 chips (2x2x1, tpu7x-standard-4t; TP=8 over 8 TensorCores, 2/chip)"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "e1Eligible": true,
+   "verification": {
+    "state": "verified",
+    "url": "https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B",
+    "urls": [
+     {
+      "url": "https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B",
+      "role": "throughput",
+      "verbatimValue": "Qwen3-Coder-480B-A35B FP8 on four Ironwood chips: 518.86 output tok/s/chip (1K/8K workload)"
+     },
+     {
+      "url": "https://cloud.google.com/tpu/pricing",
+      "role": "price",
+      "verbatimValue": "$12/chip-hour on-demand, $5.40/chip-hour 3-yr => $6.42/M on-demand, $2.89/M 3-yr"
+     }
+    ],
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Qwen3-Coder-480B-A35B FP8 on 4 chips -> 518.86 out tok/s/chip; $6.42/M on-demand, $2.89/M 3-yr",
+    "verifier": "council-empiricist",
+    "verifierRef": "reports/codex-council/2026-07-16-im-reengineer-plan-20260716T141016Z/persona-empiricist.md",
+    "note": "verified at primary sources (Google TPU recipe + Google TPU pricing) via the council empiricist (2026-07-16); price arithmetic reproduces $6.42/M and $2.89/M"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "Qwen3-Coder-480B-A35B FP8 on 4 chips -> 518.86 out tok/s/chip (1K/8K workload); $6.42/M on-demand, $2.89/M 3-yr (arrived 2026-07-15, additive). first usable TPU $/token anchors; unfitted. Operating point re-confirmed at primary 2026-07-17 (cycle2 tpu7 dive): --max-concurrency=64 (~16/chip), --request-rate=inf, NO SLO; achieved TTFT/TPOT measured by the InferenceX harness but left as placeholders (not disclosed).",
+   "notes": "RETRO; the first usable TPU $/token anchors. Unfitted -- the engine's tpu7 effDec/effPre stay analyst estimates until WS-E scores this as a prediction first (plan WS-A). Operating-point correction (cycle2 dive, research/cycle2-evidence/tpu7-ironwood-operating-point.md): concurrency IS stated at source (--max-concurrency=64, ~16/chip) -- the ledger/receipt-pack 'UNKNOWN' was wrong for concurrency. Genuinely unavailable are the achieved latency (harness placeholders) and any SLO/goodput target (none applied): a fixed-concurrency-64, request-rate=inf, no-SLO throughput point."
+  },
+  {
+   "id": "trn2-neuron-llama70b",
+   "status": "RETRO",
+   "platform": "Trainium2",
+   "platformKey": "trn2",
+   "phase": "decode",
+   "throughput": {
+    "value": 144.171,
+    "unit": "tok/s/instance",
+    "denominator": "trn2.48xlarge (16 chips), batch=1, concurrency=1, 10K in / 1.5K out, Llama-3.2-1B draft (aggregate output)",
+    "deviceCount": 16,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "Llama 3.3 70B (spec-decode, Llama-3.2-1B draft)",
+    "activeParamsB": 70,
+    "totalParamsB": 70,
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "precision path not stated for the 70B run"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": 1,
+    "concurrency": 1,
+    "prefillDecodeAllocation": "aggregate output throughput (10K in / 1.5K out)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "engineering reference (batch=1, not production TCO)",
+    "stackVersion": "AWS Neuron tutorial (trn2.48xlarge)",
+    "topology": "16 chips"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": false,
+    "statedBatchConcurrency": true,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html",
+    "urls": [
+     {
+      "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html",
+      "role": "throughput",
+      "verbatimValue": "Overall Output Throughput: 144.17136914316023"
+     },
+     {
+      "url": "https://aws.amazon.com/ec2/capacityblocks/pricing/",
+      "role": "price",
+      "verbatimValue": "$35.7608/instance-hr Capacity Blocks US-East-Ohio ($2.235/chip-hr)"
+     }
+    ],
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Overall Output Throughput: 144.17136914316023 (Llama 3.3 70B spec-decode) -> $68.90/M",
+    "verifier": "IM2-anchor-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row)",
+    "note": "throughput verified verbatim at the AWS Neuron 70B tutorial; price at aws.amazon.com/ec2/capacityblocks/pricing; arithmetic re-derived exactly"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": false,
+   "e1IneligibleReason": "The draft-token acceptance rate for this fused speculative-decoding row is UNKNOWN at source -- the dominant unmeasured determinant of its throughput -- so it is ineligible for E1 (decode-throughput) scoring under protocol §2 ('stated or reconstructable' operating point). The receipt-complete no-spec baseline (trn2-neuron-llama70b-nospec) is the family's E1 score-set observation; this spec row remains the $-leg carrier (validation-ledger trn2-neuron-llama E1-eligibility ruling).",
+   "provenance": "AWS Neuron tutorials, trn2.48xlarge (16 chips, batch=1, concurrency=1, 10K in / 1.5K out, Llama-3.2-1B draft): Llama 3.3 70B spec-decode 144.171 agg out tok/s -> $68.90/M at $35.7608/instance-hr Capacity Blocks US-East-Ohio ($2.235/chip-hr).",
+   "notes": "RETRO; engineering reference (batch=1), NOT production TCO. Throughputs are per-instance; the price/throughput pairing is correct. Capacity Blocks pricing is demand-variable, value as-published 2026-07-16."
+  },
+  {
+   "id": "trn2-neuron-llama405b",
+   "status": "RETRO",
+   "platform": "Trainium2",
+   "platformKey": "trn2",
+   "phase": "decode",
+   "throughput": {
+    "value": 100.7,
+    "unit": "tok/s/instance",
+    "denominator": "trn2.48xlarge (16 chips), batch=1, concurrency=1, 10K in / 1.5K out, FP8+spec (aggregate output)",
+    "deviceCount": 16,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "Llama 3.1 405B (FP8 + spec-decode)",
+    "activeParamsB": 405,
+    "totalParamsB": 405,
+    "precisionPath": {
+     "weights": "FP8",
+     "activations": "FP8",
+     "kvCache": "unknown",
+     "note": ""
+    },
+    "mtpAcceptance": "unknown",
+    "batch": 1,
+    "concurrency": 1,
+    "prefillDecodeAllocation": "aggregate output throughput (10K in / 1.5K out)",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "engineering reference (batch=1, not production TCO)",
+    "stackVersion": "AWS Neuron tutorial (trn2.48xlarge)",
+    "topology": "16 chips"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "verification": {
+    "state": "verified",
+    "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html",
+    "urls": [
+     {
+      "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html",
+      "role": "throughput",
+      "verbatimValue": "Overall Output Throughput: 100.69986490153724"
+     },
+     {
+      "url": "https://aws.amazon.com/ec2/capacityblocks/pricing/",
+      "role": "price",
+      "verbatimValue": "$35.7608/instance-hr Capacity Blocks US-East-Ohio ($2.235/chip-hr)"
+     }
+    ],
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Overall Output Throughput: 100.69986490153724 (Llama 3.1 405B FP8+spec) -> $98.65/M; the 405B table also shows a per-request P50 102.41 -- cite the aggregate",
+    "verifier": "IM2-anchor-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row)",
+    "note": "throughput verified verbatim at the AWS Neuron 405B tutorial; price at aws.amazon.com/ec2/capacityblocks/pricing; arithmetic re-derived exactly"
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "e1Eligible": false,
+   "e1IneligibleReason": "The draft-token acceptance rate for this fused speculative-decoding row (rescaled FP8 weights) is UNKNOWN at source -- the dominant unmeasured determinant of its throughput -- so it is ineligible for E1 (decode-throughput) scoring under protocol §2 ('stated or reconstructable' operating point). The receipt-complete no-spec bf16 baseline (trn2-neuron-llama405b-nospec) is the family's E1 score-set observation; this spec row remains the $-leg carrier (validation-ledger trn2-neuron-llama E1-eligibility ruling).",
+   "provenance": "Llama 3.1 405B FP8+spec 100.700 agg out tok/s -> $98.65/M at $35.7608/instance-hr Capacity Blocks US-East-Ohio ($2.235/chip-hr).",
+   "notes": "RETRO; citation nuance: the 405B results table shows a per-request P50 metric 102.41 next to the 100.70 aggregate -- cite the aggregate. Engineering reference (batch=1), NOT production TCO."
+  },
+  {
+   "id": "trn2-neuron-llama70b-nospec",
+   "status": "RETRO",
+   "platform": "Trainium2",
+   "platformKey": "trn2",
+   "phase": "decode",
+   "throughput": {
+    "value": 36.55567822866449,
+    "unit": "tok/s/instance",
+    "denominator": "trn2.48xlarge (16 chips), batch=1, concurrency=1, 10K in / 1.5K out, BF16, NO speculative decoding (aggregate Overall Output Throughput)",
+    "deviceCount": 16,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "Llama 3.3 70B (no speculative decoding, BF16)",
+    "activeParamsB": 70,
+    "totalParamsB": 70,
+    "precisionPath": {
+     "weights": "BF16",
+     "activations": "BF16",
+     "kvCache": "unknown",
+     "note": "conclusion table header 'Scenario (all using BF16)'; the no-spec baseline of the 70B tutorial"
+    },
+    "mtpAcceptance": "none",
+    "batch": 1,
+    "concurrency": 1,
+    "prefillDecodeAllocation": "aggregate Overall Output Throughput (10K in / 1.5K out); no spec decode",
+    "ttftMs": 814.2,
+    "tpotMs": 19.6,
+    "sloClass": "engineering reference (batch=1, not production TCO)",
+    "stackVersion": "AWS Neuron tutorial (trn2.48xlarge), TP64/LNC2",
+    "topology": "16 chips (4x4 2D torus, TP64)"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "e1Eligible": true,
+   "verification": {
+    "state": "verified",
+    "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Overall Output Throughput: 36.55567822866449 (Llama 3.3 70B, no speculative decoding, BF16); conclusion table No-spec TTFT P50 814.2ms / TPOT P50 19.6ms / 36 tok/s",
+    "verifier": "IM2-anchor-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row, no-spec baselines); research/cycle2-evidence/trn2-low-batch-overhead-evidence.md §A.1",
+    "note": "no-spec baseline re-verified verbatim on the same AWS Neuron 70B tutorial page (receipt pack 2026-07-16; cycle2 dive §A.1). The E1 score-set observation for the 70B family; the fused-spec row (trn2-neuron-llama70b) is E1-ineligible and carries the $-leg."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "AWS Neuron 70B tutorial, trn2.48xlarge (16 chips, batch=1, concurrency=1, 10K in / 1.5K out, TP64/LNC2): Llama 3.3 70B no-spec BF16 Overall Output Throughput 36.55567822866449 tok/s (registered 2026-07-16, pre-freeze, as the family's receipt-complete E1 score-set observation).",
+   "notes": "RETRO; the no-spec BF16 baseline of the 70B tutorial -- the E1 score-set observation for this family (the spec row's draft-acceptance rate is unknown, so it is E1-ineligible and carries the $-leg instead). Engineering reference (batch=1), NOT production TCO. This is the aggregate Overall-Output-Throughput (mean-throughput-with-prefill-and-TTFT-outliers), not steady-state 1/TPOT (= 51.0 tok/s); cycle2 dive §A.3 documents both targets."
+  },
+  {
+   "id": "trn2-neuron-llama405b-nospec",
+   "status": "RETRO",
+   "platform": "Trainium2",
+   "platformKey": "trn2",
+   "phase": "decode",
+   "throughput": {
+    "value": 24.421011092151268,
+    "unit": "tok/s/instance",
+    "denominator": "trn2.48xlarge (16 chips), batch=1, concurrency=1, 10K in / 1.5K out, BF16, NO speculative decoding (aggregate Overall Output Throughput)",
+    "deviceCount": 16,
+    "derivation": "measured"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "Llama 3.1 405B (no speculative decoding, BF16 baseline)",
+    "activeParamsB": 405,
+    "totalParamsB": 405,
+    "precisionPath": {
+     "weights": "BF16",
+     "activations": "BF16",
+     "kvCache": "unknown",
+     "note": "conclusion table header 'Scenario (all using BF16)'; bf16 no-spec baseline of the 405B tutorial (the spec row rescales to FP8 weights)"
+    },
+    "mtpAcceptance": "none",
+    "batch": 1,
+    "concurrency": 1,
+    "prefillDecodeAllocation": "aggregate Overall Output Throughput (10K in / 1.5K out); no spec decode",
+    "ttftMs": 2442,
+    "tpotMs": 37.9,
+    "sloClass": "engineering reference (batch=1, not production TCO)",
+    "stackVersion": "AWS Neuron tutorial (trn2.48xlarge), TP64/LNC2",
+    "topology": "16 chips (4x4 2D torus, TP64)"
+   },
+   "eligibility": {
+    "tier": "vendor-published-with-methodology",
+    "public": true,
+    "primarySourced": true,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": true,
+    "statedSLO": false,
+    "definedDenominator": true,
+    "eligible": true,
+    "exclusionReason": null
+   },
+   "e1Eligible": true,
+   "verification": {
+    "state": "verified",
+    "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html",
+    "retrievedDate": "2026-07-16",
+    "verbatimValue": "Overall Output Throughput: 24.421011092151268 (Llama 3.1 405B bf16, no speculative decoding); conclusion table No-spec TTFT P50 2442ms / TPOT P50 37.9ms / 25.46 tok/s -- cite the 24.42101 aggregate, not the rounded 25.46",
+    "verifier": "IM2-anchor-verification-2026-07-16",
+    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row, no-spec baselines); research/cycle2-evidence/trn2-low-batch-overhead-evidence.md §A.2",
+    "note": "bf16 no-spec baseline re-verified verbatim on the same AWS Neuron 405B tutorial page (receipt pack 2026-07-16; cycle2 dive §A.2). E1 score-set observation for the 405B family; the fused-spec row (trn2-neuron-llama405b) is E1-ineligible and carries the $-leg."
+   },
+   "engineFit": null,
+   "uncertainty": null,
+   "provenance": "AWS Neuron 405B tutorial, trn2.48xlarge (16 chips, batch=1, concurrency=1, 10K in / 1.5K out, TP64/LNC2): Llama 3.1 405B bf16 no-spec Overall Output Throughput 24.421011092151268 tok/s (registered 2026-07-16, pre-freeze, receipt-complete E1 score-set observation).",
+   "notes": "RETRO; the bf16 no-spec baseline of the 405B tutorial -- E1 score-set observation (the spec row is E1-ineligible, draft-acceptance unknown, and carries the $-leg). Citation nuance: the conclusion table's rounded 25.46 differs from the LLMPerf aggregate 24.42101 -- cite the aggregate. Engineering reference (batch=1), NOT production TCO. Steady-state 1/TPOT = 26.4 tok/s (cycle2 dive §A.3)."
+  },
+  {
+   "id": "gb300-analyst-set-dec",
+   "status": "ANALYST_SET",
+   "platform": "GB300 NVL72",
+   "platformKey": "gb300",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no fitted throughput -- the live coefficient uses a declared operating point because the separate SGLang observation does not disclose batch or MTP acceptance",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "V4 Pro-derived scenario",
+    "activeParamsB": 49,
+    "totalParamsB": 1600,
+    "precisionPath": {
+     "weights": "FP4",
+     "activations": "FP4",
+     "kvCache": "unknown",
+     "note": "the live coefficient de-embeds the FP4 scalar; the observed MTP acceptance is unknown"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "decode scenario",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (analyst-set operating point)",
+    "stackVersion": "SGLang V4-informed scenario",
+    "topology": "GB300 NVL72 (72-GPU)"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": true,
+    "namedPrecision": true,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "the SGLang floor observation is real but its batch and MTP acceptance are not reconstructable, so no fitted coefficient can be identified"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst-set coefficient -- the separate gb300-sglang-v4 RETRO record carries the external observation"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.258295,
+    "etaPre": null,
+    "fitClass": "analyst-set-assumed-op",
+    "prefillProvenance": null,
+    "calibrationRef": "CALIBRATION.gb300",
+    "legacyScalar": {
+     "effDec": 0.127,
+     "effPre": null
+    },
+    "deployed": true,
+    "analystSetLegs": [
+     "rent"
+    ],
+    "note": "rent = ANALYST-SET $6/GPU-hr scenario, no observed market rate; coefficient uses a declared operating point and is excluded from the fit set"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.258295,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live analyst-set assumed-operating-point identity for CALIBRATION.gb300"
+    },
+    "components": [
+     {
+      "component": "topology-SLO",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.55,
+       "highMult": 1.0,
+       "note": "downside stress for the unreconstructable batch and operating point; not an identified interval"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "research/reviews/im-adv-r4-runB-internal-raw.md §B1/§B4/§B12-2"
+     },
+     {
+      "component": "precision",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.9,
+       "highMult": 1.1,
+       "note": "the observed FP4+MTP path cannot identify the engine's de-embedded precision coefficient"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "research/d2-equation-set-v2.md §C3"
+     },
+     {
+      "component": "price",
+      "appliesTo": "price",
+      "range": {
+       "lowMult": 0.8,
+       "highMult": 1.5,
+       "note": "the $6/GPU-hour rent is an analyst scenario; no public GB300 rack rental rate is registered"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "site/engine-data-v22.js PRICE_EVIDENCE.gb300"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "stress envelope",
+     "derived": false
+    }
+   },
+   "uncertaintyDeferred": "IM5",
+   "provenance": "The separate SGLang observation informs the scenario but is excluded from the fit set. The live etaDec is analyst-set at a declared operating point with the FP4 scalar de-embedded.",
+   "notes": "ANALYST_SET representation of the live GB300 engine row. It is deliberately separate from gb300-sglang-v4 so a measured floor is not mislabeled as a fitted coefficient."
+  },
+  {
+   "id": "h200-analyst-extrap-dec",
+   "status": "ANALYST_SET",
+   "platform": "H200",
+   "platformKey": "h200",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no measured throughput -- effDec is an analyst extrapolation from the H800 fit",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "unknown",
+    "activeParamsB": "unknown",
+    "totalParamsB": "unknown",
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "no served anchor of its own; extrapolated from the H800 fit"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "unknown",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (analyst extrapolation, no operating point)",
+    "stackVersion": "unknown",
+    "topology": "H200"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": false,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "no fit exists -- effDec/effPre are analyst extrapolations from the H800 fit, not a measured anchor (validation-ledger row 22)"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst extrapolation -- no external figure to verify"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.313491,
+    "etaPre": 0.17581,
+    "fitClass": "family-transfer",
+    "prefillProvenance": "universal-transfer",
+    "calibrationRef": "CALIBRATION.h200",
+    "legacyScalar": {
+     "effDec": 0.085,
+     "effPre": 0.36
+    },
+    "deployed": true,
+    "note": "both effDec and effPre are analyst estimates (engine.js HW.h200); h200 has same compute as h100, 1.76x HBM capacity"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.313491,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live deployed identity: family-transfer eta_dec (engine-data-v22.js CALIBRATION.h200; retired scalar 0.085 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+    },
+    "components": [
+     {
+      "component": "hardware-family",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.41,
+       "highMult": 1.59,
+       "note": "the failed transfer test's residuals (37% mean / 59% worst) parameterize the out-of-domain span; extrapolating an H800-family fit onto H200"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "research/methods-loao.md (37% mean / 59% worst)"
+     },
+     {
+      "component": "model-scale",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.7,
+       "highMult": 1.4,
+       "note": "<=50B-active open benchmark to 120-300B closed-MoE extrapolation -- an architecture-and-scale transfer, not interpolation"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "cold-review v2110 #1 (unvalidated architecture-and-scale transfer)"
+     },
+     {
+      "component": "precision",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.9,
+       "highMult": 1.1,
+       "note": "H200 has no native FP4; the assumed FP8 path may be off if the served precision differs"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.h200 (analyst estimate)"
+     },
+     {
+      "component": "price",
+      "appliesTo": "price",
+      "range": {
+       "lowMult": 0.8,
+       "highMult": 1.5,
+       "note": "rent $2.90/GPU-hr is an analyst estimate; hyperscaler on-demand spans wider than annual-commit"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.h200.rent"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "effDec (effective decode MFU)",
+     "label": "stress envelope",
+     "derived": false
+    }
+   },
+   "provenance": "no fit exists; effDec/effPre are analyst estimates (engine.js:19). these rows carry the transfer-error stress envelope in WS-C.",
+   "notes": "The canonical ANALYST_SET demonstration: no measured throughput, so the row exists to carry the decomposed stress envelope (owner ruling 1: band + central). Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5. TPU v7 / Trn2 / Trn3 unfitted engine rows share this ANALYST_SET treatment (their own records follow; their measured RETRO anchors are separate records above)."
+  },
+  {
+   "id": "tpu7-analyst-set-dec",
+   "status": "ANALYST_SET",
+   "platform": "TPU v7 Ironwood",
+   "platformKey": "tpu7",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no fitted throughput -- effDec/effPre are analyst estimates (engine.js HW.tpu7); the tpu7-ironwood-qwen3 RETRO anchor is a separate, unfitted record",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "unknown",
+    "activeParamsB": "unknown",
+    "totalParamsB": "unknown",
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "no served anchor fitted into this row; the RETRO anchor (tpu7-ironwood-qwen3) is scored separately"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "unknown",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (analyst estimate, no operating point)",
+    "stackVersion": "unknown",
+    "topology": "TPU v7 Ironwood"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": false,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "no fit exists -- effDec 0.130 / effPre 0.40 are analyst estimates (engine.js HW.tpu7), not a measured anchor. A RETRO anchor exists (tpu7-ironwood-qwen3) but the engine row stays analyst-set until WS-E scores it as a prediction first (validation-ledger '-- ANALYST-SET (no anchor)' row; plan WS-A)"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst estimate -- no external figure to verify (the platform's measured RETRO anchor is verified separately as tpu7-ironwood-qwen3)"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.521,
+    "etaPre": 0.17581,
+    "fitClass": "platform-native-aggregate-bridge",
+    "prefillProvenance": "universal-transfer",
+    "calibrationRef": "CALIBRATION.tpu7",
+    "legacyScalar": {
+     "effDec": 0.13,
+     "effPre": 0.4
+    },
+    "deployed": true,
+    "note": "both effDec and effPre are analyst estimates (engine.js HW.tpu7); B200-class FP8 compute, 192GB HBM. RETRO anchor tpu7-ironwood-qwen3 exists but is not yet fitted into this row"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.521,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live deployed identity: platform-native aggregate-form bridge eta_dec, midpoint of the 0.528/0.574 same-platform diagnostics (engine-data-v22.js CALIBRATION.tpu7; VALID ONLY under decodeTrafficBasis replica-resident-distinct — b9 M1; retired joint-fit 0.36142 and scalar 0.130 archived)"
+    },
+    "components": [
+     {
+      "component": "hardware-family",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.41,
+       "highMult": 1.59,
+       "note": "the failed transfer test's residuals (37% mean / 59% worst) parameterize the out-of-domain span; a TPU-family fit has no in-domain anchor"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "research/methods-loao.md (37% mean / 59% worst)"
+     },
+     {
+      "component": "model-scale",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.7,
+       "highMult": 1.4,
+       "note": "<=50B-active open benchmark to 120-300B closed-MoE extrapolation -- an architecture-and-scale transfer, not interpolation"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "cold-review v2110 #1 (unvalidated architecture-and-scale transfer)"
+     },
+     {
+      "component": "precision",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.9,
+       "highMult": 1.1,
+       "note": "TPU v7 has no FP4; the assumed FP8 path may differ from the served precision"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.tpu7 (analyst estimate)"
+     },
+     {
+      "component": "price",
+      "appliesTo": "price",
+      "range": {
+       "lowMult": 0.8,
+       "highMult": 1.5,
+       "note": "rent $4.20/chip-hr is an analyst estimate; Google-internal fleet cost is unknown (no public Gemini-SKU->TPU mapping) and published Ironwood rental spans $5.40 (3-yr) to $12 (on-demand)"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.tpu7.rent"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "effDec (effective decode MFU)",
+     "label": "stress envelope",
+     "derived": false
+    }
+   },
+   "provenance": "no fit exists; effDec 0.130 / effPre 0.40 are analyst estimates (engine.js:22). the RETRO anchor (Qwen3-Coder-480B, 518.86 tok/s/chip) is not yet fitted into this row; it carries the transfer-error stress envelope in WS-C.",
+   "notes": "ANALYST_SET representation of the tpu7 default-fleet engine row (WS-A anchored-only reweighting needs every default-fleet row represented in the schema). DISTINCT from the measured RETRO anchor tpu7-ironwood-qwen3 (which documents the observation; this documents the analyst-estimate engine row + its stress envelope). Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5."
+  },
+  {
+   "id": "trn2-analyst-set-dec",
+   "status": "ANALYST_SET",
+   "platform": "Trainium2",
+   "platformKey": "trn2",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no fitted throughput -- effDec/effPre are analyst estimates (engine.js HW.trn2); the trn2-neuron-llama* RETRO anchors are separate, unfitted records",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "unknown",
+    "activeParamsB": "unknown",
+    "totalParamsB": "unknown",
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "no served anchor fitted into this row; the RETRO engineering anchors (trn2-neuron-llama*) are scored separately"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "unknown",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (analyst estimate, no operating point)",
+    "stackVersion": "unknown",
+    "topology": "Trainium2"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": false,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "no fit exists -- effDec 0.055 / effPre 0.30 are analyst estimates (engine.js HW.trn2), not a measured anchor. RETRO engineering anchors exist (trn2-neuron-llama*, incl. the no-spec baselines) but the engine row stays analyst-set until WS-E scores them as predictions first (validation-ledger '-- ANALYST-SET (no anchor)' row; plan WS-A)"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst estimate -- no external figure to verify (the platform's measured RETRO anchors are verified separately as trn2-neuron-llama*)"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.36142,
+    "etaPre": 0.17581,
+    "fitClass": "joint-fit",
+    "prefillProvenance": "universal-transfer",
+    "calibrationRef": "CALIBRATION.trn2",
+    "legacyScalar": {
+     "effDec": 0.055,
+     "effPre": 0.3
+    },
+    "deployed": true,
+    "note": "both effDec and effPre are analyst estimates (engine.js HW.trn2); cheap per chip, weaker software stack. RETRO engineering anchors (trn2-neuron-llama*) exist but are batch=1 references, not fitted into this row"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.36142,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn2; retired scalar 0.055 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+    },
+    "components": [
+     {
+      "component": "hardware-family",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.41,
+       "highMult": 1.59,
+       "note": "the failed transfer test's residuals (37% mean / 59% worst) parameterize the out-of-domain span; a Trainium-family fit has no in-domain anchor"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "research/methods-loao.md (37% mean / 59% worst)"
+     },
+     {
+      "component": "model-scale",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.7,
+       "highMult": 1.4,
+       "note": "<=50B-active open benchmark to 120-300B closed-MoE extrapolation -- an architecture-and-scale transfer, not interpolation"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "cold-review v2110 #1 (unvalidated architecture-and-scale transfer)"
+     },
+     {
+      "component": "precision",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.9,
+       "highMult": 1.1,
+       "note": "Trainium2 has no FP4; the assumed FP8/BF16 path may differ from the served precision, and the low-batch TP-collective overhead is a known unmodeled term"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.trn2 (analyst estimate)"
+     },
+     {
+      "component": "price",
+      "appliesTo": "price",
+      "range": {
+       "lowMult": 0.8,
+       "highMult": 1.5,
+       "note": "rent $1.50/chip-hr is an analyst estimate; Anthropic's internal Trainium2 rate is undisclosed and the public anchors are batch=1 engineering references, not production TCO"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.trn2.rent"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "effDec (effective decode MFU)",
+     "label": "stress envelope",
+     "derived": false
+    }
+   },
+   "provenance": "no fit exists; effDec 0.055 / effPre 0.30 are analyst estimates (engine.js:23). the RETRO engineering anchors (Llama 70B/405B, batch=1) are not fitted into this row; it carries the transfer-error stress envelope in WS-C.",
+   "notes": "ANALYST_SET representation of the trn2 default-fleet engine row (WS-A anchored-only reweighting needs every default-fleet row represented in the schema). DISTINCT from the measured RETRO anchors trn2-neuron-llama* (which document the observations; this documents the analyst-estimate engine row + its stress envelope). Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5."
+  },
+  {
+   "id": "trn3-analyst-set-dec",
+   "status": "ANALYST_SET",
+   "platform": "Trainium3",
+   "platformKey": "trn3",
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no measured throughput -- effDec/effPre are analyst estimates (engine.js HW.trn3); NO public serving anchor of any kind exists",
+    "deviceCount": null,
+    "derivation": "reconstruction"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "unknown",
+    "activeParamsB": "unknown",
+    "totalParamsB": "unknown",
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "no served anchor of any kind exists (confirmed negative, 2026-07-15 dive) -- purely extrapolated"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "unknown",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (analyst estimate, no operating point)",
+    "stackVersion": "unknown",
+    "topology": "Trainium3"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": false,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "no fit exists -- effDec 0.080 / effPre 0.34 are analyst estimates (engine.js HW.trn3); NO public serving anchor of any kind exists (confirmed negative, 2026-07-15 dive; AWS published a GPT-OSS-120B recipe but no achieved tok/s and no public Trn3 price) -- like H200, purely extrapolated (validation-ledger '-- ANALYST-SET (no anchor)' row)"
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "analyst estimate -- no external figure to verify (no serving anchor of any kind exists for Trainium3)"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.36142,
+    "etaPre": 0.17581,
+    "fitClass": "joint-fit",
+    "prefillProvenance": "universal-transfer",
+    "calibrationRef": "CALIBRATION.trn3",
+    "legacyScalar": {
+     "effDec": 0.08,
+     "effPre": 0.34
+    },
+    "deployed": true,
+    "note": "both effDec and effPre are analyst estimates (engine.js HW.trn3); GA Dec 2025, 2.51 PF/chip FP8, 144GB HBM3e. NO public serving anchor -- neither side of $/token is public"
+   },
+   "uncertainty": {
+    "central": {
+     "value": 0.36142,
+     "unit": "etaDec (deployed roofline decode efficiency)",
+     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn3; retired scalar 0.080 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+    },
+    "components": [
+     {
+      "component": "hardware-family",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.41,
+       "highMult": 1.59,
+       "note": "the failed transfer test's residuals (37% mean / 59% worst) parameterize the out-of-domain span; Trainium3 has no serving anchor at all"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "research/methods-loao.md (37% mean / 59% worst)"
+     },
+     {
+      "component": "model-scale",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.7,
+       "highMult": 1.4,
+       "note": "<=50B-active open benchmark to 120-300B closed-MoE extrapolation -- an architecture-and-scale transfer, not interpolation"
+      },
+      "basis": "stress-envelope",
+      "sourceRef": "cold-review v2110 #1 (unvalidated architecture-and-scale transfer)"
+     },
+     {
+      "component": "precision",
+      "appliesTo": "throughput",
+      "range": {
+       "lowMult": 0.9,
+       "highMult": 1.1,
+       "note": "Trainium3 has no FP4; the assumed FP8 path may differ from the (unobserved) served precision"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.trn3 (analyst estimate)"
+     },
+     {
+      "component": "price",
+      "appliesTo": "price",
+      "range": {
+       "lowMult": 0.8,
+       "highMult": 1.5,
+       "note": "rent $2.20/chip-hr is a pricing estimate; no public Trn3 instance/UltraServer price exists (neither side of $/token is public)"
+      },
+      "basis": "analyst-set",
+      "sourceRef": "engine.js HW.trn3.rent"
+     }
+    ],
+    "composition": "linear-worst-case",
+    "band": {
+     "low": null,
+     "high": null,
+     "unit": "effDec (effective decode MFU)",
+     "label": "stress envelope",
+     "derived": false
+    }
+   },
+   "provenance": "no fit exists; effDec 0.080 / effPre 0.34 are analyst estimates (engine.js:24). NO public serving anchor of any kind (confirmed negative); like H200, purely extrapolated -- carries the transfer-error stress envelope in WS-C.",
+   "notes": "ANALYST_SET representation of the trn3 default-fleet engine row (WS-A anchored-only reweighting needs every default-fleet row represented in the schema). Unlike tpu7/trn2, trn3 has NO measured RETRO anchor -- it is a pure analyst extrapolation like h200. Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5."
+  },
+  {
+   "id": "rubin-projection",
+   "status": "PROJECTION",
+   "platform": "Vera Rubin NVL72 (proj.)",
+   "platformKey": null,
+   "phase": "decode",
+   "throughput": {
+    "value": null,
+    "unit": "unknown",
+    "denominator": "no serving anchor exists -- all parameters are projections",
+    "deviceCount": null,
+    "derivation": "projection"
+   },
+   "phaseSplit": null,
+   "receipt": {
+    "model": "unknown",
+    "activeParamsB": "unknown",
+    "totalParamsB": "unknown",
+    "precisionPath": {
+     "weights": "unknown",
+     "activations": "unknown",
+     "kvCache": "unknown",
+     "note": "no serving anchor -- projection only"
+    },
+    "mtpAcceptance": "unknown",
+    "batch": "unknown",
+    "concurrency": "unknown",
+    "prefillDecodeAllocation": "unknown",
+    "ttftMs": "unknown",
+    "tpotMs": "unknown",
+    "sloClass": "n/a (projection)",
+    "stackVersion": "unknown",
+    "topology": "Vera Rubin NVL72 (projected)"
+   },
+   "eligibility": {
+    "tier": "analyst-estimate",
+    "public": true,
+    "primarySourced": false,
+    "namedModel": false,
+    "namedPrecision": false,
+    "statedBatchConcurrency": false,
+    "statedSLO": false,
+    "definedDenominator": false,
+    "eligible": false,
+    "exclusionReason": "chart-only projection -- no serving anchor exists (no MLPerf submission, no InferenceX result, no public price). NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, up to 10x tok/s/MW vs GB200), not an absolute anchor. Ineligible for any fit (validation-ledger row 23)."
+   },
+   "verification": {
+    "state": "n/a",
+    "url": null,
+    "retrievedDate": null,
+    "verbatimValue": null,
+    "verifier": null,
+    "verifierRef": null,
+    "note": "no serving anchor to verify"
+   },
+   "engineFit": {
+    "effDec": null,
+    "effPre": null,
+    "etaDec": 0.36142,
+    "etaPre": 0.17581,
+    "fitClass": "projection",
+    "prefillProvenance": "universal-transfer",
+    "calibrationRef": "CALIBRATION.rubin",
+    "legacyScalar": {
+     "effDec": 0.13,
+     "effPre": 0.45
+    },
+    "deployed": false,
+    "note": "const RUBIN is not in HW_ORDER; MFU, rent and capex are all projections; shape-only in the UI"
+   },
+   "uncertainty": null,
+   "provenance": "const RUBIN not in HW_ORDER; all parameters projections; NVIDIA claim is relative-only. ineligible for any fit; already shape-only in the UI.",
+   "notes": "PROJECTION demonstration: exempt from the ANALYST_SET stress-envelope requirement -- inventing a band on a pure projection with no anchor would be a fabricated number. Do not collapse NVL144 / Rubin CPX / Rubin NVL8 / R100 / VR200 / Rubin Ultra into one generic 'Rubin' figure."
+  }
+ ]
+}

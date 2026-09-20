@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Where the input-side cost comes from · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/input-cost-reconstruction">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is an archived research artifact. Where it says <em>marginal serving gross margin</em>, <em>unit CM</em> or <em>serving contribution margin</em>, the site now says <strong>serving margin</strong>; where it states a confidence interval, the site treats it as a judgment range, not a calibrated one. What the site adopted from any artifact is stated in the <a href="../index.html#report">main report</a>, which is authoritative where the two differ.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Where the input-side cost comes from — one reconstruction, in one place</h1>
+<p><strong>Provenance class: RECONSTRUCTION, executed.</strong> Every figure below is computed from the deployed
+engine at the public-evidence reference reading and is reproducible with the snippet at the end.
+Written 2026-09-20 by leg <code>im-vet-six-repairs</code> in answer to the expert reading of 2026-09-19
+(vetting report, finding E3): <em>&quot;the dominant cost is not reconstructible in one place ... and the
+reconstruction boundary is unstated.&quot;</em> It was right. This page is the boundary, stated.</p>
+<p><strong>What it is not:</strong> a measurement. One number in the chain — the fresh-prefill throughput — is a
+single reconstruction from one provider&#39;s disclosure, transferred to every accelerator the page
+prices. That is the page&#39;s largest unanchored step and it is named as such below and in the
+<a href="https://margins.ashitaorbis.com/research/methods-loao.html">methods note</a>.</p>
+<h2>1. The reading this page reconstructs</h2>
+<table>
+<thead>
+<tr>
+<th>setting</th>
+<th>value</th>
+<th>where it comes from</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>model</td>
+<td>Claude Opus 4.x, 2.5 T total / 300 B active, FP8</td>
+<td>page-adopted planning band (§5); the active figure is a working estimate</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>15 : 1 input : output, 60 % of input served from cache</td>
+<td>the page&#39;s declared Reference convention — a convention, not a measurement</td>
+</tr>
+<tr>
+<td>fleet</td>
+<td>the default&#39;s five member legs, renormalized over basis 75</td>
+<td>the two Trainium legs are withdrawn on evidence grounds (2026-09-20)</td>
+</tr>
+<tr>
+<td>occupancy</td>
+<td>50 % paid-capacity utilization</td>
+<td>a declared convention</td>
+</tr>
+<tr>
+<td>serving stack</td>
+<td>1.0× (open-source-level)</td>
+<td>a declared convention</td>
+</tr>
+<tr>
+<td>algorithmic lead</td>
+<td>0 months</td>
+<td>the public-evidence reference basis</td>
+</tr>
+<tr>
+<td>cache-read work</td>
+<td>5 % of a fresh-prefill token</td>
+<td><strong>analyst-set and unobserved</strong> — the load-bearing assumption of this page</td>
+</tr>
+</tbody></table>
+<h2>2. The identity, and the three components</h2>
+<p>For one million output tokens with fifteen million input tokens alongside them:</p>
+<pre><code>C_bundle = 15 × (1 − cacheHit) × C_in_fresh      ← fresh prefill
+         + 15 × cacheHit       × C_in_cacheread  ← cache reads
+         + C_out                                 ← decode
+C_blended = C_bundle ÷ 16
+</code></pre>
+<p>Executed at the reading above:</p>
+<table>
+<thead>
+<tr>
+<th>component</th>
+<th align="right">$ / bundle</th>
+<th align="right">share of modeled direct cost</th>
+<th>label</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fresh input — 6 M tokens at $2.44148 / M</td>
+<td align="right"><strong>14.64887</strong></td>
+<td align="right"><strong>67.40 %</strong></td>
+<td>RECONSTRUCTION (one anchor, transferred)</td>
+</tr>
+<tr>
+<td>Cache reads — 9 M tokens at $0.12207 / M</td>
+<td align="right"><strong>1.09867</strong></td>
+<td align="right"><strong>5.05 %</strong></td>
+<td>SPECULATION (the 5 % factor is analyst-set)</td>
+</tr>
+<tr>
+<td>Decode — 1 M tokens at $5.98735 / M</td>
+<td align="right"><strong>5.98735</strong></td>
+<td align="right"><strong>27.55 %</strong></td>
+<td>MIXED CALIBRATION EVIDENCE — enumerated below; <strong>not</strong> fitted per leg</td>
+</tr>
+<tr>
+<td><strong>All input-side</strong></td>
+<td align="right"><strong>15.74754</strong></td>
+<td align="right"><strong>72.45 %</strong></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Bundle total</strong></td>
+<td align="right"><strong>21.73489</strong></td>
+<td align="right">100 %</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>$ / million blended tokens</strong></td>
+<td align="right"><strong>1.35843</strong></td>
+<td align="right"></td>
+<td>this is the page&#39;s <code>$1.35843</code></td>
+</tr>
+</tbody></table>
+<p><strong>The decode component&#39;s evidence is mixed, and the mix matters more than the average.</strong> This row
+said &quot;fitted per leg&quot; until the Astra review of 2026-09-20 caught that the claim is not true of
+most of the fleet behind it. Per surviving leg, at the default reading&#39;s renormalized weights:</p>
+<table>
+<thead>
+<tr>
+<th>leg</th>
+<th align="right">weight</th>
+<th>what its coefficient actually is</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100</td>
+<td align="right">10.7 %</td>
+<td>INHERITED FIT (the H800-class fit, carried)</td>
+</tr>
+<tr>
+<td>H200</td>
+<td align="right">14.7 %</td>
+<td>FAMILY TRANSFER (in-family extrapolation off that fit, tier-(b))</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">25.3 %</td>
+<td>FITTED — but on an FP4 basis, used in the FP8 render as a declared conservative transfer</td>
+</tr>
+<tr>
+<td>GB300</td>
+<td align="right">16.0 %</td>
+<td>ANALYST-SET at a declared assumed operating point; no measured observation</td>
+</tr>
+<tr>
+<td>TPU v7</td>
+<td align="right">33.3 %</td>
+<td>ANALYST-SET platform-native bridge</td>
+</tr>
+</tbody></table>
+<p><strong>Only 25.3 % of surviving fleet weight rests on a fit of its own, and even that one is
+basis-transferred.</strong> H200, GB300 and TPU v7 — 64.0 % of the weight — are a family transfer and two
+analyst-set coefficients. A reader who takes &quot;fitted&quot; at face value would over-read this component
+by a wide margin, which is exactly the class of defect finding E5 is about, arriving inside the
+repair that was supposed to fix it.</p>
+<p>A cache-read token costs exactly 5 % of a fresh input token here, because that is what the
+assumption says; one fresh input token costs about 41 % of one output token, and there are many
+more of them. <strong>That is the whole reason the input side dominates</strong> — not a finding that prefill is
+intrinsically expensive per token.</p>
+<h2>3. The reconstruction boundary — the part that was unstated</h2>
+<p>The fresh-prefill unit cost rides one anchor: DeepSeek&#39;s 2025 production disclosure, reconstructed
+onto H800 and then transferred to every other accelerator through a single shared coefficient
+(<code>η_pre = 0.17581</code>, the frozen F7 identity fit). The disclosure gives an aggregate input rate of
+<strong>9,212.5 tok/s/GPU that INCLUDES cache hits</strong>, and 56.3 % of those inputs were hits. Two different
+fresh-equivalent rates follow, depending on what you assume cache work costs:</p>
+<table>
+<thead>
+<tr>
+<th>boundary assumption</th>
+<th>arithmetic</th>
+<th align="right">fresh-equivalent rate</th>
+<th align="right">difference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>cache work is free</strong> (the adopted one)</td>
+<td>9,212.5 × (1 − 0.563)</td>
+<td align="right"><strong>4,025.86</strong> tok/s/GPU</td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td>cache work costs 5 % of fresh prefill</td>
+<td>9,212.5 × [0.437 + 0.563 × 0.05]</td>
+<td align="right">4,285.19 tok/s/GPU</td>
+<td align="right"><strong>+6.4 %</strong></td>
+</tr>
+</tbody></table>
+<p><strong>The page adopts the first and has not said so.</strong> It is the conservative one — it attributes all
+of the measured GPU time to the fresh tokens, so the fresh rate comes out lower and the modeled
+cost comes out higher. The second is not wrong; it is a different boundary, and a reader
+reconstructing the chain from the disclosure alone would have no way to know which was taken. Now
+they do.</p>
+<p>Note what this is <strong>not</strong>: it is not the retired error of treating all 9,212.5 tokens as fresh
+prefill. The main report has said since methodology v2 that the aggregate figure is <em>&quot;not used
+directly&quot;</em>, and it is not.</p>
+<h2>4. Two sensitivities that are usually collapsed into one</h2>
+<p>The methods box calls the 5 % cache factor &quot;load-bearing&quot; and prints it next to the input-side
+share. Those are two different exposures and they are not the same size.</p>
+<table>
+<thead>
+<tr>
+<th>what moves</th>
+<th>range</th>
+<th align="right">margin</th>
+<th align="right">swing</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>cache-read factor</strong></td>
+<td>0 % of fresh prefill</td>
+<td align="right">60.53 %</td>
+<td align="right">+2.10 pp</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>5 % (adopted)</strong></td>
+<td align="right"><strong>58.43 %</strong></td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td></td>
+<td>15 %</td>
+<td align="right">54.23 %</td>
+<td align="right">−4.20 pp</td>
+</tr>
+<tr>
+<td><strong>all input-side unit cost</strong></td>
+<td>−50 %</td>
+<td align="right">73.49 %</td>
+<td align="right">+15.06 pp</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>as modeled</strong></td>
+<td align="right"><strong>58.43 %</strong></td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td></td>
+<td>+50 %</td>
+<td align="right">43.37 %</td>
+<td align="right">−15.06 pp</td>
+</tr>
+</tbody></table>
+<p><strong>The dominant exposure is fresh-prefill calibration, not the cache-read factor.</strong> The cache factor
+is the more visible assumption because it is a round number a reader can argue with; the transfer
+of one provider&#39;s reconstructed prefill rate to nine other accelerators is the larger one, and it
+has no per-platform validation behind it at all.</p>
+<h2>5. Reproduce this page</h2>
+<pre><code class="language-bash">node -e &#39;
+const E = require(&quot;./site/engine.js&quot;);
+const opus = E.MODELS.find(m =&gt; m.id === &quot;opus&quot;);
+const med  = E.PERSPECTIVES.find(p =&gt; p.id === &quot;median&quot;);
+const s = E.pinReferenceLevers(E.applyPresetSettings(opus, med, { mode: &quot;native&quot; }));
+s.trendMonths = 0;
+const w  = E.workload(s, undefined, E.scenarioContext(s));
+const io = s.ioRatio, ch = s.cacheHit / 100;
+const fresh = io * (1 - ch) * w.cIn, cache = io * ch * w.cCache, dec = w.cOut;
+const bundle = fresh + cache + dec;
+console.log({ fresh, cache, dec, bundle, perBlended: bundle / (io + 1), costMix: w.costMix,
+  inputShare: (fresh + cache) / bundle });
+&#39;
+</code></pre>
+<p>It prints the four component figures in §2 and the 72.45 % input share, and <code>perBlended</code> equals
+<code>costMix</code> exactly — the identity is the engine&#39;s, not a restatement of it.</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

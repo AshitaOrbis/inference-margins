@@ -1,0 +1,1254 @@
+{
+ "assessment_as_of": "2026-09-05",
+ "contract_digest": "sha256:801e26cc9af80ee169d26cb752203dd101fc42fa7b20bb311b6d591fc3e97138",
+ "contract_version": "dc-map/v0.3",
+ "presentation_version": "dc-map/site-data/v2",
+ "release_id": "rel-49b67fc067f5bc90db4501f2",
+ "schema_version": 1,
+ "sites": [
+  {
+   "address": null,
+   "admin1": null,
+   "alias": null,
+   "campus_capacity": {
+    "bounds": {
+     "hi": 200,
+     "lo": 200,
+     "mid": 200
+    },
+    "central_estimate": "present",
+    "evidence_ids": [
+     "ev-fixture-nonempty-0013"
+    ],
+    "mw": 200,
+    "observation_date_range": {
+     "end": "2026-09-01",
+     "start": "2026-09-01"
+    }
+   },
+   "capacity_contributions": [
+    {
+     "as_of": "2026-09-01",
+     "as_of_window": null,
+     "basis": "measured/credibly-reported",
+     "bounds": {
+      "hi": 200,
+      "lo": 200,
+      "mid": 200
+     },
+     "capacity_state": "installed-commissioned",
+     "central_estimate": "present",
+     "claim_nature": "literal-disclosure",
+     "coverage_entity_ids": [
+      "test-alpha"
+     ],
+     "entity_id": "test-alpha",
+     "evidence_id": "ev-fixture-nonempty-0013",
+     "field": "power.it_mw",
+     "kind": "it",
+     "label": "CREDIBLY REPORTED",
+     "measurement_boundary": "it-input",
+     "mw": 200,
+     "observation_kind": "point",
+     "phase_id": null,
+     "quantity_basis": "cumulative",
+     "quantity_kind": "capacity",
+     "record_kind": "adjudicated",
+     "scope": "campus",
+     "service_boundary_id": null,
+     "source_kind": "permit",
+     "sources": [
+      {
+       "pub_date": null,
+       "snapshot_status": "verified_quote",
+       "url": "https://example.test/source"
+      }
+     ],
+     "unit": "MW",
+     "valid_from": null,
+     "valid_to": null,
+     "value": {
+      "hi": 200,
+      "lo": 200,
+      "mid": 200
+     }
+    }
+   ],
+   "contracted_price_observations": [],
+   "contracted_usd_per_kwh": null,
+   "contracts": [],
+   "coordinates": {
+    "as_of": "2026-09-01",
+    "as_of_window": null,
+    "basis": "measured/credibly-reported",
+    "capacity_state": null,
+    "central_estimate": null,
+    "claim_nature": "literal-disclosure",
+    "coverage_entity_ids": null,
+    "entity_id": "test-alpha",
+    "evidence_id": "ev-fixture-nonempty-0010",
+    "field": "identity.coordinates",
+    "label": "CREDIBLY REPORTED",
+    "measurement_boundary": null,
+    "observation_kind": null,
+    "phase_id": null,
+    "quantity_basis": null,
+    "quantity_kind": null,
+    "record_kind": "adjudicated",
+    "scope": "campus",
+    "service_boundary_id": null,
+    "source_kind": "permit",
+    "sources": [
+     {
+      "pub_date": null,
+      "snapshot_status": "verified_quote",
+      "url": "https://example.test/source"
+     }
+    ],
+    "unit": null,
+    "valid_from": null,
+    "valid_to": null,
+    "value": {
+     "geometry_source": "permit",
+     "lat": 30,
+     "lng": -90,
+     "precision": "campus"
+    }
+   },
+   "country": "United States",
+   "dives": [],
+   "eligibility_receipts": [
+    {
+     "evidence_id": "ev-fixture-nonempty-0013",
+     "map": "eligible"
+    }
+   ],
+   "entity_type": "campus",
+   "estimate_only": false,
+   "estimates": [],
+   "evidence_by_field": {
+    "identity.coordinates": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0010",
+      "field": "identity.coordinates",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": null,
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "geometry_source": "permit",
+       "lat": 30,
+       "lng": -90,
+       "precision": "campus"
+      }
+     }
+    ],
+    "identity.country": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0007",
+      "field": "identity.country",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "string",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "United States"
+     }
+    ],
+    "identity.entity_type": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0004",
+      "field": "identity.entity_type",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "enum:entity_type",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "campus"
+     }
+    ],
+    "identity.name": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0001",
+      "field": "identity.name",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "string",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "test-alpha"
+     }
+    ],
+    "power.it_mw": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": "installed-commissioned",
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": [
+       "test-alpha"
+      ],
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0013",
+      "field": "power.it_mw",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": "it-input",
+      "observation_kind": "point",
+      "phase_id": null,
+      "quantity_basis": "cumulative",
+      "quantity_kind": "capacity",
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "MW",
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "hi": 200,
+       "lo": 200,
+       "mid": 200
+      }
+     }
+    ],
+    "schedule": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "declared-plan",
+      "coverage_entity_ids": null,
+      "disposition": "excluded(non-factual claim nature)",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0019",
+      "field": "schedule",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": null,
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "milestone": "phase-complete",
+       "role": "target",
+       "target_id": "fixture-target",
+       "window": {
+        "end": "2026-12-31",
+        "kind": "deadline",
+        "precision": "day",
+        "start": "2026-12-31"
+       }
+      }
+     }
+    ],
+    "status": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "dated-observation",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0016",
+      "field": "status",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "enum:status",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "operational"
+     }
+    ],
+    "tenant": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0022",
+      "field": "tenant",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": null,
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "company": "Fixture tenant",
+       "confidence": "confident",
+       "role": "serving-tenant"
+      }
+     }
+    ]
+   },
+   "evidence_mix": {
+    "CREDIBLY REPORTED": 8
+   },
+   "excluded_observations": [],
+   "expansion": {
+    "phase_ids": [],
+    "status": null
+   },
+   "financing": [],
+   "gaps": [
+    {
+     "entity_id": "test-alpha",
+     "field": "power.pue",
+     "gap_id": "gap-fixture-nonempty-0045",
+     "gap_ref": null,
+     "next_trigger": null,
+     "note": "Fixture: no PUE observation supplied.",
+     "resolved_by": null,
+     "run_id": "run-u1",
+     "schema_version": 1,
+     "scope": null,
+     "search_protocol_ref": "fixture-protocol",
+     "searched_query_ids": [],
+     "slug": "test-alpha",
+     "status": "insufficient_evidence",
+     "ts": "2026-09-05T00:00:00Z"
+    }
+   ],
+   "generation": [],
+   "headline_mw": {
+    "as_of": "2026-09-01",
+    "as_of_window": null,
+    "basis": "measured/credibly-reported",
+    "bounds": {
+     "hi": 200,
+     "lo": 200,
+     "mid": 200
+    },
+    "capacity_state": "installed-commissioned",
+    "central_estimate": "present",
+    "claim_nature": "literal-disclosure",
+    "coverage_entity_ids": [
+     "test-alpha"
+    ],
+    "entity_id": "test-alpha",
+    "evidence_id": "ev-fixture-nonempty-0013",
+    "field": "power.it_mw",
+    "kind": "it",
+    "label": "CREDIBLY REPORTED",
+    "measurement_boundary": "it-input",
+    "mw": 200,
+    "observation_kind": "point",
+    "phase_id": null,
+    "quantity_basis": "cumulative",
+    "quantity_kind": "capacity",
+    "record_kind": "adjudicated",
+    "scope": "campus",
+    "service_boundary_id": null,
+    "source_kind": "permit",
+    "sources": [
+     {
+      "pub_date": null,
+      "snapshot_status": "verified_quote",
+      "url": "https://example.test/source"
+     }
+    ],
+    "unit": "MW",
+    "valid_from": null,
+    "valid_to": null,
+    "value": {
+     "hi": 200,
+     "lo": 200,
+     "mid": 200
+    }
+   },
+   "identity_promoted": true,
+   "identity_resolved": true,
+   "incentives": [],
+   "lat": 30,
+   "lng": -90,
+   "locality": null,
+   "name": "test-alpha",
+   "operational": true,
+   "operator": null,
+   "owner": null,
+   "phase_ids": [],
+   "phase_statuses": [
+    {
+     "phase_id": "test-alpha",
+     "status": {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "dated-observation",
+      "coverage_entity_ids": null,
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0016",
+      "field": "status",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "enum:status",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "operational"
+     }
+    }
+   ],
+   "planned": [],
+   "presentation_campus_id": "test-alpha",
+   "publication": {
+    "campus_pin": "eligible",
+    "capacity_marker": "eligible"
+   },
+   "pue": null,
+   "relationships": [],
+   "reports": [],
+   "reviewed_at": "2026-09-05T00:00:00Z",
+   "reviewed_field_groups": {
+    "identity": "2026-09-05T00:00:00Z",
+    "power": "2026-09-05T00:00:00Z",
+    "schedule": "2026-09-05T00:00:00Z",
+    "status": "2026-09-05T00:00:00Z",
+    "tenant": "2026-09-05T00:00:00Z"
+   },
+   "schedule": [
+    {
+     "baseline": {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "declared-plan",
+      "coverage_entity_ids": null,
+      "entity_id": "test-alpha",
+      "evidence_id": "ev-fixture-nonempty-0019",
+      "field": "schedule",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": null,
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "milestone": "phase-complete",
+       "role": "target",
+       "target_id": "fixture-target",
+       "window": {
+        "end": "2026-12-31",
+        "kind": "deadline",
+        "precision": "day",
+        "start": "2026-12-31"
+       }
+      }
+     },
+     "baseline_assessment": {
+      "assessment": "future-target",
+      "assessment_as_of": "2026-09-05",
+      "baseline_target_id": "fixture-target",
+      "formula": "decision-table@v2",
+      "revised": false,
+      "timing_difference_days": null
+     },
+     "event": null,
+     "key": "fixture-target",
+     "latest_assessment": null,
+     "latest_target": null,
+     "milestone": "phase-complete",
+     "phase": null
+    }
+   ],
+   "slug": "test-alpha",
+   "status": {
+    "as_of": "2026-09-01",
+    "as_of_window": null,
+    "basis": "measured/credibly-reported",
+    "capacity_state": null,
+    "central_estimate": null,
+    "claim_nature": "dated-observation",
+    "coverage_entity_ids": null,
+    "entity_id": "test-alpha",
+    "evidence_id": "ev-fixture-nonempty-0016",
+    "field": "status",
+    "label": "CREDIBLY REPORTED",
+    "measurement_boundary": null,
+    "observation_kind": null,
+    "phase_id": null,
+    "quantity_basis": null,
+    "quantity_kind": null,
+    "record_kind": "adjudicated",
+    "scope": "campus",
+    "service_boundary_id": null,
+    "source_kind": "permit",
+    "sources": [
+     {
+      "pub_date": null,
+      "snapshot_status": "verified_quote",
+      "url": "https://example.test/source"
+     }
+    ],
+    "unit": "enum:status",
+    "valid_from": null,
+    "valid_to": null,
+    "value": "operational"
+   },
+   "status_value": "operational",
+   "supplies_entity_ids": [],
+   "tariff": [],
+   "tariff_applicability": [],
+   "tenants": [
+    {
+     "as_of": "2026-09-01",
+     "as_of_window": null,
+     "basis": "measured/credibly-reported",
+     "capacity_state": null,
+     "central_estimate": null,
+     "claim_nature": "literal-disclosure",
+     "coverage_entity_ids": null,
+     "entity_id": "test-alpha",
+     "evidence_id": "ev-fixture-nonempty-0022",
+     "field": "tenant",
+     "label": "CREDIBLY REPORTED",
+     "measurement_boundary": null,
+     "observation_kind": null,
+     "phase_id": null,
+     "quantity_basis": null,
+     "quantity_kind": null,
+     "record_kind": "adjudicated",
+     "scope": "campus",
+     "service_boundary_id": null,
+     "source_kind": "permit",
+     "sources": [
+      {
+       "pub_date": null,
+       "snapshot_status": "verified_quote",
+       "url": "https://example.test/source"
+      }
+     ],
+     "unit": null,
+     "valid_from": null,
+     "valid_to": null,
+     "value": {
+      "company": "Fixture tenant",
+      "confidence": "confident",
+      "role": "serving-tenant"
+     }
+    }
+   ],
+   "utility": null
+  },
+  {
+   "address": null,
+   "admin1": null,
+   "alias": null,
+   "campus_capacity": null,
+   "capacity_contributions": [],
+   "contracted_price_observations": [],
+   "contracted_usd_per_kwh": null,
+   "contracts": [],
+   "coordinates": {
+    "as_of": "2026-09-01",
+    "as_of_window": null,
+    "basis": "measured/credibly-reported",
+    "capacity_state": null,
+    "central_estimate": null,
+    "claim_nature": "literal-disclosure",
+    "coverage_entity_ids": null,
+    "entity_id": "test-beta",
+    "evidence_id": "ev-fixture-nonempty-0034",
+    "field": "identity.coordinates",
+    "label": "CREDIBLY REPORTED",
+    "measurement_boundary": null,
+    "observation_kind": null,
+    "phase_id": null,
+    "quantity_basis": null,
+    "quantity_kind": null,
+    "record_kind": "adjudicated",
+    "scope": "campus",
+    "service_boundary_id": null,
+    "source_kind": "permit",
+    "sources": [
+     {
+      "pub_date": null,
+      "snapshot_status": "verified_quote",
+      "url": "https://example.test/source"
+     }
+    ],
+    "unit": null,
+    "valid_from": null,
+    "valid_to": null,
+    "value": {
+     "geometry_source": "permit",
+     "lat": 30,
+     "lng": -90,
+     "precision": "campus"
+    }
+   },
+   "country": "United States",
+   "dives": [],
+   "eligibility_receipts": [
+    {
+     "evidence_id": "ev-fixture-nonempty-0040",
+     "map": "excluded(non-factual-current-capacity)"
+    }
+   ],
+   "entity_type": "campus",
+   "estimate_only": true,
+   "estimates": [
+    {
+     "as_of": "2026-09-01",
+     "as_of_window": null,
+     "basis": "measured/credibly-reported",
+     "capacity_state": "installed-commissioned",
+     "central_estimate": null,
+     "claim_nature": "model-output",
+     "coverage_entity_ids": [
+      "test-beta"
+     ],
+     "entity_id": "test-beta",
+     "evidence_id": "ev-fixture-nonempty-0040",
+     "field": "power.it_mw",
+     "label": "CREDIBLY REPORTED",
+     "measurement_boundary": "it-input",
+     "observation_kind": "point",
+     "phase_id": null,
+     "quantity_basis": "cumulative",
+     "quantity_kind": "capacity",
+     "record_kind": "adjudicated",
+     "scope": "campus",
+     "service_boundary_id": null,
+     "source_kind": "permit",
+     "sources": [
+      {
+       "pub_date": null,
+       "snapshot_status": "verified_quote",
+       "url": "https://example.test/source"
+      }
+     ],
+     "unit": "MW",
+     "valid_from": null,
+     "valid_to": null,
+     "value": {
+      "hi": 900,
+      "lo": 900,
+      "mid": 900
+     }
+    }
+   ],
+   "evidence_by_field": {
+    "identity.coordinates": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-beta",
+      "evidence_id": "ev-fixture-nonempty-0034",
+      "field": "identity.coordinates",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": null,
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "geometry_source": "permit",
+       "lat": 30,
+       "lng": -90,
+       "precision": "campus"
+      }
+     }
+    ],
+    "identity.country": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-beta",
+      "evidence_id": "ev-fixture-nonempty-0031",
+      "field": "identity.country",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "string",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "United States"
+     }
+    ],
+    "identity.entity_type": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-beta",
+      "evidence_id": "ev-fixture-nonempty-0028",
+      "field": "identity.entity_type",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "enum:entity_type",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "campus"
+     }
+    ],
+    "identity.name": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-beta",
+      "evidence_id": "ev-fixture-nonempty-0025",
+      "field": "identity.name",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "string",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "test-beta"
+     }
+    ],
+    "power.it_mw": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": "installed-commissioned",
+      "central_estimate": null,
+      "claim_nature": "model-output",
+      "coverage_entity_ids": [
+       "test-beta"
+      ],
+      "disposition": "excluded(non-factual-current-capacity)",
+      "entity_id": "test-beta",
+      "evidence_id": "ev-fixture-nonempty-0040",
+      "field": "power.it_mw",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": "it-input",
+      "observation_kind": "point",
+      "phase_id": null,
+      "quantity_basis": "cumulative",
+      "quantity_kind": "capacity",
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "MW",
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "hi": 900,
+       "lo": 900,
+       "mid": 900
+      }
+     }
+    ]
+   },
+   "evidence_mix": {
+    "CREDIBLY REPORTED": 5
+   },
+   "excluded_observations": [],
+   "expansion": {
+    "phase_ids": [],
+    "status": null
+   },
+   "financing": [],
+   "gaps": [],
+   "generation": [],
+   "headline_mw": null,
+   "identity_promoted": true,
+   "identity_resolved": true,
+   "incentives": [],
+   "lat": 30,
+   "lng": -90,
+   "locality": null,
+   "name": "test-beta",
+   "operational": false,
+   "operator": null,
+   "owner": null,
+   "phase_ids": [],
+   "phase_statuses": [],
+   "planned": [],
+   "presentation_campus_id": "test-beta",
+   "publication": {
+    "campus_pin": "eligible",
+    "capacity_marker": "excluded(no factual capacity)"
+   },
+   "pue": null,
+   "relationships": [],
+   "reports": [],
+   "reviewed_at": "2026-09-05T00:00:00Z",
+   "reviewed_field_groups": {
+    "identity": "2026-09-05T00:00:00Z",
+    "power": "2026-09-05T00:00:00Z"
+   },
+   "schedule": [],
+   "slug": "test-beta",
+   "status": null,
+   "status_value": null,
+   "supplies_entity_ids": [],
+   "tariff": [],
+   "tariff_applicability": [],
+   "tenants": [],
+   "utility": null
+  },
+  {
+   "address": null,
+   "admin1": null,
+   "alias": null,
+   "campus_capacity": null,
+   "capacity_contributions": [],
+   "contracted_price_observations": [],
+   "contracted_usd_per_kwh": null,
+   "contracts": [],
+   "coordinates": null,
+   "country": null,
+   "dives": [],
+   "eligibility_receipts": [
+    {
+     "evidence_id": "ev-fixture-nonempty-0043",
+     "map": "excluded(non-factual-current-capacity)"
+    }
+   ],
+   "entity_type": null,
+   "estimate_only": true,
+   "estimates": [
+    {
+     "as_of": "2026-09-01",
+     "as_of_window": null,
+     "basis": "measured/credibly-reported",
+     "capacity_state": "installed-commissioned",
+     "central_estimate": null,
+     "claim_nature": "model-output",
+     "coverage_entity_ids": [
+      "test-delta"
+     ],
+     "entity_id": "test-delta",
+     "evidence_id": "ev-fixture-nonempty-0043",
+     "field": "power.it_mw",
+     "label": "CREDIBLY REPORTED",
+     "measurement_boundary": "it-input",
+     "observation_kind": "point",
+     "phase_id": null,
+     "quantity_basis": "cumulative",
+     "quantity_kind": "capacity",
+     "record_kind": "adjudicated",
+     "scope": "campus",
+     "service_boundary_id": null,
+     "source_kind": "permit",
+     "sources": [
+      {
+       "pub_date": null,
+       "snapshot_status": "verified_quote",
+       "url": "https://example.test/source"
+      }
+     ],
+     "unit": "MW",
+     "valid_from": null,
+     "valid_to": null,
+     "value": {
+      "hi": 900,
+      "lo": 900,
+      "mid": 900
+     }
+    }
+   ],
+   "evidence_by_field": {
+    "identity.name": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": null,
+      "central_estimate": null,
+      "claim_nature": "literal-disclosure",
+      "coverage_entity_ids": null,
+      "disposition": "eligible",
+      "entity_id": "test-delta",
+      "evidence_id": "ev-fixture-nonempty-0037",
+      "field": "identity.name",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": null,
+      "observation_kind": null,
+      "phase_id": null,
+      "quantity_basis": null,
+      "quantity_kind": null,
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "string",
+      "valid_from": null,
+      "valid_to": null,
+      "value": "Unresolved fixture record"
+     }
+    ],
+    "power.it_mw": [
+     {
+      "as_of": "2026-09-01",
+      "as_of_window": null,
+      "basis": "measured/credibly-reported",
+      "capacity_state": "installed-commissioned",
+      "central_estimate": null,
+      "claim_nature": "model-output",
+      "coverage_entity_ids": [
+       "test-delta"
+      ],
+      "disposition": "excluded(non-factual-current-capacity)",
+      "entity_id": "test-delta",
+      "evidence_id": "ev-fixture-nonempty-0043",
+      "field": "power.it_mw",
+      "label": "CREDIBLY REPORTED",
+      "measurement_boundary": "it-input",
+      "observation_kind": "point",
+      "phase_id": null,
+      "quantity_basis": "cumulative",
+      "quantity_kind": "capacity",
+      "record_kind": "adjudicated",
+      "scope": "campus",
+      "service_boundary_id": null,
+      "source_kind": "permit",
+      "sources": [
+       {
+        "pub_date": null,
+        "snapshot_status": "verified_quote",
+        "url": "https://example.test/source"
+       }
+      ],
+      "unit": "MW",
+      "valid_from": null,
+      "valid_to": null,
+      "value": {
+       "hi": 900,
+       "lo": 900,
+       "mid": 900
+      }
+     }
+    ]
+   },
+   "evidence_mix": {
+    "CREDIBLY REPORTED": 2
+   },
+   "excluded_observations": [],
+   "expansion": {
+    "phase_ids": [],
+    "status": null
+   },
+   "financing": [],
+   "gaps": [],
+   "generation": [],
+   "headline_mw": null,
+   "identity_promoted": false,
+   "identity_resolved": false,
+   "incentives": [],
+   "lat": null,
+   "lng": null,
+   "locality": null,
+   "name": "Unresolved fixture record",
+   "operational": false,
+   "operator": null,
+   "owner": null,
+   "phase_ids": [],
+   "phase_statuses": [],
+   "planned": [],
+   "presentation_campus_id": null,
+   "publication": {
+    "campus_pin": "excluded(unresolved-or-non-campus)",
+    "capacity_marker": "excluded(no factual capacity)"
+   },
+   "pue": null,
+   "relationships": [],
+   "reports": [],
+   "reviewed_at": "2026-09-05T00:00:00Z",
+   "reviewed_field_groups": {
+    "identity": "2026-09-05T00:00:00Z",
+    "power": "2026-09-05T00:00:00Z"
+   },
+   "schedule": [],
+   "slug": "test-delta",
+   "status": null,
+   "status_value": null,
+   "supplies_entity_ids": [],
+   "tariff": [],
+   "tariff_applicability": [],
+   "tenants": [],
+   "utility": null
+  }
+ ]
+}
