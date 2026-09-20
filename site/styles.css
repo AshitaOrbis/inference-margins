@@ -1323,3 +1323,13 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .calc-warn { font-size: 12.5px; color: var(--warn); }
 .set-default-btn { margin-left: 6px; font-size: 12px; }
 .set-default-btn[aria-pressed="true"] { color: var(--accent); font-weight: 700; }
+
+/* Phone-width reachability (leg im-share-ready-0920, 2026-09-20). A 7-column data table inside a
+   chart card's <details> measured 535px in a 390px viewport while EVERY ancestor sat at
+   overflow-x: visible and the document itself did not scroll (documentElement.scrollWidth == 390),
+   so three of its seven columns were unreachable on a phone rather than merely cramped. This is
+   the same remedy `.report table` above has always used; scoping it to the chart cards' own
+   tables keeps the desktop grid untouched. Verified at 390x844 over CDP before and after. */
+@media (max-width: 720px) {
+  .chart-card details table { display: block; overflow-x: auto; }
+}

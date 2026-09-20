@@ -83,7 +83,8 @@ decision were both true on 2026-07-10 and are NOT true of the live engine today.
 <tr>
 <th>Held-out platform</th>
 <th align="right">Predicted</th>
-<th align="right">Measured</th>
+<th align="right">Comparator</th>
+<th>Comparator class</th>
 <th align="right">Error</th>
 </tr>
 </thead>
@@ -91,28 +92,37 @@ decision were both true on 2026-07-10 and are NOT true of the live engine today.
 <td>H20 (Ant/SGLang production, &lt;50 ms tier)</td>
 <td align="right">277</td>
 <td align="right">675</td>
+<td>measured</td>
 <td align="right"><strong>−59%</strong></td>
 </tr>
 <tr>
 <td>GB200 (vLLM published)</td>
 <td align="right">4,672</td>
 <td align="right">10,100</td>
+<td>measured</td>
 <td align="right"><strong>−54%</strong></td>
 </tr>
 <tr>
 <td>Ascend 910C INT8 (CloudMatrix-Infer, optimized)</td>
 <td align="right">1,405</td>
 <td align="right">1,943</td>
+<td>measured</td>
 <td align="right">−28%</td>
 </tr>
 <tr>
 <td>Ascend 910C INT8 (neutral read: DeepSeek &quot;60% of H100&quot;)</td>
 <td align="right">1,405</td>
 <td align="right">1,303</td>
+<td><strong>INFERRED PROXY — not a measurement</strong></td>
 <td align="right">+8%</td>
 </tr>
 </tbody></table>
-<p><strong>Mean |error| 37%, worst 59% — the abstraction FAILS the transfer test.</strong></p>
+<p><strong>Mean |error| 47% across the three benchmark observations, worst 59% — the abstraction FAILS
+the transfer test.</strong> Counting the inferred proxy as a fourth comparison gives the 37% this note
+carried until 2026-09-20; that figure averaged a derived read from DeepSeek&#39;s &quot;60% of H100&quot;
+statement alongside three measurements, and because the proxy is the closest row it made the
+failure look milder than the measurements alone support. Neither number is a forecast-error
+estimate for the current engine: three observations across three platforms cannot supply one.</p>
 <h2>Interpretation and consequences (adopted in methodology v2)</h2>
 <ol>
 <li>A scalar compute-MFU does not transfer across platforms, because decode is memory/interconnect-bound: the H20&#39;s tiny FLOPS denominator makes its fitted &quot;MFU&quot; (17%) 2.5× the H800&#39;s (7%) for the same physical workload. The coefficient absorbs bandwidth, batch regime, serving stack, and latency target — it is not a hardware constant.</li>

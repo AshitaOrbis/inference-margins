@@ -81,8 +81,8 @@ Calibration points, not a validated predictive model. Every accelerator's throug
 H20 and Ascend keep their measured observations as historical inputs to the frozen joint fit, but
 their deployed per-row coefficients are separate judgment-set values that reproduce neither source
 point, so they are not fitted either. The obvious falsification test was run and published: one
-efficiency number fitted on the DeepSeek anchor mispredicts the other platforms by ~37% mean
-error, so row-specific coefficients stay and their classes are stated everywhere the numbers are
+efficiency number fitted on the DeepSeek anchor mispredicts the other platforms by ~47% mean
+error across the three benchmark observations, so row-specific coefficients stay and their classes are stated everywhere the numbers are
 (reproducing an anchor is an identity, not out-of-sample validation).
 Where no anchor is incorporated as a live fit — TPU v7 and Trainium2 now have public named-model
 serving anchors that are not yet fitted into the roofline, while Trainium3 and Rubin have none at

@@ -27,14 +27,19 @@ Fit a **single global decode MFU** using only the DeepSeek H800 production ancho
 
 ## Result
 
-| Held-out platform | Predicted | Measured | Error |
-|---|---:|---:|---:|
-| H20 (Ant/SGLang production, <50 ms tier) | 277 | 675 | **−59%** |
-| GB200 (vLLM published) | 4,672 | 10,100 | **−54%** |
-| Ascend 910C INT8 (CloudMatrix-Infer, optimized) | 1,405 | 1,943 | −28% |
-| Ascend 910C INT8 (neutral read: DeepSeek "60% of H100") | 1,405 | 1,303 | +8% |
+| Held-out platform | Predicted | Comparator | Comparator class | Error |
+|---|---:|---:|---|---:|
+| H20 (Ant/SGLang production, <50 ms tier) | 277 | 675 | measured | **−59%** |
+| GB200 (vLLM published) | 4,672 | 10,100 | measured | **−54%** |
+| Ascend 910C INT8 (CloudMatrix-Infer, optimized) | 1,405 | 1,943 | measured | −28% |
+| Ascend 910C INT8 (neutral read: DeepSeek "60% of H100") | 1,405 | 1,303 | **INFERRED PROXY — not a measurement** | +8% |
 
-**Mean |error| 37%, worst 59% — the abstraction FAILS the transfer test.**
+**Mean |error| 47% across the three benchmark observations, worst 59% — the abstraction FAILS
+the transfer test.** Counting the inferred proxy as a fourth comparison gives the 37% this note
+carried until 2026-09-20; that figure averaged a derived read from DeepSeek's "60% of H100"
+statement alongside three measurements, and because the proxy is the closest row it made the
+failure look milder than the measurements alone support. Neither number is a forecast-error
+estimate for the current engine: three observations across three platforms cannot supply one.
 
 ## Interpretation and consequences (adopted in methodology v2)
 
