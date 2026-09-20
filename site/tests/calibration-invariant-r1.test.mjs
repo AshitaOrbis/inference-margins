@@ -42,9 +42,13 @@ const assert = (name, cond, detail = "") => {
 //         replication solves out of a two-workload system, reaching 0.521, and DISCLOSED that the
 //         two figures sit on different clocks. The completion gate ruled that a disclosure is
 //         neither a repair nor a withdrawal, which is what the commission required, so both
-//         endpoints now sit on the convention BOTH sources publish in: output tokens per second
-//         per chip over total serving wall time at 1K-in/8K-out, i.e. 518.86 and 677 x 8/9 =
-//         601.8. Midpoint 0.519, band 0.510-0.528 — lower than either candidate it replaced, so
+//         endpoints are NORMALIZED to one convention: output tokens per second per chip over
+//         total serving wall time at 1K-in/8K-out. Only the rental anchor is PUBLISHED that way
+//         (518.86); Google publishes a COMBINED input-plus-output rate and the x 8/9 conversion
+//         to 601.8 is performed by THIS PAGE, not by Google. An earlier form of this comment said
+//         both sources publish in the convention, which is false and which a reader inspecting
+//         the verification source could disprove at the citation — corrected 2026-09-20 after the
+//         fifth review round found it surviving here after the registry had retracted it. Midpoint 0.519, band 0.510-0.528 — lower than either candidate it replaced, so
 //         the choice of basis cannot flatter the page.
 //   trn2, trn3  etaDec UNCHANGED; their status prefixes gain the SPECULATION label the page's
 //         evidence ladder gives a coefficient whose unit is open by ~15.2x.
