@@ -35,8 +35,8 @@ const flagCtx = E.scenarioContext(flagship);
      thing it was always going to have to admit. Re-minted to the post-adoption reference. What the
      tripwire still does is exactly what it did: any change to this energy model that moves the
      flagship reading by a single bit fails here, and nothing in THIS suite is permitted to move it. */
-  assert("T7: flagship reference margin byte-identical 0.5843046405779231",
-    wl.margin === 0.5843046405779231, String(wl.margin));
+  assert("T7: flagship reference margin byte-identical 0.5841067415764696",
+    wl.margin === 0.5841067415764696, String(wl.margin));
   const fams = ["nvidia", "tpu", "trainium", "ascend"];
   const rows = [...E.HW_ORDER, "rubin"];
   assert("T7: family present and in the closed set on every HW_ROOFLINE row + rubin",

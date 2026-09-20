@@ -1781,7 +1781,7 @@
    "engineFit": {
     "effDec": null,
     "effPre": null,
-    "etaDec": 0.521,
+    "etaDec": 0.519,
     "etaPre": 0.17581,
     "fitClass": "platform-native-aggregate-bridge",
     "prefillProvenance": "universal-transfer",
@@ -1795,9 +1795,9 @@
    },
    "uncertainty": {
     "central": {
-     "value": 0.521,
+     "value": 0.519,
      "unit": "etaDec (deployed roofline decode efficiency)",
-     "label": "live deployed identity: platform-native aggregate-form bridge eta_dec, midpoint of the 0.528/0.574 same-platform diagnostics (engine-data-v22.js CALIBRATION.tpu7; VALID ONLY under decodeTrafficBasis replica-resident-distinct — b9 M1; retired joint-fit 0.36142 and scalar 0.130 archived)"
+     "label": "live deployed identity: platform-native aggregate-form bridge eta_dec, midpoint of the 0.528/0.510 same-platform diagnostics, both on ONE stated timing convention (output tokens per second per chip over total serving wall time at 1K-in/8K-out) (engine-data-v22.js CALIBRATION.tpu7; VALID ONLY under decodeTrafficBasis replica-resident-distinct — b9 M1; retired joint-fit 0.36142 and scalar 0.130 archived)"
     },
     "components": [
      {

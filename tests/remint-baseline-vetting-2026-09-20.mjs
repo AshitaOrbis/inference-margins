@@ -9,9 +9,13 @@
          grounds — the operating-point registry declares batch replica-global while this engine
          consumes it per chip, an open unit question worth about 15.2x, and the project's own
          hardware ledger already said the coefficient cannot support a central Trainium margin;
-     (2) the TPU v7 decode coefficient moves 0.55 -> 0.521, because one of its two same-platform
+     (2) the TPU v7 decode coefficient moves 0.55 -> 0.519, because one of its two same-platform
          endpoints was computed on Google's COMBINED input-plus-output rate (677 t/s/chip) as if it
-         were a decode rate; both endpoints now use a decode numerator (518.86 and 606).
+         were an output rate. It passed through 0.521 for part of 2026-09-20, pairing 518.86 with
+         the DECODE-STAGE 606; the completion gate refused that as a disclosed inconsistency
+         rather than a repair, because the two figures are on different clocks. Both endpoints now
+         sit on ONE convention, output tokens per second per chip over total serving wall time at
+         1K-in/8K-out: 518.86 and 677 x 8/9 = 601.8.
 
    Same scope discipline as tests/remint-baseline-tariff-2026-09-19.mjs: only the keys the fixture
    already holds are recomputed, so the fixture's scope is byte-identical and the only thing that
@@ -48,7 +52,7 @@ fixture.engine = E.ENGINE_REVISION;
 fixture.note = fixture.note.replace(/ RE-MINTED 2026-09-20[\s\S]*$/, "")
   + " RE-MINTED 2026-09-20 by leg im-vet-six-repairs (program bq-2835, vetting findings E1 + E2):"
   + " the two Trainium legs are withdrawn from the default fleet's membership on evidence grounds,"
-  + " and the TPU v7 decode coefficient moves 0.55 -> 0.521 onto a decode-only numerator."
+  + " and the TPU v7 decode coefficient moves 0.55 -> 0.519 onto ONE stated timing convention."
   + " Key-for-key re-mint against tests/fixtures-baseline-v22-pre-vetting-repairs.json; the SHAPE"
   + " of the move is asserted in tests/traffic-contract.test.mjs — a pair may differ ONLY if its"
   + " pre-repair blend carried tpu7, trn2 or trn3.";

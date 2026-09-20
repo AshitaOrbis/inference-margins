@@ -41,10 +41,15 @@ const cases = [
   ["k=2", [30, 40], [50, 70], 100],
 ];
 
-let bad = 0;
+let bad = 0, ran = 0;
 for (const [name, lo, hi, T] of cases) {
   const ex = centroidOnSum(lo, hi, T);
-  if (!ex) { console.log(`SKIP  ${name} (degenerate slice)`); continue; }
+  /* HARDENED 2026-09-20 (im-vet-six-repairs, Astra xhigh round 3, finding 5). A falsy result used
+     to SKIP, so a centroid returning null for all six fixtures produced six skips and a green run
+     - a harness that can pass without checking anything. These fixtures are feasible by
+     construction, so a null IS the failure, and the executed-case count is asserted at the end. */
+  if (!ex) { console.log(`FAIL  ${name} - centroidOnSum returned no result for a FEASIBLE slice`); bad++; continue; }
+  ran++;
   const m = mc(lo, hi, T);
   const mp = midProj(lo, hi, T);
   const sum = ex.reduce((a, b) => a + b, 0);
@@ -59,4 +64,12 @@ for (const [name, lo, hi, T] of cases) {
   console.log(`        MC       : ${m ? m.map(x => x.toFixed(4)).join(" / ") : "n/a"}  maxdev=${m ? dev.toFixed(4) : "n/a"}`);
   console.log(`        midProj  : ${mp.map(x => x.toFixed(4)).join(" / ")}  shortcut off by ${shortcutDelta.toFixed(4)} pp`);
 }
+if (ran !== cases.length) { console.log(`FAIL  only ${ran} of ${cases.length} cases actually executed`); bad++; }
 console.log(bad ? `\n${bad} FAILED` : "\nall centroid cases agree with Monte Carlo, sum to T, and stay in bounds");
+/* ADDED 2026-09-20 (im-vet-six-repairs, Astra xhigh round 2, finding 3). This file printed FAIL
+   lines, printed "N FAILED", and exited ZERO — inside `npm test`. An injected centroid regression
+   produced six FAIL lines and a green release command. It is the same class the completion gate
+   already ruled inside the frozen "no guard was edited to pass" criterion for the fleet-policy
+   harness, so it is fixed here rather than carded: a check that cannot fail the process is a log
+   line, not a check. */
+process.exitCode = bad ? 1 : 0;

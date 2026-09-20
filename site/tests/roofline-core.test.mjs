@@ -68,13 +68,13 @@ for (const k of HW_KEYS) {
   assert("tpu7 golden binds on t_H", g.bindingTerm === "t_H", g.bindingTerm);
   assert("tpu7 MoE-EP t_cc ≡ 0", g.tCc === 0, String(g.tCc));
   /* im-vet-six-repairs (2026-09-20), vetting finding E2: η 0.55 -> 0.521 after the numerator
-     repair, and throughput scales with η exactly — 1529.8619854335666 / 1615.0174510335157 =
-     0.521/0.55 to the bit, which is the property this golden exists to hold. The three golden
+     repair, and throughput scales with η exactly — 1523.9891947025355 / 1615.0174510335157 =
+     0.519/0.55 to the bit, which is the property this golden exists to hold. The three golden
      TERMS above (t_C, t_H, t_N) are η-independent and are byte-identical, which is the evidence
      that this moved a coefficient and nothing about the roofline. */
-  near("tpu7 golden T̂(b=16) at the platform-native η 0.521", g.tokPerS, 1529.8619854335666, 1e-9);
-  near("tpu7 golden T̂ scales EXACTLY with η (0.521/0.55) — the repair is a coefficient move, not a roofline move",
-    g.tokPerS / 1615.0174510335157, 0.521 / 0.55, 1e-12);
+  near("tpu7 golden T̂(b=16) at the platform-native η 0.519", g.tokPerS, 1523.9891947025355, 1e-9);
+  near("tpu7 golden T̂ scales EXACTLY with η (0.519/0.55) — the repair is a coefficient move, not a roofline move",
+    g.tokPerS / 1615.0174510335157, 0.519 / 0.55, 1e-12);
   // b9 M1 rejected the joint fit for this row (zero TPU observations in it) — see CALIBRATION.tpu7.
   assert("tpu7 η is the platform-native aggregate bridge, NOT the joint fit",
     g.etaDec === D.CALIBRATION.tpu7.etaDec && g.etaDec !== D.JOINT_ETA_DEC, String(g.etaDec));

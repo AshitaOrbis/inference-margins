@@ -417,7 +417,15 @@ const ANSWER_IDS_PIN = [
    the two registry repairs (E1 the Trainium withdrawal, E2 the TPU numerator) — every one of them
    re-derived against the engine by tests/fa-m6-b9.test.mjs and tests/trendline-interlock-b9.test.mjs
    before this pin was touched. */
-const ANSWER_DIGITS_PIN = "2e4accb04f09bcbfed2b89a41954bc432c41dfd09a9a458f3642f06b58c413ed";
+/* RE-PINNED 2026-09-20 (im-vet-six-repairs ROUND 2, completion-gate FAIL). Note WHICH of the
+   two pins moved, because the pair is designed to tell exactly this apart: the DIGITS moved and
+   the TEXT digest did NOT — it is byte-identical to the value pinned above. That is the shape a
+   pure basis correction should have. Putting E2's two diagnostics on one timing convention
+   (0.521 -> 0.519) moved every published figure that rides on the default fleet by a fraction of
+   a point and changed no sentence, no claim and no qualifier. If the text digest had moved too,
+   this would have been prose drifting behind a number, which is the failure class this file was
+   built for. */
+const ANSWER_DIGITS_PIN = "c3714685e9652c158accd9c4b7db119e78af5c78b8152a249e6f801a648279d7";
 /* RE-PINNED 2026-09-12 (im-default-window-and-mcp-discrepancy; Astra review round 3 F9), THE WORDING ONLY. The
    digits pin above did not move: the rendered digit stream is byte-identical. Read with DUMP_ANSWER_SURFACE=1 on
    both sides (the pre-change tree 9dcb54e reproduces the previous pin 9a69431e... exactly, so the dump measures

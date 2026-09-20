@@ -47,10 +47,10 @@ const withLever = (s, v) => Object.assign({}, s, { nvlinkCapMinRatio: v });
 {
   const s = DEFAULT_STATE();
   assert("A-1 DEFAULTS.nvlinkCapMinRatio is exactly 1.0", E.DEFAULTS.nvlinkCapMinRatio === 1.0);
-  assert("A-2 the ratified default headline is byte-identical 68.41398315513409",
-    E.workload(s).margin * 100 === 68.41398315513409, String(E.workload(s).margin * 100));
-  assert("A-3 trend-0 reference blend margin is byte-identical 0.5843046405779231",
-    E.workload(E.pinReferenceLevers(DEFAULT_STATE())).margin === 0.5843046405779231);
+  assert("A-2 the ratified default headline is byte-identical 68.39894608278819",
+    E.workload(s).margin * 100 === 68.39894608278819, String(E.workload(s).margin * 100));
+  assert("A-3 trend-0 reference blend margin is byte-identical 0.5841067415764696",
+    E.workload(E.pinReferenceLevers(DEFAULT_STATE())).margin === 0.5841067415764696);
   const f = E.feasibility(s, E.scenarioContext(s));
   assert("A-4 every default-fleet leg carries the typed DTO with factorApplied 1",
     f.legs.length > 0 && f.legs.every(l => l.nvlinkCap && l.nvlinkCap.decode.factorApplied === 1 && l.nvlinkCap.prefill.factorApplied === 1 && typeof l.nvlinkCap.reasonCode === "string"),

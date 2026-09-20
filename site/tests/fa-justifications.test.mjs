@@ -128,24 +128,24 @@ const m20 = marg(seededAt(2000)), m25 = marg(seededAt(2500)), m30 = marg(seededA
          decode rate; both endpoints now use a decode numerator (518.86 and 606).
    (1) raises readings slightly, (2) lowers them; the ROUNDED ladder copy is unchanged at every
    rung, which is why only the exact pins move here. */
-assert("J-9 (b9 M1): the filtered headline now VARIES with total size, monotone decreasing across 2.0/2.5/3.0 T, reproducing run B §B7's SHAPE (59.4 / 58.4 / 57.5 after the Trainium withdrawal and the TPU numerator repair)",
-  m20 > m25 && m25 > m30 && near(m20, 59.4033) && near(m25, 58.4305) && near(m30, 57.4576),
+assert("J-9 (b9 M1): the filtered headline now VARIES with total size, monotone decreasing across 2.0/2.5/3.0 T, reproducing run B §B7's SHAPE (59.4 / 58.4 / 57.4 after the Trainium withdrawal and the TPU numerator repair)",
+  m20 > m25 && m25 > m30 && near(m20, 59.3873) && near(m25, 58.4107) && near(m30, 57.4341),
   [m20, m25, m30].join(" / "));
-assert("J-9: the live default computes the SAME value (the preset seeds 2.5 T)", near(marg(seededAt(null)), 58.4305));
+assert("J-9: the live default computes the SAME value (the preset seeds 2.5 T)", near(marg(seededAt(null)), 58.4107));
 /* im-vet-six-repairs: at 5 T the feasibility rule still removes h100, and BOTH Trainium legs are
    now removed at every size by the declared withdrawal rather than by capacity at this one. */
-assert("J-9: the 5 T alternative case re-derives 52.6824 (h100 excluded by capacity; both Trainium legs withdrawn)", near(marg(seededAt(5000)), 52.6824));
+assert("J-9: the 5 T alternative case re-derives 52.6393 (h100 excluded by capacity; both Trainium legs withdrawn)", near(marg(seededAt(5000)), 52.6393));
 assert("headline token cites ≈58", fa.tokens.planningPointLine.includes("≈58%"), fa.tokens.planningPointLine);
 /* the ladder — each pinned ≈ value in the g3 bridge re-derived */
 // b9 M1 re-mint: every rung re-derives on the repaired defaults. The ladder now starts at
 // ≈59 instead of ≈37 and ends ABOVE the lens it was built to reach — see the g3 bridge,
 // which now attributes that last gap to blend composition rather than a further lever.
 const ladder = [
-  ["rent 0.70 alone", s => { s.rentMult = 0.7; }, 70.9013, "≈71"],
-  ["util 70 alone", s => { s.util = 70; }, 70.3075, "≈70"],
-  ["both", s => { s.rentMult = 0.7; s.util = 70; }, 79.2152, "≈79"],
-  ["+ throughput regime", s => { s.rentMult = 0.7; s.util = 70; s.interact = "batch"; }, 81.6265, "≈82"],
-  ["+ list-only billing", s => { s.rentMult = 0.7; s.util = 70; s.interact = "batch"; s.batchShare = 0; s.discount = 0; }, 83.8542, "≈84"],
+  ["rent 0.70 alone", s => { s.rentMult = 0.7; }, 70.8875, "≈71"],
+  ["util 70 alone", s => { s.util = 70; }, 70.2933, "≈70"],
+  ["both", s => { s.rentMult = 0.7; s.util = 70; }, 79.2053, "≈79"],
+  ["+ throughput regime", s => { s.rentMult = 0.7; s.util = 70; s.interact = "batch"; }, 81.6212, "≈82"],
+  ["+ list-only billing", s => { s.rentMult = 0.7; s.util = 70; s.interact = "batch"; s.batchShare = 0; s.discount = 0; }, 83.8497, "≈84"],
 ];
 const g3 = fa.higherJustifications.find(g => g.groupId === "g3-gptpro-9294-lens");
 for (const [name, mut, pin, cited] of ladder) {
@@ -154,10 +154,10 @@ for (const [name, mut, pin, cited] of ladder) {
 }
 {
   const sp = preset(opus, E.PERSPECTIVES.find(p => p.id === "gptpro"), { mode: "native" });
-  assert("gptpro lens re-derives 83.0174 and the bridge cites ≈83.0", near(marg(sp), 83.0174) && g3.bridge.includes("≈83.0"));
+  assert("gptpro lens re-derives 83.0119 and the bridge cites ≈83.0", near(marg(sp), 83.0119) && g3.bridge.includes("≈83.0"));
   const implied = 0.75 * 90.6 + 0.25 * 93.3;
   assert("consult combine arithmetic 91.275 and the bridge cites ≈91", near(implied, 91.275, 1e-9) && g3.bridge.includes("≈91"));
-  const cost = 100 - 83.0174;  // im-vet-six-repairs: the lens moved with the two registry repairs
+  const cost = 100 - 83.0119;  // im-vet-six-repairs: the lens moved with the two registry repairs
   assert("cost-cut arithmetic to 92/94 (56%/67%) matches the bridge citation",
     near((1 - 8 / cost) * 100, 52.89, 0.05) && near((1 - 6 / cost) * 100, 64.67, 0.05)
     && g3.bridge.includes("53% or 65%"));
@@ -169,7 +169,7 @@ const g1 = fa.higherJustifications.find(g => g.groupId === "g1-teortaxes-9095");
    move all three routes. x80-v4 leaves its authored 80-90 band (79.54) and the g1 bridge says so;
    the vector itself is untouched, which is the whole point of computing band membership rather
    than enforcing it. */
-for (const [pid, pin, cited] of [["x90-v1", 89.2503, "≈89.3"], ["x80-v3", 80.5765, "≈80.6"], ["x80-v4", 79.5372, "≈79.5"]]) {
+for (const [pid, pin, cited] of [["x90-v1", 89.2462, "≈89.2"], ["x80-v3", 80.5710, "≈80.6"], ["x80-v4", 79.5314, "≈79.5"]]) {
   assert(`route ${pid} re-derives ${pin} and the g1 bridge cites ${cited}`,
     near(E.explorationFlagshipMargin(E.PERSPECTIVES.find(p => p.id === pid)), pin) && g1.bridge.includes(cited));
 }
@@ -180,20 +180,20 @@ for (const [pid, pin, cited] of [["x90-v1", 89.2503, "≈89.3"], ["x80-v3", 80.5
   const cutTo90 = (1 - 0.10 / costShare) * 100;
   const baker = fa.higherJustifications.find(g => g.groupId === "g5-baker-85");
   const alderson = fa.higherJustifications.find(g => g.groupId === "g5-alderson-90");
-  assert("owned-TCO copy cites the live 89.3% route in every final-answer surface",
-    baker.bridge.includes("≈89.3") && alderson.bridge.includes("≈89.3")
-    && alderson.wouldFlip.includes("≈89.3") && fa.tokens.mostPlausibleLine.includes("≈89.3"));
-  assert("85% bridge re-derives the 40% cost increase the 89.3% route can tolerate",
-    near(increaseTo85, 39.54, 0.05) && baker.bridge.includes("40% increase"));
-  assert("90% bridge re-derives the 7.0% cost cut still required from 89.3%",
-    near(cutTo90, 6.97, 0.05) && alderson.wouldFlip.includes("7.0% cut"));
+  assert("owned-TCO copy cites the live 89.2% route in every final-answer surface",
+    baker.bridge.includes("≈89.2") && alderson.bridge.includes("≈89.2")
+    && alderson.wouldFlip.includes("≈89.2") && fa.tokens.mostPlausibleLine.includes("≈89.2"));
+  assert("85% bridge re-derives the 40% cost increase the 89.2% route can tolerate",
+    near(increaseTo85, 39.49, 0.05) && baker.bridge.includes("40% increase"));
+  assert("90% bridge re-derives the 7.0% cost cut still required from 89.2%",
+    near(cutTo90, 7.01, 0.05) && alderson.wouldFlip.includes("7.0% cut"));
   assert("cross-model setting transfers are not mislabeled as xAI/DeepSeek operating-point replays",
     g1.bridge.includes("Opus flagship scope") && g1.bridge.includes("cross-model setting transfers")
     && !/the xAI cash-basis valuation replay \u224896/.test(g1.bridge));
 }
 /* im-vet-six-repairs: xaicash carries no blend of its own, so it rides the withdrawn default
    and the repaired TPU coefficient; deepseek pins its own H800 blend and is untouched. */
-for (const [pid, pin, cited] of [["xaicash", 96.0152, "≈96"], ["deepseek", 86.0058, "≈86"]]) {
+for (const [pid, pin, cited] of [["xaicash", 96.0131, "≈96"], ["deepseek", 86.0058, "≈86"]]) {
   const sp = preset(opus, E.PERSPECTIVES.find(p => p.id === pid), { mode: "native" });
   if (!("blend" in (E.PERSPECTIVES.find(p => p.id === pid).set || {}))) {
     const d = E.deriveDefaultFleetMembership(E.DEFAULT_FLEET_ID, sp, E.scenarioContext(sp));
@@ -210,8 +210,8 @@ for (const [pid, pin, cited] of [["xaicash", 96.0152, "≈96"], ["deepseek", 86.
   // $60/$52 per Mtok. Repaired, the same substitution is worth −1.0 point.
   /* im-vet-six-repairs (2026-09-20): the declared topology is an EXPLICIT blend, so it keeps its
      two Trainium legs and moves only with the TPU numerator repair. */
-  assert("decomposition first step: declared-topology weights re-derive 58.2419 (≈58 in the line)",
-    near(marg(sDecl), 58.2419) && fa.tokens.decompositionLine.includes("≈58"));
+  assert("decomposition first step: declared-topology weights re-derive 58.2301 (≈58 in the line)",
+    near(marg(sDecl), 58.2301) && fa.tokens.decompositionLine.includes("≈58"));
   /* The na-blend row is now the WITHDRAWN five-leg default: the declared seven-leg composition no
      longer equals the filtered headline, because the withdrawal renormalizes two legs out of it.
      Asserting the OLD equality here would assert the defect away, so the assertion is re-scoped to
@@ -251,8 +251,8 @@ for (const [pid, pin, cited] of [["xaicash", 96.0152, "≈96"], ["deepseek", 86.
      This is an executed flat sample, not a continuity claim; alternative model sizes can
      still cross capacity boundaries. */
   assert("J-6: the shipped three-point loaded-bytes sample is flat at 58.43% under stable membership",
-    vals.every(v => near(v, 58.4305))
-    && fa.policyBand.points.every(p => near(p.value, 58.4305))
+    vals.every(v => near(v, 58.4107))
+    && fa.policyBand.points.every(p => near(p.value, 58.4107))
     && (fa.tokens.bandLine.match(/\u2192 \u224858%/g) || []).length === 3,
     vals.map(v => v.toFixed(2)).join("/"));
 }
@@ -563,29 +563,29 @@ const VETTING_REPAIRS = {
   "mostPlausibleLine": [
     { why: "E2 TPU numerator repair — the strategic-partner lens moves with the coefficient", before: "the strategic-partner lens (≈83.1 at the public-evidence reference)", after: "the strategic-partner lens (≈83.0 at the public-evidence reference)" },
     { why: "E1 + E2 — both aggressive planning-vector routes ride the default fleet and the TPU leg", before: "routes (≈81.0/≈80.0 at the public-evidence reference)", after: "routes (≈80.6/≈79.5 at the public-evidence reference)" },
-    { why: "E1 + E2 — the owned-TCO route rides the same default", before: "owned-TCO route (≈89.1 at the public-evidence reference).", after: "owned-TCO route (≈89.3 at the public-evidence reference)." },
+    { why: "E1 + E2 — the owned-TCO route rides the same default", before: "owned-TCO route (≈89.1 at the public-evidence reference).", after: "owned-TCO route (≈89.2 at the public-evidence reference)." },
   ],
   "higherJustificationsHeader": [
     { why: "E1 + E5a — the default has five member legs, and gb200's adopted rent is analyst-set", before: "four of seven rents are analyst-set (the other three name public rates", after: "four of the five member rents are analyst-set (only the fifth names a public rate" },
     { why: "E1 — the Trainium legs are no longer caveated inside the default; they are withdrawn from it", before: "carry NO matched serving anchor and are scenario-only", after: "carry NO matched serving anchor, and their unresolved batch form is why they are WITHDRAWN from this default rather than merely caveated inside it" },
   ],
   "decompositionLine": [
-    { why: "E1 + E2 — the fleet-substitution step is now a seven-leg declared topology against a five-leg withdrawn default, and the 5 T case loses H100 to capacity while Trainium is withdrawn at every size", before: "40) to ≈58 (57.88) — a −0.5 point move; the serve-feasibility rule removes nothing at this size.", after: "24) to ≈58 (58.43) — a move of under half a point, upward. The NA blend's two Trainium legs are WITHDRAWN from this default on evidence grounds and their declared weight renormalizes over the remaining five, so this is a declared seven-leg topology set against a five-leg default and the renormalization is inside the move rather than beside it; the serve-feasibility rule removes nothing further at this size." },
+    { why: "E1 + E2 — the fleet-substitution step is now a seven-leg declared topology against a five-leg withdrawn default, and the 5 T case loses H100 to capacity while Trainium is withdrawn at every size", before: "40) to ≈58 (57.88) — a −0.5 point move; the serve-feasibility rule removes nothing at this size.", after: "23) to ≈58 (58.41) — a move of under half a point, upward. The NA blend's two Trainium legs are WITHDRAWN from this default on evidence grounds and their declared weight renormalizes over the remaining five, so this is a declared seven-leg topology set against a five-leg default and the renormalization is inside the move rather than beside it; the serve-feasibility rule removes nothing further at this size." },
     { why: "E1 + E2 — the 5 T alternative case", before: "now computes ≈56, and under it the rule removes H100 and Trainium2", after: "now computes ≈53, and under it the feasibility rule additionally removes H100" },
   ],
   "g1-teortaxes-9095": [
     { why: "E1 + E2 — the throughput step's standalone and in-ladder sizes", before: "throughput regime is worth ≈6 points", after: "throughput regime is worth ≈5 points" },
     { why: "E1 + E2 — the in-ladder increment", before: "≈79 — it adds about 3 more, to ≈82.", after: "≈79 — it adds about 2 more, to ≈82." },
-    { why: "E1 + E2 — the owned-TCO route at the reference and under the prior", before: "owned-TCO route, computes ≈89.1 there", after: "owned-TCO route, computes ≈89.3 there" },
+    { why: "E1 + E2 — the owned-TCO route at the reference and under the prior", before: "owned-TCO route, computes ≈89.1 there", after: "owned-TCO route, computes ≈89.2 there" },
     { why: "E1 + E2 — the same route under the ratified prior", before: "that same route computes ≈91.7 and does land inside it", after: "that same route computes ≈91.8 and does land inside it" },
     { why: "E1 + E2 — x80-v4 leaves its authored band; the sentence now states band membership in both directions and names the two repairs that moved it", before: "The two aggressive planning-vector routes now compute ≈81.0/≈80.0, INSIDE the 80–90 band they were authored for; before the b9 repaired defaults they fell short at ≈79.6/≈78.5, so it is the repair — not a re-authoring — that moved them in. The strategic-partner lens computes ≈83.1.", after: "The two aggressive planning-vector routes now compute ≈80.6/≈79.5: the first INSIDE the 80–90 band it was authored for, the second just BELOW it. Neither vector has been re-authored — what moves them is the engine underneath. They first crossed into the band when the b9 defaults were repaired (before that they read ≈79.6/≈78.5); the vetting repairs of 2026-09-20 moved them back down, by withdrawing the two Trainium legs from the default fleet and correcting the TPU decode coefficient onto a decode-only numerator, and that carried the second route back out. Band membership is computed and disclosed here, never enforced. The strategic-partner lens computes ≈83.0." },
     { why: "E1 + E2 — the wouldFlip cost-share arithmetic follows the lens", before: "reducing the ≈83.1 construction's cost share from ≈16.9% to ≈10% of billings (roughly a further 40% cut", after: "reducing the ≈83.0 construction's cost share from ≈17.0% to ≈10% of billings (roughly a further 41% cut" },
     { why: "N1 vocabulary release edit — style/VOCABULARY.md §1.2 makes **list price** the one name for the published per-token price and retires \"tariff\"", before: "sustained ~90% unit margins at published tariffs", after: "sustained ~90% unit margins at published list prices" },
   ],
   "g2-patel-semianalysis-80": [
-    { why: "E1 + E2 — this entry listed the LADDER at the LENS's figure, so the numeral repair could not be applied without naming each construction with its own value: the four-lever ladder is ≈84, the lens (which also swaps the fleet) is ≈83.0, and the owned-TCO route is ≈89.3. All three are derivation-bound elsewhere in this guard. The mis-attribution predates this leg and is recorded in its report rather than passed off as a numeral move.",
+    { why: "E1 + E2 — this entry listed the LADDER at the LENS's figure, so the numeral repair could not be applied without naming each construction with its own value: the four-lever ladder is ≈84, the lens (which also swaps the fleet) is ≈83.0, and the owned-TCO route is ≈89.2. All three are derivation-bound elsewhere in this guard. The mis-attribution predates this leg and is recorded in its report rather than passed off as a numeral move.",
       before: "(the strategic-partner ladder ≈83.1: partner rates at 0.70×, utilization 70, throughput regime, list-only billing; the separate owned-TCO route ≈89.1 at the public-evidence reference)",
-      after: "(the strategic-partner ladder ≈84: partner rates at 0.70×, utilization 70, throughput regime, list-only billing; the strategic-partner lens ≈83.0, which also swaps the fleet; the separate owned-TCO route ≈89.3 at the public-evidence reference)" },
+      after: "(the strategic-partner ladder ≈84: partner rates at 0.70×, utilization 70, throughput regime, list-only billing; the strategic-partner lens ≈83.0, which also swaps the fleet; the separate owned-TCO route ≈89.2 at the public-evidence reference)" },
   ],
   "g3-gptpro-9294-lens": [
     { why: "E1 + E2 — every occurrence of the lens figure in this entry", before: "≈83.1", after: "≈83.0" },
@@ -593,11 +593,11 @@ const VETTING_REPAIRS = {
     { why: "N1 vocabulary release edit — style/VOCABULARY.md §1.3 splits the retired \"cost lens\" into price preset and scenario preset; this span is the span object, so it becomes the scenario-preset span", before: "cost-lens span", after: "scenario-preset span" },
   ],
   "g5-baker-85": [
-    { why: "E1 + E2 — the owned-TCO construction", before: "computes ≈89.1 at the public-evidence reference", after: "computes ≈89.3 at the public-evidence reference" },
+    { why: "E1 + E2 — the owned-TCO construction", before: "computes ≈89.1 at the public-evidence reference", after: "computes ≈89.2 at the public-evidence reference" },
     { why: "E1 + E2 — the tolerable cost increase from that construction", before: "tolerate roughly a 37% increase", after: "tolerate roughly a 40% increase" },
   ],
   "g5-alderson-90": [
-    { why: "E1 + E2 — the owned-TCO route, both occurrences", before: "≈89.1", after: "≈89.3" },
+    { why: "E1 + E2 — the owned-TCO route, both occurrences", before: "≈89.1", after: "≈89.2" },
     { why: "E1 + E2 — the remaining cut required from it", before: "roughly a further 8.5% cut", after: "roughly a further 7.0% cut" },
   ],
 };
@@ -714,7 +714,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      are therefore UNMOVED by the T4 fold. ≈59% moves to ≈51% with the reference reading. */
   /* im-vet-six-repairs (2026-09-20): every key below moves with the two registry repairs it names
      in the event header, and each is still BOUND to a live derivation rather than allowlisted. */
-  const GUARD_ENUMERATED = ["≈58%", "≈89.3", "≈91.8"];
+  const GUARD_ENUMERATED = ["≈58%", "≈89.2", "≈91.8"];
   const derived = {
     "≈58":   () => Math.round(marg(seededAt(2500))),
     "≈70":   () => Math.round(marg(seededAt(2500, s => { s.util = 70; }))),
@@ -819,7 +819,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      "no allow-rule can rescue one" was too strong for what the code does, and a blanket
      `^\d+\.\d+$` escape really would have let ANY new decimal through; both are corrected here. */
   /* im-vet-six-repairs: the declared-topology and withdrawn-default companions both move. */
-  const EXACT_COMPANIONS = ["58.24", "58.43"];
+  const EXACT_COMPANIONS = ["58.23", "58.41"];
   const disposedBy = (x) =>
     GUARD_ENUMERATED.includes(x) ? "guard-enumerated"
     : (x in derived) ? "derivation-bound"
@@ -1007,7 +1007,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
        is unchanged and is what is asserted — outside the band at the reference, inside it under
        the prior — and only the two pins move. */
     assert("J-3 x90-v1 computes OUTSIDE its authored ≥90 band at the reference (89.25) and INSIDE it under the prior (91.83)",
-      refv < 90 && priorv >= 90 && near(refv, 89.2503) && near(priorv, 91.8320),
+      refv < 90 && priorv >= 90 && near(refv, 89.2462) && near(priorv, 91.8289),
       JSON.stringify([refv, priorv]));
     const g1 = fa.higherJustifications.find(g => g.groupId === "g1-teortaxes-9095");
     assert("J-3 the published sentence is TRUE under each basis it names, and names both",

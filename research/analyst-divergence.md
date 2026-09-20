@@ -31,7 +31,7 @@ Worked at `m_own = 95%` (`P = 20 C`):
 
 So the framing "a 95% own-accelerator margin survives a lessor's cut at ~90%" is right: the markup multiplies the small cost side, not the price side. Two conditions the identity rests on, stated so nobody reads `m_L` as a named lessor's accounting gross margin: (i) it assumes the lessor's relevant cost base equals the modelled owned-capacity cost `C` — real lessors and self-owners differ in procurement discounts, financing, useful life, utilisation, residual value, PUE and shared overhead, so in practice `k` is **rent ÷ the lab's modelled TCO**, and "`m_L`" is `1 − 1/k`, an *implied* quantity; (ii) the multiple applies only to the cost the lessor replaces — retained serving costs (orchestration, networking, support) should be added separately rather than scaled.
 
-This page's own numbers, read that way: at the page's defaults the rental-inclusive stress case reads ≈58% and the same state owned reads ≈88%, i.e. `k = 0.4157/0.1169 ≈ 3.55` — a **3.55× rent/TCO multiple**, equivalent to a 72% *implied* lessor margin or a 255% markup over the page's modelled TCO. Card 1 prints it as an implied spread over modelled TCO, never as an observed lessor margin. (Re-measured from the shipped engine at each release.)
+This page's own numbers, read that way: at the page's defaults the rental-inclusive stress case reads ≈58% and the same state owned reads ≈88%, i.e. `k = 0.4159/0.1170 ≈ 3.56` — a **3.56× rent/TCO multiple**, equivalent to a 72% *implied* lessor margin or a 255% markup over the page's modelled TCO. Card 1 prints it as an implied spread over modelled TCO, never as an observed lessor margin. (Re-measured from the shipped engine at each release.)
 
 ## 3. The cited claims, attributed one by one
 

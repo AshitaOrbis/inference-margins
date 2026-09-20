@@ -15,7 +15,7 @@ function assert(name, cond, detail) {
 }
 
 /* ---------- shared fixtures ---------- */
-const REF = 0.5843046405779231; // the byte-identity bar (plan §6.1; memo §0)
+const REF = 0.5841067415764696; // the byte-identity bar (plan §6.1; memo §0)
 const opus = E.MODELS.find(m => m.id === "opus");
 const median = E.PERSPECTIVES.find(p => p.id === "median");
 /* b9 M5 fixture scope (M5 delta manifest): M4's governing invariant — "M4 moves NO shipped

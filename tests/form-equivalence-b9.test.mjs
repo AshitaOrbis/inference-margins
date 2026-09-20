@@ -39,9 +39,10 @@ const LEGS = Object.keys(s.blend).filter(k => s.blend[k] > 0);
 // meant to certify; the pins below are byte-equal at both commits.)
 /* im-vet-six-repairs (2026-09-20), vetting findings E1 + E2. TWO changes reach this table and
    NEITHER is a form change, which is what this file certifies:
-     - tpu7 393.15309363037676 -> 372.4232032389569, because its decode coefficient was corrected
-       onto a decode-only numerator (0.55 -> 0.521). Throughput scales with η exactly:
-       372.4232032389569 / 393.15309363037676 = 0.521/0.55 to the bit.
+     - tpu7 393.15309363037676 -> 370.9935556257555, because its decode coefficient was corrected
+       onto ONE STATED TIMING CONVENTION (0.55 -> 0.519; it passed through 0.521 for part of the
+       day and the completion gate refused that, see engine-data-v22.js). Throughput scales with
+       η exactly: 370.9935556257555 / 393.15309363037676 = 0.519/0.55 to the bit.
      - trn2 and trn3 leave the table entirely, because both legs are WITHDRAWN from the default
        fleet on evidence grounds, so `LEGS` (which reads the state's live blend) no longer
        contains them. Their doubles are kept below as the record of what they were, unpinned:
@@ -50,16 +51,16 @@ const LEGS = Object.keys(s.blend).filter(k => s.blend[k] > 0);
        nothing about the model's form. */
 const M1_TOKPERS = {
   h100: 286.1872031018027, h200: 410.0592760861651, gb200: 875.2294556284228,
-  gb300: 394.9383307836918, tpu7: 372.4232032389569,
+  gb300: 394.9383307836918, tpu7: 370.9935556257555,
 };
 /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
    M1_MARGIN is the value the M2 form-equivalence property holds AT, not the property itself. The
    property — re-expressing the blend must not move the number by one bit — is unchanged and every
    assertion below still demands byte-equality. The rent adoption prices GB200, GB300 and trn3, so
-   the value moves 0.5117863577679238 → 0.5843046405779231. NOTE WHAT DID NOT MOVE: every one of the
+   the value moves 0.5117863577679238 → 0.5841067415764696. NOTE WHAT DID NOT MOVE: every one of the
    seven M1_TOKPERS throughput doubles above is byte-identical, which is the evidence this ruling
    touched procurement and nothing about the model's form. */
-const M1_MARGIN = 0.5843046405779231;  // im-vet-six-repairs (2026-09-20): the value the property holds AT moves with the two repairs; the byte-equality property below is unchanged
+const M1_MARGIN = 0.5841067415764696;  // im-vet-six-repairs (2026-09-20): the value the property holds AT moves with the two repairs, and again when E2 was put on a consistent basis; the byte-equality property below is unchanged
 for (const k of LEGS) {
   const got = E.tokPerS(E.HW[k], s, "out");
   assert(`form equivalence: ${k} decode throughput BYTE-identical to pre-M2`, got === M1_TOKPERS[k],
@@ -67,14 +68,60 @@ for (const k of LEGS) {
 }
 assert("form equivalence: the blended margin is BYTE-identical to pre-M2",
   E.workload(s).margin === M1_MARGIN, String(E.workload(s).margin));
+
+/* ---------- 1b. ABSOLUTE GOLDENS ON THE DECLARED FLEET (bq-2894) ----------
+   RESTORED 2026-09-20 (im-vet-six-repairs), after the Astra xhigh review measured what the E1
+   re-scope had cost and the completion gate ruled it back in. The loop above reads `LEGS`, which
+   is the LIVE blend, so when trn2 and trn3 were withdrawn from the default fleet they simply left
+   the table — and with them went the only absolute pin on a Trainium throughput. The review
+   demonstrated the hole rather than asserting it: raising the Trainium2 decode coefficient by 10%
+   passed all 154 checks in this file.
+
+   The fix is to pin the DECLARED fleet, not the rendered one. A withdrawal is a statement about
+   which legs enter a reading; it is not a statement that the page no longer computes a throughput
+   for those legs, and it must not be able to silence a guard. These goldens therefore name every
+   declared leg explicitly and are independent of membership: a future withdrawal, or a future
+   re-admission, changes nothing here. */
+const DECLARED_LEGS = Object.keys(D.FLEETS[D.DEFAULT_FLEET_ID].legs);
+const DECLARED_TOKPERS = {
+  ...M1_TOKPERS,
+  /* withdrawn from the default reading, still computed, still pinned */
+  trn2: 105.66123177448141, trn3: 178.53104679136516,
+};
+assert("declared-fleet goldens: every DECLARED leg has an absolute pin, membership notwithstanding",
+  DECLARED_LEGS.every(k => typeof DECLARED_TOKPERS[k] === "number"),
+  JSON.stringify(DECLARED_LEGS.filter(k => typeof DECLARED_TOKPERS[k] !== "number")));
+assert("declared-fleet goldens: the withdrawn legs are IN this table (that is the point of it)",
+  DECLARED_LEGS.includes("trn2") && DECLARED_LEGS.includes("trn3"),
+  JSON.stringify(DECLARED_LEGS));
+for (const k of DECLARED_LEGS) {
+  const got = E.tokPerS(E.HW[k], s, "out");
+  assert(`declared-fleet golden: ${k} decode throughput is byte-identical`, got === DECLARED_TOKPERS[k],
+    `got ${got} want ${DECLARED_TOKPERS[k]}`);
+}
+/* THE MUTATION PROOF, executed rather than promised. The review's exact probe: move the Trainium2
+   decode coefficient 10% and require this table to go RED. A restored golden that cannot fail
+   under the mutation that exposed its absence would be theatre. */
+{
+  const before = D.CALIBRATION.trn2.etaDec;
+  D.CALIBRATION.trn2.etaDec = before * 1.10;
+  const mutated = E.tokPerS(E.HW.trn2, s, "out");
+  D.CALIBRATION.trn2.etaDec = before;
+  const restored = E.tokPerS(E.HW.trn2, s, "out");
+  assert("declared-fleet goldens MUTATION PROOF: a 10% Trainium2 coefficient move BREAKS the golden",
+    mutated !== DECLARED_TOKPERS.trn2, `mutated ${mutated} vs golden ${DECLARED_TOKPERS.trn2}`);
+  assert("declared-fleet goldens MUTATION PROOF: ...and the probe leaves the registry exactly as it found it",
+    restored === DECLARED_TOKPERS.trn2 && D.CALIBRATION.trn2.etaDec === before,
+    `restored ${restored}`);
+}
 /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
    the milestone's acceptance figure was 51.1786% for a reference computed over the four legs that
    priced. Adopting planning rents for GB200, GB300 and trn3 prices all seven and the reference is
    58.4305%. The M2 form-equivalence PROPERTY this file exists for is untouched — re-expressing the
    blend must not move the number — and it is still asserted byte-identically below; what moved is
    the number the property holds AT. */
-assert("form equivalence: reference blend still 58.4305% (the milestone's acceptance, re-minted at the 2026-09-20 vetting repairs)",
-  Math.abs(E.workload(s).margin * 100 - 58.4305) < 5e-5, String(E.workload(s).margin * 100));
+assert("form equivalence: reference blend still 58.4107% (the milestone's acceptance, re-minted at the 2026-09-20 vetting repairs)",
+  Math.abs(E.workload(s).margin * 100 - 58.4107) < 5e-5, String(E.workload(s).margin * 100));
 /* im-arc T2 (memo §2): named/ordinary states now travel through one resolved
    section, while the flattened view remains the byte-exact legacy consumer input. */
 { const flat = E.resolveFleetLegs(s), sections = E.resolveFleetSections(s);
@@ -295,13 +342,13 @@ for (const k of LEGS) {
   const hi = E.computeMix(base.cIn * P.sensitivityBand.hi, base.cOut, s);
   const prefillShare = (base.costMix - E.computeMix(0, base.cOut, s).costMix) / base.costMix;
   const sensitivityPp = (lo.margin - base.margin) * 100;
-  /* im-vet-six-repairs (2026-09-20), vetting finding E3: the share re-derives to 72.45% and the
+  /* im-vet-six-repairs (2026-09-20), vetting finding E3: the share re-derives to 72.42% and the
      one-page reconstruction annex publishes it component by component with its sources, labels and
      the cache-work boundary the fresh-prefill anchor assumes
      (research/input-cost-reconstruction.md). The carry disclosure moves with it, and also loses
      "flagship default" to the vocabulary release edit. */
-  assert("prefill: the planning baseline's input share re-derives to 72.45% of direct cost",
-    Math.abs(prefillShare - 0.7245279861880811) < 1e-12, String(prefillShare));
+  assert("prefill: the planning baseline's input share re-derives to 72.42% of direct cost",
+    Math.abs(prefillShare - 0.7241832261755355) < 1e-12, String(prefillShare));
   assert("prefill: the ±50% carry re-derives symmetrically to ±15.059 pp",
     Math.abs(sensitivityPp - 15.059146081490393) < 1e-12
       && Math.abs((base.margin - hi.margin) * 100 - sensitivityPp) < 1e-12
@@ -385,12 +432,12 @@ for (const k of LEGS) {
      adoption — the three legs it used to exclude now price, so re-expressing the traffic assumption
      has less room to move the answer. The Amendment-3 FORM is unchanged; the endpoints are re-minted
      from the engine. */
-  /* im-vet-six-repairs (2026-09-20): the span WIDENS from 10.93 pp to 13.69 pp. The Amendment-3
+  /* im-vet-six-repairs (2026-09-20): the span WIDENS from 10.93 pp to 13.74 pp. The Amendment-3
      FORM is unchanged and the endpoints are re-minted from the engine; the widening is the honest
      consequence of the Trainium withdrawal — the form axis now swings over five legs instead of
      seven, and the two it lost were the ones whose declared N_phys moved it least. */
-  assert("debt: carries the §2.2 un-identified span, Amendment-3 form (47.6064–61.2982, 13.69 pp)",
-    d.identifiedSpan.lo === 47.6064 && d.identifiedSpan.hi === 61.2982 && d.identifiedSpan.spanPp === 13.69,
+  assert("debt: carries the §2.2 un-identified span, Amendment-3 form (47.5399–61.2784, 13.74 pp)",
+    d.identifiedSpan.lo === 47.5399 && d.identifiedSpan.hi === 61.2784 && d.identifiedSpan.spanPp === 13.74,
     JSON.stringify(d.identifiedSpan));
   assert("debt: identified span declares its flagship Opus scope",
     d.identifiedSpan.scope === "flagship-opus-baseline-at-public-evidence-reference", String(d.identifiedSpan.scope)); // b9 M5 gate P2: the scope names the reference it is pinned to

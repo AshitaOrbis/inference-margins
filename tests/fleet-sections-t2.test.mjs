@@ -323,7 +323,7 @@ function costs(def, s = state()) {
   assert("T2-5 named fleets resolve as one effective section", !error && sections.length === 1
     && sections[0].section.basis === "committed-planning-rent" && sections[0].section.basis !== "inherit",
     error ? error.message : JSON.stringify(sections));
-  assert("T2-5 reference one-section identity remains bit-exact", wl && wl.margin === 0.5843046405779231, String(wl && wl.margin));
+  assert("T2-5 reference one-section identity remains bit-exact", wl && wl.margin === 0.5841067415764696, String(wl && wl.margin));
   assert("T2-5 every ordinary mix carries one typed composition entry",
     wl && wl.composition.length === 1 && !JSON.stringify(wl.composition).includes("inherit"));
 }

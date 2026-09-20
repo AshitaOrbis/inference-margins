@@ -25,10 +25,10 @@ function engineState(mid, pid, sel = { mode: "native" }, overrides = null) {
 /* im-vet-six-repairs re-mint (2026-09-20, vetting findings E1 + E2): the Trainium withdrawal and
    the TPU numerator repair move both readings; the 1e-9 tie between the MCP and the engine is what
    this test exists for and is unchanged. */
-test("opus + median @ native Reference — costs to 1e-9, margin ≈68.4 → rounded 68 (vetting-repairs re-mint, 2026-09-20; the trend-0 reference is ≈58.43)", async () => {
+test("opus + median @ native Reference — costs to 1e-9, margin ≈68.4 → rounded 68 (vetting-repairs re-mint, 2026-09-20; the trend-0 reference is ≈58.41)", async () => {
   const res = sc(await h.call("run_scenario", { model: "opus" }));
   const wl = E.workload(engineState("opus", "median"));
-  assert.ok(Math.abs(wl.margin * 100 - 68.41398315513409) < 1e-9, "engine ground truth is ≈68.4: " + wl.margin * 100);
+  assert.ok(Math.abs(wl.margin * 100 - 68.39894608278819) < 1e-9, "engine ground truth is ≈68.4: " + wl.margin * 100);
   /* b9 M5: the move is CHARACTERIZED, not merely re-minted — the default is exactly the reference
      with cost divided by E(+3 @ 3×/yr), and that RELATIONSHIP is what is asserted rather than the
      digits. im-release-edit-r2 (2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok):
@@ -37,7 +37,7 @@ test("opus + median @ native Reference — costs to 1e-9, margin ≈68.4 → rou
      algorithmic-lead prior that couples these two readings. */
   const ref = E.workload(E.pinReferenceLevers(E.applyPresetSettings(
     E.MODELS.find((m) => m.id === "opus"), E.PERSPECTIVES.find((p) => p.id === "median"), { mode: "native" })));
-  assert.ok(Math.abs(ref.margin - 0.5843046405779231) < 1e-15, "the trend-0 reference is the post-vetting-repairs value: " + ref.margin);
+  assert.ok(Math.abs(ref.margin - 0.5841067415764696) < 1e-15, "the trend-0 reference is the post-vetting-repairs value: " + ref.margin);
   assert.ok(Math.abs(ref.costMix / wl.costMix - Math.pow(3, 0.25)) < 1e-12, "the default is the reference ÷E on the cost side");
   assert.ok(Math.abs(res.costs.blended_cost_usd_per_mtok - wl.costMix) < EPS, "costMix");
   assert.ok(Math.abs(res.costs.realized_price_usd_per_mtok - wl.priceMix) < EPS, "priceMix");
@@ -97,7 +97,7 @@ test("opus + median @ native Reference — costs to 1e-9, margin ≈68.4 → rou
      out of the blend now carry rates and dilute the two legs whose form correction is largest.
      The debt did not get smaller as evidence — the blend it is measured across got wider. */
   assert.deepEqual(res.form_correction_debt.identified_span_pct,
-    { lo: 47.6064, hi: 61.2982, span_pp: 13.69 });
+    { lo: 47.5399, hi: 61.2784, span_pp: 13.74 });
   assert.equal(res.form_correction_debt.identified_span_scope, "flagship-opus-baseline-at-public-evidence-reference");
   /* im-vet-six-repairs (2026-09-20), vetting finding E1: the two Trainium legs are WITHDRAWN from
      the default fleet, so they are not in this scenario's affected_legs at all — the ~15.2x

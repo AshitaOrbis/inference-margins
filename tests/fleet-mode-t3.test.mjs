@@ -69,7 +69,7 @@ assert("T3-A1 every box declares explicit basic/advanced tiers and no basic tier
   const state = E.pinReferenceLevers(E.applyPresetSettings(model, perspective, { mode: "native" }));
   const context = E.makeScenarioContext(model, E.resolveTraffic(model, perspective, { mode: "native" }), state.customDonor);
   assert("T3-A2 REF generic mode remains byte-identical",
-    E.workload(state, undefined, context, E.fleetModeRenderOptions("generic", null)).margin === 0.5843046405779231);
+    E.workload(state, undefined, context, E.fleetModeRenderOptions("generic", null)).margin === 0.5841067415764696);
 
   const plain = E.workload(E.applyPresetSettings(model, perspective, { mode: "native" }));
   const legacyCompositionKeys = ["basis", "costBasisUsed", "electricitySource", "hourlyCostFrom", "sectionId", "share"];

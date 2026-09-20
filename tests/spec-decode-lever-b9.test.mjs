@@ -41,11 +41,11 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
    mcp-server/test/parity.test.mjs against the same engine bytes; it is re-derived here from the
    Node engine so this suite fails on its own if the default moves. */
 {
-  assert("F-3 tripwire 1 — trend-0 reference blend margin is byte-identical 0.5843046405779231",
-    E.workload(REFERENCE()).margin === 0.5843046405779231, String(E.workload(REFERENCE()).margin));
+  assert("F-3 tripwire 1 — trend-0 reference blend margin is byte-identical 0.5841067415764696",
+    E.workload(REFERENCE()).margin === 0.5841067415764696, String(E.workload(REFERENCE()).margin));
   /* im-vet-six-repairs (2026-09-20), vetting findings E1 + E2: re-minted for the Trainium withdrawal and the TPU numerator repair. */
-  assert("F-3 tripwire 2 — the ratified default headline is byte-identical 68.41398315513409",
-    E.workload(DEFAULT_STATE()).margin * 100 === 68.41398315513409,
+  assert("F-3 tripwire 2 — the ratified default headline is byte-identical 68.39894608278819",
+    E.workload(DEFAULT_STATE()).margin * 100 === 68.39894608278819,
     String(E.workload(DEFAULT_STATE()).margin * 100));
   const mem = E.finalAnswer().membership;
   assert("F-3 tripwire 3 — membership is 5 members / 2 excluded (both WITHDRAWN) / renormalization basis 75",
@@ -460,7 +460,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
      oracle, so the whole of rows 2-5 reduces to two equalities that cannot be argued with. */
   assert("rows 2-3 — the g1 bridge reproduces the ratified POST-EDIT digest exactly",
     digest(bridgeOf("g1-teortaxes-9095"))
-      === "db273d74f9e3d15be3c6dcfc7b53f79eb88baa5272f2227a367b4eb5f984eb4f",  // im-vet-six-repairs 2026-09-20: the g1 bridge moves with the repairs, every span pinned in tests/fa-justifications.test.mjs VETTING_REPAIRS
+      === "8d74fa619113c287f97db71e8295f45fd4bd1b225a59890556be4b64dd7d5ff9",  // im-vet-six-repairs 2026-09-20: the g1 bridge moves with the repairs, every span pinned in tests/fa-justifications.test.mjs VETTING_REPAIRS
     digest(bridgeOf("g1-teortaxes-9095")));
   assert("rows 4-5 — the g3 bridge reproduces the ratified POST-EDIT digest exactly",
     digest(bridgeOf("g3-gptpro-9294-lens"))
@@ -1201,10 +1201,10 @@ const SNAP = (v, step) => Math.round(v / step) * step;      // the live app.js s
      coefficient. Regenerated with `node tests/generate-specdec-preleg.mjs --write`, never
      hand-edited. */
   assert("T-1 the POST-leg engine reproduces the pre-leg fixture's pinned digest",
-    digest === "b12c7157a70c71936f30e00ac2dc1122ba5a1f7cc154bfec08b50cf925793d37", digest);
+    digest === "9713d77ddd62acb5065ca259c1e8f0eecd9cf168e48fdc2364e108c95500d1d9", digest);
   assert("T-1 the committed fixture is byte-identical to what the post-leg engine emits",
     createHash("sha256").update(fixture, "utf8").digest("hex") === digest
-    && Buffer.byteLength(fixture) === 9923, `${Buffer.byteLength(fixture)} bytes`);
+    && Buffer.byteLength(fixture) === 9924, `${Buffer.byteLength(fixture)} bytes`);
 }
 
 /* ================= T-4 / T-5 — PHASE SCOPE AND TYPED RESOLUTION ================= */

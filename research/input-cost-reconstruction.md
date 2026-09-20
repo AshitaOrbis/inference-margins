@@ -38,12 +38,12 @@ Executed at the reading above:
 
 | component | $ / bundle | share of modeled direct cost | label |
 |---|---:|---:|---|
-| Fresh input — 6 M tokens at $2.44148 / M | **14.64887** | **67.40 %** | RECONSTRUCTION (one anchor, transferred) |
+| Fresh input — 6 M tokens at $2.44148 / M | **14.64887** | **67.37 %** | RECONSTRUCTION (one anchor, transferred) |
 | Cache reads — 9 M tokens at $0.12207 / M | **1.09867** | **5.05 %** | SPECULATION (the 5 % factor is analyst-set) |
-| Decode — 1 M tokens at $5.98735 / M | **5.98735** | **27.55 %** | MIXED CALIBRATION EVIDENCE — enumerated below; **not** fitted per leg |
-| **All input-side** | **15.74754** | **72.45 %** | |
-| **Bundle total** | **21.73489** | 100 % | |
-| **$ / million blended tokens** | **1.35843** | | this is the page's `$1.35843` |
+| Decode — 1 M tokens at $5.99770 / M | **5.99770** | **27.58 %** | MIXED CALIBRATION EVIDENCE — enumerated below; **not** fitted per leg |
+| **All input-side** | **15.74754** | **72.42 %** | |
+| **Bundle total** | **21.74524** | 100 % | |
+| **$ / million blended tokens** | **1.35908** | | this is the page's `$1.35908` |
 
 **The decode component's evidence is mixed, and the mix matters more than the average.** This row
 said "fitted per leg" until the Astra review of 2026-09-20 caught that the claim is not true of
@@ -98,12 +98,12 @@ share. Those are two different exposures and they are not the same size.
 
 | what moves | range | margin | swing |
 |---|---|---:|---:|
-| **cache-read factor** | 0 % of fresh prefill | 60.53 % | +2.10 pp |
-| | **5 % (adopted)** | **58.43 %** | — |
-| | 15 % | 54.23 % | −4.20 pp |
-| **all input-side unit cost** | −50 % | 73.49 % | +15.06 pp |
-| | **as modeled** | **58.43 %** | — |
-| | +50 % | 43.37 % | −15.06 pp |
+| **cache-read factor** | 0 % of fresh prefill | 60.51 % | +2.10 pp |
+| | **5 % (adopted)** | **58.41 %** | — |
+| | 15 % | 54.21 % | −4.20 pp |
+| **all input-side unit cost** | −50 % | 73.47 % | +15.06 pp |
+| | **as modeled** | **58.41 %** | — |
+| | +50 % | 43.35 % | −15.06 pp |
 
 **The dominant exposure is fresh-prefill calibration, not the cache-read factor.** The cache factor
 is the more visible assumption because it is a round number a reader can argue with; the transfer
@@ -128,5 +128,5 @@ console.log({ fresh, cache, dec, bundle, perBlended: bundle / (io + 1), costMix:
 '
 ```
 
-It prints the four component figures in §2 and the 72.45 % input share, and `perBlended` equals
+It prints the four component figures in §2 and the 72.42 % input share, and `perBlended` equals
 `costMix` exactly — the identity is the engine's, not a restatement of it.

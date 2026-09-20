@@ -302,7 +302,7 @@ check "state landing: one-click return to the central scenario is offered" "$TMP
 #          10.93); the per-leg sizes, the family-3 "~15× wrong" exposure, and the memo-§5 replication
 #          residual must all reach a READER, not just a caller. ---
 check "debt aside: OPEN CALIBRATION DEBT lead renders"    "$TMP/s1.html" must "OPEN CALIBRATION DEBT"
-check "debt aside: Amendment-3 span renders (47.61%%-61.30%%, 13.69 pp)" "$TMP/s1.html" must "47.61%–61.30% (13.69 pp)"
+check "debt aside: Amendment-3 span renders (47.54%%-61.28%%, 13.74 pp)" "$TMP/s1.html" must "47.54%–61.28% (13.74 pp)"
 check "debt aside: NOT the superseded with-replacement span" "$TMP/s1.html" mustnot "53.29%–64.17%"
 # row 499: per-leg debt sizes are fleet-dependent, and the landing fleet is now the preset's own
 # blend. The fleet-independent span above still renders and is still checked.
@@ -939,7 +939,7 @@ check "b9 M5: the superseded 53.29% calibration-debt endpoint is gone" "$TMP/def
 check "the verdict names the planning baseline and its settings" "$TMP/default.html" must "the page-adopted 2.5T Opus, planning rents, algorithmic lead 0 months, family multipliers 1.0×"
 check "the verdict states the lead-adjusted reading beside it" "$TMP/default.html" must "reads <strong>about 68% (about 68–87% across the same presets)</strong>"
 check "the verdict declares its scenario once, and scopes the claim to calculator figures" "$TMP/default.html" must "Every calculator figure in this section is the planning baseline unless it says otherwise; 90–95% is the external claim under examination"
-check "b9 M5 micro-verify: the utilization lever states BOTH bases" "$TMP/default.html" must "the same change moves 68.41% to 54.88%, a 13.54-point drop"
+check "b9 M5 micro-verify: the utilization lever states BOTH bases" "$TMP/default.html" must "the same change moves 68.40% to 54.86%, a 13.54-point drop"
 check "b9 M5 micro-verify: the billable cached share sensitivity names its reference" "$TMP/default.html" must "at the public-evidence reference (algorithmic lead 0 months), billable cached share 0%"
 
 # --- b9 M6 (FA memo §10.4, §10.4-bis): the assertions this harness CAN make.

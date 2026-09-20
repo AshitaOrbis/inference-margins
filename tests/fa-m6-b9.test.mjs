@@ -874,7 +874,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
                51.1806 -> 58.4305   the precise reference reading (58.43052929759557)
                51.18 x2, 43.22 -> 58, 58.40, 57.88, 0.5, 56
                                     the decomposition, from finalAnswer().decompositionLine
-               63 x2 -> 68 x2       the lead-adjusted baseline (68.41398315513409)
+               63 x2 -> 68 x2       the lead-adjusted baseline (68.39894608278819)
                70.1 -> 70.5         input-side share 100*(6.45*cIn)/(cOut+6.45*cIn) = 70.5373073367345
                + 51.1786            the PREVIOUS effective result, named so the ~52% coverage history
                                     attaches to the result it actually described (round 2, R8)
@@ -924,8 +924,8 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
                Trainium WITHDRAWAL paragraph; the analyst-divergence page carries the re-derived
                rent/TCO multiple (3.43x -> 3.55x) and implied lessor margin (71% -> 72%), both
                recomputed from the live stress and owned readings rather than transcribed. */
-            "site/research/final-answer-rationale.html": "ec3803106704fd7558c6cf5e1c029b33b9db5932a3670070f03d168e958620c3",
-            "site/research/analyst-divergence.html": "2708fed6ea319f173aac59e952e0386336a172a7b4d0e0394997397c47884548",
+            "site/research/final-answer-rationale.html": "e8033bae3eb4ce33c5f44a30cee51880b0704e2eb3739b12d57d5e0cec7be249",
+            "site/research/analyst-divergence.html": "e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d",
           };
           for (const [rel, expected] of Object.entries(CLAIM_ANNEXES)) {
             const abs = join(ROOT, rel);
@@ -1519,7 +1519,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
      −37.8% -> −64.8%. gptpro's 81.7% blended reference reading is re-stated in the same note. */
   /* im-vet-six-repairs (2026-09-20): both figures move with the Trainium withdrawal and the TPU
      numerator repair; the property — each names its basis in its own clause — is unchanged. */
-  for (const [id, needle] of [["gptpro", "83.0% blended"], ["x60-v3", "−40.3%"]]) {
+  for (const [id, needle] of [["gptpro", "83.0% blended"], ["x60-v3", "−40.4%"]]) {
     const note = E.PERSPECTIVES.find(p => p.id === id).note;
     assert("T-8 [" + id + "] the published figure \"" + needle + "\" names its basis in its OWN clause",
       clauseOf(note, needle).includes(REF_PHRASE), clauseOf(note, needle).slice(0, 160));

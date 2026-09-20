@@ -236,7 +236,16 @@ emitFleetTransitionLine(`LANDING-FLEET FIXTURE SPAN 5.90T->5.95T margin=${pct(fi
    property of the fleet, not of the sweep, so with a five-leg default there is nothing to surface
    at that boundary. The gate-6 suppression it motivates is UNCHANGED and still unconditional —
    see tests/fleets.test.mjs, where the strict branch now suppresses at the baseline itself. */
-diagnosticCheck("the 5.90T->5.95T survivorship discontinuity is GONE with the Trainium legs withdrawn",
+/* PROMOTED FROM DIAGNOSTIC TO ASSERTION 2026-09-20 (im-vet-six-repairs, bq-2895), after the Astra
+   xhigh review showed that an injected 10-point jump here logged a mismatch and still exited ZERO,
+   and the completion gate ruled that gap inside the frozen "no guard was edited to pass" criterion.
+   The promotion is not a mechanical tightening: this line used to OBSERVE a discontinuity the page
+   could not help, which is the right register for something nobody has decided about. It now
+   ASSERTS a fact this leg created — that withdrawing the Trainium legs removes the 5.90T->5.95T
+   upward jump — and a fact a leg creates is a fact a guard should defend. If a future data move
+   brings a discontinuity back, that is a finding, and it will now stop the harness instead of
+   printing into a log nobody reads. */
+assertionCheck("the 5.90T->5.95T survivorship discontinuity is GONE with the Trainium legs withdrawn",
   violations.length === 0,
   `${violations.length} upward jump(s): ${violations.map(v => `${totalLabel(v.previous.totalB)}->${totalLabel(v.current.totalB)}`).join(",") || "none"}`);
 /* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): the two landing-fleet
@@ -252,12 +261,12 @@ diagnosticCheck("the 5.90T->5.95T survivorship discontinuity is GONE with the Tr
 /* im-vet-six-repairs (2026-09-20): both fixtures re-mint, and this time the MEMBERSHIP moves as
    well as the margins — the default is five legs, and at both sizes all five render, which is why
    the discontinuity above disappeared. Declared, not absorbed. */
-assertionCheck("landing-fleet fixture 5.90T = 51.41%, 5/5 legs, renderableWeightShare=100%",
-  Math.abs(fixture2000.workload.margin * 100 - 51.41) <= 0.01 && fixture2000.receipt.renderableLegs === 5 &&
+assertionCheck("landing-fleet fixture 5.90T = 51.37%, 5/5 legs, renderableWeightShare=100%",
+  Math.abs(fixture2000.workload.margin * 100 - 51.37) <= 0.01 && fixture2000.receipt.renderableLegs === 5 &&
   fixture2000.receipt.totalLegs === 5 && Math.abs(fixture2000.receipt.renderableWeightShare - 1) <= 1e-9,
   `${pct(fixture2000.workload.margin)}, ${fixture2000.receipt.renderableLegs}/${fixture2000.receipt.totalLegs}, ${pct(fixture2000.receipt.renderableWeightShare)}`);
-assertionCheck("landing-fleet fixture 5.95T = 51.29%, 5/5 legs, renderableWeightShare=100%",
-  Math.abs(fixture2500.workload.margin * 100 - 51.29) <= 0.01 && fixture2500.receipt.renderableLegs === 5 &&
+assertionCheck("landing-fleet fixture 5.95T = 51.25%, 5/5 legs, renderableWeightShare=100%",
+  Math.abs(fixture2500.workload.margin * 100 - 51.25) <= 0.01 && fixture2500.receipt.renderableLegs === 5 &&
   fixture2500.receipt.totalLegs === 5 && Math.abs(fixture2500.receipt.renderableWeightShare - 1) <= 1e-9,
   `${pct(fixture2500.workload.margin)}, ${fixture2500.receipt.renderableLegs}/${fixture2500.receipt.totalLegs}, ${pct(fixture2500.receipt.renderableWeightShare)}`);
 
@@ -418,5 +427,14 @@ console.log(disclosureFailures === 0
 console.log(topologyGuardFailures === 0
   ? "PASS  IM4 N_shard-only topology guard"
   : `FAIL  IM4 N_shard-only topology guard — ${topologyGuardFailures} failure(s)`);
-console.log("NOTE: diagnostic mismatches remain review observations; numeric/order assertions, disclosure checks, and topology guards control the process exit code.");
-process.exit(assertionFailures === 0 && disclosureFailures === 0 && topologyGuardFailures === 0 ? 0 : 1);
+/* CHANGED 2026-09-20 (im-vet-six-repairs, bq-2895). The line that used to sit here said diagnostic
+   mismatches "remain review observations" and the exit code excluded them — so a mismatch printed
+   and the harness passed. That is a defensible design only while every diagnostic is genuinely
+   undecided, and it stopped being true: the one diagnostic in this file now asserts a property
+   this release created. Mismatches reach the exit status from here on. The counter is reported
+   separately from assertion failures so a reader can still tell the two registers apart. */
+console.log(diagnosticMismatches === 0
+  ? "PASS  IM4 diagnostic observations (mismatches now reach the exit code, bq-2895)"
+  : `FAIL  IM4 diagnostic observations — ${diagnosticMismatches} mismatch(es), and they are no longer excused`);
+process.exit(assertionFailures === 0 && disclosureFailures === 0 && topologyGuardFailures === 0
+  && diagnosticMismatches === 0 ? 0 : 1);

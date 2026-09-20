@@ -78,7 +78,7 @@ assert("T1 rentAbsLeg bounds equal CF_BOUNDS.rentPerHr", JSON.stringify(E.SCENAR
      is unchanged for the fourth time. The Trainium withdrawal changes the BLEND a clean mint
      encodes — five member legs instead of seven — which is a fleet-membership fact, not an
      absolute-rent key; the assertions above are still what prove no such key appeared. */
-  assert("T1 permalink minted without absolute-rent keys matches the vetting-repairs epoch", cleanHash === "8fbf71f0b598ee2fac50970c9c61473e2521b50614ce59ba825b7ed9cac743a4", cleanHash);
+  assert("T1 permalink minted without absolute-rent keys matches the vetting-repairs epoch", cleanHash === "b214eacd95f672f538a8933cb1792727b9fd3e10e4bcd3ad5fee105dadc00a21", cleanHash);
 }
 
 {
@@ -98,7 +98,7 @@ assert("T1 rentAbsLeg bounds equal CF_BOUNDS.rentPerHr", JSON.stringify(E.SCENAR
   /* im-arc T4 fold (2026-08-24, declared delta): the reference-lever state moves with the
      defaults it is built on. It is still the SAME pin — one state, one exact value, re-minted
      under a named migration, never a tolerance. */
-  assert("T1 reference state stays byte-identical", E.workload(ref).margin === 0.5843046405779231, String(E.workload(ref).margin));
+  assert("T1 reference state stays byte-identical", E.workload(ref).margin === 0.5841067415764696, String(E.workload(ref).margin));
 }
 
 if (typeof E.lessorSpread === "function" && typeof E.blendedLessorSpread === "function") {

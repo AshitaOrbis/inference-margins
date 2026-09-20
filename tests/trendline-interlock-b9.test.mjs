@@ -441,7 +441,7 @@ const PRE_M5_FA = {
        `membership.excluded[0..1].declaredWeight` JOIN it, which is the withdrawal made visible in
        the numeric surface itself. Both are named in VETTING_NUMERIC_KEYS / VETTING_REMOVED_KEYS
        below, so nothing else can ride in behind them. */
-    "lensSpan.hiPct": 83.01738001097331, "lensSpan.loPct": 58.43046405779231, "lensSpan.n": 7,
+    "lensSpan.hiPct": 83.01188731979346, "lensSpan.loPct": 58.41067415764696, "lensSpan.n": 7,
     "membership.declaredLegCount": 7, "membership.derivedAt.cacheHit": 60, "membership.derivedAt.ioRatio": 15,
     "membership.memberLegCount": 5, "membership.renormalizationBasis": 75,
     "membership.members[0].declaredWeight": 8, "membership.members[0].defaultWeight": 10.666666666666666,
@@ -454,19 +454,19 @@ const PRE_M5_FA = {
     "membershipSensitivity[2].policyPoint": 1.05,
     "planningPoint.fleetRenderable.policy.value": 1, "planningPoint.fleetRenderable.renderableLegs": 5,
     "planningPoint.fleetRenderable.renderableWeightShare": 1, "planningPoint.fleetRenderable.totalLegs": 5,
-    "planningPoint.marginPct": 58.43046405779231, "planningPoint.policy.loadedWeightBytesPerParam": 1,
+    "planningPoint.marginPct": 58.41067415764696, "planningPoint.policy.loadedWeightBytesPerParam": 1,
     "policyBand.argMax": 0.55, "policyBand.argMin": 0.55,
-    "policyBand.max": 58.43046405779231, "policyBand.min": 58.43046405779231,
-    "policyBand.points[0].policyPoint": 0.55, "policyBand.points[0].value": 58.43046405779231,
-    "policyBand.points[1].policyPoint": 0.65, "policyBand.points[1].value": 58.43046405779231,
-    "policyBand.points[2].policyPoint": 1.05, "policyBand.points[2].value": 58.43046405779231,
-    "trafficSpan.contributors[0].marginPct": 58.43046405779231,
-    "trafficSpan.contributors[1].marginPct": 66.48598053553204,
-    "trafficSpan.contributors[2].marginPct": 67.53893199166853,
-    "trafficSpan.contributors[3].marginPct": 37.285589977316405,
-    "trafficSpan.contributors[4].marginPct": 60.65788529505305,
-    "trafficSpan.contributors[5].marginPct": 64.4326662152056,
-    "trafficSpan.hiPct": 67.53893199166853, "trafficSpan.loPct": 37.285589977316405, "trafficSpan.n": 6,
+    "policyBand.max": 58.41067415764696, "policyBand.min": 58.41067415764696,
+    "policyBand.points[0].policyPoint": 0.55, "policyBand.points[0].value": 58.41067415764696,
+    "policyBand.points[1].policyPoint": 0.65, "policyBand.points[1].value": 58.41067415764696,
+    "policyBand.points[2].policyPoint": 1.05, "policyBand.points[2].value": 58.41067415764696,
+    "trafficSpan.contributors[0].marginPct": 58.41067415764696,
+    "trafficSpan.contributors[1].marginPct": 66.4559513131697,
+    "trafficSpan.contributors[2].marginPct": 67.50641976833441,
+    "trafficSpan.contributors[3].marginPct": 37.25651652523738,
+    "trafficSpan.contributors[4].marginPct": 60.63516968913106,
+    "trafficSpan.contributors[5].marginPct": 64.40443257012491,
+    "trafficSpan.hiPct": 67.50641976833441, "trafficSpan.loPct": 37.25651652523738, "trafficSpan.n": 6,
   };
   const numericLeaves = (o) => {
     const out = {};
@@ -890,22 +890,22 @@ const PRE_M5_FA = {
      rounding of - basis = which reading it is. Every row binds both. */
   const FIGURES = [
     { needle: "~58%",         derived: pctOf(ref()),                     fmt: approx, basis: "reference" },
-    { needle: "58.43%",       derived: pctOf(ref()),                     fmt: two,    basis: "reference" },
+    { needle: "58.41%",       derived: pctOf(ref()),                     fmt: two,    basis: "reference" },
     { needle: "58.4%",        derived: pctOf(ref()),                     fmt: one,    basis: "reference" },
-    { needle: "40.61%",       derived: pctOf(ref({ util: 35 })),         fmt: two,    basis: "reference" },
+    { needle: "40.59%",       derived: pctOf(ref({ util: 35 })),         fmt: two,    basis: "reference" },
     { needle: "~58–83%",      derived: lensOf(true),   fmt: (v) => "~" + Math.round(v[0]) + "–" + Math.round(v[1]) + "%", basis: "reference" },
     /* im-release-edit 2026-09-09: same figure, same derivation, the page's new words —
        "lenses" was retired in favour of "price presets", and the approximation is spelled. */
     { needle: "about 68% (about 68–87% across the same presets)", derived: [pctOf(live()), lensOf(false)],
                               fmt: (v) => "about " + Math.round(v[0]) + "% (about " + Math.round(v[1][0]) + "–" + Math.round(v[1][1]) + "% across the same presets)", basis: "prior" },
-    { needle: "47.61–61.30%", derived: [span.lo, span.hi],          fmt: (v) => v[0].toFixed(2) + "–" + v[1].toFixed(2) + "%", basis: "reference" },
+    { needle: "47.54–61.28%", derived: [span.lo, span.hi],          fmt: (v) => v[0].toFixed(2) + "–" + v[1].toFixed(2) + "%", basis: "reference" },
     { needle: "75.3%",        derived: pctOf(ref({ billCacheHit: 0 })),  fmt: one,    basis: "reference" },
-    { needle: "31.1%",        derived: pctOf(ref({ billCacheHit: 95 })), fmt: one,    basis: "reference" },
+    { needle: "31.0%",        derived: pctOf(ref({ billCacheHit: 95 })), fmt: one,    basis: "reference" },
     { needle: "~54% blended", derived: pctOf(sref()),                    fmt: (v) => approx(v) + " blended", basis: "reference" },
     { needle: "~69%",         derived: pctOf(sref({ priceIn: 3, priceOut: 15 })), fmt: approx, basis: "reference" },
     { needle: "~65% and ~77%", derived: [pctOf(slive()), pctOf(slive({ priceIn: 3, priceOut: 15 }))],
                                                                          fmt: (v) => approx(v[0]) + " and " + approx(v[1]), basis: "prior" },
-    { needle: "54.88%",       derived: pctOf(live({ util: 35 })),        fmt: two,    basis: "prior" },
+    { needle: "54.86%",       derived: pctOf(live({ util: 35 })),        fmt: two,    basis: "prior" },
     /* Round 7 blocker 1: the annex publishes the ratified-prior default in its own form. It was
        outside every needle, so the single-basis declaration covered it silently. Enumerated here
        so the guard BINDS the exception the declaration now names. */
@@ -930,7 +930,7 @@ const PRE_M5_FA = {
     /* The x90 owned-TCO route at BOTH bases — the §4.2 finding: the g1 claim is TRUE at the
        reference and FALSE under the ratified prior, so both figures are bound and the sentence
        names each basis in the figure's own clause. */
-    { needle: "≈89.3",        derived: E.explorationFlagshipMargin(E.PERSPECTIVES.find(x => x.id === "x90-v1")),
+    { needle: "≈89.2",        derived: E.explorationFlagshipMargin(E.PERSPECTIVES.find(x => x.id === "x90-v1")),
                               fmt: (v) => "≈" + v.toFixed(1), basis: "reference" },
     { needle: "≈91.8",        derived: pctOf(E.applyPresetSettings(opus, E.PERSPECTIVES.find(x => x.id === "x90-v1"), E.FLAGSHIP_SCOPE.traffic)),
                               fmt: (v) => "≈" + v.toFixed(1), basis: "prior" },
@@ -938,7 +938,7 @@ const PRE_M5_FA = {
        carrying surface the guard did not scan. */
     { needle: "83.0% blended", derived: pctOf(E.pinReferenceLevers(E.applyPresetSettings(opus, E.PERSPECTIVES.find(x => x.id === "gptpro"), E.FLAGSHIP_SCOPE.traffic))),
                               fmt: (v) => v.toFixed(1) + "% blended", basis: "reference" },
-    { needle: "−40.3%",       derived: pctOf(E.pinReferenceLevers(E.applyPresetSettings(opus, E.PERSPECTIVES.find(x => x.id === "x60-v3"), E.FLAGSHIP_SCOPE.traffic))),
+    { needle: "−40.4%",       derived: pctOf(E.pinReferenceLevers(E.applyPresetSettings(opus, E.PERSPECTIVES.find(x => x.id === "x60-v3"), E.FLAGSHIP_SCOPE.traffic))),
                               fmt: (v) => "−" + Math.abs(v).toFixed(1) + "%", basis: "reference" },
   ];
   const REFERENCE_BASIS = ["public-evidence reference", "reference reading", "algorithmic lead 0 months",
@@ -1185,7 +1185,7 @@ const PRE_M5_FA = {
           !raw.includes(v), "found " + v);
     }
     assert("GUARD the banned variants really are roundings of the reference value",
-      Math.abs(pctOf(ref()) - 58.4305) < 5e-4, String(pctOf(ref())));
+      Math.abs(pctOf(ref()) - 58.4107) < 5e-4, String(pctOf(ref())));
   }
   // The superseded with-replacement endpoint may never return — in prose OR in a source comment
   // (round 5 found it still standing in an engine comment after the HTML had been fixed).

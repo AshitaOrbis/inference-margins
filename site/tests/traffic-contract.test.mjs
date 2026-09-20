@@ -788,9 +788,13 @@ for (const m of E.MODELS) if (m.dive)
   const wRef = E.workload(E.pinReferenceLevers(E.applyPresetSettings(M("opus"), P("median"), { mode: "native" })));
   /* im-vet-six-repairs (2026-09-20): both pins move with the Trainium withdrawal and the TPU
      numerator repair, and the §7 dollar walk on the page moves with them (asserted in
-     tests/snapshots.test.mjs, which recomputes the sentence rather than pinning it). */
-  assert("§7 pin: cost $1.35843 at the public-evidence reference", Math.abs(wRef.costMix - 1.358430729811433) < 1e-6, wRef.costMix);
-  assert("§7 pin: cost $1.03218 under the ratified-prior default", Math.abs(w.costMix - 1.0321841449964637) < 1e-6, w.costMix);
+     tests/snapshots.test.mjs, which recomputes the sentence rather than pinning it).
+     RE-MINTED AGAIN the same day when the completion gate ruled that DISCLOSING E2's basis
+     inconsistency is neither repairing it nor withdrawing the contribution: the coefficient went
+     from the mixed 0.521 to 0.519, both endpoints on one stated timing convention, and these two
+     dollar pins moved the last fraction of a cent with it. */
+  assert("§7 pin: cost $1.35908 at the public-evidence reference", Math.abs(wRef.costMix - 1.35907743437255) < 1e-6, wRef.costMix);
+  assert("§7 pin: cost $1.03268 under the ratified-prior default", Math.abs(w.costMix - 1.0326755342000742) < 1e-6, w.costMix);
   assert("§7 pin: the two readings differ by EXACTLY E(+3 @ 3×/yr) on the cost side",
     Math.abs(wRef.costMix / w.costMix - Math.pow(3, 0.25)) < 1e-12, String(wRef.costMix / w.costMix));
 }
@@ -946,8 +950,8 @@ for (const m of E.MODELS) if (m.dive)
        to 6.1 points against 2.6 before, because the withdrawal removes the two legs the 10 T
        membership was going to drop anyway and leaves the stale seed holding h100 and gb200, which
        the normative order correctly drops at that size. The hazard is more visible, not less. */
-    assert("hazard pair: NORMATIVE order margin 46.6346 (vetting-repairs re-mint)", Math.abs(mNormative - 46.6346) < 5e-4, String(mNormative));
-    assert("hazard pair: stale seed-then-diff margin 52.7143 (the forbidden order, vetting-repairs re-mint)", Math.abs(mStale - 52.7143) < 5e-4, String(mStale));
+    assert("hazard pair: NORMATIVE order margin 46.5443 (vetting-repairs re-mint)", Math.abs(mNormative - 46.5443) < 5e-4, String(mNormative));
+    assert("hazard pair: stale seed-then-diff margin 52.6565 (the forbidden order, vetting-repairs re-mint)", Math.abs(mStale - 52.6565) < 5e-4, String(mStale));
     assert("hazard pair: the two orders stay SEPARATED — the decode-order hazard remains detectable",
       Math.abs(mStale - mNormative) > 1, String(mStale - mNormative));
     /* The retention evidence moves with the membership: at 2.5 T the default now holds h100 and

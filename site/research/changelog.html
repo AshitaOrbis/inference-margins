@@ -86,16 +86,26 @@ whether its operating-point batch figure is per chip or per replica — a factor
 this page&#39;s own hardware ledger already said the coefficient <em>cannot support a central Trainium
 margin</em>. The default now declares <strong>five of seven legs</strong> instead of silently renormalizing over
 seven. Both rows stay, labelled SPECULATION.</li>
-<li><strong>The TPU throughput numerator was repaired against its own source</strong>: 0.55 → <strong>0.521</strong>. One of
-its two same-platform endpoints had used Google&#39;s <em>combined</em> input-plus-output figure as if it
-were a decode rate; this project&#39;s own published blinded replication solves the two-workload
-system for the decode-only rate. The repair <strong>raises</strong> modeled TPU cost, which is the evidence
-it is a unit repair and not a tuning. The GB200 precision identity, where the calibration
-registry and the explanatory note disagreed, now says what the registry says.</li>
+<li><strong>The TPU throughput numerator was repaired against its own source</strong>: 0.55 → <strong>0.519</strong>. Its two
+same-platform diagnostics had been read on two different clocks — one of them treating Google&#39;s
+<em>combined</em> input-plus-output figure as though it were a decode rate. Both now sit on one declared
+convention: output tokens per second per chip over total serving wall time, at a 1K-in/8K-out
+workload. <strong>Only the rental anchor publishes in that convention.</strong> Google publishes a combined
+rate, and the conversion to it is this page&#39;s own arithmetic, not something either source did —
+which the calibration record now says in terms. That gives 0.528 and 0.510, midpoint <strong>0.519</strong>,
+band 0.510–0.528. A decode-stage pair was available and is <strong>declined on a checkable ground</strong>:
+fitted on two of the rental anchor&#39;s three published rows it predicts about 468 tokens per second
+per chip for the third, against a published 499. The repair <strong>raises</strong> modeled TPU cost, so every
+MARGIN it feeds falls or stays put — measured across 288 model/perspective combinations: 100
+lower, 188 unchanged, none higher. Quantities that track COST rise with it, as they should: the
+calibration-debt width, reference serving energy, the rent/TCO ratio and the direct-serving dollar
+costs. That direction is the evidence it is a unit repair and not a tuning: a choice of basis that
+flattered the page would have gone the other way. The GB200 precision identity, where the
+calibration registry and the explanatory note disagreed, now says what the registry says.</li>
 <li><strong>The input side is reconstructible in one place</strong>: a new annex, <em>Where the input-side cost
 comes from</em>, with every component&#39;s source and label, the cache-work boundary the fresh-prefill
 anchor assumes, the two sensitivities the methods box had collapsed into one, and a snippet that
-reproduces it. Building it moved the share itself: <strong>72.45 %</strong>, not the ~70.5 % the finding cited.</li>
+reproduces it. Building it moved the share itself: <strong>72.42 %</strong>, not the ~70.5 % the finding cited.</li>
 <li><strong>Both estimate cards now lead with the calculation the engine actually runs.</strong> Their round-2
 reasoning is kept below as labelled history rather than presented as current.</li>
 <li><strong>Evidence labels were re-graded to what their sources support</strong> — a rent labelled

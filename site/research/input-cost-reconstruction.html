@@ -127,7 +127,7 @@ C_blended = C_bundle ÷ 16
 <tbody><tr>
 <td>Fresh input — 6 M tokens at $2.44148 / M</td>
 <td align="right"><strong>14.64887</strong></td>
-<td align="right"><strong>67.40 %</strong></td>
+<td align="right"><strong>67.37 %</strong></td>
 <td>RECONSTRUCTION (one anchor, transferred)</td>
 </tr>
 <tr>
@@ -137,28 +137,28 @@ C_blended = C_bundle ÷ 16
 <td>SPECULATION (the 5 % factor is analyst-set)</td>
 </tr>
 <tr>
-<td>Decode — 1 M tokens at $5.98735 / M</td>
-<td align="right"><strong>5.98735</strong></td>
-<td align="right"><strong>27.55 %</strong></td>
+<td>Decode — 1 M tokens at $5.99770 / M</td>
+<td align="right"><strong>5.99770</strong></td>
+<td align="right"><strong>27.58 %</strong></td>
 <td>MIXED CALIBRATION EVIDENCE — enumerated below; <strong>not</strong> fitted per leg</td>
 </tr>
 <tr>
 <td><strong>All input-side</strong></td>
 <td align="right"><strong>15.74754</strong></td>
-<td align="right"><strong>72.45 %</strong></td>
+<td align="right"><strong>72.42 %</strong></td>
 <td></td>
 </tr>
 <tr>
 <td><strong>Bundle total</strong></td>
-<td align="right"><strong>21.73489</strong></td>
+<td align="right"><strong>21.74524</strong></td>
 <td align="right">100 %</td>
 <td></td>
 </tr>
 <tr>
 <td><strong>$ / million blended tokens</strong></td>
-<td align="right"><strong>1.35843</strong></td>
+<td align="right"><strong>1.35908</strong></td>
 <td align="right"></td>
-<td>this is the page&#39;s <code>$1.35843</code></td>
+<td>this is the page&#39;s <code>$1.35908</code></td>
 </tr>
 </tbody></table>
 <p><strong>The decode component&#39;s evidence is mixed, and the mix matters more than the average.</strong> This row
@@ -258,37 +258,37 @@ share. Those are two different exposures and they are not the same size.</p>
 <tbody><tr>
 <td><strong>cache-read factor</strong></td>
 <td>0 % of fresh prefill</td>
-<td align="right">60.53 %</td>
+<td align="right">60.51 %</td>
 <td align="right">+2.10 pp</td>
 </tr>
 <tr>
 <td></td>
 <td><strong>5 % (adopted)</strong></td>
-<td align="right"><strong>58.43 %</strong></td>
+<td align="right"><strong>58.41 %</strong></td>
 <td align="right">—</td>
 </tr>
 <tr>
 <td></td>
 <td>15 %</td>
-<td align="right">54.23 %</td>
+<td align="right">54.21 %</td>
 <td align="right">−4.20 pp</td>
 </tr>
 <tr>
 <td><strong>all input-side unit cost</strong></td>
 <td>−50 %</td>
-<td align="right">73.49 %</td>
+<td align="right">73.47 %</td>
 <td align="right">+15.06 pp</td>
 </tr>
 <tr>
 <td></td>
 <td><strong>as modeled</strong></td>
-<td align="right"><strong>58.43 %</strong></td>
+<td align="right"><strong>58.41 %</strong></td>
 <td align="right">—</td>
 </tr>
 <tr>
 <td></td>
 <td>+50 %</td>
-<td align="right">43.37 %</td>
+<td align="right">43.35 %</td>
 <td align="right">−15.06 pp</td>
 </tr>
 </tbody></table>
@@ -311,7 +311,7 @@ console.log({ fresh, cache, dec, bundle, perBlended: bundle / (io + 1), costMix:
   inputShare: (fresh + cache) / bundle });
 &#39;
 </code></pre>
-<p>It prints the four component figures in §2 and the 72.45 % input share, and <code>perBlended</code> equals
+<p>It prints the four component figures in §2 and the 72.42 % input share, and <code>perBlended</code> equals
 <code>costMix</code> exactly — the identity is the engine&#39;s, not a restatement of it.</p>
 
 </section>

@@ -64,7 +64,7 @@ The chain, innermost first — each link names its calibration class:
    (owner-adjudicated planning interpretation; the referent is unverified), and
    its 5 T deduction is preserved as the labeled `community-central-5.0` size
    case. The headline is size-dependent and decreases monotonically across the
-   three sampled totals: 2.0/2.5/3.0 T compute ≈59.40% / ≈58.43% / ≈57.46%
+   three sampled totals: 2.0/2.5/3.0 T compute ≈59.39% / ≈58.41% / ≈57.43%
    (executed). Active ≈300B is this page's working
    estimate (the open question is flagged on the model note). COMMUNITY ESTIMATE
    class, page-adopted.
@@ -106,7 +106,7 @@ The chain, innermost first — each link names its calibration class:
    **Prefill is borrowed everywhere.** One frozen identity fit is transferred to every
    accelerator, so no leg's prefill carries a measured basis — and the input side, which prefill
    dominates, is where about 70% of the modeled direct cost sits (the report's methods box states
-   it precisely, at ~70.5% for the current flagship default). Widths are CAPACITY-SOLVED per leg over
+   it precisely — ~70.5% when this rationale was written, and 72.42% for the flagship default as of 2026-09-20). Widths are CAPACITY-SOLVED per leg over
    registered hardware domains (solver receipts on every leg), never fixed
    constants; solved widths at the revised default: h100 112, h200 32, gb200 24,
    gb300 12, tpu7 16, trn2 48, trn3 32.
@@ -148,7 +148,7 @@ priced leg is still not evidence that the capacity serves.
 
 **Open form-correction debt — not a repaired estimate.** Holding each legacy
 calibration coefficient fixed while re-expressing its traffic form produces
-**47.61% to 61.30%** at the flagship baseline computed on the planning baseline: a 13.69-point open calibration debt
+**47.54% to 61.28%** at the flagship baseline computed on the planning baseline: a 13.74-point open calibration debt
 from the declared replica width alone. More seriously, the Trainium2/3 operating
 point registry labels batch as replica-global while the shipped engine consumes it
 per chip; the alternate reading makes those affected legs about 15.2×

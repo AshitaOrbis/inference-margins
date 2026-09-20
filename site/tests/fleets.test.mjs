@@ -341,11 +341,11 @@ const marginAndReceipt = (blend, totalB) => {
   /* im-vet-six-repairs (2026-09-20): this fixture passes an EXPLICIT blend, so the withdrawal
      does not reach it and the membership numbers are untouched for the fourth time; only the
      margins move, with the TPU numerator repair. */
-  assert("gate-6 council fixture (vetting-repairs re-mint): 5.90T → 20.97%, 7/7 legs, 100% weight",
-    Math.abs(a.margin * 100 - 20.97) < 0.01 && a.legs === 7 && a.total === 7 && Math.abs(a.share - 1) < 1e-9,
+  assert("gate-6 council fixture (vetting-repairs re-mint): 5.90T → 20.94%, 7/7 legs, 100% weight",
+    Math.abs(a.margin * 100 - 20.94) < 0.01 && a.legs === 7 && a.total === 7 && Math.abs(a.share - 1) < 1e-9,
     JSON.stringify(a));
-  assert("gate-6 council fixture (vetting-repairs re-mint): 5.95T → 54.82%, 6/7 legs, 95% weight",
-    Math.abs(b.margin * 100 - 54.82) < 0.01 && b.legs === 6 && b.total === 7 && Math.abs(b.share - 0.95) < 1e-9,
+  assert("gate-6 council fixture (vetting-repairs re-mint): 5.95T → 54.79%, 6/7 legs, 95% weight",
+    Math.abs(b.margin * 100 - 54.79) < 0.01 && b.legs === 6 && b.total === 7 && Math.abs(b.share - 0.95) < 1e-9,
     JSON.stringify(b));
   assert("gate-6: the margin-improving crossing exists (this is WHY suppression is unconditional on the landing surface)",
     b.margin > a.margin);

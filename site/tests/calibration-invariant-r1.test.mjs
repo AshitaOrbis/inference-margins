@@ -35,15 +35,21 @@ const assert = (name, cond, detail = "") => {
 // the status prefixes become source-informed neutral.
 // im-vet-six-repairs RE-MINT (2026-09-20, program bq-2835; vetting finding E1 + E2). This leg
 // deliberately moves calibrated identities too, and EXACTLY THREE rows move:
-//   tpu7  0.55 -> 0.521, and its status prefix gains "on a PINNED DECODE NUMERATOR" \u2014 one of the
-//         two same-platform endpoints was computed on Google's COMBINED input-plus-output rate
-//         (677 t/s/chip) as if it were a decode rate; this project's own published blinded
-//         replication solves the two-workload system for 606 output t/s/chip, so both endpoints
-//         now use a decode numerator (518.86 and 606) and the midpoint moves with them.
+//   tpu7  0.55 -> 0.519, and its status prefix gains "on ONE DECLARED TIMING CONVENTION". One
+//         of the two same-platform endpoints was computed on Google's COMBINED input-plus-output
+//         rate (677 t/s/chip) as if it were an output rate. The first repair of 2026-09-20 paired
+//         the rental anchor's 518.86 with the DECODE-STAGE 606 this project's own blinded
+//         replication solves out of a two-workload system, reaching 0.521, and DISCLOSED that the
+//         two figures sit on different clocks. The completion gate ruled that a disclosure is
+//         neither a repair nor a withdrawal, which is what the commission required, so both
+//         endpoints now sit on the convention BOTH sources publish in: output tokens per second
+//         per chip over total serving wall time at 1K-in/8K-out, i.e. 518.86 and 677 x 8/9 =
+//         601.8. Midpoint 0.519, band 0.510-0.528 — lower than either candidate it replaced, so
+//         the choice of basis cannot flatter the page.
 //   trn2, trn3  etaDec UNCHANGED; their status prefixes gain the SPECULATION label the page's
 //         evidence ladder gives a coefficient whose unit is open by ~15.2x.
 // The other seven rows are byte-identical, and the hash guards that from here.
-const CAL_SHA256 = "b8e08c658a3277783eadfa956fd829163832cbabb4063778a7ff781228d6b357";
+const CAL_SHA256 = "c3921b2b88dee835dbf28f0a5e81d5bce710f966e78916cd037f64fdaa1f8baf";
 const SW_SHA256 = "6a7d00a1bf8eaa153ac1d895e72023cb593e04e5d0e37b6a1302ee2ef646f5b2"; // full map incl. rubin (R1-impl R2 F4)
 const cal = Object.fromEntries(Object.entries(ED.CALIBRATION).map(([k, v]) => [k, [v.etaDec, v.etaStatus.slice(0, 20)]]));
 const h = crypto.createHash("sha256").update(JSON.stringify(cal)).digest("hex");
