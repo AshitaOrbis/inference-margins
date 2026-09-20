@@ -247,7 +247,7 @@ export function withPreT4Registry(fn) {
      a historical receipt is re-earned, not re-minted to match a new number.
 
      TWO registry values moved on 2026-09-20 and both reach these grids:
-       (1) CALIBRATION.tpu7.etaDec 0.55 -> 0.521, the numerator repair (vetting finding E2). This
+       (1) CALIBRATION.tpu7.etaDec 0.55 -> 0.519, the basis repair (vetting finding E2). 0.521 was an INTERMEDIATE that stood for part of 2026-09-20 and is RETIRED: it paired the rental anchor's 518.86 with the DECODE-STAGE 606, two different clocks, and the completion gate refused a disclosed inconsistency as a repair. The live pair is 518.86 and 677 x 8/9 = 601.8, both output tokens per second per chip over TOTAL serving wall time. This
            one also closes a SEAM the gate had: site/engine-roofline-v22.js is not an archived
            module and captures `require("./engine-data-v22.js")` at load, so the ARCHIVED engine's
            decode path was reading LIVE calibration. The R3 route therefore was not running on

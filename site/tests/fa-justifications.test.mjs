@@ -123,9 +123,13 @@ const m20 = marg(seededAt(2000)), m25 = marg(seededAt(2500)), m30 = marg(seededA
      (1) the two Trainium legs are WITHDRAWN from the default fleet's membership on evidence
          grounds (unresolved replica-global-vs-per-chip batch form, ~15.2x), so the default is
          five legs renormalized over 75 declared points instead of seven over 100; and
-     (2) the TPU v7 decode coefficient moves 0.55 -> 0.521, because one of its two endpoints was
-         computed on Google's COMBINED input-plus-output rate (677 t/s/chip) as if it were a
-         decode rate; both endpoints now use a decode numerator (518.86 and 606).
+     (2) the TPU v7 decode coefficient moves 0.55 -> 0.519, because one of its two endpoints was
+         computed on Google's COMBINED input-plus-output rate (677 t/s/chip) as if it were an
+         output rate. Both endpoints are now NORMALIZED to one convention — output tokens per
+         second per chip over TOTAL serving wall time at 1K-in/8K-out — i.e. 518.86 and
+         677 x 8/9 = 601.8. The 0.521/606 pairing was a same-day INTERMEDIATE and is retired: it
+         put a decode-stage rate beside a wall-time one, and the completion gate refused a
+         disclosed inconsistency as a repair.
    (1) raises readings slightly, (2) lowers them; the ROUNDED ladder copy is unchanged at every
    rung, which is why only the exact pins move here. */
 assert("J-9 (b9 M1): the filtered headline now VARIES with total size, monotone decreasing across 2.0/2.5/3.0 T, reproducing run B §B7's SHAPE (59.4 / 58.4 / 57.4 after the Trainium withdrawal and the TPU numerator repair)",
@@ -551,11 +555,13 @@ const PRE_RENT_ADOPTION = {
          consumes it per chip; the alternative reading is ~15.2x, and the hardware ledger already
          said the coefficient cannot support a central Trainium margin). Their declared 8% and 17%
          renormalize over the remaining five legs.
-     (2) E2 — the TPU v7 decode coefficient moves 0.55 -> 0.521. One of its two same-platform
+     (2) E2 — the TPU v7 decode coefficient moves 0.55 -> 0.519. 0.521 was an INTERMEDIATE that stood for part of 2026-09-20 and is RETIRED: it paired the rental anchor's 518.86 with the DECODE-STAGE 606, two different clocks, and the completion gate refused a disclosed inconsistency as a repair. The live pair is 518.86 and 677 x 8/9 = 601.8, both output tokens per second per chip over TOTAL serving wall time. One of its two same-platform
          endpoints was computed on Google's COMBINED input-plus-output rate (677 t/s/chip) as if
-         it were a decode rate; this project's own published blinded replication solves the
-         two-workload system for 606 output t/s/chip, and both endpoints now use a decode
-         numerator (518.86 and 606).
+         it were an output rate. Both endpoints are now NORMALIZED to one convention — output
+         tokens per second per chip over TOTAL serving wall time — i.e. 518.86 and
+         677 x 8/9 = 601.8. This project's published blinded replication does solve the
+         two-workload system for a DECODE-STAGE 606, and an intermediate form of this repair
+         paired that with 518.86 to reach 0.521; that pairing mixed two clocks and is retired.
    (1) raises readings, (2) lowers them, and E5a (gb200's adopted rent relabelled analyst-set)
    moves no number at all.
    ============================================================================================ */

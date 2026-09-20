@@ -89,7 +89,7 @@ aef5cbc691243f47055856b0d066ca50b8956884410c25ad63db26b1c441f48f  ./tests/archiv
 6f9c1700a4cb16da95534f15612c712254f1c22e8838465108c1ae1b59f84ef1  ./tests/evidence-schema.test.mjs
 1c2543d84a8d9b46517f95883b5e80e114597dc68ead897476c0669a30aac6e1  ./tests/fa-dual-default-r1.test.mjs
 5d2ad03860621c52179d0d87a3ebdb6ee04b7efbe000e36505596eac2b29ca88  ./tests/fa-explain-cdp.test.mjs
-2d7a4c33e095ee3abe7f6644aeadd40c70ed0ca848ba11474ec09675c5e58c2a  ./tests/fa-justifications.test.mjs
+57c4f25dc848b6c717818e940f367a8490352e8abcffc949ef57a6d2f2e334a0  ./tests/fa-justifications.test.mjs
 531a7b6e2639b66395bf9d1580f32a65fd6ffec76b4b8e0195e9264c2a741a99  ./tests/fa-m6-b9.test.mjs
 7a53c4ee97d2eb2770123016c39493fbcccdd99bf532a92a8486c72305f639b9  ./tests/fixtures-baseline-v22-pre-rent-adoption.json
 60f8c20ad13b355b3307faa4a5ecd82bb934b708f4b4bc3aff72b61f890dc1d7  ./tests/fixtures-baseline-v22-pre-tariff-correction.json
@@ -108,13 +108,13 @@ fc75ccabf142a4a9b1dae67eafab76697860c1317b83aa5b48304cfb3a8ed098  ./tests/loao.m
 9d1c7cf99e9b1efca17ebe48be837c431cf998801b8f885f2f916e5ec570bc80  ./tests/permalink-defaults-move.test.mjs
 a9a993a77e6a081435f2a5f67d8e64123f014ad215d4228b5b32dbb2cb64b49b  ./tests/provenance-inputs.mjs
 d7d9179e1dd8ff5ac9481ba34845dc182484d94f585da6b66024f575577e81fc  ./tests/render-parity-r1.test.mjs
-97c2a043e85c38eddae97bbb0c67222d9d9c2744d59c08d85e464dfb0fee4126  ./tests/roofline-core.test.mjs
+e429c2d5a5e44249bfae6dfed35fb868aee5fad8a6e65407d8ab0d487f4471a6  ./tests/roofline-core.test.mjs
 d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofline-diagnostic.mjs
 7b1ee5fd2a26d0c45c45f280df04daad8a71f52d6f39bd5e5c76340e1cf833e8  ./tests/roofline-parallel-diff.mjs
 2b35c3edd7192b848d605387d4e5425a38e7d66aa2a702be9f18d8e09a368dd3  ./tests/run-app-tests.sh
 734cd4d34e299f7e14f9db8a697f05482cd2f045e3ac219808d2bc6ddc9229d7  ./tests/site-links.test.mjs
-7f274414b49d9bdf84fd085b616c6da55e87ec3f3943db95f3e3eb2812d4ac90  ./tests/snapshots.test.mjs
-86fa25565d0967590ae0ed9a29e6b482746389ceab484de7c6bd871a6e8d7eb5  ./tests/t4-historical-pins.mjs
+db2d23128d0977cb942409555a85162fbbaa2dfbab349038493af7cf52372a9d  ./tests/snapshots.test.mjs
+6d15da3303953846c67ecb33189034ba007865530d35c332a9dea1a577519958  ./tests/t4-historical-pins.mjs
 4d08ecb0dfb5cf729c2c6f4f3a86fb58332ece282416a4b04010d2d15a29aa35  ./tests/tariff-contract.mjs
 351e6eed2df2cb9e8183715756cef46197f70842bbc5a238895c0c8dae2d31b4  ./tests/traffic-contract.test.mjs
 4be4dd46d0224295c25563eb3c809315252d0ea7c3c34c135a320f59c0cbebc7  ./tests/turnstile-loader-cdp.test.mjs

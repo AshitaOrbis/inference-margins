@@ -67,7 +67,7 @@ for (const k of HW_KEYS) {
   assert("tpu7 W_iter = Total·s_W/N_phys = 30 GB (b9 M1 replica-resident-distinct)", g.wIterBytes === 3.0e10, String(g.wIterBytes));
   assert("tpu7 golden binds on t_H", g.bindingTerm === "t_H", g.bindingTerm);
   assert("tpu7 MoE-EP t_cc ≡ 0", g.tCc === 0, String(g.tCc));
-  /* im-vet-six-repairs (2026-09-20), vetting finding E2: η 0.55 -> 0.521 after the numerator
+  /* im-vet-six-repairs (2026-09-20), vetting finding E2: η 0.55 -> 0.519 after the basis
      repair, and throughput scales with η exactly — 1523.9891947025355 / 1615.0174510335157 =
      0.519/0.55 to the bit, which is the property this golden exists to hold. The three golden
      TERMS above (t_C, t_H, t_N) are η-independent and are byte-identical, which is the evidence

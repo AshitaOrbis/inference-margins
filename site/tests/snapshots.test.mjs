@@ -400,7 +400,7 @@ for (const [mid, target] of Object.entries(DIVE_TARGETS)) {
   // 87.4 → 84.0 because this is a tpu7-only fleet and tpu7 now carries the repaired rent
   // ($4.20 → $5.40) against the platform-native η bridge.
   // im-vet-six-repairs re-mint (2026-09-20): a tpu7-only fleet, so it carries the TPU numerator
-  // repair (η 0.55 -> 0.521) in full — 84.0 -> 83.6. The false negative stays fixed.
+  // repair (η 0.55 -> 0.519, the live value; 0.521 was a retired same-day intermediate) in full — 84.0 -> 83.6. The false negative stays fixed.
   assert("dive replay gemini (R2): the false negative is FIXED — 1/1 legs render, margin ≈83.6",
     isFinite(wl.margin) && Math.abs(wl.margin * 100 - 83.6) <= 0.1
     && wl.fleetRenderable.renderableLegs === 1 && wl.fleetRenderable.totalLegs === 1,
@@ -1520,7 +1520,7 @@ for (const p of E.PERSPECTIVES) {
 /* im-vet-six-repairs (2026-09-20, program bq-2835; vetting findings E1 + E2): every route rides
    the default fleet seed, so all four move with the two registry repairs — the two Trainium legs
    WITHDRAWN from the default's membership on evidence grounds, and the TPU v7 decode coefficient
-   corrected from 0.55 to 0.521 after one of its two endpoints was found to be computed on Google's
+   corrected from 0.55 to 0.519 after one of its two endpoints was found to be computed on Google's
    COMBINED input-plus-output rate as if it were a decode rate. NO route definition changed; the
    authored ranges and the reader-set vectors are untouched. */
 const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3": -40.3 };
