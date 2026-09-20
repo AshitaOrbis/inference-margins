@@ -1276,7 +1276,7 @@ assert("im-arc T2: WIDE electricity movement is exactly the three commissioned u
        state" where it said "the calculator's opening state" (two places), because a reader may now open on another
        default; F11 the static #out-calc container carries no class (app.js adds .tile-calc while the block has
        content), with no inline style — the static-inline-style guards in face-vs-registry and snapshots pass. */
-    indexHash === "7c11f700f23d8c9efb6d562f6fe594584ef92b4b42a6aab807895ccbd0b3e3ab" /* RE-MINTED AGAIN 2026-09-20 (im-vet-six-repairs ROUND 2, completion-gate FAIL): the gate ruled that DISCLOSING E2's basis inconsistency is neither repairing it nor withdrawing the contribution. The TPU coefficient moved from the mixed 0.521 to 0.519 with both endpoints on ONE stated timing convention, two guards lost in the E1 re-scope were restored with executed mutation proofs, and the published figures moved the last fraction with them. */
+    indexHash === "7a141c26a61f8ae3f83b09c05f70d3c155cbaf7bd68cd0a79760a7f2e6e3daa2" /* RE-MINTED AGAIN 2026-09-20 (im-vet-six-repairs ROUND 2, completion-gate FAIL): the gate ruled that DISCLOSING E2's basis inconsistency is neither repairing it nor withdrawing the contribution. The TPU coefficient moved from the mixed 0.521 to 0.519 with both endpoints on ONE stated timing convention, two guards lost in the E1 re-scope were restored with executed mutation proofs, and the published figures moved the last fraction with them. */
     /* RE-MINTED 2026-09-20 by im-repo-replacement — owner ruling
        d-20260920-im-replace-repo-then-publish-deploy (answer C on
        q-im-vetted-publish-deploy-share-2026-09-19), which authorises SIX written prose
