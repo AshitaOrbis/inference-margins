@@ -16,7 +16,7 @@ e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2  ./fonts/playfa
 c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source-serif-4-latin-var.woff2
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 19902fa519c656e346d80467b20ca67abba6f66cff582a6c26cfa058f1f13c60  ./glossary.html
-af331858842a9cfdae7b32abbc18bcaed59dea821c4f70a872e79c4c67f7926b  ./index.html
+c3cd0de20abd348c820b9b4c7de77109172cd86dd593c6a5ccfb02aa4585c068  ./index.html
 e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d  ./research/analyst-divergence.html
 c77f3b3946f5d46916d29c63914371912cf9656d7c1afe799ac919b732fb37ad  ./research/anthropic-gptpro.html
 cb2a75d541fd0252dcc6ceed09aa6861c4c0b0fec15192349dd2082c382c70a8  ./research/changelog.html
@@ -107,7 +107,7 @@ fc75ccabf142a4a9b1dae67eafab76697860c1317b83aa5b48304cfb3a8ed098  ./tests/loao.m
 7bfb8b05d6c3ceaea9818c4e055a043b6ad0277f59bf00677906c77aceda7e76  ./tests/mix-band.test.mjs
 9d1c7cf99e9b1efca17ebe48be837c431cf998801b8f885f2f916e5ec570bc80  ./tests/permalink-defaults-move.test.mjs
 a9a993a77e6a081435f2a5f67d8e64123f014ad215d4228b5b32dbb2cb64b49b  ./tests/provenance-inputs.mjs
-4f48c447dcdab8240fd9a3959734680a8b7920bc7985193eccc40709d96ec090  ./tests/render-parity-r1.test.mjs
+9280c8cf5ae6e3f5e90d7e8d48184e22b143865ed446ee9786adbfc72676685e  ./tests/render-parity-r1.test.mjs
 e429c2d5a5e44249bfae6dfed35fb868aee5fad8a6e65407d8ab0d487f4471a6  ./tests/roofline-core.test.mjs
 d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofline-diagnostic.mjs
 7b1ee5fd2a26d0c45c45f280df04daad8a71f52d6f39bd5e5c76340e1cf833e8  ./tests/roofline-parallel-diff.mjs
