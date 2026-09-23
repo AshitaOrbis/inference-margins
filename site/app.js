@@ -3963,6 +3963,17 @@ function refreshTrafficDisplay() {
 /* ---------- position dossier panel ---------- */
 function fmtDossierVal(k, v) {
   if (k === "blend") return Object.entries(v).filter(([, s]) => s > 0).map(([hw, s]) => `${HW[hw] ? HW[hw].name : hw} ${s}`).join(" / ");
+  /* im-share-ready-0920 (2026-09-21, browser-QA finding 1): `blend` was the only object-valued key
+     this formatter knew, so any other object reached the dossier table as a literal
+     "[object Object]" in a <td> — two of them were live. Same defect class as the route-card
+     summary above and fixed the same way: render the entries, never the default stringification. */
+  if (v && typeof v === "object") {
+    if (Array.isArray(v)) return v.length ? v.map(x => (x && typeof x === "object" ? "…" : String(x))).join(", ") : "none";
+    const parts = Object.entries(v)
+      .filter(([, vv]) => vv !== null && vv !== undefined)
+      .map(([kk, vv]) => `${kk} ${vv && typeof vv === "object" ? "…" : String(vv)}`);
+    return parts.length ? parts.join(", ") : "none";
+  }
   return String(v);
 }
 const ATTRIBUTION_TEXT = {
@@ -5117,7 +5128,7 @@ const BOARD_SRC_LABEL = { "primary-post": "primary post", "quoted-secondary": "q
 /* F11 (review): this map MUST cover PERSPECTIVE_SPACE_KEYS — boardChangedSummary maps over that
    list, so a key present there and missing here renders "undefined [object Object]" on a route card.
    The three row-499 keys are here for that reason, not because any config sets them yet. */
-const BOARD_FIELD_LABEL = { hwMode: "cost basis", rentMult: "GPU-hour multiplier", rentMultLeg: "per-accelerator discount", rentMultFam: "per-family discount", rentAbsAll: "absolute rental price", rentAbsLeg: "absolute rental price by accelerator", dialRanges: "declared ranges", util: "fleet utilization", stackMult: "serving-stack efficiency", interact: "interactivity", batchShare: "batch-API share", discount: "average discount", blend: "hardware blend" };
+const BOARD_FIELD_LABEL = { hwMode: "cost basis", kwh: "electricity price", dcPerW: "datacenter capex per watt", dcLifeYears: "datacenter life", capexScopeMode: "capex scope", capexAbsLeg: "absolute capex by accelerator", rentRegistryPin: "pinned rent registry", capitalRecovery: "capital recovery", rentMult: "GPU-hour multiplier", rentMultLeg: "per-accelerator discount", rentMultFam: "per-family discount", rentAbsAll: "absolute rental price", rentAbsLeg: "absolute rental price by accelerator", dialRanges: "declared ranges", util: "fleet utilization", stackMult: "serving-stack efficiency", interact: "interactivity", batchShare: "batch-API share", discount: "average discount", blend: "hardware blend" };
 function mkEl(tag, cls, text) {
   const e = document.createElement(tag);
   if (cls) e.className = cls;
@@ -5185,13 +5196,31 @@ function boardFieldVal(k, v) {
   if (k === "rentMult" || k === "stackMult") return v + "×";
   if (k === "util" || k === "batchShare" || k === "discount") return v + "%";
   if (k === "blend") return Object.entries(v).filter(([, s]) => s > 0).map(([hw, s]) => (HW[hw] ? HW[hw].name : hw) + " " + s).join(" / ");
+  /* Never let an object reach a reader as "[object Object]" (browser-QA finding 1): the pin keys
+     are object-valued, and the pinned-key filter above should already have removed them, so this
+     is the second line of defence rather than the fix. */
+  if (v && typeof v === "object") {
+    const parts = Object.entries(v).map(([kk, vv]) => kk + " " + (vv && typeof vv === "object" ? "…" : String(vv)));
+    return parts.length ? parts.join(", ") : "none";
+  }
   return String(v);
 }
 function boardChangedSummary(p) {
   const central = PERSPECTIVES.find(x => x.id === "median").set;
+  /* im-share-ready-0920 (2026-09-21, browser-QA finding 1): this summary must exclude the SAME
+     migration pins `changedFieldsFromCentral` excludes, and for the same reason — they are
+     migration metadata, not authored levers. Omitting the exclusion here did two visible things:
+     the enumerated deltas disagreed with the row's own "(N changed)" count, and the pin keys
+     reached readers as `undefined null → [object Object]`, because a pin is object-valued and its
+     label was missing from BOARD_FIELD_LABEL. Both were live on two of the five route rows. The
+     label map above is now complete as its own F11 comment requires, so a key that later stops
+     being pinned still renders a name rather than "undefined"; this filter is the primary fix and
+     that completeness is the backstop. */
+  const pinned = new Set(p.migrationPins || []);
   return PERSPECTIVE_SPACE_KEYS
-    .filter(k => JSON.stringify(p.set[k] ?? DEFAULTS[k]) !== JSON.stringify(central[k] ?? DEFAULTS[k]))
-    .map(k => BOARD_FIELD_LABEL[k] + " " + boardFieldVal(k, central[k] ?? DEFAULTS[k]) + " → " + boardFieldVal(k, p.set[k] ?? DEFAULTS[k]))
+    .filter(k => !pinned.has(k)
+      && JSON.stringify(p.set[k] ?? DEFAULTS[k]) !== JSON.stringify(central[k] ?? DEFAULTS[k]))
+    .map(k => (BOARD_FIELD_LABEL[k] || k) + " " + boardFieldVal(k, central[k] ?? DEFAULTS[k]) + " → " + boardFieldVal(k, p.set[k] ?? DEFAULTS[k]))
     .join(" · ");
 }
 function boardConfigRow(p, rank, total) {

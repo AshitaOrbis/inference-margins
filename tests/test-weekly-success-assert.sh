@@ -167,7 +167,7 @@ build_skeleton() { # build_skeleton <dir> <driver-mode>
   # $HOME/claudeworkspace/polaris/tools/pick-account, which this sandbox HOME does not have — so
   # routing degrades to the ambient account and these cases keep their original semantics.
   cp "$PROJ/scripts/lib/weekly-success-assert.sh" "$PROJ/scripts/lib/pro-fallback-policy.sh" \
-     "$PROJ/scripts/lib/claude-account.sh" "$d/proj/scripts/lib/"
+     "$PROJ/scripts/lib/claude-account.sh" "$PROJ/scripts/lib/commit-own-output.sh" "$d/proj/scripts/lib/"
   git -C "$d/proj" init -q -b master
   git -C "$d/proj" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
   cat > "$d/sandbox-home/claudeworkspace/discord/discord-dm.sh" <<EOF

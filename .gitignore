@@ -11,6 +11,12 @@ reference/*
 # Local pre-edit archive copies (Archive-instead-of-delete convention) — redundant with git
 # history once the edit lands, so kept on disk but never tracked.
 scripts/*.bak-*
+# bq-1872 (2026-09-18): the same convention reaches research/ — a leg that hand-edits
+# update-queue.md leaves `update-queue.md.bak-<stamp>` beside it, untracked, and that alone fails
+# the whole-tree clean gate in deploy.sh/publish.sh. DELIBERATELY NOT a blanket `*.bak-*`: site/ is
+# uploaded wholesale by `wrangler pages deploy site`, and the clean-tree gate is the only thing
+# that stops a stray site/*.bak-* from being published. An ignored file is invisible to that gate.
+research/*.bak-*
 
 # row 499 (review finding): node_modules must never be committed — a worktree symlink here became
 # an absolute-path dangling link on any other machine and in CI.

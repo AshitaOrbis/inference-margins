@@ -41,16 +41,19 @@ pnpm run test:browser  # headless-Chrome application suite (forged-permalink rep
 pnpm run build         # regenerate the grounding ledger + research annex from pinned tools
 ```
 
-The one sentence of method you should carry into the numbers: all published serving anchors
-are ≤~50B-active models, while the flagship scenarios assume 105–300B active — that size
-axis is the model's largest unanchored extrapolation, stated in the
+The one sentence of method you should carry into the numbers: the decode-calibration
+observations are all models of ≤~50B active parameters, while the
+flagship scenarios assume 105–300B active. The wider evidence catalog includes larger
+dense-model benchmarks, but none is a matched validation of those flagship scenarios — that
+size axis is the model's largest unanchored extrapolation, stated in the
 [methods note](research/methods-loao.md).
 
 ## What's in the model
 
 - **Pure engine** (`site/engine.js`, node-importable): cost identity over architecture
-  (active/total params, precision), hardware (per-platform anchored effective-MFU fits,
-  GPU-hour costs), traffic mix (I/O ratio + cache hit as a first-class axis), and billing
+  (active/total params, precision), hardware (per-leg compute/HBM/interconnect decode rooflines with
+  explicitly classified efficiency factors, a single reconstructed prefill calibration transferred
+  across platforms, and accelerator-hour costs), traffic mix (I/O ratio + cache hit as a first-class axis), and billing
   (list prices, cache tariffs, batch/discount) → per-token cost and margin. It is the single
   source of truth for numerical model inputs, equations, and the claims registry; UI state,
   permalink encoding, and rendered wording live in `site/app.js`.

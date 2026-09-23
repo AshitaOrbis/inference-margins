@@ -113,7 +113,7 @@ build() { # build <dir> <which-driver: prefix|fixed> <fetch-mode: files|fallback
     cp "$PROJ/scripts/weekly-update.sh" "$d/proj/scripts/weekly-update.sh"
   fi
   cp "$PROJ/scripts/lib/weekly-success-assert.sh" "$PROJ/scripts/lib/pro-fallback-policy.sh" \
-     "$PROJ/scripts/lib/claude-account.sh" "$d/proj/scripts/lib/"
+     "$PROJ/scripts/lib/claude-account.sh" "$PROJ/scripts/lib/commit-own-output.sh" "$d/proj/scripts/lib/"
   git -C "$d/proj" init -q -b master
   git -C "$d/proj" -c user.email=t@t -c user.name=t commit -q --allow-empty -m init
 
