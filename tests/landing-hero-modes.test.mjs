@@ -146,6 +146,11 @@ const PROBE_B = `(() => {
   const note = () => document.getElementById('out-margin-note').textContent;
   r.mode = LANDING_HERO_MODE;
   r.margin = document.getElementById('out-margin').textContent;
+  /* bq-3316 M2: the identity now sits in the status label IMMEDIATELY after the value node, inside the
+     same tile — the crop unit is the value + its label, not the value node alone. */
+  { const v = document.getElementById('out-margin'), st = document.getElementById('out-margin-status');
+    r.marginStatus = st ? st.textContent : null;
+    r.statusAdjacent = !!(v && st && v.nextElementSibling === st && v.closest('.tile') === st.closest('.tile')); }
   r.policyLabeled = /POLICY-LABELED SCENARIO OUTPUT/.test(note());
   r.exclusionAbsent = !/excluded from the default/.test(note());
   r.neverCentral = /never|central/.test(note());
@@ -184,7 +189,13 @@ assert("B: policy-labeled is the SHIPPED default (owner pick)", b.mode === "poli
 assert("B: landing margin displays", /≈\d+%/.test(b.margin), b.margin);
 assert("B: POLICY-LABELED identity inline", b.policyLabeled);
 assert("B (FA): NO exclusion clause on the revised-size clean landing (the membership is complete; the 5T exclusion story lives on the size case)", b.exclusionAbsent);
-assert("B (R3): the VALUE TOKEN alone carries the policy-labeled identity (single-node crop bar, memo D-3b)", /policy-labeled scenario/.test(b.margin), b.margin);
+/* bq-3316 (2026-09-25; GPT Pro 09-12 finding 1, accepted: the qualifier "becomes a conspicuous normal-sized
+   status label"). The D-3b crop bar is kept at the level it exists for — a crop of the number carries the
+   identity — by requiring the label to be the value's NEXT SIBLING in the same tile, and the value to be the
+   number alone. A missing, emptied, detached or relocated label fails; so does a qualifier left in the value. */
+assert("B (R3/bq-3316): the value token's own status label carries the policy-labeled identity, directly under the number (crop bar, memo D-3b)",
+  /policy-labeled scenario/.test(b.marginStatus || "") && b.statusAdjacent, JSON.stringify({ status: b.marginStatus, adjacent: b.statusAdjacent }));
+assert("B (bq-3316): the value node is the number alone", /^≈\d+%$/.test(b.margin), b.margin);
 assert("B: band receipt present", b.bandInNote);
 assert("B: cost/price render", b.costShown);
 

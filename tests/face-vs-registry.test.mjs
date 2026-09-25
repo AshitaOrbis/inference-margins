@@ -512,8 +512,10 @@ failures += live.failed.length;
     ["span-order", "a span printed backwards — 82 – 65%",
       (h) => h.replace('<p class="est-range">65 – 82%</p>', '<p class="est-range">82 – 65%</p>')],
     ["basis", "the face's declared basis switched from effective billings to undiscounted list",
-      (h) => h.replace('<p class="est-basis">effective price · judgment range</p>',
-        '<p class="est-basis">undiscounted list · judgment range</p>')],
+      /* bq-1141 M12 (2026-09-25): the range-type label reads "stated range" (vocabulary canon); the
+         mutation re-anchors on the live wording and still flips the BASIS half only. */
+      (h) => h.replace('<p class="est-basis">effective price · stated range</p>',
+        '<p class="est-basis">undiscounted list · stated range</p>')],
     ["face-central", "the explanatory face restated the central as ≈70% while the tile still says ≈77%",
       (h) => h.replace("reading — ≈77% at the effective price", "reading — ≈70% at the effective price")],
     ["companion-role", "THE ORIGINAL N1 DEFECT — the companion clobbered to 76% at list",

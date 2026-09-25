@@ -1003,7 +1003,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
   /* J-3: the basis declaration ships verbatim, and the x90-v1 claim is TRUE under the basis it
      names at BOTH bases — the §4.2 finding that made this the highest-risk item in M6. */
   assert("J-3 the basis declaration ships on the FA surface verbatim",
-    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is the public-evidence reference reading"));
+    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is the planning baseline")); // bq-3316 (2026-09-25): one name for ≈58%
   {
     const refv = E.explorationFlagshipMargin(E.PERSPECTIVES.find(p => p.id === "x90-v1"));
     const st = E.applyPresetSettings(opus, E.PERSPECTIVES.find(p => p.id === "x90-v1"), E.FLAGSHIP_SCOPE.traffic);

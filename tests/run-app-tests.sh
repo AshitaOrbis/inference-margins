@@ -90,7 +90,16 @@ check() { # check <name> <dom-file> <must|mustnot> <pattern>
 # GPT Pro review pr-20260902T153840Z-bce1bb finding 4: a leading ">" is NOT hero scoping — it
 # matches any element whose first serialized text begins with the token, and never names
 # #out-margin. Read the hero node itself.
-hero() { grep -o 'id="out-margin"[^>]*>[^<]*' "$1" | head -1 | sed 's/.*>//'; }
+# bq-3316 (2026-09-25, M2): the hero token is split into the number (#out-margin) and its identity
+# (#out-margin-status, the next sibling in the same tile). hero() recomposes the ONE token the engine
+# minted — "<number> — <identity>" — so every checkhero below still compares the full token, and an
+# isnot check cannot pass vacuously on a bare number.
+hero() {
+  local v s
+  v=$(grep -o 'id="out-margin"[^>]*>[^<]*' "$1" | head -1 | sed 's/.*>//')
+  s=$(grep -o 'id="out-margin-status"[^>]*>[^<]*' "$1" | head -1 | sed 's/.*>//')
+  if [ -n "$s" ]; then printf '%s — %s' "$v" "$s"; else printf '%s' "$v"; fi
+}
 checkhero() { # checkhero <name> <dom-file> <is|isnot> <exact hero text>
   local name="$1" f="$2" mode="$3" want="$4" got
   got=$(hero "$f")
@@ -112,7 +121,7 @@ render "" > "$TMP/default.html"
 # yet, and this check was passing on the app's copy. app.js and labels.ts now carry the canonical
 # name, and the pin moves with them. The CONTRACT is unchanged and is what matters here: the hero
 # must always say the metric is not a company gross margin.
-check "hero label: unit-vs-company GM" "$TMP/default.html" must "Serving margin — not company GM"
+check "hero label: unit-vs-company GM" "$TMP/default.html" must "Serving margin — not a company gross margin"  # bq-3316 M12: vocabulary canon
 check "no named margin zones" "$TMP/default.html" mustnot "TeorTaxes/Zephyr 90"
 # R2 re-mint + OWNER PICK 2026-07-23 (q-im-landing-hero-pick, LANDING_HERO_MODE=
 # "policy-labeled" — Option B): the landing default DISPLAYS the full-fleet number as an
@@ -124,7 +133,7 @@ check "default hero value token carries the policy-labeled identity (D-3b crop b
 # "≈47%" negative fires on a legitimate band token. Scoped to the element-initial HERO
 # form (the same technique the C-1 negative below uses) — this still fails if the
 # retired pre-R3 headline ever renders AS THE HERO, which is what the check is for.
-check "default hero never shows the pre-R3 headline as the hero" "$TMP/default.html" mustnot ">≈47% — policy-labeled scenario"
+checkhero "default hero never shows the pre-R3 headline as the hero" "$TMP/default.html" isnot "≈47% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "default surface carries NO exclusion clause (FA J-9: nothing is excluded at the revised size)" "$TMP/default.html" mustnot "excluded from the default"
 check "final-answer block renders the conservative planning case (b9 M1 label + value re-mint)" "$TMP/default.html" must "The conservative planning case, priced at low/committed planning rates: ≈58%"
 # T5 rec 5 (GPT Pro 2026-07-29 §6, SV-2): the Authority-2 token is renamed off "the most
@@ -152,7 +161,7 @@ check "final-answer block: seven justification entries render" "$TMP/default.htm
 check "final-answer block: no process language in the DOM (R5 N2)" "$TMP/default.html" mustnot "best-supported"
 check "final-answer block: no process language in the DOM (FA-safe label)" "$TMP/default.html" mustnot "FA-safe"
 check "default hero is POLICY-LABELED inline" "$TMP/default.html" must "POLICY-LABELED SCENARIO OUTPUT"
-check "default declares all seven fleet legs renderable" "$TMP/default.html" must "all 7 of 7 declared fleet legs renderable at declared serving topology"
+check "default declares all seven fleet legs renderable" "$TMP/default.html" must "all 7 of 7 declared fleet legs fit their declared serving setup"  # bq-3316 M11: reader wording of the same clause
 # Post-peak-KV (external review FIX-38), non-default panels may legitimately disclose an
 # h100 capacity cap ("not renderable under this policy: h100 — capacity target ..."), so the
 # guard is scoped to the DEFAULT 7-leg fleet clause instead of the whole DOM: the default
@@ -618,7 +627,7 @@ check "sliceC switcher: no per-fleet margin preview (anti-shopping)" "$TMP/defau
 FTDT=$(b64 '{"_meta":{"schema":"v5","epoch":"v22r4","displayedMargin":47.67,"model":"opus","persp":"median","fleet":{"id":"declared-topology"},"totalCase":"revised-band-central-2.5","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
 render "?s=$(urlenc "v5.$FTDT")" > "$TMP/ftdt.html"
 check "sliceC declared-topology token: loads as a shared scenario" "$TMP/ftdt.html" must "Loaded a shared scenario"
-check "sliceC declared-topology token: DECLARED construction renders (≈68%, im-release-edit-r3 re-mint: the rent adoption moved the default state 62.90 -> 68.00)" "$TMP/ftdt.html" must "≈68% — policy-labeled scenario"
+checkhero "sliceC declared-topology token: DECLARED construction renders (≈68%, im-release-edit-r3 re-mint: the rent adoption moved the default state 62.90 -> 68.00)" "$TMP/ftdt.html" is "≈68% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "sliceC declared-topology token: named-fleet identity leads the note (C-4)" "$TMP/ftdt.html" must "NAMED FLEET SCENARIO"
 # C-1 NEGATIVE — RE-POINTED at 5 T (im-share-finalization, 2026-09-02). At 2.5 T this
 # assertion could not discriminate: declared-topology's serve-feasibility-FILTERED variant
@@ -708,7 +717,7 @@ check "sliceC declared-topology token: policy-labeled identity kept" "$TMP/ftdt.
 # counterfactual token: BOTH load-bearing identities inside the ONE value node (C-4 crop bar)
 FTCF=$(b64 '{"_meta":{"schema":"v5","epoch":"v22r4","displayedMargin":71.539,"model":"opus","persp":"median","fleet":{"id":"h800-sole-anchor"},"totalCase":"revised-band-central-2.5","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
 render "?s=$(urlenc "v5.$FTCF")" > "$TMP/ftcf.html"
-check "sliceC counterfactual token: dual-identity value token (crop bar)" "$TMP/ftcf.html" must "≈78% — counterfactual, policy-labeled scenario"
+checkhero "sliceC counterfactual token: dual-identity value token (crop bar)" "$TMP/ftcf.html" is "≈78% — counterfactual, policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "sliceC counterfactual token: counterfactual bar named in the note" "$TMP/ftcf.html" must "never a default — comparison only"
 
 # default fleet + edited total: the NORMATIVE restore order live (the R3-round hazard pair)
@@ -718,8 +727,8 @@ render "?s=$(urlenc "v5.$FT10")" > "$TMP/ft10.html"
 # decode-order hazard is still detectable. Both sides are now element-initial HERO forms:
 # the old positive was a bare "≈33%" that could match any occurrence in the DOM, and the
 # old negative now collides with the new NORMATIVE value.
-check "sliceC hazard pair LIVE: normative order restores ≈47% (derivation at the POST-diff state)" "$TMP/ft10.html" must ">≈47% — policy-labeled scenario"
-check "sliceC hazard pair LIVE: the stale seed-then-diff ≈45% NEVER renders" "$TMP/ft10.html" mustnot ">≈45% — policy-labeled scenario"
+checkhero "sliceC hazard pair LIVE: normative order restores ≈47% (derivation at the POST-diff state)" "$TMP/ft10.html" is "≈47% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
+checkhero "sliceC hazard pair LIVE: the stale seed-then-diff ≈45% NEVER renders" "$TMP/ft10.html" isnot "≈45% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 
 # old-epoch fleet token: drift note + the PINNED ADDITIVE fleet sentence (C-7)
 FTDR=$(b64 '{"_meta":{"schema":"v5","epoch":"v22","displayedMargin":47.483,"model":"opus","persp":"median","fleet":{"id":"na-blend"},"totalCase":"community-central-5.0","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
@@ -733,13 +742,13 @@ check "sliceC drift: the PINNED fleet sentence appends (additive)" "$TMP/ftdr.ht
 FTMIG=$(b64 '{"_meta":{"schema":"v5","epoch":"v22r3","displayedMargin":35.14,"model":"opus","persp":"median","fleet":{"id":"na-blend"},"totalCase":"community-central-5.0","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
 render "?s=$(urlenc "v5.$FTMIG")" > "$TMP/ftmig.html"
 check "FA transition: pre-bump clean token RESTORES (no silent drop)" "$TMP/ftmig.html" must "Loaded a shared scenario"
-check "FA transition: restores at the revised size (≈68 hero token, im-release-edit-r3 re-mint)" "$TMP/ftmig.html" must "≈68% — policy-labeled scenario"
+checkhero "FA transition: restores at the revised size (≈68 hero token, im-release-edit-r3 re-mint)" "$TMP/ftmig.html" is "≈68% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "FA transition: the numeric drift note fires (originally shared ≈35%)" "$TMP/ftmig.html" must "originally shared: ≈35%"
 check "FA transition: the SIZE-MOVE sentence surfaces" "$TMP/ftmig.html" must "The page default flagship size moved from the 5 T community deduction"
 # the explicit-5000 shape keeps its 5T identity (value-match, no rewrite, no size-move note)
 FT5T=$(b64 '{"total":5000,"_meta":{"schema":"v5","epoch":"v22r4","displayedMargin":35.14,"model":"opus","persp":"median","fleet":{"id":"na-blend"},"totalCase":"community-central-5.0","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
 render "?s=$(urlenc "v5.$FT5T")" > "$TMP/ft5t.html"
-check "FA 5T case: explicit-5000 token restores under the 5 T identity (≈64, im-vet-six-repairs re-mint)" "$TMP/ft5t.html" must "≈64% — policy-labeled scenario"
+checkhero "FA 5T case: explicit-5000 token restores under the 5 T identity (≈64, im-vet-six-repairs re-mint)" "$TMP/ft5t.html" is "≈64% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "FA 5T case: NO size-move sentence on a value-matched 5 T selection" "$TMP/ft5t.html" mustnot "The page default flagship size moved"
 check "FA 5T case: the exclusion story lives HERE (h100 excluded at 5 T)" "$TMP/ft5t.html" must "excluded from the default"
 
@@ -946,12 +955,12 @@ check "b9 M5 micro-verify: the billable cached share sensitivity names its refer
 #     --dump-dom cannot click, read a computed ::backdrop, measure a touch target, check focus or
 #     emulate a coarse pointer, so B-1..B-6 and B-7b live in tests/fa-explain-cdp.test.mjs. What
 #     stays here is presence, collapsed-by-default, and class application at FIRST PAINT.
-check "b9 M6: the FA renders the public-evidence reference reading, labeled" "$TMP/default.html" must "— public-evidence reference reading, policy-labeled scenario"
+check "b9 M6: the FA renders the planning baseline, labeled (bq-3316: one name for ≈58%)" "$TMP/default.html" must "— planning baseline, policy-labeled scenario"
 check "b9 M6: …and the calculator's own default reading beside it" "$TMP/default.html" must "own default reading, policy-labeled scenario"
 check "b9 M6: the §C2 label is quoted and dated" "$TMP/default.html" must "run B §C2, 2026-07-25"
 check "b9 M6: the must-not-be-called disclaimer renders in its own node" "$TMP/default.html" must 'id="fa-must-not-be-called"'
 check "b9 M6: the bridge states how the readings relate" "$TMP/default.html" must "How the readings relate."
-check "b9 M6: the basis declaration governs the explanations below it" "$TMP/default.html" must "Every calculator figure in the explanations below is the public-evidence reference reading"
+check "b9 M6: the basis declaration governs the explanations below it" "$TMP/default.html" must "Every calculator figure in the explanations below is the planning baseline"  # bq-3316
 check "b9 M6: M5's single interim-pin line is RETIRED from the surface" "$TMP/default.html" mustnot "the ratified-prior reading arrives with the final-answer rework"
 check "b9 M6: the Deeper explanation trigger renders" "$TMP/default.html" must 'id="fa-deeper-trigger"'
 check "b9 M6 B-7: the exec summary renders and is COLLAPSED at first paint" "$TMP/default.html" must '<details class="fa-exec-details" id="fa-exec-details">'
@@ -975,7 +984,7 @@ check "b9 spec-decode: every default-fleet leg carries its per-leg disclosure" "
 check "b9 spec-decode: …and the two unknown-status legs say so by name" "$TMP/default.html" must "this page cannot establish this leg's speculative status"
 check "b9 M6: the justification bodies adopt the .explain-body type scale" "$TMP/default.html" must 'class="explain-body"'
 check "b9 M6 (D-1): the pre-repair ≈37 comparison is GONE from the FA surface" "$TMP/default.html" mustnot "≈48 → ≈37"
-check "b9 M6 (D-1): …and survives as history in the methods box" "$TMP/default.html" must "Superseded readings (history)."
+check "b9 M6 (D-1): …and survives as history in the changelog (bq-3316: moved verbatim, owner rule nd94bbc)" "${ANNEX_DIR#file://}/changelog.html" must "Superseded readings (history)."
 
 echo
 if [ "$fails" -eq 0 ]; then echo "ALL APP TESTS PASS"; else echo "$fails APP TEST FAILURE(S)"; exit 1; fi

@@ -286,6 +286,10 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .subtitle + .subtitle { margin-top: -6px; }
 .subtitle-numbers { color: var(--ink-1); }
 .masthead-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+/* bq-1141 M13: skin + theme behind one "Appearance" control. */
+.appearance-menu { position: relative; }
+.appearance-menu > summary { list-style: none; cursor: pointer; }
+.appearance-options { position: absolute; right: 0; top: calc(100% + 4px); z-index: 20; display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--tile); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-pop); }
 .ghost-btn {
   background: none; border: 1px solid var(--border); border-radius: 8px;
   color: var(--ink-2); padding: 5px 12px; font: inherit; font-size: 13px;
@@ -428,6 +432,9 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .tile-label { font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
 .tile-value { font-size: 34px; font-weight: 600; margin-top: 2px; letter-spacing: -0.02em; font-family: var(--font-head); font-variant-numeric: tabular-nums; }
 .tile-hero .tile-value { font-size: 48px; }
+/* bq-1141 M2: the value token's identity, split from the number into a normal-sized status label
+   directly under it (GPT Pro 09-12 finding 1). Inside the tile, so a crop of the number keeps it. */
+.tile-status { font-size: 13px; font-weight: 600; color: var(--ink-2); margin-top: 2px; letter-spacing: 0.01em; }
 .tile-small { font-size: 20px; }
 .tile-delta { font-size: 12px; color: var(--ink-3); margin-top: 2px; }
 /* Persistent metric-identity qualifier on the hero tile (persona RL3: the "not company GM" caveat
@@ -648,9 +655,10 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report h2 { font-size: 24px; margin: 8px 0 4px; letter-spacing: -0.01em; }
 .report h3 { font-size: 18px; margin: 26px 0 6px; }
 .report h4 { font-size: 15px; margin: 18px 0 4px; }
-.report p, .report li { color: var(--ink-2); font-size: 14.5px; }
+/* bq-1141 M9 (2026-09-25): report prose at the body size (15px) — ~12,000 words were set smaller than the rest of the page. */
+.report p, .report li { color: var(--ink-2); font-size: 15px; }
 .report strong { color: var(--ink-1); }
-.report .byline { color: var(--ink-3); font-size: 13px; margin-bottom: 14px; }
+.report .byline { color: var(--ink-3); font-size: 15px; margin-bottom: 14px; }
 .report table {
   border-collapse: collapse; width: 100%; font-size: 13px; margin: 10px 0 16px;
   display: block; overflow-x: auto;
@@ -756,8 +764,8 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report .prov .prov-margin { margin-left: auto; font-variant-numeric: tabular-nums; font-weight: 700; color: var(--ink-1); }
 .report .prov .prov-ci { font-weight: 400; color: var(--ink-3); font-size: 12.5px; }
 .report .prov .prov-body { border-top: 1px solid var(--grid); padding: 8px 0 12px; }
-.report .prov .prov-body p { font-size: 13.5px; }
-.report .prov .prov-body li { font-size: 13px; }
+.report .prov .prov-body p { font-size: 15px; }
+.report .prov .prov-body li { font-size: 15px; }
 .report .prov .kk { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 @media (max-width: 700px) { .report .prov .kk { grid-template-columns: 1fr; } }
 .report .prov .kk h5 { margin: 8px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
@@ -778,6 +786,9 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report a.load-op:hover { text-decoration: underline; }
 
 .footer { margin-top: 22px; color: var(--ink-3); font-size: 12.5px; text-align: center; }
+/* bq-1141 M20: build/manifest/connector mechanics behind one summary line. */
+.footer-build > summary { cursor: pointer; }
+.footer-build > p { text-align: left; }
 
 /* position dossier panel */
 .dossier { max-width: 100%; margin: 6px 0 14px; border: 1px solid var(--grid); border-radius: 10px; background: var(--tile); padding: 6px 14px; }

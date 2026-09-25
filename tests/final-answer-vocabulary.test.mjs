@@ -133,14 +133,14 @@ assert("V-2 NO other emitted token is exempt (the scanner still sweeps every oth
 }
 /* V-4: both reading tokens carry their basis INSIDE the token (crop-bar discipline, D-3b) */
 assert("V-4 the reference reading token carries its basis inside the token",
-  /public-evidence reference reading/.test(fa.tokens.referenceReadingLine)
+  /planning baseline/.test(fa.tokens.referenceReadingLine) // bq-3316 (2026-09-25): one name for ≈58%
   && /policy-labeled scenario/.test(fa.tokens.referenceReadingLine));
 assert("V-4 the prior reading token carries its basis inside the token",
   /calculator's own default reading/.test(fa.tokens.priorReadingLine)
   && /policy-labeled scenario/.test(fa.tokens.priorReadingLine)
   && /scenario prior, not a measurement/.test(fa.tokens.priorReadingLine));
 assert("V-4 the single value token (the crop unit) names its basis too",
-  /public-evidence reference reading/.test(fa.tokens.planningPoint));
+  /planning baseline/.test(fa.tokens.planningPoint)); // bq-3316
 
 /* 7. the MCP twin renders from the SAME tokens (one formatter — byte-inclusion) */
 {

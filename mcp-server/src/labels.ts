@@ -18,7 +18,7 @@ export function policyScenarioToolDescription(detail: string): string {
 
 /* ---------- mirrored sentences (byte-identical substrings of site/app.js) ---------- */
 export const APPJS_MIRROR = {
-  heroUnitLabel: "Serving margin — not company GM",
+  heroUnitLabel: "Serving margin — not a company gross margin",
   heroScenarioLabel: "Scenario result (tariff-only preset)",
   incompatiblePair: "INCOMPATIBLE PAIR — this perspective is scoped to a different provider; no headline is computed.",
   modifiedScenarioSuffix: "— not the published operating point; replay attribution removed.",
@@ -78,7 +78,7 @@ export const APPJS_MIRROR = {
 export const BOARD_GROUP_META: Record<string, { cls: string; title: string }> = {
   unit:    { cls: "g-unit",    title: "Unit-serving (token-SKU) claim records compatible with this range — relation badged per record (this calculator's metric)" },
   api:     { cls: "g-api",     title: "API / product-line margins — a product-line perimeter, not the single-token unit metric" },
-  cohort:  { cls: "g-cohort",  title: "Paid-user-cohort compute margins — a paying-user perimeter, not the unit metric and not company GM" },
+  cohort:  { cls: "g-cohort",  title: "Paid-user-cohort compute margins — a paying-user perimeter, not the unit metric and not a company gross margin" },
   bundle:  { cls: "g-bundle",  title: "Paid+free bundle margins — all products including free users; not the unit metric" },
   segment: { cls: "g-segment", title: "Segment-split figures — company-GM and API-GM reported side by side; not claimants for the unit metric" },
   assumption: { cls: "g-assume", title: "Analyst modeling assumptions — inputs to models, not measured or disclosed figures" },

@@ -392,7 +392,20 @@ function appNoNumberLabel(reason) {
 function fleetRenderableText(wl) {
   // R3 (D-3c): the membership story rides the SAME shared clause when the rendered
   // blend is the derived default (exclusions welded inline, canonical anchor named).
-  return fleetRenderableDisclosure(wl && wl.fleetRenderable, false, appDefaultMembership());
+  return readerClause(fleetRenderableDisclosure(wl && wl.fleetRenderable, false, appDefaultMembership()));
+}
+/* bq-1141 M11 (GPT Pro 09-12 finding 4a, 09-25 finding 10): the shared engine clause is the MCP's and
+   the historical receipts' text, so it is not reworded at the source — the T4 receipts reproduce it
+   byte for byte. What a READER sees in captions, chips and the comparison table says the same thing in
+   words: the solver's term "renderable at declared serving topology" and the policy's code identifier
+   are translated here, at the one display funnel, and nowhere else. */
+const READER_CLAUSE_WORDS = [
+  [/ renderable at declared serving topology/g, " fit their declared serving setup"],
+  [/\b[A-Z]+(?:_[A-Z]+)+ \(analyst planning default, dive §B; capacity-only, never sW\)/g, // the policy's code identifier
+    "the analyst's capacity planning default, dive §B, which sizes memory capacity only and never enters the speed (throughput) calculation"],
+];
+function readerClause(text) {
+  return READER_CLAUSE_WORDS.reduce((t, [re, words]) => t.replace(re, words), text || "");
 }
 function renderFleetRenderableChip(wl) {
   const el = $("out-fleet-renderable"); if (!el) return;
@@ -2765,8 +2778,13 @@ function applyPreset(keepTraffic) {
   } else {
     // The MODEL note (m.note — sizing/assumptions prose) lives with the Model selector (renderModelDossier),
     // NOT in this top perspective note: it carries only perspective/route + pairing/boundary + traffic.
+    /* bq-1141 M1 (2026-09-25; owner standing rule nd94bbc, GPT Pro 09-25 finding 6): the preset's
+       ~300-word note stood always-open between the intro and the calculator. The visible line now
+       names the scenario and its traffic; the note itself opens first inside the dossier below
+       (renderDossier), unshortened. Boundary labels and pairing warnings stay on this line. */
     $("preset-note").textContent = boundary + (warn ? "⚠ pairing note: " + warn + " — " : "")
-      + p.note + diveFallback + " · Traffic mix: " + tr.label + ".";
+      + "Scenario: " + (p.name || p.id) + diveFallback   // the bracket tag IS identity ("archived", "valuation replay") — review r1 F2
+      + " · Traffic mix: " + tr.label + ".";
   }
   renderDossier(m, p);
   fullRefresh();
@@ -4085,6 +4103,7 @@ function renderDossier(m, p) {
   const pd = DOSSIERS.perspectives[p.id];
   const tr = resolveTraffic(m, p, currentTrafficSel());
   const isExpl = p.kind === "exploration"; // D3: model provenance renders OUTSIDE the route dossier
+  if (!isExpl && p.note) body.append(mkEl("p", "dossier-attr", "About this scenario's assumptions: " + p.note)); // bq-1141 M1
   /* row 499 null convention: the asterisk needs a legend or it is a mystery mark. Rendered FIRST in
      the dossier, listing the dials this preset did not author, so a reader can see the boundary of
      what the preset is actually claiming before reading a word of its position. */
@@ -4287,7 +4306,7 @@ function renderSectionBandFace() {
   }
   if (!line) {
     line = mkEl("div", "tile-delta section-band", null); line.id = "out-section-band";
-    value.insertAdjacentElement("afterend", line);
+    (document.getElementById("out-margin-status") || value).insertAdjacentElement("afterend", line);
   }
   line.textContent = "";
   const cell = sectionBandCell(appSectionBand(), value => "≈" + Math.round(value * 100) + "%");
@@ -4513,7 +4532,7 @@ function renderHwTwoTables() {
         hourlyCell || (fmt$(hourly) + "/hr" + (rentSource ? " (" + rentSource + ")" : "")),
         costCell || fmt$(result.costMix), marginCell || fmtPct(result.margin)];
     });
-    appendChartTable(box, ["Accelerator", hourlyHeading, "Cost $/Mtok", "Serving margin — not company GM"], rows, heading);
+    appendChartTable(box, ["Accelerator", hourlyHeading, "Cost $/Mtok", "Serving margin — not a company gross margin"], rows, heading);
     const details = box.querySelector("details"); if (details) details.open = true;
     host.appendChild(box);
   };
@@ -5112,7 +5131,7 @@ function centralFlagshipBucketId() {
 const BOARD_GROUP_META = {
   unit:    { cls: "g-unit",    title: "Unit-serving (token-SKU) claim records compatible with this range — relation badged per record (this calculator's metric)" },
   api:     { cls: "g-api",     title: "API / product-line margins — a product-line perimeter, not the single-token unit metric" },
-  cohort:  { cls: "g-cohort",  title: "Paid-user-cohort compute margins — a paying-user perimeter, not the unit metric and not company GM" },
+  cohort:  { cls: "g-cohort",  title: "Paid-user-cohort compute margins — a paying-user perimeter, not the unit metric and not a company gross margin" },
   bundle:  { cls: "g-bundle",  title: "Paid+free bundle margins — all products including free users; not the unit metric" },
   segment: { cls: "g-segment", title: "Segment-split figures — company-GM and API-GM reported side by side; not claimants for the unit metric" },
   assumption: { cls: "g-assume", title: "Analyst modeling assumptions — inputs to models, not measured or disclosed figures" },
@@ -6028,7 +6047,7 @@ function renderFeasibilityTile(f) {
 function renderSuppressedHero(wl) {
   const f = wl.fleetRenderable || {};
   const failing = (f.legStatuses || []).filter(l => !l.renderableUnderPolicy);
-  $("out-margin").textContent = "—";
+  $("out-margin").textContent = "—"; $("out-margin-status").textContent = "";
   $("out-margin").title = "landing hero suppressed (gate-6): the landing fleet is not fully renderable under the declared loaded-bytes policy; no headline number is shown on the landing default";
   // R3 (D-4): the strict branch fires on ANY membership exclusion — the member set
   // itself renders fully, so the cause is the exclusion (shared formatter), not a
@@ -6102,10 +6121,10 @@ function updateTiles() {
   const curM = MODELS.find(x => x.id === $("model-preset").value);
   const curP = PERSPECTIVES.find(x => x.id === $("persp-preset").value);
   const heroLabel = document.querySelector(".tile-hero .tile-label");
-  if (heroLabel) heroLabel.childNodes[0].textContent = (curM && curM.scenario) ? "Scenario result (tariff-only preset) " : "Serving margin — not company GM ";
+  if (heroLabel) heroLabel.childNodes[0].textContent = (curM && curM.scenario) ? "Scenario result (tariff-only preset) " : "Serving margin — not a company gross margin ";
   if (curM && curP && pairingSeverity(curM, curP) === "hard" && !FORCE_EXPLORATORY) {
     renderFleetRenderableChip(null);
-    $("out-margin").textContent = "n/a";
+    $("out-margin").textContent = "n/a"; $("out-margin-status").textContent = "";
     $("out-margin").title = ""; // Astra round 2 F7: no previous scenario's unrounded percentage may survive in the tooltip
     TAIL.mandatory = "INCOMPATIBLE PAIR — this perspective is scoped to a different provider; no headline is computed. ";
     const btn = document.createElement("button");
@@ -6129,7 +6148,7 @@ function updateTiles() {
   }
   renderFleetRenderableChip(wl);
   if (!isFinite(wl.margin)) {
-    $("out-margin").textContent = "—";
+    $("out-margin").textContent = "—"; $("out-margin-status").textContent = "";
     $("out-margin").title = "";
     TAIL.mandatory = "DECLARED FLEET INFEASIBLE — zero declared fleet legs are renderable at the declared serving topology; no numeric result is synthesized.";
     $("out-cost").textContent = "—"; $("out-price").textContent = "—";
@@ -6156,12 +6175,18 @@ function updateTiles() {
   // R3 (D-3b, pinned value-token grammar): the identity is welded INTO the single value
   // node — the shareable unit alone carries the policy-labeled qualifier (screenshot-crop
   // bar); central-eligible states (structurally impossible for closed models) drop it.
-  $("out-margin").textContent = isFinite(wl.margin)
+  /* bq-1141 M2 (GPT Pro 09-12 finding 1, accepted): the token is still minted as ONE string with the
+     identity welded to the number, and split only at the last step — number into the value node, the
+     identity into #out-margin-status directly beneath it, a normal-sized status label inside the same
+     tile. A crop of the number takes the label with it; a 48 px qualifier over three lines it did not. */
+  { const [v, st] = splitToken(isFinite(wl.margin)
     ? "≈" + Math.round(wl.margin * 100) + "%" + (appLandingCentralEligible() ? ""
       : (FLEETS[FLEET_ID] && FLEETS[FLEET_ID].class === "counterfactual")
-        ? " — counterfactual, policy-labeled scenario" /* C-4: BOTH load-bearing identities in the ONE node (crop bar) */
+        ? " — counterfactual, policy-labeled scenario" /* C-4: BOTH load-bearing identities in the ONE token (crop bar) */
         : " — policy-labeled scenario")
-    : "—";
+    : "—");
+    $("out-margin").textContent = v;
+    $("out-margin-status").textContent = st; }
   $("out-margin").title = isFinite(wl.margin) ? "unrounded: " + (wl.margin * 100).toFixed(2)
     + "% (conditional scenario output; declared section triples propagate through the band below when present; other input uncertainty is not propagated)" : "";
   // Bands are descriptive of cited ranges, never attributed to a named analyst (reception audits:
@@ -6186,7 +6211,7 @@ function updateTiles() {
   if (isLandingClean() && !appLandingCentralEligible()) {
     const unclean = ((wl.fleetRenderable && wl.fleetRenderable.legStatuses) || []).filter(l => !l.renderableUnderPolicy);
     const memb = appDefaultMembership();
-    TAIL.mandatory = "POLICY-LABELED SCENARIO OUTPUT — not a verified or central estimate (placement unverified; this number can never carry a central identity). "
+    TAIL.mandatory = "POLICY-LABELED SCENARIO OUTPUT — a scenario calculation, not a verified or central estimate (actual deployment unverified; this number can never carry a central identity). "
       + (memb ? membershipExclusionClause(memb) + " " : "")
       + (unclean.length ? unclean.map(l => (HW[l.hwKey] ? HW[l.hwKey].name : l.hwKey) + " — " + l.note).join("; ") + ". " : "")
       + TAIL.mandatory;
@@ -6752,7 +6777,19 @@ window.addEventListener("pageshow", (e) => { if (e.persisted && EXPLAIN.phase !=
    after the disclosure: after it, a reader who expands §10 finds the affordance 33,472 characters
    below where they started, i.e. they must first take exactly the reading path owner ruling R-2
    rejects in order to reach the thing that replaces it (design gate P0-1). */
-const EXPLAIN_TRIGGER_LABEL = "Deeper explanation";
+/* bq-1141 M10 (GPT Pro 09-12 finding 9, accepted; 09-25 finding 12): fourteen-plus identical "Deeper
+   explanation" buttons made a reader relearn every one. Each trigger now names its destination; the
+   labels are unique by construction (one payload id, one label). */
+const EXPLAIN_PROVIDER_NAMES = { openai: "OpenAI", google: "Google", xai: "xAI", deepseek: "DeepSeek", zhipu: "Zhipu", moonshot: "Moonshot" };
+function explainTriggerLabel(p) {
+  const m = /^report-s(\d+)$/.exec(p.id);
+  if (m) return "Read section " + m[1] + " in a panel";
+  if (p.id.startsWith("prov-")) return "Read the " + (EXPLAIN_PROVIDER_NAMES[p.id.slice(5)] || p.id.slice(5)) + " dossier in a panel";
+  return ({ methods: "Read the methods in a panel", "board-catalog": "Open the evidence catalog",
+    dossier: "Open the scenario dossier", "model-dossier": "Open the model-sizing notes",
+    "model-context": "Open the model-sizing context", "front-door": "Open this range's detail",
+    "tile-tails": "Open the result receipts" })[p.id] || ("Open " + p.title());
+}
 const EXPLAIN_PAYLOADS = (() => {
   const q = (sel) => () => document.querySelector(sel);
   const list = [];
@@ -6762,7 +6799,7 @@ const EXPLAIN_PAYLOADS = (() => {
       title: () => { const h = document.getElementById("s" + n); return h ? h.textContent.trim() : "Report section " + n; } });
   }
   list.push({ id: "methods", anchor: q("details.scope-note.methods-box"), src: q("details.scope-note.methods-box > ul"),
-    scope: "", title: () => "What this calculator does — and does not — model" });
+    scope: "", title: () => "Methods, assumptions and limitations" });
   for (const key of ["openai", "google", "xai", "deepseek", "zhipu", "moonshot"]) {
     list.push({ id: "prov-" + key, anchor: q("#prov-" + key), src: q("#prov-" + key + " > .prov-body"), scope: "report",
       title: () => { const t = document.querySelector("#prov-" + key + " > summary > strong"); return t ? t.textContent.trim() : "Provider dossier"; } });
@@ -6848,12 +6885,12 @@ function wireExplainTriggers() {
       btn.type = "button"; btn.id = tid; btn.className = "explain-trigger";
       btn.dataset.explain = p.id;
       btn.setAttribute("aria-haspopup", "dialog");
-      btn.textContent = EXPLAIN_TRIGGER_LABEL;
+      btn.textContent = explainTriggerLabel(p);
       if (p.createdHidden) btn.hidden = true; // §18.10 P1-b: born hidden — syncTailTrigger owns visibility
     }
     /* N triggers all reading "Deeper explanation" are indistinguishable in an assistive-technology
        control list, so each carries its payload's own title in its accessible name. */
-    btn.setAttribute("aria-label", EXPLAIN_TRIGGER_LABEL + ": " + p.title());
+    btn.setAttribute("aria-label", explainTriggerLabel(p) + ": " + p.title());
     if (btn.parentNode !== anchor.parentNode || btn.nextSibling !== anchor) anchor.parentNode.insertBefore(btn, anchor);
     if (!p.createdHidden) {
       const host = p.mirrorHidden && p.mirrorHidden();
@@ -7008,12 +7045,22 @@ const FA_EXEC_ORDERING_BASIS = "Ordering basis: the owner's declared plausibilit
    finalAnswer() ONLY — the thesis baseline (clean derived flagship default), static
    per engine data, cached per page load. Live slider state can never move these
    values; the differs-note is the only live element. Visible under BOTH hero modes. */
+/* bq-1141 M2: a value token is "<number> — <identity>". The number goes to the value node; the
+   identity to the status node directly under it. Both come from the SAME string, so the label can
+   never describe a different number than the one above it. Pure: the writes stay at their surfaces,
+   where the sink registry classifies them (hero-tile vs final-answer never alias). */
+function splitToken(token) {
+  const cut = token.indexOf(" \u2014 ");
+  return cut < 0 ? [token, ""] : [token.slice(0, cut), token.slice(cut + 3)];
+}
 let FINAL_ANSWER_CACHE = null;
 function renderFinalAnswer() {
   if (!document.getElementById("final-answer")) return;
   if (!FINAL_ANSWER_CACHE) FINAL_ANSWER_CACHE = finalAnswer();
   const fa = FINAL_ANSWER_CACHE;
-  $("fa-planning-point").textContent = fa.tokens.planningPoint; // single value node — the crop unit carries its identity (D-3b)
+  { const [v, st] = splitToken(fa.tokens.planningPoint); // bq-1141 M2: one token, number + status label (D-3b crop unit = the tile)
+    $("fa-planning-point").textContent = v;
+    $("fa-planning-status").textContent = st; }
   $("fa-subject").textContent = fa.subject;
   /* Owner annotation nbc7fc1: the title-length line above the fold. Both come from the engine and
      are minted side by side there, so the short form can never say something the full declaration

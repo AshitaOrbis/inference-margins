@@ -540,7 +540,7 @@ const PRE_M5_FA = {
   assert("T-9/M6 the M5 interim-pin token is RETIRED (the rework it promised has shipped)",
     fa.leverReference === undefined && fa.tokens.leverReferenceLine === undefined);
   assert("T-9/M6 the reference token states its own basis INSIDE the token",
-    /public-evidence reference reading/.test(fa.tokens.referenceReadingLine)
+    /planning baseline/.test(fa.tokens.referenceReadingLine) // bq-3316 (2026-09-25): one name for ≈58%
     && /algorithmic\s+lead of 0 months/.test(fa.tokens.referenceReadingLine), fa.tokens.referenceReadingLine);
   /* row 499 (delta manifest research/b9-delta-manifests/row499-preset-structure-delta-manifest.md):
      the token kept its name for the reading (the median lens IS still the calculator's default

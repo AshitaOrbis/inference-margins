@@ -636,6 +636,9 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   }
   // Provider-card cross-surface parity: static summaries must match the exact dive state
   // loaded by each card's "Reproduce" link, including current fleet membership.
+  // bq-3316 (2026-09-25, M11): the static cards carry the READER wording of the membership clause
+  // ("fit their declared serving setup"), the same words app.js readerClause() shows in captions; the
+  // engine clause itself is unchanged (the T4 receipts reproduce it). The counts are still bound here.
   const card = id => html.match(new RegExp(`<details class="prov" id="${id}">[\\s\\S]*?</details>`))?.[0] || "";
   const dive = mid => {
     const m = E.MODELS.find(x => x.id === mid), p = E.PERSPECTIVES.find(x => x.id === "dive");
@@ -649,7 +652,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     assert(`provider card ${id}: live dive margin ${pct}%`,
       c.includes(`serving margin ~${pct < 0 ? "−" + Math.abs(pct) : pct}%`), c.slice(0, 260));
     assert(`provider card ${id}: live ${f.renderableLegs}/${f.totalLegs} fleet membership`,
-      c.includes(`all ${f.renderableLegs} of ${f.totalLegs} declared fleet legs renderable at declared serving topology`),
+      c.includes(`all ${f.renderableLegs} of ${f.totalLegs} declared fleet legs fit their declared serving setup`),
       c.slice(0, 360));
   }
   {
@@ -657,7 +660,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     const outputPct = Math.round((1 - w.cOut / E.MODELS.find(x => x.id === "kimi").set.priceOut) * 100);
     assert("provider card Moonshot: live output-token margin", c.includes(`output-token margin ~${outputPct}%`));
     assert("provider card Moonshot: live fleet membership",
-      c.includes(`all ${f.renderableLegs} of ${f.totalLegs} declared fleet legs renderable at declared serving topology`));
+      c.includes(`all ${f.renderableLegs} of ${f.totalLegs} declared fleet legs fit their declared serving setup`));
   }
   assert("provider-card introduction no longer claims Gemini is infeasible",
     !/Gemini's declared topology has zero renderable fleet legs/.test(html));

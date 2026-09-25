@@ -356,7 +356,7 @@ export const SINK_RULES = Object.freeze([
     { fnIn: ["commitTail"], pattern: /tile-mandatory|tile-receipts|tile-actions|tile-receipt-unit|TAIL\.mandatory|TAIL\.receipts|TAIL\.actions|replaceChildren\(man, rec, act\)|u\.textContent = unit|rec\.append/ },
     { class: "hero-tile", why: "b9 UX-C (memo §18.5): the atomic three-region tail commit — every mandatory label, receipt unit and trailing affordance of the hero note flows through this ONE writer; claim-bearing and never exempt (U-15b extends to it)" }),
   R("hero-margin-cost-price-block",
-    { pattern: /\$\("out-(margin|cost|price|cost-out|cost-in|margin-note|margin-unanchored|price-note)"\)|heroLabel|"out-price-note"|"out-margin-unanchored"|un\.textContent = parts\.length|pn\.textContent|HERO SUPPRESSED|renderSuppressedHero|TAIL\.mandatory|TAIL\.receipts\.push|TAIL\.actions\.push/ },
+    { pattern: /\$\("out-(margin|margin-status|cost|price|cost-out|cost-in|margin-note|margin-unanchored|price-note)"\)|heroLabel|"out-price-note"|"out-margin-unanchored"|un\.textContent = parts\.length|pn\.textContent|HERO SUPPRESSED|renderSuppressedHero|TAIL\.mandatory|TAIL\.receipts\.push|TAIL\.actions\.push/ },
     { class: "hero-tile", why: "landing hero margin/cost/price values + weld-bearing notes + the R2 gate-6 suppression tile (engine-derived receipts + the sampled policy band)" }),
   R("feasibility-tile",
     { pattern: /out-feas/ },

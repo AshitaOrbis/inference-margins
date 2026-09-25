@@ -384,6 +384,7 @@ const ANSWER_IDS_PIN = [
     "fa-must-not-be-called",
     "fa-planning-line",
     "fa-planning-point",
+    "fa-planning-status", // bq-3316 M2 (2026-09-25): the value token's identity label, split from the SAME engine token
     "fa-prior-reading",
     "fa-reference-reading",
     "fa-subject",
@@ -450,7 +451,13 @@ const ANSWER_DIGITS_PIN = "c3714685e9652c158accd9c4b7db119e78af5c78b8152a249e6f8
    quotation now names both terms so a reader is not left to reconcile them. Read for what this
    pin exists to catch, per its own failure message: the new text adds no RANKING of an external
    claim, and the ranking-phrase control below passed on the same run. */
-const ANSWER_TEXT_PIN = "aeb617203282b99183e0aa7405c6dd6a3e19d59c8681ebd525e4757e883f5b0b";
+/* RE-PINNED 2026-09-25 (im-legibility-merge-enact-0925, bq-3316). Read with DUMP_ANSWER_SURFACE=1 and diffed word by
+   word against the previous pin's dump; the COMPLETE list of changes: "The answer"/"The final answer" -> "Planning
+   baseline" (tile title, section name); "public-evidence reference reading" -> "planning baseline" (x5, one name for
+   ≈58%); "not company GM" -> "not a company gross margin"; three "Deeper explanation" triggers -> "Read the planning
+   baseline in full" / "Why the higher readings are higher" / "Open the executive summary"; the landing reading moved
+   first inside the collapse. No RANKING of an external claim added; the separate DIGITS pin is UNCHANGED. */
+const ANSWER_TEXT_PIN = "801905f921dfdf1f91df189be6c217a30b089e0673283240c9313ee0416f8b14"; // previous aeb617203282b991…
 
 const RANKING_PATTERNS = [
   /\bstrongest external\b/i, /\branked strongest\b/i, /\bthe strongest [^.;]{0,24}hypothesis\b/i,

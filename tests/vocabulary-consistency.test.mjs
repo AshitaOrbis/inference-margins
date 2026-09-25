@@ -115,8 +115,11 @@ const IDEAS = [
    page is deliberately naming what someone else called it. Keyed by surface + variant, with the
    count, so a SECOND occurrence of a licensed variant still fails. */
 const LICENSED = [
-  { file: "site/index.html", variant: "serving contribution margin", count: 2,
-    why: "the full technical name, stated once in the methods box and once in the tile explanation that points at the methods box \u2014 style/VOCABULARY.md \u00a71.1 licenses the full name exactly where the metric is defined, and a definition that could not state it would not be one" },
+  /* bq-3316 (2026-09-25): 2 -> 1. The standfirst's parenthetical that restated the full name was cut with
+     the rest of the standfirst (M4), so the methods box is now the ONE place it is said, as the license
+     text always intended. The negative control below injects a second occurrence and must catch it. */
+  { file: "site/index.html", variant: "serving contribution margin", count: 1,
+    why: "the full technical name, stated once in the methods box, where the metric is defined \u2014 style/VOCABULARY.md \u00a71.1 licenses the full name exactly where the metric is defined, and a definition that could not state it would not be one" },
   { file: "site/glossary.html", variant: "serving contribution margin", count: 1,
     why: "the glossary entry that DEFINES the metric under its full name and lists the variants it retires \u2014 a glossary that could not name a retired term could not retire it" },
   { file: "engine reader copy (rendered)", variant: "serving contribution margin", count: 1,
@@ -204,7 +207,7 @@ assert("name consistency: every CARRIED occurrence carries a reason",
   const t = stripQuoted(forged, "site/index.html");
   const caught = ["blended effective price", "serving contribution margin", "paid-capacity occupancy"]
     .filter(v => countIn(t, v) > (licensed.get(licenseKey("site/index.html", v))?.count ?? 0));
-  /* "serving contribution margin" is LICENSED twice in this file, so the injected third occurrence
+  /* "serving contribution margin" is LICENSED once in this file, so the injected second occurrence
      is what has to be caught \u2014 which is the case the per-file count exists for. */
   assert("name consistency NEGATIVE CONTROL: an injected retired variant IS caught, licensed-elsewhere included",
     caught.length === 3, JSON.stringify(caught));

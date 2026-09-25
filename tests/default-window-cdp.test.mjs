@@ -245,7 +245,9 @@ const PROBE = `(() => {
       gm: visible(q('.tile-hero .tile-gm')) && /Not a company gross margin/.test(txt('.tile-hero .tile-gm') || ''),
       rent: visible(q('#out-rent-segment')) && (txt('#out-rent-segment') || '').length > 0,
       analyst: visible(q('#out-margin-unanchored')) && (txt('#out-margin-unanchored') || '').length > 0,
-      policy: visible(q('#out-margin')) && /policy-labeled scenario/.test(q('#out-margin').textContent),
+      /* bq-3316 M2: the policy label is the value's own status label, its next sibling in the tile. */
+      policy: visible(q('#out-margin-status')) && q('#out-margin').nextElementSibling === q('#out-margin-status')
+        && /policy-labeled scenario/.test(q('#out-margin-status').textContent),
     },
     calcVisible: visible(q('#out-calc .calc-eq')) && visible(q('#out-calc .calc-cost')) && visible(q('#out-calc .calc-billings')) && visible(q('#out-calc .calc-engine')),
     windowVisible: visible(q('#win-head .win-name')) && visible(q('#win-head .win-swap')),
