@@ -57,6 +57,13 @@ const REPORTS = [
   { md: "research/gptpro-reports/dive-nvidia-forward-2026-07-15.md", slug: "dive-nvidia-forward", title: "NVIDIA forward (GB300/Rubin) inference economics — GPT-5.6 Pro deep dive", desc: "Round-2 dive: MLPerf v6.0 audited GB300 NVL72 generated-throughput anchors, a clean B300 $/token pair, a GB200 rack-price bridge — and a rigorous negative that Rubin's economics remain fully unanchored." },
   { md: "research/gptpro-reports/dive-ascend-2026-07-15.md", slug: "dive-ascend", title: "Huawei Ascend / CloudMatrix 384 inference economics — GPT-5.6 Pro deep dive", desc: "Round-2 dive: a full-system CM384 generated-throughput anchor and a cross-source 910B $/token proxy — plus rigorous negatives on CM384 cost, the 6,688-tok/s prefill/decode conflation, and the nonexistent Ascend 920." },
 ];
+/* The "Astra Pro estimates" review pages (bq-3351): one per model, written by
+   scripts/build-astra-pro-estimates.mjs from site/astra-pro-estimates.js and each run's verbatim
+   answer, listed in research/astra-pro-estimates/INDEX.json. Required like every entry above: a
+   listed page whose source is missing fails the build. */
+const ASTRA_PRO_INDEX = join(ROOT, "research", "astra-pro-estimates", "INDEX.json");
+const ASTRA_PRO_SLUGS = new Set();
+if (existsSync(ASTRA_PRO_INDEX)) for (const r of JSON.parse(readFileSync(ASTRA_PRO_INDEX, "utf8"))) { REPORTS.push(r); ASTRA_PRO_SLUGS.add(r.slug); }
 
 const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -130,8 +137,9 @@ const ADOPTED = {
   "changelog": "The changelog keeps the internal program codes (b9, r4, T5 and the rest) that the report's body copy no longer uses.",
 };
 const ADOPTED_DEFAULT = "This is an archived research artifact. Where it says <em>marginal serving gross margin</em>, <em>unit CM</em> or <em>serving contribution margin</em>, the site now says <strong>serving margin</strong>; where it states a confidence interval, the site treats it as a judgment range, not a calibrated one. What the site adopted from any artifact is stated in the <a href=\"../index.html#report\">main report</a>, which is authoritative where the two differ.";
+const ADOPTED_ASTRA_PRO = "This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.";
 function adoptedNote(slug) {
-  return `<div class="raw-note"><strong>In today's words</strong> — ${ADOPTED[slug] || ADOPTED_DEFAULT}</div>`;
+  return `<div class="raw-note"><strong>In today's words</strong> — ${ASTRA_PRO_SLUGS.has(slug) ? ADOPTED_ASTRA_PRO : (ADOPTED[slug] || ADOPTED_DEFAULT)}</div>`;
 }
 
 const published = [];

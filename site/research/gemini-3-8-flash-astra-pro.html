@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gemini 3.8 Flash — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/gemini-3-8-flash-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Gemini 3.8 Flash — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T110805Z-8276b2</code>, answered 2026-09-25T11:33:14Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for Gemini 3.8 Flash from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>98b64256d91e54832886be79ad74a662faaa010bebb7b4fb0b0339805ac4036c</code>; as received, <code>57899124523a5957ca7b81ed19d3e3aa6719f10142a733ad7f7aa431ee92dfe6</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~92%</strong> (92.21%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>72%–94% (72.44% – 94.29%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>92.2% (72.4–94.3%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~91%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>Gemini 3.8 Flash is priced on a published promotion — $0.75/$3.75 until the end of 2026, doubling to $1.50/$7.50 on 1 January 2027 — and the run prices the tariff in force today, as the brief asked; its own price-only sensitivity is that the 2027 tariff would lift the central to about 96%. Like the Gemini 3.1 Pro run, it treats Google&#39;s TPUs as owned: the whole fleet is TPU v7 at $1.20 per chip-hour all-in (its words: &quot;rather than Google Cloud&#39;s retail rental rate&quot;), which is the input that carries the number. The size is an assumption the run labels as such — 30B active, 600B total, FP8 — because Google&#39;s model card discloses none of it, and it holds the model on the calculator&#39;s GQA (Qwen3-class) donor geometry. The span is wider on the downside (72–94%) than on the upside because the low case changes more than the size: it adds the <code>fast</code> latency posture, and the run names latency — how much concurrent decode fits the required response time — as the most consequential downside. Google says 3.8 Flash is now the default in its own agent tooling while 3.7 Flash stays supported at the identical price; neither page says which carries more production traffic, so this card stands for both only as far as their serving is alike. At the page&#39;s Reference traffic the same inputs compute ~91%, close to the headline. This is the project&#39;s second research run for this model; the first stalled without finishing and is not used. The run reconstructed the calculator&#39;s equations after failing to reach the connector; the engine reproduces its figures to a tenth of a point.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>qwen3c</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>qwen3c</td>
+<td>qwen3c</td>
+<td>qwen3c</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>30</td>
+<td>45</td>
+<td>30</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>600</td>
+<td>900</td>
+<td>600</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.75</td>
+<td>0.75</td>
+<td>0.75</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>3.75</td>
+<td>3.75</td>
+<td>3.75</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;tpu7&quot;:100}</code></td>
+<td><code>{&quot;tpu7&quot;:100}</code></td>
+<td><code>{&quot;tpu7&quot;:100}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;tpu7&quot;:1.2}</code></td>
+<td><code>{&quot;tpu7&quot;:1.2}</code></td>
+<td><code>{&quot;tpu7&quot;:1.05}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>70</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.1</td>
+<td>1.1</td>
+<td>1.15</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>fast</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>100</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>8:1, 50% cache</td>
+<td>8:1, 50% cache</td>
+<td>8:1, 50% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈92% at list (span 72–94%)<br>The decisive cost assumption is $1.20 per all-in owned-TPU-equivalent chip-hour, rather than Google Cloud’s retail rental rate.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>GPT-6 Astra Pro · September 25, 2026.</strong> This is a modeled <strong>unit direct-serving contribution margin</strong>, not a verified Google margin or a company gross margin. The span comprises three selected scenarios, not a probability interval. Dates below distinguish publication/update dates from verification dates.</p>
+<ol>
+<li><p><strong>S1 — Exact product and release: DISCLOSED.</strong> I price the stable <strong><code>gemini-3.8-flash</code></strong>, released <strong>September 2, 2026</strong>, using the Standard paid text API. Google lists a 1,048,576-token input limit and 65,536-token output limit. This is not a Live, speech-generation, Batch, Flex or Priority endpoint. Sources: <a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash">model page</a>, updated <strong>2026-09-02</strong>, and <a href="https://ai.google.dev/gemini-api/docs/changelog">release changelog</a>, entry <strong>2026-09-02</strong>; verified <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S2 — Current tariff: DISCLOSED.</strong> The brief is correct: through <strong>December 31, 2026</strong>, Standard paid prices are <strong>$0.75/M input, $0.075/M cached input and $3.75/M output, including thinking</strong>. From <strong>January 1, 2027</strong>, the published schedule doubles these to <strong>$1.50/$0.15/$7.50</strong>. Explicit cache storage is separately priced at <strong>$0.50/M token-hour</strong>, subsequently $1.00. These promotional Standard prices—not Batch prices—are the list basis used here. Source: <a href="https://ai.google.dev/gemini-api/docs/pricing">Google pricing</a>, <strong>verified 2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S3 — Reasoning and served variants: DISCLOSED.</strong> Google specifies <strong>medium as the default reasoning level</strong>, with low and high also supported. It identifies 3.8 Flash as the default for its Antigravity agent and SDK, while saying <strong>3.7 Flash remains supported</strong>. I price medium reasoning; I do not assume each effort level is a different set of weights. The pricing page lists the same Standard tariff for 3.7 and 3.8; neither page establishes which version carries most production tokens. Source: <a href="https://ai.google.dev/gemini-api/docs/latest-model">latest-model guide</a>, <strong>accessed 2026-09-25</strong>; tariff comparison from S2. </p>
+</li>
+<li><p><strong>S4 — Target architecture: UNKNOWN.</strong> The reviewed 3.8 model card does not identify total/active parameter counts, production weight precision, attention geometry or deployment width. Accordingly, <strong>600B total / 30B active / FP8 are my assumptions</strong>, not a disclosure or a black-box measurement. Source checked: <a href="https://deepmind.google/models/model-cards/gemini-3-8-flash/">Gemini 3.8 Flash model card</a>, <strong>accessed 2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S5 — Best quantitative size lead: COMMUNITY ESTIMATE.</strong> Ivica Nikolić’s memorization study assigns the <strong>preceding <code>gemini-3-flash-preview</code> a 405B estimated lower bound</strong>. I checked the newer <strong>v3, dated June 5, 2026</strong>, rather than stopping at the v2 cited in the attachment. This is not a measured parameter count, a hard bound for 3.8, or evidence about active parameters. The method explicitly warns against precise MoE size inference. Source: <a href="https://arxiv.org/html/2605.29223v3">paper, Table III and §IV-C</a>, <strong>2026-06-05</strong>. </p>
+</li>
+<li><p><strong>S6 — Physical accelerator: DISCLOSED.</strong> Ironwood provides <strong>4.614 PFLOP/s FP8, 192 GiB HBM and approximately 7.38 TB/s memory bandwidth per physical chip</strong>. A four-chip VM is not four logical devices: frameworks expose two devices per physical chip. My hourly denominator is the <strong>physical chip</strong>, not a chiplet, VM or pod. Source: <a href="https://docs.cloud.google.com/tpu/docs/tpu7x">TPU7x documentation</a>, updated <strong>2026-09-18</strong>. </p>
+</li>
+<li><p><strong>S7 — Public rental comparator: DISCLOSED.</strong> Google’s Iowa Ironwood prices are <strong>$12/chip-hour on demand, $6 Flex-start, $8.40 one-year committed and $5.40 three-year committed</strong>. These are customer tariffs, not Google’s own resource cost. Source: <a href="https://cloud.google.com/tpu/pricing">Cloud TPU pricing</a>, <strong>verified 2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S8 — Capital-cost lead: CREDIBLY REPORTED.</strong> SemiAnalysis reports approximately <strong>400,000 Ironwood chips in $10 billion of finished racks</strong> for an external transaction. Division gives a <strong>$25,000 finished-system allocation per chip</strong>. That is a useful public capital proxy, not Google’s purchase invoice and not an all-in hourly operating cost. Source: <a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">Patel, Xie, Nishball and colleagues</a>, <strong>2025-11-28</strong>. </p>
+</li>
+<li><p><strong>S9 — Utilization evidence and its limit: DISCLOSED.</strong> Google’s historical Gemini Apps energy study reports <strong>0.24 Wh for the median text prompt</strong>, including hosts, idle provisioned capacity and facility overhead. Its idle-energy share does <strong>not</strong> identify paid-capacity occupancy. In particular, it does not justify reading 10% idle energy as 90% utilization. Source: <a href="https://arxiv.org/html/2508.15734v1">Elsworth et al.</a>, submitted <strong>2025-08-21</strong>, measuring <strong>May 2025</strong> traffic. </p>
+</li>
+<li><p><strong>S10 — Serving fleet, scale and cost disclosure: DISCLOSED.</strong> Google says TPUs power Gemini training and serving across APIs and Search; it reported approximately <strong>19 billion API tokens/minute</strong> and a <strong>78% reduction in Gemini serving costs during 2025</strong>. These statements establish a substantial TPU-serving operation, not 3.8’s generation mix, location, occupancy or absolute dollars/token. Source: <a href="https://blog.google/alphabet/investor-presentation-june-2026/">Alphabet investor presentation</a>, <strong>2026-06-03</strong>. </p>
+</li>
+<li><p><strong>S11 — Inspectable throughput proxy: DISCLOSED, for another model.</strong> Google’s Qwen3-Coder-480B-A35B FP8 Ironwood recipe reports <strong>518.86 output tokens/s/chip for 1K-input/8K-output</strong> and <strong>263.27 for 8K-input/1K-output</strong>, on four chips at maximum concurrency 64. These are whole-benchmark output rates, not Gemini measurements or pure-decode rates. Its example latency fields do not provide numerical production latency guarantees. Source: <a href="https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B/README.md">Google’s benchmark README</a>, <strong>accessed 2026-09-25</strong>; the result table does not supply an independent measurement date. </p>
+</li>
+<li><p><strong>S12 — Cache mechanism: DISCLOSED.</strong> Implicit caching is enabled for current Gemini models and cache-hit savings are passed through. The documented minimum for 3.8 Flash is <strong>4,096 input tokens</strong>. This supports modeling discounted cache hits, but establishes no population hit rate. Source: <a href="https://ai.google.dev/gemini-api/docs/caching">context-caching documentation</a>, updated <strong>2026-09-02</strong>. </p>
+</li>
+<li><p><strong>Model-specific commercial measurements: UNKNOWN.</strong> I found no public 3.8 Flash revenue, direct-serving margin, absolute cost/token, internal TPU transfer price, representative occupancy or tokens/chip-second at a specified latency. The reviewed model material and Alphabet disclosure do not identify them. Sources checked: <strong>S4 and S10</strong>, on <strong>2026-09-25</strong>. None of my numerical priors should be mistaken for such a measurement. </p>
+</li>
+<li><p><strong>S13–S15 — Calculator implementation: DISCLOSED by the calculator publisher, not by Google.</strong> I inspected the public <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js">cost/billing engine</a>, <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js">geometry/calibration registry</a> and <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js">roofline implementation</a>, <strong>accessed 2026-09-25</strong>. Their operating points are modeling policies; using them does not turn the result into observed provider economics.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>Parameters are in <strong>billions</strong>, utilization and cache shares in <strong>percent</strong>, prices in <strong>USD per million tokens</strong>, and rent in <strong>USD per physical chip-hour</strong>. Source IDs attached to an <code>ASSUMED</code> input identify its motivation, not a measurement of its value. The hourly-cost derivation contains additional explicit assumptions in heading 4.</p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;Gemini 3.8 Flash&quot;,
+  &quot;api_model_priced&quot;: &quot;gemini-3.8-flash; stable, released 2026-09-02; Standard paid text API, medium reasoning&quot;,
+  &quot;customDonor&quot;: &quot;qwen3c&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Representative 8000 input tokens and 1000 billed output tokens including thinking; mean decode context 8500, terminal 9000. Same lengths in all three scenarios; not a 1M-context estimate.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;, &quot;active&quot;: 30, &quot;total&quot;: 600, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.75, &quot;priceOut&quot;: 3.75, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;tpu7&quot;: 100}, &quot;rentAbsLeg&quot;: {&quot;tpu7&quot;: 1.2},
+      &quot;util&quot;: 70, &quot;stackMult&quot;: 1.1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;balanced&quot;, &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 0, &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;, &quot;active&quot;: 45, &quot;total&quot;: 900, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.75, &quot;priceOut&quot;: 3.75, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;tpu7&quot;: 100}, &quot;rentAbsLeg&quot;: {&quot;tpu7&quot;: 1.2},
+      &quot;util&quot;: 70, &quot;stackMult&quot;: 1.1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;fast&quot;, &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 0, &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;, &quot;active&quot;: 30, &quot;total&quot;: 600, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.75, &quot;priceOut&quot;: 3.75, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;tpu7&quot;: 100}, &quot;rentAbsLeg&quot;: {&quot;tpu7&quot;: 1.05},
+      &quot;util&quot;: 80, &quot;stackMult&quot;: 1.15, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;balanced&quot;, &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 0, &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;stated&quot;: {&quot;headline_pct&quot;: 92.2, &quot;low_pct&quot;: 72.4, &quot;high_pct&quot;: 94.3},
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;Stable gemini-3.8-flash model identity; September 2026 release, corroborated by the September 2 changelog.&quot;, &quot;url&quot;: &quot;https://ai.google.dev/gemini-api/docs/models/gemini-3.8-flash&quot;, &quot;date&quot;: &quot;2026-09-02&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Standard paid input, output including thinking, cache-read and storage tariffs; date is verification date.&quot;, &quot;url&quot;: &quot;https://ai.google.dev/gemini-api/docs/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Medium default reasoning, agentic positioning, and continued support for Gemini 3.7 Flash; accessed on the stated date.&quot;, &quot;url&quot;: &quot;https://ai.google.dev/gemini-api/docs/latest-model&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Reviewed target model card does not identify parameter counts, production precision or serving topology; date is access date.&quot;, &quot;url&quot;: &quot;https://deepmind.google/models/model-cards/gemini-3-8-flash/&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;UNKNOWN&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Nikolic v3: 405B estimated lower bound for predecessor Gemini 3 Flash Preview, not a measurement or bound for 3.8.&quot;, &quot;url&quot;: &quot;https://arxiv.org/html/2605.29223v3&quot;, &quot;date&quot;: &quot;2026-06-05&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Ironwood physical-chip specifications and dual-chiplet distinction; documentation update date.&quot;, &quot;url&quot;: &quot;https://docs.cloud.google.com/tpu/docs/tpu7x&quot;, &quot;date&quot;: &quot;2026-09-18&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;Public Ironwood Iowa chip-hour prices, not Google internal resource cost; verification date.&quot;, &quot;url&quot;: &quot;https://cloud.google.com/tpu/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;SemiAnalysis reports about 400000 Ironwood chips in about USD10B of finished racks.&quot;, &quot;url&quot;: &quot;https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the&quot;, &quot;date&quot;: &quot;2025-11-28&quot;, &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Google historical full-stack energy measurement includes hosts and idle provisioned capacity, but does not identify current Flash occupancy.&quot;, &quot;url&quot;: &quot;https://arxiv.org/html/2508.15734v1&quot;, &quot;date&quot;: &quot;2025-08-21&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;TPUs power Gemini serving; approximately 19B API tokens/minute and 78% lower Gemini serving costs during 2025; no model-specific absolute cost.&quot;, &quot;url&quot;: &quot;https://blog.google/alphabet/investor-presentation-june-2026/&quot;, &quot;date&quot;: &quot;2026-06-03&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;Google Qwen3-Coder-480B-A35B FP8 Ironwood serving recipe and output-throughput table; accessed on the stated date.&quot;, &quot;url&quot;: &quot;https://github.com/AI-Hypercomputer/tpu-recipes/blob/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B/README.md&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;Implicit caching, passed-through savings and 4096-token minimum for Gemini 3.8 Flash.&quot;, &quot;url&quot;: &quot;https://ai.google.dev/gemini-api/docs/caching&quot;, &quot;date&quot;: &quot;2026-09-02&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Calculator billing and cost implementation, not Google economics; public source accessed on the stated date.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Calculator donor geometry, calibrations and operating-point policy; public source accessed on the stated date.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Calculator roofline and traffic-length formulas; public source accessed on the stated date.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 30, &quot;low_margin&quot;: 45, &quot;high_margin&quot;: 30, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 600, &quot;low_margin&quot;: 900, &quot;high_margin&quot;: 600, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;qwen3c&quot;, &quot;low_margin&quot;: &quot;qwen3c&quot;, &quot;high_margin&quot;: &quot;qwen3c&quot;, &quot;source_ids&quot;: [&quot;S4&quot;, &quot;S14&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;S9&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 0.75, &quot;low_margin&quot;: 0.75, &quot;high_margin&quot;: 0.75, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 3.75, &quot;low_margin&quot;: 3.75, &quot;high_margin&quot;: 3.75, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;tpu7&quot;: 100}, &quot;low_margin&quot;: {&quot;tpu7&quot;: 100}, &quot;high_margin&quot;: {&quot;tpu7&quot;: 100}, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;S10&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg.tpu7&quot;, &quot;central&quot;: 1.2, &quot;low_margin&quot;: 1.2, &quot;high_margin&quot;: 1.05, &quot;source_ids&quot;: [&quot;S8&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 70, &quot;low_margin&quot;: 70, &quot;high_margin&quot;: 80, &quot;source_ids&quot;: [&quot;S9&quot;, &quot;S10&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.1, &quot;low_margin&quot;: 1.1, &quot;high_margin&quot;: 1.15, &quot;source_ids&quot;: [&quot;S9&quot;, &quot;S10&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;fast&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S11&quot;, &quot;S14&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.io_ratio&quot;, &quot;central&quot;: 8, &quot;low_margin&quot;: 8, &quot;high_margin&quot;: 8, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.cache_hit&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;S13&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low; prices and conditional arithmetic are well identified, but architecture, paid-capacity occupancy, actual request mix and production concurrency are not measured.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p>My central reading is <strong>92.2% at the current Standard list tariff</strong>, with selected low/high scenarios of <strong>72.4% and 94.3%</strong>. The most consequential favorable assumption is valuing a Google-owned serving estate at its economic resource cost rather than a retail cloud price. The most consequential downside is <strong>how much concurrent decode work fits the required latency</strong>, not a hypothetical enterprise discount.</p>
+<p><strong>Execution status.</strong> I could not obtain a live <code>run_scenario</code> response from <a href="https://margins-mcp.ashitaorbis.com/mcp">the supplied MCP endpoint</a>; the connection attempts failed. Therefore, these are <strong>independently reconstructed predictions of the calculator results</strong>, not quoted MCP returns. The intended invocation is <code>run_scenario(model=&quot;custom&quot;, perspective=&quot;median&quot;, overrides=central.overrides, traffic=central.traffic)</code>, repeated for the other two blocks. The commissioned runner’s output remains authoritative for the card.</p>
+<p>I reconstructed the relevant public FP8 MoE cost and billing formulas, including attention traffic and the TPU weight-traffic convention. As a cross-check—not a live execution—the same reconstruction gives <strong>82.3265%</strong> for the supplied current Opus reference vector, matching attachment 02’s <strong>82.33%</strong> after rounding. The attachment’s original <strong>83.1%</strong> is a separate historical authored result.  </p>
+<p><strong>Central arithmetic.</strong> The occupied-chip throughput calculation gives approximately <strong>1,229 output tokens/s/chip</strong> and <strong>12,361 fresh-input tokens/s/chip</strong>. These are model outputs, not observations. With $1.20/hour and 70% paid-capacity utilization:</p>
+<pre><code class="language-text">C_{out}=\frac{1.20\times10^6}{3600\times1229.178\times0.70}
+=\$0.387406/\mathrm{Mtok},
+</code></pre>
+<pre><code class="language-text">C_{in}=\frac{1.20\times10^6}{3600\times12360.574\times0.70}
+=\$0.038525/\mathrm{Mtok}.
+</code></pre>
+<p>At <code>cacheCost=5</code>, a cache read costs <strong>$0.001926/M tokens</strong>. Normalize traffic to one million billed output tokens, four million fresh input tokens and four million cached input tokens:</p>
+<pre><code class="language-text">R=3.75+4(0.75)+4(0.075)=\$7.05,
+</code></pre>
+<pre><code class="language-text">C=0.387406+4(0.038525)+4(0.001926)=\$0.549210,
+</code></pre>
+<pre><code class="language-text">m=1-C/R=\mathbf{92.2098\%}.
+</code></pre>
+<p>Equivalently, revenue is <strong>$0.783333/M total tokens</strong>, serving cost is <strong>$0.061023/M total tokens</strong>, and contribution is approximately <strong>$0.722310/M total tokens</strong>. These are arithmetic consequences of the declared inputs, not revenue or cost disclosures.</p>
+<table>
+<thead>
+<tr>
+<th>Joint scenario</th>
+<th>Interpretation</th>
+<th align="right">Cost per 1M output plus 8M input</th>
+<th align="right">Serving margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td>600B/30B, balanced latency, $1.20/hour, 70% utilization</td>
+<td align="right">$0.5492</td>
+<td align="right"><strong>92.2%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td>900B/45B and stricter latency; same rent, occupancy, efficiency and traffic</td>
+<td align="right">$1.9427</td>
+<td align="right"><strong>72.4%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td>Same central architecture; $1.05/hour, 80% occupancy, 1.15× stack</td>
+<td align="right">$0.4022</td>
+<td align="right"><strong>94.3%</strong></td>
+</tr>
+</tbody></table>
+<p>The low scenario combines a larger network with latency-limited batching. It does <strong>not</strong> also assume expensive rental procurement, weak utilization, no caching and a worse software stack. The high scenario describes a more mature serving estate; it does <strong>not</strong> simultaneously shrink the model, assume FP4, switch to compressed attention and select throughput-first service.</p>
+<p><strong>Tariff step.</strong> Holding the central workload and cost fixed, the published January 2027 tariff would give <strong>96.1%</strong>, approximately <strong>3.9 margin points higher</strong>. That is a price-only sensitivity, not a forecast that either costs or the tariff will remain unchanged until then. </p>
+<p><strong>Negative-margin audit.</strong> None of the three selected scenarios is negative. I checked billion-parameter versus raw-parameter units, per-million token pricing, physical-chip versus chiplet/VM hours, and <code>util=70</code> rather than <code>0.70</code> in the submitted block. Idle paid capacity is charged once through utilization; power, facilities and hosts are charged once inside rent. No input was changed to force a positive answer.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Architecture: 600B total, 30B active; 900B/45B in the low case — ASSUMED, motivated by S4/S5/S11.</strong> I place the model in the several-hundred-billion-total, tens-of-billions-active regime suggested by the predecessor size study and the open 480B/35B comparator. Those sources do not identify these particular numbers. The low case preserves the same 5% active fraction at 1.5× scale. A disclosed count or FLOPs/token would supersede both. I do not infer size from price or equate a faster user stream with fewer parameters. </p>
+<p><strong>Donor and precision: <code>qwen3c</code>, FP8 — ASSUMED, S4/S6/S11/S14.</strong> GQA is a transparent default when Google’s actual attention scheme is unknown. I have no evidence warranting the more favorable MLA donor. FP8 is a supported hardware regime with a relevant public serving example, not a claim about every production tensor. There is no FP4 credit. Changing only the central donor to <code>dsr1</code> gives <strong>93.2%</strong>, about one point higher; that sensitivity does not establish which donor is correct. </p>
+<p><strong>Fleet: 100% <code>tpu7</code> — ASSUMED economic surrogate, S6/S10.</strong> TPU-family serving is public; the 100% Ironwood allocation is not. I use the only relevant TPU generation in the permitted registry rather than invent a measured generation split. Older TPUs and any newer internal deployment would require a different effective cost/performance mapping. Specific sites and regional routing remain unknown. </p>
+<p><strong>All-in equivalent rent: $1.20/hour central and low; $1.05 high — INFERENCE from S8 plus the following ASSUMED accounting/economic choices.</strong> Starting capital is $25,000 per chip in finished systems. Because the observation already covers finished racks, I do <strong>not</strong> add another generic rack/host multiplier. Facilities remain separate. </p>
+<p>Using annual capital recovery <code>\mathrm{CRF}(r,n)=r/[1-(1+r)^{-n}]</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Cost component</th>
+<th>Central assumptions</th>
+<th align="right">$/available chip-hour</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Installed IT capital recovery</td>
+<td>$25,000; five years; 8% annual capital cost</td>
+<td align="right">0.7148</td>
+</tr>
+<tr>
+<td>Facility capital recovery</td>
+<td>$14,000 allocation/chip; 15 years; 8%</td>
+<td align="right">0.1867</td>
+</tr>
+<tr>
+<td>Electricity and cooling</td>
+<td>1.4 kW allocated IT load including hosts/network; PUE 1.10; $0.08/kWh</td>
+<td align="right">0.1232</td>
+</tr>
+<tr>
+<td>Maintenance and serving/site operations</td>
+<td>6% of IT capital annually</td>
+<td align="right">0.1712</td>
+</tr>
+<tr>
+<td><strong>Total, then rounded for entry</strong></td>
+<td><strong>8,760 hours/year</strong></td>
+<td align="right"><strong>1.1959 → 1.20</strong></td>
+</tr>
+</tbody></table>
+<p>Apart from the reported finished-rack capital anchor, <strong>none of these component values is a measured Google figure</strong>. The facility allocation covers building and electrical/cooling infrastructure, not a second set of servers. The operations allowance covers maintenance and serving operations, not customer support or corporate overhead. Capital recovery is an economic carrying-cost convention, not a claim about Google’s accounting depreciation.</p>
+<p>The high case extends IT recovery to six years and lowers annual maintenance/operations to 4%, leaving the other components unchanged: <strong>$1.0414/hour</strong>, rounded to <strong>$1.05</strong>. Its 80% occupancy represents a better-loaded estate. Both constructions include power and hosts already. No additional 12% host uplift or 1.72× energy uplift is added.</p>
+<p>At central settings, substituting the <strong>$5.40 retail committed tariff</strong> as Google’s cost gives <strong>64.9%</strong>. That 27.3-point difference demonstrates the importance of the cost basis; it is not evidence that the inferred $1.20 is exact. The retail quote is verified, while the internal equivalent is not. </p>
+<p><strong>Utilization: 70%, or 80% in the high case — ASSUMED, S9/S10.</strong> The scale of demand motivates a reasonably well-loaded fleet, while regional fragmentation, headroom and latency prevent assuming 100%. There is no occupancy measurement behind either value. Holding everything else fixed, 50% utilization gives <strong>89.1%</strong>. Energy shares and training MFU cannot substitute for this divisor. </p>
+<p><strong>Efficiency: 1.10× stack, 1.15× high; zero lead months — ASSUMED, S9/S10/S11.</strong> I allow a modest model-specific production advantage over the public baseline. Google’s historical cost improvement motivates considering an advantage but does not measure a standing gap. The central credit adds only <strong>0.8 margin points</strong> versus <code>stackMult=1</code>. <code>trendMonths=0</code> and omission of <code>specDec</code> ensure the advantage is counted once. </p>
+<p><strong>Traffic: 8:1, 50% served and billed cache hits — ASSUMED, S3/S12.</strong> My best working mix is repeated-prefix coding and enterprise-agent traffic, with billed thinking increasing output relative to visible answer text. It is not a measured traffic census. The assumed representative request has 8,000 input tokens and 1,000 billed output tokens. A 50% token-weighted hit rate need not mean a 4,000-token cached prefix on every request: for example, 80% of such requests hitting a 5,000-token prefix produces that average and respects the documented cache threshold. </p>
+<p><strong>Latency and batching: balanced central, fast low — ASSUMED, S11/S14.</strong> The engine’s TPU policy uses 16 output tokens per chip per step in balanced mode and four in fast mode. At its declared 16-chip throughput width, balanced implies 256 concurrent sequences; the public four-chip benchmark cited only 64 globally. That width-scaled concurrency is a modeling choice, not a production observation. It is the main reason the lower scenario is far below the central one. Here <code>fast</code> changes the calculator’s latency posture, not the API’s medium reasoning setting. </p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The reference author states <strong>83.1%, span 68–92%</strong>. Its vector uses 300B active/2.5T total, FP8, $5/$25, 15:1 traffic with 60% caching, 65% occupancy, a mixed fleet, and two months of residual efficiency lead. I retain its declared inputs rather than reinterpret that estimate as Google evidence.  </p>
+<p>The following is a <strong>path-ordered arithmetic bridge</strong>, starting from the reconstructed current-engine <strong>82.3265%</strong>. It changes one input group at a time and holds Reference traffic until the final row. Contributions depend on order; they are not independent effects to transplant into another scenario.</p>
+<table>
+<thead>
+<tr>
+<th>Change from the reference, in this order</th>
+<th align="right">Margin-point change</th>
+<th align="right">Running margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Starting current-engine reference</td>
+<td align="right">—</td>
+<td align="right">82.33%</td>
+</tr>
+<tr>
+<td>Active parameters: 300B → 30B</td>
+<td align="right">+13.28</td>
+<td align="right">95.61%</td>
+</tr>
+<tr>
+<td>Total parameters: 2,500B → 600B</td>
+<td align="right">+1.25</td>
+<td align="right">96.86%</td>
+</tr>
+<tr>
+<td>Fleet: mixed → 100% TPU7, retaining $2.70 TPU rent</td>
+<td align="right">+0.67</td>
+<td align="right">97.53%</td>
+</tr>
+<tr>
+<td>TPU hourly valuation: $2.70 → $1.20</td>
+<td align="right">+1.37</td>
+<td align="right">98.90%</td>
+</tr>
+<tr>
+<td>Paid-capacity utilization: 65% → 70%</td>
+<td align="right">+0.08</td>
+<td align="right">98.98%</td>
+</tr>
+<tr>
+<td>Residual efficiency: 2 months, or 1.20094×, → 1.10× stack/zero months</td>
+<td align="right">−0.09</td>
+<td align="right">98.89%</td>
+</tr>
+<tr>
+<td>Attention donor: MLA → Qwen-class GQA</td>
+<td align="right">−0.19</td>
+<td align="right">98.70%</td>
+</tr>
+<tr>
+<td>Input/output/cache tariffs: all reduced to 15% of Opus tariffs</td>
+<td align="right">−7.36</td>
+<td align="right"><strong>91.34%</strong></td>
+</tr>
+<tr>
+<td>Traffic: 15:1/60% → 8:1/50%, including billed cache share</td>
+<td align="right">+0.87</td>
+<td align="right"><strong>92.21%</strong></td>
+</tr>
+</tbody></table>
+<p>The reference fleet is H100 5%, H200 10%, GB200 25%, GB300 20%, TPU7 40%. Its procurement factors translate into <strong>$2.28, $3.496, $4.275, $5.70 and $2.70/hour</strong>, respectively, using the supplied current planning rents. FP8, balanced central latency, 10% cache-read pricing, 5% cache serving cost, zero write premium, zero Batch share and zero discount create no separate differences.   </p>
+<p><strong>Like-for-like companion:</strong> central Gemini inputs at <strong>15:1/60%</strong>, with <strong><code>billCacheHit=60</code></strong>, predict <strong>91.34%</strong>. That is about <strong>9.01 points above the current 82.33% Opus calculation</strong>, or <strong>8.24 points above its author’s 83.1%</strong>. The companion is not the headline. Changing serving cache hits without changing the billed share would be a different comparison.</p>
+<p>The small hourly-cost step in this particular bridge is evaluated while Opus’s much higher tariffs still apply. At Gemini’s own central prices, changing only $1.20 to the reference TPU valuation of $2.70 costs approximately <strong>9.7 margin points</strong>. This illustrates why waterfall ordering must be disclosed.</p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is a matched production serving trace:</strong> physical chip count, completed fresh/cached/output tokens, wall-clock time including idle capacity, reasoning level, context distribution, and a stated latency target. Coupled with an all-in hourly resource cost, it would replace most of this report’s uncertain inputs at once.</p>
+<table>
+<thead>
+<tr>
+<th>New finding or one-at-a-time test</th>
+<th>Implication under the other central assumptions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Only four concurrent output tokens/chip meet the latency target</td>
+<td>Margin falls to <strong>80.9%</strong>; adding the low case’s larger architecture gives <strong>72.4%</strong>.</td>
+</tr>
+<tr>
+<td>All-in economic cost is $2.40/hour rather than $1.20</td>
+<td>Margin falls to <strong>84.4%</strong>.</td>
+</tr>
+<tr>
+<td>Active parameters are 60B rather than 30B</td>
+<td>Margin falls to <strong>90.3%</strong>.</td>
+</tr>
+<tr>
+<td>Total parameters are 1.2T rather than 600B</td>
+<td>Margin falls to <strong>88.4%</strong>.</td>
+</tr>
+<tr>
+<td>Paid-capacity utilization is 50% rather than 70%</td>
+<td>Margin falls to <strong>89.1%</strong>.</td>
+</tr>
+<tr>
+<td>There is no residual private-stack advantage</td>
+<td>Margin falls to <strong>91.4%</strong>.</td>
+</tr>
+<tr>
+<td>Actual geometry permits MLA-like compressed KV</td>
+<td>The donor-only sensitivity rises to <strong>93.2%</strong>.</td>
+</tr>
+</tbody></table>
+<p>These are tests of the model, not additional endpoint scenarios.</p>
+<p><strong>A public cross-check already argues for caution.</strong> Taking Google’s open Qwen recipe’s <strong>263.27 output tokens/s/chip at 8K/1K</strong> literally as a whole-request throughput proxy, applying $1.20/hour and 70% paid utilization, and retaining this report’s $7.05 billing bundle gives approximately <strong>74.3%</strong>. I do <strong>not</strong> charge prefill again in that calculation. Nor do I call it a Gemini estimate: the model, cached-work share, concurrency and deployment width differ. But it shows that the public serving anchor does not independently validate 92.2%. </p>
+<p>The central reconstruction instead implies approximately <strong>867 equivalent completed output tokens/s per occupied chip after accounting for input work</strong>, around 3.3 times that open 8K/1K point. Wider concurrent serving and cached input contribute to the gap; the explicit private-stack multiplier is only 1.10. A matched Google measurement near the lower benchmark throughput would move my center down sharply, not be dismissed as a benchmark inconvenience.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Context distribution.</strong> There is no independent context-length input. I therefore match the engine’s 1,000-output-token convention with an 8:1 ratio: 8,000 prompt tokens, mean decode context <strong>8,500</strong>, terminal context <strong>9,000</strong>. The Reference companion becomes approximately 15,500 during decode. This is not an estimate for requests near the model’s advertised million-token limit. A mean also cannot express a costly long-context tail or correlation between context length and cache reuse. The length conversion comes from the public roofline; the chosen workload is my assumption. </p>
+<p><strong>Geometry and placement.</strong> The custom row now exposes <code>customDonor</code>, so donor choice is expressible; Google’s actual geometry is not. Qwen-class GQA supplies a proxy for layers, heads and KV traffic while my block supplies parameter magnitudes. The reconstruction includes <strong>126,976 FP8 KV bytes per context token</strong> and the TPU convention of reading total resident weights divided by a declared 16-chip width. Omitting these terms and using active-parameter FLOPs alone would overstate the margin. </p>
+<p>Under the registered capacity policy, the central case’s minimum four-chip placement uses approximately <strong>188.9 GB/chip</strong>, including peak KV and a 10% reserve, within <strong>192 GiB ≈206.2 GB</strong>. The low case fits on eight. These are capacity-policy checks, not observed layouts. The capacity minimum and the throughput calculation’s declared 16-chip width are different constructs; neither proves Google uses that topology or meets a service-level objective. The supplied contract itself distinguishes policy feasibility from verified placement and latency. </p>
+<p><strong>Calibration transfer.</strong> The public TPU decode coefficient is <strong>0.519</strong>, whereas prefill uses the calculator’s transferred <strong>0.17581</strong> coefficient. They are not a matched Gemini calibration. The decode evidence uses output over whole-benchmark time; interpreting it as a pure phase coefficient while pricing prefill separately introduces a timing-basis approximation. I neither hide that limitation nor add a compensating efficiency credit. A ±50% change in central prefill cost alone moves the result approximately <strong>±1.15 points</strong>. </p>
+<p><strong>Cache storage and ancillary services.</strong> The headline models token serving with implicit reuse. It includes cache-read work and live KV pressure, but no separately sold persistent-cache storage service: neither storage revenue nor that service’s separate expense is added. The calculator cannot express cache lifetime or billable token-hours. Likewise, grounding, execution and other tool-service charges are not treated as token revenue. An explicit-cache-heavy or tool-heavy invoice requires an expanded cost-and-billing model. This is a perimeter limit, not an assertion that storage is free. </p>
+<p><strong>Unresolved production facts.</strong> I could not establish an immutable dated snapshot behind the stable name, 3.7 versus 3.8 traffic shares, internal variants by reasoning level, exact total/active size, precision, attention scheme, generation/site allocation, latency-qualified throughput, occupancy, internal transfer price, actual input/output/cache mix, or model-specific revenue and margin. Billed thinking is included in output; unbilled retries are excluded by the commissioned cost perimeter. No claim is made about free Search/app traffic, subscription economics, training, research, support, sales or corporate profit.</p>
+<p><strong>Treatment of the earlier Google dive.</strong> Its <strong>95.7%</strong> was an independently modeled <strong>Gemini 3.1 Pro</strong> result with a different throughput construction, not a measured Google margin. I used its leads, rechecked public sources—including the newer size-paper revision—and did not inherit its old Flash tariff or add its host uplift to an already all-in rent. </p>
+<p><strong>File receipt.</strong> All three uploads were readable and reviewed before proceeding. Their supplied names and first readable lines were:</p>
+<table>
+<thead>
+<tr>
+<th>Supplied file</th>
+<th>First line, truncated where necessary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>03-calculator-contract-live-2026-09-25.json</code></td>
+<td><code>{&quot;result&quot;:{&quot;content&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code></td>
+</tr>
+<tr>
+<td><code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code></td>
+<td><code>```json</code></td>
+</tr>
+<tr>
+<td><code>06-google-gptpro.md</code></td>
+<td><code># Google (Gemini) — GPT-5.6 Pro deep dive</code></td>
+</tr>
+</tbody></table>
+<p><strong>Bottom line:</strong> 92.2% is my conditional best reading of the declared vector. The 72.4–94.3% span expresses selected uncertainty, not a guarantee that the true margin lies inside it. The evidence is strongest on identity and tariff, weakest on production concurrency and internal cost; the calculator can price those assumptions but cannot establish them.</p>
+<p>[Complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

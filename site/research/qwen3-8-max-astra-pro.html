@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Qwen3.8-Max — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/qwen3-8-max-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Qwen3.8-Max — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T070105Z-4d5c81</code>, answered 2026-09-25T09:36:13Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for Qwen3.8-Max from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>a616239e57e33d07fc038c0eb78cc503293536e295f906c0fb9769634950a17e</code>; as received, <code>d457269f80893aace6aa8f5acac680a5d5487e034c1ef4cb9b5da3d612ce372c</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~79%</strong> (79.19%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>72%–88% (71.85% – 88.27%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>79.2% (71.8–88.3%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~78%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>No Qwen model has had an estimate on this site before (the calculator&#39;s Qwen3-class donor geometry was the only Qwen trace). The run priced Alibaba&#39;s API model, qwen3.8-max (the 2026-09-02 snapshot, Singapore international tier, $2/$6, cached input at 12.5% of the input price), and established from Qwen&#39;s own model card that it is built on the open Qwen3.8-2.4T-A95B weights — &quot;based on&quot;, which the run is careful to say is a backbone relationship and not byte identity. So the size (2.4T total, 95B active) is disclosed for the backbone and inferred for the served snapshot. The geometry is not a match for anything the calculator carries: 92 layers, of which 69 use linear attention and 23 full attention with 4 KV heads, 512 experts with 10 active. The run held it on the Qwen3-class GQA donor, a declared approximation whose direction of error it declined to call — three quarters of the layers keep no growing KV cache, which the donor does not represent. The input the run calls decisive is the hour: all of the traffic on GB300-class capacity at an assumed $3.26 all-in, about half the page&#39;s $6.00 planning rent, built up as an owned-equivalent cost (hardware, lives, electricity, operating allowance — each an assumption) rather than taken from any rental quote; no Alibaba cost figure is public. NVIDIA has published FP8 serving of this model on GB300 NVL72, which supports the hardware choice but not the share. The span (72–88%) moves the hour, utilization and, in the high case, FP4 weights. At the page&#39;s Reference traffic the same inputs compute ~78%. The run&#39;s figures match this engine to two decimals.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>qwen3c</code> attention geometry (a declared approximation — this model&#39;s architecture is published but matches no stated row). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>qwen3c</td>
+<td>qwen3c</td>
+<td>qwen3c</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>95</td>
+<td>95</td>
+<td>95</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>2400</td>
+<td>2400</td>
+<td>2400</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp4</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>6</td>
+<td>6</td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>12.5</td>
+<td>12.5</td>
+<td>12.5</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>60</td>
+<td>60</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;gb300&quot;:100}</code></td>
+<td><code>{&quot;gb300&quot;:100}</code></td>
+<td><code>{&quot;gb300&quot;:100}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;gb300&quot;:3.26}</code></td>
+<td><code>{&quot;gb300&quot;:3.73}</code></td>
+<td><code>{&quot;gb300&quot;:3.26}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>65</td>
+<td>55</td>
+<td>65</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>8:1, 60% cache</td>
+<td>8:1, 60% cache</td>
+<td>8:1, 60% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<p>Estimator: <strong>GPT-6 Astra Pro</strong> · <strong>September 25, 2026</strong> · Commission <code>pr-20260925T070105Z-4d5c81#1</code>.</p>
+<p>File receipt: both uploaded files opened and were read. <code>03-calculator-contract-live-2026-09-25.json</code> begins <code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code> (truncated). <code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code> begins with the line <code>```json</code>.</p>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈79% at list (span 72–88%)<br>An assumed $3.26 all-in GB300-equivalent GPU-hour is the decisive input.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>Scope:</strong> standard Singapore/International paid text-token serving for <code>qwen3.8-max-0902</code>, including billed reasoning tokens—not Prime, free quota, tool-service charges, or the entire multimodal service. This is modeled <strong>unit direct-serving contribution margin</strong>, not Alibaba’s reported gross margin. All public pages below were checked on <strong>2026-09-25</strong>; an access date is not represented as a publication date.</p>
+<ol>
+<li><p><strong>S1 — Exact version: DISCLOSED.</strong> Alibaba’s notice dated <strong>2026-09-02</strong> introduces <code>qwen3.8-max-0902</code>; the unpinned <code>qwen3.8-max</code> switched to that snapshot on <strong>2026-09-05</strong>, with pricing unchanged. The snapshot is also identified as <code>qwen3.8-max-2026-09-02</code>. I price this version, not an unspecified August checkpoint. URL: <a href="https://www.alibabacloud.com/en/notice/model_studio_update_notice_for_qwen38max_models_863?_p_lc=1">https://www.alibabacloud.com/en/notice/model_studio_update_notice_for_qwen38max_models_863?_p_lc=1</a> . </p>
+</li>
+<li><p><strong>S2 — Standard list tariff: DISCLOSED.</strong> Alibaba’s pricing page, last updated <strong>2026-09-24</strong>, lists Singapore International <code>qwen3.8-max</code> and <code>qwen3.8-max-0902</code> at <strong>$2/M input and $6/M output</strong>, for both Thinking and Non-Thinking modes, through the stated 1M-input tier. Output includes reasoning plus answer. Prime and other regions are separate tariff choices. The page directs account promotions to its console; I establish the public standard tariff, not undisclosed account offers. URL: <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">https://www.alibabacloud.com/help/en/model-studio/model-pricing</a> . </p>
+</li>
+<li><p><strong>S3/S13 — Cache tariff: DISCLOSED.</strong> The official Qwen API snapshot page lists <strong>$0.25/M implicit-cache input</strong>, <strong>$2.50/M explicit-cache creation</strong>, and <strong>$0.17/M explicit-cache reads</strong>. Access date: <strong>2026-09-25</strong>; no publication date displayed. Qwen’s own model card identifies Qwen Cloud as its official API service. Alibaba’s generic 20%-of-input implicit-cache rule explicitly excludes this model. I use implicit caching: <code>cacheReadMult = 100 × 0.25/2 = 12.5</code>, not 20 or 10. Thus the commission’s previously unverified <strong>$2/$0.25/$6 is confirmed</strong> for the selected service. URLs: <a href="https://www.qwencloud.com/models/qwen3.8-max-0902">https://www.qwencloud.com/models/qwen3.8-max-0902</a> and <a href="https://www.alibabacloud.com/help/en/model-studio/context-cache">https://www.alibabacloud.com/help/en/model-studio/context-cache</a> . </p>
+</li>
+<li><p><strong>S4 — Open-weight release date: DISCLOSED.</strong> Qwen’s release log announces availability of <code>Qwen3.8-2.4T-A95B</code> on <strong>2026-08-12</strong>. I use that public-release date rather than the brief’s <strong>2026-08-08</strong>. A repository-creation or preparatory-upload date would not by itself establish public availability. URL: <a href="https://github.com/QwenLM/Qwen3.8/blob/main/README.md">https://github.com/QwenLM/Qwen3.8/blob/main/README.md</a> . </p>
+</li>
+<li><p><strong>S5 — API/open-weight relationship: DISCLOSED; snapshot-size transfer: INFERENCE.</strong> The model card says Max is <strong>based on</strong> the open 2.4T-total/95B-active model, with additional features including vision, non-thinking support, expanded default context, and built-in tools. That establishes the backbone relationship, <strong>not byte identity</strong>. The September snapshot’s complete served architecture is not separately disclosed in the material found. My <code>total:2400</code> and <code>active:95</code> are therefore disclosed open-backbone magnitudes <strong>transferred by inference to the priced API snapshot</strong>. URL: <a href="https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B">https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B</a> . Date: accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S6 — Published geometry: DISCLOSED.</strong> Selected fields are <code>num_hidden_layers:92</code>, <code>hidden_size:8192</code>, <code>num_attention_heads:64</code>, <code>num_key_value_heads:4</code>, <code>head_dim:256</code>, <code>full_attention_interval:4</code>, <code>num_experts:512</code>, and <code>num_experts_per_tok:10</code>. The layer sequence has <strong>69 linear-attention and 23 full-attention layers</strong>. Shared-expert and routed-expert intermediate sizes are both 2048; one MTP layer is specified. This is not ordinary all-layer GQA or DeepSeek MLA. URL: <a href="https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/config.json">https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/config.json</a> . Date: accessed <strong>2026-09-25</strong>, displayed revision <code>b15b863</code>. </p>
+</li>
+<li><p><strong>S7 — Hardware-specific performance exists: DISCLOSED.</strong> NVIDIA’s <strong>2026-08-12</strong> Qwen article demonstrates FP8 serving on <strong>GB300 NVL72</strong>, reporting peak throughput above 4,000 tokens/s/GPU and user output speed above 350 tokens/s. These are different performance objectives, not permission to assume both simultaneously or to identify Alibaba’s fleet. URL: <a href="https://developer.nvidia.com/blog/serve-qwen3-8-2-4t-a95b-a-2-4t-parameter-model-with-configurable-reasoning-on-nvidia-gb300-nvl72/">https://developer.nvidia.com/blog/serve-qwen3-8-2-4t-a95b-a-2-4t-parameter-model-with-configurable-reasoning-on-nvidia-gb300-nvl72/</a> . </p>
+</li>
+<li><p><strong>S8 — Open-stack precision and latency evidence: DISCLOSED.</strong> The vLLM recipe, updated <strong>2026-09-14</strong>, supports FP8 and NVFP4 layouts. Its low-latency FP8 TP16 results are <strong>130 output tokens/s/user without MTP and 307 with MTP-3</strong>. Its throughput figures—up to <strong>3,200 FP8 and 4,300 NVFP4 tokens/s/GPU</strong>—explicitly count <strong>input plus output</strong>. They must not be inserted as decode-only rates. URL: <a href="https://recipes.vllm.ai/Qwen/Qwen3.8-2.4T-A95B">https://recipes.vllm.ai/Qwen/Qwen3.8-2.4T-A95B</a> . </p>
+</li>
+<li><p><strong>S2/S7/S8 — Actual deployment and occupancy: UNKNOWN.</strong> Singapore is the selected commercial deployment scope. I found no model-specific disclosure assigning this snapshot to particular facilities, GPU generations, token-weighted fleet shares, or paid-capacity utilization. Compatibility and benchmark deployment do not establish production allocation. Accordingly, <strong>100% GB300 means a representative cost/performance-equivalent estate in this estimate, not a discovered inventory</strong>. Search basis: S2/S7/S8, including <a href="https://www.alibabacloud.com/help/en/model-studio/model-pricing">https://www.alibabacloud.com/help/en/model-studio/model-pricing</a> ; checked <strong>2026-09-25</strong>.</p>
+</li>
+<li><p><strong>S9–S11 — Calculator calibration: ASSUMED, not measured Qwen performance.</strong> The public calculator registers GB300’s balanced batch at 64 and its decode coefficient at 0.258295; the latter is explicitly analyst-set. The donor and universal prefill calibration are likewise not a matched Qwen production measurement. Sources, accessed <strong>2026-09-25</strong>: <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js">https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js</a> ; <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js">https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js</a> ; <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js">https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js</a> . The supplied contract also labels outputs as policy scenarios.  </p>
+</li>
+<li><p><strong>Hourly procurement: UNKNOWN; working cost: ASSUMED.</strong> No Alibaba all-in GPU-hour cost was established. My <strong>$3.26/hour</strong> is the rounded result of the explicit owned-equivalent construction in heading 4, not a vendor quote or a discount inferred from API prices. Its component prices, lives, electricity rate and operating allowance are assumptions. S10 supplies the costing method only; it is <strong>not evidence for my component values</strong>. Method URL: <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js">https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js</a> . Assumption date: <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S12 — Financial disclosure: DISCLOSED, different perimeter.</strong> Alibaba’s <strong>2026-08-20</strong> report gives <strong>$7.1B AI Cloud and Compute Services revenue</strong>, <strong>$830M adjusted segment EBITA</strong>, and approximately <strong>12% EBITA margin</strong>. None is Qwen3.8 API revenue, direct-serving cost, or unit margin. I found no model-specific financial disclosure to substitute for the engineering estimate. URL: <a href="https://www.alibabagroup.com/en-US/document-2027233133950140416">https://www.alibabagroup.com/en-US/document-2027233133950140416</a> .</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>Empty <code>source_ids</code> deliberately identify unsupported judgment rather than attributing invented measurements to a citation. Sources attached to inferred fleet or traffic choices motivate the scenario; they do not measure those quantities.</p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;Qwen3.8 flagship (Qwen3.8-Max / Qwen3.8-2.4T-A95B)&quot;,
+  &quot;api_model_priced&quot;: &quot;qwen3.8-max-0902 (alias qwen3.8-max-2026-09-02), released 2026-09-02; Singapore International standard text traffic; qwen3.8-max points here from 2026-09-05&quot;,
+  &quot;customDonor&quot;: &quot;qwen3c&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Standard &lt;=1M tariff, but typical modeled request is 8000 input plus 1000 billed output tokens, including reasoning; representative decode context 8500, peak 9000. Reference replay: 15000 input plus 1000 output, representative 15500.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;,
+      &quot;active&quot;: 95,
+      &quot;total&quot;: 2400,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 6,
+      &quot;cacheReadMult&quot;: 12.5,
+      &quot;billCacheHit&quot;: 60,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;gb300&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;gb300&quot;: 3.26
+      },
+      &quot;util&quot;: 65,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 8,
+      &quot;cache_hit&quot;: 60
+    }
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;,
+      &quot;active&quot;: 95,
+      &quot;total&quot;: 2400,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 6,
+      &quot;cacheReadMult&quot;: 12.5,
+      &quot;billCacheHit&quot;: 60,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;gb300&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;gb300&quot;: 3.73
+      },
+      &quot;util&quot;: 55,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 8,
+      &quot;cache_hit&quot;: 60
+    }
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;,
+      &quot;active&quot;: 95,
+      &quot;total&quot;: 2400,
+      &quot;precision&quot;: &quot;fp4&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 6,
+      &quot;cacheReadMult&quot;: 12.5,
+      &quot;billCacheHit&quot;: 60,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;gb300&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;gb300&quot;: 3.26
+      },
+      &quot;util&quot;: 65,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 8,
+      &quot;cache_hit&quot;: 60
+    }
+  },
+  &quot;stated&quot;: {&quot;headline_pct&quot;: 79.19, &quot;low_pct&quot;: 71.85, &quot;high_pct&quot;: 88.27},
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;The 0902 snapshot was released September 2; qwen3.8-max switched to it September 5 with pricing unchanged.&quot;, &quot;url&quot;: &quot;https://www.alibabacloud.com/en/notice/model_studio_update_notice_for_qwen38max_models_863?_p_lc=1&quot;, &quot;date&quot;: &quot;2026-09-02&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Singapore International standard text tariff: $2 input and $6 output per million; both thinking modes; output includes reasoning and answer.&quot;, &quot;url&quot;: &quot;https://www.alibabacloud.com/help/en/model-studio/model-pricing&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Official Qwen API snapshot page: implicit cache $0.25/M, explicit creation $2.50/M, explicit read $0.17/M; date is access date.&quot;, &quot;url&quot;: &quot;https://www.qwencloud.com/models/qwen3.8-max-0902&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Qwen release log announces the open flagship weights on August 12, rather than the August 8 date in the commission.&quot;, &quot;url&quot;: &quot;https://github.com/QwenLM/Qwen3.8/blob/main/README.md&quot;, &quot;date&quot;: &quot;2026-08-12&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;The open backbone has 2.4T total and 95B active parameters; Max is based on it with additional features, not asserted byte-identical; date is access date.&quot;, &quot;url&quot;: &quot;https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Open geometry: 92 layers, hidden 8192, hybrid linear/full attention, 64 query heads, 4 KV heads, head dimension 256, 512 routed experts with top-10 and a shared expert; date is access date.&quot;, &quot;url&quot;: &quot;https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B/blob/main/config.json&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;NVIDIA demonstrates FP8 Qwen3.8-2.4T-A95B on GB300 NVL72; this is not evidence of Alibaba production allocation.&quot;, &quot;url&quot;: &quot;https://developer.nvidia.com/blog/serve-qwen3-8-2-4t-a95b-a-2-4t-parameter-model-with-configurable-reasoning-on-nvidia-gb300-nvl72/&quot;, &quot;date&quot;: &quot;2026-08-12&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;vLLM provides FP8 and NVFP4 serving recipes and distinguishes user output speed from aggregate input-plus-output throughput.&quot;, &quot;url&quot;: &quot;https://recipes.vllm.ai/Qwen/Qwen3.8-2.4T-A95B&quot;, &quot;date&quot;: &quot;2026-09-14&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Calculator donor geometry, GB300 precision tuples and assumed operating-point calibration; date is access date, not a provider measurement.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;Published calculator cost and billing implementation used for local arithmetic reconstruction; date is access date.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;Published roofline equations and capacity-policy implementation; date is access date.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;Alibaba reports $7.1B AI Cloud and Compute Services revenue and approximately 12% segment adjusted EBITA margin; neither is a Qwen unit serving margin.&quot;, &quot;url&quot;: &quot;https://www.alibabagroup.com/en-US/document-2027233133950140416&quot;, &quot;date&quot;: &quot;2026-08-20&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Generic 20% implicit-cache pricing explicitly excludes Qwen3.8-Max; use its model-specific tariff; date is access date.&quot;, &quot;url&quot;: &quot;https://www.alibabacloud.com/help/en/model-studio/context-cache&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 95, &quot;low_margin&quot;: 95, &quot;high_margin&quot;: 95, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S5&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 2400, &quot;low_margin&quot;: 2400, &quot;high_margin&quot;: 2400, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S5&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;qwen3c&quot;, &quot;low_margin&quot;: &quot;qwen3c&quot;, &quot;high_margin&quot;: &quot;qwen3c&quot;, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;S9&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp4&quot;, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S8&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 2, &quot;low_margin&quot;: 2, &quot;high_margin&quot;: 2, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 6, &quot;low_margin&quot;: 6, &quot;high_margin&quot;: 6, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 12.5, &quot;low_margin&quot;: 12.5, &quot;high_margin&quot;: 12.5, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;gb300&quot;: 100}, &quot;low_margin&quot;: {&quot;gb300&quot;: 100}, &quot;high_margin&quot;: {&quot;gb300&quot;: 100}, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S8&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg.gb300&quot;, &quot;central&quot;: 3.26, &quot;low_margin&quot;: 3.73, &quot;high_margin&quot;: 3.26, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 65, &quot;low_margin&quot;: 55, &quot;high_margin&quot;: 65, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.0, &quot;low_margin&quot;: 1.0, &quot;high_margin&quot;: 1.0, &quot;source_ids&quot;: [&quot;S9&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;balanced&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [&quot;S9&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.io_ratio&quot;, &quot;central&quot;: 8, &quot;low_margin&quot;: 8, &quot;high_margin&quot;: 8, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S8&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.cache_hit&quot;, &quot;central&quot;: 60, &quot;low_margin&quot;: 60, &quot;high_margin&quot;: 60, &quot;source_ids&quot;: [&quot;S13&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 60, &quot;low_margin&quot;: 60, &quot;high_margin&quot;: 60, &quot;source_ids&quot;: [&quot;S13&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low; tariff and open backbone are well supported, but actual fleet, all-in hourly cost, utilization and hybrid-architecture transfer are unmeasured, so this is a conditional three-scenario judgment span.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p>My central reading is <strong>79.2% at list</strong>, with a <strong>71.9–88.3% three-scenario judgment span</strong>. These are conditional estimates of the selected text-serving workload, not verified provider margins or a probability interval. Cost includes allocated paid idle capacity and direct host/network/serving operations, but excludes training, R&amp;D, sales, G&amp;A, free-tier service, customer support and unbilled retries, following the commission’s perimeter.</p>
+<p><strong>Execution status matters.</strong> I could not obtain a live MCP response: the direct connection attempt failed during name resolution, and connector discovery did not expose this service. <strong>No <code>run_scenario</code> call returned a result.</strong> Instead, I reconstructed the relevant published equations locally. As an arithmetic cross-check, the same reconstruction produces <strong>82.3265%</strong> for the supplied Opus reference vector, matching the attachment’s <strong>82.33%</strong> live reading. This checks the implementation and units, not either provider’s economics. The public source was read on September 25; I did not establish a byte-for-byte release binding to <code>809cfb27</code>.</p>
+<p>The intended call is <code>run_scenario(model=&quot;custom&quot;, perspective=&quot;median&quot;, overrides=&lt;central.overrides&gt;, traffic=&lt;central.traffic&gt;)</code>; the other two calls substitute the complete corresponding objects above. The commissioning leg’s actual engine outputs should remain authoritative for the card.</p>
+<p><strong>Arithmetic.</strong> Let <code>r</code> be all-in dollars per GPU-hour, <code>u</code> paid-capacity utilization as a fraction, and <code>T</code> phase-specific tokens/s/GPU. Each phase’s cost is:</p>
+<pre><code class="language-text">c_{\rm phase}=\frac{r\times10^6}{3600\,T_{\rm phase}\,u}.
+</code></pre>
+<p>The central reconstruction gives <strong>4,347.65 fresh-prefill tokens/s/GPU</strong> and <strong>806.02 decode tokens/s/GPU</strong>, before occupancy. At $3.26/hour and 65% utilization:</p>
+<pre><code class="language-text">c_{\rm in}=\$0.320440/M,\qquad
+c_{\rm out}=\$1.728455/M,\qquad
+c_{\rm cache}=0.05c_{\rm in}.
+</code></pre>
+<p>Consider one million output tokens accompanied by eight million input tokens. With 60% cached, revenue and cost are:</p>
+<pre><code class="language-text">B=6+8(0.40\times2+0.60\times0.25)=\$13.60,
+</code></pre>
+<pre><code class="language-text">C=1.728455+8(0.40+0.60\times0.05)\times0.320440
+ =\$2.830770,
+</code></pre>
+<pre><code class="language-text">M=1-C/B=79.1855\%.
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Local reconstruction</th>
+<th align="right">Fresh input cost, $/M</th>
+<th align="right">Output cost, $/M</th>
+<th align="right">Cost per workload bundle</th>
+<th align="right">Billings per bundle</th>
+<th align="right">Margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central: FP8, $3.26/hour, 65% utilization</td>
+<td align="right">0.32044</td>
+<td align="right">1.72845</td>
+<td align="right">$2.83077</td>
+<td align="right">$13.60</td>
+<td align="right"><strong>79.19%</strong></td>
+</tr>
+<tr>
+<td>Low: FP8, $3.73/hour, 55% utilization</td>
+<td align="right">0.43330</td>
+<td align="right">2.33722</td>
+<td align="right">$3.82778</td>
+<td align="right">$13.60</td>
+<td align="right"><strong>71.85%</strong></td>
+</tr>
+<tr>
+<td>High: FP4, $3.26/hour, 65% utilization</td>
+<td align="right">0.10681</td>
+<td align="right">1.22806</td>
+<td align="right">$1.59550</td>
+<td align="right">$13.60</td>
+<td align="right"><strong>88.27%</strong></td>
+</tr>
+<tr>
+<td>Central at Reference 15:1/60%</td>
+<td align="right">0.33734</td>
+<td align="right">2.32772</td>
+<td align="right">$4.50359</td>
+<td align="right">$20.25</td>
+<td align="right"><strong>77.76%</strong></td>
+</tr>
+</tbody></table>
+<p>The low case combines shorter economic hardware life with additional paid slack; it does not also worsen architecture, tariff, cache rate, or stack. The high case changes <strong>precision alone</strong>: no cheaper procurement, higher occupancy or private efficiency bonus is stacked on top.</p>
+<p><strong>Sanity checks.</strong> Parameters are in billions, tariffs per million tokens, and rents per <strong>GPU</strong>, not per NVL72 rack or Grace package. <code>util:65</code> means 65%, not 0.65%. Power and hosting are already inside the hourly cost. No central negative arose. In the local capacity check, the GB300 leg remains renderable at both traffic mixes; the policy selects widths of 14 GPUs centrally and 18 at Reference. Those are calculator-selected widths, <strong>not verified Qwen tensor-parallel layouts</strong>. No expensive leg disappeared to manufacture the positive margin.</p>
+<p>An independent scale check is useful but limited: the central phase rates imply approximately <strong>2,921 total tokens/s/GPU</strong> for an uncached 8K-input/1K-output workload. That is of the same order as the published FP8 throughput evidence, without treating a mixed-token benchmark as decode speed. The FP4 reconstruction implies roughly <strong>6,021 total tokens/s/GPU</strong>, above the cited vLLM figure. Different workloads and layouts prevent a matched validation; <strong>the high endpoint is especially exposed to optimistic FP4 transfer</strong>, not an observed achievement. </p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Architecture and carrier — S5, S6, S9.</strong> The open backbone is the best identified size proxy, so I keep 95B active and 2.4T total in all three runs. I do not invent a size range for published weights merely to widen the margin span. The uncertainty is whether the September API snapshot’s text-serving path preserves those magnitudes.</p>
+<p>The additional configuration fields compared were <code>linear_num_key_heads:16</code>, <code>linear_num_value_heads:128</code>, <code>linear_key_head_dim:128</code>, <code>linear_value_head_dim:128</code>, <code>linear_conv_kernel_dim:4</code>, <code>mamba_ssm_dtype:&quot;float32&quot;</code>, and <code>mtp_num_hidden_layers:1</code>. The configuration exposes recurrent linear-attention state, not an MLA latent-KV dimension. </p>
+<table>
+<thead>
+<tr>
+<th>Geometry comparison</th>
+<th>Published open backbone</th>
+<th>Chosen calculator donor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Layers / hidden size</td>
+<td>92 / 8192</td>
+<td>62 / 6144</td>
+</tr>
+<tr>
+<td>Attention</td>
+<td>69 linear-attention + 23 full GQA</td>
+<td>GQA throughout</td>
+</tr>
+<tr>
+<td>Full-attention query / KV heads</td>
+<td>64 / 4</td>
+<td>96 / 8</td>
+</tr>
+<tr>
+<td>Full-attention head dimension</td>
+<td>256</td>
+<td>128</td>
+</tr>
+<tr>
+<td>Routed experts / selected</td>
+<td>512 / 10, plus one shared expert</td>
+<td>Qwen3-class MoE; calculator dispatch uses top-8</td>
+</tr>
+<tr>
+<td>Recurrent attention and MTP</td>
+<td>Present</td>
+<td>Not represented</td>
+</tr>
+</tbody></table>
+<p><strong>No existing open row honestly matches.</strong> <code>glm47</code> shares the layer count but not hidden size, head geometry, expert structure or hybrid attention. <code>dsr1</code>, <code>kimi</code> and <code>glm</code> use MLA-family representations; <code>dsv4</code> and <code>dsv4f</code> use a different compressed-attention approximation. The dense <code>llama70</code> donor is less appropriate. I therefore choose <strong><code>custom</code> with <code>qwen3c</code></strong>, explicitly as an approximation—not a claim that published Qwen3.8 is a 62-layer GQA model. The permitted model/donor choices come from the supplied contract. </p>
+<p>The approximation is consequential. At FP8, the open model’s full-attention component alone needs <code>23 × 2 × 4 × 256 = 47,104</code> KV bytes per context token, versus <code>62 × 2 × 8 × 128 = 126,976</code> in the donor. But the real model also has recurrent state and linear-attention computation. <strong>The 2.70× KV-component ratio is not a 2.70× total-cost penalty, nor proof that this donor supplies a one-sided cost bound.</strong></p>
+<p><strong>Fleet and precision — S7/S8; production allocation is judgment.</strong> I use one Blackwell-equivalent leg because GB300 has a model-specific serving demonstration and enough registered memory for the carrier at the selected operating points. The 100% weight avoids suggesting that unsupported fractional allocations are measured. It does <strong>not</strong> establish that Alibaba owns or exclusively uses GB300s. Older accelerators, a mixed-generation estate, or different domestic/international infrastructure would require a different estimate. FP8 is the central precision, grounded in the official benchmark; FP4 is a technically supported but unverified-production upside case. </p>
+<p><strong>All-in hourly cost — unsupported component values, explicit accounting.</strong> My central owned-equivalent calculation assumes $80,000 per GPU of installed compute, host and network capital; five-year economic life; zero residual value; 8% capital recovery rate; $20,000 of separately allocated facility capital over 15 years; 1.75 kW IT draw including host allocation; PUE 1.15; electricity at $0.15/kWh; and $0.40/hour for maintenance and serving operations. <strong>These are working assumptions, not Alibaba disclosures.</strong></p>
+<p>For capital-recovery factor <code>a(i,n)=i(1+i)^n/[(1+i)^n-1]</code>:</p>
+<pre><code class="language-text">r=\frac{80{,}000a(0.08,5)}{8760}
+ +\frac{20{,}000a(0.08,15)}{8760}
+ +(1.75\times1.15\times0.15)+0.40.
+</code></pre>
+<p>The components are <strong>$2.2873 + $0.2667 + $0.3019 + $0.4000 = $3.2559/hour</strong>, rounded to <strong>$3.26</strong>. The low-margin case changes compute life from five to four years, giving <strong>$3.7259</strong>, rounded to <strong>$3.73</strong>. Facility recovery is not included in compute capital; network capital is not added again; electricity appears once. Utilization is applied <strong>after</strong> this hourly conversion, once. This method includes capital cost, rather than treating sunk hardware as free. The calculator’s rental branch consumes the resulting absolute hourly figure without adding another power bill. </p>
+<p>The principal procurement sensitivity is large: substituting <strong>$6/hour</strong> for $3.26, with everything else fixed, lowers the local central reading from <strong>79.19% to 61.69%</strong>. That is why the card identifies hourly cost as decisive. The $6 figure is the supplied calculator’s planning observation, not a matched all-in market quote. </p>
+<p><strong>Utilization — judgment without telemetry.</strong> Central 65% represents a reasonably loaded shared estate with paid reserve; 55% represents additional peak provisioning and launch slack. The high case retains 65%. Holding other inputs fixed, 50% utilization gives <strong>72.94%</strong>, while 80% gives <strong>83.09%</strong>. Neither chip arithmetic efficiency nor a benchmark’s busy-period utilization is substituted for paid-capacity occupancy.</p>
+<p><strong>Traffic and cache — S1/S8/S13 motivate, but do not measure, the choices.</strong> I assume <strong>8 input tokens per billed output token</strong>, with <strong>60% physical and billable cache hits</strong>. Repeated code, documents and tool prefixes motivate reuse; reasoning tokens increase the output denominator. The public 8K/1K verification workload is a useful scale reference, not representative Alibaba telemetry. Equality of physical and billable hits is an explicit assumption. Cache reads cost 5% of fresh prefill; there is no explicit-cache writing in these scenarios. </p>
+<p><strong>Efficiency — no extra credit.</strong> <code>stackMult:1</code>, <code>trendMonths:0</code>, and omission of <code>specDec</code> preserve the calculator’s published-practice baseline. I do not add NVIDIA’s optimized-kernel results, vLLM’s MTP benefit, and a private lead as three multipliers. The high case’s FP4 benefit enters through precision only. The default balanced latency posture remains an unmeasured production assumption.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The supplied reference’s own statement is <strong>83.1%, span 68–92%</strong>, with 65% utilization, a five-leg fleet and a two-month efficiency lead. Its author explicitly declined to tune inputs to a target. The source’s selected span is not an engine confidence interval.   </p>
+<p>On the common Reference workload, my Qwen vector gives <strong>77.76%</strong>, versus the supplied current-engine Opus value of <strong>82.33%</strong>: approximately <strong>4.57 percentage points lower</strong>. My own-traffic headline is <strong>79.19%</strong>. Comparing that directly with the old authored 83.1% mixes both traffic and engine vintages.</p>
+<p>The following is an <strong>ordered, local-arithmetic bridge</strong>, not independent additive causal effects. Fleet changes first so later geometry changes are evaluated on one feasible GB300 leg. Each row changes only the stated input group from the preceding row; reversing the order changes the allocation of points.</p>
+<table>
+<thead>
+<tr>
+<th>Change from preceding state</th>
+<th align="right">Margin after change</th>
+<th align="right">Change, percentage points</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Supplied Opus reference, locally reconstructed</td>
+<td align="right">82.33%</td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td>Fleet to 100% GB300, retaining Opus’s $5.70 GB300 rate</td>
+<td align="right">75.42%</td>
+<td align="right">−6.90</td>
+</tr>
+<tr>
+<td>GB300 hourly cost to my $3.26 all-in equivalent</td>
+<td align="right">85.94%</td>
+<td align="right">+10.52</td>
+</tr>
+<tr>
+<td>Two-month lead to zero</td>
+<td align="right">83.12%</td>
+<td align="right">−2.82</td>
+</tr>
+<tr>
+<td>Active parameters 300B → 95B</td>
+<td align="right">93.79%</td>
+<td align="right">+10.67</td>
+</tr>
+<tr>
+<td>Total parameters 2,500B → 2,400B</td>
+<td align="right">93.79%</td>
+<td align="right">0.00</td>
+</tr>
+<tr>
+<td>MLA donor → <code>qwen3c</code> GQA approximation</td>
+<td align="right">92.43%</td>
+<td align="right">−1.36</td>
+</tr>
+<tr>
+<td>Input/output tariff $5/$25 → $2/$6</td>
+<td align="right">77.25%</td>
+<td align="right">−15.18</td>
+</tr>
+<tr>
+<td>Cached-input multiplier 10% → 12.5%</td>
+<td align="right">77.76%</td>
+<td align="right">+0.51</td>
+</tr>
+<tr>
+<td>Reference 15:1 → chosen 8:1 traffic</td>
+<td align="right">79.19%</td>
+<td align="right">+1.43</td>
+</tr>
+</tbody></table>
+<p>Utilization, central FP8 precision, stack multiplier, balanced posture, 60% physical/billed cache share, cache-cost fraction and list-only billing are unchanged and therefore contribute <strong>zero</strong> in this bridge. Total size still affects residency, but it does not change the active-parameter-surrogate throughput here. The fleet penalty is partly the calculator’s conservative GB300 calibration—not a general conclusion that newer hardware is worse.</p>
+<p>The economic reading is that <strong>lower active compute and assumed owned-equivalent procurement largely offset Qwen’s much lower tariff</strong>. Its remaining disadvantage at Reference is not evidence of a worse company business model. The reference’s procurement and efficiency assumptions are themselves judgments; this comparison preserves them rather than silently replacing them. </p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is an occupied-GPU-hour accounting trace for the exact September API snapshot</strong>, separating fresh input, cache hits, billed reasoning and answer tokens, alongside all-in paid GPU-hours. That would jointly test the representative fleet, context distribution, phase calibration and occupancy assumptions.</p>
+<p>A higher actual hourly cost moves margin down linearly at fixed throughput. <strong>$6/hour gives 61.69%</strong>, already outside my three-scenario span. Conversely, cheaper owned recovery or better achieved throughput moves it up. The span is therefore not a claim that all plausible procurement arrangements lie inside it.</p>
+<p>A faithful hybrid-architecture benchmark could move either endpoint materially. Full-attention KV is smaller than the donor’s, which could improve economics; recurrent-state traffic, larger hidden width and different expert communication can offset that. A measured fresh-prefill cost 50% above my reconstruction lowers the central margin to <strong>75.13%</strong>; 50% below raises it to <strong>83.24%</strong>, before other changes.</p>
+<p>For the high endpoint, the decisive falsifier is <strong>quality-preserving FP4 production throughput</strong>. The reconstruction’s particularly large prefill gain is not established by the public aggregate throughput figures. A matched result showing only a modest end-to-end gain would bring the 88.27% endpoint down. A verified, efficient FP4 deployment could instead justify moving the central precision away from FP8.</p>
+<p>Finally, a disclosed change in the API snapshot’s backbone, a different tariff, or telemetry dominated by very long contexts would require re-estimation, not a cosmetic confidence adjustment.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Context length is not an independent input in this contract.</strong> Custom traffic uses an implicit 1,000-output-token scale. At 8:1, this means 8,000 input tokens, representative decode context 8,500, and peak context 9,000. The Reference replay becomes 15,000 input, 15,500 representative and 16,000 peak. I am <strong>not pricing average million-token requests</strong> merely because the same list tariff extends to that tier. A real distribution with long tails cannot be represented by these averages.</p>
+<p><strong>The exact hybrid geometry is outside the permitted carrier set.</strong> The configuration is available, but the overrides cannot encode 69 recurrent layers plus 23 full-attention layers, their separate state dtypes, exact shared-expert behavior, MTP head, or snapshot-specific additions. I did not disguise this gap by shrinking active parameters or inserting a compensating private-stack multiplier. The carrier also cannot certify that a solver-selected even GPU count is a valid model-parallel deployment.</p>
+<p><strong>Quantization is too coarse.</strong> The high run selects the calculator’s FP4 tuple, including its compute and dispatch conventions. It cannot express every component that remains at higher precision, quantization metadata, quality constraints or backend-specific bottlenecks. This is a major reason to treat 88.27% as an optimistic scenario rather than a measured ceiling.</p>
+<p><strong>The fleet is a surrogate, not a finding.</strong> Neither the exact inference locations nor the actual GB300/Hopper/domestic-accelerator mix was established. Prefill and decode could use different hardware and reservation policies. The representative one-leg estate does not express those correlations, and no public evidence establishes my $80,000 compute allocation, facility allocation, power bill, asset life, cost of capital or 65% occupancy.</p>
+<p><strong>Commercial and workload details remain unidentified.</strong> I could not establish the served snapshot’s complete parameter count, production precision, paid traffic distribution, true physical-versus-billed cache relationship, explicit-cache share, reasoning intensity, unbilled work, request-length tails, latency objective or model-level financial results. No public model-wide promotional tariff superseding the standard rate was found; console-specific promotions were not inspected. Consequently no numerical promotional-price sensitivity is presented as if its tariff were known.</p>
+<p>The explicit-cache tariff is known, but it is a <strong>different scenario</strong>: changing cached reads from $0.25 to $0.17 without accounting for $2.50 creation would be incomplete. As a read-price-only diagnostic, keeping costs and all other billing fixed gives <strong>78.58%</strong>, about 0.60 points below central. That is not an estimate of actual explicit-cache economics.</p>
+<p><strong>Execution remains unverified by the live connector.</strong> The local calculation reproduces the supplied Opus anchor and the public equations, but I have no returned MCP receipt for the three Qwen runs. The commissioning leg must rerun the declared JSON; any discrepancy should be preserved, not resolved by tuning my inputs.</p>
+<p>The central conclusion is therefore <strong>about 79% direct-serving contribution margin at the verified Singapore list tariff, conditional on the declared representative estate</strong>, with <strong>72–88% across these three coherent scenarios</strong>. The unresolved facts are concentrated in production economics and architecture transfer—not in the identified standard token tariff.</p>
+<p>Complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

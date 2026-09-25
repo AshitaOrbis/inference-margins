@@ -349,8 +349,12 @@ const graph = preT4SourceGraph();
    build output, and counting them made this same commit scan 52 files before an MCP build and 64
    after — a magnitude pin cannot be right in both states, so the scan is now build-state
    independent and 52 is the number in either. */
+/* The magnitude pin moved 52 -> 53 on 2026-09-25 (bq-3351, Astra Pro estimates): ONE genuinely new
+   eligible source file, site/astra-pro-estimates.js — the category's registry of recorded operating
+   points and its replay. The graph grew by exactly that file and shrank by none; the sink registry
+   was re-minted in the same commit. */
 assert("T4-REPRO-R5 the source graph is the frozen scanner's and the pinned registry's, and they agree",
-  graph.identical && graph.pinned.length === 52,
+  graph.identical && graph.pinned.length === 53,
   JSON.stringify({ scanned: graph.scanned.length, pinned: graph.pinned.length }));
 
 const sinks = preT4ArithmeticSinks();

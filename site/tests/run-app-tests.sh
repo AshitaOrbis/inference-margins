@@ -161,7 +161,13 @@ check "final-answer block: seven justification entries render" "$TMP/default.htm
 check "final-answer block: no process language in the DOM (R5 N2)" "$TMP/default.html" mustnot "best-supported"
 check "final-answer block: no process language in the DOM (FA-safe label)" "$TMP/default.html" mustnot "FA-safe"
 check "default hero is POLICY-LABELED inline" "$TMP/default.html" must "POLICY-LABELED SCENARIO OUTPUT"
-check "default declares all seven fleet legs renderable" "$TMP/default.html" must "all 7 of 7 declared fleet legs fit their declared serving setup"  # bq-3316 M11: reader wording of the same clause
+# RE-ANCHORED 2026-09-25 (bq-3351): the "all 7 of 7" string this used to require was carried ONLY by the §10
+# normalized table's Opus row (priced through the declared seven-leg blend), which the owner ruled removed
+# (d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section). Every surviving default surface
+# (hero, charts, evidence board) discloses the ACTIVE default fleet, which since 2026-09-20 is five legs (the two
+# Trainium legs withdrawn). The property is unchanged: the default fleet reports every leg fitting — a failing leg
+# renders "4 of 5" and turns this red.
+check "default declares every active fleet leg renderable" "$TMP/default.html" must "all 5 of 5 declared fleet legs fit their declared serving setup"  # bq-3316 M11: reader wording of the same clause
 # Post-peak-KV (external review FIX-38), non-default panels may legitimately disclose an
 # h100 capacity cap ("not renderable under this policy: h100 — capacity target ..."), so the
 # guard is scoped to the DEFAULT 7-leg fleet clause instead of the whole DOM: the default

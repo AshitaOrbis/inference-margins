@@ -5077,36 +5077,74 @@ function renderSubChart() {
   el.appendChild(verdict);
 }
 
-/* ---------- §10 normalized comparison (static, same lens + same workload) ---------- */
-function renderNormalized() {
-  const el = document.getElementById("normalized-table"); if (!el) return;
-  const median = PERSPECTIVES.find(p => p.id === "median");
-  const tbl = document.createElement("table");
-  const caption = document.createElement("caption");
-  caption.textContent = "Normalized provider scenario outputs under one shared lens";
-  tbl.appendChild(caption);
-  const mkRow = (cells, head) => {
-    const tr = document.createElement("tr");
-    cells.forEach((c, i) => {
-      const td = document.createElement(head ? "th" : "td");
-      td.textContent = c;
-      if (head) td.scope = "col";
-      if (i > 0) td.style.textAlign = "right";
-      tr.appendChild(td);
-    });
-    return tr;
-  };
-  tbl.appendChild(mkRow(["Provider preset", "Blended margin", "Serving cost /Mtok", "Effective price /Mtok", "Fleet renderability"], true));
-  MODELS.filter(m => !m.scenario && m.id !== "custom").forEach(m => { // custom = user scratch model, not a provider row
-    const s = applyPresetSettings(m, median);
-    s.ioRatio = 15; s.cacheHit = 60; // common reference workload (tariff scenarios excluded — sizes unidentified)
-    const tr = resolveTraffic(m, median, { mode: "explicit", profileId: "reference" });
-    const wl = appWorkload(s, undefined, m, tr);
-    const disclosure = fleetRenderableText(wl) || "all declared fleet legs renderable";
-    tbl.appendChild(mkRow([m.name + (m.spec ? " *" : ""), isFinite(wl.margin) ? Math.round(wl.margin * 100) + "%" : "—",
-      isFinite(wl.costMix) ? fmt$(wl.costMix) : "—", isFinite(wl.priceMix) ? fmt$(wl.priceMix) : "—", disclosure]));
+/* ---------- §10 "Astra Pro estimates" chart (bq-3351) ----------
+   Replaces the §10 normalized comparison table (renderNormalized), which priced every provider
+   through one page-authored lens and read as a ranking; the owner ruled it dropped
+   (d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section). This chart draws
+   the category that took its place: each model's recorded operating points from
+   astra-pro-estimates.js, computed HERE by the engine at page load (astraProReplay — the same
+   pipeline the build uses for the card faces and the MCP uses for run_scenario). Rows keep the
+   registry's fixed provider order; nothing is sorted by value. The series label sits on the chart
+   itself so a screenshot of it carries whose estimates these are. */
+let ASTRA_PRO_CHART_NARROW = null;
+function renderAstraProChart() {
+  const el = document.getElementById("astra-pro-chart"); if (!el) return;
+  el.textContent = "";
+  const recs = (typeof ASTRA_PRO_REGISTRY !== "undefined" && ASTRA_PRO_REGISTRY.estimates) || [];
+  if (!recs.length) return;
+  const rows = recs.map(rec => {
+    try { const r = astraProReadings(rec); return { rec, ok: true, mid: r.central / 100, lo: r.low_margin / 100, hi: r.high_margin / 100 }; }
+    catch { return { rec, ok: false }; }
   });
-  el.appendChild(tbl);
+  /* Two layouts: below about 760 px the labels move above their bars and the viewBox narrows, so the
+     drawn text stays legible when the SVG scales to the column (a 720-wide viewBox on a 390 px
+     screen renders 11 px text at about 4 px). Re-rendered when the width crosses the breakpoint. */
+  const narrow = window.innerWidth < 760;
+  ASTRA_PRO_CHART_NARROW = narrow;
+  const W = narrow ? 300 : 720, rowH = narrow ? 42 : 30, padL = narrow ? 8 : 206, padR = narrow ? 44 : 64, padT = narrow ? 40 : 30;
+  const fs = narrow ? 11.5 : 11;
+  const H = padT + rows.length * rowH + 26;
+  const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Astra Pro estimates: each model's central reading (dot) and its author's low-to-high scenarios (bar), serving margin at list. Tab to inspect each row." });
+  const x0 = padL, x1 = W - padR;
+  const xmin = Math.min(0, ...rows.filter(r => r.ok).map(r => Math.floor(r.lo * 4) / 4)), xmax = 1;
+  const xs = v => x0 + (v - xmin) / (xmax - xmin) * (x1 - x0);
+  svg.append(chartText(narrow ? 4 : 8, 16, "Astra Pro estimates", { weight: 600, fill: "var(--ink-1)", size: narrow ? 13 : 12.5 }));
+  svg.append(chartText(narrow ? 4 : W - 8, narrow ? 31 : 16, "serving margin at list · not a ranking", { anchor: narrow ? "start" : "end", fill: "var(--ink-3)", size: 10.5 }));
+  for (let g = Math.ceil(xmin * 4) / 4; g <= 1.0001; g += 0.25) {
+    svg.append(svgEl("line", { x1: xs(g), y1: padT - 4, x2: xs(g), y2: H - 22, stroke: "var(--grid)", "stroke-width": 1 }));
+    svg.append(chartText(xs(g), H - 8, Math.round(g * 100) + "%", { anchor: "middle", fill: "var(--ink-3)", size: 10.5 }));
+  }
+  rows.forEach((r, i) => {
+    const y = padT + i * rowH, cy = narrow ? y + 28 : y + rowH / 2;
+    const g = svgEl("g", { "data-ape-mark": r.rec.key });
+    const name = r.rec.provider + " · " + r.rec.name;
+    g.append(narrow ? chartText(x0, y + 13, name, { size: fs }) : chartText(padL - 8, cy + 4, name, { anchor: "end", size: fs }));
+    if (!r.ok) {
+      g.append(chartText(x0 + 6, cy + 4, "no finite reading on this engine", { size: 10.5, fill: "var(--ink-3)" }));
+      svg.append(g); return;
+    }
+    const cl = v => Math.max(xmin, Math.min(1, v));
+    g.append(svgEl("rect", { x: xs(cl(r.lo)), y: cy - 5, width: Math.max(2, xs(cl(r.hi)) - xs(cl(r.lo))), height: 10, rx: 5, fill: "var(--series-1)", "fill-opacity": 0.28 }));
+    g.append(svgEl("circle", { cx: xs(cl(r.mid)), cy, r: 6, fill: "var(--series-1)", stroke: "var(--bg, #fff)", "stroke-width": 1.5 }));
+    g.append(chartText(Math.min(xs(cl(r.hi)) + 6, W - 2), cy + 4, "~" + Math.round(r.mid * 100) + "%", { weight: 600, fill: "var(--ink-1)", size: fs, anchor: xs(cl(r.hi)) + 6 > W - 40 ? "end" : "start" }));
+    const label = `${r.rec.provider} ${r.rec.name}: ~${Math.round(r.mid * 100)}% serving margin at list on GPT-6 Astra Pro's central inputs; its low and high scenarios ${Math.round(r.lo * 100)}% to ${Math.round(r.hi * 100)}%`;
+    attachMarkTip(g, () => ttRows(r.rec.provider + " — " + r.rec.name, [
+      ["Central (this calculator)", "~" + Math.round(r.mid * 100) + "%"],
+      ["Low – high scenarios", Math.round(r.lo * 100) + "% – " + Math.round(r.hi * 100) + "%"],
+      ["Its own stated reading", Number(r.rec.stated.headline_pct).toFixed(1) + "%"],
+      ["Estimated by", "GPT-6 Astra Pro, " + r.rec.dive.date],
+    ]), label);
+    svg.append(g);
+  });
+  el.appendChild(svg);
+  appendChartTable(el, ["Model", "Central (this calculator)", "Low – high scenarios", "Its own stated reading", "Review"],
+    rows.map(r => {
+      const a = document.createElement("a"); a.href = r.rec.review_page; a.textContent = "GPT-6 Astra Pro review"; a.setAttribute("aria-label", "GPT-6 Astra Pro review of " + r.rec.name);
+      return r.ok
+        ? [r.rec.provider + " — " + r.rec.name, "~" + Math.round(r.mid * 100) + "%", Math.round(r.lo * 100) + "% – " + Math.round(r.hi * 100) + "%", Number(r.rec.stated.headline_pct).toFixed(1) + "%", a]
+        : [r.rec.provider + " — " + r.rec.name, "—", "—", Number(r.rec.stated.headline_pct).toFixed(1) + "%", a];
+    }),
+    "Astra Pro estimates — serving margin at list, grouped by provider (not a ranking)");
 }
 
 /* ---------- margin-range evidence board (v2.1.3 preset redesign, M3) ----------
@@ -7381,7 +7419,8 @@ fillPresetSelects();
 renderBoard(); // static registry render (M3); per-state highlight rides renderAll → updateBoard
 renderFrontDoor(); // range-explorer entry point above the catalog; renders route cards only — never writes the hero state
 if (loadScenarioFromURL()) { fullRefresh(); } else { applyPreset(); }
-renderNormalized();
+renderAstraProChart(); // §10 Astra Pro estimates (bq-3351): static registry render, independent of the calculator state
+window.addEventListener("resize", () => { if ((window.innerWidth < 760) !== ASTRA_PRO_CHART_NARROW) renderAstraProChart(); });
 { const b = document.getElementById("share-scenario"); if (b) b.onclick = copyScenarioLink; }
 wireLoadOpLinks(); // §10/§6 "Load this operating point ↑" links (selector dissolve)
 wireSetDefaultButtons(); // note-20260912T180812Z-c9eaac: "set as default" on the estimate and stress cards

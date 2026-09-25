@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6 Astra — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/gpt-6-astra-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-6 Astra — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T060752Z-64acdf</code>, answered 2026-09-25T06:35:33Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for GPT-6 Astra from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>5af87989ce2a24c927f726c6ff0e199f4617063164f401d003432d72b5afd753</code>; as received, <code>0417a9e76550125df8a4c5cb09d70ea5d75f2f8eecf7ec4ecfb77e8bf7f1b4cd</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~95%</strong> (94.58%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>89%–97% (89.45% – 96.74%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>94.6% (89.5–96.7%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~93%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>The run&#39;s own arithmetic and this calculator agree to within 0.05 points on all three scenarios, which says the inputs were transcribed faithfully — not that they are right. What carries the number is the price: at $50 per million output tokens, even the run&#39;s low case (350B active, 8T total, 60% occupancy) keeps the margin near 89%. The input with no public measurement behind it is the active-parameter count (200B central), and the run shows the direction plainly: 400B active alone gives about 90%, 100B about 97%. Two further choices lift the billed side and are worth noticing: half of the fresh (uncached) input is billed as cache writes at 125% of the input price, and 80% of input is billed at the cache-read rate — an agentic, prefix-heavy traffic assumption rather than a measured OpenAI mix. The run could not reach the calculator&#39;s connector itself and worked the equations locally; its replay of the Opus 4.x reference matched the page&#39;s 82.33%. A separate, earlier Astra Pro run for this project (2026-09-19, different brief) put GPT-6 Astra at 93% on this calculator; the two land two points apart. The run also re-checked OpenAI&#39;s pricing page and found no API tariff for GPT-6 Astra Pro itself, which is why that model has no card.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>dsr1</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>200</td>
+<td>350</td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>6000</td>
+<td>8000</td>
+<td>4000</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>80</td>
+<td>80</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>60</td>
+<td>75</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>12:1, 80% cache</td>
+<td>12:1, 80% cache</td>
+<td>12:1, 80% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈94.6% at list (span 89.5–96.7%)<br>The deciding assumption is 200B active parameters, which puts modeled output serving cost near $1.85/M against the $50/M output tariff.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p>Prepared by <strong>GPT-6 Astra Pro</strong>. Verification cutoff: <strong>2026-09-25 UTC</strong>. Currency: USD. Dates identified as “read” are retrieval dates for living pages, not claimed publication dates.</p>
+<p>File receipt—all three uploaded files were readable: <code>03-calculator-contract-live-2026-09-25.json</code> began <code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca…</code>; <code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code> began <code>```json</code>; <code>06-openai-gptpro.md</code> began <code># OpenAI — GPT-5.6 Pro deep dive</code>. The inline attachments 01, 02 and 05 were also read.</p>
+<ol>
+<li><p><strong>Exact model and version boundary — DISCLOSED; immutable version UNKNOWN.</strong> I price <strong><code>gpt-6-astra</code></strong>, released to the API on <strong>September 3, 2026</strong>, as served under its current alias. The model page lists the alias, but I could not establish a date-suffixed immutable snapshot. I do not invent one. Sources <strong>S1</strong>, <a href="https://developers.openai.com/api/docs/changelog">https://developers.openai.com/api/docs/changelog</a> — release entry <strong>2026-09-03</strong>; <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-6-astra">https://developers.openai.com/api/docs/models/gpt-6-astra</a> — read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Tariff verified — DISCLOSED.</strong> Standard short-context Astra is <strong>$10 fresh input / $1 cached input / $12.50 cache-write input / $50 output per million tokens</strong>. The project&#39;s three quoted prices are correct but omit the write category. Long-context Standard is <strong>$20 / $2 / $25 / $75</strong>; short-context Fast is <strong>$20 / $2 / $25 / $100</strong>. This estimate uses neither. I found no Astra introductory discount; the promotional notice concerns <strong>GPT-5.6 Sol</strong>, not Astra. Source <strong>S3</strong>, <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a> — read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Variants and Pro — DISCLOSED for Astra options; Pro API tariff UNKNOWN.</strong> Astra supports several reasoning-effort settings, a 1,050,000-token context window and up to 128,000 output tokens; the short-context tariff boundary is 272,000 input tokens. I price Standard single-model text-token traffic across reasoning settings, with billed reasoning included in output—not ChatGPT subscriptions, Fast mode, tools or a separate Pro execution. <strong>I found no <code>gpt-6-pro</code> API tariff on the current pricing page.</strong> Sources <strong>S2/S3</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-6-astra">https://developers.openai.com/api/docs/models/gpt-6-astra</a> and <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a> — read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Astra architecture — UNKNOWN; predecessor proxy COMMUNITY ESTIMATE.</strong> No public Astra parameter count, expert routing density, production precision or attention geometry was established. Epoch&#39;s <strong>50–300B active-parameter estimate concerns GPT-5</strong>, not Astra. It is an order-of-magnitude prior only. My <strong>200B active / 6T total / FP8</strong> is <strong>ASSUMED</strong>, not a new community finding or a deduction from the price. Source <strong>S6</strong>, <a href="https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy">https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy</a> — <strong>2025-10-03</strong>; Astra documentation <strong>S2</strong>, read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Cache mechanics and evidence — DISCLOSED.</strong> OpenAI distinguishes uncached input, cache reads and cache writes; these are billing categories, not three charges on the same token. Its September 22 update reports improved caching and selected customers with high cache-hit rates, including Manus above 90%. <strong>Those examples do not disclose Astra&#39;s population mix.</strong> Sources <strong>S4</strong>, <a href="https://developers.openai.com/api/docs/guides/prompt-caching">https://developers.openai.com/api/docs/guides/prompt-caching</a> — read <strong>2026-09-25</strong>; <strong>S5</strong>, <a href="https://openai.com/index/better-prompt-caching-for-gpt-6/">https://openai.com/index/better-prompt-caching-for-gpt-6/</a> — <strong>2026-09-22</strong>. </p>
+</li>
+<li><p><strong>Hardware families and location — DISCLOSED at provider level; Astra allocation UNKNOWN.</strong> OpenAI identifies operating Hopper/Blackwell systems across Microsoft, OCI and CoreWeave. Its infrastructure account describes a partner-centric buildout and GPT-5.5 training at Abilene on OCI GB200s. Neither disclosure identifies Astra&#39;s inference sites or its GPU-generation shares. I use a US partner-capacity approximation, not an asserted Astra-to-Abilene assignment. Sources <strong>S7</strong>, <a href="https://openai.com/index/scaling-ai-for-everyone/">https://openai.com/index/scaling-ai-for-everyone/</a> — <strong>2026-02-27</strong>; <strong>S8</strong>, <a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/</a> — <strong>2026-04-29</strong>. </p>
+</li>
+<li><p><strong>Announced capacity is not a deployed serving fleet — DISCLOSED.</strong> The 3 GW inference figure in S7 concerns the Rubin collaboration; I do not repeat attachment 06&#39;s treatment of it as already-operating inference capacity. OpenAI&#39;s Jalapeño results likewise describe deployment beginning by year-end, not a measured Astra production share today. Source <strong>S9</strong>, <a href="https://openai.com/index/jalapeno-first-results/">https://openai.com/index/jalapeno-first-results/</a> — <strong>2026-08-25</strong>, alongside <strong>S7</strong> above. </p>
+</li>
+<li><p><strong>Public rental comparators — DISCLOSED.</strong> CoreWeave lists an eight-GPU H200 system at <strong>$50.44/hour</strong>, equivalent to <strong>$6.305/GPU-hour</strong>, and a four-GPU GB200 slice at <strong>$42/hour</strong>, equivalent to <strong>$10.50/GPU-hour</strong>, with host resources. Its GB300 listing directs buyers to sales rather than giving a numeric on-demand price. These are public product quotes, <strong>not OpenAI&#39;s contracts</strong>. Source <strong>S10</strong>, <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a> — read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Procurement used here — INFERENCE, with a weak GB300 assumption.</strong> I use all-in reserved-capacity equivalents of <strong>H200 $3.50, GB200 $4.50 and GB300 $6.00 per GPU-hour</strong>. The first two interpolate below S10&#39;s on-demand offers using S8&#39;s dedicated, long-term procurement posture and attachment 03&#39;s planning comparators. The GB300 premium is an assumption, not a located quote. These rates include accelerator, power, hosting and networking. Sources <strong>S8/S10</strong> above, and the supplied contract dated <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Speed evidence — COMMUNITY ESTIMATE, specifically an independent measurement.</strong> Artificial Analysis&#39;s current max-effort OpenAI endpoint measurement reports approximately <strong>53.7 output tokens/second</strong> and <strong>367.59 seconds to first answer token</strong>. The latter includes reasoning. Neither number is aggregate throughput per GPU, and I do not divide a GPU rent by 53.7. Source <strong>S11</strong>, <a href="https://artificialanalysis.ai/models/gpt-6-astra/providers">https://artificialanalysis.ai/models/gpt-6-astra/providers</a> — read <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Utilization and actual traffic — UNKNOWN.</strong> I found no representative Astra paid-capacity occupancy, aggregate tokens/GPU-second, cache/write distribution or input:output census in the provider and benchmark sources above. <strong>70% occupancy, 12:1 input:output and 80% cache hits are ASSUMED.</strong> Epoch&#39;s FLOP-utilization discussion is not paid-capacity occupancy and is not used as this calculator&#39;s divisor. Search boundary: <strong>S2, S5–S8, S11</strong>, checked <strong>2026-09-25</strong>; relevant proxy URL <a href="https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy">https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy</a> — <strong>2025-10-03</strong>. </p>
+</li>
+<li><p><strong>Serving improvements — DISCLOSED; standing advantage INFERENCE.</strong> OpenAI reports a <strong>20% serving-cost reduction from kernel work</strong> and <strong>over 15% generation-efficiency improvement from draft-model work</strong> for GPT-5.6. These are improvement flows, not a measured Astra advantage over today&#39;s open stack. They motivate a modest residual prior, counted once, rather than multiplied together. Source <strong>S12</strong>, <a href="https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/">https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/</a> — <strong>2026-07-29</strong>. </p>
+</li>
+<li><p><strong>Financial perimeter — CREDIBLY REPORTED; model margin UNKNOWN.</strong> Reuters relayed a <strong>33% adjusted OpenAI company gross margin for 2025</strong>. That is not Astra&#39;s model-specific direct-serving contribution margin and does not calibrate this estimate. I found no public Astra cost-per-million or serving-margin disclosure. Source <strong>S13</strong>, <a href="https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/">https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/</a> — <strong>2026-02-20</strong>. </p>
+</li>
+<li><p><strong>Calculator evidence — DISCLOSED by its author, not measured provider economics.</strong> I read its published roofline implementation and registries and independently transcribed the relevant equations. Sources <strong>S14</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js</a>; <strong>S15</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js</a>; <strong>S16</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js</a> — retrieved <strong>2026-09-25</strong>, together with attachments 01–04. The local calculation is <strong>not an executed MCP result</strong>.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p><code>cacheWriteShare</code> below is the implementation&#39;s percentage of <strong>non-cache-read input</strong>, consistent with the reference&#39;s “fresh input” wording. At 80% cache reads, a value of 50 produces <strong>80% read / 10% ordinary fresh / 10% write</strong> across all input tokens. Source IDs on assumed inputs indicate context, not evidence that measures the chosen value. The <code>stated</code> values are rounded local-replay expectations. </p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;GPT-6 Astra&quot;,
+  &quot;api_model_priced&quot;: &quot;gpt-6-astra, current alias read 2026-09-25 UTC; API release 2026-09-03; Standard processing, short-context text-token traffic, mixed reasoning effort; no dated immutable snapshot established&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Short-context tariff: input &lt;=272,000 tokens. Representative calculator request: 12,000 input and 1,000 billed output tokens including reasoning; decode context 12,500, peak KV 13,000. These lengths are assumed, not measured.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 200,
+      &quot;total&quot;: 6000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6.0
+      },
+      &quot;util&quot;: 70,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 350,
+      &quot;total&quot;: 8000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6.0
+      },
+      &quot;util&quot;: 60,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 120,
+      &quot;total&quot;: 4000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6.0
+      },
+      &quot;util&quot;: 75,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;stated&quot;: {
+    &quot;headline_pct&quot;: 94.6,
+    &quot;low_pct&quot;: 89.5,
+    &quot;high_pct&quot;: 96.7
+  },
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;API release of gpt-6-astra on September 3, 2026.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/changelog&quot;, &quot;date&quot;: &quot;2026-09-03&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Current Astra alias, reasoning settings, context limits and available snapshot listing; read date, not a publication date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/models/gpt-6-astra&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Standard Astra prices: input 10, cache read 1, cache write 12.50, output 50 USD/M; read date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Cache billing categories and prompt-cache mechanics; read date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/guides/prompt-caching&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Improved GPT-6 caching and selected customer results, not an Astra-wide traffic census.&quot;, &quot;url&quot;: &quot;https://openai.com/index/better-prompt-caching-for-gpt-6/&quot;, &quot;date&quot;: &quot;2026-09-22&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Epoch estimated 50-300B active parameters for GPT-5; a predecessor proxy, not an Astra measurement.&quot;, &quot;url&quot;: &quot;https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy&quot;, &quot;date&quot;: &quot;2025-10-03&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;Hopper and Blackwell systems operating across Microsoft, OCI and CoreWeave; Rubin capacity is separately forward-looking.&quot;, &quot;url&quot;: &quot;https://openai.com/index/scaling-ai-for-everyone/&quot;, &quot;date&quot;: &quot;2026-02-27&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;Partner-centric infrastructure; Abilene/OCI GB200 training evidence does not identify Astra serving allocation.&quot;, &quot;url&quot;: &quot;https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/&quot;, &quot;date&quot;: &quot;2026-04-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Jalapeno benchmark results and a deployment plan for year-end, not a disclosed Astra serving share.&quot;, &quot;url&quot;: &quot;https://openai.com/index/jalapeno-first-results/&quot;, &quot;date&quot;: &quot;2026-08-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;Public CoreWeave H200 and GB200 system-hour prices; no numeric GB300 on-demand quote; read date.&quot;, &quot;url&quot;: &quot;https://www.coreweave.com/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;Artificial Analysis Astra max-effort endpoint speed and latency measurements; read date.&quot;, &quot;url&quot;: &quot;https://artificialanalysis.ai/models/gpt-6-astra/providers&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;OpenAI reports 20% lower serving costs from kernel work and over 15% generation-efficiency improvement from draft-model work.&quot;, &quot;url&quot;: &quot;https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/&quot;, &quot;date&quot;: &quot;2026-07-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Reuters relays a 33% adjusted company gross margin for 2025; not an Astra serving margin.&quot;, &quot;url&quot;: &quot;https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/&quot;, &quot;date&quot;: &quot;2026-02-20&quot;, &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Calculator-author-published roofline equations, retrieved for independent arithmetic; not OpenAI measurements.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Calculator-author-published donor, precision, calibration, batch and legal-domain registries; not OpenAI measurements.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S16&quot;, &quot;claim&quot;: &quot;Calculator-author-published billing and cost composition, used with the supplied contract; retrieval date.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 200, &quot;low_margin&quot;: 350, &quot;high_margin&quot;: 120, &quot;source_ids&quot;: [&quot;S6&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 6000, &quot;low_margin&quot;: 8000, &quot;high_margin&quot;: 4000, &quot;source_ids&quot;: [&quot;S6&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;dsr1&quot;, &quot;low_margin&quot;: &quot;dsr1&quot;, &quot;high_margin&quot;: &quot;dsr1&quot;, &quot;source_ids&quot;: [&quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [&quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteMult&quot;, &quot;central&quot;: 125, &quot;low_margin&quot;: 125, &quot;high_margin&quot;: 125, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteShare&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S4&quot;, &quot;S5&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 80, &quot;low_margin&quot;: 80, &quot;high_margin&quot;: 80, &quot;source_ids&quot;: [&quot;S5&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;S14&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;low_margin&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;high_margin&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S8&quot;, &quot;S9&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg&quot;, &quot;central&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6.0}, &quot;low_margin&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6.0}, &quot;high_margin&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6.0}, &quot;source_ids&quot;: [&quot;S8&quot;, &quot;S10&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 70, &quot;low_margin&quot;: 60, &quot;high_margin&quot;: 75, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.0, &quot;low_margin&quot;: 1.0, &quot;high_margin&quot;: 1.0, &quot;source_ids&quot;: [&quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 2, &quot;low_margin&quot;: 2, &quot;high_margin&quot;: 2, &quot;source_ids&quot;: [&quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;balanced&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S11&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;hwMode&quot;, &quot;central&quot;: &quot;rent&quot;, &quot;low_margin&quot;: &quot;rent&quot;, &quot;high_margin&quot;: &quot;rent&quot;, &quot;source_ids&quot;: [&quot;S8&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;traffic.io_ratio&quot;, &quot;central&quot;: 12, &quot;low_margin&quot;: 12, &quot;high_margin&quot;: 12, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.cache_hit&quot;, &quot;central&quot;: 80, &quot;low_margin&quot;: 80, &quot;high_margin&quot;: 80, &quot;source_ids&quot;: [&quot;S5&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;batchShare&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;discount&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low: tariffs are verified and the local equation replay reproduces the supplied Opus check, but Astra architecture, fleet allocation, procurement, utilization and traffic are unmeasured; the span is three conditional scenarios, not a probability interval.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p><strong>My reading is 94.6% at list, with a selected three-scenario span of 89.5–96.7%.</strong> It is a modeled unit direct-serving contribution margin, not verified OpenAI economics and not company gross margin.</p>
+<p>The calculation is unusually sensitive to an unmeasured architecture, but the tariff is not ambiguous. My central case assumes a sparse 200B-active model, rented high-memory NVIDIA capacity, 70% paid-capacity occupancy, and repeated agent work with substantial prefix reuse. The low case is a <strong>350B-active, 8T-total model at 60% occupancy</strong>; the high case is a <strong>120B-active, 4T-total model at 75% occupancy</strong>. Both retain the central rents, fleet, precision, latency posture, efficiency credit and traffic. Thus neither endpoint stacks every possible unfavorable or favorable assumption.</p>
+<p><strong>Execution status.</strong> I did not obtain a working connection to <code>run_scenario</code> at <a href="https://margins-mcp.ashitaorbis.com/mcp">https://margins-mcp.ashitaorbis.com/mcp</a>. The HTTP access and connector-discovery attempts produced no scenario result. Accordingly, there is <strong>no successful MCP call or returned margin to quote</strong>. The intended invocation for each block is <code>run_scenario(model=&quot;custom&quot;, perspective=&quot;median&quot;, overrides=&lt;that block&#39;s overrides&gt;, traffic=&lt;that block&#39;s traffic&gt;)</code>.</p>
+<p>Instead I performed an <strong>independent local equation replay</strong> of the retrieved source. As a check—not as a target—it produces <strong>82.3264848%</strong> for the supplied current Opus reference, matching attachment 02&#39;s <strong>82.33%</strong>. That checks the arithmetic path at that operating point; it does not validate Astra&#39;s assumptions or certify every live-connector wrapper. The project&#39;s actual rerun should be published as the calculator result even if it differs.</p>
+<p><strong>The arithmetic.</strong> For this FP8, MLA-donor, NVIDIA scenario, the retrieved equations reduce to the following. Let active parameters be <code>A</code> in actual parameters; input length <code>I = 12,000</code>; representative decode length <code>L = 12,500</code>; donor attention coefficient <code>a = 4,997,120 FLOP/context-position</code>; donor KV footprint <code>k = 35,136 bytes/context-token</code>; and per-output fabric payload <code>d = 13,303,808 bytes</code>. For each GPU type with FLOP rate <code>F</code>, HBM bandwidth <code>B</code>, fabric bandwidth <code>N</code>, declared per-chip batch <code>b</code>, and decode coefficient <code>η</code>:</p>
+<pre><code class="language-text">T_{\rm pre}=\frac{0.17581\,E}{\max\{(2A+aI/2)/F,\ d/N\}},
+\qquad
+T_{\rm out}=\frac{b\eta E}{\max\{b(2A+aL)/F,\ (A+bkL)/B,\ bd/N\}}.
+</code></pre>
+<p>Here <strong><code>E = 3^(2/12) = 1.200936955</code></strong> is the only residual private-stack credit. The underlying batch values are H200 <strong>96</strong>, GB200 <strong>128</strong>, GB300 <strong>64</strong>, and decode coefficients <strong>0.313491 / 0.315997 / 0.258295</strong>. These are the calculator&#39;s transferred or assumed coefficients, not measured Astra efficiencies. Sources: <strong>S14–S15</strong>.  </p>
+<p>For each phase and GPU:</p>
+<pre><code class="language-text">C_{\rm phase}=\frac{\text{all-in dollars/GPU-hour}\times10^6}
+{3600\times T_{\rm phase}\times0.70}.
+</code></pre>
+<p>I then weight <strong>costs</strong> by served-token shares, rather than averaging throughput and applying an average rent:</p>
+<table>
+<thead>
+<tr>
+<th>Central leg</th>
+<th align="right">Token share</th>
+<th align="right">All-in $/GPU-hour</th>
+<th align="right">Fresh prefill tokens/s/GPU</th>
+<th align="right">Decode tokens/s/GPU</th>
+<th align="right">Fresh cost $/M</th>
+<th align="right">Output cost $/M</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H200</td>
+<td align="right">30%</td>
+<td align="right">3.50</td>
+<td align="right">972</td>
+<td align="right">716</td>
+<td align="right">1.42853</td>
+<td align="right">1.93873</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">50%</td>
+<td align="right">4.50</td>
+<td align="right">2,455</td>
+<td align="right">1,517</td>
+<td align="right">0.72733</td>
+<td align="right">1.17738</td>
+</tr>
+<tr>
+<td>GB300</td>
+<td align="right">20%</td>
+<td align="right">6.00</td>
+<td align="right">2,455</td>
+<td align="right">696</td>
+<td align="right">0.96977</td>
+<td align="right">3.41969</td>
+</tr>
+<tr>
+<td><strong>Token-weighted cost</strong></td>
+<td align="right"><strong>100%</strong></td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right"><strong>0.986176</strong></td>
+<td align="right"><strong>1.854249</strong></td>
+</tr>
+</tbody></table>
+<p>The GB300 ordering is inherited from its smaller assumed batch and lower coefficient. I neither interpret it as an observed GB300 disadvantage nor change its coefficient to improve the headline.</p>
+<p>For <strong>one million billed output tokens plus twelve million input tokens</strong>, billings are:</p>
+<pre><code class="language-text">R=50+12[0.10(10)+0.10(12.50)+0.80(1)]=\$86.60.
+</code></pre>
+<p>Cache reads cost <code>0.05 × 0.986175862 = $0.049308793/M</code>. Ordinary fresh and cache-write tokens both incur modeled fresh-prefill cost. Thus:</p>
+<pre><code class="language-text">C=1.854249067+12[0.20(0.986175862)+0.80(0.049308793)]
+=\$4.694435550,
+</code></pre>
+<pre><code class="language-text">M=1-\frac{4.694435550}{86.60}=\mathbf{94.5791737\%}.
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">Fresh cost $/M</th>
+<th align="right">Output cost $/M</th>
+<th align="right">Direct cost per 13M-token bundle</th>
+<th align="right">Billings per bundle</th>
+<th align="right">Local-replay margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td align="right">0.986176</td>
+<td align="right">1.854249</td>
+<td align="right">4.694436</td>
+<td align="right">86.60</td>
+<td align="right"><strong>94.5792%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td align="right">1.953272</td>
+<td align="right">3.510386</td>
+<td align="right">9.135809</td>
+<td align="right">86.60</td>
+<td align="right"><strong>89.4506%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">0.577931</td>
+<td align="right">1.155872</td>
+<td align="right">2.820314</td>
+<td align="right">86.60</td>
+<td align="right"><strong>96.7433%</strong></td>
+</tr>
+</tbody></table>
+<p>The central blended quantities are <strong>$0.361110 cost and $6.661538 billings per million aggregate tokens</strong>. All three scenarios are positive. The unit audit uses <strong>billions</strong>, not raw parameter counts, in the JSON; <strong>per GPU</strong>, not per rack or Grace-Blackwell package, for rents; <strong>percent 70</strong>, not fraction 0.70, for <code>util</code>; and the explicit million-token conversion above. No separate power, host or networking markup is added.</p>
+<p><strong>Reference traffic companion.</strong> At 15:1 and 60% cache reuse <strong>with <code>billCacheHit</code> also changed to 60</strong>, the central cost assumptions give <strong>93.3585%</strong>. Keeping the central 50% write share of non-read input is appropriate to the same assumed cache lifecycle. For an additional zero-write normalization, the result is <strong>92.9399%</strong>.</p>
+<p>There is an important replay distinction: changing <strong>only</strong> the separate traffic object to 15:1/60%, while leaving the explicit central <code>billCacheHit: 80</code>, gives <strong>91.2256%</strong>. That is a legitimate serving/billing-cache mismatch scenario, but not the coherent 60%-billed-cache comparison. The external leg should disclose which companion it runs; the headline block itself requires no change.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Active and total parameters: 200B / 6T; judgments without an Astra measurement.</strong> S6 supports a broad predecessor scale, not these numbers. I choose 200B as a larger-frontier-model working prior rather than simply inherit the earlier Sol estimate near 100B. Six trillion total represents a sparse, multi-trillion footprint; it is not a literal estimate derived from memorization capacity, tariff or single-stream speed. The activation ratio is about 3.3%, but I assert no expert count. The 350B/8T and 120B/4T alternatives carry most of the selected scenario spread. An actual checkpoint description or matched aggregate serving measurement would replace these assumptions.</p>
+<p><strong>Donor and precision: <code>dsr1</code>, FP8; judgments.</strong> There is no public reason to declare Astra to be DeepSeek-shaped, but neither GQA alternative is established as a better match. I retain the project&#39;s compressed-KV donor for comparability, with its geometry explicitly frozen. FP8 is a neutral working serving precision rather than crediting an unverified all-FP4 production graph. No assumption of literal MLA or 61 Astra layers is made. <strong>S2, S14–S15</strong> distinguish unknown provider architecture from known carrier mechanics.</p>
+<p><strong>Fleet: H200 30%, GB200 50%, GB300 20%; judgment informed by S7–S9.</strong> The family evidence supports NVIDIA partner capacity; the exact shares do not have public telemetry. Concentrating a new frontier deployment on higher-memory hardware is my inference. I do not import TPU procurement economics from Anthropic, treat future Jalapeño capacity as installed, or disguise an unsupported accelerator as an allowed ID.</p>
+<p>A preliminary H100-containing vector failed the carrier&#39;s capacity check: at <strong>6T total</strong>, 13,000-token peak KV and its 96-sequence batch, H100 requires more than the registered 144-device domain. I rejected that vector rather than let the engine discard an expensive leg and renormalize silently. The final three-leg assumption is explicit. This is <strong>not evidence that OpenAI cannot serve Astra on a larger H100 deployment</strong>; that topology is outside this calculator&#39;s registered domain. </p>
+<p>Under the retrieved uniform one-byte-per-parameter capacity policy and 10% HBM reserve, the final scenarios admit the following registered widths:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">H200 GPUs</th>
+<th align="right">GB200 GPUs</th>
+<th align="right">GB300 GPUs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td align="right">72</td>
+<td align="right">50</td>
+<td align="right">26</td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td align="right">88</td>
+<td align="right">68</td>
+<td align="right">34</td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">48</td>
+<td align="right">34</td>
+<td align="right">18</td>
+</tr>
+</tbody></table>
+<p>These are <strong>local capacity-solver-equivalent results, not observed replicas</strong>. Every declared leg fits the carrier&#39;s policy in each case. Real workspace, replication and latency feasibility remain unverified.</p>
+<p><strong>All-in rents: $3.50 / $4.50 / $6.00; inference, not contract discovery.</strong> S8 supplies the procurement-class rationale, S10 the public product comparison, and attachment 03 the planning context. H200&#39;s assumed rate is approximately 56% of the cited public offer; GB200&#39;s approximately 43%. Those fractions are judgments about committed capacity, not disclosed discounts. GB300 is weaker still: $6 is an assumed premium over GB200. I keep all three rates unchanged at the endpoints rather than make the small-model case also enjoy the cheapest procurement.</p>
+<p>I use a <strong>rented-capacity lens</strong> because the disclosed infrastructure is partner-centric. I have not established an OpenAI-owned accelerator allocation, so I do not manufacture an owned-fleet depreciation calculation. Provider capital recovery and operating costs are inside the assumed rental equivalents, and occupancy is applied once afterward.</p>
+<p><strong>Utilization: 70%, with 60% and 75% in the endpoints; judgment without public measurement.</strong> This is the share of paid serving capacity productively occupied, not peak FLOP utilization and not an already-realized production throughput divisor. A smaller implementation may be easier to fill; a larger newly deployed one may carry more scheduling slack. That is the scenario correlation being represented. There is no claimed probability attached to these occupancy values.</p>
+<p><strong>Efficiency: <code>stackMult: 1</code>, <code>trendMonths: 2</code>; judgment motivated by S12.</strong> Two months at 3×/year means about <strong>20.1% more effective throughput</strong>, or <strong>16.7% lower modeled cost</strong>. I do not add the reported 20% and 15% improvements, infer a one-for-one standing lead, or add <code>specDec</code>. Cache reuse is already explicit; occupancy is already explicit. The lead is a discounted residual allowance for model-specific kernel and serving work beyond the published baseline, not a second cache or utilization credit. All three scenarios retain it. Setting it to zero independently lowers the central margin to <strong>93.4899%</strong>.</p>
+<p><strong>Traffic: 12:1, 80% cache reads, 50% writes among non-read inputs; judgments.</strong> I expect repeated agent/tool turns to create more prompt reuse than isolated questions. S5 supports that mechanism but does not measure the mix; S11&#39;s benchmark convention is not a population census. I choose 80%, below the strongest selected-customer examples. The write-share assumption divides the remaining 20% of input equally between ordinary fresh input and cache establishment. Both billing and serving cache fractions are explicitly 80%.</p>
+<p><strong>Cache cost and latency: 5% and <code>balanced</code>; judgments.</strong> The cache factor is inherited openly as a working cost approximation, not a physical-law claim that every hit costs 5%. Balanced is the carrier&#39;s concurrency posture for Standard service, not proof that its batches satisfy Astra&#39;s production latency objectives. A model-specific SLO benchmark or cache movement measurement would change these inputs. No discounted Batch traffic is implied by batching requests internally.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The supplied Opus reference states <strong>83.1% at list, span 68–92%</strong>; its unchanged vector now computes <strong>82.33%</strong>, according to attachment 02. I compare against the current arithmetic, not by retuning either estimate toward the older headline. The reference&#39;s tariff, fleet, utilization and efficiency choices are preserved in the starting point.  </p>
+<p>The following is an <strong>ordered local-replay waterfall</strong>. Each change is applied after the preceding one; these are not order-independent attributions or live MCP measurements.</p>
+<table>
+<thead>
+<tr>
+<th>Input change from Opus toward Astra</th>
+<th align="right">Margin after change</th>
+<th align="right">Incremental margin points</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Current Opus reference reproduced locally</td>
+<td align="right">82.3265%</td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td>List input/output $5/$25 → $10/$50; read multiplier still 10%</td>
+<td align="right">91.1632%</td>
+<td align="right"><strong>+8.8368</strong></td>
+</tr>
+<tr>
+<td>Active parameters 300B → 200B</td>
+<td align="right">93.6225%</td>
+<td align="right"><strong>+2.4593</strong></td>
+</tr>
+<tr>
+<td>Fleet 5/10/25/20/40 H100/H200/GB200/GB300/TPU → 0/30/50/20/0, retaining reference rents on surviving legs</td>
+<td align="right">92.6259%</td>
+<td align="right"><strong>−0.9967</strong></td>
+</tr>
+<tr>
+<td>Total parameters 2.5T → 6T, after removing TPU/H100</td>
+<td align="right">92.6259%</td>
+<td align="right"><strong>0.0000</strong>, conditional on policy fit</td>
+</tr>
+<tr>
+<td>Surviving-leg rents $3.496/$4.275/$5.70 → $3.50/$4.50/$6.00</td>
+<td align="right">92.3968%</td>
+<td align="right"><strong>−0.2290</strong></td>
+</tr>
+<tr>
+<td>Utilization 65% → 70%</td>
+<td align="right">92.9399%</td>
+<td align="right"><strong>+0.5431</strong></td>
+</tr>
+<tr>
+<td>Cache-write share 0 → 50% of non-read input, at 125% of input tariff</td>
+<td align="right">93.3585%</td>
+<td align="right"><strong>+0.4186</strong></td>
+</tr>
+<tr>
+<td>Traffic 15:1/60% → 12:1/80%, with billed cache share aligned</td>
+<td align="right"><strong>94.5792%</strong></td>
+<td align="right"><strong>+1.2207</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Unchanged inputs contribute zero in this path:</strong> FP8, compressed-KV donor, balanced latency, <code>stackMult = 1</code>, <code>trendMonths = 2</code>, <code>cacheCost = 5</code>, list-only billing and no separate speculative-decode credit. The reference&#39;s inactive write multiplier of 125% becomes economically active; it is not itself raised.</p>
+<p>The zero direct effect of total size deserves emphasis. On these NVIDIA carrier rows, active parameters drive the surrogate decode weight traffic, while total parameters constrain capacity. Once the three legs fit, larger total size does not independently raise their phase cost. That is a <strong>model limitation</strong>, not a finding that expert footprint, wider placement or communication are free. The order above changes the fleet first so that it does not attribute a hidden membership change to total size.</p>
+<p>The comparison says most of the difference comes from <strong>twice the tariff</strong>, followed by the lower assumed active size. It does not establish superior OpenAI engineering or access to Anthropic-like TPU discounts. Against the old stated 83.1%, my central reading is about <strong>11.5 points higher</strong>; against the current reproduced vector it is about <strong>12.3 points higher</strong>.</p>
+<p>Attachment 06&#39;s earlier Sol figure near 94% is not independent validation. It used a different model, older tariff and a different cost construction with additional overhead terms. I did not import those overheads into already-all-in rents or tune Astra to that headline. </p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is aggregate Astra serving cost at a specified workload—not single-user streaming speed.</strong> A matched disclosure of fresh-prefill throughput, decode throughput, GPU type/count, billed reasoning tokens, cache reuse, concurrent sequences, paid occupancy and latency target would replace both the active-parameter proxy and much of the calibration transfer. An actual all-in procurement receipt would complete the conversion to dollars.</p>
+<p>The strongest downward falsifier would be evidence that Astra performs substantially more work per billed token than a 200B-active carrier represents—for example a large recurrent or multi-pass execution whose extra work is not fully billed. In the same local equations, <strong>400B active alone gives 89.75%</strong>, and <strong>500B gives 87.34%</strong>, with all other central inputs unchanged. Conversely, <strong>100B active gives 96.99%</strong>. Those are sensitivities, not newly added endpoints.</p>
+<p>Procurement and occupancy matter in predictable directions. <strong>Doubling every all-in rent gives 89.16%</strong>. Replacing H200 and GB200 rents with the cited CoreWeave on-demand comparators, while leaving unquoted GB300 at $6, gives <strong>90.38%</strong>. <strong>50% occupancy gives 92.41%</strong>. A cache-read cost of <strong>15% rather than 5%</strong> gives <strong>93.49%</strong>. These results show how a disclosure can move the estimate without any list-price change.</p>
+<p>Evidence for a material non-NVIDIA Astra allocation, a much longer context distribution, substantially different KV geometry, or systematic unbilled internal execution would invalidate the present carrier approximation even if the final margin happened to remain near 95%. A tariff change would instead change the denominator directly. A changed alias without a pinned snapshot would also require a fresh model-identity check.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Context distribution and reasoning length.</strong> The JSON&#39;s context text is documentation, not an engine control. Under this custom traffic path, the calculator supplies a 1,000-token output length, so 12:1 produces 12,000 input, 12,500 representative decode and 13,000 terminal-KV tokens. I adopt those as a compact-agent-turn approximation. I could not establish actual Astra averages or the expensive long-context tail. Being below the 272K tariff boundary does <strong>not</strong> make every request below that boundary equally cheap. The report does not price the million-token tier. Sources <strong>S2, S14–S15</strong>. </p>
+<p><strong>Architecture beyond the three donors.</strong> The carrier can select <code>dsr1</code>, but it cannot express an arbitrary Astra layer count, hybrid or recurrent attention, sparse-attention schedule, per-layer precision, actual expert distribution, independent prefill/decode placement or multi-pass computation. <code>dsr1</code> is a declared stand-in, not a discovered architecture. I could establish neither an Astra parameter count nor a serving-precision/geometry disclosure.</p>
+<p><strong>Hardware coverage and feasibility.</strong> No Astra-specific site, GPU-generation share or owned/rented allocation was established. The model cannot price Cerebras, AMD or Jalapeño directly through the allowed IDs; I did not convert them into fictitious NVIDIA counts. The H100 exclusion resolves a carrier-domain mismatch, not a real-world hardware impossibility. The reported width checks cover the calculator&#39;s uniform memory policy only. They do not verify actual expert replication, workspace, multi-rack communication or production service levels.</p>
+<p><strong>Calibration transfer.</strong> The prefill coefficient is transferred from one reconstructed open-model anchor; GB200&#39;s decode coefficient is carried from an FP4 basis into this FP8 scenario, and GB300&#39;s coefficient and concurrency are assumed. I could not establish a matched Astra benchmark that validates those transfers. The local Opus cross-check confirms formula consistency, not their empirical accuracy. The specific source files retrieved identify themselves with blobs <code>c516ca01b34ee3eb492c35ae854487e78ea28796</code> for the roofline and <code>e2f4f1edb550045726e3f1d195f16992d4eb855e</code> for the data registry; a later deployment may change the replay.  </p>
+<p><strong>Cache lifecycle and costs outside the estimand.</strong> The calculator applies a scalar cache-read cost and a write-billing share; it does not reconstruct prefix eviction, retention, lookup, inter-host KV movement or write-specific overhead from production traces. It also does not identify model-specific revenue sharing, tools, safety reruns or unbilled internal calls. Those were not silently inserted into the cost stack. Training, R&amp;D, sales, G&amp;A, free-tier serving and support remain outside the commissioned serving-margin perimeter. Idle paid serving capacity is included through <code>util</code>; it is not added a second time as a corporate reservation charge.</p>
+<p><strong>What remains unestablished.</strong> A dated immutable Astra snapshot; a <code>gpt-6-pro</code> API tariff; literal active/total parameters; production precision and attention; Astra-to-site/SKU allocation; all-in contract rates; paid-capacity occupancy; aggregate phase throughput; real input/output/reasoning lengths; billing-cache and serving-cache populations; cache-write frequency; a standing residual stack advantage; and Astra-specific financial margin. None is supplied by this model&#39;s statements about its own provider.</p>
+<p><strong>Publication status.</strong> The report supplies three complete, positive, capacity-checked input scenarios and the margins from a transparent local equation replay. <strong>No live MCP scenario result was obtained.</strong> The external calculator run—not an undocumented adjustment to these assumptions—should determine the card&#39;s engine headline. The stated span is conditional and selected; it does not bound every plausible architecture, tariff, procurement or workload outcome.</p>
+<p>Download the complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

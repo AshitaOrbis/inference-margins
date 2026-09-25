@@ -1,0 +1,86 @@
+[
+ {
+  "md": "research/astra-pro-estimates/claude-fable-5-1-astra-pro.md",
+  "slug": "claude-fable-5-1-astra-pro",
+  "title": "Claude Fable 5.1 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Claude Fable 5.1 from public evidence; the site's card is this calculator's result on those inputs (~84% at list, span 68%–90%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/claude-opus-5-5-astra-pro.md",
+  "slug": "claude-opus-5-5-astra-pro",
+  "title": "Claude Opus 5.5 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Claude Opus 5.5 from public evidence; the site's card is this calculator's result on those inputs (~78% at list, span 68%–84%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/claude-sonnet-5-astra-pro.md",
+  "slug": "claude-sonnet-5-astra-pro",
+  "title": "Claude Sonnet 5 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Claude Sonnet 5 from public evidence; the site's card is this calculator's result on those inputs (~84% at list, span 74%–89%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/claude-haiku-4-5-astra-pro.md",
+  "slug": "claude-haiku-4-5-astra-pro",
+  "title": "Claude Haiku 4.5 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Claude Haiku 4.5 from public evidence; the site's card is this calculator's result on those inputs (~73% at list, span 54%–85%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/gpt-6-astra-astra-pro.md",
+  "slug": "gpt-6-astra-astra-pro",
+  "title": "GPT-6 Astra — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for GPT-6 Astra from public evidence; the site's card is this calculator's result on those inputs (~95% at list, span 89%–97%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/gpt-5-6-terra-astra-pro.md",
+  "slug": "gpt-5-6-terra-astra-pro",
+  "title": "GPT-5.6 Terra — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for GPT-5.6 Terra from public evidence; the site's card is this calculator's result on those inputs (~91% at list, span 81%–94%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/gpt-5-6-luna-astra-pro.md",
+  "slug": "gpt-5-6-luna-astra-pro",
+  "title": "GPT-5.6 Luna — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for GPT-5.6 Luna from public evidence; the site's card is this calculator's result on those inputs (~66% at list, span 36%–76%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/gemini-3-8-flash-astra-pro.md",
+  "slug": "gemini-3-8-flash-astra-pro",
+  "title": "Gemini 3.8 Flash — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Gemini 3.8 Flash from public evidence; the site's card is this calculator's result on those inputs (~92% at list, span 72%–94%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/gemini-3-1-pro-astra-pro.md",
+  "slug": "gemini-3-1-pro-astra-pro",
+  "title": "Gemini 3.1 Pro — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Gemini 3.1 Pro from public evidence; the site's card is this calculator's result on those inputs (~92% at list, span 84%–94%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/grok-4-6-astra-pro.md",
+  "slug": "grok-4-6-astra-pro",
+  "title": "Grok 4.6 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Grok 4.6 from public evidence; the site's card is this calculator's result on those inputs (~81% at list, span 66%–89%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/deepseek-v4-1-flash-astra-pro.md",
+  "slug": "deepseek-v4-1-flash-astra-pro",
+  "title": "DeepSeek V4.1-Flash — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for DeepSeek V4.1-Flash from public evidence; the site's card is this calculator's result on those inputs (~59% at list, span 36%–67%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/qwen3-8-max-astra-pro.md",
+  "slug": "qwen3-8-max-astra-pro",
+  "title": "Qwen3.8-Max — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Qwen3.8-Max from public evidence; the site's card is this calculator's result on those inputs (~79% at list, span 72%–88%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/kimi-k3-astra-pro.md",
+  "slug": "kimi-k3-astra-pro",
+  "title": "Kimi K3 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for Kimi K3 from public evidence; the site's card is this calculator's result on those inputs (~88% at list, span 77%–92%)."
+ },
+ {
+  "md": "research/astra-pro-estimates/glm-5-3-astra-pro.md",
+  "slug": "glm-5-3-astra-pro",
+  "title": "GLM-5.3 — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-09-25) setting every calculator input for GLM-5.3 from public evidence; the site's card is this calculator's result on those inputs (~74% at list, span 36%–82%)."
+ }
+]

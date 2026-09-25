@@ -1,5 +1,28 @@
 # Changelog
 
+## Astra Pro estimates — 2026-09-25 (one research run per model; the one-lens comparison table removed)
+
+**Added — §10 "Astra Pro estimates".** A new category in §10: one GPT-6 Astra Pro research run per
+contemporary model, each given this calculator's input contract and asked to set every input from
+public evidence, each with its own review page. The number on each card is this calculator's result on
+the run's recorded inputs — regenerated from them, never typed — with the run's own stated figure beside
+it; the category has its own chart, drawn from the same function. The cards are grouped by provider in a
+fixed order and are not a ranking. The first release carries fourteen models: Anthropic Claude Fable 5.1, Anthropic Claude Opus 5.5, Anthropic Claude Sonnet 5, Anthropic Claude Haiku 4.5, OpenAI GPT-6 Astra, OpenAI GPT-5.6 Terra, OpenAI GPT-5.6 Luna, Google Gemini 3.8 Flash, Google Gemini 3.1 Pro, xAI Grok 4.6, DeepSeek V4.1-Flash, Alibaba Qwen3.8-Max, Moonshot AI Kimi K3 and Zhipu GLM-5.3. GPT-6 Astra Pro itself has no card: it has no API tariff, so it has no API serving margin to estimate.
+
+**Removed — the §10 table "Same-assumption scenario outputs — one normalized lens (not a ranking)".** The owner judged it the first place a reader sees models side by
+side, screenshottable, and speculation not directly relevant to anything in reality: it priced every
+provider through one page-authored lens (one procurement vector, 50% utilization, the Reference traffic)
+while keeping each row's own lead prior, so its row order encoded this page's assumptions more than any
+provider's economics. The table and its builder are gone. **The anchor `#s10-normalized` no longer
+exists**: a link to it now opens the page at its top. The nearest successor is
+[`#s10-astra-pro`](https://margins.ashitaorbis.com/#s10-astra-pro); the per-provider operating points remain on the §10
+cards, and any single lens can still be applied to any model in the calculator itself. The section's
+text, verbatim as it last stood:
+
+> **Same-assumption scenario outputs — one normalized lens (not a ranking)**
+>
+> **Read this as scenario outputs, not estimates or a leaderboard: these are deterministic results of one arbitrary shared lens, they propagate no input uncertainty, and they replace each provider's own assumptions — so the row order encodes this page's chosen lens, not the providers' relative economics.** For readers who want one comparable row per provider anyway, this table is computed live by the calculator with the lens held fixed (the registered low/committed planning-rate vector, 50% utilization, balanced latency — this page's central read) and the traffic mix pinned to the Reference mix (15:1 input:output, 60% cache hits — regardless of the interactive traffic selector above), while keeping each provider's own list prices, cache-read price and fleet. **One assumption is NOT held equal, and the heading above overstates the normalization by not saying so: each row retains its own adopted algorithmic-lead prior** — +3 months for Anthropic, OpenAI and Google, +1 for DeepSeek, 0 for the other Chinese labs and for xAI. That is a deliberate scenario prior rather than an oversight, but it is a real difference between rows: holding the lead at 0 months for every row instead moves Google's figure from **45.58% to 28.38%**. So the row order encodes the lens *and* those priors, not the lens alone. This is deliberately *not* each provider's operating point — it prices everyone through one page-authored procurement vector — and DeepSeek V4's negative number is the honest consequence of its post-price-war list price under those scenario economics (its own operating point is the ~86% card above). Margins are rounded to whole points. These are deterministic outputs of one normalized scenario; the provider-native §10 ranges do NOT apply after changing the lens and traffic mix, and this table does not propagate input uncertainty. Excluded price-only scenarios with unidentified architecture: GPT-5.6 Terra, GPT-5.6 Luna, Gemini 3.5 Flash.
+
 ## Legibility release — 2026-09-25 (the page opens on one sentence; history moved here)
 
 A presentation release: **no computed number moved.** Three model families' legibility reviews

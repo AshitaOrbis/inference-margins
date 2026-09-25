@@ -323,8 +323,10 @@ const PROBE_HASH = `(async () => {
   r.s5Focused = document.activeElement === document.getElementById('s5');
   // a target genuinely nested inside a section body still needs the ancestor walk
   document.querySelectorAll('#report > details.report-section').forEach(d => { d.open = false; });
-  location.hash = '#s10-normalized'; await wait(140);
-  r.nestedVisible = vis(document.getElementById('s10-normalized'));
+  // (re-anchored 2026-09-25, bq-3351: the nested heading this used, #s10-normalized, was removed with its
+  // section; #s10-astra-pro is the heading that took its place, nested the same way inside §10's body)
+  location.hash = '#s10-astra-pro'; await wait(140);
+  r.nestedVisible = vis(document.getElementById('s10-astra-pro'));
   // U-21: a hash change WHILE a dialog is open closes it, and the hash target wins
   location.hash = '#report'; await wait(80);
   document.querySelectorAll('#report > details.report-section').forEach(d => { d.open = false; });

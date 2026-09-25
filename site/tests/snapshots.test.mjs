@@ -897,8 +897,11 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       && (app.match(/appendChartTable\(/g) || []).length >= 6
       && /createElement\("caption"\)[\s\S]*caption\.textContent = summary/.test(app)
       && /if \(head\) cell\.scope = "col"/.test(app)
-      && /Normalized provider scenario outputs under one shared lens/.test(app)
-      && /if \(head\) td\.scope = "col"/.test(app));
+      /* re-anchored 2026-09-25 (bq-3351): the §10 normalized table carried its own caption and
+         col-scoped headers and was pinned here by name; it was removed by owner ruling
+         d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section. The chart that
+         replaced it must expose the same table view, through the shared captioned builder above. */
+      && /appendChartTable\(el,/.test((app.split("function renderAstraProChart()")[1] || "").split("\n}\n")[0]));
   assert("generated sliders expose domain labels and values instead of internal range coordinates",
     /input\.setAttribute\("aria-label", p\.label\)/.test(app)
       && /input\.setAttribute\("aria-valuetext", rendered\)/.test(app)

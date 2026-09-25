@@ -1,5 +1,5 @@
 {
- "_comment": "im-arc T4 fold (2026-08-24, spec research/im-arc-t4-fold-memo.md §§1.5, 4): re-minted one-to-one after the coverage line gained its subordinate NON-ADDITIVE SKU/workload count-backed row and the rent controls learned to say a row has no admissible public planning rate instead of formatting a null; 522 claim sinks, same ten classes, no new eligible file | T5 round 4 (2026-08-27): re-minted for ONE new eligible file, mcp-server/worker/scripts/release-gate.mjs — the executable release-artifact gate added after a release-gate review found the contract in RELEASE-ARTIFACT.md was enforced by nothing. It is classified EXEMPT by its own rule (worker-release-gate), placed before worker-report-overrides so a build tool is not counted as a report emitter. claimSinks is UNCHANGED at 522: the gate emits a digest and a verdict, no claim value. | im-share-finalization (2026-09-02): re-minted for ONE sink, mcp-server/src/server.ts's mcp-build text, after GPT Pro 2026-07-29 rec 13 replaced the raw Error.message returned to callers with a closed error-code enum and a fixed sentence per code. 522 claim sinks and the same ten classes — the count, the class set and every other sink id are BYTE-UNCHANGED; only this one text hash and the digest move, which is the evidence the change is confined to the transport's failure surface. | im-share-finalization round 2 (2026-09-02): re-minted for mcp-server/src/server.ts under GPT Pro pr-20260902T173936Z-a81123 finding 2. The mcp-build TEXT sink re-hashes (the public failure sentence changed) and ONE NEW mcp-json sink appears — the machine-readable structuredContent.error the review asked for, so a client can branch on a field instead of parsing an English sentence. 522 -> 524 claim sinks, same ten classes; no other sink id moves, which is the evidence the change is confined to the transport's failure surface. Plus ONE sink in mcp-server/worker/overrides/get_report.ts: the bounded server-side log that replaced handing the caller a raw archive-read message (same finding). 524 total. | im-release-edit (2026-09-09): re-minted for THIRTEEN eligible files the dc-map stage-3 integration (commit b216807) added to mcp-server and never pinned — three dcmap modules, seven datacenter tools, the worker substrate override, the worker deploy gate and the worker globals. The gate was ALREADY red on master before this leg: 52 eligible files against 39 pinned. claimSinks 524 -> 533 (ten added from dcmap/layer.ts and worker/scripts/build.mjs, one build.mjs log line changed); classes UNCHANGED at ten; unmatched 0, so nothing is exempted by silence. SEPARATELY, tests/sink-scanner.mjs now excludes the vendored economics/ and economics-node/ directories: they are gitignored build output written by sync-economics.mjs, and counting them made this scan return 52 or 64 for the SAME commit depending on whether mcp-server had been built. No claim value on this page moves under either change. | im-release-edit-r2 (2026-09-10): re-minted for ONE sink id in mcp-server/src/dcmap/layer.ts, closing bq-2188. runDatacenterTool used to return `structuredContent: envelope.structuredContent as ...` on one line; it now builds the object so it can attach `release_binding`, the field naming WHERE the served bytes came from, which releaseRefusal already attached and the success path did not. So the file now holds TWO `structuredContent: {` sites instead of one, and the moved id is exactly that: 2ef7b3cb…|0 -> 7578a9a8…|1. 533 claim sinks UNCHANGED, 52 eligible files UNCHANGED, the same ten classes, unmatched 0, and no other sink id moves — which is the evidence the change is confined to the connector's own provenance field. No claim value on this page moves. | im-default-window-and-mcp-discrepancy (2026-09-12): re-minted for the one-window head, the headline calculation and the Astra round-2 and round-3 folds (owner voice note note-20260912T180812Z-c9eaac, bq-2345). Against the pre-leg registry (f13afda): 61 claim sinks added (scenario-window 48, hero-calculation 12, hero-margin-cost-price-block 1), 0 removed. Two new function-anchored rules, scenario-window (identity-strip) and hero-calculation (hero-tile). Same eligible files, same ten classes, 0 unmatched. | im-default-controls-tail (2026-09-12, successor on commission im-default-window-and-mcp-discrepancy-20260912 after gate verdict 20260912T212606Z): re-minted for the set-as-default control on every scenario on every model, the Custom model included. 594 -> 593 claim sinks, all five moved ids in the scenario-window rule. REMOVED 3: the Custom-model refusal sentence appended to the window row (append-call ef0f5309), the withheld-control traffic-mix sentence (append-call a001adee), and the row control built with one fixed label (mkel-call b9ce829e). ADDED 2: the sentence naming the mix the opening scenario reopens with when only the traffic mix on screen differs (append-call d748af59), and the row control whose label names that mix when it differs (mkel-call f03b3f19). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-default-controls-tail, Astra round-6 fold (2026-09-12): re-minted again for the whole-reopening-state comparison and the edited-scenario control. 593 -> 594 claim sinks, all moved ids in the scenario-window rule. REMOVED 3: the opening-scenario traffic sentence (append-call d748af59), the row control with a traffic-only label (mkel-call f03b3f19) and its dataset write on p (dataset-attr 4e35bbca). ADDED 4: the opening-scenario sentence naming what the screen holds that the default does not keep (append-call 7eb8bd3d), the row control whose label names it (mkel-call a89ec8b7), its dataset write on the named base scenario (dataset-attr cbf99c8d), and the sentence for an edited state that names no scenario of the page (append-call 35c70c7d). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-vet-0919 (2026-09-19): re-minted for ONE new exempt sink — showRejectedLinkNotice, the rejected-shared-link notice folded for Astra pack B P0-1. It renders no computed quantity, so the claim-sink set and the digest are UNCHANGED (594 claim sinks, digest da747d941259fff4); only the classified total moves, 1072 -> 1075. | im-vet-0919 round-2 (2026-09-19, Polaris ruling on Astra pack A P0-2): re-minted for ONE claim sink whose CONTENT changed, not its class — the per-dial band basis line now renders on every band instead of only a non-exact one, so its mkEl call text moved (dd8ae3b2 -> d3ab2139) at the same occurrence index. Same rule, same class, 594 claim sinks and 1075 classified, unchanged. | im-vet-0919 round-2b (2026-09-19, Polaris ruling on Astra pack B P0-4): re-minted for the saved-record identity notice, one new EXEMPT sink under its own rule — it states which parts of the scenario came from the save and which from the page, and renders no computed quantity. Claim sinks 594 -> 594, classified 1075 -> 1076. | im-vet-six-repairs ASTRA FOLD (2026-09-20): re-minted for EXACTLY 2 sink id(s) in site/app.js whose content hash moved when the fold renamed reader strings the vocabulary checker's old scope had hidden — the hero label, which index.html rendered as \"Serving margin\" while app.js rewrote it to \"Unit serving margin\", and the thesis-baseline sentence's \"clean flagship default\". The sink COUNT is unchanged at 594, the ten emitter classes are unchanged, and nothing is unmatched: no sink was added, removed or reclassified, which is what makes this a re-mint rather than a surface change. Run from outside the repository, because every .mjs inside it is an eligible file and a re-mint script in tests/ would change the manifest it is re-minting. | bq-3316 legibility enactment (2026-09-25, leg im-legibility-merge-enact-0925): re-minted 594 -> 597 claim sinks, same ten classes, 0 unmatched. hero-tile: the value token is split into the number and a status label from the SAME token (M2), so each hero write site gains a paired #out-margin-status write (the hero rule's pattern now names out-margin-status); the hero label's reader string became 'not a company gross margin' (M12). final-answer: #fa-planning-point + #fa-planning-status inside renderFinalAnswer (function-anchored, as before). report-dossier: ONE new mkEl call, the scenario's own note rendered first inside the collapsed dossier (M1). Every removed id is a line whose bytes moved; none was reclassified. Minted from outside the repository.",
+ "_comment": "im-arc T4 fold (2026-08-24, spec research/im-arc-t4-fold-memo.md §§1.5, 4): re-minted one-to-one after the coverage line gained its subordinate NON-ADDITIVE SKU/workload count-backed row and the rent controls learned to say a row has no admissible public planning rate instead of formatting a null; 522 claim sinks, same ten classes, no new eligible file | T5 round 4 (2026-08-27): re-minted for ONE new eligible file, mcp-server/worker/scripts/release-gate.mjs — the executable release-artifact gate added after a release-gate review found the contract in RELEASE-ARTIFACT.md was enforced by nothing. It is classified EXEMPT by its own rule (worker-release-gate), placed before worker-report-overrides so a build tool is not counted as a report emitter. claimSinks is UNCHANGED at 522: the gate emits a digest and a verdict, no claim value. | im-share-finalization (2026-09-02): re-minted for ONE sink, mcp-server/src/server.ts's mcp-build text, after GPT Pro 2026-07-29 rec 13 replaced the raw Error.message returned to callers with a closed error-code enum and a fixed sentence per code. 522 claim sinks and the same ten classes — the count, the class set and every other sink id are BYTE-UNCHANGED; only this one text hash and the digest move, which is the evidence the change is confined to the transport's failure surface. | im-share-finalization round 2 (2026-09-02): re-minted for mcp-server/src/server.ts under GPT Pro pr-20260902T173936Z-a81123 finding 2. The mcp-build TEXT sink re-hashes (the public failure sentence changed) and ONE NEW mcp-json sink appears — the machine-readable structuredContent.error the review asked for, so a client can branch on a field instead of parsing an English sentence. 522 -> 524 claim sinks, same ten classes; no other sink id moves, which is the evidence the change is confined to the transport's failure surface. Plus ONE sink in mcp-server/worker/overrides/get_report.ts: the bounded server-side log that replaced handing the caller a raw archive-read message (same finding). 524 total. | im-release-edit (2026-09-09): re-minted for THIRTEEN eligible files the dc-map stage-3 integration (commit b216807) added to mcp-server and never pinned — three dcmap modules, seven datacenter tools, the worker substrate override, the worker deploy gate and the worker globals. The gate was ALREADY red on master before this leg: 52 eligible files against 39 pinned. claimSinks 524 -> 533 (ten added from dcmap/layer.ts and worker/scripts/build.mjs, one build.mjs log line changed); classes UNCHANGED at ten; unmatched 0, so nothing is exempted by silence. SEPARATELY, tests/sink-scanner.mjs now excludes the vendored economics/ and economics-node/ directories: they are gitignored build output written by sync-economics.mjs, and counting them made this scan return 52 or 64 for the SAME commit depending on whether mcp-server had been built. No claim value on this page moves under either change. | im-release-edit-r2 (2026-09-10): re-minted for ONE sink id in mcp-server/src/dcmap/layer.ts, closing bq-2188. runDatacenterTool used to return `structuredContent: envelope.structuredContent as ...` on one line; it now builds the object so it can attach `release_binding`, the field naming WHERE the served bytes came from, which releaseRefusal already attached and the success path did not. So the file now holds TWO `structuredContent: {` sites instead of one, and the moved id is exactly that: 2ef7b3cb…|0 -> 7578a9a8…|1. 533 claim sinks UNCHANGED, 52 eligible files UNCHANGED, the same ten classes, unmatched 0, and no other sink id moves — which is the evidence the change is confined to the connector's own provenance field. No claim value on this page moves. | im-default-window-and-mcp-discrepancy (2026-09-12): re-minted for the one-window head, the headline calculation and the Astra round-2 and round-3 folds (owner voice note note-20260912T180812Z-c9eaac, bq-2345). Against the pre-leg registry (f13afda): 61 claim sinks added (scenario-window 48, hero-calculation 12, hero-margin-cost-price-block 1), 0 removed. Two new function-anchored rules, scenario-window (identity-strip) and hero-calculation (hero-tile). Same eligible files, same ten classes, 0 unmatched. | im-default-controls-tail (2026-09-12, successor on commission im-default-window-and-mcp-discrepancy-20260912 after gate verdict 20260912T212606Z): re-minted for the set-as-default control on every scenario on every model, the Custom model included. 594 -> 593 claim sinks, all five moved ids in the scenario-window rule. REMOVED 3: the Custom-model refusal sentence appended to the window row (append-call ef0f5309), the withheld-control traffic-mix sentence (append-call a001adee), and the row control built with one fixed label (mkel-call b9ce829e). ADDED 2: the sentence naming the mix the opening scenario reopens with when only the traffic mix on screen differs (append-call d748af59), and the row control whose label names that mix when it differs (mkel-call f03b3f19). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-default-controls-tail, Astra round-6 fold (2026-09-12): re-minted again for the whole-reopening-state comparison and the edited-scenario control. 593 -> 594 claim sinks, all moved ids in the scenario-window rule. REMOVED 3: the opening-scenario traffic sentence (append-call d748af59), the row control with a traffic-only label (mkel-call f03b3f19) and its dataset write on p (dataset-attr 4e35bbca). ADDED 4: the opening-scenario sentence naming what the screen holds that the default does not keep (append-call 7eb8bd3d), the row control whose label names it (mkel-call a89ec8b7), its dataset write on the named base scenario (dataset-attr cbf99c8d), and the sentence for an edited state that names no scenario of the page (append-call 35c70c7d). Same eligible files, same ten classes, 0 unmatched. No claim value on this page moves. | im-vet-0919 (2026-09-19): re-minted for ONE new exempt sink — showRejectedLinkNotice, the rejected-shared-link notice folded for Astra pack B P0-1. It renders no computed quantity, so the claim-sink set and the digest are UNCHANGED (594 claim sinks, digest da747d941259fff4); only the classified total moves, 1072 -> 1075. | im-vet-0919 round-2 (2026-09-19, Polaris ruling on Astra pack A P0-2): re-minted for ONE claim sink whose CONTENT changed, not its class — the per-dial band basis line now renders on every band instead of only a non-exact one, so its mkEl call text moved (dd8ae3b2 -> d3ab2139) at the same occurrence index. Same rule, same class, 594 claim sinks and 1075 classified, unchanged. | im-vet-0919 round-2b (2026-09-19, Polaris ruling on Astra pack B P0-4): re-minted for the saved-record identity notice, one new EXEMPT sink under its own rule — it states which parts of the scenario came from the save and which from the page, and renders no computed quantity. Claim sinks 594 -> 594, classified 1075 -> 1076. | im-vet-six-repairs ASTRA FOLD (2026-09-20): re-minted for EXACTLY 2 sink id(s) in site/app.js whose content hash moved when the fold renamed reader strings the vocabulary checker's old scope had hidden — the hero label, which index.html rendered as \"Serving margin\" while app.js rewrote it to \"Unit serving margin\", and the thesis-baseline sentence's \"clean flagship default\". The sink COUNT is unchanged at 594, the ten emitter classes are unchanged, and nothing is unmatched: no sink was added, removed or reclassified, which is what makes this a re-mint rather than a surface change. Run from outside the repository, because every .mjs inside it is an eligible file and a re-mint script in tests/ would change the manifest it is re-minting. | bq-3316 legibility enactment (2026-09-25, leg im-legibility-merge-enact-0925): re-minted 594 -> 597 claim sinks, same ten classes, 0 unmatched. hero-tile: the value token is split into the number and a status label from the SAME token (M2), so each hero write site gains a paired #out-margin-status write (the hero rule's pattern now names out-margin-status); the hero label's reader string became 'not a company gross margin' (M12). final-answer: #fa-planning-point + #fa-planning-status inside renderFinalAnswer (function-anchored, as before). report-dossier: ONE new mkEl call, the scenario's own note rendered first inside the collapsed dossier (M1). Every removed id is a line whose bytes moved; none was reclassified. Minted from outside the repository. | bq-3351 Astra Pro estimates (2026-09-25, leg im-astra-pro-estimates-0925): re-minted 597 -> 610 claim sinks, same 10 classes, 0 unmatched; scanned files 52 -> 53 (+site/astra-pro-estimates.js, the registry + replay). Removed: the §10 normalized table's sinks (renderNormalized, removed by owner ruling d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section) and ids whose occurrence index or bytes moved with that removal; added: renderAstraProChart (rule astra-pro-chart, same class the table carried) and the generated Astra Pro estimate card faces in index.html (their numbers are engine replays, pinned by tests/astra-pro-estimates.test.mjs). Minted from outside the repository.",
  "files": [
   "build-dc-ledger.mjs",
   "build-grounding-ledger.mjs",
@@ -44,6 +44,7 @@
   "mcp-server/worker/src/globals.d.ts",
   "mcp-server/worker/src/index.ts",
   "site/app.js",
+  "site/astra-pro-estimates.js",
   "site/custom-fleets.js",
   "site/engine-contracts-v22.js",
   "site/engine-data-dc-v1.js",
@@ -55,7 +56,7 @@
   "site/uncertainty-contract.js"
  ],
  "unmatched": [],
- "classifiedCount": 1079,
+ "classifiedCount": 1120,
  "claimSinks": [
   {
    "id": "mcp-server/src/dcmap/layer.ts|mcp-build|50d2579283ff6c1f|0",
@@ -481,6 +482,24 @@
    "rule": "chart-tooltip-values"
   },
   {
+   "id": "site/app.js|append-call|4880ca6ebd0ab3d4|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "4880ca6ebd0ab3d4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "astra-pro-chart"
+  },
+  {
+   "id": "site/app.js|append-call|495976880ccb11aa|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "495976880ccb11aa",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "astra-pro-chart"
+  },
+  {
    "id": "site/app.js|append-call|4b8727ee3b456bda|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -503,6 +522,15 @@
    "file": "site/app.js",
    "kind": "append-call",
    "hash16": "4f2e67855f3fb456",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|54f62044e0b98407|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "54f62044e0b98407",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "svg-chart-geometry"
@@ -650,6 +678,15 @@
    "occ": 0,
    "class": "evidence-board",
    "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|append-call|90d0585cab333c11|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "90d0585cab333c11",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
   },
   {
    "id": "site/app.js|append-call|9a89f36a6b9c4572|0",
@@ -832,6 +869,15 @@
    "rule": "fleet-switcher-block"
   },
   {
+   "id": "site/app.js|append-call|f399136cd553b4bc|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "f399136cd553b4bc",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
    "id": "site/app.js|append-call|f3eb165753415a4e|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -884,6 +930,15 @@
    "occ": 0,
    "class": "hero-tile",
    "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|aria-label|75f78a7c3f2c0d31|0",
+   "file": "site/app.js",
+   "kind": "aria-label",
+   "hash16": "75f78a7c3f2c0d31",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
   },
   {
    "id": "site/app.js|aria-label|8b65924fd835e8f6|0",
@@ -994,6 +1049,15 @@
    "rule": "chart-svg-text"
   },
   {
+   "id": "site/app.js|chart-text|1f32510c23dbd94d|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "1f32510c23dbd94d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
    "id": "site/app.js|chart-text|2cbfb351722c424b|0",
    "file": "site/app.js",
    "kind": "chart-text",
@@ -1026,6 +1090,24 @@
    "kind": "chart-text",
    "hash16": "5094bc873fa3cab1",
    "occ": 2,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|6f55d0997c5d6fc8|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "6f55d0997c5d6fc8",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|71e4485763f86550|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "71e4485763f86550",
+   "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
   },
@@ -1138,10 +1220,28 @@
    "rule": "chart-svg-text"
   },
   {
+   "id": "site/app.js|chart-text|d4947a27ce3646b2|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "d4947a27ce3646b2",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
    "id": "site/app.js|chart-text|dce74b2e843c45d4|0",
    "file": "site/app.js",
    "kind": "chart-text",
    "hash16": "dce74b2e843c45d4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|e444e9aa7fd3bad2|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "e444e9aa7fd3bad2",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
@@ -1178,6 +1278,15 @@
    "file": "site/app.js",
    "kind": "chart-text",
    "hash16": "eaf1a643eeb75d80",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|ebc0ba69f5153a28|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "ebc0ba69f5153a28",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
@@ -1532,15 +1641,6 @@
    "occ": 0,
    "class": "report-dossier",
    "rule": "dossier-panel"
-  },
-  {
-   "id": "site/app.js|class-style|8c120a972241dc71|0",
-   "file": "site/app.js",
-   "kind": "class-style",
-   "hash16": "8c120a972241dc71",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "normalized-table"
   },
   {
    "id": "site/app.js|class-style|9036aba5f4f359df|0",
@@ -2245,15 +2345,6 @@
    "rule": "dossier-panel"
   },
   {
-   "id": "site/app.js|dom-write|3fcd6d433e521d49|0",
-   "file": "site/app.js",
-   "kind": "dom-write",
-   "hash16": "3fcd6d433e521d49",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "chart-table-cells"
-  },
-  {
    "id": "site/app.js|dom-write|40760c3626f009c7|0",
    "file": "site/app.js",
    "kind": "dom-write",
@@ -2585,6 +2676,15 @@
    "occ": 0,
    "class": "hero-tile",
    "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|dom-write|7f0e5ba46e9f2dd3|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "7f0e5ba46e9f2dd3",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "astra-pro-chart"
   },
   {
    "id": "site/app.js|dom-write|8050a162459c29bf|0",
@@ -3010,15 +3110,6 @@
    "rule": "fleet-switcher-block"
   },
   {
-   "id": "site/app.js|dom-write|c4bd3f727339596a|0",
-   "file": "site/app.js",
-   "kind": "dom-write",
-   "hash16": "c4bd3f727339596a",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "normalized-table"
-  },
-  {
    "id": "site/app.js|dom-write|c4f299b51f0b0ac1|0",
    "file": "site/app.js",
    "kind": "dom-write",
@@ -3118,13 +3209,13 @@
    "rule": "margin-band-readout"
   },
   {
-   "id": "site/app.js|dom-write|cba0467d379dba7f|6",
+   "id": "site/app.js|dom-write|cba0467d379dba7f|5",
    "file": "site/app.js",
    "kind": "dom-write",
    "hash16": "cba0467d379dba7f",
-   "occ": 6,
-   "class": "hero-tile",
-   "rule": "im-arc-t1-hero-bases"
+   "occ": 5,
+   "class": "hardware-lens-tile",
+   "rule": "astra-pro-chart"
   },
   {
    "id": "site/app.js|dom-write|cba0467d379dba7f|7",
@@ -3132,6 +3223,15 @@
    "kind": "dom-write",
    "hash16": "cba0467d379dba7f",
    "occ": 7,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
+   "id": "site/app.js|dom-write|cba0467d379dba7f|8",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "cba0467d379dba7f",
+   "occ": 8,
    "class": "final-answer",
    "rule": "final-answer-block"
   },
@@ -5080,6 +5180,15 @@
    "rule": "svg-chart-geometry"
   },
   {
+   "id": "site/app.js|svg-geometry|996a927eae3ada87|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "996a927eae3ada87",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
    "id": "site/app.js|svg-geometry|a2c6247178862ba9|0",
    "file": "site/app.js",
    "kind": "svg-geometry",
@@ -5350,6 +5459,15 @@
    "rule": "chart-tooltip-values"
   },
   {
+   "id": "site/app.js|tooltip-call|94bd217a4aa58b06|0",
+   "file": "site/app.js",
+   "kind": "tooltip-call",
+   "hash16": "94bd217a4aa58b06",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-tooltip-values"
+  },
+  {
    "id": "site/app.js|tooltip-call|979039f0bc1f62eb|0",
    "file": "site/app.js",
    "kind": "tooltip-call",
@@ -5443,5 +5561,5 @@
   "report-dossier",
   "share-string"
  ],
- "digest": "4579fddecf96ee8e"
+ "digest": "9e17483b3eb0d96c"
 }

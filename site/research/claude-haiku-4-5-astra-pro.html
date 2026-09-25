@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Haiku 4.5 — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/claude-haiku-4-5-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Claude Haiku 4.5 — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T064303Z-3cdb62</code>, answered 2026-09-25T08:24:30Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for Claude Haiku 4.5 from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>0ee917add83bfa7ebb690d090c781926e756da244f139f1f9a82a1e67fe6119d</code>; as received, <code>0199d7c82168874e8632c70a1e5eb00a246d5879b2f7efc7759a39d6773bb28b</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~73%</strong> (73.41%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>54%–85% (54.36% – 84.54%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>73.4% (54.4–84.5%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~72%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>Haiku 4.5 was released in October 2025, and this run prices it at the calculator&#39;s <code>fast</code> latency posture, on the reasoning that a small model is bought for its speed and so is served in small, low-latency batches; the run&#39;s own card line says balanced serving would add about 16 points. That posture choice, not the size, is what keeps the reading in the low 70s at a $1/$5 price. The size is a pure assumption — 20B active, 200B total — which the run anchors to Meta&#39;s disclosed Llama 4 Scout and Maverick shapes as examples of what a capable small sparse model can be, and says plainly is not a Haiku estimate. The low end of the span (54%) moves to a larger model (30B/300B) and to the GQA donor geometry instead of the compressed-KV MLA one, which is the donor sensitivity the site already warns about; the high end (85%) is a 12B-active model at higher utilization. Traffic is modest (8:1, half from cache), and the Reference-traffic result is ~72%, close to the headline. The run could not reach the connector and reconstructed the equations; the engine reproduces its figures to a tenth of a point.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>qwen3c</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>20</td>
+<td>30</td>
+<td>12</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>200</td>
+<td>300</td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;h200&quot;:40,&quot;gb200&quot;:20,&quot;tpu7&quot;:40}</code></td>
+<td><code>{&quot;h200&quot;:40,&quot;gb200&quot;:20,&quot;tpu7&quot;:40}</code></td>
+<td><code>{&quot;h200&quot;:40,&quot;gb200&quot;:20,&quot;tpu7&quot;:40}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;h200&quot;:3.25,&quot;gb200&quot;:5,&quot;tpu7&quot;:2.4}</code></td>
+<td><code>{&quot;h200&quot;:3.25,&quot;gb200&quot;:5,&quot;tpu7&quot;:2.4}</code></td>
+<td><code>{&quot;h200&quot;:3.25,&quot;gb200&quot;:5,&quot;tpu7&quot;:2.4}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>65</td>
+<td>60</td>
+<td>75</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>fast</td>
+<td>fast</td>
+<td>fast</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>8:1, 50% cache</td>
+<td>8:1, 50% cache</td>
+<td>8:1, 50% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈73% at list (span 54–85%)<br>Latency-oriented serving (<code>interact: &quot;fast&quot;</code>) limits batch amortization; balanced serving would add about 16 margin points.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>Estimator: GPT-6 Astra Pro. Research date: September 25, 2026.</strong> This is a modeled unit direct-serving contribution margin, not Anthropic’s reported margin. The estimate prices standard synchronous <strong>text traffic with extended thinking disabled</strong>. Dates on undated live documentation and price pages below mean <strong>access dates</strong>, not claimed publication dates. All external sources were consulted on September 25, 2026.</p>
+<ol>
+<li><p><strong>S1 — Identity and variant — DISCLOSED.</strong> The pinned Claude API model is <strong><code>claude-haiku-4-5-20251001</code></strong>, released <strong>October 15, 2025</strong>. The October 1 suffix is not its public release date. Its alias is <code>claude-haiku-4-5</code>; the documented limits are 200,000 context tokens and 64,000 output tokens. Manual extended thinking is an optional runtime mode of this model, not a separately priced model in this estimate. Source: <a href="https://platform.claude.com/docs/en/models/haiku-4-5/overview">Anthropic’s model overview</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S2 — Current tariff — DISCLOSED.</strong> The project’s price is correct: <strong>$1 input, $0.10 cache-read and $5 output per million tokens</strong>. Five-minute cache creation costs <strong>$1.25/M</strong>, and one-hour creation <strong>$2/M</strong>. I found no separate promotional Haiku tariff on the current pricing page. All three scenarios use the standard tariff, no batch discount and no negotiated token-price discount. Source: <a href="https://platform.claude.com/docs/en/about-claude/pricing">Anthropic pricing</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S3 — Intended workloads — DISCLOSED.</strong> Anthropic positions Haiku for low-latency interaction, customer service and parallel subagents. That supports a latency-conscious workload assumption, but does not disclose its actual prompt lengths, cache hits, concurrency or task shares. Source: <a href="https://www.anthropic.com/news/claude-haiku-4-5">Haiku 4.5 announcement</a>, published <strong>2025-10-15</strong>. </p>
+</li>
+<li><p><strong>S4 — Parameter-scale proxy, not a Haiku measurement — DISCLOSED.</strong> Meta disclosed <strong>17B active/109B total</strong> parameters for Llama 4 Scout and <strong>17B active/400B total</strong> for Maverick. These establish examples of capable sparse models with tens of billions of active parameters and much larger resident weights. They neither identify Haiku’s architecture nor establish equal capability. My <strong>20B active/200B total</strong> central values are <strong>ASSUMED, proxy-informed working values</strong>, not a published Haiku estimate. Source: <a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/">Meta’s Llama 4 announcement</a>, published <strong>2025-04-05</strong>. </p>
+</li>
+<li><p><strong>S5 — User-visible speed — COMMUNITY ESTIMATE.</strong> Artificial Analysis’s non-reasoning Haiku page reports <strong>84.5 output tokens/second through Anthropic’s API</strong> at this reading. This is a user-stream benchmark, not aggregate tokens per accelerator-second, and it supplies no accelerator count or paid-capacity utilization. Its individual measurement timestamp is not supplied in the displayed summary. Source: <a href="https://artificialanalysis.ai/models/claude-4-5-haiku">Artificial Analysis</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S6 — TPU infrastructure — DISCLOSED.</strong> Anthropic disclosed existing TPU use and an expansion involving up to one million TPUs. This establishes the hardware family’s relevance, not Haiku’s Ironwood share, deployment date or physical serving location. Source: <a href="https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services">Anthropic’s Google Cloud announcement</a>, published <strong>2025-10-23</strong>. </p>
+</li>
+<li><p><strong>S7 — NVIDIA infrastructure — DISCLOSED.</strong> Anthropic announced NVIDIA-backed Azure capacity and an initial Grace Blackwell/Vera Rubin commitment; Haiku 4.5 was included in Foundry availability. A capacity commitment is not an observed Haiku deployment allocation. Source: <a href="https://www.anthropic.com/news/microsoft-nvidia-anthropic-announce-strategic-partnerships">Anthropic’s Microsoft/NVIDIA announcement</a>, published <strong>2025-11-18</strong>. </p>
+</li>
+<li><p><strong>S8 — Trainium cannot simply be ignored as a real platform — DISCLOSED.</strong> Amazon reported that Trainium2 powered a majority of Bedrock inference and that Anthropic used the 500,000-plus-chip Rainier cluster for training. Neither statement allocates Haiku inference to a particular chip. Source: <a href="https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/">Amazon’s fourth-quarter release</a>, published <strong>2026-02-05</strong>. My exclusion of the calculator’s Trainium legs is a <strong>modeling limitation</strong>, not a claim that Anthropic does not use Trainium. </p>
+</li>
+<li><p><strong>S9 — Public NVIDIA hourly anchors — DISCLOSED.</strong> CoreWeave lists an eight-GPU H200 node at <strong>$50.44/hour on demand</strong> and <strong>$20.93/hour spot</strong>, and a four-GPU GB200 slice at <strong>$42/hour</strong>. Dividing by the actual GPU counts gives <strong>$6.305, $2.61625 and $10.50 per GPU-hour</strong>, respectively. These products have different procurement and bundle scopes; none is Anthropic’s disclosed contract. Source: <a href="https://coreweave.com/pricing">CoreWeave pricing</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S10 — Public TPU hourly anchor — DISCLOSED.</strong> Google lists Ironwood in Iowa at <strong>$12 per chip-hour on demand</strong> and <strong>$5.40 with a three-year commitment</strong>. These are chip-hours, not four-chip VM-hours or rack-hours. Source: <a href="https://cloud.google.com/tpu/pricing">Google Cloud TPU pricing</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S11 — Strategic TPU procurement — COMMUNITY ESTIMATE.</strong> SemiAnalysis estimates Anthropic’s rented GCP TPU capacity at approximately <strong>$1.60 per TPU-hour</strong>. This is an analyst estimate, not a disclosed executed price. It supports considering costs below retail, but I do not adopt it as the central all-in rate. Source: <a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">SemiAnalysis’s TPUv7 analysis</a>, published <strong>2025-11-28</strong>. </p>
+</li>
+<li><p><strong>S12–S14 — Calculator implementation — DISCLOSED implementation, not measured Haiku performance.</strong> I inspected the public <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js">cost/billing code</a>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js">roofline equations</a>, and <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js">geometry/calibration registry</a>, accessed <strong>2026-09-25</strong>. The supplied contract warns that Trainium’s batch interpretation has an unresolved approximately <strong>15.2×</strong> unit ambiguity. Those legs receive zero modeled weight here. </p>
+</li>
+<li><p><strong>S15 — Cache eligibility — DISCLOSED.</strong> Haiku 4.5 requires at least <strong>4,096 prompt tokens</strong> for caching. A fleet that includes short classification or customer-service requests need not achieve the cache reuse of long-running coding agents. The latter conclusion is <strong>INFERENCE</strong>, not measured traffic. Source: <a href="https://platform.claude.com/docs/en/build-with-claude/prompt-caching">Anthropic prompt-caching documentation</a>, accessed <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Architecture, deployment allocation, utilization and model-level financials — UNKNOWN.</strong> In the reviewed model documentation, launch material, infrastructure disclosures and benchmark evidence, I found no defensible public measurement of Haiku’s active/total parameters, dense-versus-sparse design, attention geometry, serving precision, accelerator-specific token shares, named serving sites, paid-capacity occupancy, or Haiku-specific revenue, direct cost or margin. Sources: <strong>S1, S3, S5–S8</strong>, with dates above. Attachment 06’s earlier AI-generated company analysis is a set of leads, not an Anthropic disclosure. Its strategic-TPU price lead is independently corroborated as an analyst estimate by S11; its margin figures are not inputs here.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>The root donor describes the central case. The low-margin case explicitly changes to the GQA donor. <code>cacheWriteShare</code> is <strong>10% of fresh input</strong>, following the public implementation, not 10% of all input. The three fleets and hourly rates are deliberately held fixed: the span varies architecture and occupancy without simultaneously taking every procurement, precision and traffic assumption to an extreme.</p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;Claude Haiku 4.5&quot;,
+  &quot;api_model_priced&quot;: &quot;claude-haiku-4-5-20251001; released 2025-10-15; standard Claude API, thinking disabled&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Text workload: mean 8000 input and 1000 output tokens; representative decode context 8500, terminal context 9000; not a 200000-token workload&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;, &quot;active&quot;: 20, &quot;total&quot;: 200, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 1, &quot;priceOut&quot;: 5, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;cacheWriteShare&quot;: 10, &quot;cacheWriteMult&quot;: 125, &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40},
+      &quot;rentAbsLeg&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4},
+      &quot;util&quot;: 65, &quot;stackMult&quot;: 1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;fast&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;qwen3c&quot;, &quot;active&quot;: 30, &quot;total&quot;: 300, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 1, &quot;priceOut&quot;: 5, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;cacheWriteShare&quot;: 10, &quot;cacheWriteMult&quot;: 125, &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40},
+      &quot;rentAbsLeg&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4},
+      &quot;util&quot;: 60, &quot;stackMult&quot;: 1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;fast&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;, &quot;active&quot;: 12, &quot;total&quot;: 120, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 1, &quot;priceOut&quot;: 5, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 50,
+      &quot;cacheWriteShare&quot;: 10, &quot;cacheWriteMult&quot;: 125, &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40},
+      &quot;rentAbsLeg&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4},
+      &quot;util&quot;: 75, &quot;stackMult&quot;: 1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;fast&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}
+  },
+  &quot;stated&quot;: {&quot;headline_pct&quot;: 73.4, &quot;low_pct&quot;: 54.4, &quot;high_pct&quot;: 84.5},
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;Pinned API identity, release, context limit and manual extended thinking.&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/models/haiku-4-5/overview&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Current USD list tariff: input 1, output 5, cache read 0.10, five-minute write 1.25, one-hour write 2 per million tokens.&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/about-claude/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Launch and low-latency, customer-service and subagent positioning.&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/news/claude-haiku-4-5&quot;, &quot;date&quot;: &quot;2025-10-15&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Open-model scale proxies only: Llama 4 Scout 17B active/109B total; Maverick 17B active/400B total.&quot;, &quot;url&quot;: &quot;https://ai.meta.com/blog/llama-4-multimodal-intelligence/&quot;, &quot;date&quot;: &quot;2025-04-05&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Observed non-reasoning Anthropic API output speed 84.5 tokens/s; not accelerator throughput.&quot;, &quot;url&quot;: &quot;https://artificialanalysis.ai/models/claude-4-5-haiku&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Anthropic TPU usage and announced expansion; not a Haiku allocation.&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services&quot;, &quot;date&quot;: &quot;2025-10-23&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;Anthropic NVIDIA/Azure partnership and Grace Blackwell plans; not a Haiku SKU share.&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/news/microsoft-nvidia-anthropic-announce-strategic-partnerships&quot;, &quot;date&quot;: &quot;2025-11-18&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;Trainium2 production footprint and Anthropic training use; no Haiku-specific allocation.&quot;, &quot;url&quot;: &quot;https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/&quot;, &quot;date&quot;: &quot;2026-02-05&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Public NVIDIA instance prices: H200 eight-GPU node 50.44/h on demand, 20.93/h spot; four-GPU GB200 slice 42/h.&quot;, &quot;url&quot;: &quot;https://coreweave.com/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;Ironwood Iowa list pricing per chip-hour: 12 on demand and 5.40 on a three-year commitment.&quot;, &quot;url&quot;: &quot;https://cloud.google.com/tpu/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;Analyst estimate of Anthropic GCP TPU rent around 1.60 per chip-hour, not a disclosed contract.&quot;, &quot;url&quot;: &quot;https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the&quot;, &quot;date&quot;: &quot;2025-11-28&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;Public calculator cost and billing implementation; cacheWriteShare applies to fresh input.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Public roofline equations used in the local arithmetic reconstruction, not an MCP execution.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Public donor geometries, operating batches and calibration coefficients; these are not Haiku measurements.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Haiku 4.5 minimum cacheable prompt length is 4096 tokens.&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/build-with-claude/prompt-caching&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 20, &quot;low_margin&quot;: 30, &quot;high_margin&quot;: 12, &quot;source_ids&quot;: [&quot;S4&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 200, &quot;low_margin&quot;: 300, &quot;high_margin&quot;: 120, &quot;source_ids&quot;: [&quot;S4&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;dsr1&quot;, &quot;low_margin&quot;: &quot;qwen3c&quot;, &quot;high_margin&quot;: &quot;dsr1&quot;, &quot;source_ids&quot;: [&quot;S14&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [&quot;S14&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;fast&quot;, &quot;low_margin&quot;: &quot;fast&quot;, &quot;high_margin&quot;: &quot;fast&quot;, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S5&quot;, &quot;S14&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40}, &quot;low_margin&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40}, &quot;high_margin&quot;: {&quot;h200&quot;: 40, &quot;gb200&quot;: 20, &quot;tpu7&quot;: 40}, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;S7&quot;, &quot;S8&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg&quot;, &quot;central&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4}, &quot;low_margin&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4}, &quot;high_margin&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 5, &quot;tpu7&quot;: 2.4}, &quot;source_ids&quot;: [&quot;S9&quot;, &quot;S10&quot;, &quot;S11&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 65, &quot;low_margin&quot;: 60, &quot;high_margin&quot;: 75, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1, &quot;low_margin&quot;: 1, &quot;high_margin&quot;: 1, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic&quot;, &quot;central&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}, &quot;low_margin&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}, &quot;high_margin&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 50}, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteShare&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S12&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteMult&quot;, &quot;central&quot;: 125, &quot;low_margin&quot;: 125, &quot;high_margin&quot;: 125, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low: tariff and identity are established, but architecture, paid occupancy, procurement, fleet allocation and the latency-to-batch mapping are not measured for Haiku.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p>My central reading is <strong>73.4% at list</strong>, with a selected three-scenario span of <strong>54.4–84.5%</strong>. The rounded card is <strong>≈73%, span 54–85%</strong>. This is my best estimate for the specified ordinary, non-thinking text workload under a rented-equivalent strategic fleet—not a measurement of Anthropic’s blended business.</p>
+<p><strong>Execution status.</strong> I could not invoke the public MCP endpoint from this environment, and plugin discovery found no accessible connector for it. <strong>There is no <code>run_scenario</code> response to quote.</strong> The intended call is <code>run_scenario(model=&quot;custom&quot;, perspective=&quot;median&quot;, overrides=central.overrides, traffic=central.traffic)</code>, with the corresponding substitutions for the two endpoints. The results below are a <strong>local arithmetic reconstruction of S12–S14</strong>, not a falsely attributed MCP execution.</p>
+<p>The reconstruction reproduces the supplied current Opus reference at <strong>82.3265%</strong>, rounding to its stated current-engine <strong>82.33%</strong>. That checks the relevant arithmetic and calibration transfer; it does not certify the public mirror against every byte of release <code>809cfb27</code>, or test the connector’s override-validation path.</p>
+<p>For each occupied accelerator, I calculate:</p>
+<pre><code class="language-text">c_{\rm phase}=\frac{r_{\rm all\text{-}in}}{3600\,T_{\rm phase}}\frac{10^6}{u}.
+</code></pre>
+<p>Here, rent is dollars per <strong>paid accelerator-hour</strong>, throughput is tokens per second per <strong>occupied accelerator</strong>, and utilization is a fraction only inside the arithmetic: the submitted value is <strong>65</strong>, not 0.65. No additional power, hosting, depreciation or network multiplier is added. The reconstructed central intermediates are:</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Token share</th>
+<th align="right">All-in $/hour</th>
+<th align="right">Fresh-prefill tokens/s</th>
+<th align="right">Decode tokens/s</th>
+<th align="right">Fresh-input cost $/M</th>
+<th align="right">Output cost $/M</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H200</td>
+<td align="right">40%</td>
+<td align="right">3.25</td>
+<td align="right">5,802.8</td>
+<td align="right">537.7</td>
+<td align="right">0.23935</td>
+<td align="right">2.58316</td>
+</tr>
+<tr>
+<td>GB200, per GPU</td>
+<td align="right">20%</td>
+<td align="right">5.00</td>
+<td align="right">14,653.6</td>
+<td align="right">903.3</td>
+<td align="right">0.14582</td>
+<td align="right">2.36554</td>
+</tr>
+<tr>
+<td>TPU v7, per chip</td>
+<td align="right">40%</td>
+<td align="right">2.40</td>
+<td align="right">13,522.4</td>
+<td align="right">1,117.2</td>
+<td align="right">0.07585</td>
+<td align="right">0.91802</td>
+</tr>
+<tr>
+<td><strong>Token-weighted cost</strong></td>
+<td align="right"><strong>100%</strong></td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right"><strong>0.15524</strong></td>
+<td align="right"><strong>1.87358</strong></td>
+</tr>
+</tbody></table>
+<p>These throughput figures are <strong>model intermediates, not observed Haiku speeds</strong>. Costs are token-weighted; I do not average hourly rents and divide by a differently weighted throughput.</p>
+<p>For a bundle of <strong>one million output tokens and eight million input tokens</strong>, the traffic assumptions imply four million cached inputs and four million fresh inputs. Of the fresh inputs, 0.4 million are five-minute cache writes and 3.6 million are ordinary inputs. Thus:</p>
+<pre><code class="language-text">B=1(5)+4(0.10)+0.4(1.25)+3.6(1)=\$9.50.
+</code></pre>
+<p>At <code>cacheCost=5</code>, the cached-input serving cost is $0.007762/M. Therefore:</p>
+<pre><code class="language-text">C=1.873578+4(0.155241)+4(0.007762)=\$2.525590,
+</code></pre>
+<pre><code class="language-text">M=1-2.525590/9.50=73.4148\%.
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Architecture / occupancy</th>
+<th align="right">Cost per million mixed tokens</th>
+<th align="right">Billings per million mixed tokens</th>
+<th align="right">Serving margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td>20B/200B, MLA donor, 65%</td>
+<td align="right">$0.28062</td>
+<td align="right">$1.05556</td>
+<td align="right"><strong>73.41%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td>30B/300B, GQA donor, 60%</td>
+<td align="right">$0.48178</td>
+<td align="right">$1.05556</td>
+<td align="right"><strong>54.36%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td>12B/120B, MLA donor, 75%</td>
+<td align="right">$0.16318</td>
+<td align="right">$1.05556</td>
+<td align="right"><strong>84.54%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Reference-traffic companion: two distinct operations.</strong> Changing only the traffic object to 15:1/60%, while retaining the central <code>billCacheHit:50</code>, gives <strong>75.25%</strong>. For a genuinely cache-billing-matched comparison with Opus, also set <code>billCacheHit:60</code>; that gives <strong>72.40%</strong>, with cost $0.20785 and billings $0.75313 per million mixed tokens. The latter is my preferred like-for-like comparison. Neither replaces the headline. The separate billed-cache control must not be silently assumed to follow the traffic override. </p>
+<p><strong>Sanity check.</strong> None of the three submitted scenarios is negative. Parameters are in billions, prices in dollars per million tokens, rents per accelerator rather than node, and utilization in percent. The workload is approximately 8,500 tokens at the representative decode position—not 200,000. Feasible weight/KV placements exist for every included leg at these short contexts; no negative or expensive leg was dropped to manufacture a positive headline. Full runtime placement and latency compliance remain unverified.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Latency posture: <code>fast</code> in all three runs — INFERENCE from S3 and S5, with an unmeasured mapping into S14.</strong> Haiku is purchased partly for responsiveness. In the calculator, <code>fast</code> means eight output tokens per chip per iteration on H200/GB200 and four on TPU v7; it does not mean a separate premium API tariff. Under the same central assumptions, <code>balanced</code> raises modeled margin from <strong>73.41% to 89.14%</strong>. That <strong>15.72-point</strong> difference is the most consequential categorical choice. I retain <code>fast</code> because the product positioning and observed stream speed support an explicit latency penalty rather than inheriting general-purpose batch sizes. This is not a matched production batch-size measurement. </p>
+<p><strong>Size and donor: 20B active/200B total with <code>dsr1</code> — ASSUMED, informed by S4 rather than identified by it.</strong> I use a tens-of-billions-active sparse hypothesis, not a price-to-parameter backsolve. The low case is a somewhat larger 30B/300B model with uncompressed GQA; the high case is 12B/120B with compact KV. <code>dsr1</code> preserves the project’s declared closed-model convention. I have no positive evidence that Haiku uses MLA; the low case expressly tests the competing GQA hypothesis. A dense implementation, a different layer count, or a materially different activation ratio would require revisiting this family of scenarios. The exact numeric sizes remain judgments. </p>
+<p><strong>Precision: FP8 throughout — ASSUMED.</strong> I do not claim to know Haiku’s weight or KV precision. Holding FP8 fixed avoids giving the high case both a smaller model and an unverified FP4 throughput gain. The donor and precision tuples remain approximations, not reverse-engineered Haiku details.</p>
+<p><strong>Fleet: H200 40%, GB200 20%, TPU v7 40% — ASSUMED.</strong> S6–S8 establish relevant platform families, not these shares. This is a tractable serving-cost proxy: substantial mature NVIDIA capacity, some Blackwell, and a large strategic TPU component. Its exact generation split has no public measurement. H100 and GB300 are not asserted absent from the real fleet; they are omitted from this compact representative basket. Trainium and older TPUs may be important in reality. The inability to price them cleanly is a major source of model risk, not evidence that the remaining basket represents 100% of actual Haiku tokens. </p>
+<p><strong>Hourly procurement: H200 $3.25, GB200 $5.00, TPU v7 $2.40 — INFERENCE, with judgmental numerical discounts.</strong> The H200 rate lies above S9’s interruptible spot anchor and below its on-demand quote. GB200 assumes substantial committed-capacity purchasing power versus S9’s retail slice. TPU v7 sits above S11’s $1.60 strategic estimate and below S10’s $5.40 public commitment. None of these interpolations is a disclosed contract. Each submitted number is an <strong>all-in rental-equivalent valuation</strong>, including hardware recovery, host resources, power, hosting, network and ordinary serving-control burden. The underlying public quotes are anchors with differing scopes, not exact all-in replicas of my assumptions. </p>
+<p>I could not establish which, if any, Haiku-serving assets Anthropic owns. Accordingly, these runs do <strong>not</strong> assert an owned-hardware share or an owned-TCO conversion; they use the cost of all-in leased capacity as their common valuation basis. An owned estimate would require an independently specified installed cost, financing/life convention and operating scope, rather than calling electricity alone the hourly cost. Holding the same performance assumptions but replacing the rents with S9/S10’s public on-demand/committed anchors—$6.305/$10.50/$5.40—gives <strong>45.81%</strong>. That is a procurement stress case outside the selected three-scenario span, not a fourth headline endpoint.</p>
+<p><strong>Paid-capacity utilization: 65%, with 60% and 75% endpoints — ASSUMED, no public measurement.</strong> This is occupancy of paid serving capacity, not achieved FLOPs utilization and not the benchmark’s concurrency. The lower case combines a heavier architecture with more operating slack; the higher case combines a compact model with steadier loading. These are coherent operational stories, not statistical quantiles. Changing utilization alone to 50% or 80% produces <strong>65.44%</strong> or <strong>78.40%</strong> at the central architecture.</p>
+<p><strong>Traffic: 8:1 input/output, 50% serving and billed cache reuse — ASSUMED.</strong> I expect a mixture of short uncached tasks and longer tool-context/subagent tasks, rather than treating the reference’s 15:1/60% convention as measured Haiku traffic. S3 supports those uses; S15 makes very high cache reuse less natural for the short-prompt portion. The assumed mean is 8,000 input and 1,000 output tokens. These are population approximations, not a literal identical request; 50% aggregate cache reuse does not require every request to have an exactly 4,000-token cached prefix. The API’s actual traffic distribution is unknown. </p>
+<p><strong>Cache cost and creation: 5% of fresh-prefill cost; 10% of fresh inputs written at 1.25× — ASSUMED volumes/cost, DISCLOSED tariff.</strong> The traffic bundle corresponds to ten cached-read tokens per cache-write token. That is a plausible reusable-prefix scenario, not measured cache lifetime telemetry. Omitting write premiums gives <strong>73.13%</strong>; billing the same write volume at the one-hour tariff gives <strong>74.23%</strong>. Cache-write storage and eviction costs are not separately modeled. </p>
+<p><strong>Private-stack advantage: none credited.</strong> <code>stackMult=1</code>, <code>trendMonths=0</code>, and speculative decoding is omitted. This is a neutral evidentiary choice, not a claim that Anthropic lacks better kernels. It prevents re-crediting gains already embedded in the calculator’s throughput anchors. Adding the reference’s two-month lead alone would raise the central result to <strong>77.86%</strong>; I found no Haiku-specific measurement justifying that credit.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The comparison starts at the supplied reference’s <strong>current-engine 82.33%</strong>, not its historical <strong>83.1%</strong> stated number. The latter and its <strong>68–92%</strong> selected span remain the reference author’s claims. Attachment 04 fixes the reference’s fleet, list billing, FP8 precision, balanced posture and two-month lead.  </p>
+<p>The following is a <strong>sequential arithmetic bridge</strong>. Each row changes only the named block after the preceding row; therefore the point attribution is order-dependent, but the bridge sums to the central result.</p>
+<table>
+<thead>
+<tr>
+<th>Change from the reference vector</th>
+<th align="right">Approximate margin-point change</th>
+<th align="right">Margin after change</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Starting Opus vector</td>
+<td align="right">—</td>
+<td align="right">82.33%</td>
+</tr>
+<tr>
+<td>Active parameters: 300B → 20B</td>
+<td align="right">+13.77</td>
+<td align="right">96.10%</td>
+</tr>
+<tr>
+<td>Total parameters: 2,500B → 200B</td>
+<td align="right">+1.52</td>
+<td align="right">97.62%</td>
+</tr>
+<tr>
+<td>List prices: $5/$25 → $1/$5</td>
+<td align="right">−9.54</td>
+<td align="right">88.08%</td>
+</tr>
+<tr>
+<td>Fleet: 5/10/25/20/40 H100/H200/GB200/GB300/TPU → 0/40/20/0/40</td>
+<td align="right">−1.45</td>
+<td align="right">86.63%</td>
+</tr>
+<tr>
+<td>Hourly rents to $3.25 H200 / $5 GB200 / $2.40 TPU</td>
+<td align="right">+0.55</td>
+<td align="right">87.18%</td>
+</tr>
+<tr>
+<td>Algorithmic lead: two months → zero</td>
+<td align="right">−2.58</td>
+<td align="right">84.61%</td>
+</tr>
+<tr>
+<td>Latency posture: balanced → fast</td>
+<td align="right">−12.55</td>
+<td align="right">72.05%</td>
+</tr>
+<tr>
+<td>Traffic and billed cache: 15:1/60% → 8:1/50%</td>
+<td align="right">+1.08</td>
+<td align="right">73.13%</td>
+</tr>
+<tr>
+<td>Cache writes: zero → 10% of fresh input</td>
+<td align="right">+0.28</td>
+<td align="right"><strong>73.41%</strong></td>
+</tr>
+</tbody></table>
+<p>The active/total changes have different effects because the registered NVIDIA and TPU decode forms do not use the same weight-traffic approximation. They must not be collapsed into a universal “cost is proportional to active parameters” rule. </p>
+<p><strong>Unchanged, hence zero bridge contribution:</strong> utilization 65%; FP8; central <code>dsr1</code> geometry; <code>stackMult=1</code>; no speculative-decode credit; cache reads priced at 10% of fresh input; cache serving cost at 5%; <code>batchShare=discount=0</code>; and rental-equivalent valuation. The reference uses 0.95× planning rents on NVIDIA and 0.50× on TPU; I instead specify absolute all-in rates once, without multiplying a second family discount into them. </p>
+<p>At matched Reference traffic <strong>and matched 60% billed cache</strong>, Haiku reads <strong>72.40% versus Opus’s 82.33%</strong>, about <strong>9.93 points lower</strong>. The modeled size advantage does not automatically translate into a higher percentage margin: Haiku charges one-fifth of the reference tariff, and my latency posture amortizes weights over much smaller batches.</p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is paid accelerator-hours and billable tokens for a representative Haiku production window, split into fresh input, cached input and output, with latency targets and hourly cost scope stated.</strong> It would bypass much of the parameter-count inference. A public test must distinguish per-request speed from total server throughput and occupied-chip performance from paid-capacity occupancy.</p>
+<p>A matched demonstration that Haiku sustains its normal interactive latency at the calculator’s balanced-style batching would move my central estimate <strong>up toward 89%</strong> without any change to architecture, rents or utilization. Conversely, evidence of lower concurrency, expensive routing/verification work, or a heavier attention implementation would move it down. Output generation accounts for approximately <strong>74.2% of modeled central cost</strong>, making this operational evidence especially important.</p>
+<p>A credible architecture disclosure would also be decisive. Holding everything else central and changing only the attention donor to GQA lowers the estimate to <strong>69.00%</strong>. The low scenario’s larger 30B/300B GQA model and 60% occupancy produce <strong>54.36%</strong>. A substantially smaller distilled model would support the high case or potentially exceed it; a materially larger dense model could fall outside the selected span.</p>
+<p>Procurement is another major falsifier. A <strong>20% increase in every all-in hourly cost</strong> lowers the central estimate to <strong>68.10%</strong>. Evidence that Haiku’s real allocation is dominated by cheaply operated owned TPUs or efficiently served Trainium could move the estimate up; evidence of expensive managed capacity or poor occupancy could move it down. The direction cannot be inferred from chip branding alone.</p>
+<p>Finally, a measured fresh-prefill cost is valuable even though decode dominates here. Scaling only prefill and its linked cache cost by <strong>0.5× or 1.5×</strong> moves the result to <strong>76.85% or 69.98%</strong>. These are diagnostics of an unmeasured transfer, not additional probability bounds.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Absolute lengths and their distribution.</strong> There is no submitted context-length control. The public engine’s default length convention yields 8,000 input/1,000 output tokens for this custom 8:1 mix, approximately 8,500 at the representative decode position and 9,000 at the terminal KV position. I adopt that convention explicitly. It does not model a distribution of short tickets, long documents, burst arrivals and occasionally near-limit prompts. Pricing the 200,000-token maximum as the typical request would answer a different question. The actual mean and tail remain unknown. </p>
+<p><strong>Geometry is selectable only as a package.</strong> <code>customDonor</code> chooses a frozen architecture package; it cannot set Haiku’s actual layers, KV heads, compression, expert placement or recurrent state. The central MLA donor is an approximation, not evidence. The low GQA donor makes one uncertainty visible but does not exhaust plausible architectures. In particular, the three-scenario span is not a bound on every dense or sparse implementation compatible with the public record.</p>
+<p><strong>Latency is not an enforced service-level target.</strong> <code>fast</code> is a coarse batch setting, not a control for 84.5 tokens/second, time to first token or a tail-latency percentile. The central NVIDIA calculations are more consistent with fast serving than the balanced calculations, but they do not constitute a matched replay of Artificial Analysis. The TPU donor-derived stream rate also differs markedly from that API benchmark. No serving-speed observation was converted directly into accelerator throughput.</p>
+<p><strong>Fleet and calibration coverage.</strong> Trainium’s unresolved batch-unit defect prevents me from using it as a clean headline leg. Older TPU generations lack selectable rows. The representative three-leg fleet therefore approximates costs beyond the portion of the real estate that can be mapped, and actual Haiku platform shares remain unknown. The public registry also transfers a single prefill-efficiency calibration across platforms and uses different NVIDIA/TPU decode traffic forms. Those structural limitations are not removed by the apparently precise percentages. </p>
+<p><strong>Billing and cost boundaries.</strong> Actual server-side reuse need not equal billed cache hits; I assume equality at 50%. The Reference companion must state whether it changes one or both. Cache-write volume is a share of <strong>fresh</strong> input in the implementation, and storage/eviction overhead is not separately controllable. The modeled cost includes the chosen all-in capacity valuation and allocated paid-capacity slack, but excludes training, research, sales, support, free-tier serving and unbilled retries as required by this commission. Image-specific preprocessing, tools charged separately, and extended-thinking workload distributions are outside the priced text-only case.</p>
+<p><strong>Evidence and execution gaps.</strong> I could not establish Haiku’s architecture, actual precision, real batching, speculative-decoding acceptance and draft costs, chip/site allocation, ownership split, executed hourly prices, utilization, request-length distribution, cache telemetry, or model-level financials. I also could not obtain a live MCP response. The report’s numeric evidence is the disclosed input vector plus local reconstruction, including the successful Opus arithmetic check—not a provider margin disclosure or a connector receipt. No input was tuned to reproduce the old Opus number or the existing speculative Haiku preset.</p>
+<p><strong>Attachment receipt.</strong> All six supplied materials were readable before analysis. Files 03 and 04 were opened from the uploads; 01, 02, 05 and 06 were supplied inline. Their first lines/headings, truncated where needed, were:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>First line or heading</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>01-method-and-input-contract.md</code></td>
+<td><code># The calculator: what it computes, and exactly which inputs you may give it</code></td>
+</tr>
+<tr>
+<td><code>02-opus-4x-reference-dive-summary.md</code></td>
+<td><code># The reference: GPT-5.6 Pro&#39;s estimate for Claude Opus 4.x — the headline form this dive should match</code></td>
+</tr>
+<tr>
+<td><code>03-calculator-contract-live-2026-09-25.json</code></td>
+<td><code>{&quot;result&quot;:{&quot;content&quot;:{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code></td>
+</tr>
+<tr>
+<td><code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code></td>
+<td><code>```json</code></td>
+</tr>
+<tr>
+<td><code>05-carrier-and-nearest-row\.md</code></td>
+<td><code># How the calculator will hold Claude Haiku 4.5, and the nearest row the site carries today</code></td>
+</tr>
+<tr>
+<td><code>06-anthropic-gptpro.md</code></td>
+<td><code># GPT-5.6 Pro consult — ADOPTED-FINDINGS SUMMARY (req_1783636621475_l5tccc, 54m21s, 2026-07-09)</code></td>
+</tr>
+</tbody></table>
+<p>[Complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

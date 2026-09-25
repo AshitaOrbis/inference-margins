@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Fable 5.1 — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/claude-fable-5-1-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Claude Fable 5.1 — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T060752Z-f9b29c</code>, answered 2026-09-25T07:07:16Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for Claude Fable 5.1 from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>454e2637016ff9cc203a5471a5d3b5ce6efe61d34aa46f33065916f22136e959</code>; as received, <code>2efe52ece8c6b833a9f361889d61c14b66f148a538ae679e64b7be5eafeda4e5</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~84%</strong> (84.34%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>68%–90% (68.43% – 90.33%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>84.3% (68.4–90.3%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~89%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>Anthropic&#39;s top model is priced at $10/$50, twice Opus 4.x, and the run pairs that price with a very large assumed model: 400B active and 8T total (its own words: &quot;the decisive assumption is 400B active parameters; Anthropic has not published that number&quot;), served with a stack it rates 10% worse than open practice. The price is the stronger of the two, which is why the reading sits in the mid 80s. Two inputs deserve attention. The TPU half of the fleet is priced at $1.50 per chip-hour — an owned-hardware conversion the run shows step by step (rack cost, five-year life, capital recovery, power), well under the $5.40 committed retail rate for Ironwood; pricing the GB200 leg at a public on-demand rate ($10.50 per GPU-hour) instead of $5 lowers the central to about 77%, by the run&#39;s own sensitivity. And the traffic is extremely agentic — 50 input tokens per output token, 92% of input from cache — motivated by Anthropic&#39;s statement that Fable 5.1&#39;s cheaper cache reads (2.5% of the input price) cut typical workloads&#39; cost by a quarter. That mix is where the low cache-read price bites: at the page&#39;s Reference traffic (15:1, 60% cache) the same inputs compute ~89%, above the headline. The span (68–90%) comes from the model size (250B–600B active) and utilization. The run could not reach the connector and reconstructed the equations; the engine reproduces its figures to the fourth decimal.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>dsr1</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>400</td>
+<td>600</td>
+<td>250</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>8000</td>
+<td>10000</td>
+<td>6000</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>2.5</td>
+<td>2.5</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>92</td>
+<td>92</td>
+<td>92</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;gb200&quot;:30,&quot;gb300&quot;:20,&quot;tpu7&quot;:50}</code></td>
+<td><code>{&quot;gb200&quot;:30,&quot;gb300&quot;:20,&quot;tpu7&quot;:50}</code></td>
+<td><code>{&quot;gb200&quot;:30,&quot;gb300&quot;:20,&quot;tpu7&quot;:50}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;gb200&quot;:5,&quot;gb300&quot;:6.5,&quot;tpu7&quot;:1.5}</code></td>
+<td><code>{&quot;gb200&quot;:5,&quot;gb300&quot;:6.5,&quot;tpu7&quot;:1.5}</code></td>
+<td><code>{&quot;gb200&quot;:5,&quot;gb300&quot;:6.5,&quot;tpu7&quot;:1.5}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>65</td>
+<td>55</td>
+<td>70</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.1</td>
+<td>1</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>50:1, 92% cache</td>
+<td>50:1, 92% cache</td>
+<td>50:1, 92% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈84% at list (span 68–90%)<br>The decisive assumption is 400B active parameters; Anthropic has not published that number.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>Estimator: GPT-6 Astra Pro. Research cutoff: September 24, 2026, America/Dawson_Creek; commission/file identifier dated September 25, 2026.</strong> Dates below are publication dates unless identified as retrieval dates. “Unknown” means not established by this research, not proof that no disclosure exists anywhere.</p>
+<p><strong>File receipt.</strong> Both uploaded files opened and were read: <code>03-calculator-contract-live-2026-09-25.json</code>, first-line prefix <code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code>; and <code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code>, first line <code>```json</code>. Inline attachments 01, 02, 05 and 06 were also readable. The uploaded contract is calculator evidence, not independent evidence of Anthropic’s economics.  </p>
+<ol>
+<li><p><strong>S1 — DISCLOSED: identity and variant.</strong> The exact Claude API identifier is <strong><code>claude-fable-5-1</code></strong>, released <strong>September 1, 2026</strong>. Its published limits are 1M context and 128K output tokens; adaptive thinking is always on and default effort is <code>high</code>. I price standard, synchronous Claude API text-dominant traffic at that effort, not Batch, a subscription, or a separately priced fast service. Source: <a href="https://platform.claude.com/docs/en/models/fable-5-1/overview">https://platform.claude.com/docs/en/models/fable-5-1/overview</a> — release dated 2026-09-01; retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S2 — DISCLOSED: current tariff, verified on the provider’s pricing page.</strong> Per million tokens: <strong>$10 fresh input, $50 output, $0.25 cache read, $12.50 five-minute cache write, $20 one-hour cache write</strong>. Batch input/output are 50% lower, but no batch discount enters this estimate. No Fable 5.1 promotional tariff was identified. The brief’s prices are correct; its “every other model 0.1×” footnote is now overbroad because Opus 5.5 uses 0.05×. Fable 5.1 still uses <strong>0.025×</strong>, therefore <strong><code>cacheReadMult: 2.5</code></strong>. Source: <a href="https://platform.claude.com/docs/en/about-claude/pricing">https://platform.claude.com/docs/en/about-claude/pricing</a> — undated live table, retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S3 — DISCLOSED: the most useful model-specific traffic clue.</strong> Anthropic describes Fable 5.1 and restricted-access Mythos 5.1 as the same underlying model with different safeguards. It estimates typical token-billed workloads will cost 25% less than Fable 5, because cache reads became cheaper. This supports substantial prefix reuse; it does <strong>not</strong> disclose an input/output ratio or cache-hit percentage. Source: <a href="https://www.anthropic.com/claude-fable-and-mythos-5-1">https://www.anthropic.com/claude-fable-and-mythos-5-1</a> — launch 2026-09-01; retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S4 — DISCLOSED: version naming.</strong> Anthropic’s post-4.6 dateless identifiers denote pinned model versions, not rolling aliases. I therefore do not invent a <code>-20260901</code> suffix. Source: <a href="https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions">https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions</a> — undated, retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S5 — COMMUNITY ESTIMATE: predecessor-size leads, not Fable 5.1 measurements.</strong> Reuters relays FT industry estimates of roughly 8T parameters for Mythos 5 and 5T for Fable 5, while noting the absence of company disclosures. These are weak priors for the new shared model, not verified counts. Source: <a href="https://www.reuters.com/technology/bytedance-targets-mega-ai-model-nearing-anthropics-mythos-ft-reports-2026-08-07/">https://www.reuters.com/technology/bytedance-targets-mega-ai-model-nearing-anthropics-mythos-ft-reports-2026-08-07/</a> — 2026-08-07. Original report: <a href="https://www.ft.com/content/9b8383b1-a28d-4940-8c4e-2f0cd21556ef">https://www.ft.com/content/9b8383b1-a28d-4940-8c4e-2f0cd21556ef</a> — full text was paywalled in this session. </p>
+</li>
+<li><p><strong>S6 — DISCLOSED: an open architectural analogy.</strong> DeepSeek-V3 reports 671B total and 37B active parameters and uses multi-head latent attention. Its 5.5% activation fraction makes a sparse-model prior plausible; it does not establish Fable’s architecture. Source: <a href="https://arxiv.org/abs/2412.19437">https://arxiv.org/abs/2412.19437</a> — first submitted 2024-12-27, revised 2025-02-18. </p>
+</li>
+<li><p><strong>S7 — DISCLOSED: hardware families, not token shares.</strong> Anthropic identifies TPU, Trainium and NVIDIA as its three-platform strategy, and announced an expansion involving up to one million TPUs. A procurement plan cannot identify Fable 5.1’s serving allocation or physical deployment sites. Source: <a href="https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services">https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services</a> — 2025-10-23. </p>
+</li>
+<li><p><strong>S8 — DISCLOSED: Trainium use and company-level context.</strong> Anthropic reported using over one million Trainium2 chips to train <strong>and</strong> serve Claude. The same announcement reported revenue run rate above $30B and peak-demand infrastructure strain. Those are historical April disclosures, not current Fable revenue, paid-capacity utilization, or serving margin. Source: <a href="https://www.anthropic.com/news/anthropic-amazon-compute">https://www.anthropic.com/news/anthropic-amazon-compute</a> — published 2026-04-20, updated 2026-04-21. </p>
+</li>
+<li><p><strong>S9 — DISCLOSED: a real NVIDIA serving deployment.</strong> NVIDIA says Claude-family models run on GB300 NVL72 in Microsoft Azure/Foundry. This establishes a serving platform, not a Fable 5.1-specific GPU count, region, or share. Source: <a href="https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/">https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/</a> — 2026-06-29. </p>
+</li>
+<li><p><strong>S10 — DISCLOSED: public TPU rental benchmark.</strong> Google lists Ironwood in Iowa at $12 on demand, $8.40 on a one-year commitment, and $5.40 on a three-year commitment, <strong>per chip-hour</strong>. None is Anthropic’s disclosed contract price. Source: <a href="https://cloud.google.com/tpu/pricing">https://cloud.google.com/tpu/pricing</a> — undated live table, retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S11 — COMMUNITY ESTIMATE: strategic TPU economics.</strong> SemiAnalysis estimates 400,000 purchased Ironwoods at approximately $10B in finished racks and 600,000 rented units, with the rented tranche around $1.60/chip-hour. These are analyst estimates of a program, not verified Fable-serving assets. Source: <a href="https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the">https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the</a> — Dylan Patel, Myron Xie, Daniel Nishball and colleagues, 2025-11-28. </p>
+</li>
+<li><p><strong>S12 — DISCLOSED: a public NVIDIA price comparison.</strong> CoreWeave lists a four-GPU GB200 slice at $42/hour, or $10.50/GPU-hour, with host CPU, RAM and local storage. Its GB300 NVL72 price is “contact sales.” This supports a retail comparison, not my lower committed-cost assumption. Source: <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a> — undated live table, retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S13 — COMMUNITY ESTIMATE: observable API speed.</strong> Artificial Analysis’s English release page shows approximately 49 streamed output tokens/second for its high-effort, default-fallback Fable 5.1 benchmark. This is a user-facing stream rate, <strong>not aggregate tokens/second per accelerator</strong>. Source: <a href="https://artificialanalysis.ai/models/releases/claude-fable-5-1">https://artificialanalysis.ai/models/releases/claude-fable-5-1</a> — undated measurement page, retrieved 2026-09-24. </p>
+</li>
+<li><p><strong>S14–S17 — INFERENCE: calculator arithmetic, inspected rather than assumed.</strong> I reconstructed the relevant cost, billing, geometry and capacity calculations from the calculator’s public source mirror. Sources, inspected 2026-09-24: <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js</a> ; <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js</a> ; <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js</a> . Its explanatory reconstruction, dated 2026-09-20, explicitly identifies universal-transfer prefill and assumed cache work: <a href="https://margins.ashitaorbis.com/research/input-cost-reconstruction">https://margins.ashitaorbis.com/research/input-cost-reconstruction</a> . These describe the calculator, not measured Fable performance.   </p>
+</li>
+<li><p><strong>S18 — UNKNOWN: the actual production cost identity.</strong> I could not establish Fable 5.1’s parameter counts, attention design, serving precision, model-to-site allocation, per-chip throughput at a matched latency target, paid utilization, or direct serving cost/margin. The public model specification does not supply those quantities. Source checked: <a href="https://platform.claude.com/docs/en/models/fable-5-1/overview">https://platform.claude.com/docs/en/models/fable-5-1/overview</a> — 2026-09-24. The assumptions below fill these gaps explicitly, rather than treating another model’s self-description or an earlier consultant’s answer as provider evidence.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>The three scenarios hold the workload and procurement thesis fixed while varying architecture scale and operating maturity. They are <strong>selected joint scenarios, not a probability interval or exhaustive bounds</strong>. In <code>sources</code>, dates on undated pages are retrieval dates. Empty <code>source_ids</code> identify unsupported working judgments.</p>
+<p><strong>Implementation detail:</strong> the inspected engine applies <code>cacheWriteShare</code> to <strong>fresh/non-cache-read input</strong>, not all input. Thus <code>50</code> below means 50% of the remaining 8%: <strong>4% of all input tokens</strong> are billed as five-minute writes. This differs from the abbreviated wording in attachment 01; the arithmetic below makes the interpretation auditable. </p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;Claude Fable 5.1&quot;,
+  &quot;api_model_priced&quot;: &quot;claude-fable-5-1; released 2026-09-01; standard Claude API, high effort, default safeguards&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Text-dominant agentic traffic: 50,000 input and 1,000 billed output tokens per representative request, including billed thinking; 50,500 mean decode context, 51,000 peak. Not the 1M maximum-context workload.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 400,
+      &quot;total&quot;: 8000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 2.5,
+      &quot;billCacheHit&quot;: 92,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50},
+      &quot;rentAbsLeg&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5},
+      &quot;util&quot;: 65,
+      &quot;stackMult&quot;: 1.1,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 50, &quot;cache_hit&quot;: 92}
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 600,
+      &quot;total&quot;: 10000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 2.5,
+      &quot;billCacheHit&quot;: 92,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50},
+      &quot;rentAbsLeg&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5},
+      &quot;util&quot;: 55,
+      &quot;stackMult&quot;: 1,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 50, &quot;cache_hit&quot;: 92}
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 250,
+      &quot;total&quot;: 6000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 10,
+      &quot;priceOut&quot;: 50,
+      &quot;cacheReadMult&quot;: 2.5,
+      &quot;billCacheHit&quot;: 92,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50},
+      &quot;rentAbsLeg&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5},
+      &quot;util&quot;: 70,
+      &quot;stackMult&quot;: 1.1,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 50, &quot;cache_hit&quot;: 92}
+  },
+  &quot;stated&quot;: {&quot;headline_pct&quot;: 84.3362, &quot;low_pct&quot;: 68.4347, &quot;high_pct&quot;: 90.3293},
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;API identity, release date, limits and default effort&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/models/fable-5-1/overview&quot;, &quot;date&quot;: &quot;2026-09-01&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Current standard list and prompt-cache tariffs; date is retrieval&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/about-claude/pricing&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Fable/Mythos 5.1 share an underlying model; estimated typical billing reduction&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/claude-fable-and-mythos-5-1&quot;, &quot;date&quot;: &quot;2026-09-01&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Dateless model identifiers denote pinned versions; date is retrieval&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Reuters relays FT industry estimates for PREDECESSORS, not measured 5.1 counts&quot;, &quot;url&quot;: &quot;https://www.reuters.com/technology/bytedance-targets-mega-ai-model-nearing-anthropics-mythos-ft-reports-2026-08-07/&quot;, &quot;date&quot;: &quot;2026-08-07&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;DeepSeek-V3 discloses 671B total, 37B active and MLA; analogy only&quot;, &quot;url&quot;: &quot;https://arxiv.org/abs/2412.19437&quot;, &quot;date&quot;: &quot;2024-12-27&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;Anthropic describes three accelerator families and a TPU expansion plan&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/news/expanding-our-use-of-google-cloud-tpus-and-services&quot;, &quot;date&quot;: &quot;2025-10-23&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;Trainium training/serving use and historical April revenue disclosure&quot;, &quot;url&quot;: &quot;https://www.anthropic.com/news/anthropic-amazon-compute&quot;, &quot;date&quot;: &quot;2026-04-21&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Claude-family GB300 serving on Azure; not a Fable 5.1 allocation&quot;, &quot;url&quot;: &quot;https://blogs.nvidia.com/blog/anthropic-nvidia-gb300-blackwell-ultra-microsoft-azure/&quot;, &quot;date&quot;: &quot;2026-06-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;Public Ironwood chip-hour prices; date is retrieval&quot;, &quot;url&quot;: &quot;https://cloud.google.com/tpu/pricing&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;SemiAnalysis estimated TPU purchase/rental split, finished-rack cost and strategic rent&quot;, &quot;url&quot;: &quot;https://newsletter.semianalysis.com/p/tpuv7-google-takes-a-swing-at-the&quot;, &quot;date&quot;: &quot;2025-11-28&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;GB200 public four-GPU slice price and bundle; date is retrieval&quot;, &quot;url&quot;: &quot;https://www.coreweave.com/pricing&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Artificial Analysis observed streamed-output speed, not per-chip throughput; date is retrieval&quot;, &quot;url&quot;: &quot;https://artificialanalysis.ai/models/releases/claude-fable-5-1&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Independent reconstruction of billing and cost aggregation from public source; date is inspection&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Independent reconstruction of roofline and capacity arithmetic; date is inspection&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S16&quot;, &quot;claim&quot;: &quot;Public calculator geometry and calibration constants, not provider measurements; date is inspection&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S17&quot;, &quot;claim&quot;: &quot;Calculator documents universal-transfer prefill and assumed cache work&quot;, &quot;url&quot;: &quot;https://margins.ashitaorbis.com/research/input-cost-reconstruction&quot;, &quot;date&quot;: &quot;2026-09-20&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S18&quot;, &quot;claim&quot;: &quot;Exact Fable 5.1 sizes, deployment allocation, utilization and direct cost not established in inspected disclosure&quot;, &quot;url&quot;: &quot;https://platform.claude.com/docs/en/models/fable-5-1/overview&quot;, &quot;date&quot;: &quot;2026-09-24&quot;, &quot;evidence_class&quot;: &quot;UNKNOWN&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 400, &quot;low_margin&quot;: 600, &quot;high_margin&quot;: 250, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S5&quot;, &quot;S6&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 8000, &quot;low_margin&quot;: 10000, &quot;high_margin&quot;: 6000, &quot;source_ids&quot;: [&quot;S3&quot;, &quot;S5&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;dsr1&quot;, &quot;low_margin&quot;: &quot;dsr1&quot;, &quot;high_margin&quot;: &quot;dsr1&quot;, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;S16&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 2.5, &quot;low_margin&quot;: 2.5, &quot;high_margin&quot;: 2.5, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 92, &quot;low_margin&quot;: 92, &quot;high_margin&quot;: 92, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;S17&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteShare&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteMult&quot;, &quot;central&quot;: 125, &quot;low_margin&quot;: 125, &quot;high_margin&quot;: 125, &quot;source_ids&quot;: [&quot;S2&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50}, &quot;low_margin&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50}, &quot;high_margin&quot;: {&quot;gb200&quot;: 30, &quot;gb300&quot;: 20, &quot;tpu7&quot;: 50}, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S8&quot;, &quot;S9&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg&quot;, &quot;central&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5}, &quot;low_margin&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5}, &quot;high_margin&quot;: {&quot;gb200&quot;: 5, &quot;gb300&quot;: 6.5, &quot;tpu7&quot;: 1.5}, &quot;source_ids&quot;: [&quot;S10&quot;, &quot;S11&quot;, &quot;S12&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 65, &quot;low_margin&quot;: 55, &quot;high_margin&quot;: 70, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.1, &quot;low_margin&quot;: 1, &quot;high_margin&quot;: 1.1, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;balanced&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;batchShare&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;discount&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;hwMode&quot;, &quot;central&quot;: &quot;rent&quot;, &quot;low_margin&quot;: &quot;rent&quot;, &quot;high_margin&quot;: &quot;rent&quot;, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.io_ratio&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.cache_hit&quot;, &quot;central&quot;: 92, &quot;low_margin&quot;: 92, &quot;high_margin&quot;: 92, &quot;source_ids&quot;: [&quot;S3&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low: identity and tariffs are verified, but architecture, fleet, paid utilization and workload-matched throughput are not; this is a conditional serving-margin estimate, not a measured provider margin.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p>My reading is <strong>84.34% at list</strong>, with selected scenarios of <strong>68.43% and 90.33%</strong>. The card rounds those to <strong>84%, 68–90%</strong>. This is the requested unit direct-serving contribution margin: hardware time, paid-capacity utilization and direct infrastructure/serving burden, excluding training, R&amp;D, sales, G&amp;A, free-tier subsidy, support and unbilled retries. It is not Anthropic’s accounting gross margin.</p>
+<p><strong>Execution status.</strong> I attempted <code>tools/call</code> → <code>run_scenario</code> at <a href="https://margins-mcp.ashitaorbis.com/mcp">https://margins-mcp.ashitaorbis.com/mcp</a> with <code>model: &quot;custom&quot;</code>, <code>perspective: &quot;median&quot;</code>, and exactly the <code>central.overrides</code> and <code>central.traffic</code> objects above. The transport returned <strong>“Temporary failure in name resolution.” No JSON-RPC scenario result was received.</strong> The figures here are an independent reconstruction from S14–S16, not a claimed successful MCP execution. The submitting leg’s engine rerun remains authoritative for the card.</p>
+<p>As an arithmetic check, the same reconstruction produces <strong>82.3265%</strong> for attachment 02’s current Opus reference vector, matching its stated current-engine <strong>82.33%</strong>. This is a useful implementation check, not validation of either model’s inferred costs. The reference author’s preserved headline remains 83.1%.  </p>
+<p><strong>Central arithmetic.</strong> Consider one million billed output tokens accompanied by fifty million input tokens. With 92% cache hits, these are 46M cache reads and 4M fresh tokens. Half the fresh tokens are billed as five-minute cache writes:</p>
+<pre><code class="language-text">R=46(0.25)+2(10)+2(12.50)+1(50)=\$106.50.
+</code></pre>
+<p>The reconstructed fleet-weighted costs, including the utilization divisor and all-in hourly rates, are <strong>$1.476804/M fresh input</strong>, <strong>$0.073840/M cache read</strong>, and <strong>$7.378086/M output</strong>. Therefore:</p>
+<pre><code class="language-text">C=4(1.476804)+46(0.073840)+7.378086=\$16.681954,
+</code></pre>
+<pre><code class="language-text">m=1-16.681954/106.50=84.3362\%.
+</code></pre>
+<p>Equivalently, this is <strong>$0.32710 cost against $2.08824 billing per million total traffic tokens</strong>. The normalization is optional; it leaves the margin unchanged.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">Fresh input cost, $/M</th>
+<th align="right">Output cost, $/M</th>
+<th align="right">Cost of 50M input + 1M output</th>
+<th align="right">List billing</th>
+<th align="right">Margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td align="right">1.4768</td>
+<td align="right">7.3781</td>
+<td align="right">$16.6820</td>
+<td align="right">$106.50</td>
+<td align="right"><strong>84.34%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td align="right">2.7501</td>
+<td align="right">16.2914</td>
+<td align="right">$33.6171</td>
+<td align="right">$106.50</td>
+<td align="right"><strong>68.43%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">0.9265</td>
+<td align="right">4.4621</td>
+<td align="right">$10.2993</td>
+<td align="right">$106.50</td>
+<td align="right"><strong>90.33%</strong></td>
+</tr>
+</tbody></table>
+<p>These are calculated outputs from the submitted inputs. Every scenario uses the verified tariff, not a separately chosen margin target.</p>
+<p>For dimensional checking, with hourly cost <code>p</code>, occupied-accelerator throughput <code>T</code>, and utilization fraction <code>u</code>:</p>
+<pre><code class="language-text">C_{\$/M}=\frac{p\times10^6}{3600\,T\,u}.
+</code></pre>
+<p>At the central point, the reconstructed prefill/decode throughputs are approximately <strong>1,045/221 tokens/s per GB200 GPU</strong>, <strong>1,045/283 per GB300 GPU</strong>, and <strong>965/127 per TPU chip</strong>, before the separate paid-utilization divisor. These are <strong>calculator throughputs</strong>, not production observations. The GB200 decode batch is memory-capped, as explained in section 7.</p>
+<p><strong>Sanity checks.</strong> Parameters are entered in billions; prices are per million tokens; rents are per GPU/chip-hour, not node-hour; utilization is entered as <code>65</code>, not <code>0.65</code>; and a 2.5% cache-read multiplier is entered as <code>2.5</code>, not <code>25</code>. Power and hosting are already inside the hourly figures. All three margins are positive. No negative result was “repaired” by choosing more favorable inputs.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Architecture: 400B active / 8T total, FP8, <code>dsr1</code>.</strong> The total-size prior comes from S5’s predecessor estimates together with S3’s shared-model disclosure. The active-size prior is approximately 5% activation, loosely informed by S6’s open MoE example. Neither step identifies Fable’s size: these are weak architectural inferences, not a parameter-count discovery. The low-margin case is a 10T/600B model; the high-margin case is 6T/250B. FP8 is a working serving assumption. I do not import attachment 06’s unverified low-precision claims as proof that this model runs in FP4. The MLA donor is a declared approximation retained for comparability; no public evidence selects it over <code>qwen3c</code> or <code>llama70</code> for Fable. <strong>Judgment with no Fable-specific measurement.</strong> A disclosed smaller active network or proven lower-precision deployment raises the margin; a larger network or more expensive attention lowers it.</p>
+<p><strong>Traffic: 50:1 input/output, 92% physical and billed cache hits.</strong> S3 motivates a reuse-heavy, long-running agentic mix. I assume a representative 50K-token input and 1K-token billed output, including billed thinking. At the old $1 cache-read tariff, this exact bundle would bill $141; at $0.25 it bills $106.50, a <strong>24.47% reduction</strong>, close to the provider’s estimated typical reduction. This is an externally informed consistency check, not unique identification: many traffic mixes fit that claim. The 50:1 ratio, five-minute-write mix and representative lengths remain judgment. Larger thinking outputs, shorter sessions or more cache invalidation would change the appropriate traffic vector. </p>
+<p><strong>Cache work and writes: 5% of prefill; half of fresh input written at 1.25×.</strong> The 5% work assumption is S17’s modeling convention, not a measured Fable cache-restoration cost. Five-minute writes are plausible for repeatedly updated agent contexts; the write share is assumed. The one-hour tariff is verified but receives zero share. Removing the write premium alone gives <strong>83.56%</strong>, while making every fresh token a five-minute write gives <strong>85.04%</strong>. Raising cache-read work to 15% of prefill gives <strong>77.96%</strong>. Cheap billed cache reads do not imply costless KV storage or movement. </p>
+<p><strong>Fleet: 30% GB200, 20% GB300, 50% TPU7 by served-token share.</strong> S7–S9 support the platform families, not these fractions. A very large frontier model plausibly favors newer high-memory equipment; the precise split is <strong>assumed</strong>. Trainium is deliberately excluded because attachment 03 flags an unresolved per-chip versus replica-global throughput ambiguity of about 15.2×. That exclusion does <strong>not</strong> mean Anthropic serves no Fable requests on Trainium. It means the headline prices a declared NVIDIA/TPU proxy fleet rather than claiming a verified whole-provider inventory. This is a material coverage limitation. </p>
+<p><strong>NVIDIA all-in hourly cost: $5.00/GB200 GPU and $6.50/GB300 GPU.</strong> I use attachment 03’s provisional $4.50/$6.00 planning anchors plus a <strong>$0.50/GPU-hour assumed allowance</strong> to complete the direct host/network/control-plane cost scope. Those are committed-capacity judgments, not prices disclosed by Anthropic or vendor offers. S12’s $10.50 public GB200 slice is a different procurement class; substituting that rate on the GB200 leg alone lowers the central margin to <strong>77.35%</strong>. No second electricity, hosting or networking charge is added after the all-in rates enter <code>rentAbsLeg</code>.</p>
+<p><strong>TPU all-in equivalent: $1.50/chip-hour.</strong> This is an inference with an explicit ownership conversion, not a claimed invoice. S11’s finished-rack estimate implies $25,000 per chip. For the owned portion, assume five-year compute life, 8% capital recovery, $12,500/chip allocated facility capital over fifteen years, 1 kW operating draw, PUE 1.15, electricity $0.08/kWh, and $0.20/chip-hour for continuing operations and direct host/network/control-plane burden. These financing, facility, power and operating inputs are <strong>working assumptions</strong>.</p>
+<p>With <code>\operatorname{CRF}(r,n)=r/[1-(1+r)^{-n}]</code>:</p>
+<pre><code class="language-text">\begin{aligned}
+p_{owned}={}&amp;\frac{25{,}000\operatorname{CRF}(0.08,5)}{8760}
++\frac{12{,}500\operatorname{CRF}(0.08,15)}{8760}\\
+&amp;+1(1.15)(0.08)+0.20\\
+={}&amp;0.71477+0.16671+0.092+0.20=\$1.17348/h.
+\end{aligned}
+</code></pre>
+<p>For the rented portion, use S11’s estimated $1.60 plus $0.10/h assumed API-side burden: <strong>$1.70/h</strong>. Applying the analyst’s 40:60 purchase/rental program split as an <strong>assumed proxy for this TPU serving tranche</strong> gives:</p>
+<pre><code class="language-text">0.4(1.17348)+0.6(1.70)=\$1.48939/h\approx\$1.50/h.
+</code></pre>
+<p>The conversion includes capital recovery rather than treating sunk hardware as free. It counts power and the facility exactly once, inside the owned hourly figure. It does not establish that the announced purchases have all been commissioned or assigned to Fable. A $2.70 TPU rate instead gives <strong>80.87%</strong>; using $5.40 as an alternative hourly cost gives <strong>73.08%</strong>. Those are procurement sensitivities outside the selected three-scenario span. </p>
+<p><strong>Utilization: 65%, versus 55%/70% in the low/high scenarios.</strong> This is paid-capacity utilization, not training FLOP utilization and not GPU activity during an occupied request. S8’s demand statement does not measure it. The lower case combines a larger deployment with more paid slack; the higher case combines a smaller model with a mature, better-loaded deployment. <strong>No public measurement supports these exact values.</strong></p>
+<p><strong>Efficiency: <code>stackMult: 1.10</code>, <code>trendMonths: 0</code>; low case 1.00/0.</strong> The central point assumes 10% more throughput than the calculator’s published-open-practice baseline, equivalent to about 9.1% less cost, not a measured Anthropic lead. This single modest credit is judgment; there is no extra speculative-decoding multiplier or algorithmic-lead credit. Removing it lowers the central result to <strong>82.77%</strong>. <code>interact: &quot;balanced&quot;</code> is likewise a declared posture, not a verified latency guarantee.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The reference is the <strong>declared vector in attachment 02</strong>, not today’s tariff for every historical model called Opus 4. Its author preserved <strong>83.1%, span 68–92%</strong>; the supplied current engine evaluates the vector at <strong>82.33%</strong>. I compare input changes against that current-engine value, so engine drift is not misattributed to Fable.   </p>
+<p>The following is an <strong>ordered waterfall from my reconstruction</strong>, first at common Reference traffic with both physical and billed cache shares at 60%. Contributions depend on order because the model is nonlinear.</p>
+<table>
+<thead>
+<tr>
+<th>Change, in this order</th>
+<th align="right">Margin-point change</th>
+<th align="right">Resulting margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Current-engine Opus reference</td>
+<td align="right">—</td>
+<td align="right">82.33%</td>
+</tr>
+<tr>
+<td>Input/output tariff $5/$25 → $10/$50</td>
+<td align="right">+8.84</td>
+<td align="right">91.16%</td>
+</tr>
+<tr>
+<td>Cache-read multiplier 10% → 2.5%</td>
+<td align="right">−0.53</td>
+<td align="right">90.63%</td>
+</tr>
+<tr>
+<td>Active parameters 300B → 400B</td>
+<td align="right">−2.61</td>
+<td align="right">88.02%</td>
+</tr>
+<tr>
+<td>Total parameters 2.5T → 8T</td>
+<td align="right">−2.17</td>
+<td align="right">85.85%</td>
+</tr>
+<tr>
+<td>Fleet 5/10/25/20/40 H100/H200/GB200/GB300/TPU → 0/0/30/20/50</td>
+<td align="right">+1.21</td>
+<td align="right">87.06%</td>
+</tr>
+<tr>
+<td>Remaining-leg rents $4.275/$5.70/$2.70 → $5/$6.50/$1.50</td>
+<td align="right">+1.84</td>
+<td align="right">88.90%</td>
+</tr>
+<tr>
+<td>Replace two-month lead, 1.201×, with 1.10× stack and zero lead</td>
+<td align="right">−1.02</td>
+<td align="right">87.88%</td>
+</tr>
+<tr>
+<td>Five-minute writes: 0 → 50% of fresh input</td>
+<td align="right">+0.76</td>
+<td align="right"><strong>88.64%</strong></td>
+</tr>
+<tr>
+<td>Move to own 50:1 / 92% physical-and-billed-cache traffic</td>
+<td align="right">−4.31</td>
+<td align="right"><strong>84.34%</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Unchanged inputs:</strong> 65% utilization, FP8, balanced posture, 5% cache-read work, list billing, zero batch share and zero discount. Donor geometry remains the same approximation. Their contribution in this comparison is zero.</p>
+<p><strong>Reference companion and an important ambiguity.</strong> With central hardware/architecture settings, Reference traffic, and <strong><code>billCacheHit: 60</code></strong>, I calculate <strong>88.64%</strong>: $13.6014 cost against $119.75 billing per 15M-input/1M-output bundle. This is the clean like-for-like billing comparison.</p>
+<p>A literal rerun that changes <strong>only</strong> <code>traffic</code> to 15:1/60% while retaining the submitted <strong><code>billCacheHit: 92</code></strong> instead calculates <strong>79.68%</strong>, because billing falls to $66.95 while physical cost stays $13.6014. Both results are coherent calculations of different billing assumptions. The rerun receipt should state which it used; neither replaces the own-traffic headline. Physical cache reuse and billed cache share must not be silently conflated. </p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The highest-value disclosure is Fable-tagged billed-token throughput per paid accelerator-hour, accompanied by the hardware invoice or equivalent ownership cost, context distribution, cache behavior and latency target.</strong> That directly tests the numerator instead of relying on parameter counts as a cost proxy.</p>
+<p>A matched measurement showing twice my throughput at the same paid capacity and workload would raise the central margin to approximately <strong>92.17%</strong>, above my selected high scenario. Half the throughput would lower it to approximately <strong>68.67%</strong>. These are algebraic sensitivities, not predictions.</p>
+<p>An actual active count near 600B, with everything else held at central, produces <strong>78.67%</strong> rather than 84.34%; 250B produces <strong>88.59%</strong>. A different total size can additionally change memory residency and feasible batching, so total and active counts must both be disclosed.</p>
+<p>A TPU cost near the public three-year rate instead of my owned/strategic equivalent pushes the result materially downward, as section 4 shows. Conversely, a proven lower-cost, latency-matched Trainium deployment could raise the estimate and repair the fleet-coverage gap. Its direction cannot be inferred from the presently ambiguous Trainium coefficient.</p>
+<p>Finally, representative billing telemetry could reject the 50:1/92% traffic choice. A measured cache-restoration cost or matched platform-specific prefill result could also move the estimate outside the span without any price change. The headline is not insulated from those measurements by the owner’s positive-margin sanity rule.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Context and geometry.</strong> The submitted interface has no independent mean-context or output-length input. Its custom/reference path uses a 1,000-token output convention; my 50:1 ratio consequently represents 50,000 input tokens, about 50,500 tokens at average decode and 51,000 at peak. It does not represent serving every request at the model’s 1M maximum. I cannot separately set the context-length distribution, prefix residence time, per-effort output distribution or long-context tail. Physical cache hits avoid repeated prefill; they do not remove the prefix from decoder attention. <code>customDonor</code> selects one frozen geometry, but cannot express Fable’s unknown layer count, expert placement, hybrid attention or KV design. The TPU throughput formula also retains a fixed 16-chip weight-traffic normalization independently of the capacity solver’s larger feasible width. S14–S16 supply these calculator conventions, not evidence that they match Fable.</p>
+<p><strong>Memory-capped NVIDIA leg.</strong> Under the inspected 1-byte-per-parameter capacity policy and 10% memory reserve, the central 8T FP8 model at the assumed peak context cannot sustain the GB200 row’s declared batch of 128 within a 72-GPU domain. The source’s fallback renders it at <strong>37</strong>, versus <strong>22</strong> in the low-margin case and <strong>53</strong> in the high-margin case. I retained that leg’s complete 30% weight and charged its capped cost; I did not drop the expensive leg and renormalize the survivors. This is a <strong>capped, not policy-clean, operating point</strong>, and no production placement was verified. The GB300 and TPU central batches remain 64 and 16 in the reconstruction. The live rerun must preserve and report these status distinctions. </p>
+<p><strong>Latency is not validated.</strong> The raw reconstructed decode rate divided by the row’s batch implies only roughly 4–8 tokens/s per sequence under a literal one-token-per-step interpretation, versus S13’s approximately 49 streamed tokens/s. Those observations have unmatched context, thinking/fallback behavior and serving topology, so they do not yield a valid replacement aggregate rate. Nevertheless, this mismatch is a warning, not a validation: the calculator does not establish that my operating point meets the observed API latency. A matched measurement could overturn the architecture or throughput-transfer assumptions. I have not converted a single-user stream rate into per-GPU throughput. </p>
+<p><strong>Calibration uncertainty is larger than the displayed decimals.</strong> The engine transfers a single reconstructed prefill coefficient across platforms. GB300 decode uses an assumed operating point; TPU decode uses a platform-specific aggregate-throughput bridge, not a Fable measurement. Changing all input-side cost by ±50% around my central point gives <strong>79.97–88.70%</strong>. That diagnostic is separate from the three submitted scenarios. There is no exposed input for a clean platform-specific prefill recalibration, and changing <code>stackMult</code> to imitate one would also move decode. I did not do that. </p>
+<p><strong>Billing and service composition.</strong> The engine’s fresh-input interpretation of <code>cacheWriteShare</code> should be checked on the live rerun. A mixed five-minute/one-hour cache policy, safeguards and fallback-model compute, auxiliary classifiers, draft-model cost, heterogeneous precision and separate prefill/decode fleets are not individually identified by this input vector. The direct-infrastructure allowances are approximations, not measurements of these services. The requested exclusion of unbilled retries and support is maintained; those costs must not be used to compare this result directly with company gross margin.</p>
+<p><strong>Unestablished facts and access limits.</strong> I did not establish exact Fable parameters, accelerator assignments or physical serving sites; the operating status and Fable allocation of the estimated owned TPU tranche; actual negotiated rates; paid utilization; representative input/output/cache telemetry; production precision; or matched throughput and service-level performance. I could not retrieve the complete linked system card, and the full FT report was paywalled. The July company-level consult’s margin figures were not promoted into new provider facts. The live MCP remained unreachable; the public-source reconstruction matches the supplied reference but is not proof of byte-identical execution of release <code>809cfb27</code>.</p>
+<p><strong>Bottom line:</strong> the submitted vector expresses a defensible but low-confidence <strong>approximately 84% list-price serving-margin estimate</strong>, with <strong>68–90% selected scenarios</strong>. The verified tariff is firm; the conversion from an undisclosed production system to calculator cost is not.</p>
+<p>Complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-5.6 Luna — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/gpt-5-6-luna-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-5.6 Luna — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T070104Z-7304c2</code>, answered 2026-09-25T09:03:13Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for GPT-5.6 Luna from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>749264b2599012e49a29334b236e10c198c8a07cc51d9f61180a65a3cc25c5f4</code>; as received, <code>ae4035466f64609be6482681fdd829cd74a53016fda3166ba766cb00200ca820</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~66%</strong> (65.71%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>36%–76% (36.08% – 76.49%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>65.7% (36.1–76.5%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~45%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>Luna is priced at $0.20/$1.20, and the calculator has carried it only as a tariff scenario. The run makes it an estimate by assuming a small model — 12B active, 160B total, with 6B–24B active as the alternatives — and says plainly that no Luna measurement stands behind those numbers and that it did not back-infer size from the price or from streaming speed. Its card line points at the input that limits the result: the DeepSeek-R1 attention geometry the calculator uses for every undisclosed model sets a floor on decode cost that a small active count does not remove, so a different real attention design could move this number more than the parameter count does. The run also applies a small stack penalty (10% worse than open practice) and prices the fleet as ordinary rented NVIDIA capacity. The run&#39;s own perspective check is the clearest statement of what drives Luna: at the $1/$6 price this site carried until 2026-09-19, the same costs give about 93%; the fivefold price cut, not any change in serving cost, is what brings it to the mid 60s. The span is wide (36–77%) because the low case combines the 24B-active size with a more input-heavy, more cached traffic mix. At the page&#39;s Reference traffic the same inputs compute ~45%, below the headline — the Reference mix carries more input per output token, and Luna&#39;s input price is very thin. The run reconstructed the equations; the engine reproduces them to a tenth of a point.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>dsr1</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>12</td>
+<td>24</td>
+<td>6</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>160</td>
+<td>320</td>
+<td>120</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>0.2</td>
+<td>0.2</td>
+<td>0.2</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>1.2</td>
+<td>1.2</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>60</td>
+<td>70</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>20</td>
+<td>20</td>
+<td>20</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;h100&quot;:20,&quot;h200&quot;:30,&quot;gb200&quot;:50}</code></td>
+<td><code>{&quot;h100&quot;:20,&quot;h200&quot;:30,&quot;gb200&quot;:50}</code></td>
+<td><code>{&quot;h200&quot;:20,&quot;gb200&quot;:80}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;h100&quot;:2.6,&quot;h200&quot;:3.25,&quot;gb200&quot;:4.5}</code></td>
+<td><code>{&quot;h100&quot;:2.6,&quot;h200&quot;:3.25,&quot;gb200&quot;:4.5}</code></td>
+<td><code>{&quot;h200&quot;:3.25,&quot;gb200&quot;:4.5}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>65</td>
+<td>75</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1.1</td>
+<td>1.1</td>
+<td>1.1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>8:1, 60% cache</td>
+<td>12:1, 70% cache</td>
+<td>8:1, 60% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈66% at list (span 36–77%)<br>The assumed <code>dsr1</code> attention/KV geometry sets a substantial decode-cost floor, even at 12B active parameters.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>Estimator: GPT-6 Astra Pro. Date: September 25, 2026.</strong> This is a modeled <strong>unit direct-serving contribution margin</strong>, not OpenAI’s verified margin or accounting gross margin. The headline is conditional on the architecture and operating assumptions below. My numerical results are a reconstruction of the calculator’s published equations, <strong>not successful live-MCP returns</strong>.</p>
+<p><strong>File receipt.</strong> All three uploads opened and were read: <code>03-calculator-contract-live-2026-09-25.json</code> begins <code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code>; <code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code> begins with a JSON code fence; <code>06-openai-gptpro.md</code> begins <code># OpenAI — GPT-5.6 Pro deep dive</code>. The inline attachments 01, 02 and 05 were also reviewed.</p>
+<p>In the source records, a date on an undated documentation, benchmark or pricing page means <strong>checked on that date</strong>, not a claimed publication date. Source IDs are reused in the input block. They identify the evidence informing a judgment, not proof of an assumed numerical value.</p>
+<ol>
+<li><p><strong>Identity and release — DISCLOSED.</strong> The priced API alias is <strong><code>gpt-5.6-luna</code></strong>, from the GPT-5.6 family generally released on <strong>July 9, 2026</strong>. I price <strong>Standard text service, medium reasoning</strong>, without regional-processing surcharges. The alias supports multiple reasoning settings; this is not a Fast-mode, Batch, Flex or long-context estimate. Sources: <strong>S1</strong>, <a href="https://openai.com/index/gpt-5-6/">launch</a>, July 9, 2026; <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">model page</a>, checked September 25, 2026. </p>
+</li>
+<li><p><strong>Current list tariff — DISCLOSED.</strong> The project’s <strong>$0.20 ordinary input / $0.02 cached input / $1.20 output per million tokens is correct</strong>. Cache writes are <strong>$0.25/M</strong>. I checked the <a href="https://developers.openai.com/api/docs/pricing">English pricing hub</a>, <strong>S3</strong>, whose default display now foregrounds GPT-6; the <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">Luna model page</a>, <strong>S2</strong>, confirms Luna’s rates. OpenAI’s indexed <a href="https://developers.openai.com/fr-FR/api/docs/pricing">French pricing table</a>, <strong>S4</strong>, independently shows all four Standard rates. Checked September 25, 2026; the localized search snapshot was crawled the preceding week, and its direct reopening failed. </p>
+</li>
+<li><p><strong>Price history — DISCLOSED.</strong> OpenAI cut Luna’s prices by <strong>80% on July 30, 2026</strong>. The July attachment’s $1/$6 tariff therefore does not describe today’s billings. Source <strong>S17</strong>: <a href="https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/">price-performance announcement</a>, July 30, 2026. I found no Luna-specific scheduled reversion price; the old tariff is a historical sensitivity, not an alternative current list price.  </p>
+</li>
+<li><p><strong>Cache and long-context rules — DISCLOSED.</strong> Cache writes replace ordinary input billing at 1.25 times its rate; they are not an additional $0.25 on top of $0.20. Prompts above <strong>272,000 input tokens</strong> reprice the entire request at twice the input rate and 1.5 times the output rate. Sources <strong>S5</strong>, <a href="https://developers.openai.com/api/docs/guides/prompt-caching">prompt caching</a>, and <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">model page</a>, checked September 25, 2026. </p>
+</li>
+<li><p><strong>“OpenAI’s cheapest tier” is no longer the current identity — DISCLOSED.</strong> OpenAI now advertises <strong>GPT-6 Luna</strong> at $0.10 input and $0.50 output. This report deliberately retains the requested <strong>GPT-5.6 Luna</strong> rather than substituting its successor. Source <strong>S6</strong>: <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/">GPT-6 Sol and Luna</a>, checked September 25, 2026. </p>
+</li>
+<li><p><strong>Literal architecture and immutable served version — UNKNOWN.</strong> I did not establish Luna’s active or total parameter counts, layer geometry, routing, production precision, or a dated immutable backend snapshot behind its public alias. The inspected model page lists the alias, not an independently identified weight version. Source checked: <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">model page</a>, September 25, 2026. </p>
+</li>
+<li><p><strong>A public architecture proxy — DISCLOSED.</strong> OpenAI’s separate open-weight <strong>gpt-oss-120b</strong> has <strong>117B total / 5.1B active parameters</strong> and MXFP4 expert weights. This establishes that a useful OpenAI reasoning model can activate relatively few parameters; it does <strong>not</strong> identify Luna’s size or topology. Source <strong>S7</strong>: <a href="https://huggingface.co/openai/gpt-oss-120b">OpenAI’s model card</a>, checked September 25, 2026. </p>
+</li>
+<li><p><strong>Available infrastructure — DISCLOSED.</strong> OpenAI describes operating Hopper and Blackwell systems across <strong>Microsoft, Oracle Cloud Infrastructure and CoreWeave</strong>. Its same announcement describes 3 GW of dedicated inference on <strong>future Vera Rubin systems</strong>, not 3 GW of already-operating Luna capacity. Source <strong>S8</strong>: <a href="https://openai.com/index/scaling-ai-for-everyone/">Scaling AI for everyone</a>, February 27, 2026. The July dive’s broader infrastructure interpretation is not carried forward.  </p>
+</li>
+<li><p><strong>Luna-specific deployment and occupancy — UNKNOWN.</strong> The inspected infrastructure and model sources do not allocate Luna traffic to sites, accelerator generations, owners or regions, and do not disclose paid-capacity utilization or an all-in transfer price. Sources checked: <strong>S8</strong>, <a href="https://openai.com/index/scaling-ai-for-everyone/">infrastructure announcement</a>, February 27, 2026, and <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-5.6-luna">model page</a>, checked September 25, 2026. The fleet fractions and occupancy below are therefore judgments, not observations. </p>
+</li>
+<li><p><strong>Public rental comparables — DISCLOSED.</strong> CoreWeave lists bundled H100 eight-GPU instances at <strong>$49.24/hour</strong>, H200 eight-GPU instances at <strong>$50.44/hour</strong>, and four-GPU GB200 slices at <strong>$42/hour</strong>. It advertises committed-use discounts of <strong>up to 60%</strong>, without promising that discount for every configuration or customer. Source <strong>S9</strong>: <a href="https://www.coreweave.com/pricing">CoreWeave pricing</a>, checked September 25, 2026. These are public comparables, not OpenAI invoices. </p>
+</li>
+<li><p><strong>Endpoint speed — COMMUNITY ESTIMATE.</strong> Artificial Analysis’s inspected <strong>10,000-input-token, max-reasoning</strong> benchmark reports the direct OpenAI endpoint at <strong>126.4 output tokens/second</strong>, with <strong>141.57 seconds to first answer token</strong>. This is a user-stream measurement, not aggregate tokens per GPU-second, and not a matched measurement of my medium-reasoning workload. Source <strong>S10</strong>: <a href="https://artificialanalysis.ai/models/gpt-5-6-luna/providers">Luna providers benchmark</a>, checked September 25, 2026. The attachment’s earlier 205–229 tokens/second cannot be substituted for accelerator capacity or treated as a matched historical comparison.  </p>
+</li>
+<li><p><strong>Private serving improvements — DISCLOSED.</strong> OpenAI reports production-kernel work cutting end-to-end serving costs by <strong>20%</strong>, and speculative-draft improvements raising token-generation efficiency by <strong>more than 15%</strong>. These are improvement observations, not a measured standing advantage for Luna over a contemporaneous open implementation. Source <strong>S11</strong>: <a href="https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/">frontier intelligence and efficiency</a>, July 29, 2026. </p>
+</li>
+<li><p><strong>Output-token accounting — DISCLOSED.</strong> Hidden reasoning tokens are billed as output. My input:output ratio uses <strong>all billed output</strong>, not merely the visible answer. Source <strong>S12</strong>: <a href="https://developers.openai.com/api/docs/guides/reasoning">reasoning guide</a>, checked September 25, 2026. </p>
+</li>
+<li><p><strong>Company economics — CREDIBLY REPORTED.</strong> Reuters reported <strong>33% adjusted company gross margin for 2025</strong>. That is not a Luna list-price serving margin and supplies no numerical calibration for this estimate. Source <strong>S13</strong>: <a href="https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/">Reuters</a>, February 20, 2026. </p>
+</li>
+<li><p><strong>Calculator reconstruction — INFERENCE.</strong> The calculations below derive from the published <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js">cost and billing functions</a>, <strong>S14</strong>; <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js">geometry and calibration registry</a>, <strong>S15</strong>; and <a href="https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js">roofline equations</a>, <strong>S16</strong>, all inspected September 25, 2026. Their coefficients are calculator assumptions, not Luna measurements. The supplied contract declares engine <code>v3.0.0-2026-08-13</code>; public-source inspection does not prove byte identity with its deployed worker.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>The three vectors are complete. <code>cacheWriteShare</code> is explicitly <strong>20% of fresh input</strong> under the inspected engine’s implementation—8% of all input in the central case—not 20% of all input. No speculative-decoding override is used. All rents are <strong>all-in dollars per individual GPU-hour</strong>.</p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;GPT-5.6 Luna&quot;,
+  &quot;api_model_priced&quot;: &quot;gpt-5.6-luna; public unversioned API alias, general availability 2026-07-09; Standard text service, medium reasoning, priced 2026-09-25; immutable backend snapshot unknown&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Standard &lt;=272000-input-token tariff. Central/high: 8000 input + 1000 billed output, mean decode context 8500. Low: 12000 input + 1000 billed output, mean decode context 12500.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;, &quot;active&quot;: 12, &quot;total&quot;: 160, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.2, &quot;priceOut&quot;: 1.2, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 60,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 20, &quot;cacheWriteMult&quot;: 125,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h100&quot;: 20, &quot;h200&quot;: 30, &quot;gb200&quot;: 50},
+      &quot;rentAbsLeg&quot;: {&quot;h100&quot;: 2.6, &quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5},
+      &quot;util&quot;: 70, &quot;stackMult&quot;: 1.1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;balanced&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 60}
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;, &quot;active&quot;: 24, &quot;total&quot;: 320, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.2, &quot;priceOut&quot;: 1.2, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 70,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 20, &quot;cacheWriteMult&quot;: 125,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h100&quot;: 20, &quot;h200&quot;: 30, &quot;gb200&quot;: 50},
+      &quot;rentAbsLeg&quot;: {&quot;h100&quot;: 2.6, &quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5},
+      &quot;util&quot;: 65, &quot;stackMult&quot;: 1.1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;balanced&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 12, &quot;cache_hit&quot;: 70}
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;, &quot;active&quot;: 6, &quot;total&quot;: 120, &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 0.2, &quot;priceOut&quot;: 1.2, &quot;cacheReadMult&quot;: 10, &quot;billCacheHit&quot;: 60,
+      &quot;cacheCost&quot;: 5, &quot;cacheWriteShare&quot;: 20, &quot;cacheWriteMult&quot;: 125,
+      &quot;batchShare&quot;: 0, &quot;discount&quot;: 0,
+      &quot;blend&quot;: {&quot;h200&quot;: 20, &quot;gb200&quot;: 80},
+      &quot;rentAbsLeg&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5},
+      &quot;util&quot;: 75, &quot;stackMult&quot;: 1.1, &quot;trendMonths&quot;: 0, &quot;interact&quot;: &quot;balanced&quot;, &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {&quot;mode&quot;: &quot;custom&quot;, &quot;io_ratio&quot;: 8, &quot;cache_hit&quot;: 60}
+  },
+  &quot;stated&quot;: {&quot;headline_pct&quot;: 65.7, &quot;low_pct&quot;: 36.1, &quot;high_pct&quot;: 76.5},
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;GPT-5.6 family general availability, including Luna.&quot;, &quot;url&quot;: &quot;https://openai.com/index/gpt-5-6/&quot;, &quot;date&quot;: &quot;2026-07-09&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;Public Luna alias, reasoning settings, context tiers and current token tariffs; undated page inspected on the stated date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/models/gpt-5.6-luna&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;English provider pricing hub inspected; its default display now foregrounds GPT-6.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Provider pricing table independently retains Luna Standard 0.20/0.02/0.25/1.20; indexed French page inspected on the stated date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/fr-FR/api/docs/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Cache-write rate replaces ordinary input billing rather than adding to it; undated documentation inspected.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/guides/prompt-caching&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Newer GPT-6 Luna has a lower input/output tariff; page inspected on the stated date.&quot;, &quot;url&quot;: &quot;https://openai.com/index/introducing-gpt-6-sol-and-luna/&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;OpenAI gpt-oss-120b model card: 117B total, 5.1B active; a proxy, not Luna architecture. Undated card inspected.&quot;, &quot;url&quot;: &quot;https://huggingface.co/openai/gpt-oss-120b&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;Operating Hopper/Blackwell systems across Microsoft, OCI and CoreWeave; not a Luna allocation.&quot;, &quot;url&quot;: &quot;https://openai.com/index/scaling-ai-for-everyone/&quot;, &quot;date&quot;: &quot;2026-02-27&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Bundled public instance prices and up-to-60% committed-use discounts; undated rate card inspected.&quot;, &quot;url&quot;: &quot;https://www.coreweave.com/pricing&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;Independent 10k-input, max-reasoning Luna endpoint benchmark; not aggregate GPU throughput.&quot;, &quot;url&quot;: &quot;https://artificialanalysis.ai/models/gpt-5-6-luna/providers&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;Production-kernel and speculative-draft efficiency improvements, not a measured Luna-versus-open-stack advantage.&quot;, &quot;url&quot;: &quot;https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/&quot;, &quot;date&quot;: &quot;2026-07-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;Hidden reasoning tokens are billed as output; undated guide inspected.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/guides/reasoning&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Reported 2025 adjusted company gross margin of 33%, not Luna unit serving margin.&quot;, &quot;url&quot;: &quot;https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/&quot;, &quot;date&quot;: &quot;2026-02-20&quot;, &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Public cost/billing equations used for my reconstruction; inspected source, not a successful MCP result.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Published donor geometry and hardware calibrations adopted as calculator assumptions; inspected source.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;id&quot;: &quot;S16&quot;, &quot;claim&quot;: &quot;Public roofline and implicit-context equations used for my reconstruction; inspected source.&quot;, &quot;url&quot;: &quot;https://raw.githubusercontent.com/AshitaOrbis/inference-margins/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;id&quot;: &quot;S17&quot;, &quot;claim&quot;: &quot;Luna price reduction of 80% and examples of background-automation use.&quot;, &quot;url&quot;: &quot;https://openai.com/index/advancing-the-price-performance-frontier-with-gpt-5-6/&quot;, &quot;date&quot;: &quot;2026-07-30&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;dsr1&quot;, &quot;low_margin&quot;: &quot;dsr1&quot;, &quot;high_margin&quot;: &quot;dsr1&quot;, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 12, &quot;low_margin&quot;: 24, &quot;high_margin&quot;: 6, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S7&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 160, &quot;low_margin&quot;: 320, &quot;high_margin&quot;: 120, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S7&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;S15&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 0.2, &quot;low_margin&quot;: 0.2, &quot;high_margin&quot;: 0.2, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S4&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 1.2, &quot;low_margin&quot;: 1.2, &quot;high_margin&quot;: 1.2, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S4&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S4&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteMult&quot;, &quot;central&quot;: 125, &quot;low_margin&quot;: 125, &quot;high_margin&quot;: 125, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S4&quot;, &quot;S5&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;h100&quot;: 20, &quot;h200&quot;: 30, &quot;gb200&quot;: 50}, &quot;low_margin&quot;: {&quot;h100&quot;: 20, &quot;h200&quot;: 30, &quot;gb200&quot;: 50}, &quot;high_margin&quot;: {&quot;h200&quot;: 20, &quot;gb200&quot;: 80}, &quot;source_ids&quot;: [&quot;S8&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg&quot;, &quot;central&quot;: {&quot;h100&quot;: 2.6, &quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5}, &quot;low_margin&quot;: {&quot;h100&quot;: 2.6, &quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5}, &quot;high_margin&quot;: {&quot;h200&quot;: 3.25, &quot;gb200&quot;: 4.5}, &quot;source_ids&quot;: [&quot;S8&quot;, &quot;S9&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 70, &quot;low_margin&quot;: 65, &quot;high_margin&quot;: 75, &quot;source_ids&quot;: [&quot;S8&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.1, &quot;low_margin&quot;: 1.1, &quot;high_margin&quot;: 1.1, &quot;source_ids&quot;: [&quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [&quot;S11&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;balanced&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S10&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 60, &quot;low_margin&quot;: 70, &quot;high_margin&quot;: 60, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S17&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;S14&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteShare&quot;, &quot;central&quot;: 20, &quot;low_margin&quot;: 20, &quot;high_margin&quot;: 20, &quot;source_ids&quot;: [&quot;S5&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;io_ratio&quot;, &quot;central&quot;: 8, &quot;low_margin&quot;: 12, &quot;high_margin&quot;: 8, &quot;source_ids&quot;: [&quot;S2&quot;, &quot;S12&quot;, &quot;S17&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cache_hit&quot;, &quot;central&quot;: 60, &quot;low_margin&quot;: 70, &quot;high_margin&quot;: 60, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S17&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low — architecture, fleet allocation, occupancy and model-specific cost are unmeasured; the three-scenario span is conditional on the declared donor geometry and the results are reconstructed, not MCP-returned.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p>My reading is <strong>65.7% at list</strong>, with a selected three-scenario span of <strong>36.1–76.5%</strong>. The card rounds the point to 66% and rounds the endpoints outward to 36–77%. This is a judgment span conditional on the stated donor—not a probability interval, a full uncertainty bound, or a measurement of OpenAI’s business.</p>
+<p><strong>Execution status matters.</strong> I attempted <code>run_scenario(model=&quot;custom&quot;, perspective=&quot;median&quot;, overrides=central.overrides, traffic=central.traffic)</code> through the public <a href="https://margins-mcp.ashitaorbis.com/mcp">MCP endpoint</a>, using the exact central values above. The request failed at DNS resolution with “Temporary failure in name resolution”; <strong>there was no calculator result to quote</strong>. The <code>stated</code> fields are my predictions from a Python reconstruction of the inspected public equations. They are not presented as a successful execution of the complete engine, its placement solver, or its deployed revision.</p>
+<p>The resulting economics are:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">List billings, $/M total tokens</th>
+<th align="right">Direct serving cost, $/M total tokens</th>
+<th align="right">Reconstructed margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Low margin</td>
+<td align="right">0.163385</td>
+<td align="right">0.104428</td>
+<td align="right">36.1%</td>
+</tr>
+<tr>
+<td>Central</td>
+<td align="right">0.218667</td>
+<td align="right">0.074985</td>
+<td align="right">65.7%</td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">0.218667</td>
+<td align="right">0.051409</td>
+<td align="right">76.5%</td>
+</tr>
+</tbody></table>
+<p>“Total tokens” includes input, cached input and all billed output. These are <strong>ratios of combined dollars</strong>, not averages of input and output margin percentages.</p>
+<p>For the central case, the reconstruction produces the following occupied-capacity rates before applying the separate 70% paid-capacity occupancy divisor:</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Prefill tokens/s/GPU</th>
+<th align="right">Aggregate decode tokens/s/GPU</th>
+<th align="right">Resulting fresh-input cost, $/M</th>
+<th align="right">Resulting output cost, $/M</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100</td>
+<td align="right">8,705</td>
+<td align="right">2,727</td>
+<td align="right">0.11853</td>
+<td align="right">0.37838</td>
+</tr>
+<tr>
+<td>H200</td>
+<td align="right">8,705</td>
+<td align="right">3,907</td>
+<td align="right">0.14816</td>
+<td align="right">0.33009</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">21,982</td>
+<td align="right">7,086</td>
+<td align="right">0.08124</td>
+<td align="right">0.25199</td>
+</tr>
+</tbody></table>
+<p>These are <strong>modeled batched rates</strong>, not the endpoint benchmark in fact 11. Costs in the last two columns already include occupancy. The hardware-weighted values are <strong>$0.1087696/M fresh input</strong>, <strong>$0.0054385/M cached input</strong> and <strong>$0.3006979/M output</strong>.</p>
+<p>The accelerator-hour conversion is:</p>
+<pre><code class="language-text">C_j=\frac{r_j\times10^6}{3600\times T_j\times u},
+</code></pre>
+<p>where <code>r_j</code> is all-in dollars per GPU-hour, <code>T_j</code> is tokens per second <strong>per GPU</strong>, and <code>u=0.70</code>. The million-token multiplier is explicit. Fleet costs are weighted by token share, not by averaging hardware throughput and then dividing an average rent.</p>
+<p>Per one million output tokens, central traffic contains <strong>4.8 million cache reads</strong>, <strong>3.2 million fresh inputs</strong>, and one million outputs. Of the fresh input, 0.64 million are billed as writes and 2.56 million at ordinary input rates. Thus:</p>
+<pre><code class="language-text">R=1.20+4.8(0.02)+2.56(0.20)+0.64(0.25)=\$1.968.
+</code></pre>
+<pre><code class="language-text">C=0.3006979+3.2(0.1087696)+4.8(0.0054385)
+  =\$0.6748652.
+</code></pre>
+<pre><code class="language-text">m=1-C/R=65.7081\%.
+</code></pre>
+<p>Dividing both dollars by nine yields the central per-million-total-token entries above. The billing construction follows the inspected engine’s fresh-input write-share convention. </p>
+<p><strong>The sanity check passes without changing the inputs.</strong> All three primary scenarios are positive. Parameters are entered in billions, utilization as 70 rather than 0.70, and rentals per GPU rather than per node or GB200 package. Power, hosting and networking are inside the hourly figures and are not added again. Simple uniform-placement checks find feasible weight-plus-KV allocations for these three vectors under the planning memory policy; they do not establish production placement or latency compliance.</p>
+<p>For perspective, keeping costs fixed but restoring the historical five-times-higher tariff gives <strong>93.1%</strong>, not 65.7%. That difference is denominator arithmetic, not evidence of an efficiency collapse. Removing cache-write premiums entirely gives <strong>65.1%</strong>; billing every fresh input as a write gives <strong>67.8%</strong>. Neither uncertainty drives the headline.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Architecture: 12B active / 160B total; FP8; <code>dsr1</code>.</strong> These numerical sizes are <strong>ASSUMED, with no Luna measurement behind them</strong>. S7 provides a qualitative sparse-model precedent. I use a model somewhat larger in active computation and total storage than that precedent, with 6B/120B and 24B/320B alternatives. Neither Luna’s price nor a single user’s streaming rate is inverted into a parameter count. The former is a commercial decision; the latter lacks concurrency, hardware and speculation information.</p>
+<p>The donor retains the project’s comparable compressed-KV approximation. There is no evidence that Luna literally uses DeepSeek’s architecture. A smaller hybrid-attention model could have a lower memory footprint, while full-context grouped-query attention could have a higher one. FP8 is a deliberately common serving assumption across the chosen fleet; the open model’s MXFP4 disclosure does not establish Luna’s production precision. <strong>All three size, geometry and precision choices are judgments.</strong> S2, S7 and S15 are context, not identification. </p>
+<p><strong>Fleet: 20% H100, 30% H200, 50% GB200 by served tokens.</strong> S8 supports the hardware families and supplier relationships, not these percentages. I assume a mixed North American partner-operated serving estate rather than all-new Blackwell hardware. The high case shifts to 20% H200 / 80% GB200; the low case retains the central fleet. These are <strong>unmeasured allocation judgments</strong>. I assign no share to GB300, Rubin, Trainium, AMD or Cerebras merely because capacity exists or has been announced. </p>
+<p><strong>Procurement: $2.60 / $3.25 / $4.50 all-in per GPU-hour.</strong> The public S9 instance prices normalize as follows:</p>
+<table>
+<thead>
+<tr>
+<th>Accelerator</th>
+<th align="right">Public bundled on-demand conversion</th>
+<th align="right">My all-in committed-rate assumption</th>
+<th align="right">Reduction from public comparator</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H100</td>
+<td align="right">$49.24 ÷ 8 = $6.155/GPU-hour</td>
+<td align="right">$2.60</td>
+<td align="right">57.8%</td>
+</tr>
+<tr>
+<td>H200</td>
+<td align="right">$50.44 ÷ 8 = $6.305/GPU-hour</td>
+<td align="right">$3.25</td>
+<td align="right">48.5%</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">$42 ÷ 4 = $10.50/GPU-hour</td>
+<td align="right">$4.50</td>
+<td align="right">57.1%</td>
+</tr>
+</tbody></table>
+<p>Those reductions are compatible with the advertised committed-use discount class, but are <strong>inferred purchasing assumptions, not disclosed OpenAI rates</strong>. The assumed bundle includes accelerator, power, facility, host and network/control-plane costs. No second hosting or power factor is applied. This is a partner-rental estimate, not a claim of OpenAI ownership, so no depreciation-to-hour conversion is used. </p>
+<p>Rent values do not fall in the high-margin scenario or rise in the low-margin scenario. Changing all central rents by ±20% moves the result by approximately <strong>∓6.9 percentage points</strong>. Using the public on-demand comparators instead gives <strong>24.7%</strong> in the same reconstruction, demonstrating the importance of procurement class without treating that class as OpenAI’s actual contract.</p>
+<p><strong>Paid-capacity utilization: 70%, with 65% low and 75% high.</strong> This is <strong>ASSUMED</strong>, not measured utilization, and not hardware FLOP utilization. It allocates the unused part of the modeled paid serving fleet. I allow moderately better packing for a mature high-volume service, but do not assume 90–100% occupancy. At the central vector, changing only occupancy to 65% produces <strong>63.1%</strong>; 50% produces <strong>52.0%</strong>. There is no public Luna occupancy evidence narrowing this judgment.</p>
+<p><strong>Private efficiency: <code>stackMult=1.10</code>; <code>trendMonths=0</code>.</strong> S11 supports the existence of economically meaningful private improvements, not their residual size for Luna. I allow only a <strong>10% throughput advantage</strong>, an <strong>ASSUMED</strong> transfer after published open practice, and hold it constant in all scenarios. I do not multiply the reported 20% cost reduction by the reported speculative improvement, and then add a lead prior. <code>specDec</code> is absent. Removing this single advantage gives <strong>62.3%</strong>, a 3.4-point reduction. </p>
+<p><strong>Traffic: 8:1 input to all billed output, 60% serving and billing cache hits.</strong> This is <strong>ASSUMED population traffic</strong>, informed only qualitatively by Luna’s high-volume role and disclosed background-automation examples, S2/S17. I expect substantial retrieval, extraction and agent subtask traffic, but less extreme prefix reuse than the earlier company dive’s 78% convention. The typical modeled call has <strong>8,000 input and 1,000 billed output tokens</strong>. That output includes reasoning, so it is not a 1,000-token visible-answer assumption. </p>
+<p><strong>Caching: <code>cacheCost=5</code>; write share 20% of fresh input.</strong> Both cost and write-share values are <strong>ASSUMED</strong>. Serving hits and billed hits are explicitly equal here, but they are conceptually separate inputs. The write fraction lets persistent prefixes coexist with fresh suffixes rather than silently billing all fresh input at a premium. S5 establishes the tariff, not the traffic fraction. Raising cache-read cost alone from 5% to 15% of fresh prefill lowers the headline to <strong>63.1%</strong>. </p>
+<p><strong>Why the endpoints belong together.</strong> The low case represents a larger routed model on longer agent contexts, with somewhat less full capacity; its higher 70% cache reuse offsets part of the added work. It does not also assume higher rents, weaker kernels, BF16 and an older fleet. The high case represents a smaller implementation concentrated on Blackwell with modestly better occupancy; it retains FP8, the central rents, cache policy and private-stack credit. These are three coherent operating hypotheses, not independently compounded knob extremes.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p><strong>The like-for-like traffic companion is approximately 44.6%, not the 65.7% headline.</strong> It uses the central Luna overrides with <strong>15:1 input:output and 60% cache hits</strong>. The frozen reference author states <strong>83.1%</strong>, span <strong>68–92%</strong>; attachment 02 and the live contract say that reference vector now computes <strong>82.33%</strong>. The historical-versus-current 0.77-point difference is not attributed to Luna. The original reference explicitly distinguished its selected span from a live-engine corner interval.  </p>
+<p>There is an important qualification: the calculator’s 1,000-output-token fallback also increases implied average decode context from <strong>8,500 to 15,500 tokens</strong> when the ratio rises from eight to fifteen. Thus the companion changes the workload’s physical cost as well as its revenue mix. It is the requested calculator comparison, not a pure fixed-context revenue normalization. </p>
+<p>The following <strong>order-specific arithmetic bridge</strong> compares the native headlines input by input. It starts from the supplied 82.33% reference rather than re-estimating Opus. Subsequent NVIDIA-only values are my reconstruction. The first row’s difference therefore also carries any source-reconstruction mismatch with the supplied anchor. Price changes are deliberately last; the point contributions are path-dependent, not separable causal effects.</p>
+<table>
+<thead>
+<tr>
+<th>Change from the reference, in this order</th>
+<th align="right">Approximate margin after change</th>
+<th align="right">Incremental percentage points</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Supplied current-engine Opus reference</td>
+<td align="right">82.33%</td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td>Fleet: 5/10/25/20/40 H100/H200/GB200/GB300/TPU7 → 20/30/50 H100/H200/GB200</td>
+<td align="right">79.45%</td>
+<td align="right">−2.88</td>
+</tr>
+<tr>
+<td>Remaining-leg rents: 2.28/3.496/4.275 → 2.60/3.25/4.50</td>
+<td align="right">79.10%</td>
+<td align="right">−0.35</td>
+</tr>
+<tr>
+<td>Active parameters: 300B → 12B</td>
+<td align="right">97.58%</td>
+<td align="right">+18.48</td>
+</tr>
+<tr>
+<td>Total parameters: 2,500B → 160B, with feasible placement retained</td>
+<td align="right">97.58%</td>
+<td align="right">≈0.00</td>
+</tr>
+<tr>
+<td>Occupancy: 65% → 70%</td>
+<td align="right">97.75%</td>
+<td align="right">+0.17</td>
+</tr>
+<tr>
+<td>Algorithmic lead: two months → zero</td>
+<td align="right">97.30%</td>
+<td align="right">−0.45</td>
+</tr>
+<tr>
+<td>Stack: 1.0 → 1.1</td>
+<td align="right">97.54%</td>
+<td align="right">+0.25</td>
+</tr>
+<tr>
+<td>Traffic: 15:1 → 8:1; cache remains 60%; implicit context also changes</td>
+<td align="right">98.45%</td>
+<td align="right">+0.90</td>
+</tr>
+<tr>
+<td>Cache-write share: zero → 20% of fresh input</td>
+<td align="right">98.47%</td>
+<td align="right">+0.03</td>
+</tr>
+<tr>
+<td>List input/output prices: $5/$25 → $0.20/$1.20</td>
+<td align="right"><strong>65.71%</strong></td>
+<td align="right"><strong>−32.77</strong></td>
+</tr>
+</tbody></table>
+<p>The reference’s fleet, precision, list-price and efficiency settings are documented in attachment 04. Its procurement multipliers give the rental figures above and <strong>$5.70/GB300-hour, $2.70/TPU7-hour</strong> on the removed legs.  </p>
+<p>FP8 precision, the <code>dsr1</code> carrier, balanced serving posture, 10% cache-read price, 60% cache shares, 5% cache cost, and zero Batch/discount remain unchanged and therefore contribute zero in this bridge. Total parameters mainly affect capacity in the selected NVIDIA active-parameter-surrogate branch; their near-zero point contribution is <strong>a property of this model implementation</strong>, not a claim that storing or distributing additional weights is free. </p>
+<p>Economically, Luna’s much smaller assumed active computation helps greatly, but its list tariff falls more than its modeled total cost. The cheap input tariff and residual KV traffic prevent transferring an Opus-like margin to Luna simply by shrinking active parameters.</p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p>The most valuable disclosure would be a <strong>matched Luna production measurement of paid accelerator-hours, hardware, context lengths, cache classes, all billed output and latency targets</strong>. It would identify aggregate serving cost without requiring a parameter-count guess. A parameter count alone would not resolve batching, KV traffic, utilization or speculative verification overhead.</p>
+<p>The largest structural uncertainty is <strong>attention/KV geometry at the actual context distribution</strong>. Under the adopted donor, KV reads account for approximately <strong>70–76% of modeled central decode HBM traffic</strong>. A disclosure showing much smaller resident KV or predominantly local attention would move the estimate upward, potentially beyond this conditional span. Larger full-context KV, or more expensive internal work per billed token, would move it downward.</p>
+<p>Useful one-at-a-time tests, retaining central prices, are:</p>
+<table>
+<thead>
+<tr>
+<th>New information represented by one changed assumption</th>
+<th align="right">Reconstructed margin</th>
+<th align="right">Direction versus central</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Typical input/output lengths both halve, retaining 8:1</td>
+<td align="right">75.1%</td>
+<td align="right">+9.4 points</td>
+</tr>
+<tr>
+<td>Typical input/output lengths both double, retaining 8:1</td>
+<td align="right">45.9%</td>
+<td align="right">−19.8 points</td>
+</tr>
+<tr>
+<td>Active parameters are 24B rather than 12B</td>
+<td align="right">51.2%</td>
+<td align="right">−14.5 points</td>
+</tr>
+<tr>
+<td>All-in rents are 20% higher</td>
+<td align="right">58.8%</td>
+<td align="right">−6.9 points</td>
+</tr>
+<tr>
+<td>No residual private-stack advantage</td>
+<td align="right">62.3%</td>
+<td align="right">−3.4 points</td>
+</tr>
+</tbody></table>
+<p>These are diagnostic calculations, not additional endpoints or new telemetry. A measured cost above the central <strong>$0.218667/M total-token billings</strong> would falsify its positive serving margin at this exact mix. It would not be legitimate to restore positivity by choosing a smaller model, changing units or inventing a discount without supporting evidence.</p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Context is implicit, not an exposed input.</strong> The public equations use an output-length fallback and derive input length from the ratio. I aligned the central scenario with that convention: 8,000 input, 1,000 billed output and mean decode context 8,500; the low scenario uses 12,000, 1,000 and 12,500. The tariff ceiling is not the representative context. A population mean also cannot express a long right tail or the covariance of length, caching and output. The absolute-length diagnostics above are outside the submitted override API. </p>
+<p><strong>The geometry choice is expressible; the desired geometry is not.</strong> <code>customDonor</code> lets me choose among three frozen proxies, but cannot set Luna’s actual layer count, attention windows, compressed states or hybrid architecture. <code>dsr1</code> leaves a 61-layer geometry in place while <code>active</code> and <code>total</code> change independently. This is not a physically complete claim about a literal 12B-active network. Changing to GQA can also change memory feasibility and which legs render, so a throughput-only donor substitution is not a valid full-engine sensitivity. </p>
+<p><strong>Serving details remain unresolved.</strong> The block cannot independently describe per-phase fleets, per-layer precision, draft-model costs and acceptance, actual concurrency, quality-preserving quantization, expert imbalance, retry behavior, or an enforced latency objective. I use the published balanced calibration and one modest stack multiplier rather than claiming the observed user-stream rate verifies those choices. Feasible memory arithmetic is not a service-level or production-deployment receipt.</p>
+<p><strong>Scope is deliberately narrow.</strong> All-in rents cover the selected serving capacity, and <code>util</code> allocates its paid slack once. Unused commitments outside that modeled fleet are not additionally allocated. This distinguishes the brief’s occupancy divisor from attachment 03’s exclusion of broader idle reservations. Training, research, sales, free-tier demand, support, unbilled retries, tools, subscriptions and revenue sharing are outside this unit token-serving estimate. The July report’s extra platform and non-GPU add-ons are not imported on top of all-in rents.  </p>
+<p><strong>Facts not established:</strong> the immutable served snapshot; literal active/total size; real attention or numerical precision; Luna’s site, supplier and accelerator allocation; its occupied versus reserved capacity; actual all-in contracts; representative context, reasoning and cache distributions; aggregate GPU throughput at an identified latency target; cache-write incidence; a Luna-specific revenue, cost or margin disclosure; and a Luna-specific future tariff-reversion schedule. Artificial Analysis’s “deprecated” label is not treated as proof that OpenAI has retired this API. </p>
+<p><strong>Execution remains a limitation, not a hidden substitution.</strong> I inspected the public source and reconstructed its relevant equations, but did not obtain a live <code>run_scenario</code> response, an exact worker/source hash match, or the deployed engine’s complete feasibility receipt. The publishing leg’s rerun should remain authoritative for the card’s engine number, with my <strong>65.7 / 36.1 / 76.5</strong> predictions retained beside it. A difference should first be traced to applied state, geometry, calibration, feasibility or source revision—not eliminated by retuning assumptions.</p>
+<p><strong>Bottom line:</strong> 66% is my conditional list-price reading for the explicitly defined GPT-5.6 Luna workload. The evidence establishes the tariff much more securely than the cost. The 36–77% span describes three declared hypotheses within the chosen carrier, not everything an undisclosed Luna architecture could plausibly do.</p>
+<p>Complete report — copy of record (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

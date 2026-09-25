@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kimi K3 — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/kimi-k3-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>Kimi K3 — GPT-6 Astra Pro estimate (2026-09-25)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260925T060752Z-9a9c6e</code>, answered 2026-09-25T06:59:23Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for Kimi K3 from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>7452559cc8201f6a34776cc696e29c0c87370d4fecb596fad7614a3f4e40188b</code>; as received, <code>35ce5320136a8b4d32f5fefb49e7f31bae6d0fe55fb89533a33428a4a0213836</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~88%</strong> (87.78%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>77%–92% (76.63% – 91.86%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>87.8% (76.6–91.9%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~85%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>Kimi K3&#39;s size is disclosed — 2.8T total, 104B active, on Moonshot&#39;s own model card — so unlike a closed model&#39;s, the parameter count is not what carries the uncertainty. Two other things do. First, the geometry: K3 mixes a linear-attention variant (KDA) with gated MLA across 93 layers and 896 routed experts, and none of the calculator&#39;s three donor geometries is that; the run held it on the DeepSeek-R1 (MLA) donor and says so, which is an approximation of the attention cost rather than a statement about K3. Second, the fleet and its price: the whole fleet is modeled as H800-equivalent capacity at $2.20 per all-in accelerator-hour, derived from a Chinese vendor&#39;s advertised rent for an eight-H800 server (CNY 75,000 a month, about $1.90 per GPU-hour) plus an all-in uplift — the run&#39;s own words are that this is &quot;the decisive assumption&quot;, and it is not a disclosed Moonshot rate. The span comes from that rent, utilization and, in the low case, a more input-heavy traffic mix. At $3/$15, K3 is priced between three and four times Kimi K2.7 Code ($0.95/$4), and that price is what holds the margin in the high 80s on a hardware base that is modest by frontier standards. At the page&#39;s Reference traffic the same inputs compute ~85%. The run could not reach the calculator&#39;s connector and reconstructed the equations by hand; the engine reproduces its figures to a tenth of a point.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is published but matches no stated row). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>dsr1</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>104</td>
+<td>104</td>
+<td>104</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>2800</td>
+<td>2800</td>
+<td>2800</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp4</td>
+<td>fp4</td>
+<td>fp4</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>3</td>
+<td>3</td>
+<td>3</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>15</td>
+<td>15</td>
+<td>15</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>70</td>
+<td>65</td>
+<td>60</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;h800&quot;:100}</code></td>
+<td><code>{&quot;h800&quot;:100}</code></td>
+<td><code>{&quot;h800&quot;:100}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;h800&quot;:2.2}</code></td>
+<td><code>{&quot;h800&quot;:2.6}</code></td>
+<td><code>{&quot;h800&quot;:2}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>65</td>
+<td>50</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>8</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>100</td>
+<td>100</td>
+<td>100</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>12:1, 70% cache</td>
+<td>16:1, 65% cache</td>
+<td>8:1, 60% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈88% at list (span 77–92%)<br>The decisive assumption is $2.20 per all-in H800-equivalent accelerator-hour, not a disclosed Moonshot procurement rate.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p><strong>Author: GPT-6 Astra Pro. Research date: September 25, 2026 UTC, September 24 in America/Dawson_Creek.</strong> This estimates unit direct-serving contribution margin, not company gross margin. Dates below distinguish publication or event dates from retrieval dates; an access date does not establish when a tariff changed.</p>
+<p><strong>File receipt.</strong> All three uploaded files opened and were read: <code>03-calculator-contract-live-2026-09-25.json</code> — first line, truncated: <code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code>; <code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code> — first line: <code>```json</code>; <code>06-moonshot-gptpro.md</code> — first heading: <code># Moonshot AI (Kimi) — GPT-5.6 Pro deep dive</code>. The first is the supplied calculator contract, not empirical evidence of Moonshot’s economics. The other two are attributed prior estimates, not provider disclosures.   </p>
+<ol>
+<li><p><strong>S1 — DISCLOSED: identity and release.</strong> I price Moonshot’s first-party API identifier <strong><code>kimi-k3</code></strong>, with <strong><code>reasoning_effort=&quot;max&quot;</code></strong>, the default reasoning setting. Moonshot’s official timeline dates API availability to <strong>July 16, 2026</strong> and full weight release to <strong>July 27, 2026</strong>. The API offers low/high/max reasoning effort under the same identifier; I did not establish an immutable, dated endpoint alias or its currently deployed checkpoint hash. This is not the consumer Agent Swarm product. Sources: <a href="https://www.kimi.ai/help/agent/agent-overview">official product timeline</a> and <a href="https://huggingface.co/moonshotai/Kimi-K3">model card, S2</a>; pages undated, retrieved <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S4–S6 — DISCLOSED: the quoted token prices are correct, with a cache-write qualification.</strong> The current standard tariff is <strong>$3.00 fresh input / $0.30 cache hit / $15.00 output per million tokens</strong>, before applicable taxes. Five-minute cache writes cost <strong>$3.00/M</strong>, and one-hour writes <strong>$6.00/M</strong>. A five-minute write replaces ordinary input billing for those tokens; it is not another $3 layered on top. Sources: <a href="https://platform.kimi.ai/docs/pricing/chat">pricing page, S4</a>, <a href="https://platform.kimi.ai/">platform’s numeric tariff, S5</a>, and <a href="https://platform.kimi.ai/docs/guide/context-caching">cache guide, S6</a>; undated, retrieved <strong>2026-09-25</strong>. I use default five-minute caching, no one-hour-write premium, no discounted batch traffic, and no negotiated discount. I found no separate current promotional per-token K3 tariff in these pages. </p>
+</li>
+<li><p><strong>S2–S3 — DISCLOSED: size and architecture.</strong> The released model has <strong>2.8 trillion total parameters and 104 billion active parameters</strong>, with <strong>69 KDA and 24 gated-MLA attention layers</strong>. The context ceiling is <strong>1,048,576 tokens</strong>; that is not a measurement of average served context. Sources: <a href="https://huggingface.co/moonshotai/Kimi-K3">model card, S2</a> and <a href="https://huggingface.co/moonshotai/Kimi-K3/blob/main/config.json">published config, S3</a>, whose displayed initial revision is <code>c5d1dd4</code>; retrieved <strong>2026-09-25</strong>. The fields compared for carrier selection are:</p>
+<table>
+<thead>
+<tr>
+<th>Public K3 field or configuration</th>
+<th align="right">K3 value</th>
+<th align="right">Supplied <code>dsr1</code> donor</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>num_hidden_layers</code> / <code>hidden_size</code></td>
+<td align="right">93 / 7168</td>
+<td align="right">61 / 7168</td>
+</tr>
+<tr>
+<td><code>num_attention_heads</code></td>
+<td align="right">96</td>
+<td align="right">128</td>
+</tr>
+<tr>
+<td>Attention form</td>
+<td align="right">KDA plus gated MLA</td>
+<td align="right">MLA throughout</td>
+</tr>
+<tr>
+<td><code>num_key_value_heads</code> / <code>kv_lora_rank</code></td>
+<td align="right">96 / 512</td>
+<td align="right">MLA compressed latent</td>
+</tr>
+<tr>
+<td><code>qk_nope_head_dim</code> / <code>qk_rope_head_dim</code> / <code>v_head_dim</code></td>
+<td align="right">128 / 64 / 128</td>
+<td align="right">128 / 64 / 128</td>
+</tr>
+<tr>
+<td>Routed experts / selected per token / shared</td>
+<td align="right">896 / 16 / 2</td>
+<td align="right">256 / 8 / 1</td>
+</tr>
+<tr>
+<td>Dense-first layers / MoE layers</td>
+<td align="right">1 / 92</td>
+<td align="right">3 / 58</td>
+</tr>
+<tr>
+<td><code>num_nextn_predict_layers</code></td>
+<td align="right">0</td>
+<td align="right">No K3-specific acceleration implied</td>
+</tr>
+</tbody></table>
+<p>The config’s KV-head count must <strong>not</strong> be read as ordinary 96-head GQA. None of the offered rows matches this hybrid. I choose <strong><code>custom</code> with <code>customDonor:&quot;dsr1&quot;</code></strong>, retaining the compressed-attention family but explicitly approximating depth, heads, routing and recurrent state. The <code>kimi</code> row is K2 geometry, not K3 geometry.  </p>
+</li>
+<li><p><strong>S2–S3 — DISCLOSED, with a production UNKNOWN: quantization.</strong> Moonshot describes native <strong>MXFP4 weights and MXFP8 activations</strong> with quantization-aware training. The released quantization is selective, not proof that every parameter or runtime tensor occupies four bits. <strong>The first-party API’s actual kernel/precision path is not established.</strong> Sources: the <a href="https://huggingface.co/moonshotai/Kimi-K3">model card</a> and <a href="https://huggingface.co/moonshotai/Kimi-K3/blob/main/config.json">config</a>, retrieved <strong>2026-09-25</strong>. My <code>fp4</code> input represents the published low-bit weight regime, subject to the material Hopper fallback caveat in heading 7. </p>
+</li>
+<li><p><strong>S7 — DISCLOSED: historical serving, not today’s K3 deployment.</strong> The Mooncake authors report production on A800/H800 clusters, thousands of nodes and more than 100 billion tokens daily. This establishes a real serving lineage, not present utilization or K3 throughput. Source: <a href="https://www.usenix.org/conference/fast25/presentation/qin">Mooncake, USENIX FAST ’25</a>, published <strong>February 2025</strong>, retrieved <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>S8 — CREDIBLY REPORTED: Hopper access; exact serving location UNKNOWN.</strong> Reuters, relaying Bloomberg on <strong>2026-07-31</strong>, reported access to roughly 20,000 Hopper-generation chips through Alibaba. Reuters could not independently confirm the report; Alibaba specifically denied supplying H200s. That supports a Hopper-class proxy, not a precise SKU, campus, ownership split or K3 allocation. Source: <a href="https://www.reuters.com/business/retail-consumer/moonshot-has-nvidia-chip-cluster-alibaba-computing-deal-bloomberg-news-reports-2026-07-31/">Reuters report</a>. </p>
+</li>
+<li><p><strong>S9 — COMMUNITY ESTIMATE: useful K3 serving measurements, but no matched first-party cost observation.</strong> SGLang reports <strong>4,550 prefill tokens/s/GPU on GB200</strong> at 8,192 input tokens, concurrency 32, PP16×TP1. This is a prefill-stage measurement, not output throughput or an end-to-end API cost. Its documentation distinguishes verified configurations from configurations still being verified, and describes a <strong>Marlin W4A16</strong> path outside native Blackwell execution. A forced speculative-acceptance benchmark setting is not measured production acceptance. Source: <a href="https://docs.sglang.io/cookbook/autoregressive/Moonshotai/Kimi-K3">SGLang’s K3 cookbook</a>, undated, retrieved <strong>2026-09-25</strong>. I found no matched K3/H800 measurement with complete topology, latency, cache and paid-time denominators. </p>
+</li>
+<li><p><strong>S10–S11 — DISCLOSED observations; INFERENCE for the all-in rent.</strong> The vendor advertises <strong>CNY75,000/month for eight H800s</strong>. At the <strong>2026-09-24</strong> CFETS central parity of <strong>CNY6.7489/USD</strong>, and an assumed 730 hours/month, this is <strong>$1.9029 per accelerator-hour</strong>. I round upward to <strong>$2.20 all-in</strong>, allowing approximately $0.30/hour for the gap between an advertised rental bundle and a serving allocation including network/cache/control-plane resources. That allowance and the bundle interpretation are judgments, not quoted components. Sources: <a href="https://www.omniyq.com/">vendor, S10</a>, undated offer retrieved <strong>2026-09-25</strong>; <a href="https://finance.sina.com.cn/jjxw/2026-09-24/doc-iniswvxc5391561.shtml">CFETS statement republished by Sina, S11</a>, dated <strong>2026-09-24</strong>. No Moonshot contract rate is disclosed. </p>
+</li>
+<li><p><strong>UNKNOWN: actual utilization and traffic. ASSUMED: this report’s working values.</strong> I found no representative first-party K3 telemetry for paid-capacity utilization, input/output ratio, cache-hit share, average context or latency distribution. The central choices—<strong>65% utilization, 12:1 input/output and 70% cache hits</strong>—are authored judgments, not inferred measurements. Repeated coding/tool histories motivate the traffic direction, but do not identify its magnitude. Relevant public descriptions: <a href="https://huggingface.co/moonshotai/Kimi-K3">model card, S2</a>, <a href="https://platform.kimi.ai/">platform, S5</a> and <a href="https://platform.kimi.ai/docs/guide/context-caching">cache guide, S6</a>, retrieved <strong>2026-09-25</strong>.</p>
+</li>
+<li><p><strong>S12 — CREDIBLY REPORTED: company revenue; product margin UNKNOWN.</strong> Cailian Press reported on <strong>2026-06-30</strong> that ARR exceeded <strong>$300 million in mid-June</strong>, with API revenue exceeding <strong>70%</strong> of the total. This predates K3 and is not audited K3 revenue, inference expenditure or contribution margin. Source: <a href="https://finance.sina.com.cn/roll/2026-06-30/doc-inifehke3518487.shtml">Cailian report republished by Sina</a>. I found no public K3 serving-cost or serving-margin disclosure. </p>
+</li>
+<li><p><strong>S13–S15 — DISCLOSED calculator implementation, not disclosed provider economics.</strong> The public code supplies the equations and hardware calibration used for my hand reconstruction. Sources: <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js">roofline implementation, S13</a> and <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js">registries, S14</a>, retrieved <strong>2026-09-25</strong>; <a href="https://margins.ashitaorbis.com/research/input-cost-reconstruction">prefill reconstruction, S15</a>, dated <strong>2026-09-20</strong>. The universal prefill coefficient is a transferred calibration, not a K3 measurement.</p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>The three scenarios are conditional judgments on one declared Hopper-equivalent carrier. <code>sources[].date</code> is the publication date where specified, otherwise the explicitly identified retrieval date. Empty <code>source_ids</code> denotes an assumption without a public measurement behind it.</p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;Kimi K3&quot;,
+  &quot;api_model_priced&quot;: &quot;kimi-k3; reasoning_effort=max; API release 2026-07-16; weights released 2026-07-27; no immutable dated API alias established&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Text-dominant standard API; 1000 billed output tokens/request assumed, with 12000/16000/8000 input tokens in central/low/high; representative decode contexts 12500/16500/8500. Not average 1M-token requests.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 104,
+      &quot;total&quot;: 2800,
+      &quot;precision&quot;: &quot;fp4&quot;,
+      &quot;priceIn&quot;: 3,
+      &quot;priceOut&quot;: 15,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 70,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h800&quot;: 2.2
+      },
+      &quot;util&quot;: 65,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 70
+    }
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 104,
+      &quot;total&quot;: 2800,
+      &quot;precision&quot;: &quot;fp4&quot;,
+      &quot;priceIn&quot;: 3,
+      &quot;priceOut&quot;: 15,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 65,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h800&quot;: 2.6
+      },
+      &quot;util&quot;: 50,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 8,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 16,
+      &quot;cache_hit&quot;: 65
+    }
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 104,
+      &quot;total&quot;: 2800,
+      &quot;precision&quot;: &quot;fp4&quot;,
+      &quot;priceIn&quot;: 3,
+      &quot;priceOut&quot;: 15,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 60,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h800&quot;: 2.0
+      },
+      &quot;util&quot;: 80,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 0,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;,
+      &quot;cacheCost&quot;: 5,
+      &quot;cacheWriteShare&quot;: 0,
+      &quot;cacheWriteMult&quot;: 100
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 8,
+      &quot;cache_hit&quot;: 60
+    }
+  },
+  &quot;stated&quot;: {
+    &quot;headline_pct&quot;: 87.8,
+    &quot;low_pct&quot;: 76.6,
+    &quot;high_pct&quot;: 91.9
+  },
+  &quot;sources&quot;: [
+    {
+      &quot;id&quot;: &quot;S1&quot;,
+      &quot;claim&quot;: &quot;Official timeline: K3 API launch July 16, 2026; weights July 27. Undated page; date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://www.kimi.ai/help/agent/agent-overview&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S2&quot;,
+      &quot;claim&quot;: &quot;K3 model card: 2800B total, 104B active, native quantization, API identity and reasoning modes. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://huggingface.co/moonshotai/Kimi-K3&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S3&quot;,
+      &quot;claim&quot;: &quot;Published K3 architecture fields, initial config revision c5d1dd4. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://huggingface.co/moonshotai/Kimi-K3/blob/main/config.json&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S4&quot;,
+      &quot;claim&quot;: &quot;First-party inference-pricing page: list basis, tax exclusion, cache-write rules. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://platform.kimi.ai/docs/pricing/chat&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S5&quot;,
+      &quot;claim&quot;: &quot;First-party numeric tariff: input 3, output 15, default cache write 3, cache hit 0.30 dollars/M tokens. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://platform.kimi.ai/&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S6&quot;,
+      &quot;claim&quot;: &quot;Five-minute writes cost 3, one-hour writes 6, hits 0.30; input categories do not overlap. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://platform.kimi.ai/docs/guide/context-caching&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S7&quot;,
+      &quot;claim&quot;: &quot;Mooncake, FAST 2025: historical A800/H800 production and over 100B tokens/day. Publication February 2025; date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://www.usenix.org/conference/fast25/presentation/qin&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S8&quot;,
+      &quot;claim&quot;: &quot;Reuters relays Bloomberg report of roughly 20000 Hopper chips via Alibaba; exact K3 serving allocation unestablished.&quot;,
+      &quot;url&quot;: &quot;https://www.reuters.com/business/retail-consumer/moonshot-has-nvidia-chip-cluster-alibaba-computing-deal-bloomberg-news-reports-2026-07-31/&quot;,
+      &quot;date&quot;: &quot;2026-07-31&quot;,
+      &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S9&quot;,
+      &quot;claim&quot;: &quot;SGLang K3 recipes and measurements; Hopper W4A16 fallback, hybrid state, GB200 prefill observation. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://docs.sglang.io/cookbook/autoregressive/Moonshotai/Kimi-K3&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S10&quot;,
+      &quot;claim&quot;: &quot;Vendor advertised eight-H800 monthly quote CNY75000; not Moonshot procurement. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://www.omniyq.com/&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S11&quot;,
+      &quot;claim&quot;: &quot;CFETS official statement republished by Sina: September 24 central parity CNY6.7489/USD.&quot;,
+      &quot;url&quot;: &quot;https://finance.sina.com.cn/jjxw/2026-09-24/doc-iniswvxc5391561.shtml&quot;,
+      &quot;date&quot;: &quot;2026-09-24&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S12&quot;,
+      &quot;claim&quot;: &quot;Cailian Press report: mid-June ARR above USD300M and API revenue above 70%; not audited K3 margin.&quot;,
+      &quot;url&quot;: &quot;https://finance.sina.com.cn/roll/2026-06-30/doc-inifehke3518487.shtml&quot;,
+      &quot;date&quot;: &quot;2026-06-30&quot;,
+      &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S13&quot;,
+      &quot;claim&quot;: &quot;Calculator&#39;s published roofline equations; implementation disclosure, not measured Moonshot economics. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S14&quot;,
+      &quot;claim&quot;: &quot;Calculator registries: donor geometry, precision tuples, operating points, calibration and legal widths. Date is retrieval.&quot;,
+      &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js&quot;,
+      &quot;date&quot;: &quot;2026-09-25&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;id&quot;: &quot;S15&quot;,
+      &quot;claim&quot;: &quot;Calculator documents universal-transfer prefill limitations and sensitivity.&quot;,
+      &quot;url&quot;: &quot;https://margins.ashitaorbis.com/research/input-cost-reconstruction&quot;,
+      &quot;date&quot;: &quot;2026-09-20&quot;,
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    }
+  ],
+  &quot;key_inputs&quot;: [
+    {
+      &quot;input&quot;: &quot;active / total&quot;,
+      &quot;central&quot;: [
+        104,
+        2800
+      ],
+      &quot;low_margin&quot;: [
+        104,
+        2800
+      ],
+      &quot;high_margin&quot;: [
+        104,
+        2800
+      ],
+      &quot;source_ids&quot;: [
+        &quot;S2&quot;,
+        &quot;S3&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;customDonor&quot;,
+      &quot;central&quot;: &quot;dsr1&quot;,
+      &quot;low_margin&quot;: &quot;dsr1&quot;,
+      &quot;high_margin&quot;: &quot;dsr1&quot;,
+      &quot;source_ids&quot;: [
+        &quot;S3&quot;,
+        &quot;S14&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;INFERENCE&quot;
+    },
+    {
+      &quot;input&quot;: &quot;precision&quot;,
+      &quot;central&quot;: &quot;fp4&quot;,
+      &quot;low_margin&quot;: &quot;fp4&quot;,
+      &quot;high_margin&quot;: &quot;fp4&quot;,
+      &quot;source_ids&quot;: [
+        &quot;S2&quot;,
+        &quot;S3&quot;,
+        &quot;S9&quot;,
+        &quot;S14&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;INFERENCE&quot;
+    },
+    {
+      &quot;input&quot;: &quot;priceIn / priceOut / cacheReadMult&quot;,
+      &quot;central&quot;: [
+        3,
+        15,
+        10
+      ],
+      &quot;low_margin&quot;: [
+        3,
+        15,
+        10
+      ],
+      &quot;high_margin&quot;: [
+        3,
+        15,
+        10
+      ],
+      &quot;source_ids&quot;: [
+        &quot;S4&quot;,
+        &quot;S5&quot;,
+        &quot;S6&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;DISCLOSED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;blend&quot;,
+      &quot;central&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;low_margin&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;high_margin&quot;: {
+        &quot;h800&quot;: 100
+      },
+      &quot;source_ids&quot;: [
+        &quot;S7&quot;,
+        &quot;S8&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;INFERENCE&quot;
+    },
+    {
+      &quot;input&quot;: &quot;rentAbsLeg.h800&quot;,
+      &quot;central&quot;: 2.2,
+      &quot;low_margin&quot;: 2.6,
+      &quot;high_margin&quot;: 2.0,
+      &quot;source_ids&quot;: [
+        &quot;S10&quot;,
+        &quot;S11&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;INFERENCE&quot;
+    },
+    {
+      &quot;input&quot;: &quot;util&quot;,
+      &quot;central&quot;: 65,
+      &quot;low_margin&quot;: 50,
+      &quot;high_margin&quot;: 80,
+      &quot;source_ids&quot;: [],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;traffic.io_ratio&quot;,
+      &quot;central&quot;: 12,
+      &quot;low_margin&quot;: 16,
+      &quot;high_margin&quot;: 8,
+      &quot;source_ids&quot;: [
+        &quot;S2&quot;,
+        &quot;S5&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;traffic.cache_hit / billCacheHit&quot;,
+      &quot;central&quot;: [
+        70,
+        70
+      ],
+      &quot;low_margin&quot;: [
+        65,
+        65
+      ],
+      &quot;high_margin&quot;: [
+        60,
+        60
+      ],
+      &quot;source_ids&quot;: [
+        &quot;S6&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;cacheCost&quot;,
+      &quot;central&quot;: 5,
+      &quot;low_margin&quot;: 8,
+      &quot;high_margin&quot;: 5,
+      &quot;source_ids&quot;: [],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;cacheWriteShare / cacheWriteMult&quot;,
+      &quot;central&quot;: [
+        0,
+        100
+      ],
+      &quot;low_margin&quot;: [
+        0,
+        100
+      ],
+      &quot;high_margin&quot;: [
+        0,
+        100
+      ],
+      &quot;source_ids&quot;: [
+        &quot;S6&quot;
+      ],
+      &quot;evidence_class&quot;: &quot;INFERENCE&quot;
+    },
+    {
+      &quot;input&quot;: &quot;stackMult / trendMonths&quot;,
+      &quot;central&quot;: [
+        1.0,
+        0
+      ],
+      &quot;low_margin&quot;: [
+        1.0,
+        0
+      ],
+      &quot;high_margin&quot;: [
+        1.0,
+        0
+      ],
+      &quot;source_ids&quot;: [],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;interact&quot;,
+      &quot;central&quot;: &quot;balanced&quot;,
+      &quot;low_margin&quot;: &quot;balanced&quot;,
+      &quot;high_margin&quot;: &quot;balanced&quot;,
+      &quot;source_ids&quot;: [],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    },
+    {
+      &quot;input&quot;: &quot;context_length_assumed.input_tokens / output_tokens&quot;,
+      &quot;central&quot;: [
+        12000,
+        1000
+      ],
+      &quot;low_margin&quot;: [
+        16000,
+        1000
+      ],
+      &quot;high_margin&quot;: [
+        8000,
+        1000
+      ],
+      &quot;source_ids&quot;: [],
+      &quot;evidence_class&quot;: &quot;ASSUMED&quot;
+    }
+  ],
+  &quot;confidence&quot;: &quot;low: the tariff and released architecture are identified, but actual serving hardware, precision, paid-capacity utilization, traffic and K3-specific throughput are not; margins are hand reconstructions, not returned MCP results.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p><strong>My reading is 87.8% at list, with a three-scenario judgment span of 76.6–91.9%, rounded on the card to 88% and 77–92%.</strong> These are hand reconstructions of the published calculator branches, <strong>not returned MCP results</strong>. The span is neither a probability interval nor a bound on all possible architectures, contexts or deployments.</p>
+<p>I could not obtain a numeric <code>run_scenario</code> response from the MCP endpoint. Connector discovery found no available integration, and direct access did not succeed. The intended replay is <code>run_scenario</code>, with <code>model=&quot;custom&quot;</code>, <code>perspective=&quot;median&quot;</code> and each complete <code>overrides</code>/<code>traffic</code> pair in heading 2. I therefore do not invent a call receipt or claim that the deployed release reproduced these numbers.</p>
+<p><strong>Revenue.</strong> Normalize the central traffic to one million output tokens and twelve million input tokens. Of the input, 3.6 million are fresh/default-write tokens and 8.4 million are hits:</p>
+<pre><code class="language-text">R = 3.6(3.00)+8.4(0.30)+1(15.00)=\$28.32.
+</code></pre>
+<p>That is <strong>$2.17846 per million mixed input-plus-output tokens</strong>. Default writes are already in the $3 category.</p>
+<p><strong>Cost.</strong> My reconstruction uses the donor’s 61-layer MLA geometry, the registered H800 balanced batch of 96, and the H800 low-bit-weight fallback: 0.5 byte/weight, one byte/KV element, FP8 compute basis. The relevant public coefficients are decode efficiency 0.313491 and prefill efficiency 0.17581. These are calculator assumptions/calibrations, not Moonshot measurements. Sources S13–S14, retrieved 2026-09-25.   </p>
+<p>At the assumed 12,000-token input and 1,000-token output, the representative decode context is 12,500. The reconstructed rates are approximately <strong>1,463 fresh-prefill tokens/s/GPU</strong> and <strong>1,071 output tokens/s/GPU</strong>. These are aggregate per-accelerator service rates, not a user stream’s speed.</p>
+<p>For either phase:</p>
+<pre><code class="language-text">C_{\$/M}=
+\frac{r_{\$/GPUh}\,10^6}
+{3600\,T_{\mathrm{tokens/s/GPU}}\,(u/100)}.
+</code></pre>
+<p>Thus, at $2.20/hour and 65% paid-capacity utilization:</p>
+<pre><code class="language-text">C_{\rm fresh}= \$0.642752/M,\qquad
+C_{\rm output}= \$0.878106/M.
+</code></pre>
+<p>Cache-read work is assumed to cost 5% of fresh prefill. The central traffic bundle therefore costs:</p>
+<pre><code class="language-text">C=12[0.30+0.70(0.05)] (0.642752)+0.878106
+=\$3.461969,
+</code></pre>
+<pre><code class="language-text">m=1-\frac{3.461969}{28.32}
+=87.7755\%.
+</code></pre>
+<p>The mixed-token cost is <strong>$0.26631/M</strong>. Input and cache processing contribute <strong>74.6% of modeled direct cost</strong>; this is not an output-only margin disguised as a blended one.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Input/output; cache hits</th>
+<th>All-in $/GPU-hour; utilization</th>
+<th align="right">Fresh input cost $/M</th>
+<th align="right">Output cost $/M</th>
+<th align="right">Bundle revenue</th>
+<th align="right">Bundle cost</th>
+<th align="right">Margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td>12:1; 70%</td>
+<td>$2.20; 65%</td>
+<td align="right">0.6428</td>
+<td align="right">0.8781</td>
+<td align="right">$28.32</td>
+<td align="right">$3.4620</td>
+<td align="right"><strong>87.78%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td>16:1; 65%</td>
+<td>$2.60; 50%</td>
+<td align="right">1.0290</td>
+<td align="right">1.5424</td>
+<td align="right">$34.92</td>
+<td align="right">$8.1607</td>
+<td align="right"><strong>76.63%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td>8:1; 60%</td>
+<td>$2.00; 80%</td>
+<td align="right">0.4548</td>
+<td align="right">0.5557</td>
+<td align="right">$26.04</td>
+<td align="right">$2.1203</td>
+<td align="right"><strong>91.86%</strong></td>
+</tr>
+<tr>
+<td>Central at Reference traffic</td>
+<td>15:1; 60%</td>
+<td>$2.20; 65%</td>
+<td align="right">0.6630</td>
+<td align="right">0.9725</td>
+<td align="right">$35.70</td>
+<td align="right">$5.2488</td>
+<td align="right"><strong>85.30%</strong></td>
+</tr>
+</tbody></table>
+<p>Each bundle contains one million output tokens plus the stated multiple of input tokens.</p>
+<p><strong>Sanity checks.</strong> Parameters are entered in billions; tariffs are per million tokens; the vendor’s eight-GPU node quote is divided by eight; utilization is 65, not 0.65; and the maximum context window is not substituted for average context. The public capacity policy admits the declared batch at minimum H800 widths of approximately <strong>88/144/64 GPUs</strong> for central/low/high, respectively, and <strong>128</strong> for Reference traffic. Those are solver-policy calculations, not observed deployment widths. All three modeled margins are positive; no negative result was turned positive by changing units or inventing revenue. The low scenario is close to the registered memory boundary, discussed below. Sources S13–S14.  </p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p><strong>Size and carrier — 104B active, 2,800B total; S2–S3, S14.</strong> I retain the released magnitudes in every run. I neither charge 2.8T parameters as if they were all active nor infer active size by multiplying total size by the expert-selection fraction. Shared, attention and other parameters make that shortcut inappropriate. The donor is a necessary approximation, not a declaration that K3 is DeepSeek R1. Actual hybrid-attention measurements could move cost in either direction. </p>
+<p><strong>Fleet — H800-equivalent 100%; S7–S8.</strong> This is a one-leg economic proxy for a Hopper-centered serving estate, not a literal inventory assertion. I do not assign unsupported percentages to H20, H200, Ascend or Blackwell. Holding the proxy fixed also avoids making the upper scenario depend simultaneously on cheaper procurement and a wholly different, unverified fleet. A disclosed production allocation would replace the proxy rather than merely tighten its error bars.</p>
+<p><strong>Procurement — $2.20 central, $2.60 low-margin, $2.00 high-margin; S10–S11.</strong> The conversion is:</p>
+<pre><code class="language-text">75{,}000/(8\times730\times6.7489)=\$1.9029/GPUh.
+</code></pre>
+<p>The central uplift is an inferred all-in allowance, not a second power bill. <strong>Accelerator, power, hosting, networking and allocated serving infrastructure are all contained in <code>rentAbsLeg</code>; none is added elsewhere.</strong> The endpoint rents represent a less favorable capacity bundle versus a well-procured commitment near the vendor proxy. They do not assert that Moonshot receives either contract. This is a rental-equivalent calculation; I do not claim owned hardware and consequently do not invent an owned-capex amortization schedule. The earlier attachment’s CNY59,000 H800 quote is not the current vendor quote.  </p>
+<p><strong>Utilization — 65/50/80%; ASSUMED, no public measurement.</strong> These mean productive use of paid serving capacity, not tensor-core utilization. The low scenario represents uneven load or fragmented reserved capacity; the upper one represents better scheduling and sustained demand. None is implied by a queue, subscription pause or benchmark run. At otherwise central settings, 50% gives approximately <strong>84.1%</strong>, and 80% gives <strong>90.1%</strong>. That sensitivity shows why utilization needs a real denominator.</p>
+<p><strong>Traffic — 12:1 and 70% cache centrally; ASSUMED, motivated by S2/S5/S6 rather than measured by them.</strong> My working picture is text-dominant coding and tool use with repeated histories. Low-margin traffic has longer contexts, somewhat less reuse and more expensive cache work. High-margin traffic has shorter contexts and better capacity use, but <strong>lower</strong>, not higher, cache hits than the central case. It does not take every favorable setting simultaneously. The 1,000-token average billed output length is an additional unmeasured convention, not a claim that max-effort answers are always short.</p>
+<p><strong>Precision — <code>fp4</code>; INFERENCE from S2/S3, constrained by S9/S14.</strong> The released low-bit regime is a better weight-traffic proxy than BF16 throughout. Nevertheless, an H800 cannot be treated as native Blackwell MXFP4 hardware. The calculator’s fallback and the public Hopper recipe are not identical. I leave that discrepancy visible instead of mislabeling a compensating multiplier as a measured private-stack advantage. </p>
+<p><strong>Efficiency — <code>stackMult=1</code>, <code>trendMonths=0</code>, no <code>specDec</code>; ASSUMED neutral residual.</strong> Published serving techniques belong in the public baseline. I award no additional private advantage for the same techniques, no capability-lag-to-cost conversion, and no speculative-decoding credit without measured acceptance and draft cost. Zero is not proof that Moonshot has no private advantage; it is the point at which I decline to claim one.</p>
+<p><strong>Cache and billing — <code>cacheCost=5/8/5</code>, <code>billCacheHit=70/65/60</code>; ASSUMED cost and traffic.</strong> Billing and serving cache shares are explicitly equal here, not silently inherited. <code>cacheWriteShare=0</code> with <code>cacheWriteMult=100</code> is the economic encoding of <strong>no premium-bearing writes</strong>, not a claim that no cache entries are created. Under default writes, this produces the correct denominator. A hypothetical 10% of all input billed as one-hour writes, with everything else unchanged, would raise the central margin to approximately <strong>89.2%</strong> through the extra premium; that is a tariff sensitivity, not assumed traffic. S6. </p>
+<p><strong>Latency — <code>balanced</code> in all runs; ASSUMED.</strong> I do not equate the internal batching posture with discounted Batch API billing. <code>batchShare=0</code> and <code>discount=0</code> remain fixed even though ordinary online serving batches concurrent requests.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The supplied reference states <strong>83.1% at list, span 68–92%</strong>, with 300B active/2.5T total, FP8, 65% utilization and two months of efficiency lead. Its tariff is $5/$25, and its traffic is 15:1 with 60% cache hits. The supplied current-engine replay is <strong>82.33%</strong>, not 83.1%; I preserve that distinction rather than calibrating K3 to either number.   </p>
+<p>My K3 central vector at that same traffic reconstructs to <strong>85.30%</strong>, about <strong>3.0 percentage points above 82.33%</strong>. Own-traffic K3 is another <strong>2.48 points higher</strong>. Thus, the card-to-card difference is partly workload, not simply model efficiency.</p>
+<p>The following effects are <strong>one-change diagnostics on the K3 Reference-traffic reconstruction</strong>, not an additive waterfall from the real Opus architecture:</p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>K3 versus supplied Opus reference</th>
+<th>Approximate margin-point significance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Active parameters</td>
+<td>104B versus 300B</td>
+<td>Substituting 300B into the K3 carrier lowers its result from 85.30% to 63.61%: <strong>21.7 points</strong>. This isolates size, not a claim about actual Opus throughput.</td>
+</tr>
+<tr>
+<td>Total parameters</td>
+<td>2.8T versus 2.5T</td>
+<td><strong>0 direct points in this binding branch</strong> while batch and membership stay fixed; resident-memory width changes. Near a feasibility boundary this ceases to be a small or continuous effect.</td>
+</tr>
+<tr>
+<td>Weight precision</td>
+<td>FP4 proxy versus FP8</td>
+<td>Switching K3’s weight path to FP8 gives 83.94%: <strong>1.36 points lower</strong>. No native FP4 compute doubling is credited on H800.</td>
+</tr>
+<tr>
+<td>List tariff</td>
+<td>$3/$15 versus $5/$25; both cache reads 10%</td>
+<td>Giving K3 Opus’s tariff produces 91.18%: the lower K3 tariff costs <strong>5.88 points</strong> at this operating point.</td>
+</tr>
+<tr>
+<td>Hardware mix</td>
+<td>H800-equivalent 100% versus H100 5%, H200 10%, GB200 25%, GB300 20%, TPU7 40%</td>
+<td><strong>No independently defensible fleet-only point attribution established.</strong> Hardware, precision, topology and transferred coefficients change together; a token-share-weighted average rent is not a throughput-adjusted cost.</td>
+</tr>
+<tr>
+<td>Procurement</td>
+<td>K3 $2.20 all-in; reference rates implied by its factors are $2.28/$3.496/$4.275/$5.70/$2.70 in the above order</td>
+<td>As a procurement-only scale check, replacing $2.20 with the page’s $1.75 H800 planning rent raises K3 by <strong>3.01 points</strong>. This is not an actual fleet substitution or evidence that the cheaper quote has the same scope.</td>
+</tr>
+<tr>
+<td>Utilization</td>
+<td>65% versus 65%</td>
+<td><strong>0 central points.</strong> At 50%, K3’s Reference result loses <strong>4.41 points</strong>.</td>
+</tr>
+<tr>
+<td>Efficiency</td>
+<td>Stack 1 in both; K3 lead 0 versus Opus lead 2</td>
+<td>Giving K3 the same two-month lead raises its result by <strong>2.46 points</strong>. I do not award it.</td>
+</tr>
+<tr>
+<td>Traffic</td>
+<td>Own K3 12:1/70% versus Reference 15:1/60%</td>
+<td><strong>+2.48 points</strong> for own traffic; this also changes the calculator’s implied absolute context.</td>
+</tr>
+<tr>
+<td>Cache cost, writes, discounts and posture</td>
+<td>Both central cache cost 5%, no write premium, no batch discount, no negotiated discount, balanced posture</td>
+<td><strong>0 direct difference</strong> on these central settings.</td>
+</tr>
+<tr>
+<td>Architecture carrier</td>
+<td>Declared K3 hybrid approximation versus the reference’s own model representation</td>
+<td><strong>Not identified separately.</strong> A zero-point assignment would falsely imply a validated architectural transfer.</td>
+</tr>
+</tbody></table>
+<p>The reference’s procurement factors are judgments, not disclosed contracts; its own text explicitly prevents family and per-leg discounts from being multiplied twice. I likewise use one absolute rent, with no additional family discount.  </p>
+<p>The earlier Moonshot report is a different comparison again: its approximately <strong>81%</strong> reading was <strong>K2.7 output-only</strong> at $4/M. It explicitly declined to turn that into a blended provider margin. I have not carried that percentage forward or multiplied it by the tariff increase. </p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is K3’s fresh-prefill and decode throughput per paid accelerator-hour, at its real precision, traffic and latency targets.</strong> It would test both the transferred calibration and the utilization divisor without confusing per-user speed with aggregate throughput.</p>
+<p>The central reconstruction spends $2.584 of its $3.462 bundle cost on input/cache processing. Consequently, with decode unchanged, <strong>50% higher prefill cost lowers margin to 83.2%; twice the prefill cost lowers it to 78.7%</strong>. Half the prefill cost raises it to <strong>92.3%</strong>. These are explicit arithmetic sensitivities, not extra scenarios added to the card span.</p>
+<p>A disclosed all-in effective rent of <strong>$2.60 rather than $2.20</strong>, with the other central assumptions unchanged, lowers the result to <strong>85.6%</strong>. A measured 50% utilization instead of 65% lowers it to <strong>84.1%</strong>. Better procurement or higher paid-capacity utilization moves it upward. If production throughput is already averaged over paid capacity, applying the utilization divisor again would be double-counting and must be removed.</p>
+<p>A verified W4A16-dominated Hopper prefill path, with roughly half the assumed effective compute throughput, would favor the <strong>78.7%</strong> diagnostic rather than the central reading. Conversely, a matched K3 hybrid-attention deployment demonstrating materially lower total service work could support a higher result. Neither direction follows merely from the architecture’s marketing name.</p>
+<p>Finally, a representative context/output-length distribution dominated by very long sessions would falsify the chosen traffic proxy, even if the price, parameters and rental rate were exactly right. <strong>The 77–92% span does not insure the estimate against an entirely different production workload.</strong></p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Hybrid geometry is the largest representation gap.</strong> The donor charges a full MLA attention stack where K3 combines recurrent and compressed-attention layers, and substitutes different expert-routing geometry. K3’s state-management costs do not disappear just because fewer layers scan a growing KV history. I therefore do <strong>not</strong> call the donor a conservative cost bound. Correct treatment needs KDA recurrent state, gated-MLA history, attention-residual behavior, actual routing and physical placement, not just the total and active parameter sliders. Sources S3, S9, S13–S14.  </p>
+<p><strong>Precision is not one scalar.</strong> The engine’s H800 <code>fp4</code> tuple means four-bit weight traffic with an FP8 compute basis; SGLang’s documented non-Blackwell path can instead use W4A16. The interface cannot separately set weight, activation and KV formats or the share of operations executed by each kernel. Choosing BF16 would wrongly double the modeled weight footprint too. I do not hide this mismatch in <code>stackMult</code> or <code>trendMonths</code>. The central assumes the more efficient low-bit-weight/eight-bit-compute representation; production evidence for that exact K3/H800 path remains missing. S9, S14.  </p>
+<p><strong>Context is not an independent input.</strong> I assume 1,000 billed output tokens per request, including any billed reasoning, and 12,000/16,000/8,000 input tokens. The resulting representative decode lengths are 12,500/16,500/8,500; peak lengths are 13,000/17,000/9,000. These are conditioning assumptions, not observed averages. A maximum-effort workload could have much longer outputs. The calculator cannot express that distribution, multimodal encoder work or long tails through the supplied traffic object. It also cannot vary the I/O ratio while independently holding both absolute token lengths fixed.</p>
+<p><strong>Feasibility is policy, not deployment verification.</strong> The hand check uses the engine’s loaded-weight planning policy and flat 10% memory reserve. At the low scenario’s 144-H800 boundary, only about <strong>0.18 GB per device</strong> remains beyond that policy allocation at the declared batch. Unmodeled state, workspace or fragmentation could require a lower batch or different topology. I did not establish real placement, service-level compliance, or the deployed wrapper’s exact feasibility receipt. Any replay that drops a leg or changes the effective batch must report that change rather than silently compare a different fleet. S13–S14.  </p>
+<p><strong>Prefill calibration remains transferred.</strong> The published calculator carries one prefill-efficiency anchor across platforms and models. A bespoke K3 prefill coefficient is unavailable through this contract, as is an independently specified prefill/decode fleet. The sensitivity in heading 6 makes the resulting exposure visible; a private efficiency credit would not repair an architectural or calibration mismatch. The historical production anchor may also embed its original occupancy; I cannot separate that effect from implementation efficiency. The 65% forward utilization divisor is therefore another unmeasured transfer, not an independently verified correction. S15. </p>
+<p><strong>Facts not established:</strong> the immutable served K3 checkpoint; the exact production GPU types and shares; named physical serving sites; owned-versus-rented allocation; contract costs and bundle inclusions; actual hosted quantization; measured K3/Hopper prefill and decode economics; paid-capacity utilization; per-user and tail-latency targets; absolute context/output distributions; billed versus physical cache reuse; one-hour-write share; multimodal traffic share; private-stack advantage; speculative acceptance and draft overhead; and K3-specific direct cost, gross profit or margin.</p>
+<p><strong>Execution limitation.</strong> I read the public implementation but did not execute the deployed MCP engine or verify public-source/deployed-release byte identity. The figure beside the card is therefore explicitly a hand reconstruction. The project’s rerun should retain the declared vector and publish any numerical gap, rather than adjust a dial to recover 87.8%.</p>
+<p><strong>Publication judgment:</strong> use <strong>≈88% at list, span 77–92%, low confidence</strong>, accompanied by the <strong>custom-MLA geometry approximation and unverified production operating point</strong>. This is a positive, reproducible conditional estimate—not a verified Moonshot margin.</p>
+<p>Download the complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

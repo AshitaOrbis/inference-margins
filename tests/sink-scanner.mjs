@@ -422,11 +422,15 @@ export const SINK_RULES = Object.freeze([
     { pattern: /nvlinkcap-readout|hw-nvlinkcap|cf-leg-nvlinkcap|nvlinkCapReadoutText\(/ },
     { class: "hardware-lens-tile", why: "the NVLink-cap lever's readout, chart disclosure and per-leg lineage lines — engine-computed exposure and typed codes qualifying rendered margins" }),
   R("chart-table-cells",
-    { fnIn: ["renderHwChart", "renderStackChart", "renderGenChart", "renderSubChart", "renderSensChart", "renderNormalized"], pattern: /td\.textContent = c|mkRow\(/ },
+    { fnIn: ["renderHwChart", "renderStackChart", "renderGenChart", "renderSubChart", "renderSensChart"], pattern: /td\.textContent = c|mkRow\(/ },
     { class: "hardware-lens-tile", why: "table view of the chart claims (same numbers, tabular adapter) — anchored by enclosing chart renderer, not line ranges" }),
-  R("normalized-table",
-    { fnIn: ["renderNormalized"], pattern: /./ },
-    { class: "hardware-lens-tile", why: "normalized comparison table, including its accessible name and cells, carries computed scenario claims" }),
+  /* bq-3351 (2026-09-25): the §10 normalized comparison table (renderNormalized) was removed by owner
+     ruling d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section; the chart
+     that took its place draws each Astra Pro estimate's engine-computed readings, labels and table
+     view. Same class the table carried: a computed-claim chart, anchored by its enclosing renderer. */
+  R("astra-pro-chart",
+    { fnIn: ["renderAstraProChart"], pattern: /./ },
+    { class: "hardware-lens-tile", why: "the §10 Astra Pro estimates chart — each estimate's engine-computed central reading and low–high span, its accessible labels and its table view" }),
   R("board-current-scenario-chip",
     { pattern: /boardStateLabel/ },
     { class: "hardware-lens-tile", why: "evidence-board chip carrying the current scenario's ≈% claim" }),
