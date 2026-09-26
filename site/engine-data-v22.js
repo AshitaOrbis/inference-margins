@@ -1375,7 +1375,7 @@ const PREFILL_CAL = {
     ascend: "universal-transfer", rubin: "universal-transfer",
   }),
   // The per-leg disclosure every universal-transfer row must carry (plan D-11 wording).
-  carryDisclosure: "prefill: universal-transfer carry; the planning baseline ±50% ⇒ ±15.1pp headline",
+  carryDisclosure: "prefill: universal-transfer carry; ±50% prefill-cost sensitivity from the public-data floor's settings ⇒ ±15.1pp calculated margin",
   // The mandatory sensitivity band (run B §B3 replacement item 3). Multipliers on prefill COST;
   // engine-computed at render time, never a stored margin.
   sensitivityBand: Object.freeze({ lo: 0.5, hi: 1.5,

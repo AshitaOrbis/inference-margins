@@ -457,7 +457,25 @@ const ANSWER_DIGITS_PIN = "c3714685e9652c158accd9c4b7db119e78af5c78b8152a249e6f8
    ≈58%); "not company GM" -> "not a company gross margin"; three "Deeper explanation" triggers -> "Read the planning
    baseline in full" / "Why the higher readings are higher" / "Open the executive summary"; the landing reading moved
    first inside the collapse. No RANKING of an external claim added; the separate DIGITS pin is UNCHANGED. */
-const ANSWER_TEXT_PIN = "801905f921dfdf1f91df189be6c217a30b089e0673283240c9313ee0416f8b14"; // previous aeb617203282b991…
+/* RE-PINNED 2026-09-26 (im-legibility-astra-pass-and-remint-0926, bq-3520 — owner ruling
+   d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate; review of record r1 folded). Read with
+   DUMP_ANSWER_SURFACE=1 and diffed word by word against the base commit's dump (evidence/answer-surface-worddiff-r2.txt in
+   the leg's work dir); the COMPLETE list of changes: "Planning baseline"/"planning baseline" -> "Public-data floor"/
+   "public-data floor" (tile title, both aria-labels, read-in-full trigger, reference token, bridge, basis declaration);
+   the tile's status label drops the name the title carries and reads "policy-labeled scenario: a bare minimum from public
+   data known to be wrong; real margins cannot be lower. Not an estimate."; the reference token adds "a bare minimum from
+   public data, not an estimate"; the §C2 frame reads "describing the scenario this public-data floor is built on, as it
+   stood then" (quotation byte-untouched); every "conservative (planning) case" naming the ≈58% -> "public-data floor";
+   the header's closing identity -> "a floor from public data — a bare minimum, reproducible, and not an estimate"; its
+   disagreement sentence and the g2 bridge now say a claim above a floor is compatible with it ("exceeding a floor is not
+   a disagreement"; ">80" "sits above this page's ≈58 public-data floor, which a floor allows"); "is the disagreement" ->
+   "is the difference between the modeled scenarios". No RANKING of an external claim added; the DIGITS pin is UNCHANGED
+   (c3714685… before and after). */
+/* …and the review-of-record r2 fold (finding R2-1), same day: three g2 spans — "this calculator reaches the neighborhood of
+   Patel's claim" (was "reproduces the floor's neighborhood", ambiguous beside the public-data floor), "not a second claim about
+   the same metric", "could identify the differing assumptions". Diff: evidence/answer-surface-worddiff-final.txt. DIGITS
+   still c3714685… (the reviewer's "above-80%" was left out so no figure enters the answer). */
+const ANSWER_TEXT_PIN = "3b4bffaf19b858f979b7671b61c80b31fdf6e822e7ed0bb82d5d1c50d9bc0c29"; // previous 801905f921dfdf1f… (intermediate pins of this leg, ce322c8f… and 5f2fe255…, never shipped) (previous aeb617203282b991…)
 
 const RANKING_PATTERNS = [
   /\bstrongest external\b/i, /\branked strongest\b/i, /\bthe strongest [^.;]{0,24}hypothesis\b/i,

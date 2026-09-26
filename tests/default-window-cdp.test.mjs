@@ -1006,7 +1006,7 @@ async function main() {
       const s13d = await probe(send);
       assert("W-13 stored as the Custom model, and the confirmation says the edits on screen are not part of a default",
         storedIs(s13d.stored, "custom", "stress-public-rate")
-          && /^Default set: this browser will open on Planning baseline \(conservative\) \(Custom\)\. It opens that scenario's own settings, without the edits on screen\. Shared links still open what they name\.$/.test(s13d.note || ""),
+          && /^Default set: this browser will open on Public-data floor \(Custom\)\. It opens that scenario's own settings, without the edits on screen\. Shared links still open what they name\.$/.test(s13d.note || ""),
         JSON.stringify({ stored: s13d.stored, note: s13d.note }));
       assert("W-13 ...and the edited Fable screen, no longer the opening scenario, now carries its own control, which says the edits are not kept",
         s13d.setHere === true && /^Set Fable 5 estimate's own settings as my default \(without the edits on screen\)$/.test(s13d.setHereText || ""),
@@ -1014,7 +1014,7 @@ async function main() {
       assert("W-13 reload", await reload(send));
       const s13e = await probe(send);
       assert("W-13 the page reopens the Custom model on the planning baseline's unedited settings, as disclosed",
-        s13e.model === "custom" && s13e.persp === "stress-public-rate" && s13e.badge === "★ Your default" && s13e.restore && s13e.name === "Planning baseline (conservative)",
+        s13e.model === "custom" && s13e.persp === "stress-public-rate" && s13e.badge === "★ Your default" && s13e.restore && s13e.name === "Public-data floor", // bq-3520: the switch label follows the owner ruling d-20260926
         JSON.stringify({ model: s13e.model, persp: s13e.persp, badge: s13e.badge, name: s13e.name }));
       assert("W-13 restore the page's default", await click(send, "#win-head .win-restore"));
       assert("W-13 restoring clears the stored Custom default", (await probe(send)).stored === null);

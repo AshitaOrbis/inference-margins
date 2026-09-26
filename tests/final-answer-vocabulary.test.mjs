@@ -73,10 +73,12 @@ assert("FA band values each carry the identity inside the value token",
   (fa.tokens.bandLine.match(/policy-labeled scenario/g) || []).length >= 3);
 
 /* 3-bis. the conservative-case label + the most-plausible token (memo v7 J-5) */
-assert("FA planning line carries the conservative-case label + the re-minted estimand",
+assert("FA planning line carries the public-data-floor label + the re-minted estimand",
   // b9 M1: "market-rent" retired on the default case (r4 defect D4 — every default rent
   // sits at or below its public comparator, so the vector is low/committed planning, not market).
-  fa.tokens.planningPointLine.startsWith("The conservative planning case, priced at low/committed planning rates:")
+  /* bq-3520 (2026-09-26): the conservative-case label is now the public-data floor's name (owner ruling
+     d-20260926-…-floor; bq-1141 review residual (b)). Same rates clause, same estimand clause below. */
+  fa.tokens.planningPointLine.startsWith("The public-data floor, priced at low/committed planning rates:")
   // im-vet-six-repairs (2026-09-20), the vocabulary release edit: "tariff schedule" -> "list-price
   // schedule", the same object under style/VOCABULARY.md §1.2's canonical name.
   && /published list-price schedule under the reference cache\/batch\/discount mix/.test(fa.tokens.planningPointLine));
@@ -133,14 +135,16 @@ assert("V-2 NO other emitted token is exempt (the scanner still sweeps every oth
 }
 /* V-4: both reading tokens carry their basis INSIDE the token (crop-bar discipline, D-3b) */
 assert("V-4 the reference reading token carries its basis inside the token",
-  /planning baseline/.test(fa.tokens.referenceReadingLine) // bq-3316 (2026-09-25): one name for ≈58%
+  /public-data floor/.test(fa.tokens.referenceReadingLine) // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the ≈58% is the public-data floor (was bq-3316's "planning baseline")
   && /policy-labeled scenario/.test(fa.tokens.referenceReadingLine));
 assert("V-4 the prior reading token carries its basis inside the token",
   /calculator's own default reading/.test(fa.tokens.priorReadingLine)
   && /policy-labeled scenario/.test(fa.tokens.priorReadingLine)
   && /scenario prior, not a measurement/.test(fa.tokens.priorReadingLine));
 assert("V-4 the single value token (the crop unit) names its basis too",
-  /planning baseline/.test(fa.tokens.planningPoint)); // bq-3316
+  /public-data floor/.test(fa.tokens.planningPoint)
+  && /bare minimum from public data known to be wrong/.test(fa.tokens.planningPoint)
+  && /not an estimate/i.test(fa.tokens.planningPoint)); // bq-3520: the crop unit names its basis AND carries the tile's caption (owner ruling d-20260926; review r1 finding 10)
 
 /* 7. the MCP twin renders from the SAME tokens (one formatter — byte-inclusion) */
 {

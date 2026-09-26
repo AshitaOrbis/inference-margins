@@ -66,7 +66,7 @@ token, narrower than the company. Cited; never computed here.
 
 **reading** — One number the calculator produces at one complete set of settings. The page names
 three scenarios a reading can belong to, and each has its own entry below: the **opening
-scenario**, the **planning baseline** and the **lead-adjusted baseline**.
+scenario**, the **public-data floor** and the **lead-adjusted baseline**.
 
 **opening scenario** — The settings the calculator loads first. The page's built-in default is the
 GPT-5.6 Pro estimate's own settings, the built-in opening state since 2026-08-09; a reader can make
@@ -74,18 +74,21 @@ any other scenario the default for their own browser from the result window, and
 their browser loads first. The built-in default's author states 83.1% at **list price** for its
 settings; the calculator reads about 82% at the same settings today, because the calculator has
 changed since that figure was stated, and the estimate card says how. The built-in default is *not*
-the **planning baseline**, and it is not the calculator's engine defaults either — those carry no
+the **public-data floor**, and it is not the calculator's engine defaults either — those carry no
 assumed lead. The estimate card that supplies those settings says that it is the built-in default.
 
-**planning baseline** — The page's planning scenario with no assumed efficiency lead: the
+**public-data floor** — The page's reading from public data and stated assumptions, with no assumed efficiency lead: the
 **default fleet**, **planning rent**, 50% **utilization**, the **Reference mix**, the adopted
 2.5-trillion-parameter Opus, **algorithmic lead** 0 months, **family multipliers** 1.0. About
-58% for Opus at **effective price**, and about 63% at **list price**. It removes one assumption
-and keeps the others — the fleet, the model size, the utilization, the prefill transfer and the
-analyst-set rents are all still assumed — and it is reproducible by a reader because every one
-of those assumptions is stated, not because they are all public facts.
+58% for Opus at **effective price**, and about 63% at **list price**. It is a floor, not an estimate:
+the public data it is built from is known to be wrong in the direction that lowers the margin, so it
+is a bare minimum real inference margins cannot be under, and nothing like a best estimate of them.
+It rests on public data and the page's explicitly stated assumptions, so a reader can rebuild it;
+three of its rents (GB200, GB300, Trainium3) are provisional judgments rather than published prices.
+The calculator can still produce lower readings under other assumptions or model forms; those are
+hypothetical sensitivities of the model, not observed margins.
 
-**lead-adjusted baseline** — The **planning baseline** plus the adopted 3-month **algorithmic
+**lead-adjusted baseline** — The **public-data floor**'s settings plus the adopted 3-month **algorithmic
 lead** for the closed labs. About 68% for Opus at **effective price**. It is a labeled assumption,
 not a measurement, and it is not the page's built-in opening scenario. Older text on this site called it
 the calculator's "ratified-prior default" or "own default state"; both names are retired, the
@@ -108,7 +111,7 @@ it as a claim when it is being examined and as an estimate when its settings are
 
 **range** — The span of a number across declared alternatives, always with the alternatives
 named: an **estimator's stated range** ("GPT-5.6 Pro's 68–92%"), a **price-preset range** (the
-planning baseline across the page's price presets, 58–83%), a **single-setting sensitivity**
+public-data floor's settings across the page's price presets, 58–83%), a **single-setting sensitivity**
 (utilization 50%→35%: 58%→40%), a **traffic-mix envelope** (37–66% across the named mixes).
 None of these carries a stated coverage probability — nobody has asserted "95% of the time" —
 so none is a confidence interval; where an archived report says "80% credible interval", that
@@ -123,8 +126,9 @@ The page's largest: **active parameters**, **utilization**, and the **cost basis
 floor, $0.289 per million output tokens" means "rent a B300 node at Nebius's public price, run
 it at its published benchmark speed, and the accelerator cost of an output token is that much —
 before any overhead, idle time or non-GPU cost". It bounds *that* configuration at *that* price
-and speed; another operating point can be cheaper. An assumed baseline (the planning baseline) is
-not a floor in this sense at all.
+and speed; another operating point can be cheaper. The **public-data floor** is a floor in a second
+sense: the public data it is built from is known to understate the margin, so real margins cannot be
+under it.
 
 **markup versus margin** — A markup is profit ÷ cost; a margin is profit ÷ price. DeepSeek's
 famous "545% cost-profit ratio" is a markup; the same numbers as a margin are 84.5%.
@@ -165,7 +169,7 @@ observed revenue; the page says "realized" only for a figure a source reported a
 **At list** means batch share and discount both at 0%.
 
 **at list** — Computed with no batch share and no discount. The provider cards and the GPT-5.6
-Pro estimate are at list; the planning baseline and the Fable 5 estimate are at effective
+Pro estimate are at list; the public-data floor and the Fable 5 estimate are at effective
 price.
 
 **token, input, output** — A token is the unit models read and write, roughly three-quarters
@@ -243,8 +247,9 @@ while in use).
 
 **utilization divisor** — How the page charges idle capacity: serving cost is divided by
 utilization, so the tokens that were served pay for the time nothing was. At 50% utilization each
-served token is charged twice the accelerator cost it would carry on a fully busy fleet. Moving
-utilization from 50% to 35% takes the Opus planning baseline from 58% to 40%.
+served token is charged twice the accelerator cost it would carry on a fully busy fleet.
+Starting from the public-data floor's settings, changing utilization from 50% to 35% produces a
+hypothetical calculator reading of 40% instead of 58%.
 
 **serving-stack overhead** — The cost of everything around the accelerator: host CPUs,
 networking, the control plane, reliability engineering. Where it enters depends on the cost
@@ -356,7 +361,7 @@ firewalled from the throughput calibration.
 ## E. "What actually happens when a model serves a token?"
 
 **prefill** — Reading the input: the model processes the whole prompt in one parallel pass
-before it writes anything. Compute-heavy. On the page's planning baseline about 70% of modeled
+before it writes anything. Compute-heavy. On the page's public-data floor about 70% of modeled
 cost is prefill, because inputs outnumber outputs 15 to 1.
 
 **decode** — Writing the output, one token at a time, each step re-reading the model's weights
@@ -428,7 +433,7 @@ multipliers** and the algorithmic lead, because those two are both broad and uns
 **algorithmic lead** — A slider for how many months a lab's private serving efficiency is
 assumed ahead of published open practice, at 3× per year. The lead-adjusted baseline gives
 Anthropic, OpenAI and Google 3 months (about 1.3×), DeepSeek 1, the other Chinese labs 0. A
-labeled assumption, not a measurement; the planning baseline sets it to zero.
+labeled assumption, not a measurement; the public-data floor sets it to zero.
 
 **family multiplier** — A stress dial: a ±% on the throughput of every accelerator in one
 **hardware family** (NVIDIA, TPU, Trainium, Ascend). "Suppose we are 20% wrong about all of
@@ -450,7 +455,7 @@ provider publishes its current serving allocation; what exists are public commit
 (Anthropic's TPU and Trainium deals), historical statements, and one second-hand report of the
 NVIDIA share. The page's fleet is built from those and is an assumption.
 
-**default fleet** — The page's assumed Anthropic fleet for the planning baseline: NVIDIA 50%
+**default fleet** — The page's assumed Anthropic fleet for the public-data floor: NVIDIA 50%
 (H100, H200, GB200, GB300), TPU v7 25%, Trainium2/3 25% — seven legs. The **opening scenario**
 declares a different and smaller fleet — five legs, 40% TPU v7, 25% GB200, 20% GB300, 10% H200,
 5% H100, with Trainium at zero weight, which its author says was deliberate. (A 40/25/15/15/5
@@ -526,14 +531,14 @@ prefilled.
 
 **Reference mix** — The page's standard traffic mix: 15 input tokens per output token, 60%
 cache hits. A convention chosen to sit between chat and agentic traffic, not a measured
-operating point. The report's fixed scenarios (the planning baseline, the same-assumption
+operating point. The report's fixed scenarios (the public-data floor, the same-assumption
 table) are at the Reference mix; the interactive calculator is at whatever you select.
 
 **billable cached share** — The share of *all* input tokens the customer is billed at the
 cache-read price. The page assumes it equals the serving-side cache-hit share; if a provider
 serves more from cache than it bills as cached, its margin is higher than shown. This
-assumption alone spans 30% to 75% on the Opus planning baseline (billable share 95%, equal to
-serving, and 0%).
+assumption alone, varied from the Opus public-data floor's settings, produces hypothetical calculator
+readings spanning 30% to 75% (billable share 95%, equal to serving, and 0%).
 
 **subscription economics** — Flat-fee plans (Claude Max) versus per-token API billing. Heavy
 subscribers demonstrably consume 15–40× their fee in list-price value; what that costs to

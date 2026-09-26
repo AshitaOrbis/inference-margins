@@ -105,8 +105,13 @@ const IDEAS = [
     retired: ["cost lens", "cost-lens"] },
   { idea: "a set of settings", canonical: "settings",
     retired: ["own vector", "declared vector", "declared dials"] },
-  { idea: "what the stress control loads", canonical: "planning baseline",
-    retired: ["public-rate reproducibility floor", "reproducibility floor"] },
+  /* bq-3520 (2026-09-26), owner ruling d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate:
+     "58% is based on public data which we know is wrong, it's a bare minimum which it cannot be under. Nothing like a
+     best estimate of real inference margins". The ≈58% is the PUBLIC-DATA FLOOR; "planning baseline" joins the retired
+     names on every own-voice surface. (The 09-08 canon's "an assumed baseline is not a demonstrated lower bound" is
+     superseded for this one reading by the owner; style/VOCABULARY.md carries the dated amendment.) */
+  { idea: "what the stress control loads", canonical: "public-data floor",
+    retired: ["public-rate reproducibility floor", "reproducibility floor", "planning baseline"] },
   { idea: "what loads first", canonical: "opening scenario",
     retired: ["activated default", "deployed defaults", "flagship default"] },
 ];
@@ -227,9 +232,9 @@ const CARRIED = [
   { phrase: "modeled unit direct-serving contribution margin (connector `estimand`, incl. the fleet-sections variant)",
     canonical: "modeled serving margin",
     why: "the WIRE VALUE of run_scenario's `estimand` field, returned on five response paths and pinned by the connector contract test and by shipped permalink receipts. A consumer that stored a response and compares the field would see a silent identity change, so renaming it is a connector release with its own fixture re-mint, not a copy edit. Added 2026-09-20 after the Astra xhigh review found it live." },
-  { phrase: "public-evidence reference", canonical: "planning baseline — no assumed efficiency lead",
+  { phrase: "public-evidence reference", canonical: "public-data floor — no assumed efficiency lead",
     why: "the basis identifier the engine emits (bandLeadBasisClause, finalAnswer's basisDeclarationLine), the MCP returns, and tests/fa-justifications.test.mjs uses as its class-A canonical phrase. Renaming it is a coordinated engine + connector + fixture move." },
-  { phrase: "policy-labeled scenario", canonical: "planning baseline",
+  { phrase: "policy-labeled scenario", canonical: "public-data floor",
     why: "same class: a typed label the engine emits on the landing surface and the gate-6 decision path reads." },
 ];
 assert("name consistency: the carried items are enumerated with reasons, not left silent",

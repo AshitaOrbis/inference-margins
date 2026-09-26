@@ -464,7 +464,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
     digest(bridgeOf("g1-teortaxes-9095")));
   assert("rows 4-5 — the g3 bridge reproduces the ratified POST-EDIT digest exactly",
     digest(bridgeOf("g3-gptpro-9294-lens"))
-      === "88d416a196382b6f34e25d6a569ae18f31b0136051dd1185d511a3f1b43a6a5b",  // im-vet-six-repairs 2026-09-20: the g3 bridge, same pinned-span treatment
+      === "320f05e7dd2c1758affb98799e0d40dc56b413c20c441347cf80eeb253da4004",  /* RE-MINTED 2026-09-26 by im-legibility-astra-pass-and-remint-0926 (bq-3520, owner ruling d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate): the g3 bridge's two floor-rename spans ("from the public-data floor,", "The public-data floor answers"), pinned in tests/fa-justifications.test.mjs FLOOR_RENAME; reverting exactly those two spans reproduces the previous digest 88d416a196382b6f… byte for byte (evidence/remint.md). */ // im-vet-six-repairs 2026-09-20: the g3 bridge, same pinned-span treatment
     digest(bridgeOf("g3-gptpro-9294-lens")));
 
   /* T-21e on the four bridge spans. Each states availability under the D-SD-7 gate, so each must

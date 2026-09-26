@@ -540,7 +540,7 @@ const PRE_M5_FA = {
   assert("T-9/M6 the M5 interim-pin token is RETIRED (the rework it promised has shipped)",
     fa.leverReference === undefined && fa.tokens.leverReferenceLine === undefined);
   assert("T-9/M6 the reference token states its own basis INSIDE the token",
-    /planning baseline/.test(fa.tokens.referenceReadingLine) // bq-3316 (2026-09-25): one name for ≈58%
+    /public-data floor/.test(fa.tokens.referenceReadingLine) // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the one name for ≈58% (was bq-3316's "planning baseline")
     && /algorithmic\s+lead of 0 months/.test(fa.tokens.referenceReadingLine), fa.tokens.referenceReadingLine);
   /* row 499 (delta manifest research/b9-delta-manifests/row499-preset-structure-delta-manifest.md):
      the token kept its name for the reading (the median lens IS still the calculator's default
@@ -945,7 +945,11 @@ const PRE_M5_FA = {
                            "reference-reading", "at that reference", "at that same reference", "on that same reference", "that same reference",
                            "AT THE PUBLIC-EVIDENCE REFERENCE",
                            /* im-release-edit 2026-09-09: the canonical name for this basis. */
-                           "planning baseline", "PLANNING BASELINE", "on the planning baseline"];
+                           "planning baseline", "PLANNING BASELINE", "on the planning baseline",
+                           /* bq-3520 (2026-09-26), owner ruling d-20260926-…-floor: the ≈58% reading's one name is now the
+                              public-data floor, and the tile's caption identifies it as the bare minimum from public data. Both
+                              name the SAME lead-0 basis; neither is a prior-basis word, so the opposite-basis check is unchanged. */
+                           "public-data floor", "PUBLIC-DATA FLOOR", "bare minimum from public data"];
   const PRIOR_BASIS = ["ratified-prior", "ratified algorithmic-lead prior", "ratified prior",
                        "own default state", "default state carries", "calculator's own default",
                        "calculator default", "the default state of the calculator",

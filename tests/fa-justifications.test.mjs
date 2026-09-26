@@ -565,6 +565,50 @@ const PRE_RENT_ADOPTION = {
    (1) raises readings, (2) lowers them, and E5a (gb200's adopted rent relabelled analyst-set)
    moves no number at all.
    ============================================================================================ */
+/* ============================================================================================
+   THE 2026-09-26 FLOOR RENAME, kept as its OWN event (owner ruling
+   d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate; leg
+   im-legibility-astra-pass-and-remint-0926, bq-3520). The ≈58% reading is the PUBLIC-DATA FLOOR —
+   "a bare minimum which it cannot be under. Nothing like a best estimate" — so every name these
+   tokens gave it ("the conservative (planning) case") becomes that one name. WORDS ONLY: no numeral
+   moves. Same treatment as the vetting repairs: every span pinned (before -> after) with its
+   reason, reverted FIRST (it is the newest event), everything downstream then compares against the
+   pre-rename bytes unchanged — a word that moved under cover of the rename fails there.
+   ============================================================================================ */
+const FLOOR_LABEL = { why: "the entry's sub-heading names the ≈58% by its one name", before: " · Why the conservative case differs: ", after: " · Why the public-data floor differs: " };
+const FLOOR_RENAME = {
+  "higherJustificationsHeader": [
+    { why: "the header's subject", before: "This page's conservative planning case — priced", after: "This page's public-data floor — priced" },
+    /* review r1 finding 4: exceeding a floor is not disagreeing with it */
+    { why: "the disagreement sentence", before: "the public evidence genuinely disagrees with the conservative case, and the entry says so.", after: "the entry examines why its stated margin exceeds the public-data floor; exceeding a floor is not a disagreement with it." },
+    { why: "the closing identity: a floor, never an estimate", before: " is a conservative, reproducible scenario, not a verified estimate of any provider's actual margin;", after: " is a floor from public data — a bare minimum, reproducible, and not an estimate of any provider's actual margin;" },
+  ],
+  "mostPlausibleLine": [
+    { why: "the neighborhood sentence", before: "The conservative planning case does not reach that neighborhood;", after: "The public-data floor does not reach that neighborhood;" },
+  ],
+  "g1-teortaxes-9095": [FLOOR_LABEL],
+  "g2-patel-semianalysis-80": [FLOOR_LABEL,
+    { why: "the bridge's subject (review r1 finding 4: a difference between scenarios, not a disagreement)", before: "and the conservative planning case is the disagreement", after: "and the public-data floor is the difference between the modeled scenarios" },
+    /* review r2 finding R2-1: with "the public-data floor" now named in this entry, the remaining comparison wording
+       would read as a disagreement or point at the wrong floor (Patel's "north of 80" is itself a floor claim). */
+    { why: "r2 R2-1: SemiAnalysis's grouped figure is another claim, not a contradiction", before: "not a second same-estimand contradiction.", after: "not a second claim about the same metric." },
+    { why: "r2 R2-1: whose neighborhood the calculator reaches", before: "this calculator reproduces the floor's neighborhood under labeled constructions", after: "this calculator reaches the neighborhood of Patel's claim under labeled constructions" }, // no new figure: the answer's DIGITS pin stays unchanged
+    { why: "r2 R2-1: publication identifies differing assumptions rather than settling a disagreement", before: "could settle the disagreement if every relevant boundary matches", after: "could identify the differing assumptions if every relevant boundary matches" },
+    { why: "review r1 finding 4: >80 is compatible with a ≈58 FLOOR", before: "\">80\" and \u224858 contradict each other — they are not compatible readings.", after: "\">80\" sits above this page's \u224858 public-data floor, which a floor allows — the two are compatible, and what follows examines the assumptions the calculator would need to reach that higher level." },
+    { why: "the wouldFlip target", before: "back toward this page's conservative case", after: "back toward this page's public-data floor" },
+  ],
+  "g3-gptpro-9294-lens": [FLOOR_LABEL,
+    { why: "the ladder's origin", before: "each step a calculator mutation from the conservative case,", after: "each step a calculator mutation from the public-data floor," },
+    { why: "the tariff sentence's subject", before: "The conservative case answers", after: "The public-data floor answers" },
+  ],
+  "g5-baker-85": [FLOOR_LABEL],
+  "g5-huatai-80": [FLOOR_LABEL],
+  "g5-teortaxes-2025": [FLOOR_LABEL,
+    { why: "the wouldFlip target", before: "materially conflicts with the conservative case.", after: "materially conflicts with the public-data floor." },
+  ],
+  "g5-alderson-90": [FLOOR_LABEL],
+};
+
 const VETTING_REPAIRS = {
   "mostPlausibleLine": [
     { why: "E2 TPU numerator repair — the strategic-partner lens moves with the coefficient", before: "the strategic-partner lens (≈83.1 at the public-evidence reference)", after: "the strategic-partner lens (≈83.0 at the public-evidence reference)" },
@@ -630,7 +674,21 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     }
     return out;
   };
-  const preVet = Object.fromEntries(REOPENED.map(k => [k, revertVetting(k, live[k])]));
+  /* bq-3520: the floor rename is reverted FIRST (newest event), with each pinned span's presence asserted. */
+  const revertFloor = (k, text) => {
+    let out = text;
+    for (const e of (FLOOR_RENAME[k] || [])) {
+      assert("J-2 floor rename [" + k + "]: the pinned rename edit is PRESENT verbatim (" + e.why.slice(0, 52) + "…)",
+        out.includes(e.after), e.after.slice(0, 90));
+      out = out.split(e.after).join(e.before);
+    }
+    return out;
+  };
+  const preFloor = Object.fromEntries(REOPENED.map(k => [k, revertFloor(k, live[k])]));
+  assert("J-2 floor rename: no reopened token still carries the retired \"conservative case\" name after the rename",
+    REOPENED.every(k => !/conservative (planning )?case/.test(live[k])),
+    JSON.stringify(REOPENED.filter(k => /conservative (planning )?case/.test(live[k]))));
+  const preVet = Object.fromEntries(REOPENED.map(k => [k, revertVetting(k, preFloor[k])]));
 
   /* Class A oracle: strip every canonical-phrase occurrence → BYTE-EQUAL to the pinned pre-M6
      value. Rule 6 class A: any edit that survives the strip FAILS. */
@@ -638,8 +696,10 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     assert("J-2 class A [" + k + "]: stripping the canonical phrase reproduces the pre-M6 bytes exactly",
       strip(preVet[k]) === pre[k],
       JSON.stringify({ delta: preVet[k].length - pre[k].length, inserts: (preVet[k].split(CP).length - 1) }));
-  assert("J-2 class A: the two figure-free tokens are BYTE-IDENTICAL (zero insertions, R9's point)",
-    live["g5-huatai-80"] === pre["g5-huatai-80"] && live["g5-teortaxes-2025"] === pre["g5-teortaxes-2025"]);
+  /* bq-3520: byte-identical once the pinned floor rename (their sub-heading label, and g5-teortaxes-2025's
+     wouldFlip target) is reverted — the rename is the only thing that touched them. */
+  assert("J-2 class A: the two figure-free tokens are BYTE-IDENTICAL apart from the pinned floor rename (zero insertions, R9's point)",
+    preFloor["g5-huatai-80"] === pre["g5-huatai-80"] && preFloor["g5-teortaxes-2025"] === pre["g5-teortaxes-2025"]);
   /* The figure-free pair carries NO vetting repair either — the repairs moved figures and the
      sentences that explain them, and these two tokens have neither. */
   assert("J-2 vetting repairs: the two figure-free tokens are untouched by the 2026-09-20 repairs",
@@ -684,12 +744,28 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     /* Class B: a change BEYOND the pinned edit set must survive BOTH the phrase strip and the edit
        reversion, so the comparison against pre-M6 differs. Driven through the same CLASS_B table the
        positive path uses, so the two can never test different things. */
-    const rogueB = live["g3-gptpro-9294-lens"].replace("The conservative case answers", "The conservative case now answers");
-    let rev = rogueB;
-    for (const e of [...CLASS_B["g3-gptpro-9294-lens"]].reverse())
-      if (e.after !== "") rev = rev.replace(e.after, e.before);
+    /* bq-3520 review r1 finding 11: the rogue edit is injected into the SAME normalized input the positive path
+       uses (floor rename and vetting repairs already reverted), so the only thing that can make the comparison
+       differ is the rogue edit itself; the unmodified input is shown to reproduce pre-M6 through the same steps. */
+    /* The positive path for g3 runs: the rent-adoption digits-only check + substitution (g3 is in PRE_RENT_ADOPTION),
+       then the CLASS_B reversion, then the phrase strip. The negative path runs exactly those steps; a rogue word that
+       survives the digits-only check is caught by the pre-M6 comparison, one that does not is caught by that check. */
+    const K = "g3-gptpro-9294-lens";
+    const revB = (x) => {
+      let r = x;
+      if (K in PRE_RENT_ADOPTION) {
+        if (digitsOnlyStripped(r) !== digitsOnlyStripped(PRE_RENT_ADOPTION[K])) return null;  // the rent-adoption check refuses it
+        r = PRE_RENT_ADOPTION[K];
+      }
+      for (const e of [...CLASS_B[K]].reverse()) if (e.after !== "") r = r.replace(e.after, e.before);
+      return strip(r);
+    };
+    assert("J-2 rule 6 negative (class B) CONTROL: the unmodified normalized g3 input reproduces pre-M6 through the negative path's own steps",
+      revB(preVet[K]) === pre[K]);
+    const rogueB = preVet[K].replace("The conservative case answers", "The conservative case now answers");
+    assert("J-2 rule 6 negative (class B): the rogue edit actually landed in the normalized input", rogueB !== preVet[K]);
     assert("J-2 rule 6 negative (class B): a change BEYOND the pinned edit set FAILS",
-      strip(rev) !== pre["g3-gptpro-9294-lens"]);
+      revB(rogueB) !== pre[K]);
   }
 
   /* Rule 3b: COMPLETENESS — what makes rule 3a meaningful. The basis guard ADJUDICATES enumerated
@@ -1003,7 +1079,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
   /* J-3: the basis declaration ships verbatim, and the x90-v1 claim is TRUE under the basis it
      names at BOTH bases — the §4.2 finding that made this the highest-risk item in M6. */
   assert("J-3 the basis declaration ships on the FA surface verbatim",
-    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is the planning baseline")); // bq-3316 (2026-09-25): one name for ≈58%
+    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is at the public-data floor's settings")); // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): was bq-3316's "is the planning baseline" // bq-3316 (2026-09-25): one name for ≈58%
   {
     const refv = E.explorationFlagshipMargin(E.PERSPECTIVES.find(p => p.id === "x90-v1"));
     const st = E.applyPresetSettings(opus, E.PERSPECTIVES.find(p => p.id === "x90-v1"), E.FLAGSHIP_SCOPE.traffic);
@@ -1026,7 +1102,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      separators, exactly five parts, each with its pinned label prefix. */
   {
     const SEPS = [" · What it claims: ", [" · What it does not claim: ", " · Not claimed: "],
-      " · Why the conservative case differs: ", " · What would flip it: "];
+      " · Why the public-data floor differs: ", " · What would flip it: "]; // bq-3520 (2026-09-26): the entry label names the ≈58% by its one name
     let allOk = true, detail = [];
     fa.tokens.higherJustificationEntries.forEach((txt, i) => {
       let rest = txt, parts = [], used = [];

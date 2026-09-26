@@ -347,12 +347,12 @@ for (const k of LEGS) {
      the cache-work boundary the fresh-prefill anchor assumes
      (research/input-cost-reconstruction.md). The carry disclosure moves with it, and also loses
      "flagship default" to the vocabulary release edit. */
-  assert("prefill: the planning baseline's input share re-derives to 72.42% of direct cost",
+  assert("prefill: the public-data floor's input share re-derives to 72.42% of direct cost",
     Math.abs(prefillShare - 0.7241832261755355) < 1e-12, String(prefillShare));
   assert("prefill: the ±50% carry re-derives symmetrically to ±15.059 pp",
     Math.abs(sensitivityPp - 15.059146081490393) < 1e-12
       && Math.abs((base.margin - hi.margin) * 100 - sensitivityPp) < 1e-12
-      && /the planning baseline/.test(P.carryDisclosure) && /15\.1pp/.test(P.carryDisclosure),
+      && /the public-data floor/.test(P.carryDisclosure) && /15\.1pp/.test(P.carryDisclosure), // bq-3520: the ≈58% is the public-data floor (owner ruling d-20260926)
     `${sensitivityPp} / ${P.carryDisclosure}`);
   assert("prefill: the MANDATORY 0.5–1.5× sensitivity band is declared (run B §B3 item 3)",
     P.sensitivityBand.lo === 0.5 && P.sensitivityBand.hi === 1.5
