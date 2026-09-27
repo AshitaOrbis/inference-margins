@@ -1344,3 +1344,213 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 @media (max-width: 720px) {
   .chart-card details table { display: block; overflow-x: auto; }
 }
+
+/* ======================================================================================
+   VISUAL SYSTEM — 2026-09-27 (bq-3550, owner commission d-20260927-dividing-line-and-
+   inference-margins-visual-polish…). A VISUAL pass: no word and no number on the page moves
+   (the leg's numbers-diff test walks every text node before and after). Everything below is
+   appended so the history above stays readable; it wins by source order at equal specificity.
+   Review of record: Astra xhigh + Opus visual reviews, merged in the leg's VISUAL-REVIEW.md
+   (V-numbers below refer to it).
+   ====================================================================================== */
+
+/* ---- ≈ ≥ ≤ ← → (V11) --------------------------------------------------------------------
+   None of the five vendored faces carries these, so the ≈ in the page's own headline was drawn by
+   whatever the device had. One 5 KB subset of the same Inter (4.1, OFL) supplies them to every
+   family that sets numbers or prose; each face claims ONLY these code points. */
+@font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("fonts/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+@font-face { font-family: "Space Grotesk"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("fonts/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+@font-face { font-family: "Source Serif 4"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("fonts/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+@font-face { font-family: "Playfair Display"; font-style: normal; font-weight: 100 900; font-display: swap;
+  src: url("fonts/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+
+/* ---- tokens (V10, V12, V23) -----------------------------------------------------------------
+   --line was used by 24 rules (the estimates block, the calc box, both tile collapses, the lever
+   panels, the 3-point range track) and defined by none, so every one of those borders was silently
+   dropped — the range control rendered as a lone dot. --bg / --bg-2 / --surface-2 / --ink were
+   undefined the same way. They alias the theme's own tokens, so each theme resolves its own. */
+html {
+  --line: var(--border); --bg: var(--page); --bg-2: var(--tile); --surface-2: var(--tile); --ink: var(--ink-1);
+  --font-num: var(--font-head);            /* numerals: Space Grotesk in the app skin */
+  --fs-headline: 64px;   /* ≈82%: the page's own calculated result, and the only numeral above 40 px */
+  --fs-quoted: 30px;     /* the two quoted estimates — equal to each other, visibly below the headline */
+  --fs-value: 30px;      /* the floor, the owned counterpart, the calculator's own result tiles */
+  --fs-h1: 26px;
+  --c-owned: #2DD4BF;    /* owned / TCO — one hue, one job (V12) */
+}
+@media (min-width: 981px) {
+  html { --fs-headline: 88px; --fs-quoted: 38px; --fs-value: 34px; --fs-h1: 32px; }
+}
+:root[data-theme="light"] { --c-owned: #0F766E; }
+:root[data-skin="editorial"][data-theme="light"] { --c-owned: #1F6F6B; }
+:root[data-skin="editorial"][data-theme="dark"] { --c-owned: #6BB5A0; }
+/* Editorial numerals in Inter: Playfair's default old-style figures set "$0.66" as "$o.66" and dropped
+   the 5 in "GPT-5.6" below the baseline (V3). Headings stay Playfair. */
+:root[data-skin="editorial"] { --font-num: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; --font-data: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }
+/* Playfair headings and card labels keep their face but set lining figures ("GPT-5.6", "Fable 5"). */
+:root[data-skin="editorial"] h1, :root[data-skin="editorial"] h2, :root[data-skin="editorial"] h3, :root[data-skin="editorial"] h4 { font-variant-numeric: lining-nums; font-feature-settings: "lnum" 1; }
+/* Light app theme: cards lift off the page in white instead of greying out like disabled controls (V20). */
+:root[data-theme="light"]:not([data-skin="editorial"]) { --tile: #FFFFFF; }
+
+/* ---- numerals: one face per skin, lining + tabular everywhere a value is set (V3) ---------- */
+.tile-value, .est-median, .est-range, .est-stress-value, .calc-op-value, .chip-range {
+  font-family: var(--font-num); font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "tnum" 1;
+}
+.calc-eq, .hw-pct, .chart text { font-variant-numeric: lining-nums tabular-nums; }
+
+/* ---- masthead (V22) ----------------------------------------------------------------------- */
+h1 { font-size: var(--fs-h1); line-height: 1.15; letter-spacing: -0.025em; }
+.subtitle { line-height: 1.6; max-width: 68ch; }
+@media (min-width: 981px) { .subtitle { font-size: 16px; } }
+
+/* ---- the headline tile: ≈82% is THE number (V2, V3, V9) ------------------------------------
+   The window is three containers in reading order (index.html, bq-3550 internal review R1/R2): its identity
+   above the number, the scenario's assumptions under the gross-margin line, and its controls after every
+   sentence that qualifies the number. Source, keyboard and visual order agree; nothing is reordered by CSS. */
+.projections .tile-hero {
+  padding: 18px 20px 16px;
+  /* The violet wash marks the RESULT, not the receipts under it (V9). */
+  background: linear-gradient(to bottom, var(--wash) 0, var(--wash) 300px, transparent 560px), var(--surface-1);
+}
+.win-identity { display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; color: var(--ink-2); }
+.win-facts-slot:empty { margin: 0; }
+.projections .tile-hero > .tile-label { margin-top: 12px; }
+.win-facts-slot { margin-top: 8px; font-size: 13.5px; line-height: 1.5; color: var(--ink-1); }
+/* The controls close the tile, after the receipts, set off by a rule. */
+.projections .tile-hero > #win-head { margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--line); }
+/* Where the receipts begin (V9): a rule, so the result block reads as finished above it. */
+.projections .tile-hero > #out-rent-segment { margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--line); }
+.projections .tile-hero .win-name { font-size: 16px; line-height: 1.35; font-weight: 600; }
+.projections .tile-hero .win-name-scenario { font-weight: 700; }
+.tile-hero .tile-value {
+  font-size: var(--fs-headline); line-height: 1; font-weight: 700; letter-spacing: -0.04em;
+  margin: 6px 0 6px -0.04em; color: var(--ink-1);
+}
+.tile-hero .tile-status { font-size: 14px; color: var(--ink-1); }
+.tile-hero .tile-gm { font-size: 14px; line-height: 1.45; margin-top: 4px; }
+/* V13: accent as small text is --accent-ink (the stylesheet's own header rule): 4.34:1 → 6.2:1. */
+.tile-hero .win-badge, .win-is-default, .set-default-btn[aria-pressed="true"] { color: var(--accent-ink); border-color: var(--accent-ink); }
+.tile-calc { margin: 14px 0 4px; }
+.calc-op-value { font-size: 20px; }
+
+/* ---- one disclosure style (V9) --------------------------------------------------------------
+   Every sentence stays on the face, complete; what changes is one size, one line-height, one ink
+   and one measure instead of three sizes in one tile (13.5 px, the UX-C wrapper size). */
+.projections .tile-delta, .projections .tile-explain, .projections .tile-mandatory {
+  font-size: 13.5px; line-height: 1.6; color: var(--ink-2); max-width: 68ch;
+}
+.projections .tile-delta strong { color: var(--ink-1); }
+.form-debt-disclosure { font-size: 13px; line-height: 1.6; max-width: 72ch; }
+
+/* ---- the quoted estimates: equal to each other, visibly subordinate, no hue (V3) ------------ */
+.est-top { border: 0; padding: 0; background: none; border-radius: 0; }
+.est-top-head { margin-top: 0; }
+.est-median { font-size: var(--fs-quoted); font-weight: 600; letter-spacing: -0.02em; margin-top: 6px; }
+.est-range { font-size: 15px; }
+.est-stress-value { font-size: 20px; color: var(--ink-2); }
+
+/* ---- the floor and the owned counterpart: quieter numerals (V3, V12) ------------------------ */
+.tile-value { font-size: var(--fs-value); line-height: 1.1; }
+.tile-final-answer .tile-value, .tile-owned .tile-value { color: var(--ink-2); }
+.tile-owned { border-left-color: var(--c-owned); }
+.rent-bar-tco { background: var(--c-owned); }
+
+/* ---- desktop band geometry (V8) ---------------------------------------------------------------
+   The headline column was 340–390 px, so its mandatory text stood 2–3× taller than the estimates
+   and the floor tile floated in the empty height. A wider column, and the spare height goes to a
+   flexible LAST row instead of being split, so the floor tile sits directly under the estimates.
+   The analyst-hypothesis paragraph joins the right column under the floor tile, which it
+   qualifies, instead of a 1,200 px-wide row (~200 characters a line). Which block is where in the
+   band is unchanged; below 980 px the single column keeps source order. */
+@media (min-width: 981px) {
+  .projections { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-rows: auto auto auto minmax(0, 1fr); gap: 20px 24px; }
+  .projections .hero-lead { grid-row: 1 / span 4; }
+  .projections .final-answer { align-self: start; }
+  .projections .fa-analyst-hypothesis { grid-column: 2; grid-row: 3; align-self: start; }
+}
+.projections .fa-analyst-hypothesis { border-left: 3px solid var(--border); padding: 4px 0 4px 16px; }
+.projections .fa-analyst-hypothesis .tile-delta { margin: 0; }
+
+/* ---- phone: the number inside the first screen (V2, V14) -------------------------------------
+   The five masthead links become one row that scrolls sideways instead of two wrapped rows; the
+   appearance menu, which would be clipped by a scrolling row, opens as a fixed panel instead. */
+@media (max-width: 600px) {
+  .page { padding: 14px 16px 48px; }
+  .masthead-row { gap: 8px; }
+  .masthead-actions {
+    flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; gap: 6px;
+    margin: 0 -16px; padding: 2px 16px 4px; width: calc(100% + 32px); scrollbar-width: none;
+  }
+  .masthead-actions > * { flex: 0 0 auto; }
+  .appearance-options { position: fixed; top: 64px; right: 12px; }
+  .subtitle { font-size: 15px; line-height: 1.5; margin: 8px 0 10px; }
+  /* The sideways row says it scrolls: its right edge fades, and the last link can scroll clear of the fade. */
+  .masthead-actions { padding-right: 40px; overscroll-behavior-x: contain;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); mask-image: linear-gradient(to right, #000 calc(100% - 44px), transparent); }
+  .dossier-block { padding: 6px 12px; margin: 4px 0 12px; }
+  .preset-note { line-height: 1.45; }
+  .projections { gap: 14px; }
+  .projections .tile-hero { padding: 14px 16px; }
+  .explain-trigger { margin-top: 0; }
+}
+@media (pointer: coarse) {
+  .masthead-actions .ghost-btn, .win-swap-btn, .win-set-default, .win-restore, .radio-row button { min-height: 44px; display: inline-flex; align-items: center; }
+}
+
+/* ---- range explorer: no stretched empty cards, no violet wall (V7) --------------------------- */
+.range-chips { align-items: start; }
+.range-chip { padding: 12px 14px; gap: 4px; }
+.range-chip .chip-current {
+  font-size: 12.5px; font-weight: 400; line-height: 1.55; color: var(--ink-2);
+  border-left: 2px solid var(--accent); padding-left: 9px; margin-top: 6px;
+}
+.range-chip .chip-current::first-line { color: var(--accent-ink); font-weight: 600; }
+@media (max-width: 600px) { .range-chips { grid-template-columns: 1fr; } }
+
+/* ---- charts (V4, V5) ---------------------------------------------------------------------------
+   Value labels carry a halo in the PAGE colour: the chart card's surface is translucent, so it cannot be a
+   stroke colour; over the dark and light cards the page colour differs from the surface by a few percent. */
+.chart text.chart-value-label { paint-order: stroke; stroke: var(--page); stroke-width: 4px; stroke-linejoin: round; }
+.chart-card .chart-sub { line-height: 1.5; max-width: 90ch; }
+
+/* ---- report measure (V15) ------------------------------------------------------------------ */
+.report-section-body p, .report-section-body li { font-size: 15px; }
+/* The subscription verdict (V9): the verdict itself bold in its status colour, the fleet qualifier after
+   it at secondary weight — one paragraph of bold coral before. Colours unchanged (contrast-check). */
+.sub-verdict { font-size: 13px; line-height: 1.6; padding: 4px 4px 8px; max-width: 72ch; }
+.sub-verdict-lead { font-weight: 600; }
+.sub-verdict-good .sub-verdict-lead { color: var(--good); }
+.sub-verdict-bad .sub-verdict-lead { color: var(--series-6); }
+.sub-verdict-qual { font-weight: 400; color: var(--ink-2); }
+
+/* ---- the rent bar under the headline (GPT Pro expert F01): drawn to the percent, keyed by the sentence ---- */
+.rent-pct-0 { flex-basis: 0%; } .rent-pct-1 { flex-basis: 1%; } .rent-pct-2 { flex-basis: 2%; } .rent-pct-3 { flex-basis: 3%; } .rent-pct-4 { flex-basis: 4%; } .rent-pct-5 { flex-basis: 5%; } .rent-pct-6 { flex-basis: 6%; } .rent-pct-7 { flex-basis: 7%; } .rent-pct-8 { flex-basis: 8%; } .rent-pct-9 { flex-basis: 9%; }
+.rent-pct-10 { flex-basis: 10%; } .rent-pct-11 { flex-basis: 11%; } .rent-pct-12 { flex-basis: 12%; } .rent-pct-13 { flex-basis: 13%; } .rent-pct-14 { flex-basis: 14%; } .rent-pct-15 { flex-basis: 15%; } .rent-pct-16 { flex-basis: 16%; } .rent-pct-17 { flex-basis: 17%; } .rent-pct-18 { flex-basis: 18%; } .rent-pct-19 { flex-basis: 19%; }
+.rent-pct-20 { flex-basis: 20%; } .rent-pct-21 { flex-basis: 21%; } .rent-pct-22 { flex-basis: 22%; } .rent-pct-23 { flex-basis: 23%; } .rent-pct-24 { flex-basis: 24%; } .rent-pct-25 { flex-basis: 25%; } .rent-pct-26 { flex-basis: 26%; } .rent-pct-27 { flex-basis: 27%; } .rent-pct-28 { flex-basis: 28%; } .rent-pct-29 { flex-basis: 29%; }
+.rent-pct-30 { flex-basis: 30%; } .rent-pct-31 { flex-basis: 31%; } .rent-pct-32 { flex-basis: 32%; } .rent-pct-33 { flex-basis: 33%; } .rent-pct-34 { flex-basis: 34%; } .rent-pct-35 { flex-basis: 35%; } .rent-pct-36 { flex-basis: 36%; } .rent-pct-37 { flex-basis: 37%; } .rent-pct-38 { flex-basis: 38%; } .rent-pct-39 { flex-basis: 39%; }
+.rent-pct-40 { flex-basis: 40%; } .rent-pct-41 { flex-basis: 41%; } .rent-pct-42 { flex-basis: 42%; } .rent-pct-43 { flex-basis: 43%; } .rent-pct-44 { flex-basis: 44%; } .rent-pct-45 { flex-basis: 45%; } .rent-pct-46 { flex-basis: 46%; } .rent-pct-47 { flex-basis: 47%; } .rent-pct-48 { flex-basis: 48%; } .rent-pct-49 { flex-basis: 49%; }
+.rent-pct-50 { flex-basis: 50%; } .rent-pct-51 { flex-basis: 51%; } .rent-pct-52 { flex-basis: 52%; } .rent-pct-53 { flex-basis: 53%; } .rent-pct-54 { flex-basis: 54%; } .rent-pct-55 { flex-basis: 55%; } .rent-pct-56 { flex-basis: 56%; } .rent-pct-57 { flex-basis: 57%; } .rent-pct-58 { flex-basis: 58%; } .rent-pct-59 { flex-basis: 59%; }
+.rent-pct-60 { flex-basis: 60%; } .rent-pct-61 { flex-basis: 61%; } .rent-pct-62 { flex-basis: 62%; } .rent-pct-63 { flex-basis: 63%; } .rent-pct-64 { flex-basis: 64%; } .rent-pct-65 { flex-basis: 65%; } .rent-pct-66 { flex-basis: 66%; } .rent-pct-67 { flex-basis: 67%; } .rent-pct-68 { flex-basis: 68%; } .rent-pct-69 { flex-basis: 69%; }
+.rent-pct-70 { flex-basis: 70%; } .rent-pct-71 { flex-basis: 71%; } .rent-pct-72 { flex-basis: 72%; } .rent-pct-73 { flex-basis: 73%; } .rent-pct-74 { flex-basis: 74%; } .rent-pct-75 { flex-basis: 75%; } .rent-pct-76 { flex-basis: 76%; } .rent-pct-77 { flex-basis: 77%; } .rent-pct-78 { flex-basis: 78%; } .rent-pct-79 { flex-basis: 79%; }
+.rent-pct-80 { flex-basis: 80%; } .rent-pct-81 { flex-basis: 81%; } .rent-pct-82 { flex-basis: 82%; } .rent-pct-83 { flex-basis: 83%; } .rent-pct-84 { flex-basis: 84%; } .rent-pct-85 { flex-basis: 85%; } .rent-pct-86 { flex-basis: 86%; } .rent-pct-87 { flex-basis: 87%; } .rent-pct-88 { flex-basis: 88%; } .rent-pct-89 { flex-basis: 89%; }
+.rent-pct-90 { flex-basis: 90%; } .rent-pct-91 { flex-basis: 91%; } .rent-pct-92 { flex-basis: 92%; } .rent-pct-93 { flex-basis: 93%; } .rent-pct-94 { flex-basis: 94%; } .rent-pct-95 { flex-basis: 95%; } .rent-pct-96 { flex-basis: 96%; } .rent-pct-97 { flex-basis: 97%; } .rent-pct-98 { flex-basis: 98%; } .rent-pct-99 { flex-basis: 99%; }
+.rent-pct-100 { flex-basis: 100%; } 
+.rent-key { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 3px; }
+.rent-key-tco { text-decoration-color: var(--c-owned); }
+.rent-key-cut { text-decoration-color: var(--series-5); }
+
+/* ---- GPT Pro fold (bq-3550, expert + enthusiast perspectives) --------------------------------- */
+/* F03: the range the current scenario lands in is marked on its header, and on a 4-up row its card takes two
+   columns so its note reads at twice the measure instead of as a narrow tower. Source order is unchanged. */
+.range-chip:has(.chip-current) { border-top: 3px solid var(--accent-ink); }
+@media (min-width: 901px) { .range-chip:has(.chip-current) { grid-column: span 2; } }
+/* F07: the two hardware tables — numbers right-aligned, tabular, never wrapped; names on one line. */
+.chart-card table td:not(:first-child), .chart-card table th:not(:first-child) { text-align: right; font-variant-numeric: lining-nums tabular-nums; }
+.chart-card table td { white-space: nowrap; }
+/* F10: editorial keeps its serif headings and prose; its controls speak the interface face. */
+:root[data-skin="editorial"] .ghost-btn, :root[data-skin="editorial"] .range-chip, :root[data-skin="editorial"] .est-more > summary,
+:root[data-skin="editorial"] .hero-full-summary, :root[data-skin="editorial"] .fa-full-summary, :root[data-skin="editorial"] .win-all-summary,
+:root[data-skin="editorial"] .explain-trigger { font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif; }

@@ -12,6 +12,7 @@ All five families are licensed under the **SIL Open Font License 1.1**
 | File | Family | Copyright |
 |---|---|---|
 | `inter-latin-var.woff2` | Inter | © The Inter Project Authors |
+| `inter-symbols-var.woff2` | Inter (≈ ≥ ≤ ← → only; subset of Inter 4.1 `InterVariable.ttf`, 2026-09-27) | © The Inter Project Authors |
 | `jetbrains-mono-latin-var.woff2` | JetBrains Mono | © JetBrains |
 | `playfair-display-latin-var.woff2` | Playfair Display | © The Playfair Display Project Authors |
 | `source-serif-4-latin-var.woff2` | Source Serif 4 | © Adobe (Source Serif Project Authors) |

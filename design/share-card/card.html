@@ -1,0 +1,55 @@
+<!doctype html>
+<!-- The link-preview card (og:image / twitter:image), 1200×630. Rendered by scripts/build-share-card.mjs:
+     every double-braced value is READ OFF THE RENDERED PAGE, never typed here; the words are the page's own.
+     ONE conditional claim (GPT Pro review, 2026-09-27: the expert asked for qualifications readable at the
+     ~340 px an X phone timeline shows — 340/1200 = 0.28×, so ~44 px here reads as ~12 px there; the
+     enthusiast read a four-number scoreboard as "supporting votes" and the floor as a guarantee). So: the
+     headline, whose calculation it is, the scenario's own billing and cost-basis assumptions, "Not a
+     company gross margin.", and that the page opens on this scenario (so a shared scenario link, which opens
+     another state, does not borrow this card's number as its own — internal review R4). The estimates and the floor stay on the page, where their bases are explained.
+     The bottom-left band stays clear: X lays the link's domain over it. -->
+<html lang="en"><head><meta charset="utf-8">
+<style>
+@font-face { font-family: "Space Grotesk"; font-weight: 500 700; src: url("{{FONTS}}/space-grotesk-latin-var.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400 700; src: url("{{FONTS}}/inter-latin-var.woff2") format("woff2"); }
+@font-face { font-family: "Inter"; font-weight: 100 900; src: url("{{FONTS}}/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+@font-face { font-family: "Space Grotesk"; font-weight: 100 900; src: url("{{FONTS}}/inter-symbols-var.woff2") format("woff2"); unicode-range: U+2190, U+2192, U+2248, U+2264-2265; }
+:root { --page: #050505; --ink-1: #F0F0F2; --ink-2: #BDBDC4; --ink-3: #9A9AA3; --accent: #7B61FF; --accent-ink: #B0A2FF; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1200px; height: 630px; overflow: hidden; }
+body {
+  background: radial-gradient(820px 520px at 0% 0%, rgba(123,97,255,0.24), transparent 66%), var(--page);
+  color: var(--ink-1); font-family: "Inter", sans-serif; -webkit-font-smoothing: antialiased; padding: 44px 56px 0;
+}
+.top { display: flex; justify-content: space-between; align-items: baseline; }
+.kicker { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 32px; letter-spacing: 0.1em; text-transform: uppercase; }
+.url { font-size: 28px; color: var(--ink-3); }
+.main { display: grid; grid-template-columns: 520px 1fr; column-gap: 44px; margin-top: 28px; align-items: center; min-height: 470px; }
+.num-block { border-left: 5px solid var(--accent); padding-left: 26px; margin-left: -31px; }
+.label { font-size: 40px; font-weight: 600; color: var(--ink-2); }
+.headline { font-family: "Space Grotesk", sans-serif; font-variant-numeric: lining-nums tabular-nums; font-weight: 700;
+  font-size: 168px; line-height: 0.95; letter-spacing: -0.045em; color: #FFFFFF; margin: 10px 0 0 -6px; white-space: nowrap; }
+.text { display: grid; row-gap: 12px; }
+.gm { font-size: 44px; font-weight: 700; line-height: 1.06; color: var(--ink-1); }
+.who { font-size: 36px; font-weight: 600; line-height: 1.12; color: var(--accent-ink); }
+.cond { font-size: 32px; font-weight: 500; line-height: 1.15; color: var(--ink-2); }
+.cond.status { white-space: nowrap; margin-top: -6px; color: var(--ink-1); font-weight: 600; font-size: 34px; }
+.cond.opens { color: var(--ink-3); }
+</style></head>
+<body>
+  <div class="top"><div class="kicker" data-fit="kicker">Frontier Inference Margins</div><div class="url">margins.ashitaorbis.com</div></div>
+  <div class="main">
+    <div class="num-block">
+      <div class="label" data-fit="label">Serving margin</div>
+      <div class="headline" data-fit="headline">{{HEADLINE}}</div>
+    </div>
+    <div class="text">
+      <div class="gm" data-fit="gm">Not a company gross margin.</div>
+      <div class="who" data-fit="who">{{SCENARIO}}</div>
+      <div class="cond status" data-fit="status">{{HEADLINE_STATUS}}</div>
+      <div class="cond" data-fit="billing">{{BILLING}}</div>
+      <div class="cond" data-fit="basis">{{BASIS}}</div>
+      <div class="cond opens" data-fit="opens">{{OPENS}}</div>
+    </div>
+  </div>
+</body></html>

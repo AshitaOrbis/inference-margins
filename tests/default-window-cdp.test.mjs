@@ -160,7 +160,7 @@ const evalExpr = async (send, expression) => {
   if (r.exceptionDetails) throw new Error("page eval threw: " + JSON.stringify(r.exceptionDetails).slice(0, 600));
   return r.result.value;
 };
-const READY = "(document.readyState === 'complete' && typeof renderScenarioWindow === 'function' && !!document.querySelector('#win-head .win-name') && !window.__imNav)";
+const READY = "(document.readyState === 'complete' && typeof renderScenarioWindow === 'function' && !!document.querySelector('.tile-hero .win-name') && !window.__imNav)";
 /* A navigation is complete only when the OLD document is gone: the marker lives on the old window object. */
 async function go(send, url) {
   try { await evalExpr(send, "window.__imNav = true"); } catch {}
@@ -223,12 +223,12 @@ const PROBE = `(() => {
     return r.width > 0 && r.height > 0 && getComputedStyle(el).visibility !== 'hidden' && getComputedStyle(el).display !== 'none';
   };
   const wl = appWorkload(S);
-  const nameEl = q('#win-head .win-name');
+  const nameEl = q('.tile-hero .win-name');
   return JSON.stringify({
     persp: q('#persp-preset').value, model: q('#model-preset').value,
-    name: txt('#win-head .win-name-scenario'), namePersp: nameEl ? nameEl.dataset.persp : null,
-    badge: txt('#win-head .win-badge'), tileDefault: q('.tile-hero').classList.contains('win-default'),
-    billing: txt('#win-head .win-billing'), basis: txt('#win-head .win-basis'), lead: txt('#win-head .win-lead'),
+    name: txt('.tile-hero .win-name-scenario'), namePersp: nameEl ? nameEl.dataset.persp : null,
+    badge: txt('.tile-hero .win-badge'), tileDefault: q('.tile-hero').classList.contains('win-default'),
+    billing: txt('.tile-hero .win-billing'), basis: txt('.tile-hero .win-basis'), lead: txt('.tile-hero .win-lead'),
     restore: !!q('#win-head .win-restore'), setHere: !!q('#win-head .win-default-row .win-set-default'),
     setHereText: txt('#win-head .win-default-row .win-set-default'),
     note: txt('#win-note'),
@@ -250,7 +250,7 @@ const PROBE = `(() => {
         && /policy-labeled scenario/.test(q('#out-margin-status').textContent),
     },
     calcVisible: visible(q('#out-calc .calc-eq')) && visible(q('#out-calc .calc-cost')) && visible(q('#out-calc .calc-billings')) && visible(q('#out-calc .calc-engine')),
-    windowVisible: visible(q('#win-head .win-name')) && visible(q('#win-head .win-swap')),
+    windowVisible: visible(q('.tile-hero .win-name')) && visible(q('#win-head .win-swap')),
     swapButtons: [...document.querySelectorAll('#win-head .win-swap-btn')].map(b => ({ id: b.dataset.persp, pressed: b.getAttribute('aria-pressed') })),
     allItems: [...document.querySelectorAll('#win-head .win-all-item')].map(li => ({ id: li.dataset.persp, set: !!li.querySelector('.win-set-default'), isDefault: !!li.querySelector('.win-is-default') })),
     perspIds: PERSPECTIVES.map(p => p.id), pageDefault: LANDING_DEFAULT_PERSP_ID,
@@ -472,7 +472,7 @@ async function main() {
           }
           const m = MODELS.find(x => x.id === mid), p = PERSPECTIVES.find(x => x.id === baseId);
           try { const a = resolveTraffic(m, p, currentTrafficSel()), b = resolveTraffic(m, p, { mode: "native" }); out.differs = a.ioRatio !== b.ioRatio || a.cacheHit !== b.cacheHit; } catch {}
-          const nameEl = box.querySelector(".win-name"), rowEl = box.querySelector(".win-default-row"), badgeEl = box.querySelector(".win-badge");
+          const nameEl = document.querySelector(".tile-hero .win-name"), rowEl = box.querySelector(".win-default-row"), badgeEl = document.querySelector(".tile-hero .win-badge"); /* bq-3550: identity sits in #win-identity, above the number, in the same tile */
           const rowText = rowEl ? rowEl.textContent : "";
           const rowSet = rowEl ? [...rowEl.querySelectorAll(".win-set-default")] : [];
           const onOpening = mid === opening.model && baseId === opening.persp;

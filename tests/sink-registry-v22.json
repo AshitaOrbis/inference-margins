@@ -56,7 +56,7 @@
   "site/uncertainty-contract.js"
  ],
  "unmatched": [],
- "classifiedCount": 1120,
+ "classifiedCount": 1130,
  "claimSinks": [
   {
    "id": "mcp-server/src/dcmap/layer.ts|mcp-build|50d2579283ff6c1f|0",
@@ -365,15 +365,6 @@
    "rule": "typed-tail-commit"
   },
   {
-   "id": "site/app.js|append-call|2374acb623936e6c|0",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "2374acb623936e6c",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "svg-chart-geometry"
-  },
-  {
    "id": "site/app.js|append-call|2521d099edf29edf|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -437,15 +428,6 @@
    "rule": "chart-tooltip-values"
   },
   {
-   "id": "site/app.js|append-call|3dc271be8a6b90bb|0",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "3dc271be8a6b90bb",
-   "occ": 0,
-   "class": "identity-strip",
-   "rule": "scenario-window"
-  },
-  {
    "id": "site/app.js|append-call|440e96c63d271726|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -462,6 +444,15 @@
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "custom-fleet-leg-panel"
+  },
+  {
+   "id": "site/app.js|append-call|46b4a086bd345104|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "46b4a086bd345104",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
   },
   {
    "id": "site/app.js|append-call|4713bded22659af1|0",
@@ -581,15 +572,6 @@
    "rule": "im-arc-t3-fleet-mode"
   },
   {
-   "id": "site/app.js|append-call|75175bef0ff98444|0",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "75175bef0ff98444",
-   "occ": 0,
-   "class": "identity-strip",
-   "rule": "scenario-window"
-  },
-  {
    "id": "site/app.js|append-call|7584488c71f541ae|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -608,20 +590,20 @@
    "rule": "dossier-panel"
   },
   {
+   "id": "site/app.js|append-call|771c93cd3d045c2c|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "771c93cd3d045c2c",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
    "id": "site/app.js|append-call|79c42630cd8bd394|0",
    "file": "site/app.js",
    "kind": "append-call",
    "hash16": "79c42630cd8bd394",
    "occ": 0,
-   "class": "hero-tile",
-   "rule": "im-arc-t1-hero-bases"
-  },
-  {
-   "id": "site/app.js|append-call|79c42630cd8bd394|1",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "79c42630cd8bd394",
-   "occ": 1,
    "class": "hero-tile",
    "rule": "im-arc-t1-hero-bases"
   },
@@ -707,6 +689,15 @@
    "rule": "final-answer-block"
   },
   {
+   "id": "site/app.js|append-call|a1843103a1e9ddae|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "a1843103a1e9ddae",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
    "id": "site/app.js|append-call|ab725ffebf825d41|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -732,15 +723,6 @@
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "interlock-lever-panel"
-  },
-  {
-   "id": "site/app.js|append-call|b4a8817a1aba32eb|0",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "b4a8817a1aba32eb",
-   "occ": 0,
-   "class": "identity-strip",
-   "rule": "scenario-window"
   },
   {
    "id": "site/app.js|append-call|b5803c9c3886dd00|0",
@@ -770,15 +752,6 @@
    "rule": "scenario-window"
   },
   {
-   "id": "site/app.js|append-call|bf86eadce21fe360|0",
-   "file": "site/app.js",
-   "kind": "append-call",
-   "hash16": "bf86eadce21fe360",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "svg-chart-geometry"
-  },
-  {
    "id": "site/app.js|append-call|c9164b2b0c991181|0",
    "file": "site/app.js",
    "kind": "append-call",
@@ -786,6 +759,15 @@
    "occ": 0,
    "class": "evidence-board",
    "rule": "evidence-board"
+  },
+  {
+   "id": "site/app.js|append-call|cb1c1a7b4289fd23|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "cb1c1a7b4289fd23",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
   },
   {
    "id": "site/app.js|append-call|cc0379e773c9b959|0",
@@ -810,6 +792,24 @@
    "file": "site/app.js",
    "kind": "append-call",
    "hash16": "d1352ee964984943",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
+   "id": "site/app.js|append-call|d748c937203082e4|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "d748c937203082e4",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
+   "id": "site/app.js|append-call|d85058496333797f|0",
+   "file": "site/app.js",
+   "kind": "append-call",
+   "hash16": "d85058496333797f",
    "occ": 0,
    "class": "identity-strip",
    "rule": "scenario-window"
@@ -1067,29 +1067,11 @@
    "rule": "chart-svg-text"
   },
   {
-   "id": "site/app.js|chart-text|5094bc873fa3cab1|0",
+   "id": "site/app.js|chart-text|5e6b8ea89b745a5e|0",
    "file": "site/app.js",
    "kind": "chart-text",
-   "hash16": "5094bc873fa3cab1",
+   "hash16": "5e6b8ea89b745a5e",
    "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "chart-svg-text"
-  },
-  {
-   "id": "site/app.js|chart-text|5094bc873fa3cab1|1",
-   "file": "site/app.js",
-   "kind": "chart-text",
-   "hash16": "5094bc873fa3cab1",
-   "occ": 1,
-   "class": "hardware-lens-tile",
-   "rule": "chart-svg-text"
-  },
-  {
-   "id": "site/app.js|chart-text|5094bc873fa3cab1|2",
-   "file": "site/app.js",
-   "kind": "chart-text",
-   "hash16": "5094bc873fa3cab1",
-   "occ": 2,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
   },
@@ -1193,19 +1175,46 @@
    "rule": "chart-svg-text"
   },
   {
-   "id": "site/app.js|chart-text|bf2edf090a557e50|0",
+   "id": "site/app.js|chart-text|b11c9eb828e5659c|0",
    "file": "site/app.js",
    "kind": "chart-text",
-   "hash16": "bf2edf090a557e50",
+   "hash16": "b11c9eb828e5659c",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
   },
   {
-   "id": "site/app.js|chart-text|cd52b480c764f5ae|0",
+   "id": "site/app.js|chart-text|b863a0806fb30d43|0",
    "file": "site/app.js",
    "kind": "chart-text",
-   "hash16": "cd52b480c764f5ae",
+   "hash16": "b863a0806fb30d43",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|be984595cb4f881e|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "be984595cb4f881e",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|be984595cb4f881e|1",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "be984595cb4f881e",
+   "occ": 1,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
+   "id": "site/app.js|chart-text|bf2edf090a557e50|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "bf2edf090a557e50",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
@@ -1247,6 +1256,15 @@
    "rule": "chart-svg-text"
   },
   {
+   "id": "site/app.js|chart-text|e6cdfa7755ab9eca|0",
+   "file": "site/app.js",
+   "kind": "chart-text",
+   "hash16": "e6cdfa7755ab9eca",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "chart-svg-text"
+  },
+  {
    "id": "site/app.js|chart-text|e8b2bea703c3d64b|0",
    "file": "site/app.js",
    "kind": "chart-text",
@@ -1274,28 +1292,10 @@
    "rule": "chart-svg-text"
   },
   {
-   "id": "site/app.js|chart-text|eaf1a643eeb75d80|0",
-   "file": "site/app.js",
-   "kind": "chart-text",
-   "hash16": "eaf1a643eeb75d80",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "chart-svg-text"
-  },
-  {
    "id": "site/app.js|chart-text|ebc0ba69f5153a28|0",
    "file": "site/app.js",
    "kind": "chart-text",
    "hash16": "ebc0ba69f5153a28",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "chart-svg-text"
-  },
-  {
-   "id": "site/app.js|chart-text|f69725fbb1b85eb0|0",
-   "file": "site/app.js",
-   "kind": "chart-text",
-   "hash16": "f69725fbb1b85eb0",
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-svg-text"
@@ -1326,6 +1326,15 @@
    "occ": 0,
    "class": "hero-tile",
    "rule": "hero-margin-cost-price-block"
+  },
+  {
+   "id": "site/app.js|class-style|0bac1c390711688d|0",
+   "file": "site/app.js",
+   "kind": "class-style",
+   "hash16": "0bac1c390711688d",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "computed-presentation-state"
   },
   {
    "id": "site/app.js|class-style|0f821a88500cfbfd|0",
@@ -1497,15 +1506,6 @@
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "total-case-bookmarks"
-  },
-  {
-   "id": "site/app.js|class-style|51b5b9d057fb22b3|0",
-   "file": "site/app.js",
-   "kind": "class-style",
-   "hash16": "51b5b9d057fb22b3",
-   "occ": 0,
-   "class": "hardware-lens-tile",
-   "rule": "computed-presentation-state"
   },
   {
    "id": "site/app.js|class-style|52880a189557f6fc|0",
@@ -2588,6 +2588,15 @@
    "rule": "fleet-switcher-block"
   },
   {
+   "id": "site/app.js|dom-write|6f1097b1b5484225|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "6f1097b1b5484225",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
+  },
+  {
    "id": "site/app.js|dom-write|6f2faf3f70d37496|0",
    "file": "site/app.js",
    "kind": "dom-write",
@@ -2613,6 +2622,15 @@
    "occ": 0,
    "class": "hero-tile",
    "rule": "form-correction-debt"
+  },
+  {
+   "id": "site/app.js|dom-write|72a09dea1d5e05f5|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "72a09dea1d5e05f5",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
   },
   {
    "id": "site/app.js|dom-write|7555e3bd5452c041|0",
@@ -2658,6 +2676,15 @@
    "occ": 0,
    "class": "hardware-lens-tile",
    "rule": "chart-tooltip-values"
+  },
+  {
+   "id": "site/app.js|dom-write|797b25348366095b|0",
+   "file": "site/app.js",
+   "kind": "dom-write",
+   "hash16": "797b25348366095b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "fleet-renderability-chip"
   },
   {
    "id": "site/app.js|dom-write|7d2c25ae66735727|0",
@@ -3938,6 +3965,15 @@
    "rule": "fleet-switcher-block"
   },
   {
+   "id": "site/app.js|mkel-call|47c1258fd2ab162b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "47c1258fd2ab162b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
    "id": "site/app.js|mkel-call|487a7e4911c80358|0",
    "file": "site/app.js",
    "kind": "mkel-call",
@@ -4280,15 +4316,6 @@
    "rule": "im-arc-t3-section-band-cells"
   },
   {
-   "id": "site/app.js|mkel-call|7f9ede8abf7f7f07|0",
-   "file": "site/app.js",
-   "kind": "mkel-call",
-   "hash16": "7f9ede8abf7f7f07",
-   "occ": 0,
-   "class": "hero-tile",
-   "rule": "im-arc-t1-hero-bases"
-  },
-  {
    "id": "site/app.js|mkel-call|7fdb79ee2391d25c|0",
    "file": "site/app.js",
    "kind": "mkel-call",
@@ -4514,6 +4541,15 @@
    "rule": "evidence-board"
   },
   {
+   "id": "site/app.js|mkel-call|a43d9f279bfda62b|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "a43d9f279bfda62b",
+   "occ": 0,
+   "class": "hero-tile",
+   "rule": "im-arc-t1-hero-bases"
+  },
+  {
    "id": "site/app.js|mkel-call|a80d6200e7d5826b|0",
    "file": "site/app.js",
    "kind": "mkel-call",
@@ -4527,15 +4563,6 @@
    "file": "site/app.js",
    "kind": "mkel-call",
    "hash16": "a89ec8b74b83e79f",
-   "occ": 0,
-   "class": "identity-strip",
-   "rule": "scenario-window"
-  },
-  {
-   "id": "site/app.js|mkel-call|a95de7f0d267a174|0",
-   "file": "site/app.js",
-   "kind": "mkel-call",
-   "hash16": "a95de7f0d267a174",
    "occ": 0,
    "class": "identity-strip",
    "rule": "scenario-window"
@@ -4845,6 +4872,15 @@
    "occ": 0,
    "class": "hero-tile",
    "rule": "margin-band-readout"
+  },
+  {
+   "id": "site/app.js|mkel-call|d644292d18ee4d98|0",
+   "file": "site/app.js",
+   "kind": "mkel-call",
+   "hash16": "d644292d18ee4d98",
+   "occ": 0,
+   "class": "identity-strip",
+   "rule": "scenario-window"
   },
   {
    "id": "site/app.js|mkel-call|d8ff9dc1112babe4|0",
@@ -5225,6 +5261,15 @@
    "rule": "svg-chart-geometry"
   },
   {
+   "id": "site/app.js|svg-geometry|fd60ce466299223a|0",
+   "file": "site/app.js",
+   "kind": "svg-geometry",
+   "hash16": "fd60ce466299223a",
+   "occ": 0,
+   "class": "hardware-lens-tile",
+   "rule": "svg-chart-geometry"
+  },
+  {
    "id": "site/app.js|title-attr|2532ddd8fd1b1555|0",
    "file": "site/app.js",
    "kind": "title-attr",
@@ -5561,5 +5606,5 @@
   "report-dossier",
   "share-string"
  ],
- "digest": "9e17483b3eb0d96c"
+ "digest": "48f7a7da646caaa9"
 }

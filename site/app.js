@@ -4315,6 +4315,7 @@ function renderSectionBandFace() {
 }
 
 /* ---------- chart: margin per hardware (horizontal bars, emphasis) ---------- */
+let HW_CHART_NARROW = null;
 function renderHwChart() {
   const el = $("chart-hw"); el.textContent = "";
   const w = blendWeights(S);
@@ -4333,7 +4334,16 @@ function renderHwChart() {
       renderable: isFinite(r.margin), inBlend: !!w[k], reason };
   });
   const blended = appWorkload(S);
-  const W = 720, rowH = 34, padL = 150, padR = 90, padT = 8;
+  /* bq-3550 visual pass: padT 8 → 26 gives the blend marker's label a band of its own above the first bar
+     (it used to sit on the first bar's value label), and the blend LINE is drawn under the bars instead of
+     over them, so it never strikes through a value label (which also carries a halo, styles.css). Geometry
+     and paint order only; every value, label string, accessible name and the text order are unchanged.
+     Below 760 px it takes the narrow layout renderAstraProChart() already uses: names above their bars
+     and a 320-unit viewBox, so the text is drawn at about its stated size on a phone instead of ~5 px
+     (a 720-wide viewBox in a 330 px column). Re-rendered when the width crosses the breakpoint. */
+  const narrow = window.innerWidth < 760;
+  HW_CHART_NARROW = narrow;
+  const W = narrow ? 320 : 720, rowH = narrow ? 44 : 34, padL = narrow ? 16 : 150, padR = narrow ? 50 : 90, padT = 26;
   const H = padT + rows.length * rowH + 26;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Margin by accelerator. Tab to inspect each renderable bar." });
   const x0 = padL, x1 = W - padR;
@@ -4345,10 +4355,11 @@ function renderHwChart() {
     svg.append(svgEl("line", { x1: xs(g), y1: padT, x2: xs(g), y2: H - 22, stroke: "var(--grid)", "stroke-width": 1 }));
     svg.append(chartText(xs(g), H - 8, fmtPct(g), { anchor: "middle", fill: "var(--ink-3)", size: 10.5 }));
   });
+  const firstRowNode = svgEl("g", { class: "chart-rows-start" }); svg.append(firstRowNode);
   rows.forEach((r, i) => {
-    const y = padT + i * rowH + 5;
-    const bh = 22;
-    svg.append(chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
+    const y = padT + i * rowH + (narrow ? 18 : 5);
+    const bh = narrow ? 18 : 22;
+    svg.append(narrow ? chartText(x0, y - 5, r.name, { size: 11.5 }) : chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
     if (!r.renderable) {
       svg.append(chartText(x0 + 6, y + bh / 2 + 4, appNoNumberLabel(r.reason), { size: 10.5, fill: "var(--ink-3)" }));
       return;
@@ -4357,7 +4368,9 @@ function renderHwChart() {
     const color = r.inBlend ? "var(--series-1)" : "var(--baseline)";
     const path = svgEl("path", { d: roundedBarPath(Math.min(xs(0), xs(v)), y, Math.abs(xs(v) - xs(0)), bh, 4, true), fill: color });
     svg.append(path);
-    svg.append(chartText(xs(Math.max(0, v)) + 6, y + bh / 2 + 4, fmtPct(r.margin), { weight: 600, fill: "var(--ink-1)" }));
+    const valueLabel = chartText(xs(Math.max(0, v)) + 6, y + bh / 2 + 4, fmtPct(r.margin), { weight: 600, fill: "var(--ink-1)" });
+    valueLabel.classList.add("chart-value-label");
+    svg.append(valueLabel);
     attachMarkTip(path, () => {
       // R2 (§1.6): this hardware-lens surface's OWN three-point policy band (computed
       // lazily at hover — sampled, no continuity implied).
@@ -4388,8 +4401,11 @@ function renderHwChart() {
   // blended reference line
   if (isFinite(blended.margin)) {
     const bx = xs(Math.max(xmin, Math.min(1, blended.margin)));
-    svg.append(svgEl("line", { x1: bx, y1: padT - 2, x2: bx, y2: H - 22, stroke: "var(--ink-1)", "stroke-width": 1.5, "stroke-dasharray": "" }));
-    svg.append(chartText(bx, padT + 2, "blend " + fmtPct(blended.margin), { anchor: bx > W - 170 ? "end" : "start", size: 10.5, fill: "var(--ink-1)", weight: 600 }));
+    // the line goes under the bars and labels: inserted right after the gridlines
+    svg.insertBefore(svgEl("line", { x1: bx, y1: padT - 6, x2: bx, y2: H - 22, stroke: "var(--ink-1)", "stroke-width": 1.5, "stroke-dasharray": "4 3", class: "chart-blend-line" }), firstRowNode);
+    const blendLabel = chartText(bx, padT - 10, "blend " + fmtPct(blended.margin), { anchor: bx < x0 + 60 ? "start" : bx > W - 60 ? "end" : "middle", size: 11.5, fill: "var(--ink-1)", weight: 600 });
+    blendLabel.classList.add("chart-value-label");
+    svg.append(blendLabel);
   }
   /* Owner annotation n12b450: the affordance has to SAY it is there. The same complaint he made
      about the spec-decode slider ("I'd have no idea how to activate it") applies to a bar that is
@@ -4588,6 +4604,7 @@ const STACK_KEYS = [
 const STACK_RENT_KEY = { k: "rent", name: "rent — lessor's cut (implied over modelled TCO)", color: "var(--series-5)" };
 const STACK_RENT_BELOW_KEY = { k: "rentBelow", name: "rent (reader-stated, below modelled TCO)", color: "var(--series-6)", className: "stack-rent-below" };
 let STACK_RENT_TOUCHED = false, STACK_RENT_MODE = null;
+let STACK_CHART_NARROW = null;
 function renderStackChart() {
   const el = $("chart-stack"); el.textContent = "";
   const toggle = $("stack-rent-toggle");
@@ -4667,7 +4684,21 @@ function renderStackChart() {
       appEngineContext(currentModel(), resolvedTraffic(), state), opts).costMix);
     const cell = sectionBandCell(band, fmt$);
     if (cell) { const line = mkEl("p", "chart-section-band"); line.appendChild(cell); el.appendChild(line); } }
-  const W = 720, rowH = 34, padL = 150, padR = 70, padT = 26;
+  /* bq-3550 visual pass: the legend WRAPS (it was laid out on one line from a 5.4-units-per-character
+     guess, and the fifth key was clipped to "rent — lessor's cu"), and below 760 px the chart takes the
+     narrow layout renderHwChart() and renderAstraProChart() use — names above bars, a 320-unit viewBox —
+     so its text is not drawn at ~5 px on a phone. Geometry only; every value, string and label is unchanged. */
+  const narrow = window.innerWidth < 760;
+  STACK_CHART_NARROW = narrow;
+  const W = narrow ? 320 : 720, rowH = narrow ? 44 : 34, padL = narrow ? 16 : 150, padR = narrow ? 56 : 70;
+  const legendPlaced = [];
+  { let lx = narrow ? 4 : padL, ly = 13;
+    legendKeys.forEach(sk => {
+      const wItem = 14 + sk.name.length * 5.6 + 14;
+      if (lx > (narrow ? 4 : padL) && lx + wItem > W - 4) { lx = narrow ? 4 : padL; ly += 17; }
+      legendPlaced.push({ sk, x: lx, y: ly }); lx += wItem;
+    }); }
+  const padT = (legendPlaced.length ? legendPlaced[legendPlaced.length - 1].y : 13) + 13;
   const H = padT + rows.length * rowH + 26;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Cost decomposition per accelerator. Tab to inspect each cost segment." });
   /* im-arc T1: preserve the pre-toggle expression exactly when rent is hidden; even a
@@ -4676,16 +4707,14 @@ function renderStackChart() {
     ? Math.max(r.total, r.segs.reduce((a, g) => a + g.v, 0))
     : r.total)) * 1.08;
   const xs = v => padL + v / xmax * (W - padL - padR);
-  // legend
-  let lx = padL;
-  legendKeys.forEach(sk => {
-    svg.append(svgEl("rect", { x: lx, y: 4, width: 10, height: 10, rx: 2, fill: sk.color }));
-    const t = chartText(lx + 14, 13, sk.name, { size: 10.5, fill: "var(--ink-2)" });
-    svg.append(t); lx += 14 + sk.name.length * 5.4 + 16;
+  // legend (wrapping rows, placed above)
+  legendPlaced.forEach(({ sk, x, y }) => {
+    svg.append(svgEl("rect", { x, y: y - 9, width: 10, height: 10, rx: 2, fill: sk.color }));
+    svg.append(chartText(x + 14, y, sk.name, { size: 10.5, fill: "var(--ink-2)" }));
   });
   rows.forEach((r, i) => {
-    const y = padT + i * rowH + 5, bh = 22;
-    svg.append(chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
+    const y = padT + i * rowH + (narrow ? 18 : 5), bh = narrow ? 18 : 22;
+    svg.append(narrow ? chartText(padL, y - 5, r.name, { size: 11.5 }) : chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
     if (!r.renderable) {
       svg.append(chartText(padL + 6, y + bh / 2 + 4, appNoNumberLabel(r.reason), { size: 10.5, fill: "var(--ink-3)" }));
       return;
@@ -4743,9 +4772,13 @@ function renderStackChart() {
 }
 
 /* ---------- chart: sensitivity (margin vs active params) ---------- */
+let SENS_CHART_NARROW = null;
 function renderSensChart() {
   const el = $("chart-sens"); el.textContent = "";
-  const W = 720, H = 300, padL = 56, padR = 20, padT = 12, padB = 40;
+  /* bq-3550: below 760 px a 380-unit viewBox (not 720) so the labels are drawn near their stated size on a
+     phone; every position below derives from W and H. Re-rendered when the width crosses the breakpoint. */
+  const narrow = window.innerWidth < 760; SENS_CHART_NARROW = narrow;
+  const W = narrow ? 380 : 720, H = narrow ? 260 : 300, padL = narrow ? 50 : 56, padR = narrow ? 22 : 20, padT = 12, padB = 40;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Margin versus active parameters. Tab to inspect named model markers." });
   // Active parameters cannot exceed total parameters. Several shipped models
   // are smaller than the chart's historical 800B ceiling, so bound every
@@ -4887,6 +4920,7 @@ function renderSensChart() {
 /* ---------- chart: cost per generation (columns, ordinal ramp) ---------- */
 /* Ramp lives in the skin token layer (--ord-1..5) so it re-themes with data-skin/data-theme. */
 const ORDINAL = ["var(--ord-1)", "var(--ord-2)", "var(--ord-3)", "var(--ord-4)", "var(--ord-5)"];
+let GEN_CHART_NARROW = null;
 function renderGenChart() {
   const el = $("chart-gen"); el.textContent = "";
   const ramp = ORDINAL;
@@ -4902,7 +4936,9 @@ function renderGenChart() {
       key: g.key, op: opCell,
       reason: appNoNumberReason(wl) };
   });
-  const W = 720, H = 300, padL = 56, padR = 16, padT = 26, padB = 34;
+  /* bq-3550: the same narrow viewBox as the other charts below 760 px (re-rendered at the breakpoint). */
+  const narrow = window.innerWidth < 760; GEN_CHART_NARROW = narrow;
+  const W = narrow ? 400 : 720, H = narrow ? 270 : 300, padL = narrow ? 52 : 56, padR = 16, padT = 26, padB = 34;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Cost per generation. Tab to inspect each column." });
   const renderedCosts = cols.filter(c => !c.proj && c.renderable).map(c => c.cost);
   const ymax = (renderedCosts.length ? Math.max(...renderedCosts) : 1) * 1.15; // exclude the unpriced Rubin projection and infeasible rows from the $ scale
@@ -5027,8 +5063,10 @@ function buildSubControls() {
   ];
   defs.forEach(p => el.appendChild(buildParam(p)));
 }
+let SUB_CHART_NARROW = null;
 function renderSubChart() {
   const el = $("chart-sub"); el.textContent = "";
+  SUB_CHART_NARROW = window.innerWidth < 760; // before any early return (bq-3550 internal review R5)
   const wl = appWorkload(S);
   const sub = $("chart-sub-sub");
   if (sub) sub.textContent = "What heavy users might cost under the selected serving scenario"
@@ -5051,14 +5089,16 @@ function renderSubChart() {
     { name: "Direct cost to serve", v: cost, color: cost > S.subPlan ? "var(--bad)" : "var(--good)" }, // status tokens: critical / good
     { name: "Value at list API prices", v: S.subUsage, color: "var(--baseline)" },
   ];
-  const W = 720, rowH = 36, padL = 210, padR = 90, padT = 8;
+  /* bq-3550: names above bars in a 320-unit viewBox below 760 px, like the other bar charts. */
+  const narrow = SUB_CHART_NARROW;
+  const W = narrow ? 320 : 720, rowH = narrow ? 44 : 36, padL = narrow ? 16 : 210, padR = narrow ? 64 : 90, padT = 8;
   const H = padT + rows.length * rowH + 30;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Subscription economics. Tab to inspect each bar." });
   const xmax = Math.max(...rows.map(r => r.v)) * 1.1;
   const xs = v => padL + v / xmax * (W - padL - padR);
   rows.forEach((r, i) => {
-    const y = padT + i * rowH + 6, bh = 22;
-    svg.append(chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
+    const y = padT + i * rowH + (narrow ? 16 : 6), bh = narrow ? 18 : 22;
+    svg.append(narrow ? chartText(padL, y - 5, r.name, { size: 11.5 }) : chartText(padL - 8, y + bh / 2 + 4, r.name, { anchor: "end", size: 11.5 }));
     const p = svgEl("path", { d: roundedBarPath(padL, y, Math.max(1, xs(r.v) - padL), bh, 4, true), fill: r.color });
     svg.append(p);
     svg.append(chartText(xs(r.v) + 6, y + bh / 2 + 4, fmt$(r.v), { weight: 600, fill: "var(--ink-1)" }));
@@ -5068,13 +5108,24 @@ function renderSubChart() {
   el.appendChild(svg);
   appendChartTable(el, ["Metric", "Per month"], rows.map(r => [r.name, fmt$(r.v)]),
     "Subscription economics");
-  const verdict = document.createElement("div");
-  verdict.style.cssText = "font-size:12.5px;font-weight:600;padding:2px 4px 8px;color:" + (subMargin >= 0 ? "var(--good)" : "var(--series-6)");
+  /* bq-3550: the verdict sentence and the appended fleet qualifier are two runs of the same text, so the
+     verdict can be bold and coloured while the qualifier reads at secondary weight (it was one bold coral
+     paragraph). Same words, same order; the colours are the ones the inline style used. */
+  const verdictBox = document.createElement("div");
+  verdictBox.className = "sub-verdict " + (subMargin >= 0 ? "sub-verdict-good" : "sub-verdict-bad");
+  const verdict = document.createElement("span");
+  verdict.className = "sub-verdict-lead";
+  verdictBox.appendChild(verdict);
   verdict.textContent = subMargin >= 0
     ? `Plan serving margin ≈ ${fmtPct(subMargin)} — THIS usage level is still profitable at direct serving cost (${fmtNum(tokensM * 1e6)} tokens ≈ ${fmt$(cost)} to serve). Says nothing about the median subscriber — no usage distribution is public.`
     : `THIS usage level is underwater by ${fmt$(cost - S.subPlan)}/mo at direct serving cost. Says nothing about the median subscriber — no usage distribution is public.`;
-  if (fleetRenderableText(wl)) verdict.textContent += " " + fleetRenderableText(wl) + ".";
-  el.appendChild(verdict);
+  if (fleetRenderableText(wl)) {
+    const qual = document.createElement("span");
+    qual.className = "sub-verdict-qual";
+    qual.textContent = " " + fleetRenderableText(wl) + ".";
+    verdictBox.appendChild(qual);
+  }
+  el.appendChild(verdictBox);
 }
 
 /* ---------- §10 "Astra Pro estimates" chart (bq-3351) ----------
@@ -5921,16 +5972,22 @@ function renderScenarioWindow() {
   const refocus = had ? { cls: [...had.classList].find(c => c.startsWith("win-")) || "", persp: (had.dataset && had.dataset.persp) || "" } : null;
   const tile = box.closest(".tile-hero"); if (tile) tile.classList.toggle("win-default", isDefault);
   box.textContent = "";
+  /* bq-3550: identity above the number, facts under its qualifier, controls after the tile's disclosures —
+     three containers in reading order (index.html). Both extra containers are optional: a page without them
+     (a stale cached document) gets the whole window in #win-head, as before. */
+  const idBox = document.getElementById("win-identity") || box, factsBox = document.getElementById("win-facts") || box;
+  if (idBox !== box) idBox.textContent = "";
+  if (factsBox !== box && factsBox !== idBox) factsBox.textContent = "";
   const kicker = mkEl("div", "win-kicker", "Selected scenario · calculated here");
   if (isDefault) kicker.append(" ", mkEl("span", "win-badge", readerDefault ? "★ Your default" : "★ Default"));
-  box.append(kicker);
+  idBox.append(kicker);
   const clean = !!p && presetIsClean() && !MODIFIED_FROM && !EXPLORATION_ORIGIN;
   const title = mkEl("div", "win-name");
   title.dataset.persp = p ? p.id : "";
   title.append(mkEl("strong", "win-name-scenario", (clean ? "" : "Modified from ") + (p ? scenarioLabel(p) : (MODIFIED_FROM || "a scenario"))),
     " · " + (m ? m.name.replace(" (define with sliders)", "") : "—"));
-  box.append(title);
-  if (!clean) box.append(mkEl("div", "win-modified", "These are no longer the scenario's unchanged settings."
+  idBox.append(title);
+  if (!clean) idBox.append(mkEl("div", "win-modified", "These are no longer the scenario's unchanged settings."
     + (p && p.statedReading ? " The quoted estimate has not changed." : "")));
   let basisName = "—";
   try { const db = displayedProcurementBasis(p, m, appFleetEnergy(S)); if (db && db.name) basisName = db.name; } catch { /* a synthetic modified state has no lens basis to name */ }
@@ -5941,7 +5998,7 @@ function renderScenarioWindow() {
     mkEl("span", "win-billing", "Billing: " + ((S.batchShare || 0) === 0 && (S.discount || 0) === 0
       ? "undiscounted list price"
       : "modeled effective price (Batch share " + (S.batchShare || 0) + "% · negotiated discount " + (S.discount || 0) + "%)")));
-  box.append(facts);
+  factsBox.append(facts);
   const base = windowBaseScenario(), baseDiffs = (base && m) ? reopenDifferences(m, base) : [];
   const defaultRow = mkEl("div", "win-default-row");
   if (isDefault) {
@@ -6412,10 +6469,22 @@ function renderRentSegment() {
   }
   const cut = Math.max(0, delta);
   const share = spread.rentCostPerMtok > 0 ? Math.max(0, Math.min(1, cut / spread.rentCostPerMtok)) : 0;
-  el.append(document.createTextNode(rentSegmentText(spread, fmt$)));
+  /* bq-3550 (GPT Pro expert review F01): the sentence's own two phrases key the bar's two segments — the same
+     words, wrapped so each carries its segment's swatch — and the lessor segment is drawn at the stated share to
+     the percent (rent-pct-N) instead of snapped to tens (rent-share-N drew a stated 65% as 60%). */
+  /* Inline, not a helper: the sink registry anchors this sentence's writes to renderRentSegment, and a write
+     moved into another function would leave the registry's claim coverage. First occurrences, in order. */
+  { let rest = rentSegmentText(spread, fmt$);
+    for (const [phrase, cls] of [["lessor's cut", "rent-key rent-key-cut"], ["modelled TCO", "rent-key rent-key-tco"]]) {
+      const i = rest.indexOf(phrase);
+      if (i < 0) continue;
+      el.append(document.createTextNode(rest.slice(0, i)), mkEl("span", cls, phrase));
+      rest = rest.slice(i + phrase.length);
+    }
+    el.append(document.createTextNode(rest)); }
   const bar = mkEl("div", "rent-bar"); bar.setAttribute("role", "img");
   bar.setAttribute("aria-label", "Owned TCO and implied lessor cut segments; implied rent share " + Math.round(share * 100) + " percent");
-  bar.append(mkEl("span", "rent-bar-tco"), mkEl("span", "rent-bar-cut rent-share-" + Math.round(share * 10)));
+  bar.append(mkEl("span", "rent-bar-tco"), mkEl("span", "rent-bar-cut rent-pct-" + Math.round(share * 100)));
   el.appendChild(bar);
 }
 
@@ -7427,6 +7496,26 @@ renderFrontDoor(); // range-explorer entry point above the catalog; renders rout
 if (loadScenarioFromURL()) { fullRefresh(); } else { applyPreset(); }
 renderAstraProChart(); // §10 Astra Pro estimates (bq-3351): static registry render, independent of the calculator state
 window.addEventListener("resize", () => { if ((window.innerWidth < 760) !== ASTRA_PRO_CHART_NARROW) renderAstraProChart(); });
+/* bq-3550 (internal review R5): a breakpoint redraw rebuilds the chart's subtree, so it hands focus back to the
+   same mark (by position among the chart's focusable marks) and re-opens any table view that was open. */
+function rerenderChartKeepingState(id, render) {
+  const el = document.getElementById(id);
+  const marks = () => (el ? [...el.querySelectorAll("[tabindex]")] : []);
+  const had = el && el.contains(document.activeElement) ? marks().indexOf(document.activeElement) : -1;
+  const openTables = el ? [...el.querySelectorAll("details")].map(d => d.open) : [];
+  render();
+  if (!el) return;
+  [...el.querySelectorAll("details")].forEach((d, i) => { if (openTables[i]) d.open = true; });
+  if (had >= 0) { const t = marks()[had]; if (t) t.focus({ preventScroll: true }); }
+}
+window.addEventListener("resize", () => {
+  const narrow = window.innerWidth < 760;
+  if (HW_CHART_NARROW !== null && narrow !== HW_CHART_NARROW) rerenderChartKeepingState("chart-hw", renderHwChart);
+  if (STACK_CHART_NARROW !== null && narrow !== STACK_CHART_NARROW) rerenderChartKeepingState("chart-stack", renderStackChart);
+  if (SENS_CHART_NARROW !== null && narrow !== SENS_CHART_NARROW) rerenderChartKeepingState("chart-sens", renderSensChart);
+  if (GEN_CHART_NARROW !== null && narrow !== GEN_CHART_NARROW) rerenderChartKeepingState("chart-gen", renderGenChart);
+  if (SUB_CHART_NARROW !== null && narrow !== SUB_CHART_NARROW) rerenderChartKeepingState("chart-sub", renderSubChart);
+});
 { const b = document.getElementById("share-scenario"); if (b) b.onclick = copyScenarioLink; }
 wireLoadOpLinks(); // §10/§6 "Load this operating point ↑" links (selector dissolve)
 wireSetDefaultButtons(); // note-20260912T180812Z-c9eaac: "set as default" on the estimate and stress cards

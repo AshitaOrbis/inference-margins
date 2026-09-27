@@ -1,7 +1,7 @@
 c42bba798dce5edaa95b23c5da1b2d515218e58b97b2f636bb89dcd97ae66586  ./404.html
 b2b3afbf9c7b0f94cb85b31f8c330aa306a92d9a18d0da94a31a853dd6c60727  ./_headers
 3414beac158e2e6613a8a2e54978cf1c673d88ea9fe391b1fbe26da127bc4b11  ./_redirects
-772b21632ea47252f5caf6c63723c321771c50aa49dd988c4d3c36d891efb9b3  ./app.js
+ee264add912b35855a3238d5af3a4de6e8bb943d3a88f9f1519ec4e8a5193ed5  ./app.js
 474107e4a0d4deda27d958d3f1112e15292f5e342a1216730f80affbbe235ced  ./appear-1440.png
 0d0028bbc601b0d67022d661f191ed336122199ba51a0802bf720491a6a3bdc0  ./appear-390.png
 6da5779346c63cca430d638bb9ace19b2429ddd1b46fc01c009001eed69d3da9  ./astra-pro-estimates.js
@@ -14,12 +14,13 @@ d2e9a90091f08bc1b6d55e226bce055abf3caea4ff2a63dfe3e2118b522fa654  ./engine.js
 e1585518e5df98557c8f639438c97c743c91cab4894a17b2f97f941172d64171  ./evidence-schema.js
 b80aa654e87ea1fd7b1638df5da4365e02714d93dbf30a008afaf64f964a3076  ./favicon.svg
 3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62  ./fonts/inter-latin-var.woff2
+b679a04ae75e54c254972fe2045832b028699914825d212a1dac6d703b8b1aec  ./fonts/inter-symbols-var.woff2
 83c005d49d8a6a50474c73a5a36ac0468076e9c4a29da7bdb14995d80560a5be  ./fonts/jetbrains-mono-latin-var.woff2
 e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2  ./fonts/playfair-display-latin-var.woff2
 c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source-serif-4-latin-var.woff2
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 b4ab3c3e5de311be8a4331b476ec69af36c2c74e88acf8c43066c253f980c97b  ./glossary.html
-ea58c66b3b365729aeaa2a09ab9e206f0eb566255e8cd7565b1be4b7e118e34d  ./index.html
+87610f5aa1a0c73349a3b49d54b8525924d6b2106fe2f8351aa866c1c3e5f0dc  ./index.html
 e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d  ./research/analyst-divergence.html
 c77f3b3946f5d46916d29c63914371912cf9656d7c1afe799ac919b732fb37ad  ./research/anthropic-gptpro.html
 60bcff1b130ef883a1287a74d39a71750b0cf4f4fff3f65d1217efd19d8e0e46  ./research/changelog.html
@@ -94,7 +95,8 @@ a84003deca077fe0fc907fa7ae5c44a4d748cfad470574f73c7e50ed0452f16d  ./research/rec
 ccad627e97e42065f4b947198c1b8e1100ad704d496d5909e1bfb4ae2867b78b  ./research/review-gptpro.html
 f6c4c3953325f5014105c59298b42b8ea67d6fb7a4ce62dbabf2d4a8746476ba  ./research/xai-gptpro.html
 100528aca7a88f03779fe96be3dcbbff61815cc1a4781e2cd93f4fe826e3489b  ./research/zhipu-gptpro.html
-d438e3ac6f00d000b1b5fb2540edfd639ae0a6dcfc38d43404d2cce49b806571  ./styles.css
+b01ad7a9d918e8a6f4323579da28c5500cd21e54005d02591455d65465cda0cc  ./share-card.png
+dedf6265680c51a5db5d0fcf8b46ed8303c0bdd8ee3a05ae38609f63ec8322e2  ./styles.css
 aef5cbc691243f47055856b0d066ca50b8956884410c25ad63db26b1c441f48f  ./tests/archived/README.md
 4e17c99bbd6b296d128429487c71518bf7df920e0137ba3b03045ff85f02d98b  ./tests/archived/fixtures-baseline-v211.json
 88d415c327f3eb92dacf0182ce16cdb938ed51315e4f998c41f09ade2fa2a772  ./tests/calibration-invariant-r1.test.mjs
@@ -124,7 +126,7 @@ fc75ccabf142a4a9b1dae67eafab76697860c1317b83aa5b48304cfb3a8ed098  ./tests/loao.m
 7bfb8b05d6c3ceaea9818c4e055a043b6ad0277f59bf00677906c77aceda7e76  ./tests/mix-band.test.mjs
 9d1c7cf99e9b1efca17ebe48be837c431cf998801b8f885f2f916e5ec570bc80  ./tests/permalink-defaults-move.test.mjs
 a9a993a77e6a081435f2a5f67d8e64123f014ad215d4228b5b32dbb2cb64b49b  ./tests/provenance-inputs.mjs
-3635d412667540d3c96110f712b0c6836a7038c8ab75b834f9ec67bd0aea83d7  ./tests/render-parity-r1.test.mjs
+27e7e3c5b9cfdd2feb3e37ad80c331a73c5160e44d46f33ff26596267bc4604f  ./tests/render-parity-r1.test.mjs
 e429c2d5a5e44249bfae6dfed35fb868aee5fad8a6e65407d8ab0d487f4471a6  ./tests/roofline-core.test.mjs
 d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofline-diagnostic.mjs
 7b1ee5fd2a26d0c45c45f280df04daad8a71f52d6f39bd5e5c76340e1cf833e8  ./tests/roofline-parallel-diff.mjs

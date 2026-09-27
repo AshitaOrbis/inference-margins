@@ -1,0 +1,36 @@
+{
+  "schema": "im-share-card/2",
+  "size": [
+    1200,
+    630
+  ],
+  "png": "site/share-card.png",
+  "png_sha256": "b01ad7a9d918e8a6f4323579da28c5500cd21e54005d02591455d65465cda0cc",
+  "template_sha256": "a624e053559a265491b6e2ee648589d12775b737c2efa9664fc471d3df7fe550",
+  "read_from": "site/index.html rendered at 1440×900, default skin/theme, no storage",
+  "values": {
+    "headline": "≈82%",
+    "headlineStatus": "policy-labeled scenario",
+    "scenario": "GPT-5.6 Pro estimate · Claude Opus 4.x",
+    "billing": "Billing: undiscounted list price",
+    "basis": "Cost basis: Low/committed planning rent",
+    "opens": "The page opens on this scenario.",
+    "floor": "≈58%",
+    "floorLabel": "Public-data floor",
+    "estimates": [
+      {
+        "who": "GPT-5.6 Pro",
+        "median": "83.1%",
+        "range": "68 – 92%",
+        "basis": "undiscounted list · stated range"
+      },
+      {
+        "who": "Fable 5",
+        "median": "≈77%",
+        "range": "65 – 82%",
+        "basis": "effective price · stated range"
+      }
+    ],
+    "title": "Frontier Inference Margins — interactive cost model"
+  }
+}
