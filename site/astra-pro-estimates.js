@@ -472,6 +472,160 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
    "review_page": "research/claude-sonnet-5-astra-pro.html"
   },
   {
+   "key": "claude-sonnet-5-5",
+   "name": "Claude Sonnet 5.5",
+   "provider": "Anthropic",
+   "api_model": "claude-sonnet-5-5; pinned release 2026-09-28; standard global first-party Claude API; adaptive thinking, high effort; ordinary Sonnet 5.5 path",
+   "open": false,
+   "carrier": "custom",
+   "scenarios": {
+    "central": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 100,
+      "total": 1000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 75,
+      "cacheCost": 5,
+      "cacheWriteShare": 20,
+      "cacheWriteMult": 125,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h100": 5,
+       "h200": 15,
+       "gb200": 25,
+       "gb300": 5,
+       "tpu7": 50
+      },
+      "rentAbsLeg": {
+       "h100": 2.5,
+       "h200": 3.8,
+       "gb200": 5,
+       "gb300": 6.5,
+       "tpu7": 2.7
+      },
+      "util": 65,
+      "stackMult": 1.1,
+      "trendMonths": 0,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 75
+     }
+    },
+    "low_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 200,
+      "total": 1600,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 75,
+      "cacheCost": 5,
+      "cacheWriteShare": 20,
+      "cacheWriteMult": 125,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h100": 5,
+       "h200": 15,
+       "gb200": 25,
+       "gb300": 5,
+       "tpu7": 50
+      },
+      "rentAbsLeg": {
+       "h100": 2.5,
+       "h200": 3.8,
+       "gb200": 5,
+       "gb300": 6.5,
+       "tpu7": 3.5
+      },
+      "util": 60,
+      "stackMult": 1.0,
+      "trendMonths": 0,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 75
+     }
+    },
+    "high_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 60,
+      "total": 1000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 75,
+      "cacheCost": 5,
+      "cacheWriteShare": 20,
+      "cacheWriteMult": 125,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h100": 5,
+       "h200": 15,
+       "gb200": 25,
+       "gb300": 5,
+       "tpu7": 50
+      },
+      "rentAbsLeg": {
+       "h100": 2.5,
+       "h200": 3.8,
+       "gb200": 5,
+       "gb300": 6.5,
+       "tpu7": 2.7
+      },
+      "util": 70,
+      "stackMult": 1.2,
+      "trendMonths": 0,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 75
+     }
+    }
+   },
+   "stated": {
+    "headline_pct": 83.8689,
+    "low_pct": 62.435,
+    "high_pct": 89.8596
+   },
+   "card_lines": [
+    "≈84% at list (span 62–90%)",
+    "The deciding assumption is 100B active parameters, giving modeled serving cost of about $0.225 per million mixed tokens."
+   ],
+   "context_length_assumed": "Standard 1M-capable model, not a separate short-context tariff. Representative 12000 input and 1000 total generated tokens; decode context 12500, peak 13000.",
+   "confidence": "low — identity and tariff are verified, but architecture, fleet allocation, procurement, throughput and occupancy are not; the span is three judgment scenarios, not a confidence interval.",
+   "reading": "Claude Sonnet 5.5 launched on 2026-09-28, the day this run was made, at Sonnet 5's price: $2 per million input tokens, $10 per million output tokens and $0.20 for a cache read, verified on Anthropic's pricing page that day. Nothing about its architecture or serving is public, so the run starts from the Sonnet 5 estimate made on 2026-09-25 and says, input by input, what it carried and what it changed. Carried: the model size (100B active, 1T total — the input it names as deciding the number), FP8 and the `dsr1` attention geometry, the fleet (half the tokens on TPU v7 at $2.70 per chip-hour, the rest across H100, H200, GB200 and GB300) and the traffic (12 input tokens per output token, 75% from cache); at the page's Reference traffic the same inputs compute {{REF}}. Changed, both stated as judgments: utilization from 70% to 65%, a launch-period allowance for routing and batching that have not settled; and a 10% private-stack efficiency credit, motivated by — not calculated from — Anthropic's claim of more than 30% faster output. The two changes nearly cancel, which is why the central reading sits close to Sonnet 5's. What moved is the span. The low case is a heavier model (200B active, 1.6T total) at 60% utilization with TPU v7 at $3.50 per chip-hour, a harsher downside than the Sonnet 5 estimate used, so the low end sits well below Sonnet 5's; the high case is a lighter one (60B active) with a 20% efficiency credit. Anthropic's other launch claims — up to 30% lower cost per task through fewer tokens and tool calls, and its benchmark gains — are claims about the product, and the run deliberately does not turn them into cost inputs. Trainium stays out of the fleet for the reason given on the Sonnet 5 page: the calculator's Trainium throughput unit is ambiguous. The run could not reach the calculator's connector and worked the published equations by hand; the engine reproduces all three of its figures to the fourth decimal.",
+   "dive": {
+    "id": "pr-20260928T182812Z-e802e3",
+    "date": "2026-09-28",
+    "model_slug": "gpt-6-pro",
+    "answered_at": "2026-09-28T19:17:09Z",
+    "answer_sha256": "860787de1b3d0d7c6194761711d989d0dee62610c5ad9dc147822a953cc068f8",
+    "raw_answer_sha256": "a451932ba6e0c0da1bd993cb5e5266a84f0fee3a0c5e7aa58babfc5e16acaf85"
+   },
+   "review_page": "research/claude-sonnet-5-5-astra-pro.html"
+  },
+  {
    "key": "claude-haiku-4-5",
    "name": "Claude Haiku 4.5",
    "provider": "Anthropic",
@@ -754,6 +908,148 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
     "raw_answer_sha256": "0417a9e76550125df8a4c5cb09d70ea5d75f2f8eecf7ec4ecfb77e8bf7f1b4cd"
    },
    "review_page": "research/gpt-6-astra-astra-pro.html"
+  },
+  {
+   "key": "gpt-6-sol",
+   "name": "GPT-6 Sol",
+   "provider": "OpenAI",
+   "api_model": "gpt-6-sol, current alias read 2026-09-28; API release 2026-09-22; Standard short-context text-token traffic, mixed reasoning effort; no dated immutable snapshot established",
+   "open": false,
+   "carrier": "custom",
+   "scenarios": {
+    "central": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 100,
+      "total": 5000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 70,
+      "stackMult": 1.0,
+      "trendMonths": 2,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    },
+    "low_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 250,
+      "total": 8000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 55,
+      "stackMult": 1.0,
+      "trendMonths": 2,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    },
+    "high_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 50,
+      "total": 3000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 10,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 75,
+      "stackMult": 1.0,
+      "trendMonths": 2,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    }
+   },
+   "stated": {
+    "headline_pct": 85.0,
+    "low_pct": 57.8,
+    "high_pct": 91.6
+   },
+   "card_lines": [
+    "≈85.0% at list (span 57.8–91.6%)",
+    "The unmeasured 100B-active assumption puts modeled output cost near $1.08/M against the $10/M output tariff."
+   ],
+   "context_length_assumed": "Standard short-context tariff, input <=272000 tokens. Representative request: 12000 input and 1000 billed output tokens including reasoning; average decode context 12500, peak KV context 13000. Assumed compact-agent-turn operating point, not a measured traffic mean; this field is documentation, not an engine control.",
+   "confidence": "low: the tariff is verified, but architecture, fleet allocation, all-in procurement, occupancy and traffic are unmeasured; the span contains three conditional scenarios, not a probability interval or a bound.",
+   "reading": "GPT-6 Sol is OpenAI's model below GPT-6 Astra, released on 2026-09-22 at $2 per million input tokens and $10 per million output tokens, with cached input at $0.20 — half GPT-5.6 Sol's $4/$20 and a fifth of GPT-6 Astra's $10/$50. The run verified the tariff on OpenAI's own pages the day it ran. The model was six days old, so almost nothing about how it is served is public, and the run says so input by input. The tariff and the model's options are disclosed. The fleet (30% H200, 50% GB200, 20% GB300 at $3.50, $4.50 and $6.00 per GPU-hour, all-in), the 70% occupancy and the `dsr1` attention geometry are carried over from the GPT-6 Astra estimate made three days earlier. The active-parameter count — 100B, the input the run names as deciding the number — is carried from this project's earlier GPT-5.6 Sol working point, not measured. Traffic is an agentic assumption: 12 input tokens per output token, 80% of input read from cache, and half of the fresh input billed as cache writes at 125% of the input price; at the page's Reference traffic the same inputs compute {{REF}}. The span is much wider than GPT-6 Astra's, and on purpose: the low case is a larger implementation (250B active, 8T total) at 55% occupancy, the high case a smaller one (50B active, 3T total) at 75%. The run also marks the span as conditional on balanced serving — a latency-first posture on the same tariff would land well below it. It could not reach the calculator's connector and worked the published equations by hand; the engine reproduces all three of its figures to the fourth decimal.",
+   "dive": {
+    "id": "pr-20260928T182812Z-844f4e",
+    "date": "2026-09-28",
+    "model_slug": "gpt-6-pro",
+    "answered_at": "2026-09-28T19:14:43Z",
+    "answer_sha256": "d5da78e81e6679b4d5c5430b8d5adc77bc936ec0d634171a9057665d52d50ab6",
+    "raw_answer_sha256": "3aa1fad50f7cd3c8dbe105efdee37293292aad8560d43f2fdf7cb784b7592708"
+   },
+   "review_page": "research/gpt-6-sol-astra-pro.html"
   },
   {
    "key": "gpt-5-6-terra",

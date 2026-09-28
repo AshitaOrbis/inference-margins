@@ -1,5 +1,18 @@
 # Changelog
 
+## Astra Pro estimates — 2026-09-28 (Claude Sonnet 5.5 and GPT-6 Sol added)
+
+**Added — two cards in §10 "Astra Pro estimates".** Claude Sonnet 5.5 (Anthropic, launched 2026-09-28) and
+GPT-6 Sol (OpenAI, released 2026-09-22), one GPT-6 Astra Pro research run each on 2026-09-28 (requests
+`pr-20260928T182812Z-e802e3` and `pr-20260928T182812Z-844f4e`), worked through this calculator exactly as
+the fourteen before them: the number on each card is this calculator's result on the run's recorded
+inputs, never typed, with the run's own stated figure beside it. Sonnet 5.5 launched the day its run was
+made and GPT-6 Sol six days before its run, so each run was given its nearest sibling's published estimate (Claude Sonnet 5 and GPT-6 Astra, 2026-09-25) as
+context rather than a target, and each says input by input what it carried over, what it changed and what
+it assumed. Their spans are wider than their siblings' for that reason. The fourteen existing records are
+byte-identical; the category now carries sixteen models. GPT-5.6 Sol and GPT-6 Luna have no Astra Pro
+estimate yet.
+
 ## Astra Pro estimates — 2026-09-25 (one research run per model; the one-lens comparison table removed)
 
 **Added — §10 "Astra Pro estimates".** A new category in §10: one GPT-6 Astra Pro research run per

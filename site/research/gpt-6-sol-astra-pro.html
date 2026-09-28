@@ -1,0 +1,860 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GPT-6 Sol — GPT-6 Astra Pro estimate · Frontier Inference Margins</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="canonical" href="https://margins.ashitaorbis.com/research/gpt-6-sol-astra-pro">
+<script>
+/* Skin/theme resolution — runs before the stylesheet applies so first paint has the right
+   identity (no flash). Order: ?skin/?theme URL params (validated; persisted) → referrer tier
+   (ashitaorbis.com = editorial, app.ashitaorbis.com = app; theme from storage or the tier
+   default) → stored im_skin/im_theme → default app+dark. READ-ONLY on the URL: never touches
+   history or the ?s= scenario permalink. */
+(function () {
+  var TIER_THEME = { app: "dark", editorial: "light" };
+  var okSkin = function (v) { return v === "app" || v === "editorial" ? v : null; };
+  var okTheme = function (v) { return v === "dark" || v === "light" ? v : null; };
+  var q = new URLSearchParams(location.search);
+  var skin = okSkin(q.get("skin")), theme = okTheme(q.get("theme"));
+  try {
+    if (skin) localStorage.setItem("im_skin", skin);
+    if (theme) localStorage.setItem("im_theme", theme);
+  } catch (e) { console.warn("Skin/theme preference not persisted (storage unavailable):", e); }
+  var storedSkin = null, storedTheme = null;
+  try { storedSkin = okSkin(localStorage.getItem("im_skin")); storedTheme = okTheme(localStorage.getItem("im_theme")); } catch (e) {}
+  if (!skin) {
+    try {
+      var refOrigin = (document.referrer ? new URL(document.referrer).origin : "").replace(/^https:\/\/www\./, "https://");
+      if (refOrigin === "https://ashitaorbis.com") skin = "editorial";
+      else if (refOrigin === "https://app.ashitaorbis.com") skin = "app";
+      if (skin && !theme) theme = storedTheme || TIER_THEME[skin];
+    } catch (e) {}
+  }
+  if (!skin) skin = storedSkin;
+  if (!theme) theme = storedTheme;
+  if (!skin) skin = "app";
+  if (!theme) theme = TIER_THEME[skin];
+  document.documentElement.dataset.skin = skin;
+  document.documentElement.dataset.theme = theme;
+})();
+</script>
+<link rel="stylesheet" href="../styles.css">
+<style>
+  .page { max-width: 880px; }
+  .report table { display: block; overflow-x: auto; }
+  .crumb { font-size: 13px; margin: 4px 0 14px; }
+  .raw-note { border: 1px dashed var(--ink-3); background: var(--wash); border-radius: 10px; padding: 8px 12px; font-size: 13px; color: var(--ink-2); margin: 10px 0 16px; }
+</style>
+</head>
+<body>
+<div class="page">
+<p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
+<section class="report">
+<div class="raw-note"><strong>In today's words</strong> — This is one of the site's <strong>Astra Pro estimates</strong>. The number on the site's card is this calculator's own result on the inputs the run declared, recomputed from those inputs; the figure the run itself stated is shown beside it. Its span is the author's judgment span — two scenarios it called plausible — not a probability interval. The quantity is the <strong>serving margin</strong> at list price, not a company gross margin.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>GPT-6 Sol — GPT-6 Astra Pro estimate (2026-09-28)</h1>
+<p><strong>Provenance.</strong> One GPT-6 Astra Pro research run (ChatGPT, model <code>gpt-6-pro</code>), request <code>pr-20260928T182812Z-844f4e</code>, answered 2026-09-28T19:14:43Z. It was given this calculator&#39;s input contract, the Claude Opus 4.x reference estimate and the live connector&#39;s scenario space, and asked to set every input for GPT-6 Sol from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT&#39;s interface citation markers are removed, as on every page of this annex; links into the research run&#39;s own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 <code>d5da78e81e6679b4d5c5430b8d5adc77bc936ec0d634171a9057665d52d50ab6</code>; as received, <code>3aa1fad50f7cd3c8dbe105efdee37293292aad8560d43f2fdf7cb784b7592708</code>).</p>
+<h2>What the site shows</h2>
+<table>
+<thead>
+<tr>
+<th>reading</th>
+<th>value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Card headline</strong> — this calculator on the run&#39;s central inputs, at list</td>
+<td><strong>~85%</strong> (84.97%)</td>
+</tr>
+<tr>
+<td>Span — the run&#39;s own low- and high-margin scenarios, same engine</td>
+<td>58%–92% (57.82% – 91.60%)</td>
+</tr>
+<tr>
+<td>The run&#39;s own stated reading</td>
+<td>85.0% (57.8–91.6%)</td>
+</tr>
+<tr>
+<td>Same central inputs at the page&#39;s Reference traffic (15:1, 60% cache) — context, not the headline</td>
+<td>~82%</td>
+</tr>
+</tbody></table>
+<p>The span is the author&#39;s judgment span: two scenarios it called plausible as a whole, not a probability interval and not a bound. The headline is a modeled unit direct-serving margin from public information; it is not a disclosure by the provider and not a company gross margin.</p>
+<h2>Our reading</h2>
+<p>GPT-6 Sol is OpenAI&#39;s model below GPT-6 Astra, released on 2026-09-22 at $2 per million input tokens and $10 per million output tokens, with cached input at $0.20 — half GPT-5.6 Sol&#39;s $4/$20 and a fifth of GPT-6 Astra&#39;s $10/$50. The run verified the tariff on OpenAI&#39;s own pages the day it ran. The model was six days old, so almost nothing about how it is served is public, and the run says so input by input. The tariff and the model&#39;s options are disclosed. The fleet (30% H200, 50% GB200, 20% GB300 at $3.50, $4.50 and $6.00 per GPU-hour, all-in), the 70% occupancy and the <code>dsr1</code> attention geometry are carried over from the GPT-6 Astra estimate made three days earlier. The active-parameter count — 100B, the input the run names as deciding the number — is carried from this project&#39;s earlier GPT-5.6 Sol working point, not measured. Traffic is an agentic assumption: 12 input tokens per output token, 80% of input read from cache, and half of the fresh input billed as cache writes at 125% of the input price; at the page&#39;s Reference traffic the same inputs compute ~82%. The span is much wider than GPT-6 Astra&#39;s, and on purpose: the low case is a larger implementation (250B active, 8T total) at 55% occupancy, the high case a smaller one (50B active, 3T total) at 75%. The run also marks the span as conditional on balanced serving — a latency-first posture on the same tariff would land well below it. It could not reach the calculator&#39;s connector and worked the published equations by hand; the engine reproduces all three of its figures to the fourth decimal.</p>
+<h2>The operating point</h2>
+<p>Carrier: the calculator&#39;s blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model&#39;s architecture is not published). <code>batchShare</code> and <code>discount</code> are 0 in every run (list basis).</p>
+<table>
+<thead>
+<tr>
+<th>input</th>
+<th>central</th>
+<th>low-margin scenario</th>
+<th>high-margin scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>customDonor</code></td>
+<td>dsr1</td>
+<td>dsr1</td>
+<td>dsr1</td>
+</tr>
+<tr>
+<td><code>active</code></td>
+<td>100</td>
+<td>250</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>total</code></td>
+<td>5000</td>
+<td>8000</td>
+<td>3000</td>
+</tr>
+<tr>
+<td><code>precision</code></td>
+<td>fp8</td>
+<td>fp8</td>
+<td>fp8</td>
+</tr>
+<tr>
+<td><code>priceIn</code></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>priceOut</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>cacheReadMult</code></td>
+<td>10</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr>
+<td><code>billCacheHit</code></td>
+<td>80</td>
+<td>80</td>
+<td>80</td>
+</tr>
+<tr>
+<td><code>cacheWriteShare</code></td>
+<td>50</td>
+<td>50</td>
+<td>50</td>
+</tr>
+<tr>
+<td><code>cacheWriteMult</code></td>
+<td>125</td>
+<td>125</td>
+<td>125</td>
+</tr>
+<tr>
+<td><code>cacheCost</code></td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td><code>batchShare</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>discount</code></td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td><code>blend</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+<td><code>{&quot;h200&quot;:30,&quot;gb200&quot;:50,&quot;gb300&quot;:20}</code></td>
+</tr>
+<tr>
+<td><code>rentAbsLeg</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+<td><code>{&quot;h200&quot;:3.5,&quot;gb200&quot;:4.5,&quot;gb300&quot;:6}</code></td>
+</tr>
+<tr>
+<td><code>util</code></td>
+<td>70</td>
+<td>55</td>
+<td>75</td>
+</tr>
+<tr>
+<td><code>stackMult</code></td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>trendMonths</code></td>
+<td>2</td>
+<td>2</td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>interact</code></td>
+<td>balanced</td>
+<td>balanced</td>
+<td>balanced</td>
+</tr>
+<tr>
+<td><code>hwMode</code></td>
+<td>rent</td>
+<td>rent</td>
+<td>rent</td>
+</tr>
+<tr>
+<td>traffic</td>
+<td>12:1, 80% cache</td>
+<td>12:1, 80% cache</td>
+<td>12:1, 80% cache</td>
+</tr>
+</tbody></table>
+<h2>The answer, verbatim</h2>
+<h2>0 — THE CARD, IN TWO LINES.</h2>
+<p>≈85.0% at list (span 57.8–91.6%)<br>The unmeasured 100B-active assumption puts modeled output cost near $1.08/M against the $10/M output tariff.</p>
+<h2>1 — PUBLIC FACTS.</h2>
+<p>Prepared by <strong>GPT-6 Astra Pro</strong>, <strong>September 28, 2026</strong>. All monetary amounts are USD. “Read” dates identify retrieval of living pages, not their publication dates. The estimate concerns <strong>unit direct-serving contribution margin</strong>, not company gross margin or verified OpenAI economics.</p>
+<p><strong>File receipt.</strong> All four uploaded files opened and were read. Their first lines, truncated where necessary, were:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>First line</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>03-calculator-contract-live-2026-09-28.json</code></td>
+<td><code>{&quot;result&quot;:{&quot;content&quot;:[{&quot;type&quot;:&quot;text&quot;,&quot;text&quot;:&quot;The scenario space of the Frontier Inference Margins ca</code></td>
+</tr>
+<tr>
+<td><code>04-opus-4x-reference-dive-verbatim-2026-08-08.md</code></td>
+<td><code>```json</code></td>
+</tr>
+<tr>
+<td><code>06-openai-gptpro.md</code></td>
+<td><code># OpenAI — GPT-5.6 Pro deep dive</code></td>
+</tr>
+<tr>
+<td><code>07-gpt-6-astra-astra-pro-2026-09-25.md</code></td>
+<td><code># GPT-6 Astra — GPT-6 Astra Pro estimate (2026-09-25)</code></td>
+</tr>
+</tbody></table>
+<p>Inline attachments 01, 02 and 05 were also read. Attachment 03 governs accepted inputs; attachment 04 supplies the original reference; attachments 06–07 supply earlier <strong>assumptions</strong>, not independent provider evidence.    </p>
+<ol>
+<li><p><strong>Exact identity — DISCLOSED for this model; immutable version UNKNOWN.</strong> I price the OpenAI API alias <strong><code>gpt-6-sol</code></strong>, released <strong>2026-09-22</strong>, as served on <strong>2026-09-28</strong>. The changelog records an image-encoding fix on <strong>2026-09-25</strong>. The model page supplies no dated immutable snapshot that I could establish; I do not invent one. Sources <strong>S1</strong>, <a href="https://developers.openai.com/api/docs/models/gpt-6-sol">https://developers.openai.com/api/docs/models/gpt-6-sol</a> — read <strong>2026-09-28</strong>; <strong>S2</strong>, <a href="https://developers.openai.com/api/docs/changelog">https://developers.openai.com/api/docs/changelog</a> — entries <strong>2026-09-22</strong> and <strong>2026-09-25</strong>. </p>
+</li>
+<li><p><strong>Current tariff — DISCLOSED for this model.</strong> Standard short-context prices are <strong>$2.00 fresh input / $0.20 cached input / $2.50 cache-write input / $10.00 output per million tokens</strong>. The brief is correct. Above <strong>272,000 input tokens</strong>, the entire request uses <strong>$4.00 / $0.40 / $5.00 / $15.00</strong>. Batch/Flex cost half Standard; Fast costs twice the applicable rate. I price neither those modes nor regional premiums. The promotional-expiry notice concerns <strong>GPT-5.6 Sol</strong>, not GPT-6 Sol; I found no separate expiring GPT-6 Sol tariff. <strong>S3</strong>, <a href="https://developers.openai.com/api/docs/pricing">https://developers.openai.com/api/docs/pricing</a> — read <strong>2026-09-28</strong>, corroborated by <strong>S1</strong>. </p>
+</li>
+<li><p><strong>Options and token boundary — DISCLOSED for this model; traffic weighting ASSUMED.</strong> Sol supports reasoning efforts <code>none</code>, <code>low</code>, <code>medium</code> (default), <code>high</code>, <code>xhigh</code> and <code>max</code>; a <strong>1,050,000-token</strong> context window; <strong>128,000</strong> maximum output tokens; and a stated knowledge cutoff of <strong>2026-04-20</strong>. I price Standard text-token traffic across reasoning efforts, not a subscription, tool execution or separate Fast service. Billed output includes hidden reasoning. <strong>S1</strong>, model URL above, and <strong>S13</strong>, <a href="https://developers.openai.com/api/docs/guides/reasoning">https://developers.openai.com/api/docs/guides/reasoning</a> — both read <strong>2026-09-28</strong>. </p>
+</li>
+<li><p><strong>Launch economics — DISCLOSED product claims, not cost-of-serving measurements.</strong> OpenAI attributes lower prices to caching and inference improvements. The Sol tariff is half its predecessor’s current $4/$20 tariff. Its launch table reports <strong>33.2% on AutomationBench at $0.27/task</strong>, versus <strong>26.9%</strong> for Opus 5 at <strong>11.1 times</strong> that task price. These are benchmark results and customer expenditure, not GPU-hour costs. They receive no direct parameter-count or cost multiplier here. <strong>S4</strong>, <a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/">https://openai.com/index/introducing-gpt-6-sol-and-luna/</a> — <strong>2026-09-22</strong>. </p>
+</li>
+<li><p><strong>Architecture — UNKNOWN for Sol; predecessor proxy COMMUNITY ESTIMATE.</strong> I found no Sol disclosure of active/total parameters, expert routing, attention geometry or production precision. Epoch’s <strong>50–300B active-parameter</strong> estimate concerns <strong>GPT-5</strong>, not GPT-6 Sol. My <strong>100B active / 5T total</strong> is <strong>ASSUMED</strong>, carrying an earlier Sol working prior rather than upgrading it into a measurement. <strong>S7</strong>, <a href="https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy">https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy</a> — <strong>2025-10-03</strong>; <strong>A06</strong>, <a href="https://margins.ashitaorbis.com/research/openai-gptpro">https://margins.ashitaorbis.com/research/openai-gptpro</a> — estimate dated <strong>2026-07-09</strong>; Sol documentation <strong>S1</strong>, checked <strong>2026-09-28</strong>.  </p>
+</li>
+<li><p><strong>Serving hardware and location — DISCLOSED at provider level; Sol allocation UNKNOWN.</strong> OpenAI identifies operating Hopper/Blackwell systems across Microsoft, OCI and CoreWeave and describes a partner-centric infrastructure strategy. Neither identifies Sol’s inference sites or generation shares. I use a North American partner-capacity approximation, not an asserted Sol-to-Abilene allocation. The often-repeated <strong>3 GW inference</strong> figure in the February announcement concerns the Rubin collaboration, not verified current Sol capacity. <strong>S8</strong>, <a href="https://openai.com/index/scaling-ai-for-everyone/">https://openai.com/index/scaling-ai-for-everyone/</a> — <strong>2026-02-27</strong>; <strong>S9</strong>, <a href="https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/">https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/</a> — <strong>2026-04-29</strong>. </p>
+</li>
+<li><p><strong>Public hardware prices — DISCLOSED by the seller.</strong> CoreWeave lists <strong>$50.44/hour for eight H200 GPUs</strong>, or <strong>$6.305/GPU-hour</strong>, and <strong>$42/hour for a four-GPU GB200 slice</strong>, or <strong>$10.50/GPU-hour</strong>, with host resources. GB300 directs buyers to sales rather than giving a numerical quote. These are public offerings, not OpenAI’s contracts. <strong>S10</strong>, <a href="https://www.coreweave.com/pricing">https://www.coreweave.com/pricing</a> — read <strong>2026-09-28</strong>. </p>
+</li>
+<li><p><strong>Procurement used here — INFERENCE; GB300 price ASSUMED.</strong> I carry <strong>H200 $3.50, GB200 $4.50, GB300 $6.00 per GPU-hour</strong> from the sibling estimate. The first two are assumed committed-capacity equivalents below S10’s public offers, motivated by S9’s procurement posture; GB300’s premium has weaker support. Every rate is expressly <strong>all-in</strong>, including accelerator, power, hosting and networking. <strong>A07</strong>, <a href="https://margins.ashitaorbis.com/research/gpt-6-astra-astra-pro">https://margins.ashitaorbis.com/research/gpt-6-astra-astra-pro</a> — <strong>2026-09-25</strong>; underlying comparison sources <strong>S9/S10</strong>, dated above. No actual Sol transfer price was established. </p>
+</li>
+<li><p><strong>Caching — DISCLOSED mechanics and selected examples; population mix UNKNOWN.</strong> OpenAI distinguishes ordinary input, cache reads and cache writes as exclusive billing categories. Its September update reports selected customers with high reuse: Manus rose from about <strong>85% to above 90%</strong>. Such examples support the reuse mechanism, not a Sol-wide census. <strong>S5</strong>, <a href="https://developers.openai.com/api/docs/guides/prompt-caching">https://developers.openai.com/api/docs/guides/prompt-caching</a> — read <strong>2026-09-28</strong>; <strong>S6</strong>, <a href="https://openai.com/index/better-prompt-caching-for-gpt-6/">https://openai.com/index/better-prompt-caching-for-gpt-6/</a> — <strong>2026-09-22</strong>. My 80% read share and write frequency remain assumptions. </p>
+</li>
+<li><p><strong>Endpoint speed — COMMUNITY ESTIMATE, specifically an independent measurement.</strong> Artificial Analysis’s rolling OpenAI endpoint measurement at maximum effort reports <strong>89.8 output tokens/second</strong> and <strong>125.39 seconds to first answer token</strong>, including reasoning latency. These are endpoint measurements, not aggregate tokens per GPU. I do not divide a GPU rent by 89.8. <strong>S11</strong>, <a href="https://artificialanalysis.ai/models/gpt-6-sol/providers">https://artificialanalysis.ai/models/gpt-6-sol/providers</a> — read <strong>2026-09-28</strong>. </p>
+</li>
+<li><p><strong>Occupancy and traffic — UNKNOWN for Sol.</strong> The provider and benchmark material above does not establish paid-capacity occupancy, aggregate phase throughput, input/output lengths, or serving-versus-billing cache shares. My <strong>70% occupancy, 12:1 input:output and 80% cache reuse are ASSUMED</strong>. Epoch’s realized-FLOP utilization is a different quantity, not this calculator’s occupancy divisor. Search boundary: <strong>S1, S6–S11</strong>, checked <strong>2026-09-28</strong>; relevant proxy <strong>S7</strong>, dated <strong>2025-10-03</strong>. </p>
+</li>
+<li><p><strong>Private-stack evidence — DISCLOSED for the predecessor; transfer ASSUMED.</strong> OpenAI reported <strong>20% lower serving cost from kernel work</strong> and <strong>over 15% better token-generation efficiency from draft-model work</strong> for GPT-5.6. These are historical improvements, not a measured Sol advantage over contemporary open practice. I carry a discounted, single residual allowance rather than multiplying these claims. <strong>S12</strong>, <a href="https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/">https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/</a> — <strong>2026-07-29</strong>. </p>
+</li>
+<li><p><strong>Financial perimeter — CREDIBLY REPORTED company figure; Sol economics UNKNOWN.</strong> Reuters relayed a <strong>33% adjusted OpenAI company gross margin for 2025</strong>. It does not identify this model’s contribution margin. No Sol-specific revenue, serving cost per million tokens or margin disclosure was established. <strong>S14</strong>, <a href="https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/">https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/</a> — published <strong>2026-02-20</strong>, updated <strong>2026-02-21</strong>. </p>
+</li>
+<li><p><strong>Calculator mechanics — DISCLOSED by the calculator author, not OpenAI measurements.</strong> I inspected its public equations and registries and transcribed the relevant arithmetic locally. <strong>S15</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js</a>; <strong>S16</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js</a>; <strong>S17</strong>, <a href="https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js">https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js</a> — retrieved <strong>2026-09-28</strong>, used alongside the supplied contract. <strong>No successful live MCP scenario result was obtained.</strong></p>
+</li>
+</ol>
+<h2>2 — CALCULATOR INPUTS.</h2>
+<p>All parameter counts are <strong>billions</strong>. <code>cacheWriteShare</code> is the implementation’s percentage of <strong>non-cache-read input</strong>: 80% reads plus a 50% write share produces <strong>80% read / 10% ordinary fresh / 10% write</strong> across all input tokens. Sources on assumed inputs identify context or the origin of a carry, not a measurement of the selected number. The three <code>stated</code> values are rounded <strong>local-replay expectations</strong>, not MCP returns. </p>
+<pre><code class="language-json">{
+  &quot;model_id&quot;: &quot;custom&quot;,
+  &quot;model_name&quot;: &quot;GPT-6 Sol&quot;,
+  &quot;api_model_priced&quot;: &quot;gpt-6-sol, current alias read 2026-09-28; API release 2026-09-22; Standard short-context text-token traffic, mixed reasoning effort; no dated immutable snapshot established&quot;,
+  &quot;customDonor&quot;: &quot;dsr1&quot;,
+  &quot;basis&quot;: &quot;list&quot;,
+  &quot;context_length_assumed&quot;: &quot;Standard short-context tariff, input &lt;=272000 tokens. Representative request: 12000 input and 1000 billed output tokens including reasoning; average decode context 12500, peak KV context 13000. Assumed compact-agent-turn operating point, not a measured traffic mean; this field is documentation, not an engine control.&quot;,
+  &quot;central&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 100,
+      &quot;total&quot;: 5000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 10,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6
+      },
+      &quot;util&quot;: 70,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;low_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 250,
+      &quot;total&quot;: 8000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 10,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6
+      },
+      &quot;util&quot;: 55,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;high_margin&quot;: {
+    &quot;overrides&quot;: {
+      &quot;customDonor&quot;: &quot;dsr1&quot;,
+      &quot;active&quot;: 50,
+      &quot;total&quot;: 3000,
+      &quot;precision&quot;: &quot;fp8&quot;,
+      &quot;priceIn&quot;: 2,
+      &quot;priceOut&quot;: 10,
+      &quot;cacheReadMult&quot;: 10,
+      &quot;billCacheHit&quot;: 80,
+      &quot;cacheWriteShare&quot;: 50,
+      &quot;cacheWriteMult&quot;: 125,
+      &quot;cacheCost&quot;: 5,
+      &quot;batchShare&quot;: 0,
+      &quot;discount&quot;: 0,
+      &quot;blend&quot;: {
+        &quot;h200&quot;: 30,
+        &quot;gb200&quot;: 50,
+        &quot;gb300&quot;: 20
+      },
+      &quot;rentAbsLeg&quot;: {
+        &quot;h200&quot;: 3.5,
+        &quot;gb200&quot;: 4.5,
+        &quot;gb300&quot;: 6
+      },
+      &quot;util&quot;: 75,
+      &quot;stackMult&quot;: 1.0,
+      &quot;trendMonths&quot;: 2,
+      &quot;interact&quot;: &quot;balanced&quot;,
+      &quot;hwMode&quot;: &quot;rent&quot;
+    },
+    &quot;traffic&quot;: {
+      &quot;mode&quot;: &quot;custom&quot;,
+      &quot;io_ratio&quot;: 12,
+      &quot;cache_hit&quot;: 80
+    }
+  },
+  &quot;stated&quot;: {
+    &quot;headline_pct&quot;: 85.0,
+    &quot;low_pct&quot;: 57.8,
+    &quot;high_pct&quot;: 91.6
+  },
+  &quot;sources&quot;: [
+    {&quot;id&quot;: &quot;S1&quot;, &quot;claim&quot;: &quot;Sol alias, model options, context limits and token tariff; retrieval date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/models/gpt-6-sol&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S2&quot;, &quot;claim&quot;: &quot;API release September 22; image-encoding fix September 25, 2026.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/changelog&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S3&quot;, &quot;claim&quot;: &quot;Standard Sol tariff: 2 input, 0.20 read, 2.50 write, 10 output USD/M; retrieval date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/pricing&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S4&quot;, &quot;claim&quot;: &quot;Launch positioning, benchmark/task-price claims and predecessor price comparison; not serving-cost measurements.&quot;, &quot;url&quot;: &quot;https://openai.com/index/introducing-gpt-6-sol-and-luna/&quot;, &quot;date&quot;: &quot;2026-09-22&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S5&quot;, &quot;claim&quot;: &quot;Exclusive fresh/read/write billing categories and cache mechanics; retrieval date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/guides/prompt-caching&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S6&quot;, &quot;claim&quot;: &quot;Caching improvements and selected-customer observations, not Sol-wide traffic telemetry.&quot;, &quot;url&quot;: &quot;https://openai.com/index/better-prompt-caching-for-gpt-6/&quot;, &quot;date&quot;: &quot;2026-09-22&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S7&quot;, &quot;claim&quot;: &quot;Epoch GPT-5 active-parameter range 50-300B; predecessor proxy only.&quot;, &quot;url&quot;: &quot;https://epoch.ai/gradient-updates/how-many-digital-workers-could-openai-deploy&quot;, &quot;date&quot;: &quot;2025-10-03&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S8&quot;, &quot;claim&quot;: &quot;Operating Hopper/Blackwell partner systems; announced Rubin capacity is a separate statement.&quot;, &quot;url&quot;: &quot;https://openai.com/index/scaling-ai-for-everyone/&quot;, &quot;date&quot;: &quot;2026-02-27&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S9&quot;, &quot;claim&quot;: &quot;Partner-centric infrastructure strategy, not a Sol-specific fleet allocation.&quot;, &quot;url&quot;: &quot;https://openai.com/index/building-the-compute-infrastructure-for-the-intelligence-age/&quot;, &quot;date&quot;: &quot;2026-04-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S10&quot;, &quot;claim&quot;: &quot;CoreWeave public H200 and GB200 system prices; no numeric GB300 quote; retrieval date.&quot;, &quot;url&quot;: &quot;https://www.coreweave.com/pricing&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S11&quot;, &quot;claim&quot;: &quot;OpenAI Sol max-effort endpoint measurement: 89.8 output tokens/s, 125.39 s first-answer latency; retrieval date.&quot;, &quot;url&quot;: &quot;https://artificialanalysis.ai/models/gpt-6-sol/providers&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;COMMUNITY ESTIMATE&quot;},
+    {&quot;id&quot;: &quot;S12&quot;, &quot;claim&quot;: &quot;GPT-5.6 kernel and draft-model improvement claims; not a measured current Sol/open-stack gap.&quot;, &quot;url&quot;: &quot;https://openai.com/index/gpt-5-6-frontier-intelligence-efficiency/&quot;, &quot;date&quot;: &quot;2026-07-29&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S13&quot;, &quot;claim&quot;: &quot;Reasoning tokens are billed as output; retrieval date.&quot;, &quot;url&quot;: &quot;https://developers.openai.com/api/docs/guides/reasoning&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S14&quot;, &quot;claim&quot;: &quot;Reuters relays 33% adjusted company gross margin for 2025, not Sol economics.&quot;, &quot;url&quot;: &quot;https://www.reuters.com/technology/openai-sees-compute-spend-around-600-billion-by-2030-cnbc-reports-2026-02-20/&quot;, &quot;date&quot;: &quot;2026-02-20&quot;, &quot;evidence_class&quot;: &quot;CREDIBLY REPORTED&quot;},
+    {&quot;id&quot;: &quot;S15&quot;, &quot;claim&quot;: &quot;Calculator-author-published roofline implementation; retrieval date.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-roofline-v22.js&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S16&quot;, &quot;claim&quot;: &quot;Calculator donor, hardware, concurrency and calibration registries; retrieval date.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine-data-v22.js&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;S17&quot;, &quot;claim&quot;: &quot;Calculator cost/billing composition, including writes as a share of non-read input; retrieval date.&quot;, &quot;url&quot;: &quot;https://github.com/AshitaOrbis/inference-margins/blob/main/site/engine.js&quot;, &quot;date&quot;: &quot;2026-09-28&quot;, &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;id&quot;: &quot;A06&quot;, &quot;claim&quot;: &quot;Earlier estimator assumptions for GPT-5.6 Sol; not provider disclosures.&quot;, &quot;url&quot;: &quot;https://margins.ashitaorbis.com/research/openai-gptpro&quot;, &quot;date&quot;: &quot;2026-07-09&quot;, &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;id&quot;: &quot;A07&quot;, &quot;claim&quot;: &quot;Sibling Astra estimator operating point supplied as attachment 07; not provider disclosures.&quot;, &quot;url&quot;: &quot;https://margins.ashitaorbis.com/research/gpt-6-astra-astra-pro&quot;, &quot;date&quot;: &quot;2026-09-25&quot;, &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;key_inputs&quot;: [
+    {&quot;input&quot;: &quot;active&quot;, &quot;central&quot;: 100, &quot;low_margin&quot;: 250, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S7&quot;, &quot;A06&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;total&quot;, &quot;central&quot;: 5000, &quot;low_margin&quot;: 8000, &quot;high_margin&quot;: 3000, &quot;source_ids&quot;: [&quot;A06&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;customDonor&quot;, &quot;central&quot;: &quot;dsr1&quot;, &quot;low_margin&quot;: &quot;dsr1&quot;, &quot;high_margin&quot;: &quot;dsr1&quot;, &quot;source_ids&quot;: [&quot;S16&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;precision&quot;, &quot;central&quot;: &quot;fp8&quot;, &quot;low_margin&quot;: &quot;fp8&quot;, &quot;high_margin&quot;: &quot;fp8&quot;, &quot;source_ids&quot;: [&quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;priceIn&quot;, &quot;central&quot;: 2, &quot;low_margin&quot;: 2, &quot;high_margin&quot;: 2, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;priceOut&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheReadMult&quot;, &quot;central&quot;: 10, &quot;low_margin&quot;: 10, &quot;high_margin&quot;: 10, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteMult&quot;, &quot;central&quot;: 125, &quot;low_margin&quot;: 125, &quot;high_margin&quot;: 125, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S3&quot;], &quot;evidence_class&quot;: &quot;DISCLOSED&quot;},
+    {&quot;input&quot;: &quot;billCacheHit&quot;, &quot;central&quot;: 80, &quot;low_margin&quot;: 80, &quot;high_margin&quot;: 80, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S6&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheWriteShare&quot;, &quot;central&quot;: 50, &quot;low_margin&quot;: 50, &quot;high_margin&quot;: 50, &quot;source_ids&quot;: [&quot;S5&quot;, &quot;S6&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;cacheCost&quot;, &quot;central&quot;: 5, &quot;low_margin&quot;: 5, &quot;high_margin&quot;: 5, &quot;source_ids&quot;: [&quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;blend&quot;, &quot;central&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;low_margin&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;high_margin&quot;: {&quot;h200&quot;: 30, &quot;gb200&quot;: 50, &quot;gb300&quot;: 20}, &quot;source_ids&quot;: [&quot;S8&quot;, &quot;S9&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;rentAbsLeg&quot;, &quot;central&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6}, &quot;low_margin&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6}, &quot;high_margin&quot;: {&quot;h200&quot;: 3.5, &quot;gb200&quot;: 4.5, &quot;gb300&quot;: 6}, &quot;source_ids&quot;: [&quot;S9&quot;, &quot;S10&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;util&quot;, &quot;central&quot;: 70, &quot;low_margin&quot;: 55, &quot;high_margin&quot;: 75, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;stackMult&quot;, &quot;central&quot;: 1.0, &quot;low_margin&quot;: 1.0, &quot;high_margin&quot;: 1.0, &quot;source_ids&quot;: [&quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;trendMonths&quot;, &quot;central&quot;: 2, &quot;low_margin&quot;: 2, &quot;high_margin&quot;: 2, &quot;source_ids&quot;: [&quot;S12&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;interact&quot;, &quot;central&quot;: &quot;balanced&quot;, &quot;low_margin&quot;: &quot;balanced&quot;, &quot;high_margin&quot;: &quot;balanced&quot;, &quot;source_ids&quot;: [&quot;S1&quot;, &quot;S11&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;hwMode&quot;, &quot;central&quot;: &quot;rent&quot;, &quot;low_margin&quot;: &quot;rent&quot;, &quot;high_margin&quot;: &quot;rent&quot;, &quot;source_ids&quot;: [&quot;S9&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;INFERENCE&quot;},
+    {&quot;input&quot;: &quot;traffic.io_ratio&quot;, &quot;central&quot;: 12, &quot;low_margin&quot;: 12, &quot;high_margin&quot;: 12, &quot;source_ids&quot;: [&quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;traffic.cache_hit&quot;, &quot;central&quot;: 80, &quot;low_margin&quot;: 80, &quot;high_margin&quot;: 80, &quot;source_ids&quot;: [&quot;S6&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;context_length_assumed.input_tokens&quot;, &quot;central&quot;: 12000, &quot;low_margin&quot;: 12000, &quot;high_margin&quot;: 12000, &quot;source_ids&quot;: [&quot;S16&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;context_length_assumed.output_tokens_including_reasoning&quot;, &quot;central&quot;: 1000, &quot;low_margin&quot;: 1000, &quot;high_margin&quot;: 1000, &quot;source_ids&quot;: [&quot;S16&quot;, &quot;A07&quot;], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;batchShare&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;},
+    {&quot;input&quot;: &quot;discount&quot;, &quot;central&quot;: 0, &quot;low_margin&quot;: 0, &quot;high_margin&quot;: 0, &quot;source_ids&quot;: [], &quot;evidence_class&quot;: &quot;ASSUMED&quot;}
+  ],
+  &quot;confidence&quot;: &quot;low: the tariff is verified, but architecture, fleet allocation, all-in procurement, occupancy and traffic are unmeasured; the span contains three conditional scenarios, not a probability interval or a bound.&quot;
+}
+</code></pre>
+<h2>3 — YOUR OWN READING.</h2>
+<p><strong>My estimate is 85.0% at list, with a selected three-scenario span of 57.8–91.6%.</strong> The central calculation is <strong>84.9677%</strong>. This is a conditional estimate of direct-serving contribution margin; the decimals describe arithmetic, not knowledge of OpenAI’s costs.</p>
+<p>The central model is a <strong>100B-active, 5T-total sparse implementation at 70% paid-capacity occupancy</strong>. The low case is <strong>250B active, 8T total and 55% occupancy</strong>: a larger implementation carrying launch-period scheduling slack. The high case is <strong>50B active, 3T total and 75% occupancy</strong>: a smaller implementation that is easier to keep occupied. These are my judgments as of <strong>2026-09-28</strong>. Both endpoints retain the central fleet, rents, precision, cache assumptions, latency posture and efficiency allowance. Neither combines every favorable or unfavorable input extreme.</p>
+<p><strong>Execution and reproducibility.</strong> Connector discovery found no available matching connector; direct access to <a href="https://margins-mcp.ashitaorbis.com/mcp">https://margins-mcp.ashitaorbis.com/mcp</a> failed before a scenario could run. There is therefore no successful <code>run_scenario</code> call or returned margin to quote. The intended invocation, once for each complete block, is:</p>
+<pre><code class="language-text">run_scenario(
+  model=&quot;custom&quot;,
+  perspective=&quot;median&quot;,
+  overrides=&lt;central, low_margin, or high_margin overrides&gt;,
+  traffic=&lt;the same scenario&#39;s traffic&gt;
+)
+</code></pre>
+<p>I instead performed an independent transcription of the published equations. It reproduces <strong>82.3265%</strong> for the supplied current Opus reference and <strong>94.5792%</strong> for attachment 07’s Astra central vector. Those checks establish arithmetic consistency at those points, <strong>not empirical validation or a byte-identical replay of every live wrapper</strong>. The submitting leg’s actual engine results should determine the card, without adjusting these inputs to eliminate a discrepancy. The attachment reports the corresponding reference checks and sibling result.  </p>
+<p><strong>Cost arithmetic.</strong> For these FP8, compressed-KV, NVIDIA scenarios, the retrieved equations use active parameters <code>A</code>, input length <code>I = 12,000</code>, representative decode context <code>L = 12,500</code>, attention coefficient <code>a = 4,997,120</code>, KV footprint <code>k = 35,136 bytes/token</code>, and fabric payload <code>d = 13,303,808 bytes/token</code>. With FLOP rate <code>F</code>, HBM bandwidth <code>B</code>, fabric bandwidth <code>N</code>, declared concurrency <code>b</code> and decode coefficient <code>η</code>:</p>
+<pre><code class="language-text">E = 3^(2/12) = 1.200936955
+
+Tprefill = 0.17581 × E / max((2A + aI/2)/F, d/N)
+Tdecode  = b × η × E / max(b(2A + aL)/F, (A + bkL)/B, bd/N)
+
+Cphase [$/M tokens] = all-in $/GPU-hour × 1,000,000
+                     / (3,600 × Tphase × occupancy)
+</code></pre>
+<p>The carrier’s balanced concurrency values are <strong>96 / 128 / 64</strong> for H200 / GB200 / GB300; its decode coefficients are <strong>0.313491 / 0.315997 / 0.258295</strong>. These are calculator calibration choices, <strong>not observed Sol efficiencies</strong>. The same equation structure is documented in attachment 07; S15–S17 were checked again for this estimate.  </p>
+<table>
+<thead>
+<tr>
+<th>Central leg</th>
+<th align="right">Served-token share</th>
+<th align="right">All-in $/GPU-hour</th>
+<th align="right">Fresh tokens/s/GPU</th>
+<th align="right">Output tokens/s/GPU</th>
+<th align="right">Fresh cost $/M</th>
+<th align="right">Output cost $/M</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>H200</td>
+<td align="right">30%</td>
+<td align="right">3.50</td>
+<td align="right">1,818</td>
+<td align="right">1,220</td>
+<td align="right">0.764071</td>
+<td align="right">1.138143</td>
+</tr>
+<tr>
+<td>GB200</td>
+<td align="right">50%</td>
+<td align="right">4.50</td>
+<td align="right">4,590</td>
+<td align="right">2,488</td>
+<td align="right">0.389021</td>
+<td align="right">0.717858</td>
+</tr>
+<tr>
+<td>GB300</td>
+<td align="right">20%</td>
+<td align="right">6.00</td>
+<td align="right">4,590</td>
+<td align="right">1,240</td>
+<td align="right">0.518695</td>
+<td align="right">1.920541</td>
+</tr>
+<tr>
+<td><strong>Token-weighted cost</strong></td>
+<td align="right"><strong>100%</strong></td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right">—</td>
+<td align="right"><strong>0.527471</strong></td>
+<td align="right"><strong>1.084480</strong></td>
+</tr>
+</tbody></table>
+<p>I weight <strong>costs by token share</strong>, rather than averaging throughput and applying an average rent. The GB300 disadvantage comes from the carrier’s lower concurrency/coefficient and higher assumed rent. It is not evidence that real GB300 serving is worse than GB200; I leave that inherited calibration visible.</p>
+<p>For a bundle of <strong>one million billed output tokens and twelve million input tokens</strong>:</p>
+<pre><code class="language-text">Revenue = 10 + 12 × [0.80 × 0.20 + 0.10 × 2.00 + 0.10 × 2.50]
+        = $17.32
+
+Cache-read cost = 0.05 × 0.527470981 = $0.026373549/M
+
+Direct cost = 1.084480331
+            + 12 × [0.20 × 0.527470981 + 0.80 × 0.026373549]
+            = $2.603596757
+
+Margin = 1 − 2.603596757 / 17.32 = 84.967686%
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">Fresh cost $/M</th>
+<th align="right">Output cost $/M</th>
+<th align="right">Cost per 13M-token bundle</th>
+<th align="right">Billings per bundle</th>
+<th align="right">Local-replay margin</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td align="right">0.527471</td>
+<td align="right">1.084480</td>
+<td align="right">2.603597</td>
+<td align="right">17.32</td>
+<td align="right"><strong>84.9677%</strong></td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td align="right">1.547036</td>
+<td align="right">2.849806</td>
+<td align="right">7.305270</td>
+<td align="right">17.32</td>
+<td align="right"><strong>57.8218%</strong></td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">0.278244</td>
+<td align="right">0.652956</td>
+<td align="right">1.454299</td>
+<td align="right">17.32</td>
+<td align="right"><strong>91.6034%</strong></td>
+</tr>
+</tbody></table>
+<p>The central blended quantities are <strong>$0.200277 direct cost and $1.332308 billings per million aggregate tokens</strong>. Ordinary fresh and cache-write input both incur modeled prefill cost; the calculator does not separately price write-specific overhead.</p>
+<p><strong>Unit audit.</strong> All three scenarios are positive. Inputs use billions of parameters, dollars per <strong>single GPU-hour</strong>, <code>util: 70</code> rather than <code>0.70</code>, and an explicit million-token conversion. Occupancy is applied once. Power, hosting and networking are already inside the hourly rates; no additional markup is added. No negative result was concealed or repaired by targeting a positive margin.</p>
+<p><strong>Reference-traffic companion.</strong> With input:output <strong>15:1</strong>, serving cache <strong>60%</strong>, and <strong><code>billCacheHit</code> also changed to 60</strong>, the central assumptions give <strong>81.5293%</strong>. Setting cache writes to zero as an additional billing normalization gives <strong>80.3652%</strong>.</p>
+<p>Changing <strong>only</strong> the separate traffic object to 15:1/60%, while leaving the explicit <code>billCacheHit: 80</code>, instead gives <strong>75.5975%</strong>. That is a serving/billing mismatch scenario, not the coherent 60%-billed-cache comparison. Both are disclosed so the external leg can label its companion precisely; neither replaces the headline.</p>
+<h2>4 — WHY THESE INPUTS.</h2>
+<p>All judgments in this section are authored <strong>2026-09-28</strong>. “Carried” means carried as an assumption, not verified for the new model.</p>
+<p><strong>Architecture: 100B active / 5T total — carried predecessor prior, with no Sol measurement.</strong> <strong>S7/A06</strong> provide the scale context. I retain the earlier Sol working point near 100B rather than presume that each new generation doubles active compute. The 5T footprint is also a carried planning assumption, not a literal parameter count extracted from a knowledge-capacity paper. I regard a smaller active implementation than Astra’s assumed 200B as plausible for the workhorse role, but do not claim to have established that ordering. The low scenario’s 250B explicitly permits Sol to exceed Astra’s central active assumption. </p>
+<p>The chosen 100B happens to be half the sibling’s central active count. <strong>It was not calculated from Sol’s one-fifth tariff or its predecessor’s price cut.</strong> The low/high alternatives deliberately extend beyond the earlier Sol active-size range, reflecting how little the new release establishes. Actual active compute, routing density or matched throughput would replace this prior, not merely refine a decimal.</p>
+<p><strong>Donor and precision: <code>dsr1</code>, FP8 — carried sibling judgments.</strong> <strong>S16/A07</strong> explain the carrier. I have no public basis to identify either available GQA donor as a better Sol match. Retaining <code>dsr1</code> provides a consistent compressed-KV approximation, not a claim of literal MLA or 61 Sol layers. FP8 avoids crediting an unverified all-FP4 production graph. A precision or attention disclosure could move costs materially. </p>
+<p><strong>Fleet and procurement — carried sibling estate assumptions.</strong> The <strong>30% H200 / 50% GB200 / 20% GB300</strong> shares remain judgment. <strong>S8/S9</strong> support the family and partner procurement model; they do not measure these percentages. I see no evidence that three days between the sibling estimate and this estimate require a different provider estate. Equally, common ownership of a service does not prove that Sol and Astra actually share this mix.</p>
+<p>The all-in <strong>$3.50/$4.50/$6.00</strong> rates remain fixed across the scenarios. <strong>S9/S10/A07</strong> motivate a committed-capacity interpretation; they do not disclose a contract. In particular, the calculator registry’s planning rates cannot be relabeled as an observed all-in OpenAI bill. GB300’s $6 is an explicit assumption. The public H200/GB200 offers remain useful adverse procurement comparisons. </p>
+<p>I use <code>hwMode: &quot;rent&quot;</code> because no Sol-owned accelerator allocation was established. Consequently, I do <strong>not</strong> manufacture an owned-fleet depreciation conversion. These rental equivalents already pay the capacity supplier for capital recovery and operating costs; OpenAI’s occupancy divisor is then applied separately.</p>
+<p><strong>Occupancy: 70%, with 55% and 75% endpoints — judgment without telemetry.</strong> Central and high carry Astra’s values. The low case moves from Astra’s 60% to <strong>55%</strong> to represent a new release with a larger implementation and more scheduling slack. This is not a claim that launch demand is weak: high demand does not itself measure productive use of paid, latency-constrained capacity. I keep rates and stack efficiency unchanged rather than compound every downside.</p>
+<p><strong>Efficiency: <code>stackMult: 1</code>, <code>trendMonths: 2</code> — carried once.</strong> <strong>S12/A07</strong> motivate a residual allowance for model-specific kernel and serving work. At the calculator’s 3×/year conversion, it gives approximately <strong>20.1% more effective throughput</strong>, equivalent to <strong>16.7% lower cost</strong>. No separate <code>specDec</code> credit is applied. Cache reuse, occupancy and hardware gains are already explicit and are excluded from this residual. Removing the allowance alone gives <strong>81.95%</strong>, about <strong>3.02 points</strong> below central. Historical improvement claims do not identify a present standing gap. </p>
+<p><strong>Traffic: 12:1, 80% serving and billed cache, 50% writes among non-read input — carried sibling judgments.</strong> I expect repeated coding/tool turns to make Sol more prefix-reusing than isolated-question traffic. <strong>S5/S6</strong> support that mechanism, not the selected frequencies. The operating point represents compact agent turns rather than exclusively maximum-effort research sessions. Central occupancy, traffic and write shares have <strong>no representative public measurement behind them</strong>.</p>
+<p>The write share allows both reusable-prefix establishment and fresh material that is not written into a reusable prefix. It is not inferred from the existence of the write tariff. Removing all billed writes changes central from <strong>84.97% to 84.43%</strong>; the write assumption is therefore not what makes this an 85% estimate. Internal request batching does not imply discounted Batch API billing.</p>
+<p><strong>Cache cost and latency: 5%, <code>balanced</code> — carried approximations.</strong> A cache read still incurs lookup and KV movement; the 5% value is not a measurement of those operations. Cached context still participates in decode—the cache hit does not erase its KV footprint. Balanced retains the sibling’s latency/concurrency convention, not a demonstrated Sol service-level guarantee. Cache-cost measurements or matched latency/throughput results would move these choices.</p>
+<p><strong>What the launch claims change—and do not change.</strong> <strong>S4</strong> establishes product positioning and the tariff change. Benchmark scores affect neither <code>active</code> nor <code>total</code> directly. Task-price comparisons mix tariff, token usage and completion behavior; they are not serving-cost ratios. Speed claims do not reveal concurrent sequences per GPU. I found no representative numerical tokens-per-task reduction to insert into traffic. The caching announcement supports the direction of the traffic prior, but it receives no second efficiency multiplier. </p>
+<p><strong>Complete reconciliation with the sibling estimate.</strong> Attachment 07’s values below are its September 25 assumptions, not targets. The changes and carries cover the entire operating vector. </p>
+<table>
+<thead>
+<tr>
+<th>Input</th>
+<th>Astra estimate</th>
+<th>Sol estimate</th>
+<th>Treatment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API model</td>
+<td><code>gpt-6-astra</code></td>
+<td><code>gpt-6-sol</code></td>
+<td>Different priced service; current identity checked independently.</td>
+</tr>
+<tr>
+<td>Carrier / donor</td>
+<td><code>custom</code> / <code>dsr1</code></td>
+<td>Same</td>
+<td>Carried approximation.</td>
+</tr>
+<tr>
+<td>Active B, central / low / high</td>
+<td>200 / 350 / 120</td>
+<td><strong>100 / 250 / 50</strong></td>
+<td>Earlier Sol scale prior; broader new-release alternatives, not price-derived sizes.</td>
+</tr>
+<tr>
+<td>Total B, central / low / high</td>
+<td>6000 / 8000 / 4000</td>
+<td><strong>5000 / 8000 / 3000</strong></td>
+<td>Central predecessor footprint; low carried; smaller high-case footprint.</td>
+</tr>
+<tr>
+<td>Input / output tariff</td>
+<td>$10 / $50</td>
+<td><strong>$2 / $10</strong></td>
+<td>This model’s verified tariff.</td>
+</tr>
+<tr>
+<td>Read / write multipliers</td>
+<td>10% / 125%</td>
+<td>Same</td>
+<td>Verified for Sol, not merely inherited.</td>
+</tr>
+<tr>
+<td>Occupancy, central / low / high</td>
+<td>70 / 60 / 75</td>
+<td><strong>70 / 55 / 75</strong></td>
+<td>Central/high carried; greater low-case launch slack.</td>
+</tr>
+<tr>
+<td>Fleet shares; per-leg rents</td>
+<td>H200/GB200/GB300 30/50/20; $3.50/$4.50/$6.00</td>
+<td>Same</td>
+<td>Carried estate/procurement judgments.</td>
+</tr>
+<tr>
+<td>Precision; latency; cost basis</td>
+<td>FP8; balanced; rent</td>
+<td>Same</td>
+<td>Carried.</td>
+</tr>
+<tr>
+<td><code>stackMult</code>; <code>trendMonths</code>; speculative credit</td>
+<td>1; 2; none separately</td>
+<td>Same</td>
+<td>Carried once.</td>
+</tr>
+<tr>
+<td>Input:output; serving/billed cache</td>
+<td>12:1; 80%/80%</td>
+<td>Same</td>
+<td>Carried agent-turn convention.</td>
+</tr>
+<tr>
+<td>Write share; cache serving-cost factor</td>
+<td>50% of non-read; 5% of prefill</td>
+<td>Same</td>
+<td>Carried, unmeasured.</td>
+</tr>
+<tr>
+<td>Representative input / output / decode / peak KV</td>
+<td>12000 / 1000 / 12500 / 13000</td>
+<td>Same</td>
+<td>Carried absolute-length approximation.</td>
+</tr>
+<tr>
+<td><code>batchShare</code>; <code>discount</code></td>
+<td>0; 0</td>
+<td>Same</td>
+<td>Required list basis.</td>
+</tr>
+</tbody></table>
+<p>A useful diagnostic separates price from engineering assumptions. Applying Sol’s tariff to Astra’s central cost vector gives <strong>72.90%</strong>, not 95%. Moving active size to 100B gives the <strong>84.97%</strong> central result; the smaller total footprint changes placement but not this carrier’s NVIDIA phase cost once it fits. No parameter was adjusted to preserve the sibling headline.</p>
+<h2>5 — AGAINST THE CLAUDE OPUS 4.X REFERENCE.</h2>
+<p>The reference states <strong>83.1% at list, span 68–92%</strong>. Its unchanged declared vector now computes <strong>82.33%</strong> in the supplied comparison. I use that current arithmetic as the starting point, not the older headline as a target. The original tariff, fleet, utilization and efficiency choices are preserved in that starting vector.  </p>
+<p>This is an <strong>ordered local-replay waterfall</strong>, not order-independent attribution and not a live MCP result. Each change follows the preceding one.</p>
+<table>
+<thead>
+<tr>
+<th>Change from Opus toward Sol</th>
+<th align="right">Margin after change</th>
+<th align="right">Incremental margin points</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Current Opus reference reproduced</td>
+<td align="right">82.33%</td>
+<td align="right">—</td>
+</tr>
+<tr>
+<td>Input/output tariff $5/$25 → $2/$10</td>
+<td align="right">55.82%</td>
+<td align="right"><strong>−26.51</strong></td>
+</tr>
+<tr>
+<td>Active parameters 300B → 100B</td>
+<td align="right">80.41%</td>
+<td align="right"><strong>+24.59</strong></td>
+</tr>
+<tr>
+<td>Fleet 5/10/25/20/40 H100/H200/GB200/GB300/TPU → 0/30/50/20/0, retaining reference rents on surviving legs</td>
+<td align="right">79.49%</td>
+<td align="right"><strong>−0.92</strong></td>
+</tr>
+<tr>
+<td>Total parameters 2.5T → 5T, after changing fleet</td>
+<td align="right">79.49%</td>
+<td align="right"><strong>0.00</strong>, conditional on fit</td>
+</tr>
+<tr>
+<td>H200/GB200/GB300 rents $3.496/$4.275/$5.70 → $3.50/$4.50/$6.00</td>
+<td align="right">78.85%</td>
+<td align="right"><strong>−0.64</strong></td>
+</tr>
+<tr>
+<td>Utilization 65% → 70%</td>
+<td align="right">80.37%</td>
+<td align="right"><strong>+1.51</strong></td>
+</tr>
+<tr>
+<td>Cache-write share 0 → 50% of non-read input</td>
+<td align="right">81.53%</td>
+<td align="right"><strong>+1.16</strong></td>
+</tr>
+<tr>
+<td>Input:output 15:1 → 12:1</td>
+<td align="right">82.89%</td>
+<td align="right"><strong>+1.36</strong></td>
+</tr>
+<tr>
+<td>Serving and billed cache 60% → 80%</td>
+<td align="right"><strong>84.97%</strong></td>
+<td align="right"><strong>+2.08</strong></td>
+</tr>
+</tbody></table>
+<p><strong>Unchanged, hence zero contribution in this path:</strong> FP8; <code>dsr1</code>; balanced latency; <code>stackMult: 1</code>; two months of residual efficiency; 5% cache serving cost; 10% read-price multiplier; 125% write-price multiplier; rented basis; no separate speculative-decode credit; and zero Batch share/discount. The reference’s inactive write-price multiplier becomes economically active without changing its value.</p>
+<p>The zero direct total-size effect is a <strong>limitation of this carrier</strong>, not evidence that a larger expert footprint is free. Total parameters constrain resident memory and legal width; active parameters drive the NVIDIA surrogate weight-traffic term. I change fleet before total size so an infeasible leg cannot disappear and silently improve the comparison.</p>
+<p>The dominant tradeoff is clear: <strong>much lower assumed active compute compensates for a much lower tariff</strong>. Sol is about <strong>1.87 points above the original stated 83.1%</strong>, or <strong>2.64 points above the current reproduced reference</strong>, only on its own chosen traffic. With coherent Reference traffic, Sol is <strong>81.53%</strong>, approximately <strong>0.80 points below</strong> the current Opus vector. With cache-write billing also normalized to the reference’s zero, Sol is <strong>80.37%</strong>, about <strong>1.96 points below</strong>. This is not evidence of a superior OpenAI serving stack.</p>
+<p>The July company dive’s older Sol margin is not a validation either. It prices a different model and tariff and includes a separate overhead construction that I did not import on top of all-in hourly rates. </p>
+<h2>6 — WHAT WOULD FALSIFY THIS ESTIMATE.</h2>
+<p><strong>The most valuable measurement is aggregate Sol serving cost at a defined workload and service level.</strong> A usable disclosure would specify model revision, fresh/read/write/reasoning token counts, input/output lengths, accelerator type/count, concurrent sequences, prefill/decode throughput, paid occupancy and all-in procurement. It would replace the architecture surrogate and much of the calibration transfer simultaneously.</p>
+<p>The strongest downward falsifier would be evidence that effective work per billed token is substantially above the 100B-active approximation, or that Standard service needs much lower batching than <code>balanced</code> represents. Evidence for a smaller implementation, higher aggregate throughput at the same latency, or lower genuine all-in committed rates would move the result upward.</p>
+<p>These are <strong>one-variable local sensitivities</strong>, not additional endpoints or new public measurements:</p>
+<table>
+<thead>
+<tr>
+<th>Change from central</th>
+<th align="right">Modeled margin</th>
+<th>Direction of evidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Active parameters 200B</td>
+<td align="right"><strong>72.90%</strong></td>
+<td>More work per token substantially lowers the estimate.</td>
+</tr>
+<tr>
+<td>Active parameters 300B</td>
+<td align="right"><strong>60.82%</strong></td>
+<td>The current headline would be materially too high.</td>
+</tr>
+<tr>
+<td>Active parameters 50B, otherwise central</td>
+<td align="right"><strong>91.00%</strong></td>
+<td>Smaller active compute supports the upper scenario.</td>
+</tr>
+<tr>
+<td>Paid occupancy 50%</td>
+<td align="right"><strong>78.95%</strong></td>
+<td>More paid slack lowers the estimate.</td>
+</tr>
+<tr>
+<td>Double all three all-in rents</td>
+<td align="right"><strong>69.94%</strong></td>
+<td>Procurement can materially outweigh engineering gains.</td>
+</tr>
+<tr>
+<td>Public CoreWeave H200/GB200 rates, GB300 retained at $6</td>
+<td align="right"><strong>73.26%</strong></td>
+<td>Public-price procurement is much less favorable.</td>
+</tr>
+<tr>
+<td>Remove the residual efficiency allowance</td>
+<td align="right"><strong>81.95%</strong></td>
+<td>No private standing advantage costs about three points.</td>
+</tr>
+<tr>
+<td>Cache-read serving cost 15%, rather than 5% of prefill</td>
+<td align="right"><strong>82.04%</strong></td>
+<td>More expensive KV reuse lowers the estimate.</td>
+</tr>
+</tbody></table>
+<p>A changed alias, material non-NVIDIA allocation, different attention geometry, or a much longer context distribution could invalidate the carrier even if the resulting margin coincidentally remained near 85%. Likewise, a tariff change alters the denominator without establishing any physical efficiency gain.</p>
+<p>The launch price reduction must not be treated as a cost disclosure. At the predecessor’s current $4/$20 tariff but with <strong>this report’s costs unchanged</strong>, the arithmetic would give <strong>92.48%</strong>. The reduction to $2/$10 lowers that to <strong>84.97%</strong>. This is a tariff-only diagnostic, not an estimate of the predecessor’s costs or a forecast of a Sol price increase. The verified predecessor comparison is in S3/S4. </p>
+<h2>7 — WHAT THE CALCULATOR COULD NOT EXPRESS, AND WHAT YOU COULD NOT ESTABLISH.</h2>
+<p><strong>Absolute context and reasoning lengths.</strong> <code>context_length_assumed</code> is documentation, not a numeric engine input. The custom-traffic path supplies a 1,000-token output-length convention, so 12:1 produces 12,000 input tokens, 12,500 representative decode context and 13,000 peak KV context. I adopt those lengths explicitly as a compact-agent-turn approximation. They are not a measured Sol average. A request below the 272K tariff boundary can still be much more expensive than this operating point; this report does not price the entire short-context distribution or the million-token tier. The fixed-length behavior is also documented in the supplied sibling report. </p>
+<p><strong>Architecture and donor choice.</strong> The API permits selecting <code>dsr1</code>, but not specifying Sol’s actual layer count, hybrid/recurrent computation, sparse-attention schedule, expert replication, per-layer precision, independently placed prefill/decode or arbitrary KV compression. The donor choice is expressible; a faithful closed-model geometry is not. Literal active/total parameters, routing and precision remain unestablished.</p>
+<p><strong>Capacity is a policy check, not a deployment receipt.</strong> Under the carrier’s uniform one-byte-per-parameter resident-memory policy and 10% HBM reserve, all declared legs fit at these calculated widths:</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th align="right">H200 GPUs</th>
+<th align="right">GB200 GPUs</th>
+<th align="right">GB300 GPUs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Central</td>
+<td align="right">56</td>
+<td align="right">42</td>
+<td align="right">22</td>
+</tr>
+<tr>
+<td>Low margin</td>
+<td align="right">88</td>
+<td align="right">68</td>
+<td align="right">34</td>
+</tr>
+<tr>
+<td>High margin</td>
+<td align="right">40</td>
+<td align="right">26</td>
+<td align="right">14</td>
+</tr>
+</tbody></table>
+<p>These are <strong>solver-equivalent local checks</strong>, not observed replicas. Each scenario retains <strong>three of three legs and 100% of its declared token share</strong>. Real workspace, communication and placement remain unverified. The contract itself warns that dropping infeasible legs can create non-monotonic margins; that mechanism is not used to support these headlines. </p>
+<p>Changing to <code>qwen3c</code> while holding the other central settings fixed fails the H200 memory check: its larger KV footprint at the declared concurrency exhausts the available memory allowance before weights fit. I do not let H200 disappear and report the renormalized remainder as a better estimate. A GQA hypothesis would need a jointly revised batching/placement scenario, not a donor toggle presented as independent evidence.</p>
+<p><strong>Service levels and calibration transfer.</strong> Endpoint speed does not establish that the carrier’s concurrency meets Sol’s production latency requirements. Its prefill coefficient is transferred from an open-model anchor; the GB200 coefficient is carried across a precision basis; and GB300’s operating point is partly assumed. No matched Sol benchmark validates these transfers. The numerical reference checks validate transcription, not physical representativeness. </p>
+<p>This limitation can exceed the three-scenario span. As a separate structural stress—not a fourth endpoint—changing only the carrier’s latency posture to <code>fast</code> while retaining the <strong>Standard tariff</strong> gives about <strong>37.7%</strong> in the local equations. That is <strong>not OpenAI Fast-mode economics</strong>: the provider’s Fast tariff is different. It demonstrates that the span is conditional on balanced serving, not a bound over every plausible service-level regime.</p>
+<p><strong>Fleet and procurement coverage.</strong> I could not establish Sol-specific sites, GPU-generation shares, owned-versus-rented allocation, executed all-in hourly rates or the contribution of Cerebras, AMD or custom accelerators. Those platforms lack usable rows in this commission’s allowed accelerator set. Assigning them fictitious NVIDIA equivalents would obscure rather than resolve the gap. The current partner-centric approximation does not prove that other platforms serve zero Sol traffic.</p>
+<p><strong>Cache lifecycle and cost perimeter.</strong> A scalar read-cost factor and write-billing share cannot express retention, eviction, prefix placement, cache tiering, inter-host movement or write-specific overhead. Billing and serving cache fractions may differ; their equality here is an assumption. I also could not establish model-specific revenue sharing, unbilled internal work, tool-cost allocation or failed-generation rates. Training, R&amp;D, sales, G&amp;A, free-tier serving, support and unbilled retries remain outside the commissioned quantity. Paid serving-capacity slack is already charged through occupancy, not added again as a corporate reservation burden.</p>
+<p><strong>Remaining evidence gaps.</strong> As of <strong>2026-09-28</strong>, I could not establish an immutable Sol snapshot; literal architecture or production precision; representative absolute input/output/reasoning lengths; aggregate tokens/GPU-second; paid occupancy; a serving/billed cache census; write frequency; a numerical population-wide tokens-per-task reduction; a standing residual advantage over open practice; or Sol-specific revenue, direct cost and margin. The retrieved sources establish the product and tariff, plus provider-level context—not those missing measurements. No statement by this model about its own provider is used as evidence.</p>
+<p><strong>Publication status.</strong> The report supplies three complete, positive, locally capacity-checked scenarios and transparent equation-replay expectations. <strong>It does not contain a successful live MCP result.</strong> The submitting leg’s calculator result should be published as the engine headline, with any difference from <strong>85.0% (57.8–91.6%)</strong> preserved rather than tuned away. The principal uncertainty is the unmeasured serving workload and architecture, not the rounding of the calculation.</p>
+<p>Download the complete copy-of-record report (a file in the research run&#39;s own workspace, not published)</p>
+
+</section>
+<footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>
+</div>
+</body>
+</html>

@@ -78,6 +78,15 @@ const OTHER_QUANTITY = ["accelerators ≈58% of per-prompt energy", "~63% at ful
   "Its own stated reading: 58.8%",                 // a §10 Astra Pro estimate card: another model's own stated figure
   "accelerators are only 58% of per-prompt energy", // the energy share again, in the methods box's words
   "reads about 91%, 63% or 19%"];                  // the glossary's xAI cost-basis example (cash / owned / customer rent)
+/* OCCURRENCE-EXACT licenses (bq-3800, 2026-09-28; its review r1 finding R2). OTHER_QUANTITY exempts every mention whose
+   local window CONTAINS its words, so an unframed "58%" placed beside a licensed phrase would ride along. An entry here
+   exempts ONLY the one number that sits at its own position inside the quoted phrase; any other mention near it is still
+   scanned. */
+const EXACT_OTHER = [
+  "high-margin scenarios: 58%–92%",   // a §10 Astra Pro estimate card: GPT-6 Sol's own low-to-high-margin scenario span
+];
+const exactOther = (t, m) => EXACT_OTHER.some(q => { const k = q.indexOf(m[0]);
+  return k >= 0 && t.slice(m.index - k, m.index - k + q.length) === q; });
 /* Review r2: "is a baseline" / "is an estimate" affirmed of the reading fail too; "is not an estimate" does not match. */
 const AFFIRMED_ESTIMATE = /\b(?:best|central|likely|verified|our) estimate\b|\bis (?:a|an|the|this page's) (?:answer|estimate|baseline)\b/gi;
 const affirmsEstimate = (win) => [...win.matchAll(AFFIRMED_ESTIMATE)]
@@ -86,7 +95,7 @@ const unframed = (html) => {
   const t = plain(html), out = [];
   for (const m of t.matchAll(MENTION)) {
     const local = t.slice(Math.max(0, m.index - 30), m.index + 45);
-    if (OTHER_QUANTITY.some(q => local.includes(q))) continue;
+    if (OTHER_QUANTITY.some(q => local.includes(q)) || exactOther(t, m)) continue;
     const win = t.slice(Math.max(0, m.index - 260), m.index + 160);
     /* "floor" or the owner's own "bare minimum" in reach of the number; never the retired name beside it, never an
        affirmative estimate. */
@@ -159,6 +168,8 @@ assert("NEG an unframed report mention is caught",
   assert("NEG (review r2) a bare \"63%\" with no framing is caught", unframed(INDEX + pad + "<p>At list price it reads 63% here.</p>").length === base + 1);
   assert("NEG (review r2) \"The public-data floor is a baseline: about 58%\" is caught", unframed(INDEX + pad + "<p>The public-data floor is a baseline: about 58%.</p>").length === base + 1);
   assert("NEG (review r2) \"The public-data floor is an estimate: about 58%\" is caught", unframed(INDEX + pad + "<p>The public-data floor is an estimate: about 58%.</p>").length === base + 1);
+  assert("NEG (bq-3800 review r1) an unframed \"58%\" beside an occurrence-exact licensed span is still caught",
+    unframed(INDEX + pad + "<p>The page's estimate: 58%. Low- and high-margin scenarios: 58%–92%.</p>").length === base + 1);
   assert("NEG ...and the negated form is NOT caught: \"floor, nothing like a best estimate: about 58%\"",
     unframed(INDEX + pad + "<p>The public-data floor, nothing like a best estimate: about 58%.</p>").length === base);
 }
