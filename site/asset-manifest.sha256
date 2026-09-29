@@ -10,7 +10,7 @@ fef3733f39e3645dcdb2d894a222fee3bf39d3f069092b744bee6b6b6eb7be90  ./astra-pro-es
 77c2c95b98481b64b3108a776d3c1703b122f248de7524c7f37a08704328729d  ./engine-data-dc-v1.js
 5f50d34a38065f779e9c9006fe5e451fef4d0abcd4679387c76768609d27e0f8  ./engine-data-v22.js
 15508ac9e66b2c66e23aca56a4517e56269390f12a5683dea9dcc2e43d1c3fc2  ./engine-roofline-v22.js
-d2e9a90091f08bc1b6d55e226bce055abf3caea4ff2a63dfe3e2118b522fa654  ./engine.js
+5c2a86c47d09c8af8ac8490fba0a78a4dcf3c3ebdb6cb4783bc6a047cc8a63c1  ./engine.js
 e1585518e5df98557c8f639438c97c743c91cab4894a17b2f97f941172d64171  ./evidence-schema.js
 b80aa654e87ea1fd7b1638df5da4365e02714d93dbf30a008afaf64f964a3076  ./favicon.svg
 3100e775e8616cd2611beecfa23a4263d7037586789b43f035236a2e6fbd4c62  ./fonts/inter-latin-var.woff2
@@ -20,7 +20,7 @@ e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2  ./fonts/playfa
 c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source-serif-4-latin-var.woff2
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 b4ab3c3e5de311be8a4331b476ec69af36c2c74e88acf8c43066c253f980c97b  ./glossary.html
-3a02fc675c134307de82b3045341ed4d9a0ca6770722c9e3de90a6f5be19f92a  ./index.html
+2357617ee379e3aaf663be5cd3245d09e0b2750f7024f89c5a60f8202dad6863  ./index.html
 e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d  ./research/analyst-divergence.html
 c77f3b3946f5d46916d29c63914371912cf9656d7c1afe799ac919b732fb37ad  ./research/anthropic-gptpro.html
 37f79cde697f7347d96c471fe77c4f275a8412c6301d0afa83a4d28d71483a83  ./research/changelog.html
@@ -128,7 +128,7 @@ fc75ccabf142a4a9b1dae67eafab76697860c1317b83aa5b48304cfb3a8ed098  ./tests/loao.m
 7bfb8b05d6c3ceaea9818c4e055a043b6ad0277f59bf00677906c77aceda7e76  ./tests/mix-band.test.mjs
 9d1c7cf99e9b1efca17ebe48be837c431cf998801b8f885f2f916e5ec570bc80  ./tests/permalink-defaults-move.test.mjs
 a9a993a77e6a081435f2a5f67d8e64123f014ad215d4228b5b32dbb2cb64b49b  ./tests/provenance-inputs.mjs
-641dc8a51da1703e6c3bdd02a4423817d9ae584eba1901e99cc26276b80f721b  ./tests/render-parity-r1.test.mjs
+0a9dc48ec763fc5b954ce162e82a366df0eac7c92d6e3e45160d7c0a9f5cb025  ./tests/render-parity-r1.test.mjs
 e429c2d5a5e44249bfae6dfed35fb868aee5fad8a6e65407d8ab0d487f4471a6  ./tests/roofline-core.test.mjs
 d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofline-diagnostic.mjs
 7b1ee5fd2a26d0c45c45f280df04daad8a71f52d6f39bd5e5c76340e1cf833e8  ./tests/roofline-parallel-diff.mjs
@@ -137,7 +137,7 @@ d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofli
 5a8ba02ed1723137fa616dd9884d8991e8753e14ac3736ff4150ddfb99e26de4  ./tests/snapshots.test.mjs
 6d15da3303953846c67ecb33189034ba007865530d35c332a9dea1a577519958  ./tests/t4-historical-pins.mjs
 4d08ecb0dfb5cf729c2c6f4f3a86fb58332ece282416a4b04010d2d15a29aa35  ./tests/tariff-contract.mjs
-351e6eed2df2cb9e8183715756cef46197f70842bbc5a238895c0c8dae2d31b4  ./tests/traffic-contract.test.mjs
+81bf59122f332f2ff2a244f69b70e9fbb3a2c638c8dcab1cd986b37b3e8dc5fc  ./tests/traffic-contract.test.mjs
 4be4dd46d0224295c25563eb3c809315252d0ea7c3c34c135a320f59c0cbebc7  ./tests/turnstile-loader-cdp.test.mjs
 0ae44f4c67868271284ae32841994d7b3e61f880d158de4fcf61ed945dba99b5  ./tests/ux-a-cdp.test.mjs
 02f30de8ddf0da8149d487fb8ecce9aa20d6d066481e61d2ed49b26b20a11c6b  ./tests/ux-b-cdp.test.mjs

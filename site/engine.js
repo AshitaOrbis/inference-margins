@@ -436,15 +436,19 @@ const MODELS = [
     tariff: {
       current: { priceIn: 2, priceOut: 10, effectiveFrom: "2026-08-10", status: "standard",
                  sources: [
+                   { url: "https://platform.claude.com/docs/en/about-claude/pricing", observedAt: "2026-09-29",
+                     quote: "The $2/$10 per million input/output token pricing for Claude Sonnet 5, announced at launch as introductory pricing through August 31, 2026, is now the standard price. The previously scheduled increase to $3/$15 per million input/output tokens on September 1, 2026 will not occur." },
+                   { url: "https://www.anthropic.com/news/claude-sonnet-5", observedAt: "2026-09-29",
+                     quote: "Edit August 10, 2026: Sonnet 5's introductory pricing of $2 per million input tokens and $10 per million output tokens is now permanent. The standard pricing of $3 input / $15 output previously set to take effect September 1 no longer applies." },
                    { url: "https://platform.claude.com/docs/en/about-claude/pricing", observedAt: "2026-09-02",
                      quote: "The $2/$10 per million input/output token pricing for Claude Sonnet 5, announced at launch as introductory pricing through August 31, 2026, is now the standard price. The previously scheduled increase to $3/$15 per million input/output tokens on September 1, 2026 will not occur." },
                    { url: "https://www.anthropic.com/news/claude-sonnet-5", observedAt: "2026-09-02",
                      quote: "Edit August 10, 2026: Sonnet 5's introductory pricing of $2 per million input tokens and $10 per million output tokens is now permanent. The standard pricing of $3 input / $15 output previously set to take effect September 1 no longer applies." },
                  ] },
       scheduled: [],
-      verification: { verifiedAt: "2026-09-02", reverifyBy: "2026-10-02", owner: "inference-margins",
+      verification: { verifiedAt: "2026-09-29", reverifyBy: "2026-10-29", owner: "inference-margins",
                       procedure: "research/inference-margins/BACKLOG.md section 2 — tariff verification",
-                      queueId: "Q-AUTO-2026-08-12" },
+                      queueId: "Q-AUTO-2026-09-29" },
       history: [
         { kind: "cancelled-transition", announcedEffectiveFrom: "2026-09-01", priceIn: 3, priceOut: 15,
           cancelledAt: "2026-08-10",
@@ -473,12 +477,15 @@ const MODELS = [
     tariff: {
       current: { priceIn: 2, priceOut: 6, effectiveFrom: "2026-07-08", status: "standard",
                  sources: [
+                   { url: "https://docs.x.ai/developers/models/grok-4.5", observedAt: "2026-09-29",
+                     quote: "Pricing Input Tokens $2.00 / 1M tokens Cached tokens $0.30 / 1M tokens Output Tokens $6.00 / 1M tokens" },
                    { url: "https://docs.x.ai/developers/models/grok-4.5", observedAt: "2026-09-02",
                      quote: "Input $2.00 / Cached input $0.30 / Output $6.00 per 1M tokens (standard tier; a request reaching 200k prompt tokens is billed at $4.00 / $0.60 / $12.00 for all its tokens)." },
                  ] },
       scheduled: [],
-      verification: { verifiedAt: "2026-09-02", reverifyBy: "2026-10-02", owner: "inference-margins",
-                      procedure: "research/inference-margins/BACKLOG.md section 2 — tariff verification" },
+      verification: { verifiedAt: "2026-09-29", reverifyBy: "2026-10-29", owner: "inference-margins",
+                      procedure: "research/inference-margins/BACKLOG.md section 2 — tariff verification",
+                      queueId: "Q-AUTO-2026-09-29" },
       knownStaleInputs: [
         /* CLOSED 2026-09-10 by owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok. The
            adopted value IS the verified value now; the row is kept rather than deleted because the
@@ -8827,20 +8834,25 @@ function claimsForBucket(bucketId) {
 
 /* ---------- provenance-tier honesty labels (2026-07-12 evidence pass) ----------
    Rendered on every claim row so no reader mistakes a relayed/assumed/clip-mediated figure for a
-   measured primary. Templates follow the curated-spec labeling rules verbatim; rows carrying
-   sweep:"2026-07-12" that are not audited/primary-post additionally carry the
-   not-independently-re-verified disclaimer. */
-const SWEEP_DISCLAIMER = "surfaced by a 2026-07-12 reputable-source sweep; not independently re-verified here";
+   measured primary. Templates follow the curated-spec labeling rules verbatim; rows carrying a
+   sweep date that are not audited/primary-post additionally carry the
+   not-independently-re-verified disclaimer, dated from the row's OWN c.sweep (bq-3150: the date
+   was hard-coded to 2026-07-12, mislabelling the 2026-07-26 sweep rows). SWEEP_DISCLAIMER stays
+   exported as the 2026-07-12 wording. */
+function sweepDisclaimer(date) {
+  return "surfaced by a " + date + " reputable-source sweep; not independently re-verified here";
+}
+const SWEEP_DISCLAIMER = sweepDisclaimer("2026-07-12");
 function provenanceTierLabel(c) {
   if (!c || !c.provenanceTier) return "";
   const note = c.tierNote ? " (" + c.tierNote + ")" : "";
-  const sweep = c.sweep ? " — " + SWEEP_DISCLAIMER : "";
+  const sweep = c.sweep ? " — " + sweepDisclaimer(c.sweep) : "";
   switch (c.provenanceTier) {
     case "audited":
-      return "Audited filing (" + SWEEP_DISCLAIMER + ")" + note;
+      return "Audited filing" + (c.sweep ? " (" + sweepDisclaimer(c.sweep) + ")" : "") + note;
     case "reported-unverified":
       return "Reported figure — " + (c.tierSource || c.who)
-        + (c.sweep ? "; surfaced by a 2026-07-12 sweep, not independently re-verified here" : "") + note;
+        + (c.sweep ? "; surfaced by a " + c.sweep + " sweep, not independently re-verified here" : "") + note;
     case "clip-mediated":
       return "Quoted via a clip/recap account, not the speaker's own post" + note + sweep;
     case "analyst-assumption":

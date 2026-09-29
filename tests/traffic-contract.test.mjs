@@ -694,8 +694,14 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   { /* And the clock cannot be advanced without the evidence moving with it — the "edit one date
        and never look at the vendor" hole. */
     const dateOnly = structuredClone(withTariff[0]);
-    dateOnly.tariff.verification.verifiedAt = "2026-09-20";
-    dateOnly.tariff.verification.reverifyBy = "2026-10-15";
+    /* One day PAST the record's freshest source observation, so the control keeps biting when a
+       re-verification legitimately adds a newer source (a fixed "2026-09-20" stopped biting the day
+       the 2026-09-29 reads landed — bq-3892). */
+    const freshest = dateOnly.tariff.current.sources.map(x => x.observedAt).sort().pop();
+    const dayAfter = new Date(`${freshest}T00:00:00Z`); dayAfter.setUTCDate(dayAfter.getUTCDate() + 1);
+    const horizon = new Date(dayAfter); horizon.setUTCDate(horizon.getUTCDate() + 15);
+    dateOnly.tariff.verification.verifiedAt = dayAfter.toISOString().slice(0, 10);
+    dateOnly.tariff.verification.reverifyBy = horizon.toISOString().slice(0, 10);
     assert("tariff NEGATIVE CONTROL: advancing verifiedAt without a fresher source observation is REJECTED",
       validateTariff(dateOnly).some(x => /not backed by any source observed on or after it/.test(x))); }
 }
