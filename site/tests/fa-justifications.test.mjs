@@ -609,6 +609,45 @@ const FLOOR_RENAME = {
   "g5-alderson-90": [FLOOR_LABEL],
 };
 
+/* ============================================================================================
+   THE 2026-09-30 SCENARIO RENAME, kept as its OWN event (owner ruling
+   d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario, block B of card
+   q-im-floor-wording-2026-09-28; Polaris ruling
+   p-20260930-im-floor-release-carries-block-b-phrases-into-the-four-places-the-count-missed; leg
+   im-floor-scenario-release-bq3933-0930, bq-3933). The ≈58% reading is the PUBLIC-DATA SCENARIO — "a model
+   result under public-data assumptions, not a guaranteed minimum" — so the name bq-3520 gave it becomes the
+   new one and its guarantee wording takes block B's copy. WORDS ONLY: no numeral moves. It is now the newest
+   event, so it is reverted FIRST, with every span pinned (before -> after); the floor rename below then faces
+   its own pins unchanged, and a word that moved under cover of this rename fails there.
+   ============================================================================================ */
+const SCENARIO_LABEL = { why: "block B rename: the sub-heading's name for the ≈58%", before: " · Why the public-data floor differs: ", after: " · Why the public-data scenario differs: " };
+const SCENARIO_RENAME = {
+  "higherJustificationsHeader": [
+    { why: "block B rename: the header's subject", before: "This page's public-data floor — priced", after: "This page's public-data scenario — priced" },
+    { why: "block B place 10: the disagreement sentence", before: "the entry examines why its stated margin exceeds the public-data floor; exceeding a floor is not a disagreement with it.", after: "the entry examines why its stated margin exceeds the public-data scenario; exceeding a scenario is not a disagreement with it." },
+    { why: "block B place 9: the closing identity", before: " is a floor from public data — a bare minimum, reproducible, and not an estimate of any provider's actual margin;", after: " is a public-data scenario — a reproducible model result, not a guaranteed minimum, and not an estimate of any provider's actual margin;" },
+  ],
+  "mostPlausibleLine": [
+    { why: "block B rename: the neighborhood sentence", before: "The public-data floor does not reach that neighborhood;", after: "The public-data scenario does not reach that neighborhood;" },
+  ],
+  "g1-teortaxes-9095": [SCENARIO_LABEL],
+  "g2-patel-semianalysis-80": [SCENARIO_LABEL,
+    { why: "block B rename: the bridge's subject", before: "and the public-data floor is the difference between the modeled scenarios", after: "and the public-data scenario is the difference between the modeled scenarios" },
+    { why: "block B rename + place 10: >80 above the ≈58", before: "\">80\" sits above this page's ≈58 public-data floor, which a floor allows", after: "\">80\" sits above this page's ≈58 public-data scenario, which that scenario allows" },
+    { why: "block B rename: the wouldFlip target", before: "back toward this page's public-data floor", after: "back toward this page's public-data scenario" },
+  ],
+  "g3-gptpro-9294-lens": [SCENARIO_LABEL,
+    { why: "block B rename: the ladder's origin", before: "each step a calculator mutation from the public-data floor,", after: "each step a calculator mutation from the public-data scenario," },
+    { why: "block B rename: the tariff sentence's subject", before: "The public-data floor answers", after: "The public-data scenario answers" },
+  ],
+  "g5-baker-85": [SCENARIO_LABEL],
+  "g5-huatai-80": [SCENARIO_LABEL],
+  "g5-teortaxes-2025": [SCENARIO_LABEL,
+    { why: "block B rename: the wouldFlip target", before: "materially conflicts with the public-data floor.", after: "materially conflicts with the public-data scenario." },
+  ],
+  "g5-alderson-90": [SCENARIO_LABEL],
+};
+
 const VETTING_REPAIRS = {
   "mostPlausibleLine": [
     { why: "E2 TPU numerator repair — the strategic-partner lens moves with the coefficient", before: "the strategic-partner lens (≈83.1 at the public-evidence reference)", after: "the strategic-partner lens (≈83.0 at the public-evidence reference)" },
@@ -684,7 +723,21 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     }
     return out;
   };
-  const preFloor = Object.fromEntries(REOPENED.map(k => [k, revertFloor(k, live[k])]));
+  /* bq-3933: the scenario rename is the newest event, so it is reverted FIRST, each pinned span's presence asserted. */
+  const revertScenario = (k, text) => {
+    let out = text;
+    for (const e of (SCENARIO_RENAME[k] || [])) {
+      assert("J-2 scenario rename [" + k + "]: the pinned rename edit is PRESENT verbatim (" + e.why.slice(0, 52) + "…)",
+        out.includes(e.after), e.after.slice(0, 90));
+      out = out.split(e.after).join(e.before);
+    }
+    return out;
+  };
+  const preScenario = Object.fromEntries(REOPENED.map(k => [k, revertScenario(k, live[k])]));
+  assert("J-2 scenario rename: no reopened token still carries the retired \"public-data floor\" name or the ruled-out guarantee wording",
+    REOPENED.every(k => !/public-data floor|bare minimum|cannot be (?:lower|under)|known to be wrong/i.test(live[k])),
+    JSON.stringify(REOPENED.filter(k => /public-data floor|bare minimum|cannot be (?:lower|under)|known to be wrong/i.test(live[k]))));
+  const preFloor = Object.fromEntries(REOPENED.map(k => [k, revertFloor(k, preScenario[k])]));
   assert("J-2 floor rename: no reopened token still carries the retired \"conservative case\" name after the rename",
     REOPENED.every(k => !/conservative (planning )?case/.test(live[k])),
     JSON.stringify(REOPENED.filter(k => /conservative (planning )?case/.test(live[k]))));
@@ -698,7 +751,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
       JSON.stringify({ delta: preVet[k].length - pre[k].length, inserts: (preVet[k].split(CP).length - 1) }));
   /* bq-3520: byte-identical once the pinned floor rename (their sub-heading label, and g5-teortaxes-2025's
      wouldFlip target) is reverted — the rename is the only thing that touched them. */
-  assert("J-2 class A: the two figure-free tokens are BYTE-IDENTICAL apart from the pinned floor rename (zero insertions, R9's point)",
+  assert("J-2 class A: the two figure-free tokens are BYTE-IDENTICAL apart from the pinned floor and scenario renames (zero insertions, R9's point)",
     preFloor["g5-huatai-80"] === pre["g5-huatai-80"] && preFloor["g5-teortaxes-2025"] === pre["g5-teortaxes-2025"]);
   /* The figure-free pair carries NO vetting repair either — the repairs moved figures and the
      sentences that explain them, and these two tokens have neither. */
@@ -1079,7 +1132,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
   /* J-3: the basis declaration ships verbatim, and the x90-v1 claim is TRUE under the basis it
      names at BOTH bases — the §4.2 finding that made this the highest-risk item in M6. */
   assert("J-3 the basis declaration ships on the FA surface verbatim",
-    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is at the public-data floor's settings")); // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): was bq-3316's "is the planning baseline" // bq-3316 (2026-09-25): one name for ≈58%
+    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is at the public-data scenario's settings")); // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the ruled name (was bq-3520's "public-data floor"); bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): was bq-3316's "is the planning baseline" // bq-3316 (2026-09-25): one name for ≈58%
   {
     const refv = E.explorationFlagshipMargin(E.PERSPECTIVES.find(p => p.id === "x90-v1"));
     const st = E.applyPresetSettings(opus, E.PERSPECTIVES.find(p => p.id === "x90-v1"), E.FLAGSHIP_SCOPE.traffic);
@@ -1102,7 +1155,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      separators, exactly five parts, each with its pinned label prefix. */
   {
     const SEPS = [" · What it claims: ", [" · What it does not claim: ", " · Not claimed: "],
-      " · Why the public-data floor differs: ", " · What would flip it: "]; // bq-3520 (2026-09-26): the entry label names the ≈58% by its one name
+      " · Why the public-data scenario differs: ", " · What would flip it: "]; // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the label names the ≈58% by its ruled name; bq-3520 (2026-09-26): the entry label names the ≈58% by its one name
     let allOk = true, detail = [];
     fa.tokens.higherJustificationEntries.forEach((txt, i) => {
       let rest = txt, parts = [], used = [];

@@ -28,7 +28,7 @@ assert("rendered: the 'page opens on this scenario' line the card states (a shar
   live.opens === rec.values.opens, `${live.opens} vs ${rec.values.opens}`);
 assert("rendered: the scenario's billing and cost-basis facts the card states",
   live.billing === rec.values.billing && live.basis === rec.values.basis, JSON.stringify([live.billing, live.basis, rec.values.billing, rec.values.basis]));
-assert("rendered: the public-data floor figure and its label", live.floor === rec.values.floor && live.floorLabel === rec.values.floorLabel,
+assert("rendered: the public-data scenario figure and its label", live.floor === rec.values.floor && live.floorLabel === rec.values.floorLabel,
   JSON.stringify([live.floor, live.floorLabel, rec.values.floor, rec.values.floorLabel]));
 assert("rendered: both quoted estimates (who, median, stated range)",
   JSON.stringify(live.estimates.map(({ who, median, range }) => [who, median, range])) ===

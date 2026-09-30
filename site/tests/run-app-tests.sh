@@ -135,7 +135,7 @@ check "default hero value token carries the policy-labeled identity (D-3b crop b
 # retired pre-R3 headline ever renders AS THE HERO, which is what the check is for.
 checkhero "default hero never shows the pre-R3 headline as the hero" "$TMP/default.html" isnot "≈47% — policy-labeled scenario"  # bq-3316: hero token recomposed (M2 split)
 check "default surface carries NO exclusion clause (FA J-9: nothing is excluded at the revised size)" "$TMP/default.html" mustnot "excluded from the default"
-check "final-answer block renders the public-data floor line (b9 M1 label + value re-mint; bq-3520 owner ruling d-20260926)" "$TMP/default.html" must "The public-data floor, priced at low/committed planning rates: ≈58%"
+check "final-answer block renders the public-data scenario line (b9 M1 label + value re-mint; bq-3520, then bq-3933 owner ruling d-20260930)" "$TMP/default.html" must "The public-data scenario, priced at low/committed planning rates: ≈58%"
 # T5 rec 5 (GPT Pro 2026-07-29 §6, SV-2): the Authority-2 token is renamed off "the most
 # plausible reading …" and its node MOVED OUT of THE ANSWER into the
 # evidence-ranking section. All four checks below are needed: the new phrase must render, the
@@ -951,9 +951,9 @@ check "b9 M5 fix-verify: route cards name the reference their band is judged at"
 # still be caught. One retired wording is kept below as a cheap canary; the class is guarded there.
 check "b9 M5: the retired activated-default wording has not returned" "$TMP/default.html" mustnot "the activated default produces"
 check "b9 M5: the superseded 53.29% calibration-debt endpoint is gone" "$TMP/default.html" mustnot "53.29"
-check "the verdict names the public-data floor and its settings (bq-3520)" "$TMP/default.html" must "the page-adopted 2.5T Opus, planning rents, algorithmic lead 0 months, family multipliers 1.0×"
+check "the verdict names the public-data scenario and its settings (bq-3520; bq-3933)" "$TMP/default.html" must "the page-adopted 2.5T Opus, planning rents, algorithmic lead 0 months, family multipliers 1.0×"
 check "the verdict states the lead-adjusted reading beside it" "$TMP/default.html" must "reads <strong>about 68% (about 68–87% across the same presets)</strong>"
-check "the verdict declares its scenario once, and scopes the claim to calculator figures" "$TMP/default.html" must "Every calculator figure in this section is at the public-data floor's settings unless it says otherwise; 90–95% is the external claim under examination"
+check "the verdict declares its scenario once, and scopes the claim to calculator figures" "$TMP/default.html" must "Every calculator figure in this section is at the public-data scenario's settings unless it says otherwise; 90–95% is the external claim under examination"
 check "b9 M5 micro-verify: the utilization lever states BOTH bases" "$TMP/default.html" must "the same change moves 68.40% to 54.86%, a 13.54-point drop"
 check "b9 M5 micro-verify: the billable cached share sensitivity names its reference" "$TMP/default.html" must "at the public-evidence reference (algorithmic lead 0 months), billable cached share 0%"
 
@@ -961,12 +961,12 @@ check "b9 M5 micro-verify: the billable cached share sensitivity names its refer
 #     --dump-dom cannot click, read a computed ::backdrop, measure a touch target, check focus or
 #     emulate a coarse pointer, so B-1..B-6 and B-7b live in tests/fa-explain-cdp.test.mjs. What
 #     stays here is presence, collapsed-by-default, and class application at FIRST PAINT.
-check "b9 M6: the FA renders the public-data floor, labeled (bq-3520: owner ruling d-20260926 — was bq-3316's planning baseline)" "$TMP/default.html" must "— public-data floor, policy-labeled scenario"
+check "b9 M6: the FA renders the public-data scenario, labeled (bq-3933: owner ruling d-20260930, block B place 7 — was bq-3520's public-data floor, bq-3316's planning baseline)" "$TMP/default.html" must "— public-data scenario, policy-labeled: a model result under public-data assumptions, not a guaranteed minimum or an estimate."
 check "b9 M6: …and the calculator's own default reading beside it" "$TMP/default.html" must "own default reading, policy-labeled scenario"
 check "b9 M6: the §C2 label is quoted and dated" "$TMP/default.html" must "run B §C2, 2026-07-25"
 check "b9 M6: the must-not-be-called disclaimer renders in its own node" "$TMP/default.html" must 'id="fa-must-not-be-called"'
 check "b9 M6: the bridge states how the readings relate" "$TMP/default.html" must "How the readings relate."
-check "b9 M6: the basis declaration governs the explanations below it" "$TMP/default.html" must "Every calculator figure in the explanations below is at the public-data floor's settings"  # bq-3520 (was bq-3316)
+check "b9 M6: the basis declaration governs the explanations below it" "$TMP/default.html" must "Every calculator figure in the explanations below is at the public-data scenario's settings"  # bq-3933 (was bq-3520's floor, bq-3316's baseline)
 check "b9 M6: M5's single interim-pin line is RETIRED from the surface" "$TMP/default.html" mustnot "the ratified-prior reading arrives with the final-answer rework"
 check "b9 M6: the Deeper explanation trigger renders" "$TMP/default.html" must 'id="fa-deeper-trigger"'
 check "b9 M6 B-7: the exec summary renders and is COLLAPSED at first paint" "$TMP/default.html" must '<details class="fa-exec-details" id="fa-exec-details">'

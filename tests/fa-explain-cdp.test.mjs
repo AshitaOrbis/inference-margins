@@ -426,7 +426,18 @@ const ANSWER_IDS_PIN = [
    a point and changed no sentence, no claim and no qualifier. If the text digest had moved too,
    this would have been prose drifting behind a number, which is the failure class this file was
    built for. */
-const ANSWER_DIGITS_PIN = "c3714685e9652c158accd9c4b7db119e78af5c78b8152a249e6f801a648279d7";
+/* RE-PINNED 2026-09-30 (im-floor-scenario-release-bq3933-0930, bq-3933 — owner ruling
+   d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario, block B of card q-im-floor-wording-2026-09-28;
+   Polaris ruling p-20260930-im-floor-release-carries-block-b-phrases-into-the-four-places-the-count-missed). Read with
+   DUMP_ANSWER_SURFACE=1 and diffed word by word against the base commit's dump (evidence/answer-surface-worddiff.txt in the
+   leg's work dir); the COMPLETE list of changes: every "public-data floor" / "floor" naming the ≈58% -> "public-data
+   scenario" / "scenario" (tile title, aria-labels, read-in-full trigger, tokens, bridges, entry labels); the tile's status
+   reads block B place 4 ("≈58% using the public-data assumptions shown. This is a model result, not a guaranteed minimum
+   for actual margins."); the reference token place 7; the planning line place 8; the header's closing identity place 9;
+   "exceeding a scenario is not a disagreement" (10a) and "which that scenario allows" (10b). No RANKING of an external claim
+   added. The DIGITS pin moves by exactly ONE added number: the stream gains a leading "58" — block B's tile body repeats
+   "≈58%" under the ≈58% value; no published figure moved (c3714685… -> d07f0b5f…). */
+const ANSWER_DIGITS_PIN = "d07f0b5fb1f8bf4b426a8c8c416acb249a886d058d3d04634c14497688bc685a"; // previous c3714685e9652c15…
 /* RE-PINNED 2026-09-12 (im-default-window-and-mcp-discrepancy; Astra review round 3 F9), THE WORDING ONLY. The
    digits pin above did not move: the rendered digit stream is byte-identical. Read with DUMP_ANSWER_SURFACE=1 on
    both sides (the pre-change tree 9dcb54e reproduces the previous pin 9a69431e... exactly, so the dump measures
@@ -475,7 +486,7 @@ const ANSWER_DIGITS_PIN = "c3714685e9652c158accd9c4b7db119e78af5c78b8152a249e6f8
    Patel's claim" (was "reproduces the floor's neighborhood", ambiguous beside the public-data floor), "not a second claim about
    the same metric", "could identify the differing assumptions". Diff: evidence/answer-surface-worddiff-final.txt. DIGITS
    still c3714685… (the reviewer's "above-80%" was left out so no figure enters the answer). */
-const ANSWER_TEXT_PIN = "3b4bffaf19b858f979b7671b61c80b31fdf6e822e7ed0bb82d5d1c50d9bc0c29"; // previous 801905f921dfdf1f… (intermediate pins of this leg, ce322c8f… and 5f2fe255…, never shipped) (previous aeb617203282b991…)
+const ANSWER_TEXT_PIN = "db29f5b161442a46916e6d240a77e22d182d8e3ac1fdfb0af23afd370fa0310e"; // bq-3933 (see the RE-PINNED note above ANSWER_DIGITS_PIN); previous 3b4bffaf19b858f9… // previous 801905f921dfdf1f… (intermediate pins of this leg, ce322c8f… and 5f2fe255…, never shipped) (previous aeb617203282b991…)
 
 const RANKING_PATTERNS = [
   /\bstrongest external\b/i, /\branked strongest\b/i, /\bthe strongest [^.;]{0,24}hypothesis\b/i,

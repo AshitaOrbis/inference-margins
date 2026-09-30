@@ -416,7 +416,7 @@ _Sets nothing — replays the model's own §10 dive fields (see each model's `di
 | `discount` | 5 | This page's illustrative billing mix (5%) | SPECULATION |
 | `dialRanges` | {"util":{"lo":50,"mid":60,"hi":70}} | The ONE axis of its band assembly its author stated in numbers: utilization 50-70 around a stated 60. Its other two band axes are deliberately NOT rendered — 'rates half-to-full-strategic' is a qualitative phrase this page will not convert into an adjudicator's numbers on their behalf, and the lead axis ('0-to-+3-not-stacked') is one this author explicitly instructs must not be switched on to reach its headline, because the serving-stack credit it took instead already covers part of the same mechanism. The band a reader sees here is therefore narrower than its author's stated 70-84, and the preset note says so rather than letting the narrower band pass as the whole claim | DECLARED RANGE (one axis; the other two are stated qualitatively and left unrendered) |
 
-### [stress case] Public-data floor — no assumed efficiency lead
+### [stress case] Public-data scenario — no assumed efficiency lead
 
 | parameter | adopted value | source | label |
 |---|---|---|---|

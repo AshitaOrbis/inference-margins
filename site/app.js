@@ -5771,7 +5771,7 @@ const WINDOW_PRIMARY = Object.freeze(["gptpro-r3", "fable-r3", "stress-public-ra
 const WINDOW_SHORT_NAMES = Object.freeze({
   "gptpro-r3": "GPT-5.6 Pro estimate",
   "fable-r3": "Fable 5 estimate",
-  "stress-public-rate": "Public-data floor", // bq-3520: owner ruling d-20260926 — a floor from public data, never a baseline or an estimate
+  "stress-public-rate": "Public-data scenario", // bq-3520: owner ruling d-20260926 — a floor from public data, never a baseline or an estimate
   "median": "Central scenario",
 });
 function readReaderDefault() {
@@ -6561,7 +6561,7 @@ function renderBasisCounterpart() {
 const FA_SEGMENT_SEPARATORS = [
   { label: "What it claims", seps: [" · What it claims: "] },
   { label: "What it does not claim", seps: [" · What it does not claim: ", " · Not claimed: "] },
-  { label: "Why the public-data floor differs", seps: [" · Why the public-data floor differs: "] }, // bq-3520: the ≈58% is the public-data floor (owner ruling d-20260926)
+  { label: "Why the public-data scenario differs", seps: [" · Why the public-data scenario differs: "] }, // bq-3520: the ≈58% is the public-data floor (owner ruling d-20260926)
   { label: "What would flip it", seps: [" · What would flip it: "] },
 ];
 function segmentJustification(txt) {
@@ -7156,7 +7156,7 @@ const FA_EXEC_ORDERING_BASIS = "Ordering basis: the owner's declared plausibilit
    identity to the status node directly under it. Both come from the SAME string, so the label can
    never describe a different number than the one above it. Pure: the writes stay at their surfaces,
    where the sink registry classifies them (hero-tile vs final-answer never alias). */
-const FA_TILE_NAME_PREFIX = "public-data floor, ";
+const FA_TILE_NAME_PREFIX = "public-data scenario, policy-labeled: ";
 function splitToken(token) {
   const cut = token.indexOf(" \u2014 ");
   return cut < 0 ? [token, ""] : [token.slice(0, cut), token.slice(cut + 3)];

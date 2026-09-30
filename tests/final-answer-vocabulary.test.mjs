@@ -78,7 +78,8 @@ assert("FA planning line carries the public-data-floor label + the re-minted est
   // sits at or below its public comparator, so the vector is low/committed planning, not market).
   /* bq-3520 (2026-09-26): the conservative-case label is now the public-data floor's name (owner ruling
      d-20260926-…-floor; bq-1141 review residual (b)). Same rates clause, same estimand clause below. */
-  fa.tokens.planningPointLine.startsWith("The public-data floor, priced at low/committed planning rates:")
+  fa.tokens.planningPointLine.startsWith("The public-data scenario, priced at low/committed planning rates:") // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the ruled name (was bq-3520's "public-data floor")
+ 
   // im-vet-six-repairs (2026-09-20), the vocabulary release edit: "tariff schedule" -> "list-price
   // schedule", the same object under style/VOCABULARY.md §1.2's canonical name.
   && /published list-price schedule under the reference cache\/batch\/discount mix/.test(fa.tokens.planningPointLine));
@@ -135,16 +136,17 @@ assert("V-2 NO other emitted token is exempt (the scanner still sweeps every oth
 }
 /* V-4: both reading tokens carry their basis INSIDE the token (crop-bar discipline, D-3b) */
 assert("V-4 the reference reading token carries its basis inside the token",
-  /public-data floor/.test(fa.tokens.referenceReadingLine) // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the ≈58% is the public-data floor (was bq-3316's "planning baseline")
-  && /policy-labeled scenario/.test(fa.tokens.referenceReadingLine));
+  /public-data scenario/.test(fa.tokens.referenceReadingLine) // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): block B place 7 (was bq-3520's "public-data floor"); bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the ≈58% is the public-data floor (was bq-3316's "planning baseline")
+  && /policy-labeled/.test(fa.tokens.referenceReadingLine)); // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): place 7 reads "public-data scenario, policy-labeled:"
 assert("V-4 the prior reading token carries its basis inside the token",
   /calculator's own default reading/.test(fa.tokens.priorReadingLine)
   && /policy-labeled scenario/.test(fa.tokens.priorReadingLine)
   && /scenario prior, not a measurement/.test(fa.tokens.priorReadingLine));
 assert("V-4 the single value token (the crop unit) names its basis too",
-  /public-data floor/.test(fa.tokens.planningPoint)
-  && /bare minimum from public data known to be wrong/.test(fa.tokens.planningPoint)
-  && /not an estimate/i.test(fa.tokens.planningPoint)); // bq-3520: the crop unit names its basis AND carries the tile's caption (owner ruling d-20260926; review r1 finding 10)
+  /public-data scenario, policy-labeled: /.test(fa.tokens.planningPoint)
+  && /using the public-data assumptions shown/.test(fa.tokens.planningPoint)
+  && /not a guaranteed minimum for actual margins/.test(fa.tokens.planningPoint)
+  && !/bare minimum|cannot be lower|known to be wrong/.test(fa.tokens.planningPoint)); // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the crop unit names its basis and carries block B's tile body (place 4), which drops "Not an estimate" by the ruling; bq-3520: the crop unit names its basis AND carries the tile's caption (owner ruling d-20260926; review r1 finding 10)
 
 /* 7. the MCP twin renders from the SAME tokens (one formatter — byte-inclusion) */
 {

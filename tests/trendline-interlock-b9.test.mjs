@@ -540,7 +540,7 @@ const PRE_M5_FA = {
   assert("T-9/M6 the M5 interim-pin token is RETIRED (the rework it promised has shipped)",
     fa.leverReference === undefined && fa.tokens.leverReferenceLine === undefined);
   assert("T-9/M6 the reference token states its own basis INSIDE the token",
-    /public-data floor/.test(fa.tokens.referenceReadingLine) // bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the one name for ≈58% (was bq-3316's "planning baseline")
+    /public-data scenario/.test(fa.tokens.referenceReadingLine) // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the one name for ≈58% (was bq-3520's "public-data floor"); bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): the one name for ≈58% (was bq-3316's "planning baseline")
     && /algorithmic\s+lead of 0 months/.test(fa.tokens.referenceReadingLine), fa.tokens.referenceReadingLine);
   /* row 499 (delta manifest research/b9-delta-manifests/row499-preset-structure-delta-manifest.md):
      the token kept its name for the reading (the median lens IS still the calculator's default
@@ -949,7 +949,11 @@ const PRE_M5_FA = {
                            /* bq-3520 (2026-09-26), owner ruling d-20260926-…-floor: the ≈58% reading's one name is now the
                               public-data floor, and the tile's caption identifies it as the bare minimum from public data. Both
                               name the SAME lead-0 basis; neither is a prior-basis word, so the opposite-basis check is unchanged. */
-                           "public-data floor", "PUBLIC-DATA FLOOR", "bare minimum from public data"];
+                           "public-data floor", "PUBLIC-DATA FLOOR", "bare minimum from public data",
+                           /* bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the reading is now the
+                              public-data scenario, and the tile's caption states its basis as "the public-data assumptions shown".
+                              Same lead-0 basis, still no prior-basis word; the retired names above STAY (the 2026-09-20 rule). */
+                           "public-data scenario", "PUBLIC-DATA SCENARIO", "using the public-data assumptions shown"];
   const PRIOR_BASIS = ["ratified-prior", "ratified algorithmic-lead prior", "ratified prior",
                        "own default state", "default state carries", "calculator's own default",
                        "calculator default", "the default state of the calculator",
