@@ -20,7 +20,7 @@ e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2  ./fonts/playfa
 c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source-serif-4-latin-var.woff2
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 30affd7de68c1fd8b52dc2c77c023579cd0dbfc84969ad25ceb5de9e0ce06a43  ./glossary.html
-8cc428e82d98ba3525023c0bbed01fcc3aa85940182dcad247c10b7c47a78931  ./index.html
+91375ea5b95443b61e38f2457fd26a407add64e0303f4b15c38a7eb6443613cd  ./index.html
 e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d  ./research/analyst-divergence.html
 c77f3b3946f5d46916d29c63914371912cf9656d7c1afe799ac919b732fb37ad  ./research/anthropic-gptpro.html
 5898b2303a6288eb073d5e0c464ca4bd0a83f7f4973e1429c526bc4b4e2ebc9f  ./research/changelog.html
@@ -42,7 +42,7 @@ d2077e1121a0228d6bd1afb961b43811e0b7ae76f2a24069cdac831029c25cfc  ./research/cla
 6bd0a56288ca2574d5ba048b1ee5e863c9349de7d0a8097609bff554989adf28  ./research/deepseek-v4-1-flash-astra-pro.html
 b03a419ae9fc571abd51130edcf68788317aa7cf288c8d44b78f4c3cfd2ff396  ./research/dive-amd.html
 559b2f94b82e82c8facf212e3303e1f30133923864d3ad8f8a86da9dc7219084  ./research/dive-ascend.html
-ed14ed6f70422bb1c66bdb57884e1d7bf9ebfe40dff09f1010ff5c014c72a573  ./research/dive-nvidia-forward.html
+fe5a003ce1211d79c928a85b8f503d03584c96663b6b60164765135eca8a7b09  ./research/dive-nvidia-forward.html
 a9acece8a1dc2c1fabda827bee75bb0e5d3bc335d8047cf858c6021d374b0d35  ./research/dive-replication-blinded.html
 35f0954dca9e755b9468ea1e3734741c809c4407dfbbffbdfcf6b515cb9c64b2  ./research/dive-tpu.html
 afd20e4560528e1511c10826d5c9cc764857975589e8caa37476208308fecf95  ./research/dive-trainium.html

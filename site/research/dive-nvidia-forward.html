@@ -56,14 +56,14 @@
 <h1>Public anchors for frontier NVIDIA LLM-serving economics</h1>
 <p><strong>Research cutoff: July 15, 2026.</strong> All derived dollar-per-token figures below are my calculations from the cited throughput and hourly-price inputs.</p>
 <h2>Executive finding</h2>
-<p><strong>GB300 NVL72 is now strongly throughput-anchored but remains market-price-unanchored.</strong> MLPerf Inference v6.0 contains valid, reproducible, named-model GB300 results for DeepSeek-R1 at FP4, including a full-rack latency-constrained Interactive result, multiple Server results, and Offline saturation results. The strongest single-rack observations range from <strong>250,634 generated tokens/s under the tight Interactive SLO</strong> to <strong>673,936 generated tokens/s Offline</strong>. These are generated-output tokens, not input-plus-output totals. [cite: turn578695view0 turn578695view1]</p>
-<p><strong>No numeric official public GB300 rental rate was found</strong> on the public pricing pages checked for AWS, CoreWeave, Nebius, GCP, Azure, OCI, or Crusoe as of July 15, 2026. The providers either list the system without a rate, require contact with sales, or omit the price field. Thus, a direct public <code>GB300 rack throughput × actual GB300 rack rental price</code> anchor still does not exist. [cite: turn341554view0 turn341554view4 turn320368view2 turn320368view5 turn812928view0 turn812928view4]</p>
-<p><strong>B300 does have a usable paired public anchor.</strong> A Nebius eight-GPU B300 node submitted <strong>60,413 generated tokens/s</strong> on DeepSeek-R1 FP4 in MLPerf Server, while Nebius publicly lists B300 at <strong>$7.85/GPU-hour on demand</strong>. Pairing those yields approximately <strong>$0.289 per million generated output tokens</strong> before non-GPU serving costs. [cite: file turn57file0L6-L19] [cite: turn341554view5]</p>
-<p><strong>Rubin remains absolute-economics-unanchored.</strong> There are credible production-ramp signals and a named-workload relative claim, but no public absolute tokens/s, no public rack or GPU rental price, no MLPerf result, and no InferenceX result. NVIDIA&#39;s current claim is a relative one—up to <strong>10× tokens/s/MW</strong> and <strong>one-tenth the cost per million tokens</strong> versus GB200 NVL72 on Kimi-K2-Thinking at 32K input/8K output—not an absolute throughput or dollar anchor. [cite: turn204192view0 turn204192view2 turn199113view1 turn812928view6]</p>
+<p><strong>GB300 NVL72 is now strongly throughput-anchored but remains market-price-unanchored.</strong> MLPerf Inference v6.0 contains valid, reproducible, named-model GB300 results for DeepSeek-R1 at FP4, including a full-rack latency-constrained Interactive result, multiple Server results, and Offline saturation results. The strongest single-rack observations range from <strong>250,634 generated tokens/s under the tight Interactive SLO</strong> to <strong>673,936 generated tokens/s Offline</strong>. These are generated-output tokens, not input-plus-output totals.</p>
+<p><strong>No numeric official public GB300 rental rate was found</strong> on the public pricing pages checked for AWS, CoreWeave, Nebius, GCP, Azure, OCI, or Crusoe as of July 15, 2026. The providers either list the system without a rate, require contact with sales, or omit the price field. Thus, a direct public <code>GB300 rack throughput × actual GB300 rack rental price</code> anchor still does not exist.</p>
+<p><strong>B300 does have a usable paired public anchor.</strong> A Nebius eight-GPU B300 node submitted <strong>60,413 generated tokens/s</strong> on DeepSeek-R1 FP4 in MLPerf Server, while Nebius publicly lists B300 at <strong>$7.85/GPU-hour on demand</strong>. Pairing those yields approximately <strong>$0.289 per million generated output tokens</strong> before non-GPU serving costs.</p>
+<p><strong>Rubin remains absolute-economics-unanchored.</strong> There are credible production-ramp signals and a named-workload relative claim, but no public absolute tokens/s, no public rack or GPU rental price, no MLPerf result, and no InferenceX result. NVIDIA&#39;s current claim is a relative one—up to <strong>10× tokens/s/MW</strong> and <strong>one-tenth the cost per million tokens</strong> versus GB200 NVL72 on Kimi-K2-Thinking at 32K input/8K output—not an absolute throughput or dollar anchor.</p>
 <hr>
 <h2>1. Throughput accounting: what the numbers actually mean</h2>
 <h3>MLPerf&#39;s token numerator is GENERATED output</h3>
-<p>For the DeepSeek-R1 benchmark, the reference SUT passes the number of generated tokens as <code>n_tokens</code> to MLPerf LoadGen. LoadGen then sums those output-token counts to calculate &quot;Completed tokens per second.&quot; [cite: file turn10file0L215-L241] [cite: file turn6file0L88-L106]</p>
+<p>For the DeepSeek-R1 benchmark, the reference SUT passes the number of generated tokens as <code>n_tokens</code> to MLPerf LoadGen. LoadGen then sums those output-token counts to calculate &quot;Completed tokens per second.&quot;</p>
 <p>Therefore:</p>
 <ul>
 <li><strong>MLPerf &quot;tokens/s&quot; = generated-output tokens/s.</strong></li>
@@ -78,9 +78,9 @@
 <li><strong>Server:</strong> Poisson arrivals with looser 2-second TTFT and 80-ms TPOT constraints.</li>
 <li><strong>Offline:</strong> saturation throughput with no interactive-serving latency SLO.</li>
 </ul>
-<p>Server and Interactive are still aggregate batched-system results. They do not mean a single user receives hundreds of thousands of tokens per second. [cite: turn578695view1]</p>
+<p>Server and Interactive are still aggregate batched-system results. They do not mean a single user receives hundreds of thousands of tokens per second.</p>
 <h3>InferenceX&#39;s headline throughput is TOTAL</h3>
-<p>InferenceX separately records total, input, and output throughput. Its headline <code>tput_per_gpu</code> is input-plus-output tokens divided by all participating GPUs. Its output-throughput metric is separate and, for disaggregated serving, is divided over the decode GPUs rather than the whole prefill-plus-decode allocation. [cite: file turn39file0L53-L69] [cite: file turn48file0L132-L165]</p>
+<p>InferenceX separately records total, input, and output throughput. Its headline <code>tput_per_gpu</code> is input-plus-output tokens divided by all participating GPUs. Its output-throughput metric is separate and, for disaggregated serving, is divided over the decode GPUs rather than the whole prefill-plus-decode allocation.</p>
 <p>For a fixed 8K-input/1K-output workload: TOTAL tokens = 9 × output tokens.</p>
 <p>Consequently, a reported cost of $0.07 per million <strong>total</strong> tokens corresponds mechanically to approximately $0.63 per million <strong>output</strong> tokens, assuming the exact 8:1 input/output ratio.</p>
 <hr>
@@ -136,20 +136,20 @@
 <li><a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/Nebius/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Server/performance/run_1/mlperf_log_summary.txt">Nebius Server raw result</a></li>
 <li><a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/Nebius/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Offline/performance/run_1/mlperf_log_summary.txt">Nebius Offline raw result</a></li>
 </ul>
-<p>The NVIDIA Interactive result met its 1.5-second TTFT and 15-ms TPOT thresholds; its measured 99th-percentile TTFT was about <strong>492 ms</strong> and 99th-percentile TPOT about <strong>13.87 ms</strong>. The submitted topology used <strong>eight prefill GPUs and 64 decode GPUs</strong>, FP4 model weights, disaggregated serving, and a configured maximum concurrency of 5,120. [cite: file turn19file0L6-L19] [cite: file turn19file0L35-L63] [cite: file turn52file0L3-L9] [cite: file turn52file0L23-L39]</p>
-<p>The Nebius Server result met the 2-second/80-ms constraints with approximately <strong>1.015 seconds 99th-percentile TTFT</strong> and <strong>77.88 ms 99th-percentile TPOT</strong>. [cite: file turn12file0L6-L19] [cite: file turn12file0L35-L62]</p>
+<p>The NVIDIA Interactive result met its 1.5-second TTFT and 15-ms TPOT thresholds; its measured 99th-percentile TTFT was about <strong>492 ms</strong> and 99th-percentile TPOT about <strong>13.87 ms</strong>. The submitted topology used <strong>eight prefill GPUs and 64 decode GPUs</strong>, FP4 model weights, disaggregated serving, and a configured maximum concurrency of 5,120.</p>
+<p>The Nebius Server result met the 2-second/80-ms constraints with approximately <strong>1.015 seconds 99th-percentile TTFT</strong> and <strong>77.88 ms 99th-percentile TPOT</strong>.</p>
 <p><strong>Source quality:</strong> MLPerf Closed Division, valid result logs, public configurations and reproducible harness. This is the strongest public throughput evidence available.</p>
 <p><strong>Anchor utility:</strong> Excellent for <code>generated tok/s/rack</code>; insufficient by itself for <code>$ / token</code> because no public GB300 rental rate exists.</p>
 <h3>The 2.49-million-tok/s headline is four racks, not one</h3>
-<p>NVIDIA&#39;s v6.0 headline of roughly <strong>2,494,310 generated tokens/s Offline</strong> and <strong>1,555,110 generated tokens/s Server</strong> used <strong>four GB300 NVL72 racks, 288 GPUs total</strong>. It is a scale-out result, not one-rack throughput. Any &quot;per GPU&quot; value from it is again an arithmetic division by 288. [cite: turn839898view0 turn839898view1 turn839898view3]</p>
+<p>NVIDIA&#39;s v6.0 headline of roughly <strong>2,494,310 generated tokens/s Offline</strong> and <strong>1,555,110 generated tokens/s Server</strong> used <strong>four GB300 NVL72 racks, 288 GPUs total</strong>. It is a scale-out result, not one-rack throughput. Any &quot;per GPU&quot; value from it is again an arithmetic division by 288.</p>
 <p><strong>Anchor utility:</strong> Useful for scale-out efficiency and system scaling; inappropriate as a one-rack or isolated-GPU anchor.</p>
 <h3>Benchmark vintage materially changes the result</h3>
-<p>In MLPerf v5.1, the same NVIDIA one-rack GB300 submission reported approximately <strong>209,328 generated tokens/s Server</strong> and <strong>420,659 Offline</strong>. In v6.0, NVIDIA reported 400,437 Server and 647,076 Offline—approximately <strong>1.91×</strong> and <strong>1.54×</strong> higher, respectively. [cite: file turn23file0L6-L19] [cite: file turn24file0L6-L14]</p>
+<p>In MLPerf v5.1, the same NVIDIA one-rack GB300 submission reported approximately <strong>209,328 generated tokens/s Server</strong> and <strong>420,659 Offline</strong>. In v6.0, NVIDIA reported 400,437 Server and 647,076 Offline—approximately <strong>1.91×</strong> and <strong>1.54×</strong> higher, respectively.</p>
 <p>That makes &quot;GB300 throughput&quot; inseparable from benchmark date, serving stack, quantization recipe, and scheduling configuration. A forward model should retain the benchmark vintage rather than treating tokens/s as a fixed property of the silicon.</p>
 <hr>
 <h2>2026-04-01 benchmark + 2026-07-15 public price — B300 is the cleanest paired Blackwell Ultra anchor</h2>
-<p>Nebius submitted a valid eight-GPU B300 DeepSeek-R1 Server result of <strong>60,413.44 generated tokens/s</strong>. The configuration specifies FP4 model precision, FP8 KV cache, TP8, and the standard 2-second/80-ms Server constraints. [cite: file turn57file0L6-L19] [cite: file turn61file0L20-L38] [cite: file turn61file0L59-L77]</p>
-<p>Nebius&#39;s public on-demand rate is <strong>$7.85 per B300 GPU-hour</strong>, making the eight-GPU node <strong>$62.80/hour</strong>. [cite: turn341554view5]</p>
+<p>Nebius submitted a valid eight-GPU B300 DeepSeek-R1 Server result of <strong>60,413.44 generated tokens/s</strong>. The configuration specifies FP4 model precision, FP8 KV cache, TP8, and the standard 2-second/80-ms Server constraints.</p>
+<p>Nebius&#39;s public on-demand rate is <strong>$7.85 per B300 GPU-hour</strong>, making the eight-GPU node <strong>$62.80/hour</strong>.</p>
 <p>$62.80 × 10^6 / (60,413.44 × 3,600) = <strong>$0.289 / M generated output tokens</strong></p>
 <p><strong>Source quality:</strong> Valid MLPerf result plus official provider list price. The benchmark and price come from the same provider, although this is not a production billing disclosure tying that exact benchmark run to an invoice.</p>
 <p><strong>Anchor utility:</strong> <strong>Strongest presently available public standalone B300 cost-per-generated-token candidate.</strong></p>
@@ -159,7 +159,7 @@
 <li>$7.15/GPU-hour, or $57.20/node-hour.</li>
 <li><strong>$0.307/M generated output tokens.</strong></li>
 </ul>
-<p>Thus, in this one provider/benchmark pairing, B300 reduces the rental-derived hardware cost by only about <strong>6%</strong> relative to B200, despite a roughly 17% throughput improvement, because B300&#39;s hourly price is higher. [cite: file turn60file0L6-L19] [cite: file turn62file0L5-L23] [cite: turn341554view6]</p>
+<p>Thus, in this one provider/benchmark pairing, B300 reduces the rental-derived hardware cost by only about <strong>6%</strong> relative to B200, despite a roughly 17% throughput improvement, because B300&#39;s hourly price is higher.</p>
 <hr>
 <h2>2026-01-22 — Google publishes an unusually clean TOTAL-versus-GENERATED GB200 disclosure</h2>
 <p>Google Cloud reported a full 72-GPU A4X/GB200 NVL72 run of <strong>DeepSeek-R1 at FP8</strong>, 8K input/1K output, using SGLang and NVIDIA Dynamo:</p>
@@ -168,14 +168,14 @@
 <li><strong>1,500 GENERATED output tokens/s/GPU</strong>.</li>
 <li>Therefore approximately <strong>108,000 generated output tokens/s per rack</strong>.</li>
 <li>The throughput-oriented configuration did not publish an interactive latency SLO.</li>
-<li>A separate eight-GPU latency-oriented configuration achieved median 10-ms inter-token latency at concurrency four, but Google did not publish aggregate throughput for that configuration. [cite: turn752102view0]</li>
+<li>A separate eight-GPU latency-oriented configuration achieved median 10-ms inter-token latency at concurrency four, but Google did not publish aggregate throughput for that configuration.</li>
 </ul>
 <p><strong>Source quality:</strong> Hyperscaler production-oriented validated recipe, with model, precision, sequence lengths, topology, framework, and separate total/output figures disclosed.</p>
 <p><strong>Anchor utility:</strong> Strong operational cross-check on GB200. It lacks a public GCP A4X price and should not be mixed directly with MLPerf because its precision, fixed sequence lengths, software, and latency target differ.</p>
 <p>The disclosure is also a useful warning: the <strong>6,000 tok/s/GPU headline is TOTAL</strong>, while the interactive-serving-relevant generated-output figure is only one quarter as large.</p>
 <hr>
 <h2>2025-10-24 — Azure&#39;s &quot;1.2 million tok/s&quot; GB200 claim is not an economic anchor</h2>
-<p>Azure reported <strong>1.2 million tokens/s</strong> for GPT-OSS 120B on ND GB200-v6 infrastructure. However, the post does not disclose whether that is total or generated throughput, the exact number of GPUs/racks, precision, input/output lengths, concurrency, or latency constraints. [cite: turn195724view0 turn195724view1]</p>
+<p>Azure reported <strong>1.2 million tokens/s</strong> for GPT-OSS 120B on ND GB200-v6 infrastructure. However, the post does not disclose whether that is total or generated throughput, the exact number of GPUs/racks, precision, input/output lengths, concurrency, or latency constraints.</p>
 <p><strong>Source quality:</strong> Production-oriented hyperscaler disclosure, but insufficiently specified.</p>
 <p><strong>Anchor utility:</strong> <strong>Reject for cost-per-token modeling.</strong> It can be retained only as a directional scale claim.</p>
 <hr>
@@ -185,13 +185,13 @@
 <ul>
 <li><strong>11,055.6 TOTAL tok/s/GPU</strong> at 13.12 output tok/s/user and 77.83-ms TPOT.</li>
 <li>At a matched 27 output tok/s/user, <strong>6,182 TOTAL tok/s/GPU</strong> on GB300 versus 2,189 on GB200.</li>
-<li>The benchmark&#39;s published cost calculation uses <strong>TOTAL input-plus-output tokens</strong>, not generated tokens. [cite: file turn42file0L22-L35] [cite: file turn43file0L18-L29]</li>
+<li>The benchmark&#39;s published cost calculation uses <strong>TOTAL input-plus-output tokens</strong>, not generated tokens.</li>
 </ul>
 <p>Primary source:</p>
 <ul>
 <li><a href="https://inferencex.semianalysis.com/blog/gb300-nvl72-vs-gb200-nvl72-dsv4-pro-vllm-fp4">InferenceX: GB300 NVL72 versus GB200 NVL72 on DeepSeek-V4-Pro</a>, published May 27, 2026; measurements dated May 22, 2026.</li>
 </ul>
-<p>The reported economics use approximately <strong>$2.65/GB300 GPU-hour</strong>. Critically, InferenceX&#39;s public source code labels the GB300 number as <strong>temporary</strong>, constructed as 1.2× the GB200 estimate until official pricing becomes available. The same registry assumes 2.12 kW of chip-plus-host/NIC power per GB300 GPU. [cite: file turn47file0L72-L94]</p>
+<p>The reported economics use approximately <strong>$2.65/GB300 GPU-hour</strong>. Critically, InferenceX&#39;s public source code labels the GB300 number as <strong>temporary</strong>, constructed as 1.2× the GB200 estimate until official pricing becomes available. The same registry assumes 2.12 kW of chip-plus-host/NIC power per GB300 GPU.</p>
 <p>For a 72-GPU rack, those model assumptions imply:</p>
 <ul>
 <li><strong>$190.94/rack-hour</strong></li>
@@ -209,7 +209,7 @@
 <li>5× tokens/s/MW.</li>
 <li>A combined &quot;AI factory output&quot; multiple of up to 50×.</li>
 </ul>
-<p>These are explicitly vendor projections and relative multipliers; no absolute tokens/s, rack power, or hourly price is supplied. [cite: turn191680view0 turn191680view1 turn191680view2 turn191680view3]</p>
+<p>These are explicitly vendor projections and relative multipliers; no absolute tokens/s, rack power, or hourly price is supplied.</p>
 <p><strong>Source quality:</strong> Vendor &quot;up to&quot; marketing claim.</p>
 <p><strong>Anchor utility:</strong> Not suitable for an absolute cost-per-token model. It may be used only as a relative upside scenario with a large uncertainty band.</p>
 <hr>
@@ -226,52 +226,52 @@
 <tbody><tr>
 <td><strong>AWS Capacity Blocks</strong></td>
 <td>B200: <strong>$12.355/GPU-h</strong>; B300: <strong>$14.04/GPU-h</strong>; GB200 NVL72: <strong>$761.904/rack-h</strong>, or $10.582/GPU-h</td>
-<td>No GB300 rate shown. Capacity Blocks are reserved/upfront, not ordinary on-demand. [cite: turn370942view0]</td>
+<td>No GB300 rate shown. Capacity Blocks are reserved/upfront, not ordinary on-demand.</td>
 </tr>
 <tr>
 <td><strong>CoreWeave</strong></td>
 <td>B200: <strong>$8.60/GPU-h on demand</strong>; GB200: <strong>$42/h per four-GPU instance</strong>, or $10.50/GPU-h</td>
-<td>GB300 four-GPU instance is quote-only. B300 on-demand is quote-only; B300 spot shown at <strong>$4.48/GPU-h</strong>. [cite: turn341554view0 turn341554view1 turn341554view2 turn341554view3]</td>
+<td>GB300 four-GPU instance is quote-only. B300 on-demand is quote-only; B300 spot shown at <strong>$4.48/GPU-h</strong>.</td>
 </tr>
 <tr>
 <td><strong>Nebius</strong></td>
 <td>B200: <strong>$7.15/GPU-h on demand</strong>, $3.95 preemptible; B300: <strong>$7.85 on demand</strong>, $4.30 preemptible</td>
-<td>GB200 and GB300 require contact with sales. [cite: turn341554view4 turn341554view5 turn341554view6]</td>
+<td>GB200 and GB300 require contact with sales.</td>
 </tr>
 <tr>
 <td><strong>Lambda</strong></td>
 <td>B200: approximately <strong>$6.69–$6.99/GPU-h</strong>, depending on allocation size</td>
-<td>No public B300 or GB300 numeric rate. Large clusters are negotiated. [cite: turn341554view7]</td>
+<td>No public B300 or GB300 numeric rate. Large clusters are negotiated.</td>
 </tr>
 <tr>
 <td><strong>RunPod</strong></td>
 <td>B200 Pod: <strong>$5.89/GPU-h</strong>; B300 Pod: <strong>$7.39/GPU-h</strong>; higher serverless worker rates also listed</td>
-<td>No GB300 NVL72 rack rate. [cite: turn160105view0]</td>
+<td>No GB300 NVL72 rack rate.</td>
 </tr>
 <tr>
 <td><strong>Hyperstack</strong></td>
 <td>B200: <strong>$6.00/GPU-h on demand</strong>, <strong>$5.10 reserved</strong></td>
-<td>No numeric B300 or GB300 rate. The page&#39;s B200 memory description appears inconsistent with standard B200 specifications, reducing source quality. [cite: turn320368view0]</td>
+<td>No numeric B300 or GB300 rate. The page&#39;s B200 memory description appears inconsistent with standard B200 specifications, reducing source quality.</td>
 </tr>
 <tr>
 <td><strong>Crusoe</strong></td>
 <td>B200 and GB200 capacity exposed as contact-sales products</td>
-<td>No numeric GB300 rate on the checked price page. [cite: turn320368view2 turn320368view3 turn320368view4]</td>
+<td>No numeric GB300 rate on the checked price page.</td>
 </tr>
 <tr>
 <td><strong>GCP</strong></td>
 <td>A4X Max documentation identifies a four-GPU GB300 bare-metal instance and 18-instance/72-GPU NVL72 domain</td>
-<td>No numeric A4X Max/GB300 rate on the public compute-price page; capacity reservation required. [cite: turn812928view0 turn812928view1 turn812928view2 turn812928view3]</td>
+<td>No numeric A4X Max/GB300 rate on the public compute-price page; capacity reservation required.</td>
 </tr>
 <tr>
 <td><strong>Azure</strong></td>
 <td>GB300/B300 infrastructure announcements and product references exist</td>
-<td>No numeric GB300/B300 rate found on the public Linux VM pricing page. [cite: turn812928view4 turn812928view5]</td>
+<td>No numeric GB300/B300 rate found on the public Linux VM pricing page.</td>
 </tr>
 <tr>
 <td><strong>OCI</strong></td>
 <td>Public price list names B200, B300, GB200 and <code>BM.GPU.GB300.4</code> shapes</td>
-<td>Retrieved public table did not populate numeric prices for those entries. [cite: turn320368view5 turn320368view6 turn320368view7]</td>
+<td>Retrieved public table did not populate numeric prices for those entries.</td>
 </tr>
 </tbody></table>
 <h3>Rack-level interpretation</h3>
@@ -334,7 +334,7 @@
 <td>Saturation lower bound</td>
 </tr>
 </tbody></table>
-<p>The GB200 throughputs are the NVIDIA MLPerf v6.0 full-rack results. [cite: file turn18file0L11-L17] The AWS price is an official Capacity Block rate rather than ordinary on-demand pricing. [cite: turn370942view0]</p>
+<p>The GB200 throughputs are the NVIDIA MLPerf v6.0 full-rack results. The AWS price is an official Capacity Block rate rather than ordinary on-demand pricing.</p>
 <p>These are <strong>rental-derived compute costs</strong>, not bare-metal owner TCO. They include the infrastructure provider&#39;s capex, energy, operations, and margin to whatever extent those are embedded in its rate, but exclude the model server&#39;s own storage, networking, orchestration, engineering, failover reserve, idle capacity, and other operating costs.</p>
 <h2>GB300 price sensitivity: the most defensible current representation</h2>
 <p>Because there is no public rack price, the cleanest GB300 model is to expose cost as a function of rack-hour price.</p>
@@ -415,13 +415,13 @@
 <hr>
 <h1>5. GB300 power evidence</h1>
 <p>The submitted NVIDIA MLPerf system identifies <strong>1,400 W GPU TGP per GB300</strong>, implying 72 × 1.4 kW = <strong>100.8 kW</strong>.</p>
-<p>That is an <strong>accelerator-only nameplate sum</strong>, not the electrical draw of a complete NVL72 rack. It excludes Grace CPUs, NVLink switches, networking, storage, power-conversion losses, and cooling. [cite: file turn50file0L3-L19] [cite: file turn50file0L33-L50]</p>
-<p>SemiAnalysis&#39;s public TCO registry instead uses <strong>2.12 kW per GPU</strong> including a modeled per-GPU share of host and NIC power, or approximately <strong>152.6 kW per rack</strong>. That is an analyst model input, not a measured rack-power disclosure, and may still differ from facility draw after PUE. [cite: file turn47file0L83-L94]</p>
+<p>That is an <strong>accelerator-only nameplate sum</strong>, not the electrical draw of a complete NVL72 rack. It excludes Grace CPUs, NVLink switches, networking, storage, power-conversion losses, and cooling.</p>
+<p>SemiAnalysis&#39;s public TCO registry instead uses <strong>2.12 kW per GPU</strong> including a modeled per-GPU share of host and NIC power, or approximately <strong>152.6 kW per rack</strong>. That is an analyst model input, not a measured rack-power disclosure, and may still differ from facility draw after PUE.</p>
 <p><strong>Negative finding:</strong> I found no public, measured GB300 NVL72 wall-power trace paired with an LLM inference run. Thus there is no audited public <code>generated tokens / joule</code> anchor for the entire rack.</p>
 <hr>
 <h1>6. Rubin: exactly what is public</h1>
 <h2>2026-03-16 — production-ramp signal</h2>
-<p>NVIDIA states that the seven-chip Vera Rubin platform is <strong>in full production</strong> and that partner systems from hyperscalers and neoclouds are expected in the <strong>second half of 2026</strong>. The current primary rack-scale product is <strong>Vera Rubin NVL72</strong>, consisting of 72 Rubin GPUs and 36 Vera CPUs. [cite: turn204192view0 turn204192view1 turn204192view2]</p>
+<p>NVIDIA states that the seven-chip Vera Rubin platform is <strong>in full production</strong> and that partner systems from hyperscalers and neoclouds are expected in the <strong>second half of 2026</strong>. The current primary rack-scale product is <strong>Vera Rubin NVL72</strong>, consisting of 72 Rubin GPUs and 36 Vera CPUs.</p>
 <p><strong>Source quality:</strong> Vendor production and availability statement. Stronger than an analyst roadmap, but still forward-looking for customer availability.</p>
 <p><strong>Anchor utility:</strong> Useful for ramp timing and probability-of-availability, not for economics.</p>
 <h2>Named-model relative claim</h2>
@@ -434,7 +434,7 @@
 <li>Up to <strong>10× tokens/s/MW</strong></li>
 <li>Approximately <strong>one-tenth cost per million tokens</strong></li>
 </ul>
-<p>However, NVIDIA publishes no absolute tokens/s, no measured or modeled power number, no hourly cost input, no concurrency, no TTFT/TPOT target, and no reproducible benchmark recipe. The page also characterizes specifications and performance as subject to change. [cite: turn199113view1 turn199113view2 turn812928view6 turn812928view7]</p>
+<p>However, NVIDIA publishes no absolute tokens/s, no measured or modeled power number, no hourly cost input, no concurrency, no TTFT/TPOT target, and no reproducible benchmark recipe. The page also characterizes specifications and performance as subject to change.</p>
 <p><strong>Source quality:</strong> Named-workload vendor projection.</p>
 <p><strong>Anchor utility:</strong> Relative scenario only. It cannot determine absolute Rubin $/token.</p>
 <h2>Preliminary peak specifications</h2>
@@ -444,12 +444,12 @@
 <li>20.7 TB aggregate HBM4.</li>
 <li>1,580 TB/s aggregate memory bandwidth.</li>
 </ul>
-<p>These are peak specifications, not serving throughput. Converting them to tokens/s would require assumptions about active parameters, sparsity, KV-cache behavior, batch size, utilization, communication overhead, and prefill/decode allocation. [cite: turn199113view2]</p>
+<p>These are peak specifications, not serving throughput. Converting them to tokens/s would require assumptions about active parameters, sparsity, KV-cache behavior, batch size, utilization, communication overhead, and prefill/decode allocation.</p>
 <p><strong>Anchor utility:</strong> Capacity constraints and theoretical ceiling only; reject for direct cost-per-token estimation.</p>
 <h2>MLPerf and independent benchmarking status</h2>
 <ul>
 <li>No Rubin, Vera Rubin, <code>VR200</code>, or Rubin GPU submission was found in the public MLPerf Inference v6.0 results.</li>
-<li>InferenceX&#39;s public hardware list labels <strong>Vera Rubin NVL72</strong> and <strong>Rubin NVL8</strong> as &quot;Coming Soon,&quot; rather than supported hardware with results. [cite: file turn33file0L51-L71]</li>
+<li>InferenceX&#39;s public hardware list labels <strong>Vera Rubin NVL72</strong> and <strong>Rubin NVL8</strong> as &quot;Coming Soon,&quot; rather than supported hardware with results.</li>
 <li>No public Rubin hourly rental, preorder rate, Capacity Block rate, or reservation price was found.</li>
 <li>No public production disclosure pairs Rubin absolute output throughput with a workload price.</li>
 </ul>
@@ -496,15 +496,15 @@
 <hr>
 <h1>Five most load-bearing sources</h1>
 <ol>
-<li><p><strong>MLPerf Inference v6.0 GB300 raw results and release, April 1, 2026.</strong> <a href="https://mlcommons.org/2026/04/mlperf-inference-v6-0-results/">MLCommons v6.0 release</a>; <a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Interactive/performance/run_1/mlperf_log_summary.txt">NVIDIA GB300 Interactive log</a>; <a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/Nebius/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Server/performance/run_1/mlperf_log_summary.txt">Nebius GB300 Server log</a>. These establish the strongest public GB300 generated-throughput anchors. [cite: turn578695view0 turn578695view1]</p>
+<li><p><strong>MLPerf Inference v6.0 GB300 raw results and release, April 1, 2026.</strong> <a href="https://mlcommons.org/2026/04/mlperf-inference-v6-0-results/">MLCommons v6.0 release</a>; <a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Interactive/performance/run_1/mlperf_log_summary.txt">NVIDIA GB300 Interactive log</a>; <a href="https://github.com/mlcommons/inference_results_v6.0/blob/main/closed/Nebius/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Server/performance/run_1/mlperf_log_summary.txt">Nebius GB300 Server log</a>. These establish the strongest public GB300 generated-throughput anchors.</p>
 </li>
-<li><p><strong>MLPerf DeepSeek SUT and LoadGen source code.</strong> <a href="https://github.com/mlcommons/inference/blob/master/language/deepseek-r1/mlperf/offline_sut.py">DeepSeek-R1 SUT</a>; <a href="https://github.com/mlcommons/inference/blob/master/loadgen/results.cc">LoadGen results implementation</a>. These prove that the published token numerator is generated output rather than total input-plus-output. [cite: file turn10file0L215-L241] [cite: file turn6file0L88-L106]</p>
+<li><p><strong>MLPerf DeepSeek SUT and LoadGen source code.</strong> <a href="https://github.com/mlcommons/inference/blob/master/language/deepseek-r1/mlperf/offline_sut.py">DeepSeek-R1 SUT</a>; <a href="https://github.com/mlcommons/inference/blob/master/loadgen/results.cc">LoadGen results implementation</a>. These prove that the published token numerator is generated output rather than total input-plus-output.</p>
 </li>
-<li><p><strong>Official AWS and Nebius public pricing.</strong> <a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">AWS EC2 Capacity Blocks pricing</a>; <a href="https://nebius.com/prices">Nebius pricing</a>. These supply the strongest public B200/B300/GB200 dollar-per-hour inputs. [cite: turn370942view0 turn341554view5 turn341554view6]</p>
+<li><p><strong>Official AWS and Nebius public pricing.</strong> <a href="https://aws.amazon.com/ec2/capacityblocks/pricing/">AWS EC2 Capacity Blocks pricing</a>; <a href="https://nebius.com/prices">Nebius pricing</a>. These supply the strongest public B200/B300/GB200 dollar-per-hour inputs.</p>
 </li>
-<li><p><strong>SemiAnalysis InferenceX GB300 NVL72 benchmark and public economic-model code, May 2026.</strong> <a href="https://inferencex.semianalysis.com/blog/gb300-nvl72-vs-gb200-nvl72-dsv4-pro-vllm-fp4">GB300 versus GB200 on DeepSeek-V4-Pro</a>. This is the strongest independent GB300 performance/latency curve, while its code reveals that the GB300 price is explicitly temporary. [cite: file turn43file0L3-L29] [cite: file turn47file0L72-L94]</p>
+<li><p><strong>SemiAnalysis InferenceX GB300 NVL72 benchmark and public economic-model code, May 2026.</strong> <a href="https://inferencex.semianalysis.com/blog/gb300-nvl72-vs-gb200-nvl72-dsv4-pro-vllm-fp4">GB300 versus GB200 on DeepSeek-V4-Pro</a>. This is the strongest independent GB300 performance/latency curve, while its code reveals that the GB300 price is explicitly temporary.</p>
 </li>
-<li><p><strong>NVIDIA Vera Rubin announcement and current product page, March–July 2026.</strong> <a href="https://nvidianews.nvidia.com/news/nvidia-vera-rubin-platform">Vera Rubin platform announcement</a>; <a href="https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/">Vera Rubin NVL72 product page</a>. These establish what is genuinely public for Rubin: production/ramp claims, current NVL72 topology, preliminary specifications, and relative Kimi-K2-Thinking efficiency claims—but no absolute economic anchor. [cite: turn204192view0 turn204192view2 turn199113view1 turn199113view2]</p>
+<li><p><strong>NVIDIA Vera Rubin announcement and current product page, March–July 2026.</strong> <a href="https://nvidianews.nvidia.com/news/nvidia-vera-rubin-platform">Vera Rubin platform announcement</a>; <a href="https://www.nvidia.com/en-us/data-center/vera-rubin-nvl72/">Vera Rubin NVL72 product page</a>. These establish what is genuinely public for Rubin: production/ramp claims, current NVL72 topology, preliminary specifications, and relative Kimi-K2-Thinking efficiency claims—but no absolute economic anchor.</p>
 </li>
 </ol>
 <hr>
@@ -558,13 +558,14 @@ this is the complete requested report, not a reasoning-summary.</li>
 text seen live during polling: &quot;I&#39;ll separate audited benchmarks... SemiAnalysis&#39;s GB300 economics use
 a provisional 1.2× GB200 cost uplift...&quot;). That preamble is preserved verbatim in the collapsed note
 below; the full report proper begins at the &quot;# Public anchors...&quot; heading.</li>
-<li><strong>Citation normalization:</strong> the API read returned ChatGPT&#39;s internal web.run/file reference tokens with
+<li><strong>Citation markers:</strong> the API read returned ChatGPT&#39;s internal web.run/file reference tokens with
 their private-use-unicode delimiters stripped, leaving bare concatenated strings (<code>citeturn…view…</code>,
-<code>fileciteturn…file…L…</code>). These are normalized here to readable <code>[cite: …]</code> markers with the raw token
-ids <strong>preserved</strong> (not re-split beyond the <code>cite</code>/<code>filecite</code> prefix, to avoid mis-parsing concatenated
-runs). Resolve them via the conversation URL above or the inline markdown source links — most claims
-also carry a direct URL in-text and in the &quot;Five most load-bearing sources&quot; list. Report text is
-otherwise verbatim; numeric figures untouched.</li>
+<code>fileciteturn…file…L…</code>). They were first normalized to readable <code>[cite: …]</code> markers; on 2026-10-01 the
+58 markers were removed from the report text, as the July 15 hygiene pass did for the TPU, Trainium
+and blinded-replication dives. The pre-removal copy is archived at
+<code>research/gptpro-reports/archive/pre-marker-strip-2026-10-01/</code>. Most claims carry a direct URL in-text
+and in the &quot;Five most load-bearing sources&quot; list. Report text is otherwise verbatim; numeric figures
+untouched.</li>
 <li><strong>Provenance routing:</strong> any site change this dive justifies enters through <code>research/update-queue.md</code>
 (Q-AUTO items), never via direct edits to the site/engine/annex/tracked numbers.</li>
 </ul>
