@@ -1052,6 +1052,148 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
    "review_page": "research/gpt-6-sol-astra-pro.html"
   },
   {
+   "key": "gpt-6-1-sol",
+   "name": "GPT-6.1 Sol",
+   "provider": "OpenAI",
+   "api_model": "gpt-6.1-sol, current API alias as read 2026-10-01; released 2026-09-29. Standard short-context text-token tariff, ordinary execution with mixed supported reasoning efforts; no immutable dated snapshot established.",
+   "open": false,
+   "carrier": "custom",
+   "scenarios": {
+    "central": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 100,
+      "total": 5000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 5,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 70,
+      "stackMult": 1.0,
+      "trendMonths": 2,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    },
+    "low_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 300,
+      "total": 8000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 5,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 60,
+      "stackMult": 1.0,
+      "trendMonths": 0,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    },
+    "high_margin": {
+     "overrides": {
+      "customDonor": "dsr1",
+      "active": 50,
+      "total": 3000,
+      "precision": "fp8",
+      "priceIn": 2,
+      "priceOut": 10,
+      "cacheReadMult": 5,
+      "billCacheHit": 80,
+      "cacheWriteShare": 50,
+      "cacheWriteMult": 125,
+      "cacheCost": 5,
+      "batchShare": 0,
+      "discount": 0,
+      "blend": {
+       "h200": 30,
+       "gb200": 50,
+       "gb300": 20
+      },
+      "rentAbsLeg": {
+       "h200": 3.5,
+       "gb200": 4.5,
+       "gb300": 6
+      },
+      "util": 75,
+      "stackMult": 1.0,
+      "trendMonths": 2,
+      "interact": "balanced",
+      "hwMode": "rent"
+     },
+     "traffic": {
+      "mode": "custom",
+      "io_ratio": 12,
+      "cache_hit": 80
+     }
+    }
+   },
+   "stated": {
+    "headline_pct": 84.1,
+    "low_pct": 41.9,
+    "high_pct": 91.1
+   },
+   "card_lines": [
+    "≈84.1% at list (span 41.9–91.1%)",
+    "The carried, unmeasured 100B-active assumption keeps modeled output cost near $1.08/M against the $10/M output tariff."
+   ],
+   "context_length_assumed": "Input <=272000 tokens for tariff eligibility, but costed representative request is 12000 input plus 1000 billed output tokens including reasoning: average decode context 12500, peak KV context 13000. Carried compact-agent-turn assumption, not population telemetry; documentation only, not a numeric engine override.",
+   "confidence": "low: the tariff is verified, but architecture, fleet allocation, procurement, paid occupancy and traffic are unmeasured; the three-scenario judgment span is conditional on the chosen geometry and balanced short-context serving, not a probability interval or bound.",
+   "reading": "GPT-6.1 Sol is OpenAI's successor to GPT-6 Sol, released on 2026-09-29 at the same $2 per million input tokens and $10 per million output tokens, with cached input halved to $0.10 (5% of the input price, where GPT-6 Sol charges $0.20). OpenAI publishes no separately priced Pro tier for it: its pro mode bills at the model's standard rates, so the run priced the standard `gpt-6.1-sol` tariff. The model was two days old when the run was made, so almost nothing about how it is served is public, and the run started from the GPT-6 Sol estimate of 2026-09-28 and said, input by input, what it carried and what it changed. The tariff is disclosed. Everything on the cost side of the central case is carried over unchanged: 100B active and 5T total parameters on the `dsr1` attention geometry, the fleet (30% H200, 50% GB200, 20% GB300 at $3.50, $4.50 and $6.00 per GPU-hour, all-in), 70% occupancy, and the agentic traffic (12 input tokens per output token, 80% of input read from cache, half of the fresh input billed as cache writes, at the 125%-of-input write price OpenAI lists for this model too); at the page's Reference traffic the same inputs compute {{REF}}. The only input the central case changes is the cache-read price, so the card sits just below GPT-6 Sol's, by under a point: the cheaper cache lowers billings while the modeled cost stays the same. The run read OpenAI's launch claims (benchmark gains and lower cost per task) as claims about the product, not disclosures of serving cost, and set no input from them. The span is wider than GPT-6 Sol's at the bottom: the low case is a larger implementation than GPT-6 Sol's low case (300B active rather than 250B, on the same 8T total) with no private-stack efficiency credit, at 60% occupancy rather than 55%; the high case is GPT-6 Sol's (50B active, 3T total, 75%) at the new cache-read price. It could not reach the calculator's connector and worked the published equations by hand; the engine reproduces all three of its figures to the fourth decimal.\n\n**Editorial correction to the reproduced answer:** In §4, the H200 and GB200 rates are correctly stated as 55.5% and 42.9% of the respective public-price comparators, but those percentages are then incorrectly called discounts. The implied discounts are approximately 44.5% and 57.1%, respectively. These remain hypothetical discounts implied by the assumed rates, not verified OpenAI contract discounts. This correction changes neither the operating inputs nor the calculated margins; the research answer below is preserved verbatim.",
+   "dive": {
+    "id": "pr-20261001T142917Z-7bb1e4",
+    "date": "2026-10-01",
+    "model_slug": "gpt-6-pro",
+    "answered_at": "2026-10-01T15:01:51Z",
+    "answer_sha256": "431d52ebc0ee65daf1bf0034d0b8bca92c9450b5ae71db023b58d1986c9e770e",
+    "raw_answer_sha256": "215173d201892cb99166293eb3dce18b34e8ecf8e6247b8310323c96fa704593"
+   },
+   "review_page": "research/gpt-6-1-sol-astra-pro.html"
+  },
+  {
    "key": "gpt-5-6-terra",
    "name": "GPT-5.6 Terra",
    "provider": "OpenAI",

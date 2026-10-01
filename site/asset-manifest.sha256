@@ -4,7 +4,7 @@ b2b3afbf9c7b0f94cb85b31f8c330aa306a92d9a18d0da94a31a853dd6c60727  ./_headers
 50964d0abcbe961b6b6cabc24e21de114beeaf2ed9523adf36830279157851f7  ./app.js
 474107e4a0d4deda27d958d3f1112e15292f5e342a1216730f80affbbe235ced  ./appear-1440.png
 0d0028bbc601b0d67022d661f191ed336122199ba51a0802bf720491a6a3bdc0  ./appear-390.png
-fef3733f39e3645dcdb2d894a222fee3bf39d3f069092b744bee6b6b6eb7be90  ./astra-pro-estimates.js
+503da89f7b30b1594faab9a83ea7f797974950ee6f71c5079362bccc84f582a0  ./astra-pro-estimates.js
 240605e43fd35e6f8e8bb5f38dc277d44eb8fff79ddb4c287dda661432c9071c  ./custom-fleets.js
 819b1dd34140b13cacb4d28f5fad8ec1db8f9f479e5852f765cff89ee2ea0bda  ./engine-contracts-v22.js
 77c2c95b98481b64b3108a776d3c1703b122f248de7524c7f37a08704328729d  ./engine-data-dc-v1.js
@@ -20,10 +20,10 @@ e0c764a8e9e1cce92163c55bac4b2ad6cd4cf8c696ce2289ab5c41565e65b7e2  ./fonts/playfa
 c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source-serif-4-latin-var.woff2
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 30affd7de68c1fd8b52dc2c77c023579cd0dbfc84969ad25ceb5de9e0ce06a43  ./glossary.html
-ef02de85bf03b8f375dd82b25143d532da219e8d89e162b3716b27cec396ff86  ./index.html
+8cc428e82d98ba3525023c0bbed01fcc3aa85940182dcad247c10b7c47a78931  ./index.html
 e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d  ./research/analyst-divergence.html
 c77f3b3946f5d46916d29c63914371912cf9656d7c1afe799ac919b732fb37ad  ./research/anthropic-gptpro.html
-37f79cde697f7347d96c471fe77c4f275a8412c6301d0afa83a4d28d71483a83  ./research/changelog.html
+5898b2303a6288eb073d5e0c464ca4bd0a83f7f4973e1429c526bc4b4e2ebc9f  ./research/changelog.html
 dbf5435a2789a21d15608e2be6fa239cbd7d8e01331a51aa2439323ce5cdfee7  ./research/chinese-accel-ascend-websweep.html
 529eeb42e146460615d19c77acbfe82f5aba7e4a48158a89877f6531f9be7f82  ./research/chinese-accel-gptpro.html
 b7adb98afcf780d7970afb09ff74695ffb1aef336d401ee3124e81db3cc078fe  ./research/chinese-accel-h800-h20-websweep.html
@@ -53,6 +53,7 @@ bde43d506251dae2898a414a319b5ab4414dd7ad43fbcf694d484450f88e8b27  ./research/gem
 fcaba3567068db653afd363772b1b2ba344b0018f696ee7aac3a7f349b2c5ab5  ./research/google-gptpro.html
 d112783f6e6d31f1210e363f50a6b7825a07b2c25f0e4ffd35c48f69f8578782  ./research/gpt-5-6-luna-astra-pro.html
 f09d404ad48cfc61fdd0a82567de4ab5491c577218676417c2cd9d91be90de5d  ./research/gpt-5-6-terra-astra-pro.html
+ba5ab057183d8b5090d5357a4556e900f03e31c24f865f8401681d9ea71fda6b  ./research/gpt-6-1-sol-astra-pro.html
 6bbb91ae7acbf1d675b8557917e036da73c11b73a55d41be0b72ad841d324e18  ./research/gpt-6-astra-astra-pro.html
 480b3bba9903d56237c1e2367ad3d2609887ea7b5b3a2809b10dcff066f93494  ./research/gpt-6-sol-astra-pro.html
 99c01439635fdd4afa67aa1f107a66f181e207c7a982c857f27ea6c5e12cd120  ./research/gptpro-consult-anthropic-verbatim.html
@@ -60,7 +61,7 @@ b8420ef521cee93945446eae4673048920c9ae4d96c95ba74c6204e78f89d9f0  ./research/gro
 8506bb1876f7198dcbbd793894b39fd398119b03f75233acc7cdd624aa1024d2  ./research/grok-sweep-glm-gb300.html
 6263c463cea438a04bbf90679298a9990ca0086122645a36135037483c3d8085  ./research/grok-sweep-margin-claims.html
 f5c749a3445bf4a1e82103e32e2cd1b791438f365c5757ff25224e064df78b01  ./research/grounding-ledger.html
-684bd2ccd66b91d592aae37451381185f154347f9bfa1ae8425e479298aca5a2  ./research/index.html
+5081e25d0af3380ded315042b4c47ba826803c92961d4d38e443ad729bc022bf  ./research/index.html
 c69ae03a6d73cd3e233db3a8da0ef9ed08f303d4630dc03bc58e94f1388348ca  ./research/input-cost-reconstruction.html
 85e435a40cf6a5c084e8b3c709510d49db34d520de8e4d5181c0bbc9dc476c02  ./research/kimi-k3-astra-pro.html
 b38eb77864bf7f3595cf22aec61a3175fac7c96f25228062d1d5c7573c99eb1e  ./research/methods-loao.html
@@ -128,7 +129,7 @@ fc75ccabf142a4a9b1dae67eafab76697860c1317b83aa5b48304cfb3a8ed098  ./tests/loao.m
 7bfb8b05d6c3ceaea9818c4e055a043b6ad0277f59bf00677906c77aceda7e76  ./tests/mix-band.test.mjs
 9d1c7cf99e9b1efca17ebe48be837c431cf998801b8f885f2f916e5ec570bc80  ./tests/permalink-defaults-move.test.mjs
 a9a993a77e6a081435f2a5f67d8e64123f014ad215d4228b5b32dbb2cb64b49b  ./tests/provenance-inputs.mjs
-8b1fbc417d4a49831253053e72398973bbf74c31f46ca170904e38afb064efcd  ./tests/render-parity-r1.test.mjs
+a09a14bd5c2626ceec23b3bca71038ab542974a3f6954401f30303599c6493f4  ./tests/render-parity-r1.test.mjs
 e429c2d5a5e44249bfae6dfed35fb868aee5fad8a6e65407d8ab0d487f4471a6  ./tests/roofline-core.test.mjs
 d118bca316c898f1ab50ac3b7c635528a77e6eb322c4ae7ac36590a7dc9129a5  ./tests/roofline-diagnostic.mjs
 7b1ee5fd2a26d0c45c45f280df04daad8a71f52d6f39bd5e5c76340e1cf833e8  ./tests/roofline-parallel-diff.mjs

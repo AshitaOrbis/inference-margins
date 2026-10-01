@@ -1,5 +1,18 @@
 # Changelog
 
+## Astra Pro estimates — 2026-10-01 (GPT-6.1 Sol added)
+
+**Added — one card in §10 "Astra Pro estimates".** GPT-6.1 Sol (OpenAI, `gpt-6.1-sol`, released 2026-09-29 as
+GPT-6 Sol's successor; $2 per million input tokens, $0.10 cached input, $10 output), one GPT-6 Astra Pro research
+run on 2026-10-01 (request `pr-20261001T142917Z-7bb1e4`), worked through this calculator exactly as the sixteen
+before it: the number on the card is this calculator's result on the run's recorded inputs, never typed, with the
+run's own stated figure beside it. The model was two days old, so the run was given the GPT-6 Sol estimate
+(2026-09-28) as context rather than a target, and says input by input what it carried over, what it changed and
+what it assumed: its central case keeps GPT-6 Sol's cost-side inputs and changes only the cache-read price, which
+OpenAI halved for this model. OpenAI publishes no separately priced Pro tier for it (pro mode bills at the
+standard rates), so the standard tariff is priced. The sixteen existing records are byte-identical; the category
+now carries seventeen models.
+
 ## Astra Pro estimates — 2026-09-28 (Claude Sonnet 5.5 and GPT-6 Sol added)
 
 **Added — two cards in §10 "Astra Pro estimates".** Claude Sonnet 5.5 (Anthropic, launched 2026-09-28) and

@@ -42,6 +42,12 @@
   "desc": "One GPT-6 Astra Pro research run (2026-09-28) setting every calculator input for GPT-6 Sol from public evidence; the site's card is this calculator's result on those inputs (~85% at list, span 58%–92%)."
  },
  {
+  "md": "research/astra-pro-estimates/gpt-6-1-sol-astra-pro.md",
+  "slug": "gpt-6-1-sol-astra-pro",
+  "title": "GPT-6.1 Sol — GPT-6 Astra Pro estimate",
+  "desc": "One GPT-6 Astra Pro research run (2026-10-01) setting every calculator input for GPT-6.1 Sol from public evidence; the site's card is this calculator's result on those inputs (~84% at list, span 42%–91%)."
+ },
+ {
   "md": "research/astra-pro-estimates/gpt-5-6-terra-astra-pro.md",
   "slug": "gpt-5-6-terra-astra-pro",
   "title": "GPT-5.6 Terra — GPT-6 Astra Pro estimate",
