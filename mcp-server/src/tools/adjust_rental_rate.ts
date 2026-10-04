@@ -1,4 +1,4 @@
-/* im-arc T3 (plan §1 T3 / §4.1, owner answer d-20260822-4c26 2026-08-22):
+/* The update of 2026-08-22:
    the narrow stateless rent tool. It delegates the standard envelope to run_scenario,
    but computes its provenance-rich delta from the same engine states. Override values
    are never logged. */
@@ -20,7 +20,7 @@ export const config = {
     rent_usd_per_hr: z.number().optional().describe("Absolute rental $/accelerator-hour for every active fleet leg"),
     rent_usd_per_hr_by_hw: z.record(z.number()).optional().describe("Absolute rental $/accelerator-hour by registered accelerator donor key"),
     perspective: z.string().optional().describe("gptpro-r3 (default), fable-r3, stress-public-rate, or median"),
-    /* im-arc T4 fold (2026-08-24), memo §2.1 [F6] and §2 [F5]. `capital_recovery` has ONE canonical
+    /* The update of 2026-08-24. `capital_recovery` has ONE canonical
        default — off — identical to the basic UI, the advanced UI and the v7 codec, so a shared link
        and an MCP request reproduce the same arithmetic. `capex_scope` is REQUIRED whenever the
        caller states a capex of their own: an observed capex is meaningless without its input scope,
@@ -77,7 +77,7 @@ function vectorText(vector: Record<string, RentReceipt>, key: "registeredRent" |
     `${key}{${donor}=${dollars(receipt.value)}/hr; source=${receipt.source}}`).join(", ");
 }
 
-/* im-t5 (2026-08-28): this tool projects `.impliedShare` and nothing else out of the spread
+/* The update of 2026-08-28: this tool projects `.impliedShare` and nothing else out of the spread
    record. Without this flag every spread evaluation also ran marginOnBasis on both bases —
    two structuredClones plus two full workload() evaluations — to fill two cost-per-Mtok
    fields that are then discarded. `shareOnly` skips exactly those two calls; the four fields
@@ -113,12 +113,11 @@ function resultMetrics(state: Record<string, any>) {
    Worker/Node byte-for-byte parity test is the proof that stayed green.
 
    (2026-08-28: the uncached `metricValue` that used to sit here was left with no callers once the
-   memo below took over, and a dead near-duplicate of live logic is how two copies drift apart —
-   a review found exactly that shape in this repo before. It is deleted; the memo is now the only
+   cached helper below took over, and a dead near-duplicate of live logic is how two copies drift apart —
+   a review found exactly that shape in this repo before. It is deleted; the cached helper is now the only
    place these two engine functions are called for a metric.)
 
-   ── 2026-08-28, the ONE authorised optimisation round (owner answer 12:47Z on
-   q-im-t5-machine-envelope-2026-08-27). ────────────────────────────────────────────────────────
+   ── The optimisation update of 2026-08-28. ────────────────────────────────────────────────────────
    The fix above stopped each corner computing metrics it did not need. It was not enough: the
    deployed Worker still returned Cloudflare 1102 on this tool. Measured on the shape the release
    gate actually challenges with (company=anthropic, rent=6.281173, perspective=gptpro-r3,
@@ -249,7 +248,7 @@ export function handler(args: Args): ToolResult {
     }
   }
 
-  /* im-arc T4 fold (2026-08-24): the scenario fields ride through to run_scenario, which owns the
+  /* The update of 2026-08-24: the scenario fields ride through to run_scenario, which owns the
      one validation path — this wrapper never re-implements it. */
   const overrides: Record<string, unknown> = hasAll
     ? { rentAbsAll: args.rent_usd_per_hr } : { rentAbsLeg: args.rent_usd_per_hr_by_hw };
@@ -261,8 +260,7 @@ export function handler(args: Args): ToolResult {
 
   const model = E.MODELS.find((row) => row.id === modelId) as ModelPreset;
   const perspective = E.PERSPECTIVES.find((row) => row.id === perspectiveId) as Perspective;
-  /* THE T4 CAPITAL-RECOVERY SETTINGS TRAVEL WITH THE OVERRIDES (vetting round 2026-09-19, Astra
-     pack C P0-1). They were forwarded to run_scenario above, which honours them, and then this
+  /* THE CAPITAL-RECOVERY SETTINGS TRAVEL WITH THE OVERRIDES (corrected 2026-09-19). They were forwarded to run_scenario above, which honours them, and then this
      handler rebuilt the baseline and adjusted states for `what_changed` and for all nine
      uncertainty triples WITHOUT them — so the same call published a headline computed with
      capital recovery ON beside lessor spreads computed with it OFF, and a receipt that said
@@ -355,13 +353,13 @@ export function handler(args: Args): ToolResult {
       lessor_spread_implied: { baseline: bands.spread.baseline, adjusted: bands.spread.adjusted,
         delta_pp: bands.spread.delta },
     },
-    /* im-arc T4 fold (2026-08-24), memo §7: a receipt that names only the reader's own move is
+    /* The update of 2026-08-24: a receipt that names only the reader's own move is
        incomplete when the REGISTRY under it moved too. These name the registry arithmetic this
        request rests on — the selected quote per donor, the rows with no admissible public planning
        rate, and the scope-derived cluster overhead — so a caller can see what changed beneath its
        override as well as what it changed itself. */
     registry_arithmetic: {
-      migration: "im-arc T4 fold (2026-08-24) — tests/fixtures-t4-declared-delta.json enumerates every moved sink",
+      migration: "Registry arithmetic revision of 2026-08-24",
       planning_policy: (E.registryPlanningRentReceipt("h100", base) as any).planningPolicy ?? "low-committed",
       selected_quotes: Object.fromEntries(receiptKeys.map((key) => {
         const receipt: any = E.registryPlanningRentReceipt(key, base);

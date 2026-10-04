@@ -1,4 +1,4 @@
-// MARGIN BANDS FROM RANGE-VALUED DIALS (row 499, owner note 507081) — the engine half.
+// MARGIN BANDS FROM RANGE-VALUED DIALS (case 499, the author’s note) — the engine half.
 //
 // What is asserted here is the property that makes the feature honest: the band is the ATTAINABLE
 // range, not an enclosure. Concretely — no setting of the dials inside their declared ranges
@@ -47,7 +47,7 @@ assert("every declared dial was monotone here, so the band is EXACT (attainable,
   band.exact === true && band.nonMonotone.length === 0, JSON.stringify(band.nonMonotone));
 assert("corner count is 2^k over the monotone dials, not a sample count", band.corners === (1 << DIALS.length),
   String(band.corners));
-/* AMENDED 2026-09-19 (Polaris ruling on Astra pack A P0-2). This used to require the word
+/* AMENDED 2026-09-19 (the maintainer ruling on Astra pack A P0-2). This used to require the word
    "attainable", which is a claim of exhaustiveness the search cannot make: corner evaluation
    plus five samples per axis does not prove that nothing inside the box computes outside the
    band, and grok/median over ioRatio 1–100 is a counterexample. The forbidden vocabulary is
@@ -180,7 +180,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     /workEstimate|steps each/.test(bandFn.toString()), "guard still counts dials only");
 }
 
-// ---------------- row 499 follow-on: THE FAMILY DIAL IS INERT, AND THE BAND MUST NOT BE
+// ---------------- case 499 follow-on: THE FAMILY DIAL IS INERT, AND THE BAND MUST NOT BE
 {
   /* The spike's first finding, now a gate. `gptpro-ctx` prices PER LEG, and a per-leg value always
      beats the family control — correctly, for a control. For a BAND that resolution order is a trap:
@@ -215,7 +215,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     && !E.legsInFamily("tpu").includes("h100"));
 }
 
-// ---------------- row 499 follow-on: PER-DIAL BANDS ARE FIRST-CLASS, COMPOUNDED IS NOT THE DEFAULT
+// ---------------- case 499 follow-on: PER-DIAL BANDS ARE FIRST-CLASS, COMPOUNDED IS NOT THE DEFAULT
 {
   const dials = E.dialsFromRanges(persp.set.dialRanges);
   const per = E.marginBandsPerDial(opus, persp, SEL, dials);
@@ -233,11 +233,11 @@ assert("...and it warns where the search can miss, rather than promising it cann
     per.every(b => !("mean" in b) && !("p50" in b) && !("probability" in b)));
 }
 
-// ---------------- row 499 follow-on: THE PRESETS CARRY THEIR AUTHORS' OWN DECLARED RANGES
+// ---------------- case 499 follow-on: THE PRESETS CARRY THEIR AUTHORS' OWN DECLARED RANGES
 {
   const want = { "util": [50, 65, 80], "cacheHit": [40, 60, 80], "rentMultFam.nvidia": [0.90, 0.95, 1.00],
                  "rentMultFam.tpu": [0.30, 0.50, 0.70], "rentMultFam.trainium": [0.70, 0.85, 1.00] };
-  /* THE BLEND DECLARATION JOINED THEM on 2026-08-09 (owner ruling q-sliders-fleet-util-point), and
+  /* THE BLEND DECLARATION JOINED THEM on 2026-08-09 (the adopted decision), and
      this assertion is deliberately split rather than loosened. Its job is to stop anyone quietly
      adding a range to an adjudicator's preset, so "five became eight" has to be stated as what it
      is: the same author's blend constraints — carried verbatim in this preset's provenance as
@@ -269,15 +269,15 @@ assert("...and it warns where the search can miss, rather than promising it cann
   const s = E.applyPresetSettings(opus, persp, SEL);
   const point = E.workload(s, undefined, E.scenarioContext(s)).margin * 100;
   const band = E.marginBand(opus, persp, SEL, E.dialsFromRanges(got));
-  /* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): the point moves with the folded defaults. What the assertion
+  /*  (2026-08-24, tests/fixtures-t4-declared-delta.json): the point moves with the folded defaults. What the assertion
      PROTECTS is unchanged — nothing was tuned toward the stated 84, and the gap between the
      computed point and the author's stated central is still disclosed rather than closed.
-     im-release-edit-r2 (2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok):
+     publication revision (2026-09-10, adjudicated 2026-09-10):
      the point moves again with the adopted planning rents, and AWAY from the author's stated 84 —
      80.48 to 78.89. That direction is worth noticing: a change that raised the page's own headline
      widened this estimator's honest gap rather than closing it, which is what a procurement change
      applied without regard to any target looks like. Nothing was tuned. */
-  /* im-vet-six-repairs (2026-09-20): the point moves again, and again AWAY from the author's
+  /* registry repairs (2026-09-20): the point moves again, and again AWAY from the author's
      stated 84 — 78.89 to 78.78 — with the Trainium withdrawal and the TPU numerator repair. Two
      coefficient repairs made without regard to any target widened this estimator's honest gap for
      the second release running. Nothing was tuned. */
@@ -299,7 +299,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     E.PERSPECTIVES.find(p => p.id === "stress-public-rate").set.dialRanges === undefined);
 }
 
-// ---------------- row 499 follow-on: A BAND IS A BRACKET, SO IT DECLARES ITS LEAD BASIS
+// ---------------- case 499 follow-on: A BAND IS A BRACKET, SO IT DECLARES ITS LEAD BASIS
 {
   /* The binding this pins: the two estimates were once quoted 0.7 pp apart across a MIXED lead
      treatment, and on a like-for-like basis they are 5-7 points apart. Nothing on this page may
@@ -308,7 +308,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
   const off = E.bandLeadBasisClause({ trendMonths: 0 }, []);
   const on = E.bandLeadBasisClause({ trendMonths: 3 }, []);
   const moved = E.bandLeadBasisClause({ trendMonths: 0 }, [{ key: "trendMonths", lo: 0, hi: 6 }]);
-  /* im-vet-six-repairs (2026-09-20), vetting finding E4: "like-for-like" was asserting that BOTH
+  /* registry repairs (2026-09-20), vetting finding E4: "like-for-like" was asserting that BOTH
      estimate presets RUN at lead 0, which stopped being true when both round-3 revisions moved
      their dials off zero (0/2/4 midpoint 2, and 0/1/2 midpoint 1). What survives, and what the
      clause now says, is that zero is the basis their authors DECLARE for a cross-arm comparison —
@@ -320,7 +320,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     && /neither RUNS at it/.test(off) && /2 and 1 months/.test(off), off);
   assert("a nonzero lead basis names its months AND refuses a second application of the prior",
     /3 months/.test(on) && /not applied again on top/.test(on), on);
-  /* OWNER RULING 2026-08-08: the "cannot be compared" framing is dropped — the headline compares
+  /* the adopted decision 2026-08-08: the "cannot be compared" framing is dropped — the headline compares
      the calculators' end results, and two calculators run to their ends ARE comparable. What the
      clause must still carry is the double-count guard, which is a different claim and was tangled
      with it in the same sentence. */
@@ -336,7 +336,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     typeof E.bandLeadBasisClause === "function" && E.BAND_LEAD_BASIS === "Lead basis: " && off.startsWith(E.BAND_LEAD_BASIS));
 }
 
-// ---------------- OWNER RULING 2026-08-07 18:55Z: A MODE CHANGE MUST NOT MOVE A HANDLE
+// ---------------- the adopted decision 2026-08-07 18:55Z: A MODE CHANGE MUST NOT MOVE A HANDLE
 {
   /* "You just get two buttons stacked on the slider instead of one button going anywhere else."
      1 -> 2 stacks the second on the first; 2 -> 3 puts the third at the MIDPOINT of the two, which is
@@ -391,7 +391,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
   assert("no derived median ever lands outside the bounds it sits between", escaped === 0, `${escaped} escaped`);
 }
 
-// ---------------- OWNER RULING 2026-08-07: THE BAND COPY STATES, IT DOES NOT DISCLAIM
+// ---------------- the adopted decision 2026-08-07: THE BAND COPY STATES, IT DOES NOT DISCLAIM
 {
   /* The earlier wording said "not a probability interval" and "no distribution is assumed". Both are
      true and both are the wrong instrument: a denial hands the reader the term. Every string this
@@ -411,7 +411,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
   const offenders = rendered.filter(s => BANNED.test(s));
   assert(`no engine-side band string uses probability or distribution vocabulary, even to deny it (${rendered.length} strings)`,
     offenders.length === 0, offenders.map(s => s.slice(0, 90)).join(" | "));
-  /* AMENDED 2026-09-19 (Polaris ruling on Astra pack A P0-2). The owner rule this pins — SAY
+  /* AMENDED 2026-09-19 (the maintainer ruling on Astra pack A P0-2). The adopted rule this pins — SAY
      WHAT THE RANGE IS, never what it is not — is unchanged; "reachable by some setting" is not,
      because it asserts exhaustiveness the search cannot prove. The positive statement is now the
      METHOD: what was evaluated, and where it can miss. Both are statements about what the page
@@ -422,7 +422,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
     rendered.slice(0, 3).map(s => s.slice(0, 80)).join(" | "));
 }
 
-// ---------------- THE QUOTED ADJUDICATOR PAIR (owner ruling 19:02Z, adjudicated 2026-08-08)
+// ---------------- THE QUOTED ADJUDICATOR PAIR (the adopted decision 19:02Z, adjudicated 2026-08-08)
 {
   /* "Displayable the same way they have been framing it": the author's stated median over the
      author's stated range. The thing this must never become is a second output of this page dressed
@@ -447,8 +447,8 @@ assert("...and it warns where the search can miss, rather than promising it cann
   const computed = E.workload(s, undefined, E.scenarioContext(s)).margin * 100;
   const derived = E.marginBand(opus, gp, SEL, E.dialsFromRanges(gp.set.dialRanges));
   /* THE GAP IS NOT A CONSTANT AND THIS NOTE STOPS PRETENDING IT IS. It has been three values:
-     84 vs 79.65 (4.35 pp) at the im-arc T4 fold of 2026-08-24, 84 vs 80.48 (3.52 pp) after it,
-     and 84 vs 78.8931 (5.11 pp) today under d-20260910-im-adopt-fleet-rents-and-correct-grok —
+     84 vs 79.65 (4.35 pp) at the  of 2026-08-24, 84 vs 80.48 (3.52 pp) after it,
+     and 84 vs 78.8931 (5.11 pp) today under adjudicated 2026-09-10 —
      measured, not recalled. Every move came from a default changing; the author's vector is
      byte-untouched throughout, which is why the distance wanders in both directions rather than
      shrinking toward the stated value.
@@ -469,7 +469,7 @@ assert("...and it warns where the search can miss, rather than promising it cann
   const c = E.statedReadingClause(gp, computed);
   assert("the rendered sentence says QUOTED, not computed here", /QUOTED, not computed here/.test(c.basis), c.basis);
   assert("...names whose figures they are", /GPT-5.6 Pro/.test(c.basis));
-  // im-vet-six-repairs (2026-09-20), the vocabulary release edit: "tariff" -> "list price".
+  // registry repairs (2026-09-20), the vocabulary release edit: "tariff" -> "list price".
   assert("...names the basis they were stated on", /undiscounted list price/.test(c.basis));
   /* The clause DERIVES the gap from the live computation, so this pin follows it: 4.3 -> 3.5 -> 5.1
      -> 5.2. The 2026-09-10 rent adoption WIDENED it and the 2026-09-20 vetting repairs widened it
@@ -488,13 +488,13 @@ assert("...and it warns where the search can miss, rather than promising it cann
     !/points below/.test(moved.basis) && /0 points/.test(moved.basis), moved.basis);
 }
 
-/* owner voice note note-20260912T180812Z-c9eaac (2026-09-12): WHERE THE 83.1-vs-82.4 GAP COMES FROM.
+/* the author’s note of 2026-09-12 (2026-09-12): WHERE THE 83.1-vs-82.4 GAP COMES FROM.
    The stated reading records what this calculator computed when the figure was stated, at the scope it was
    stated on (model, traffic profile, the preset's own settings), and the clause renders the comparison AT
    THAT SCOPE, so the page explains the gap instead of leaving two numbers to disagree. Every value compared
    against is EXECUTED here from the live engine, except the dated reading itself, which is the record:
    executed from site/engine.js at c45c2c3 and re-executed at that commit by the leg's verifier
-   (reports/im-default-window-2026-09-12/verify-discrepancy-answer.py).
+   (reports/the release-09-12/verify-discrepancy-answer.py).
    Astra round 1 F1: the first version compared the dated figure with WHATEVER the caller computed, so on
    Sonnet it attributed Sonnet's own difference to "later calculator changes". The scope rows below pin
    that the sentence is independent of the caller's reading. */

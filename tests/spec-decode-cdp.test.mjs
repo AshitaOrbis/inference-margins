@@ -1,5 +1,5 @@
 /* =====================================================================================
-   spec-decode-cdp.test.mjs — T-14, T-16 and T-19 of the b9 spec-decode LEVER test plan
+   spec-decode-cdp.test.mjs — T-14, T-16 and T-19 of the spec-decode LEVER test plan
    (memo research/b9-spec-decode-lever-memo.md §13, FROZEN v16).
 
    WHY THIS FILE EXISTS. These three are BEHAVIOURAL: a drag that keeps pointer capture across

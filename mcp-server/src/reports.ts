@@ -35,7 +35,7 @@ export function htmlToText(html: string): string {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<!--[\s\S]*?-->/g, "");
-  /* b9 UX-B: the ten #report sections are now collapsed <details class="report-section"> wrappers,
+  /* Report sections: the ten #report sections are now collapsed <details class="report-section"> wrappers,
      whose <summary> carries a UI-only expand/collapse label. That label is CHROME, not document
      text, so it must not enter the MCP transport — without this strip `front-page` alone gains ~420
      characters and all eleven ids move. The rule is CLASS-SCOPED and anchored to the wrapper's own
@@ -87,7 +87,7 @@ function buildCatalog(): Map<string, CatalogEntry> {
     source_url: SITE.calculator,
     read: () => readFileSync(indexPath, "utf8"),
   });
-  /* R3 Row 1 (design memo D-9): the FINAL ANSWER — the ONE live, engine-derived
+  /* Final-answer report: the FINAL ANSWER — the ONE live, engine-derived
      catalog entry. Unlike every other entry (archived verbatim documents), its
      figures ARE derived estimates, rendered from engine finalAnswer()'s own token
      strings (one formatter — byte-identical to the site block), each carrying its
@@ -99,25 +99,25 @@ function buildCatalog(): Map<string, CatalogEntry> {
     source_url: SITE.calculator + "#final-answer",
     read: () => {
       const fa = (E as any).finalAnswer();
-      /* b9 M6 (FA memo §8.4, §9): the D-6 five-part surface + the D-7 exec summary. The
+      /* The five-part answer surface and executive summary. The
          MCP twin renders the SAME minted tokens the site does, so all three transports
          emit byte-identical text. This ALSO closes the recorded `leverReferenceLine`
          parity gap by retiring that token: an MCP consumer previously received the FA
          figures without the statement that they were trend-0-pinned; now every reading
          token states its own basis inside itself. */
-      /* T5 rec 5 (GPT Pro 2026-07-29 §6, SV-2). `mostPlausibleLine` is NOT in this list any
+      /* The finding of 2026-07-29. `mostPlausibleLine` is NOT in this list any
          more. The site moved that claim out of THE ANSWER into its own section; leaving it
          inside the report titled "THE FINAL ANSWER" would have left the connector contradicting
          the website and the annex — a third review caught exactly that, and it is the sharper
          version of the defect, because an MCP consumer cannot see the page to notice. The claim
-         is preserved, in its own catalog entry below, which is what the rec's "preserve the
-         source claim, but separate evidence ranking" asks for.
-         ROUND 4: the decomposition, the justifications header and its entries move here too.
+         is preserved, in its own catalog entry below, which preserves the
+         source claim while separating evidence ranking.
+         The decomposition, the justifications header and its entries move here too.
          Renaming the header was not enough — a release-gate review found that a consumer calling
          get_report({id:"final-answer"}) still received the above-80 hypothesis and its supporting
          claim, so the connector contradicted both the separate analyst-hypothesis entry and the
-         annex. On the SITE these render inside the answer tile, deliberately (owner annotation
-         nbc7fc1 put them in the collapsed expander, and #fa-basis-declaration governs "the
+         annex. On the SITE these render inside the answer tile, deliberately (they appear in the
+         collapsed expander, and #fa-basis-declaration governs "the
          explanations BELOW", so they travel with it). The connector has no collapse and no
          reading order: an entry titled THE FINAL ANSWER is simply the answer. So the two surfaces
          diverge HERE, on purpose, and this is the note that says so. */
@@ -131,12 +131,12 @@ function buildCatalog(): Map<string, CatalogEntry> {
         ...fa.tokens.executiveSummaryRows].filter(Boolean).join("\n\n");
     },
   });
-  /* T5 rec 5: the relocated claim, as its own entry. Same token, same bytes, separate id —
+  /* Report identity: the relocated claim, as its own entry. Same token, same bytes, separate id —
      evidence ranking, not one of the calculator's answers. */
   map.set("analyst-hypothesis", {
     id: "analyst-hypothesis",
     title: "STRONGEST EXTERNAL ANALYST HYPOTHESIS carried by this registry (adopted judgment, not a calculator output)",
-    /* T5 rec 5, round 4b: this was `kind: "final-answer"`, and `get_report` keys its whole
+    /* Report identity: this was `kind: "final-answer"`, and `get_report` keys its whole
        envelope off that tag — so the response said "adopted judgment, not a calculator output" in
        the title and "LIVE engine-derived result surface" in the sentence beside it. Both about
        the same entry, in the same reply. Seven review rounds missed it because each checked the

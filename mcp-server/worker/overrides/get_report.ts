@@ -7,7 +7,7 @@
    vector. Load-bearing strings are parity-checked against ../src/tools/get_report.ts by
    scripts/build.mjs.
 
-   RELEASE RIDER (Pro review 2026-07-29 rec 6 / C-6; bq-1253): every archived answer now names
+   RELEASE PROVENANCE (identified 2026-07-29; confirmed 2026-08-16): every archived answer now names
    the release it came from and the sha256 of the document it was sliced out of, because the
    thing that made the old live-fetch behaviour a provenance bug was not the staleness — it was
    that the response said "archived verbatim" without saying archived FROM WHAT. */
@@ -23,7 +23,7 @@ const RELEASE_NOTE =
   ` not a live read of the current site — so this document and this server's computed results are always the same release.` +
   ` source_url points at the CURRENT live document, which may have moved on.`;
 
-/* R3 D-9: the honest note for the ONE live entry (everything else stays archived-verbatim). */
+/* Live answer: the honest note for the ONE live entry (everything else stays archived-verbatim). */
 /* ══ ROUND 4b P1 — the MACHINE half of rec 5. ═══════════════════════════════════════════════
    `registryEmitMeta` bakes this string into the emitted claim's estimand ("modeled unit
    direct-serving contribution margin (flagship baseline carried by a ${responseKind}
@@ -91,11 +91,11 @@ export async function handler(args: Args): Promise<ToolResult> {
   try {
     raw = await entry.read();
   } catch (err) {
-    /* SANITIZED (GPT Pro pr-20260902T173936Z-a81123, finding 2). This used to hand the caller
+    /* SANITIZED (corrected 2026-09-02). This used to hand the caller
        `(err as Error).message` verbatim, and failClosed copies its argument into BOTH the text and
        the structured sentence — while the archive reader's own throws name internal paths and
-       release identifiers. That is precisely the leak rec 13 was about, surviving in the one
-       transport rec 13's wrapper does not cover. The public sentence is now fixed text; the
+       release identifiers. That leak survived in the one
+       transport the original wrapper does not cover. The public sentence is now fixed text; the
        diagnostic stays in the Worker log. */
     console.error("[inference-margins-worker/get_report] archive read failed", JSON.stringify({
       name: err instanceof Error ? err.name : "Error", id: entry.id,
@@ -124,7 +124,7 @@ export async function handler(args: Args): Promise<ToolResult> {
   return envelope(
     sentence,
     registryReceipt(entry.kind === "final-answer"
-      ? `live final-answer render: ${entry.id} — engine-derived policy-labeled estimates (D-9 result surface)`
+      ? `live final-answer render: ${entry.id} — engine-derived policy-labeled estimates`
       : entry.kind === "analyst-hypothesis"
       ? `live analyst-hypothesis render: ${entry.id} — adopted ranking of external claims, not a calculator output`
       : `verbatim archive fetch: ${entry.id} — quoted material, no derived estimate`),
@@ -140,7 +140,7 @@ export async function handler(args: Args): Promise<ToolResult> {
       source_url: entry.source_url,
       archive_note: entry.kind === "final-answer" ? FINAL_ANSWER_NOTE
         : entry.kind === "analyst-hypothesis" ? ANALYST_HYPOTHESIS_NOTE : ARCHIVE_NOTE,
-      /* rec 6 / C-6: the provenance of the bytes above, machine-readable. document_sha256 is of
+      /* Release provenance: the provenance of the bytes above, machine-readable. document_sha256 is of
          the WHOLE archived document (report-sN entries are a slice of the front page), so a
          caller can pin what they read; it is null for the live final-answer render. */
       release: {

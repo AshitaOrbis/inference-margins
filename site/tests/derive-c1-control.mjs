@@ -1,6 +1,6 @@
 // C-1 NEGATIVE CONTROL — token generator, derived from the PRODUCTION filtering path.
 //
-// GPT Pro review pr-20260902T153840Z-bce1bb finding 1: the C-1 negative's control existed only in
+// GPT Pro review a research review on 2026-09-02 finding 1: the C-1 negative's control existed only in
 // a comment, so nothing in the gate proved the forbidden hero was reachable. A comment records a
 // one-time experiment; it cannot keep the gate non-vacuous across the next engine or data
 // revision. This emits a permalink for the serve-feasibility-FILTERED construction of a named
@@ -51,7 +51,7 @@ for (const m of d.members) blend[m.hwKey] = m.declaredWeight;   // the DEFAULT-f
    "community-central-5.0" silently stopped decoding the moment a caller re-pointed this
    generator at any total but 5 T — and a non-decoding token here reads, at the call site, as
    "the filter does not bite", which is the WRONG diagnosis. Resolve the id; fall back to
-   "custom" when no declared case carries that size. (im-vet-six-repairs 2026-09-20, found by
+   "custom" when no declared case carries that size. (registry repairs 2026-09-20, found by
    re-pointing the C-1 fixture after the vetting repairs made 5 T non-discriminating.) */
 const caseId = Object.entries(ED_FLEET_CASES).find(([, v]) => v.totalB === totalB)?.[0] || "custom";
 const token = {

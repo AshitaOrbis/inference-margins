@@ -72,7 +72,7 @@ function card(rec, r) {
   return `  <details class="prov ape-card" id="ape-${rec.key}" data-ape-key="${rec.key}">
     <summary><strong>${esc(rec.provider)} — ${esc(rec.name)}</strong> <span class="prov-margin">serving margin <span class="ape-mid">~${pct(r.central)}</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">${pct(r.low_margin)}–${pct(r.high_margin)}</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, ${esc(rec.dive.date)}, research run <code>${esc(rec.dive.id)}</code>. Its own stated reading: ${one(st.headline_pct)}% (${one(st.low_pct)}–${one(st.high_pct)}%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="${esc(rec.review_page)}">one research run on ${esc(rec.dive.date)}</a>. Its own stated reading: ${one(st.headline_pct)}% (${one(st.low_pct)}–${one(st.high_pct)}%).</p>
       ${lines ? `<p class="ape-lines"><strong>What decides it, in its own words:</strong> ${lines}</p>` : ""}
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (${esc(String(rec.api_model).split(";")[0])}) · <strong>traffic:</strong> ${t.io_ratio}:1 input:output, ${t.cache_hit}% cache hits · <strong>fleet:</strong> ${fleetText(ov)} · <strong>utilization:</strong> ${ov.util}% · <strong>model:</strong> ${ov.active}B active / ${ov.total}B total, ${esc(ov.precision)}. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~${pct(r.reference)}.</p>
       <p class="cardmeta"><strong>Carrier:</strong> ${carrierText(rec)}.</p>
@@ -95,9 +95,12 @@ function inputsTable(rec) {
 /* Two rendering-only transforms of the verbatim answer, stated on the page: display math
    (\[ … \]) is set as a preformatted block so the Markdown renderer cannot read "[x](0.64)" inside
    an equation as a link, and links into ChatGPT's own sandbox (files no reader can open) are
-   shown as their text. The stored answer, and its hash, are untouched. */
+   shown as their text. A third: the run's own request identifier, which some answers repeat from
+   their brief, names an internal queue entry and is withheld (the site's maintainers ruled internal
+   process references out of public text, 2026-10-04). The stored answer, and its hash, are untouched. */
 function presentAnswer(answer) {
   return answer
+    .replace(/\bpr-\d{8}T\d{6}Z-[0-9a-f]{6}(?:#\d+)?/g, "[request identifier withheld]")
     .replace(/^\\\[\s*\n([\s\S]*?)\n\s*\\\]\s*$/gm, (_, body) => "```text\n" + body.trim() + "\n```")
     .replace(/\\\[([^\n]*?)\\\]/g, (_, body) => "`" + body.trim() + "`")
     .replace(/\\\(([^\n]*?)\\\)/g, (_, body) => "`" + body.trim() + "`")
@@ -116,9 +119,11 @@ function readingText(rec, r) {
 
 function reviewPage(rec, r, answer) {
   const st = rec.stated || {};
+  const presented = presentAnswer(answer);
+  const publishedDigest = sha(presented);
   return `# ${rec.name} — GPT-6 Astra Pro estimate (${rec.dive.date})
 
-**Provenance.** One GPT-6 Astra Pro research run (ChatGPT, model \`${rec.dive.model_slug}\`), request \`${rec.dive.id}\`, answered ${rec.dive.answered_at}. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for ${rec.name} from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 \`${rec.dive.answer_sha256}\`; as received, \`${rec.dive.raw_answer_sha256}\`).
+**Provenance.** one research run on ${rec.dive.date} by GPT-6 Astra Pro (ChatGPT, model \`${rec.dive.model_slug}\`), answered ${rec.dive.answered_at}. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for ${rec.name} from public evidence. The answer is reproduced below verbatim except for four presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; and where the answer repeats the run's own request identifier, an internal queue entry, it is withheld; its sources are cited by URL in the text (as-received answer SHA-256 \`${rec.dive.answer_sha256}\`; published text SHA-256 \`${publishedDigest}\`; original capture SHA-256 \`${rec.dive.raw_answer_sha256}\`).
 
 ## What the site shows
 
@@ -143,7 +148,7 @@ ${inputsTable(rec)}
 
 ## The answer, verbatim
 
-${presentAnswer(answer)}
+${presented}
 `;
 }
 

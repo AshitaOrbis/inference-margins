@@ -1,10 +1,10 @@
-// EVIDENCE-SCHEMA contract (IM2 / v2.2) — governing plan
-// the private plan im-reengineer-defaults-2026-07-16 §3 WS-B/WS-C, IM2 row, council P0-3.
+// EVIDENCE-SCHEMA contract (v2.2) — governing plan
+// the private plan the release-07-16  WS-B/WS-C, evidence-schema contract, council P0-3.
 // Run: node site/tests/evidence-schema.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.
 //
-// Acceptance property (plan §6 / IM2): the WS-B phase-evidence schema + WS-C uncertainty contract
+// Acceptance property: the WS-B phase-evidence schema + WS-C uncertainty contract
 // ACCEPT every populated instance and REJECT structurally deficient records — missing phase, a
 // total-throughput figure without a prefill/decode decomposition, an uncertainty component without a
 // basis, and (explicit assertion) coverage/confidence vocabulary in any of our own label fields.
@@ -33,7 +33,7 @@ assert("instance count is 27 (all F1-F7 fit inputs plus split H20, Ascend, and G
   DATA.anchors.length === 27, String(DATA.anchors.length));
 
 // status coverage — the schema represents every status without loss (ledger rows incl. 22-23).
-// IM3 backfill added 3 RETRO score-set observations (2 Trn2 no-spec + cm384 6P2D) and 3 ANALYST_SET
+// Evidence backfill added 3 RETRO score-set observations (2 Trn2 no-spec + cm384 6P2D) and 3 ANALYST_SET
 // rows (tpu7/trn2/trn3) so every analyst-estimate default-fleet engine row is represented.
 const byStatus = {};
 for (const a of DATA.anchors) byStatus[a.status] = (byStatus[a.status] || 0) + 1;
@@ -71,7 +71,7 @@ assert("every GB300 MLPerf record is audited + verified with url/date/verifier",
   mlperf.every((a) => a.eligibility.tier === "audited" && a.verification.state === "verified"
     && a.verification.url && a.verification.retrievedDate && a.verification.verifier));
 
-/* GPT Pro 2026-07-29 rec 8 — REWORKED 2026-09-02 after review pr-20260902T173936Z-a81123 called the
+/* GPT Pro 2026-07-29 rec 8 — REWORKED 2026-09-02 after review a research review on 2026-09-02 called the
    first attempt a rationalisation, correctly. That attempt asserted only that an `inherited` row
    cannot wear the label `audited`, which was never the chokepoint: the three rows still carried
    status FITTED, eligible:true, a respectable quality tier AND engineFit.deployed:true, so they
@@ -292,7 +292,7 @@ assert("scanForbiddenVocabulary exempts url + verbatimValue fields",
   assert("makeThroughput defaults unit to UNKNOWN and derivation to 'measured'",
     t.unit === S.UNKNOWN && t.derivation === "measured"); }
 
-// ============================ 5. IM2 gate fixes ============================
+// ============================ 5. Evidence-schema fixes ============================
 // A component scoped to a quantity; helper to attach a valid uncertainty object to a cloned record.
 const mkUnc = (appliesTo, basis = "analyst-set") => ({
   central: { value: 100, unit: "x", label: "central" },
@@ -317,17 +317,17 @@ assert("APPLIES_TO has the four scopes", U.APPLIES_TO.length === 4 && ["throughp
 // B3 (analyst-set legs): the separate GB300 scenario row carries the live fit identity;
 // the SGLang observation remains a RETRO record with no engineFit.
 { const r = byId("gb300-analyst-set-dec");
-  assert("gb300 has analystSetLegs ['rent'] + uncertaintyDeferred 'IM5' and validates",
+  assert("gb300 has analystSetLegs ['rent'] + the declared uncertainty deferral and validates",
     r.engineFit.analystSetLegs.join() === "rent" && r.uncertaintyDeferred === "IM5" && errs(r).length === 0, JSON.stringify(errs(r))); }
 { const r = byId("gb300-analyst-set-dec"); r.uncertaintyDeferred = null;
   r.uncertainty.components = r.uncertainty.components.filter(c => c.appliesTo !== "price");
-  assert("REJECT: analyst-set leg with neither a scoped component nor an IM5 deferral (B3, #7)",
+  assert("REJECT: analyst-set leg with neither a scoped component nor the declared uncertainty deferral (B3, #7)",
     errs(r).some(e => /analyst-set leg "rent" needs a scoped uncertainty component/.test(e))); }
 { const r = byId("gb300-analyst-set-dec"); r.uncertaintyDeferred = null; r.uncertainty = mkUnc("price");
   assert("ACCEPT: analyst-set leg covered by a price-scoped uncertainty component instead of deferral",
     errs(r).length === 0, JSON.stringify(errs(r))); }
 { const r = byId("gb300-analyst-set-dec"); r.uncertaintyDeferred = "IM6";
-  assert("REJECT: invalid deferral marker (only 'IM5')", errs(r).some(e => /uncertaintyDeferred "IM6" invalid/.test(e))); }
+  assert("REJECT: invalid deferral marker (only the declared marker)", errs(r).some(e => /uncertaintyDeferred "IM6" invalid/.test(e))); }
 
 // P1-1: RETRO/PROSPECTIVE rows must not carry an engineFit.
 { const r = byId("gb300-mlperf-v6-interactive"); r.engineFit = { effDec: 0.13, deployed: false };
@@ -363,37 +363,37 @@ for (const id of ["trn2-neuron-llama70b", "trn2-neuron-llama405b"]) {
     tpu.verification.state === "verified" && tpu.verification.urls.length === 2
     && /tpu-recipes/.test(tpu.verification.url)); }
 
-// ============================ 6. IM3 backfill wave (score-set + E1 eligibility + ANALYST_SET coverage) ============================
+// ============================ 6. Evidence backfill wave (score-set + E1 eligibility + ANALYST_SET coverage) ============================
 // --- new RETRO score-set observations validate and carry their full-precision values ---
 const trn70ns = DATA.anchors.find(a => a.id === "trn2-neuron-llama70b-nospec");
 const trn405ns = DATA.anchors.find(a => a.id === "trn2-neuron-llama405b-nospec");
 const cm6p2d = DATA.anchors.find(a => a.id === "cm384-flexnpu-6p2d-decode");
-assert("IM3: trn2 70B/405B no-spec baselines + cm384 6P2D decode present and valid",
+assert("Evidence: trn2 70B/405B no-spec baselines + cm384 6P2D decode present and valid",
   !!(trn70ns && trn405ns && cm6p2d) && errs(trn70ns).length === 0 && errs(trn405ns).length === 0 && errs(cm6p2d).length === 0,
   JSON.stringify([trn70ns && errs(trn70ns), trn405ns && errs(trn405ns), cm6p2d && errs(cm6p2d)]));
-assert("IM3: trn2 no-spec baselines carry the full-precision verbatim throughputs (36.55567822866449 / 24.421011092151268)",
+assert("Evidence: trn2 no-spec baselines carry the full-precision verbatim throughputs (36.55567822866449 / 24.421011092151268)",
   trn70ns.throughput.value === 36.55567822866449 && trn405ns.throughput.value === 24.421011092151268
   && /36\.55567822866449/.test(trn70ns.verification.verbatimValue) && /24\.421011092151268/.test(trn405ns.verification.verbatimValue));
-assert("IM3: cm384 6P2D decode-pool observation is 2,885.4 tok/s/decode-card, RETRO decode, engineFit null (P1-1)",
+assert("Evidence: cm384 6P2D decode-pool observation is 2,885.4 tok/s/decode-card, RETRO decode, engineFit null (P1-1)",
   cm6p2d.throughput.value === 2885.4 && cm6p2d.status === "RETRO" && cm6p2d.phase === "decode" && cm6p2d.engineFit === null
   && cm6p2d.throughput.derivation === "derived-from-aggregate");
 
 // --- E1-scoring eligibility (a SEPARATE axis from §2 anchor eligibility) ---
 const gb300Int = DATA.anchors.find(a => a.id === "gb300-mlperf-v6-interactive");
-assert("IM3: GB300 Interactive is E1-INELIGIBLE (mandated MTP-3, acceptance unpublished) with a reason, yet still a valid §2 anchor",
+assert("Evidence: GB300 Interactive is E1-INELIGIBLE (mandated MTP-3, acceptance unpublished) with a reason, yet still a valid §2 anchor",
   gb300Int.e1Eligible === false && !!gb300Int.e1IneligibleReason && gb300Int.eligibility.eligible === true && errs(gb300Int).length === 0);
 for (const id of ["trn2-neuron-llama70b", "trn2-neuron-llama405b"]) {
   const a = DATA.anchors.find(x => x.id === id);
-  assert(`IM3: Trn2 fused-spec row ${id} is E1-ineligible (draft-acceptance unknown) with a reason, still valid`,
+  assert(`Evidence: Trn2 fused-spec row ${id} is E1-ineligible (draft-acceptance unknown) with a reason, still valid`,
     a.e1Eligible === false && !!a.e1IneligibleReason && errs(a).length === 0);
 }
 // the E1 score set: the 7 scoreable RETRO observations are e1Eligible:true; the 3 mandated/known-spec rows are false.
 const e1True = DATA.anchors.filter(a => a.e1Eligible === true).map(a => a.id).sort();
 const e1False = DATA.anchors.filter(a => a.e1Eligible === false).map(a => a.id).sort();
-assert("IM3: exactly 3 E1-ineligible rows (gb300 Interactive + 2 Trn2 fused-spec)",
+assert("Evidence: exactly 3 E1-ineligible rows (gb300 Interactive + 2 Trn2 fused-spec)",
   e1False.length === 3 && e1False.join() === ["gb300-mlperf-v6-interactive", "trn2-neuron-llama405b", "trn2-neuron-llama70b"].sort().join(),
   JSON.stringify(e1False));
-assert("IM3: 7 E1-eligible score-set observations explicitly marked",
+assert("Evidence: 7 E1-eligible score-set observations explicitly marked",
   e1True.length === 7, JSON.stringify(e1True));
 // REJECT: an E1-ineligible row must state a reason (validator enforces the new axis).
 { const r = byId("gb300-mlperf-v6-interactive"); r.e1IneligibleReason = null;
@@ -401,18 +401,18 @@ assert("IM3: 7 E1-eligible score-set observations explicitly marked",
 { const r = S.makeAnchorRecord({ id: "x", status: "FITTED", platform: "P", phase: "decode" });
   assert("makeAnchorRecord defaults e1Eligible=true, e1IneligibleReason=null", r.e1Eligible === true && r.e1IneligibleReason === null); }
 
-// --- ANALYST_SET coverage of every analyst-estimate default-fleet engine row (IM4 entry pre-req) ---
+// --- ANALYST_SET coverage of every analyst-estimate default-fleet engine row (registry prerequisite) ---
 const analystSet = DATA.anchors.filter(a => a.status === "ANALYST_SET");
 assert("review split: 7 ANALYST_SET rows cover h20 + ascend + gb300 + h200 + tpu7 + trn2 + trn3", analystSet.length === 7
   && ["h20", "ascend", "gb300", "h200", "tpu7", "trn2", "trn3"].every(k => analystSet.some(a => a.platformKey === k)),
   JSON.stringify(analystSet.map(a => a.platformKey)));
-assert("IM3: every ANALYST_SET row carries a non-empty decomposed uncertainty object + a numeric central scenario, and validates",
+assert("Evidence: every ANALYST_SET row carries a non-empty decomposed uncertainty object + a numeric central scenario, and validates",
   analystSet.every(a => a.uncertainty && typeof a.uncertainty.central.value === "number"
     && Array.isArray(a.uncertainty.components) && a.uncertainty.components.length > 0
     && errs(a).length === 0));
-// IM4 slice A (council exit-gate fix 9): centrals retargeted at the LIVE registry — the
+// Registry reconciliation (council exit-gate fix 9): centrals retargeted at the LIVE registry — the
 // evidence records now describe the deployed roofline identity, never the retired scalars.
-assert("IM4 slice A: ANALYST_SET central values equal the live CALIBRATION etaDec",
+assert("Registry reconciliation: ANALYST_SET central values equal the live CALIBRATION etaDec",
   DATA.anchors.find(a => a.id === "h20-neutral-live-dec").uncertainty.central.value === ED.CALIBRATION.h20.etaDec
   && DATA.anchors.find(a => a.id === "ascend-neutral-live-dec").uncertainty.central.value === ED.CALIBRATION.ascend.etaDec
   && DATA.anchors.find(a => a.id === "gb300-analyst-set-dec").uncertainty.central.value === ED.CALIBRATION.gb300.etaDec
@@ -420,7 +420,7 @@ assert("IM4 slice A: ANALYST_SET central values equal the live CALIBRATION etaDe
   && DATA.anchors.find(a => a.id === "trn2-analyst-set-dec").uncertainty.central.value === ED.CALIBRATION.trn2.etaDec
   && DATA.anchors.find(a => a.id === "trn3-analyst-set-dec").uncertainty.central.value === ED.CALIBRATION.trn3.etaDec
   && DATA.anchors.find(a => a.id === "h200-analyst-extrap-dec").uncertainty.central.value === ED.CALIBRATION.h200.etaDec);
-assert("IM4 slice A: no ANALYST_SET central carries a retired scalar value anymore",
+assert("Registry reconciliation: no ANALYST_SET central carries a retired scalar value anymore",
   ![0.130, 0.055, 0.080, 0.085].some(v =>
     analystSet.some(a => a.uncertainty.central.value === v)));
 { const h20 = DATA.anchors.find(a => a.id === "h20-neutral-live-dec").uncertainty.components[0].range;
@@ -432,13 +432,13 @@ assert("IM4 slice A: no ANALYST_SET central carries a retired scalar value anymo
 
 // --- TPU7 provenance/operating-point correction: concurrency IS stated (64), no SLO ---
 { const tpu = DATA.anchors.find(a => a.id === "tpu7-ironwood-qwen3");
-  assert("IM3: TPU7 receipt corrected — concurrency=64 (stated), statedBatchConcurrency=true, no-SLO; verification still 'verified' with 2 urls",
+  assert("Evidence: TPU7 receipt corrected — concurrency=64 (stated), statedBatchConcurrency=true, no-SLO; verification still 'verified' with 2 urls",
     tpu.receipt.concurrency === 64 && tpu.eligibility.statedBatchConcurrency === true
     && /no SLO/i.test(tpu.receipt.sloClass) && tpu.verification.state === "verified"
     && tpu.verification.urls.length === 2 && errs(tpu).length === 0); }
 
-// ============================ 7. IM3 slice-2 roofline calibration extension ============================
-assert("IM3 slice 2: engineFit factory/validator are exported",
+// ============================ 7. Roofline roofline calibration extension ============================
+assert("Roofline: engineFit factory/validator are exported",
   typeof S.makeEngineFit === "function" && typeof S.validateEngineFit === "function");
 if (typeof S.makeEngineFit === "function" && typeof S.validateEngineFit === "function") {
   const roofFit = S.makeEngineFit({
@@ -487,28 +487,28 @@ if (typeof S.makeEngineFit === "function" && typeof S.validateEngineFit === "fun
 
 // P0-1 MUST-NOT-CHANGE: retain the named negative after extending engineFit.
 { const r = byId("h800-deepseek-prod-dec"); r.uncertainty = mkUnc("throughput");
-  assert("IM3 slice 2 P0-1 RETAINED: FITTED throughput-scoped uncertainty still rejected",
+  assert("Roofline P0-1 RETAINED: FITTED throughput-scoped uncertainty still rejected",
     errs(r).some(e => /appliesTo "throughput"\) is not admissible on a FITTED row/.test(e))); }
 // P1-1 MUST-NOT-CHANGE across both forbidden statuses.
 for (const status of ["RETRO", "PROSPECTIVE"]) {
   const r = byId("gb300-mlperf-v6-interactive");
   r.status = status;
   r.engineFit = { etaDec: 0.313491, deployed: false };
-  assert(`IM3 slice 2 P1-1 RETAINED: ${status} row carrying engineFit rejected`,
+  assert(`Roofline P1-1 RETAINED: ${status} row carrying engineFit rejected`,
     errs(r).some(e => new RegExp(`a ${status} row must not carry an engineFit`).test(e)));
 }
 
-// ============================ 8. IM4 slice A — evidence-identity fork migration (rev 2.2) ============================
+// ============================ 8. Registry reconciliation — evidence-identity fork migration (rev 2.2) ============================
 // Council exit-gate fix 9: every deployed engineFit carries the discriminated LIVE identity,
 // value-bound to the live registries; the retired v2.1 scalars are archived, never live.
 
 const FIT_RECORDS = DATA.anchors.filter(a => a.engineFit != null);
-assert("IM4 slice A: exactly 11 engineFit records, all discriminated (fitClass + calibrationRef + legacyScalar), top-level scalars null",
+assert("Registry reconciliation: exactly 11 engineFit records, all discriminated (fitClass + calibrationRef + legacyScalar), top-level scalars null",
   FIT_RECORDS.length === 11 && FIT_RECORDS.every(a =>
     a.engineFit.fitClass != null && a.engineFit.calibrationRef != null
     && a.engineFit.legacyScalar != null
     && a.engineFit.effDec === null && a.engineFit.effPre === null), JSON.stringify(FIT_RECORDS.map(a => a.id)));
-assert("IM4 slice A: every migrated record still validates", FIT_RECORDS.every(a => errs(a).length === 0),
+assert("Registry reconciliation: every migrated record still validates", FIT_RECORDS.every(a => errs(a).length === 0),
   JSON.stringify(FIT_RECORDS.map(a => ({ id: a.id, e: errs(a) })).filter(x => x.e.length)));
 assert("FITTED evidence rows attach only fitted engine identities",
   DATA.anchors.filter(a => a.status === "FITTED" && a.engineFit != null)
@@ -531,52 +531,52 @@ assert("every ANALYST_SET identity has null throughput and a non-measured deriva
 // Value equality against the LIVE registries — the anti-fork guarantee (no duplicated op
 // points; calibrationRef + these assertions bind record to registry).
 { const cls2status = { fitted: /^FITTED \(/, "fitted-inherited": /^FITTED-inherited/, "family-transfer": /^family-transfer/, "joint-fit": /^analyst-set \(joint fleet fit(?!.*PROJECTION)/, "source-informed-neutral": /^analyst-set \(source-informed neutral adjustment/, projection: /^analyst-set \(joint fleet fit — PROJECTION/,
-  // b9 M1 closed-set amendment (memo §5): two typed classes added, each with its own prose anchor.
+  //  closed-set amendment: two typed classes added, each with its own prose anchor.
   "platform-native-aggregate-bridge": /^analyst-set \(platform-native aggregate-form bridge/, "analyst-set-assumed-op": /^analyst-set at a DECLARED assumed operating point/ };
   for (const a of FIT_RECORDS) {
     const ref = a.engineFit.calibrationRef;
     if (/^CALIBRATION\./.test(ref)) {
       const key = ref.split(".")[1]; const row = ED.CALIBRATION[key];
-      assert(`IM4 slice A: ${a.id} etaDec equals live ${ref}.etaDec`, row && a.engineFit.etaDec === row.etaDec,
+      assert(`Registry reconciliation: ${a.id} etaDec equals live ${ref}.etaDec`, row && a.engineFit.etaDec === row.etaDec,
         JSON.stringify({ rec: a.engineFit.etaDec, live: row && row.etaDec }));
-      assert(`IM4 slice A: ${a.id} fitClass "${a.engineFit.fitClass}" consistent with live etaStatus prose`,
+      assert(`Registry reconciliation: ${a.id} fitClass "${a.engineFit.fitClass}" consistent with live etaStatus prose`,
         row && cls2status[a.engineFit.fitClass] && cls2status[a.engineFit.fitClass].test(row.etaStatus), row && row.etaStatus);
     } else if (ref === "PREFILL_CAL") {
-      assert(`IM4 slice A: ${a.id} etaPre equals live PREFILL_CAL.etaPre`, a.engineFit.etaPre === ED.PREFILL_CAL.etaPre);
+      assert(`Registry reconciliation: ${a.id} etaPre equals live PREFILL_CAL.etaPre`, a.engineFit.etaPre === ED.PREFILL_CAL.etaPre);
     }
     if (a.engineFit.etaPre != null)
-      assert(`IM4 slice A: ${a.id} etaPre carries the universal prefill value`, a.engineFit.etaPre === ED.PREFILL_CAL.etaPre);
+      assert(`Registry reconciliation: ${a.id} etaPre carries the universal prefill value`, a.engineFit.etaPre === ED.PREFILL_CAL.etaPre);
   }
 }
 
-// Typed selector inputs (memo §2.1/§2.5): prose is display-only; the typed fields are the rule.
+// Typed selector inputs: prose is display-only; the typed fields are the rule.
 { for (const [k, row] of Object.entries(ED.CALIBRATION)) {
-    assert(`IM4 slice A: CALIBRATION.${k} carries typed throughputEvidenceClass consistent with its etaStatus prose`,
+    assert(`Registry reconciliation: CALIBRATION.${k} carries typed throughputEvidenceClass consistent with its etaStatus prose`,
       (row.throughputEvidenceClass === "fitted" && /^FITTED \(/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "fitted-inherited" && /^FITTED-inherited/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "family-transfer" && /^family-transfer/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "joint-fit" && /^analyst-set \(joint fleet fit/.test(row.etaStatus) && !/PROJECTION/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "source-informed-neutral" && /^analyst-set \(source-informed neutral adjustment/.test(row.etaStatus))
-      // b9 M1 closed-set amendment (memo §5)
+      //  closed-set amendment
       || (row.throughputEvidenceClass === "platform-native-aggregate-bridge" && /^analyst-set \(platform-native aggregate-form bridge/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "analyst-set-assumed-op" && /^analyst-set at a DECLARED assumed operating point/.test(row.etaStatus))
       || (row.throughputEvidenceClass === "projection" && /PROJECTION/.test(row.etaStatus)),
       `${k}: ${row.throughputEvidenceClass} vs ${row.etaStatus}`);
-    assert(`IM4 slice A: PRICE_EVIDENCE covers CALIBRATION.${k}`,
+    assert(`Registry reconciliation: PRICE_EVIDENCE covers CALIBRATION.${k}`,
       ED.PRICE_EVIDENCE[k] === "observed-source-named"
       || ED.PRICE_EVIDENCE[k] === "analyst-set"
       || ED.PRICE_EVIDENCE[k] === "unpriced");
   }
-  // Cluster policy (memo v3 §2.1): only independent measured observations carry clusterIds.
-  assert("IM4 slice A: gb300 has ZERO cluster credit (measured:null — excluded from the fit set)",
+  // Cluster policy (specification v3 §2.1): only independent measured observations carry clusterIds.
+  assert("Registry reconciliation: gb300 has ZERO cluster credit (measured:null — excluded from the fit set)",
     ED.CALIBRATION.gb300.clusterId === null);
-  assert("IM4 slice A: neutral, joint-fit, bridge and projection rows carry no clusterId",
+  assert("Registry reconciliation: neutral, joint-fit, bridge and projection rows carry no clusterId",
     ["h20", "ascend", "tpu7", "trn2", "trn3", "rubin"].every(k => ED.CALIBRATION[k].clusterId === null));
-  assert("IM4 slice A: h100/h200 share h800's cluster (inherited/family-transfer, not independent)",
+  assert("Registry reconciliation: h100/h200 share h800's cluster (inherited/family-transfer, not independent)",
     ED.CALIBRATION.h100.clusterId === ED.CALIBRATION.h800.clusterId
     && ED.CALIBRATION.h200.clusterId === ED.CALIBRATION.h800.clusterId
     && ED.CALIBRATION.h800.clusterId != null);
-  assert("IM4 slice A: exactly 2 fitted independent measured clusters exist (h800 and gb200)",
+  assert("Registry reconciliation: exactly 2 fitted independent measured clusters exist (h800 and gb200)",
     new Set(Object.values(ED.CALIBRATION).map(r => r.clusterId).filter(Boolean)).size === 2);
 }
 
@@ -624,7 +624,7 @@ assert("every ANALYST_SET identity has null throughput and a non-measured deriva
   };
   for (const [id, exp] of Object.entries(EXPECT)) {
     const f = DATA.anchors.find(a => a.id === id).engineFit;
-    assert(`IM4 slice A pins: ${id} deployed=${exp.dep}, legacyScalar archives the exact retired pair`,
+    assert(`Registry reconciliation pins: ${id} deployed=${exp.dep}, legacyScalar archives the exact retired pair`,
       f.deployed === exp.dep && f.legacyScalar.effDec === exp.ls.effDec && f.legacyScalar.effPre === exp.ls.effPre,
       JSON.stringify({ dep: f.deployed, ls: f.legacyScalar }));
   }
@@ -669,31 +669,31 @@ assert("every ANALYST_SET identity has null throughput and a non-measured deriva
   assert("REJECT: prefill record referencing a CALIBRATION row instead of PREFILL_CAL",
     errs(r).some(e => /prefill record must reference PREFILL_CAL/.test(e))); }
 { for (const a of FIT_RECORDS) if (a.platformKey != null && a.phase === "decode")
-    assert(`IM4 slice A binding: ${a.id} ref names its own row`, a.engineFit.calibrationRef === "CALIBRATION." + a.platformKey);
+    assert(`Registry reconciliation binding: ${a.id} ref names its own row`, a.engineFit.calibrationRef === "CALIBRATION." + a.platformKey);
   const rub = DATA.anchors.find(a => a.id === "rubin-projection");
-  assert("IM4 slice A binding: rubin (platformKey null) pinned to CALIBRATION.rubin", rub.engineFit.calibrationRef === "CALIBRATION.rubin");
+  assert("Registry reconciliation binding: rubin (platformKey null) pinned to CALIBRATION.rubin", rub.engineFit.calibrationRef === "CALIBRATION.rubin");
   for (const a of FIT_RECORDS) if (/^CALIBRATION\./.test(a.engineFit.calibrationRef))
-    assert(`IM4 slice A binding: ${a.id} ref names an EXISTING registry key`, ED.CALIBRATION[a.engineFit.calibrationRef.split(".")[1]] != null); }
+    assert(`Registry reconciliation binding: ${a.id} ref names an EXISTING registry key`, ED.CALIBRATION[a.engineFit.calibrationRef.split(".")[1]] != null); }
 // F3: typed receipt completeness — sourceRefs everywhere; price map pinned ROW BY ROW
 // (the enum-membership check alone cannot catch a silent reclassification).
 { for (const [k, row] of Object.entries(ED.CALIBRATION))
-    assert(`IM4 slice A: CALIBRATION.${k} carries non-empty string sourceRefs`,
+    assert(`Registry reconciliation: CALIBRATION.${k} carries non-empty string sourceRefs`,
       Array.isArray(row.sourceRefs) && row.sourceRefs.length > 0 && row.sourceRefs.every(x => typeof x === "string" && x.length > 0));
-  /* im-vet-six-repairs (2026-09-20), vetting finding E5a: gb200 moves observed-source-named ->
+  /* registry repairs (2026-09-20), vetting finding E5a: gb200 moves observed-source-named ->
      analyst-set. The rent this engine actually prices with is the provisional $4.50 its own quote
-     record calls "NOT a rate that became public", and research/im-arc-t4-fold-memo.md:77 calls it
+     record calls "NOT a rate that became public", and the design analysis calls it
      "an analyst-set middle over a dated Jul-2026 neocloud range note". The named neocloud RANGE
      stays in the row's rentQuotes with its own provenance; what is downgraded is the ADOPTED
      value's label, which is what this map grades. No number moves. */
   const PRICE_EXPECT = { h100: "analyst-set", h200: "analyst-set", gb200: "analyst-set",
     gb300: "analyst-set", h800: "observed-source-named", h20: "observed-source-named",
-    // b9 M1 (r4 defect D4): tpu7/trn2 now name published rates — Google 3-yr commit $5.40/chip-hr,
+    //  (r4 defect D4): tpu7/trn2 now name published rates — Google 3-yr commit $5.40/chip-hr,
     // AWS Capacity Blocks $2.235/chip-hr. Re-derived by the harness, not hand-set here.
     tpu7: "observed-source-named", trn2: "observed-source-named", trn3: "analyst-set", ascend: "observed-source-named", rubin: "unpriced" };
-  assert("IM4 slice A: PRICE_EVIDENCE matches the diagnostic-derived map EXACTLY (row by row, same keyset)",
+  assert("Registry reconciliation: PRICE_EVIDENCE matches the diagnostic-derived map EXACTLY (row by row, same keyset)",
     JSON.stringify(Object.fromEntries(Object.entries(ED.PRICE_EVIDENCE).sort())) === JSON.stringify(Object.fromEntries(Object.entries(PRICE_EXPECT).sort())),
     JSON.stringify(ED.PRICE_EVIDENCE));
-  assert("IM4 slice A: PRICE_EVIDENCE keyset === CALIBRATION keyset",
+  assert("Registry reconciliation: PRICE_EVIDENCE keyset === CALIBRATION keyset",
     JSON.stringify(Object.keys(ED.PRICE_EVIDENCE).sort()) === JSON.stringify(Object.keys(ED.CALIBRATION).sort())); }
 
 console.log(`\n${failures === 0 ? "ALL EVIDENCE-SCHEMA TESTS PASS" : failures + " EVIDENCE-SCHEMA FAILURE(S)"}`);

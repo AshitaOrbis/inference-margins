@@ -1,11 +1,11 @@
 /* =====================================================================================
    provenance-inputs.mjs — the ONE registry of PRIVATE inputs the release gates read at
    TEST TIME, and the two-mode discipline that governs them.
-   Owner ruling q-row441-publish-fork, 2026-08-06: option C.
+   the adopted decision, 2026-08-06: option C.
 
    THE PROBLEM. Several release assertions prove that shipped bytes ARE the bytes their
-   private design memo pins — the discipline that caught real drift during the b9 arc. Those
-   memos are deliberately absent from the public snapshot (publish.sh's allow-list states the
+   private design specification pins — the discipline that caught real drift during the development. Those
+   specifications are deliberately absent from the public snapshot (publish.sh's allow-list states the
    doctrine: design docs never ship), so those same assertions cannot run inside the
    reconstructed public stage, nor in the public repo's CI. Before this module they died on
    ENOENT and the whole publish was blocked.
@@ -15,7 +15,7 @@
    runs. PARTIAL PRESENCE IS A FAILURE, never a skip: the moment any registered input exists,
    this is the private tree and every registered input must be there. That hard guard is the
    entire safety property. Without it, option C degrades into "the private gate quietly
-   stopped checking" the first time a memo is moved or renamed.
+   stopped checking" the first time a specification is moved or renamed.
 
    THERE IS DELIBERATELY NO WAY TO TURN THE PRIVATE GATE OFF. IM_PRIVATE_TREE=1 can only
    TIGHTEN (force private mode where the guard demands all inputs); no environment variable,
@@ -24,7 +24,7 @@
    and is not a state any private checkout can be talked into.
 
    WHAT MAY LIVE HERE: paths, reasons, counts. NOT the bytes being skipped. A skip must never
-   embed what it skips, or the mechanism that keeps the memos private becomes the mechanism
+   embed what it skips, or the mechanism that keeps the specifications private becomes the mechanism
    that publishes them.
 
    REGISTRY MEMBERSHIP IS EMPIRICAL. This is the set of tracked, non-allow-listed files that
@@ -57,14 +57,14 @@ export const PRIVATE_INPUTS = [
   { path: "research/b9-m6-fa-memo.md",
     why: "M6 §2.9 / §17.2 / §17.4 hold the normative bytes of the FINAL-ANSWER copy the page ships" },
   { path: "research/b9-spec-decode-lever-memo.md",
-    why: "the two narrative exceptions registered in [N-BASIS] carry their oracles in the memo itself" },
+    why: "the two narrative exceptions registered in [N-BASIS] carry their oracles in the specification itself" },
   { path: "research/im3-integration-design.md",
     why: "T-13 basis-manifest quote citations for the h20 / ascend / trn2 / trn3 rows" },
   { path: "deploy.sh",
     why: "release-entrypoint ordering gates; the master-only deploy path is private by design" },
   { path: "scripts/publish.sh",
     why: "publisher structural and safety gates, incl. allow-list coverage; it carries mutation policy and privacy-pattern bytes and is private by design" },
-  /* The ten im-arc working dives the DC registry cites as `sourceFile`, at every depth. T2-DC-5
+  /* The ten  working dives the DC registry cites as `sourceFile`, at every depth. T2-DC-5
      and T4-SCHEMA-NEEDLE open each cited source and look for that object's exact needle; the
      allow-list does not ship these, so on the reconstructed public stage those checks failed —
      35 of 40 sourced objects unresolved — and took validate_stage with them (vetting round
@@ -75,7 +75,7 @@ export const PRIVATE_INPUTS = [
      SEPARATELY CARDED: research/dc-registry.md and site/research/dc-registry.html — both of
      which DO ship — cite these paths, so a public reader follows them to nothing. Whether the
      dives should become public, or the citations should name something else, is a
-     publication-scope question for the owner, not a test-wiring one. */
+     publication-scope question for the author, not a test-wiring one. */
   { path: "research/dives/im-arc/electricity-gptpro-2026-08-23.md",
     why: "registry cited source for the us-industrial and cn-western electricity rows" },
   { path: "research/dives/im-arc/electricity-fable-2026-08-23.md",

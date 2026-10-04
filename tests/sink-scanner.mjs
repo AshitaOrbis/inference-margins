@@ -200,7 +200,7 @@ export const SINK_RULES = Object.freeze([
   R("blend-exclusion-marker",
     { fnIn: ["buildBlend"], pattern: /excluded from the default|hw-excluded|membershipExclusionClause\(memb\)/ },
     { class: "hardware-lens-tile", why: "R3 Row 0 (design memo D-3d): the slider-row exclusion marker — an excluded leg sits at 0 with the disclosure attached (title text = the ONE shared exclusion formatter; user may still raise the leg)" }),
-  /* b9 spec-decode LEVER (§9.5). CLAIM-BEARING, and deliberately NOT the exemption the gate's
+  /* spec-decode LEVER (§9.5). CLAIM-BEARING, and deliberately NOT the exemption the gate's
      control-row disclosure gets: this string carries `factorApplied` — a computed factor on a
      RENDERED leg — and states whether the credit reached that leg. It is the same surface class as
      the custom-fleet leg panel below, which already covers the identical disclosure on custom
@@ -216,7 +216,7 @@ export const SINK_RULES = Object.freeze([
     { class: "hardware-lens-tile", why: "owner ruling q-sliders-fleet-util-point: the slider-row note naming the provider-wide share range this leg is bounded inside, with that range's declared ends, and why a per-leg range is not offered on top of it" }),
   R("specdec-per-leg-disclosure",
     { fnIn: ["buildBlend"], pattern: /hw-specdec|specDecReasonText/ },
-    { class: "hardware-lens-tile", why: "b9 spec-decode LEVER (§9.5): the per-leg spec-decode disclosure on default and named fleet rows — whether the credit reached this leg and, when it did, the factor applied. Bytes come from the ONE engine-owned formatter; the leg DTO carries codes only" }),
+    { class: "hardware-lens-tile", why: "spec-decode LEVER (§9.5): the per-leg spec-decode disclosure on default and named fleet rows — whether the credit reached this leg and, when it did, the factor applied. Bytes come from the ONE engine-owned formatter; the leg DTO carries codes only" }),
   R("custom-fleet-leg-panel",
     { fnIn: ["cfPerLegPanel"] },
     { class: "hardware-lens-tile", why: "b9 M4 (memo §5.4): the read-only per-leg panel that replaces the share sliders under a custom-fleet selection — leg labels + donor calibration identity (attribution), user-declared share values, override enumeration, and the analyst-transfer disclosure sentence. Function-anchored like the switcher rule: every sink in the panel builder IS this surface" }),
@@ -481,7 +481,7 @@ export const SINK_RULES = Object.freeze([
   R("control-accessible-labels",
     { fnIn: ["buildParam", "buildBlend", "infoBtn", "wireExplainTriggers"], pattern: /setAttribute\("aria-(label|haspopup)"/ },
     { exempt: "accessible names for scenario controls — labels describe user inputs and carry no computed result. b9 UX-A adds `infoBtn`: its name is composed from the TIPS registry TITLE and its aria-haspopup declares the dialog affordance; neither is a computed value. The tooltip BODY is separately handled by `tooltip-chrome`. b9 UX-B adds `wireExplainTriggers` on the same footing: N triggers all reading \"Deeper explanation\" are indistinguishable in an assistive-technology control list, so each name is composed from the constant label plus its payload's OWN EXISTING TITLE — a section <h3>, a provider name, or a fixed string. No value is computed or read. Deliberately NOT extended to explainRelocate(), which creates no discovered sink at all (appendChild/insertBefore/createComment are not channels) and therefore needs no rule: exempting it would be a hole with nothing in it." }),
-  /* b9 spec-decode LEVER (D-SD-7). The gate's own disclosure sites inside the control row: the
+  /* spec-decode LEVER (D-SD-7). The gate's own disclosure sites inside the control row: the
      why-line (why the credit is unavailable here), the reset announcement (a value THIS user set and
      the gate zeroed), the correction notice (a value a LINK or SAVED SCENARIO carried and the
      sanitizer overrode), and the row's group/labelledby/describedby wiring. Each states the
@@ -494,7 +494,7 @@ export const SINK_RULES = Object.freeze([
      they need a CLAIM-BEARING classification of their own, not this exemption. */
   R("specdec-gate-disclosure",
     { fnIn: ["buildParam"], pattern: /specdec-(label|why|reset|correction)|SPECDEC_RESET_LINE|specDecCorrectionNotice|setAttribute\("aria-(labelledby|describedby)"|setAttribute\("role", "group"\)/ },
-    { exempt: "b9 spec-decode LEVER: the D-SD-7 gate's control-row disclosure — why-line, reset announcement, correction notice and the gated row's accessible wiring. Availability statements and echoes of the user's own setting; no computed result. The bytes are ratified and separately byte-pinned by the lever suite" }),
+    { exempt: "spec-decode LEVER: the D-SD-7 gate's control-row disclosure — why-line, reset announcement, correction notice and the gated row's accessible wiring. Availability statements and echoes of the user's own setting; no computed result. The bytes are ratified and separately byte-pinned by the lever suite" }),
   R("input-readouts",
     { pattern: /val\.textContent|pct\.textContent|hw-pct|controlsEl\.textContent|ms\.textContent|ps\.textContent|ts\.textContent/ },
     { exempt: "input-control readouts (sliders, user-set fleet weights, selector rebuilds) — echo user inputs, not computed claims" }),

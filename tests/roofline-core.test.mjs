@@ -1,10 +1,10 @@
-// IM3 slice-1b invariant/golden tests for the live roofline path (engine-roofline-v22.js).
-// Covers the memo §12 "Slice 1b" bullets INCLUDING the "Slice 1b also owns" list and the
+// Roofline invariant/golden tests for the live roofline path (engine-roofline-v22.js).
+// Covers the  "Slice 1b" bullets INCLUDING the "Slice 1b also owns" list and the
 // slice-1a spec item (non-compute-bound guard). Run: node tests/roofline-core.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.
-// Golden constants below are hand-computed from the FROZEN research/d2-equation-set-v2.md
-// (§1 forms, §5 recipes) and research/im3-slice1a-derivations.md — each carries its citation.
+// Golden constants below are hand-computed from the frozen equation set
+// using the frozen forms and recipes.
 import { createRequire } from "node:module";
 import { readFileSync } from "node:fs";
 const require = createRequire(import.meta.url);
@@ -52,7 +52,7 @@ for (const k of HW_KEYS) {
          K(L)  = 2·62·8·128·1·5000  = 634,880,000     W_iter = 35e9·1 = 3.5e10
          D     = 2·62·8·6144·2      = 12,189,696
          t_C = 16·Φ/4.614e15 = 2.955773558734287e-4 s
-         t_H = (3.0e10 + 16·K)/7.37e12 = 5.448857530529172e-3 s  (binds)   [b9 M1/M2 re-mint]
+         t_H = (3.0e10 + 16·K)/7.37e12 = 5.448857530529172e-3 s  (binds)   [/equation revision re-mint]
          t_N = 16·D/1.2e12 = 1.6252928e-4 s
          T̂(joint η 0.36142, MoE t_cc≡0) = 16/(t_H/0.36142) = 943.7656871151297 tok/s/chip */
 {
@@ -60,14 +60,14 @@ for (const k of HW_KEYS) {
   near("tpu7 golden t_C", g.tC, 2.955773558734287e-4, 1e-9);
   near("tpu7 golden t_H", g.tH, 5.448857530529172e-3, 1e-9);
   near("tpu7 golden t_N", g.tN, 1.6252928e-4, 1e-9);
-  // b9 M1 re-mint (unmanifested at M1; recorded in the b9 M2 manifest, family 7): this row left
+  //  re-mint (unmanifested at calibration revision; recorded in the  manifest, family 7): this row left
   // the frozen recipe's active-parameter surrogate for the replica-resident-distinct basis, so
   // W_iter = Total·s_W / nPhysDeclared = 480e9 × 1 / 16 = 3.0e10, NOT the recipe's A_m·s_w = 35 GB.
   // The frozen recipe itself is untouched — it governs the frozen protocol's own engine copy.
-  assert("tpu7 W_iter = Total·s_W/N_phys = 30 GB (b9 M1 replica-resident-distinct)", g.wIterBytes === 3.0e10, String(g.wIterBytes));
+  assert("tpu7 W_iter = Total·s_W/N_phys = 30 GB (replica-resident-distinct)", g.wIterBytes === 3.0e10, String(g.wIterBytes));
   assert("tpu7 golden binds on t_H", g.bindingTerm === "t_H", g.bindingTerm);
   assert("tpu7 MoE-EP t_cc ≡ 0", g.tCc === 0, String(g.tCc));
-  /* im-vet-six-repairs (2026-09-20), vetting finding E2: η 0.55 -> 0.519 after the basis
+  /* registry repairs (2026-09-20), vetting finding E2: η 0.55 -> 0.519 after the basis
      repair, and throughput scales with η exactly — 1523.9891947025355 / 1615.0174510335157 =
      0.519/0.55 to the bit, which is the property this golden exists to hold. The three golden
      TERMS above (t_C, t_H, t_N) are η-independent and are byte-identical, which is the evidence
@@ -75,7 +75,7 @@ for (const k of HW_KEYS) {
   near("tpu7 golden T̂(b=16) at the platform-native η 0.519", g.tokPerS, 1523.9891947025355, 1e-9);
   near("tpu7 golden T̂ scales EXACTLY with η (0.519/0.55) — the repair is a coefficient move, not a roofline move",
     g.tokPerS / 1615.0174510335157, 0.519 / 0.55, 1e-12);
-  // b9 M1 rejected the joint fit for this row (zero TPU observations in it) — see CALIBRATION.tpu7.
+  //  rejected the joint fit for this row (zero TPU observations in it) — see CALIBRATION.tpu7.
   assert("tpu7 η is the platform-native aggregate bridge, NOT the joint fit",
     g.etaDec === D.CALIBRATION.tpu7.etaDec && g.etaDec !== D.JOINT_ETA_DEC, String(g.etaDec));
 }
@@ -90,7 +90,7 @@ for (const k of HW_KEYS) {
          D = 4·80·8192·2·(15/16) = 4,915,200
          t_C = Φ_dev/0.65e15 = 1.61712e-5 s
          t_H = (8.75e9 + 2.2016e8)/2.9e12 = 3.093158620689655e-3 s  (binds)
-         t_N = D/1.28e12 = 3.84e-6 s   [b9 M1 cell 10: AWS published NeuronLink 1.28e12]
+         t_N = D/1.28e12 = 3.84e-6 s   [ cell 10: AWS published NeuronLink 1.28e12]
          t_cc = 2·80·18e-6 = 2.88e-3 s  (frozen §1.5: "t_cc(70B) = 2.88 ms")
          T̂(joint η) = 1/(t_H/0.36142 + t_cc) = 87.4252018133709 tok/s */
 {
@@ -103,7 +103,7 @@ for (const k of HW_KEYS) {
   assert("trn2-70b binds on t_H", g.bindingTerm === "t_H", g.bindingTerm);
   near("trn2-70b golden T̂(b=1) at joint η + t_cc", g.tokPerS, 87.4252018133709, 1e-9);
 }
-/* (c) h800 F1 decomposition — im3-slice1a-derivations §2 (b=96, L=4,989, FP8 tuple, dsr1):
+/* (c) h800 F1 decomposition at the frozen operating point (b=96, L=4,989, FP8 tuple, dsr1):
        t_C 4.796637 ms · t_H 16.068112 ms (binds) · t_N 3.192914 ms; T̂ at deployed η 0.313491
        = 1,872.973 tok/s (the snapshot-pin basis). */
 {
@@ -195,7 +195,7 @@ throwsAs("units: absent flops map fails loudly", () => R.assertHwRowUnits("doct"
     assert(`${id} NEVER enters stated branches (declared forms only)`, o.fAttnForm === "gqa-upper-bound" && o.kvForm === "compressed-single-head",
       JSON.stringify(o));
     assert(`${id} status is analyst-approx, never stated`, /analyst-approx/.test(a.status), String(a.status));
-    // Numeric distinctness of the compressed-KV reading (memo §3): layers·kvHeads(1)·headDim(512)·sKV
+    // Numeric distinctness of the compressed-KV reading: layers·kvHeads(1)·headDim(512)·sKV
     const kv = R.kvBytesPerToken(a, 1);
     const mlaReading = a.layers * 576 * 1;              // what the MLA branch would give with dsr1-family kvDim
     const gqaReading = 2 * a.layers * a.kvHeads * a.headDim * 1; // what the stated GQA form would give
@@ -216,8 +216,8 @@ for (const k of HW_KEYS) for (const p of PRECISIONS) {
     [t.sW, t.sKV, t.sAct].every(v => typeof v === "number" && v > 0),
     JSON.stringify(t));
 }
-// fallback/ineligibility cells are EXPLICIT, never silent (memo §6)
-// b9 M1 cell 13 removed trn3 from this list: AWS publishes 2.517 PF MXFP4, so the row carries a
+// fallback/ineligibility cells are EXPLICIT, never silent
+//  cell 13 removed trn3 from this list: AWS publishes 2.517 PF MXFP4, so the row carries a
 // NATIVE tuple. CAPACITY-SIDE ONLY — run B leaves throughput uncredited until a serving anchor
 // exists, which is why the fp8 default path is unaffected and asserted separately below.
 for (const k of ["h100", "h200", "h800", "h20", "tpu7", "trn2"]) {
@@ -227,12 +227,12 @@ for (const k of ["h100", "h200", "h800", "h20", "tpu7", "trn2"]) {
 }
 {
   const t = R.resolvePrecisionTuple("trn3", "fp4");
-  assert("trn3×fp4 = NATIVE MXFP4 tuple, no fallback (b9 M1 cell 13)",
+  assert("trn3×fp4 = NATIVE MXFP4 tuple, no fallback (native tuple)",
     t.fallback === null && t.flopsBasis === "fp4" && t.sW === 0.5, JSON.stringify(t));
 }
 {
   const a8 = R.resolvePrecisionTuple("ascend", "fp8");
-  assert("ascend 8-bit resolves to INT8 basis (structural naming, memo §6)",
+  assert("ascend 8-bit resolves to INT8 basis (structural naming)",
     a8.flopsBasis === "int8" && a8.naming === "int8" && a8.flops === D.HW_ROOFLINE.ascend.flops.int8 && a8.sKV === 2, JSON.stringify(a8));
   const a4 = R.resolvePrecisionTuple("ascend", "fp4");
   assert("ascend fp4 falls back to INT8 basis, KV BF16 (C1)", a4.flopsBasis === "int8" && a4.fallback === "fp4-not-capable" && a4.sKV === 2);
@@ -253,7 +253,7 @@ throwsAs("unknown precision enum hard-errors (never a default)", () => R.resolve
 throwsAs("unknown HW row hard-errors", () => R.resolvePrecisionTuple("nonesuch", "fp8"), "RooflineDataError");
 throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "RooflineDataError");
 
-/* ================= 5. stackMult on both paths (memo §7) ================= */
+/* ================= 5. stackMult on both paths ================= */
 {
   const base = { arch: dsr1, activeB: 37, totalB: 671, hwKey: "h800", b: 96, L: 4989, precision: "fp8" };
   const s1 = R.decodeRoofline(base), s2 = R.decodeRoofline({ ...base, stackMult: 2 });
@@ -303,7 +303,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
   assert("no exported name offers τ/band access", Object.keys(R).every(k => !/tau|band|tcc/i.test(k)), Object.keys(R).join(","));
 }
 
-/* ================= 7. traffic fixed-OSL rule (memo §3; all 6 profiles) =================
+/* ================= 7. traffic fixed-OSL rule (all 6 profiles) =================
    Expected (registry OSL × authored ratio; C5 representative decode L = ISL + OSL/2,
    peak live KV length LPeak = ISL + OSL, L_in = ISL):
      reference 15×1000 ⇒ ISL 15,000, L 15,500, LPeak 16,000
@@ -324,7 +324,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
       && g.LPeak === want[t.id][2] && g.LIn === g.isl, JSON.stringify(g));
   }
   const n = R.resolveTrafficLengths({ profileId: "ncode" });
-  assert("ncode amended registry: OSL 10,125 ⇒ L = 86,062.5 (memo §3 as amended, 7d65239)",
+  assert("ncode amended registry: OSL 10,125 ⇒ L = 86,062.5 (as amended, 7d65239)",
     n.osl === 10125 && n.L === 86062.5, JSON.stringify(n));
   // edited-ratio determinism: fixed-OSL — editing ioRatio moves ISL only
   const e1 = R.resolveTrafficLengths({ profileId: "ncode", ioRatio: 4 });
@@ -392,7 +392,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
   }
 }
 
-/* ================= 8. customDonor codec delta (memo §3 R2 contract) ================= */
+/* ================= 8. customDonor codec delta ( R2 contract) ================= */
 {
   assert("bounds enum matches the reviewed CUSTOM_DONOR_ENUM", JSON.stringify(R.CUSTOM_DONOR_BOUNDS) === JSON.stringify(D.CUSTOM_DONOR_ENUM.values));
   // round-trip: non-default on custom encodes and decodes back
@@ -415,14 +415,14 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
   throwsAs("custom with out-of-enum donor hard-errors", () => R.resolveArch("custom", "grok"), "RooflineDataError");
 }
 
-/* ================= 9. N_shard values (frozen §1.3 + memo §5) + KV-basis consistency ================= */
+/* ================= 9. N_shard values (frozen §1.3 + ) + KV-basis consistency ================= */
 {
   const want = { gb300: 8, tpu7: 4, trn2: 16,                       // frozen d2 §1.3 replica widths
                  h800: 144,                                          // PUBLISHED (R5 amendment): DeepSeek Day-6 decode unit EP144/DP144, 18 nodes × 8
                  h20: 16,                                            // PUBLISHED (R5 amendment): LMSYS/Ant decode instance 16× H20, Attention-DP16 + MoE-EP16
                  gb200: 8, h100: 144, h200: 144,                     // analyst family-carry of sourced h800 deployment width (slice 2)
-                 ascend: 128,                                        // cm384 co-location instance width (memo §5)
-                 trn3: 16, rubin: 8 };                               // trn2 carry / projection (memo §5)
+                 ascend: 128,                                        // cm384 co-location instance width
+                 trn3: 16, rubin: 8 };                               // trn2 carry / projection
   for (const [k, n] of Object.entries(want))
     assert(`N_shard ${k} = ${n}`, D.HW_ROOFLINE[k].nShard === n, String(D.HW_ROOFLINE[k].nShard));
   const h100FamilyFeas = R.feasibilityRoofline({ arch: dsr1, totalB: 671, hwKey: "h100", precision: "fp8", L: 4989, LPeak: 4989 });
@@ -442,7 +442,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
     moeF.kvSeqBytesBasis === R.kvBytesPerToken(dsr1, 1) * 3000 && tpF.kvSeqBytesBasis * 16 === R.kvBytesPerToken(llama70, 2) * 10750);
 }
 
-/* ================= 10. declared-batch cap + infeasible-state core behavior (memo §5) =================
+/* ================= 10. declared-batch cap + infeasible-state core behavior =================
    Expectations re-derived at the R5-amended widths + framebuffer bytes (review R5 fix 4b — the
    original h800-infeasible / h20-b_feas-17 claims were artifacts of stale nShard 8 + GB×1e9). */
 {
@@ -501,7 +501,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
     "decodeCustomDonor", "decodeRoofline", "encodeCustomDonor",
     "fAttnPerPos", "fabricBytesPerPos", "feasibilityRoofline", "kvBytesPerToken",
     "prefillRoofline", "renderPoint",
-    // R1/R2 sealed-door capacity-WIDTH solver (pre-existing drift, never re-minted until b9 M2).
+    // R1/R2 sealed-door capacity-WIDTH solver (pre-existing drift, never re-minted until ).
     "assertDeclaredOperatingWidth", "capacityWidthSolve", "rdEnumerateLegalWidths",
     "contextWindowStatus",
     "resolveArch", "resolveHwRoofline", "resolveOperatingPoint", "resolvePrecisionTuple",
@@ -618,7 +618,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
 
 /* ================= 13. regime b values match the §4 registry ================= */
 {
-  // b9 M1 re-mint (manifest family 7): gb300 128→64 (declared workload midpoint; 128 was never an
+  //  re-mint (manifest family 7): gb300 128→64 (declared workload midpoint; 128 was never an
   // anchor), trn2/trn3 4→32 (the 16–64 aggregate-batch surrogate replacing an AWS tutorial demo).
   const wantB = { h800: [96, 8], h20: [48, 8], gb200: [128, 8], gb300: [64, 8], ascend: [96, 8],
                   h100: [96, 8], h200: [96, 8], tpu7: [16, 4], trn2: [32, 1], trn3: [32, 1] }; // [balanced, fast]
@@ -715,11 +715,11 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
     JSON.stringify(cases.map(c => `${c.value}:${c.topologyDimension}:${c.evidenceClasses.join("/")}`)));
   assert("NVL72 sensitivities: the retired aggregate is archived (superseded), and ONLY it",
     cases.filter(c => c.superseded).length === 1 && byId("analyst-default-8").superseded === "analyst-transfer-default-8");
-  assert("NVL72 sensitivities: every SOURCE case carries a GPT Pro consult citation; analyst cases cite the B\u2032 memo contract",
+  assert("NVL72 sensitivities: every SOURCE case carries a dated replica-width research citation; analyst cases cite the analyst-transfer convention",
     cases.length === 11 && cases.every(candidate => typeof candidate.citation === "string" &&
       (candidate.evidenceClasses.includes("ANALYST")
-        ? candidate.citation.includes("research/im4-sliceBprime-design-memo.md")
-        : candidate.citation.includes("research/gptpro-reports/2026-07-20-replica-width-consult.md"))));
+        ? candidate.citation.includes("the analyst-transfer convention")
+        : candidate.citation.includes("replica-width research of 2026-07-20"))));
   assert("B\u20321: every non-archived case carries typed applicability + precisionTier",
     cases.filter(c => !c.superseded).every(c => c.precisionTier && c.applicability !== undefined
       && (c.applicability.modelTotalB === null || Array.isArray(c.applicability.modelTotalB))));
@@ -735,7 +735,7 @@ throwsAs("unknown model hard-errors", () => R.resolveArch("nonesuch"), "Roofline
   const case48 = byId("yuan-3-bf16-example-48");
   // R2 RETIRED the caller-supplied sensitivity-case channel: widths now arrive only through the
   // solver's sealed door. This block used to pass cases straight in and has thrown ever since —
-  // repaired at b9 M2 (manifest family 7) to assert the retirement is LOUD rather than silent.
+  // repaired at  (manifest family 7) to assert the retirement is LOUD rather than silent.
   const rejects = (c) => { try { R.feasibilityRoofline({ ...baseOpts, nShardCase: c }); return false; }
                            catch (e) { return /nShardCase channel is RETIRED/.test(e.message); } };
   assert("nShard sensitivity: the retired nShardCase channel is rejected LOUDLY, never ignored",

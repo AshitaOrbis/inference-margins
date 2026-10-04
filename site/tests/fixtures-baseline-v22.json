@@ -1,7 +1,7 @@
 {
  "frozenAt": "2026-07-27",
  "engine": "v3.0.0-2026-08-13",
- "note": "Fresh IM3 slice-3 baseline minted from the activated v2.2 roofline display path. Finite/capped legs render; mixed blends renormalize over renderable legs with fleetRenderable disclosure; zero-renderable blends store null numeric fields. im-arc T2 electricity migration 2026-08-22: historical owned-TCO perspectives are explicitly pinned at $0.07/kWh, so every recorded pair reproduces without a numeric remint while the generic default moves to $0.0871/kWh. RE-MINTED by the im-arc T4 fold (2026-08-24) under tests/fixtures-t4-declared-delta.json: 128 of 180 pairs moved. Every moved pair is enumerated in that manifest with the sink and the evidence that moved it. RE-MINTED 2026-09-19 by leg im-vet-model-estimates (owner note note-20260919T142116Z-6b5c83, 'sanity check those numbers'): five presets carried a price their vendor no longer charges (gpt $5/$30 -> $4/$20, terra $2.50/$15 -> $2/$12, luna $1/$6 -> $0.20/$1.20, dsv4 $0.435/$0.87 -> $0.66/$1.98 off-peak, dsv4f $0.14/$0.28 -> $0.15/$0.60 off-peak), each verified on the vendor's own page that day. Key-for-key re-mint against tests/fixtures-baseline-v22-pre-tariff-correction.json; the SHAPE of the move is asserted in tests/traffic-contract.test.mjs — a pair may differ ONLY if its model is one of those five. RE-MINTED 2026-09-20 by leg im-vet-six-repairs (program bq-2835, vetting findings E1 + E2): the two Trainium legs are withdrawn from the default fleet's membership on evidence grounds, and the TPU v7 decode coefficient moves 0.55 -> 0.519 onto ONE stated timing convention. Key-for-key re-mint against tests/fixtures-baseline-v22-pre-vetting-repairs.json; the SHAPE of the move is asserted in tests/traffic-contract.test.mjs — a pair may differ ONLY if its pre-repair blend carried tpu7, trn2 or trn3.",
+ "note": "Fresh roofline baseline minted from the activated v2.2 roofline display path. Finite/capped legs render; mixed blends renormalize over renderable legs with fleetRenderable disclosure; zero-renderable blends store null numeric fields. Electricity migration 2026-08-22: historical owned-TCO perspectives are explicitly pinned at $0.07/kWh, so every recorded pair reproduces without a numeric remint while the generic default moves to $0.0871/kWh. Re-minted on 2026-08-24 under tests/fixtures-t4-declared-delta.json: 128 of 180 pairs moved. Every moved pair is enumerated in that manifest with the sink and the evidence that moved it. Re-minted on 2026-09-19 after tariff verification: five presets carried a price their vendor no longer charges (gpt $5/$30 -> $4/$20, terra $2.50/$15 -> $2/$12, luna $1/$6 -> $0.20/$1.20, dsv4 $0.435/$0.87 -> $0.66/$1.98 off-peak, dsv4f $0.14/$0.28 -> $0.15/$0.60 off-peak), each verified on the vendor's own page that day. Key-for-key re-mint against tests/fixtures-baseline-v22-pre-tariff-correction.json; the SHAPE of the move is asserted in tests/traffic-contract.test.mjs — a pair may differ ONLY if its model is one of those five. Re-minted on 2026-09-20 after two registry repairs: the two Trainium legs are withdrawn from the default fleet's membership on evidence grounds, and the TPU v7 decode coefficient moves 0.55 -> 0.519 onto ONE stated timing convention. Key-for-key re-mint against tests/fixtures-baseline-v22-pre-vetting-repairs.json; the SHAPE of the move is asserted in tests/traffic-contract.test.mjs — a pair may differ ONLY if its pre-repair blend carried tpu7, trn2 or trn3.",
  "pairs": {
   "opus|median": {
    "ioRatio": 15,
@@ -6158,7 +6158,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6204,7 +6204,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6250,7 +6250,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6296,7 +6296,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6342,7 +6342,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6388,7 +6388,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6434,7 +6434,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6480,7 +6480,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6526,7 +6526,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6572,7 +6572,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6618,7 +6618,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {
@@ -6664,7 +6664,7 @@
      "value": null,
      "source": "component-placement registry (published per-component loaded bytes; see placementRegistry) — the uniform policy scalar did not drive this solve",
      "residencyBasis": "placement-registry",
-     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (d2-receipt-pack §1a; im3-arch-constants row 1)"
+     "placementComponentSource": "deepseek-ai/DeepSeek-R1 config.json (the source-receipt summary; architecture constants, item 1)"
     },
     "legStatuses": [
      {

@@ -21,7 +21,7 @@ export const config = {
   annotations: { readOnlyHint: true, openWorldHint: false },
 };
 
-/* U5: additive only. The eight existing keys, their sentence and their receipt are unchanged; the
+/* Datacenter registry: additive only. The eight existing keys, their sentence and their receipt are unchanged; the
    `datacenters` block is a NINTH key carrying the dc-map substrate's accepted ids, its published
    schemas, its metric definitions and its compatibility versions — read from the same U3 discovery
    call the browser reads, never restated here. Discovery is the enum source for the seven
@@ -54,7 +54,7 @@ export async function handler(): Promise<ToolResult> {
       : { enum: b as string[] };
   }
   const reports = listReports().map(({ id, title }) => ({ id, title }));
-  // Slice C (memo C-11): the named-fleet registry, enumerated so agents discover
+  // Fleet identity: the named-fleet registry, enumerated so agents discover
   // valid run_scenario fleet ids AND their identity classes before selecting.
   const fleets = Object.entries((E as any).FLEETS as Record<string, any>).map(([id, f]) => ({
     id, name: f.name, class: f.class, models: f.models, representativeness: f.representativeness,
@@ -62,7 +62,7 @@ export async function handler(): Promise<ToolResult> {
     counterfactual_bar: f.class === "counterfactual" ? "selectable, receipted, never a default" : null,
     attribution: f.attribution,
   }));
-  /* im-arc T3 (plan §1 T3 / §4.3, owner answer d-20260822-4c26 2026-08-22):
+  /* The update of 2026-08-22:
      discovery exposes the registries and the ONE validator schema through engine
      functions; no MCP-local copy can drift from the builder. */
   const dc_registry = Object.entries(E.registryRows()).map(([id, row]: [string, any]) => ({
@@ -71,7 +71,7 @@ export async function handler(): Promise<ToolResult> {
   }));
   const company_models = Object.fromEntries(Object.entries(E.COMPANY_MODELS)
     .map(([company, ids]) => [company, { flagship: ids[0], models: [...ids] }]));
-  /* im-arc T4 fold (2026-08-24) [F3]: the coverage ledger is keyed {company, preset} and stores
+  /* The update of 2026-08-24: the coverage ledger is keyed {company, preset} and stores
      EVIDENCE, not percentages — so discovery publishes the DERIVED partition from the one resolver,
      exactly what the page renders, rather than a transcription that could drift from it. */
   const coverage_ledgers = Object.fromEntries(models.map(({ id }) => {
@@ -81,7 +81,7 @@ export async function handler(): Promise<ToolResult> {
       named_site: [...(keys.namedSite ?? [])], programme: [...(keys.programme ?? [])],
       count_backed: [...(keys.countBacked ?? [])], physical_inventory: [...(keys.physicalInventory ?? [])],
     } : null;
-    /* ROUND 4 (2026-08-25), memo :28: the DERIVED partition and the EVIDENCE it was derived from
+    /* The update of 2026-08-25: the DERIVED partition and the EVIDENCE it was derived from
        travel together. `rendered` is the same one-resolver output the page shows; everything
        beside it is the stored key-level evidence a caller needs to check that output rather than
        take it on faith. Nothing here is recomputed locally — every field is the resolver's own. */
@@ -102,7 +102,7 @@ export async function handler(): Promise<ToolResult> {
       receipts: [...(row.receipts ?? [])],
     }];
   }).filter(([, row]) => row));
-  /* im-arc T4 fold (2026-08-24), memo §7: the ONE closed schema, published so a caller reads the
+  /* The update of 2026-08-24: the ONE closed schema, published so a caller reads the
      same enum lists the validator enforces and the page renders. Nothing here is an MCP-local copy:
      every list is the registry's own. */
   const dcSchema: any = (E as any).DC_SCHEMA ?? {};
@@ -138,11 +138,11 @@ export async function handler(): Promise<ToolResult> {
                   rate_class: receipt.replay.rateClass, declared_as: receipt.replay.declaredAs,
                   how_to_use: "state it explicitly as overrides.rentAbsLeg — there is no silent fallback" }
               : null }
-        /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+        /* The update of 2026-09-10.
            `basis` was published on every ALTERNATE quote below and on nothing the caller actually
            gets by default — which was survivable while every selected default was a disclosed or
-           analyst-set rate, and stopped being survivable the day the owner adopted three
-           PROVISIONAL rates as planning defaults. A consumer reading $4.50/hr off this surface has
+           analyst-set rate, and stopped being survivable when three
+           PROVISIONAL rates were adopted as planning defaults. A consumer reading $4.50/hr off this surface has
            to be able to see that it is provisional, and until now it could not: the page disclosed
            it and the connector did not. `observation_kind` rides along for the same reason. */
         : { available: true, quote_id: receipt.quoteId, rate_class: receipt.rateClass,
@@ -180,7 +180,7 @@ export async function handler(): Promise<ToolResult> {
     `${E.PERSPECTIVES.filter((p) => p.kind === "exploration").length} page-authored range-exploration routes), ` +
     `${traffic_profiles.length} provenance-labeled traffic profiles, 4 margin buckets and ` +
     `${reports.length} verbatim research documents. Calculator tools return policy-scenario outputs, not measured results; ` +
-    // IM3 exit-gate fix 1/2/3 + R2 §1.4: the baseline fragment's noun, fused token and
+    // Baseline identity: the baseline fragment's noun, fused token and
     // weld all gate on the SAME central-eligibility decision the receipt uses.
     `${flagshipBaselineFragment()}.`;
 

@@ -1,4 +1,4 @@
-// LIVE R2 capacity-width solver contract (feasibility-redesign memo v4.1):
+// LIVE R2 capacity-width solver contract (feasibility-redesign specification v4.1):
 // these pins bind the solver and the selected solve consumed by live rendering. Fixture
 // values are verified at live Opus/median traffic lengths; the two review-executed
 // counterexamples (redesign R1 review finding 4) are permanent pins.
@@ -39,7 +39,7 @@ const at = (hw, totalB, opts) => {
     JSON.stringify({ width: r.declaredOperatingPointWidth,
       row104: r.perWidth.find(row => row.width === 104) })); }
 { const glm = E.MODELS.find(m => m.id === "glm");
-  /* im-vet-model-estimates (2026-09-19): the profile is now selected EXPLICITLY instead of taken
+  /* tariff revision (2026-09-19): the profile is now selected EXPLICITLY instead of taken
      from whatever happens to be this row's default. The case exists to falsify peak-KV sizing at a
      LONG context — it asserts L = 86,062.5 on the next line — and it reached that context only
      because `ncode` was GLM's default. That default moved to the page's Reference convention on
@@ -86,7 +86,7 @@ const at = (hw, totalB, opts) => {
     JSON.stringify(wl)); }
 
 // ---- domain registry shape ----
-assert("domains: every HW_ROOFLINE family except rubin carries a domain object; rubin excluded (memo §0-bis)",
+assert("domains: every HW_ROOFLINE family except rubin carries a domain object; rubin excluded",
   ["gb200", "gb300", "tpu7", "trn2", "trn3", "h800", "h100", "h200", "h20", "ascend"].every(k => ED.HW_DOMAINS[k])
   && ED.HW_DOMAINS.rubin === undefined);
 assert("domains: legal shapes are explicit specs, never bare integer ranges",
@@ -96,10 +96,10 @@ assert("domains: scale-out tiers are declared but unsearched in R1 (gb200/gb300)
   ED.HW_DOMAINS.gb200.scaleOut.searchedInR1 === false && ED.HW_DOMAINS.gb300.scaleOut.searchedInR1 === false
   && E.enumerateLegalWidths(ED.HW_DOMAINS.gb300.scaleOut.hardwareLegalShapes).length === 0);
 
-// ---- the owner's cases: the false negative is dead in the live solver ----
-assert("owner case: 5T on GB300 solves at width 20 within ONE NVL72 rack (fp8 policy 1.0; live C8 workspace equation)",
+// ---- the reported cases: the false negative is dead in the live solver ----
+assert("example case: 5T on GB300 solves at width 20 within ONE NVL72 rack (fp8 policy 1.0; live C8 workspace equation)",
   at("gb300", 5000).capacityMinimumUnderUniformPolicy === 20);
-assert("owner case: 10T on GB300 solves at width 38 within ONE rack (aggregate-capacity plausible — dive §G.1)",
+assert("example case: 10T on GB300 solves at width 38 within ONE rack (aggregate-capacity plausible — dive §G.1)",
   at("gb300", 10000).capacityMinimumUnderUniformPolicy === 38);
 assert("tpu7@5T solves at width 32 (the old fixed-width-4 false infeasibility is a solver-visible artifact)",
   at("tpu7", 5000).capacityMinimumUnderUniformPolicy === 32);
@@ -224,7 +224,7 @@ assert("counterexample pin: trn2@5T solves exactly at the 64-chip domain edge (l
     && g.statusVector.fullMemory === "weights+peak-KV+flat-10%-HBM-reserve fit at the declared operating point under the policy (runtime-specific workspace demand and fragmentation unmodeled)"
     && g.statusVector.topologyLegal === "within-registered-scale-up-shapes"
     && g.statusVector.slo === "UNVERIFIED"
-    // b9 M1: gb300 relabelled fitted → analyst-set-assumed-op (its calibration observation
+    // : gb300 relabelled fitted → analyst-set-assumed-op (its calibration observation
     // carries measured:null and an assumed batch — the "fitted" label was false).
     && g.statusVector.economics === "evidence-quality: analyst-set-assumed-op throughput · analyst-set price"
     && Object.keys(g.statusVector).length === 5);
@@ -259,7 +259,7 @@ assert("counterexample pin: trn2@5T solves exactly at the 64-chip domain edge (l
     && g.receipt.role === "uniform-width across roles (published role widths are evidence annotations only; role-split solving is deferred)"
     && g.receipt.modelDivisibilityStatus === "not evaluated by the current capacity solver (receipted)",
     liveReceiptText);
-  // b9 M1: gb300's declared batch moved 128 → 64 (a declared workload midpoint replacing an
+  // : gb300's declared batch moved 128 → 64 (a declared workload midpoint replacing an
   // assumed anchor), which relaxes its capacity requirement: declared-op width 26 → 22.
   assert("two booleans: gb300@5T renderableUnderPolicy=true (declared-op 22 in-domain), placementVerified=false (closed model)",
     g.renderableUnderPolicy === true && g.placementVerified === false && g.declaredOperatingPointWidth === 22);
@@ -376,68 +376,68 @@ assert("blindness: solver + enumerator read no cost/margin functions",
 // forwarding solver output across the boundary) cannot appear without moving these pins;
 // combined with the worker-emitter freeze this closes the lexical-scan evasion.
 { const R = require("../engine-roofline-v22.js");
-  /* R2 re-mint (shipment plan §2 "export-name pins ... RE-MINT (new exports enumerated in the
+  /* R2 re-mint (shipment  "export-name pins ... RE-MINT (new exports enumerated in the
      manifest)"): ADDED CAPACITY_POLICY_BAND, evaluateAtPolicyBand, policyCapacityClause
      (§1.6/§1.10); RETIRED feasibilityAtNShard, workloadAtNShard, replicaWidthSensitivityClause,
      selectWidthCaseDefault, widthCaseApplicable (legacy width-case channel — §4.3 core). */
-  /* R3 re-mint (design memo, manifest family 10): ADDED the D-1/D-2 membership API
+  /* R3 re-mint (design specification, manifest family 10): ADDED the D-1/D-2 membership API
      (deriveDefaultFleetMembership, membershipSensitivity, membershipExclusionClause),
      the D-10 population API (legStatusSlots, aggregateFleetStatusVector, worstByOrder +
      the three predeclared order constants + FULL_MEMORY_FIT), the D-2e authoredRange
      API (inHalfOpenRange, withinAuthoredRange, authoredRangeLabel), the D-11 formatter
      (roleWidthEvidenceClause), and the D-9 result surface (finalAnswer). */
-  /* b9 M3 re-mint (delta manifest, energy/electricity dimension): ADDED the energy
-     surface + procurement-basis machinery (memo research/b9-m3-energy-memo.md §3.3) —
+  /*  re-mint (delta manifest, energy/electricity dimension): ADDED the energy
+     surface + procurement-basis machinery —
      PROCUREMENT_BASES/PROCUREMENT_BASIS_NAMES/DIVE_PROCUREMENT_BASES, procurementBasisFor,
      legProcurementBasis, assertUniformProcurementBasis (the fail-closed mixing trap),
      opPowerKw (the ONE operating-power resolver), energyPerMtok, energyMix, fleetEnergy;
      fix-round: displayedProcurementBasis (gate P1 — the LENS-basis display resolver).
      Consciously edited, per this pin's own rule. */
-  // b9 M4 (delta manifest): enginePin +4 — customFleetSource, isCustomFleetId,
+  // The declared revision adds four exports to enginePin — customFleetSource, isCustomFleetId,
   // registerCustomFleetSource, resolveFleetLegs (the custom-fleet leg path + source
-  // registration; memo research/b9-m45-ui-memo.md §3.1). Deliberate sealed-set change.
-  /* b9 M6: the export surface gains SEVEN names (153 → 160) — the exec-summary row registry, its renderer (exported so T-4 can mutate THROUGH the real formatter rather than beside it) and the pinned copy
+  // registration). Deliberate sealed-set change.
+  /* The export surface gains SEVEN names (153 → 160) — the exec-summary row registry, its renderer (exported so T-4 can mutate THROUGH the real formatter rather than beside it) and the pinned copy
      constants the suite pins the same bytes from (one source of bytes for page, MCP and Worker),
      plus the TCO assumption-vector formatter D-6t reads from the live state. The pin stays a
      FULL-SET seal: adding a name is a deliberate, reviewed act, never an alias door. */
-  /* b9 spec-decode LEVER (chunk A) re-mint: ADDED 6 names — the gate tick constant and
+  /* spec-decode LEVER (chunk A) re-mint: ADDED 6 names — the gate tick constant and
      domain (SPECDEC_GATE_TICK, SPECDEC_BOUNDS), THE ONE predicate and its state wrapper
      (stackAtMtpFreeTick, specDecGateAllows), the typed baseline-status reader
      (specDecBaselineStatusFor) and the ENGINE BACKSTOP (specDecFactor). The backstop is
      exported so the suite can assert the invariant is TOTAL — that every DOM-less caller
      is covered — rather than inferring it from UI behaviour. Consciously edited, per this
-     pin's own rule; ratified design (memo frozen v16, esc-...20c444d8). */
-  /* b9 spec-decode LEVER (kernel element 2) re-mint: ADDED 4 names — the ORDERED disposition
+     pin's own rule; ratified design (specification frozen v16, esc-...20c444d8). */
+  /* spec-decode LEVER (kernel element 2) re-mint: ADDED 4 names — the ORDERED disposition
      ladder (specDecDisposition), the ratified per-leg reason copy and its formatter
      (SPECDEC_REASON_COPY, specDecReasonText), and the typed per-leg result
      (specDecLegDisclosure). The ladder is exported because T-22 asserts it over the full
      24-combination cross-product against a LITERAL table — a test that re-derived its oracle
      from the function under test would prove only self-consistency. Consciously edited. */
-  /* b9 spec-decode LEVER (kernel element 3, manifest rows 6/7/21) re-mint: ADDED 6 names — the
+  /* spec-decode LEVER (kernel element 3, manifest cases 6/7/21) re-mint: ADDED 6 names — the
      three CANONICAL CLAIM CONSTANTS (SPECDEC_PORTABLE_TICK, SPECDEC_GATE_SEMANTICS,
      SPECDEC_CONSERVATISM) and the three pinned gate lines composed from them (SPECDEC_WHY_LINE,
      SPECDEC_RESET_LINE, SPECDEC_REPLAY_WHY_LINE). They are exported because the suite must pin
      the SAME bytes the page renders: the claim these carry drifted across two separate review
      rounds while it lived as four independent literals, and a second copy in a test would be a
      fifth place for it to drift. Consciously edited, per this pin's own rule. */
-  /* b9 spec-decode LEVER (kernel element 3, manifest rows 8/22-26) re-mint: ADDED 3 names —
+  /* spec-decode LEVER (kernel element 3, manifest cases 8/22-26) re-mint: ADDED 3 names —
      SPECDEC_SECTION_TITLE and SPECDEC_CONTROL_LABEL (the ratified section title and control label,
      named constants so SECTIONS and the tip's own title read ONE definition rather than two
      literals that can drift), and SPECDEC_TIP_HEAD (the head of the ratified tip, pinned as its own
      constant so the tip's composition names its head instead of eliding it — an oracle with an
      ellipsis in it is not an oracle). Consciously edited, per this pin's own rule. */
-  /* b9 spec-decode LEVER (codec rows) re-mint: ADDED 1 name — specDecTokenConsistent, THE ONE
+  /* spec-decode LEVER (codec rows) re-mint: ADDED 1 name — specDecTokenConsistent, THE ONE
      shared cross-field codec rule. It is exported because the encoder and the decoder must run the
      SAME predicate: an encoder that can mint a token its own decoder rejects produces links that
-     copy successfully and then silently fail to restore, which is the M4 P0-1 failure mode. The
+     copy successfully and then silently fail to restore, which is the preset revision P0-1 failure mode. The
      per-field domain check stays in leverDomainViolation; this is the cross-field one, and a diff
      carrying only what differs cannot express it. Consciously edited. */
-  /* b9 spec-decode LEVER (correction lifetime) re-mint: ADDED 1 name — specDecCorrectionNotice,
+  /* spec-decode LEVER (correction lifetime) re-mint: ADDED 1 name — specDecCorrectionNotice,
      the engine-owned formatter for the ratified state-level notice. Same pattern and same reason as
-     SPECDEC_REASON_COPY: the manifest files row 15 under site/app.js because that is where it
+     SPECDEC_REASON_COPY: the manifest files case 15 under site/app.js because that is where it
      RENDERS, and the bytes live in the engine because that is where the suite can pin them — one
      source of bytes for page, MCP and Worker. Consciously edited. */
-  /* row 499 follow-on re-mint (the slider change-set): ADDED marginBandsPerDial (the per-dial band
+  /* case 499 follow-on re-mint (the slider change-set): ADDED marginBandsPerDial (the per-dial band
      derivation the presentation ruling requires), bandLeadBasisClause (the sentence declaring which
      algorithmic-lead basis a band was computed on — engine-side so it is testable without a browser
      and emittable by any surface that emits a band), and legsInFamily / familyGroupOverrides (which
@@ -445,23 +445,23 @@ assert("blindness: solver + enumerator read no cost/margin functions",
      DISCLOSURE or DERIVATION surfaces over ranges the reader or an adjudicator declared; none
      changes a computed margin, and 0 of the 180 pre-existing render states move. Consciously
      edited, per this pin's own rule. */
-  /* CENTROID WIRING (bq-231 / M8, 2026-08-12-13): + centroidOnSum — the exact mean-mix
+  /* CENTROID WIRING (the release / mean-mix revision, 2026-08-12-13): + centroidOnSum — the exact mean-mix
      construction (reference parity + trap rows in mix-band.test.mjs).
      COUNCIL F3 (2026-08-13): + normalizeModifiedIdentities — the ONE staleness rule shared by
      encoder and sender UI (pinned in traffic-contract). */
-  /* d-im-h800 (2026-08-18, owner note aca09d): +19 — the fit-transfer-assumption surface: NVLINKCAP_BOUNDS,
+  /* the adopted decision (2026-08-18, the author’s note): +19 — the fit-transfer-assumption surface: NVLINKCAP_BOUNDS,
      NVLINKCAP_SLOPE_STEP, NVLINKCAP_ANCHOR_KEY, NVLINKCAP_ELIGIBLE, NVLINKCAP_SECTION_TITLE,
      NVLINKCAP_CONTROL_LABEL, the four pinned tip constants, NVLINKCAP_REASON_COPY, nvlinkCapLineageFor,
      nvlinkCapCounterfactual, nvlinkCapPhaseDisposition, nvlinkCapLegCode, nvlinkCapReasonText,
      nvlinkCapLegDisclosure, nvlinkCapFactor, nvlinkCapReadout. Consciously edited, per this pin's own
      rule; the WIDE-hash re-mint note in render-parity-r1.test.mjs carries the delta evidence. */
-  /* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): +3 read-only
+  /*  ( T1, adjudicated 2026-08-22 2026-08-22): +3 read-only
      basis derivations — blendedLessorSpread, lessorSpread and marginOnBasis. */
-  /* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): +1 pure renderer-row
+  /*  (review 2026-08-22, finding P1-1): +1 pure renderer-row
      derivation — stackRowsFor; consciously re-minted under this sealed export contract. */
   const enginePin = ["BAND_LEAD_BASIS","BAND_MAX_CORNER_DIALS","CAPACITY_BYTES_POLICY","CAPACITY_POLICY_BAND","DATA_AS_OF","DEFAULTS","DEFAULTS_EPOCH","DEFAULT_FLEET_ID","DIVE_PROCUREMENT_BASES","DOSSIERS","EMPTY_BUCKET_STATEMENT","ENGINE_REVISION","EXEC_SUMMARY_ROWS","EXPLORATION_ORDER_BASIS","FAMILY_BOUNDS","FAMILY_GROUP_KEYS","FAMILY_STATE_KEY","FA_MUST_NOT_BE_CALLED_FRAME","FA_MUST_NOT_BE_CALLED_VERBATIM","FLAGSHIP_SCOPE","FLEETS","FORM_DEBT_NOT_A_RESULT","FULL_MEMORY_FIT","GEN_TIMELINE","HW","HW_ORDER","INTERACT_ENUM_KEYS","INTERLOCK_STATES","INTERLOCK_UNLOCK_WARNING","INTERLOCK_WHY","LANDING_DEFAULT_PERSP_ID","LOW_EVIDENCE_COPY","MARGIN_BUCKETS","MARGIN_CLAIMS","MIN_CLUSTER_SUPPORT_SHARE","MIX_AFFINE_EPS","MIX_MAX_BLOCKS","MIX_SHARE_BOUNDS","MODELS","MODEL_OWNED_KEYS","MTP_ROW_COPY","NEGATIVE_FINDINGS_STATEMENT","NVLINKCAP_ANCHOR_KEY","NVLINKCAP_BOUNDS","NVLINKCAP_CONTROL_LABEL","NVLINKCAP_ELIGIBLE","NVLINKCAP_REASON_COPY","NVLINKCAP_SECTION_TITLE","NVLINKCAP_SLOPE_STEP","NVLINKCAP_TIP_HEAD","NVLINKCAP_WHAT_IT_DOES","NVLINKCAP_WHAT_IT_IS_NOT","NVLINKCAP_WHAT_THE_ENGINE_SAYS","PERSPECTIVES","PERSPECTIVE_SPACE_KEYS","PRECISION_ENUM_KEYS","PRECISION_TIER_MAP","PRICE_EVIDENCE_ORDER","PROCUREMENT_BASES","PROCUREMENT_BASIS_NAMES","REFERENCE_LEVER_PIN","RETIRED_PERSPECTIVES","RUBIN","SCENARIO_BOUNDS","SECTIONS","SLO_STATUS_ORDER","SPECDEC_BOUNDS","SPECDEC_CONSERVATISM","SPECDEC_CONTROL_LABEL","SPECDEC_GATE_SEMANTICS","SPECDEC_GATE_TICK","SPECDEC_PORTABLE_TICK","SPECDEC_REASON_COPY","SPECDEC_REPLAY_WHY_LINE","SPECDEC_RESET_LINE","SPECDEC_SECTION_TITLE","SPECDEC_TIP_HEAD","SPECDEC_WHY_LINE","SPECIFIED_LEVER_KEYS","SWEEP_DISCLAIMER","THROUGHPUT_EVIDENCE_ORDER","TIPS","TITLE_MAX_CHARS","TOTAL_CASES","TOTAL_CASE_SCOPE","TRAFFIC_MODES","TRAFFIC_PROFILES","TREND_DEFAULTS","TREND_GROUP_KEYS","TREND_LAB_NOTES","TREND_MONTHS_BOUNDS","TREND_RATES","TREND_SOFT_WARN_MONTHS","aggregateFleetStatusVector","applyDial","applyModelSwitchWhileModified","applyPresetSettings","assertUniformProcurementBasis","authoredRangeLabel","bandHandleDefaults","bandLeadBasisClause","blendBlocksFromRanges","blendWeights","blendedCost","blendedCosts","blendedLessorSpread","bucketForMargin","centralEligibilityDecision","centroidOnSum","changedFieldsFromCentral","claimBucketRelations","claimsForBucket","computeMix","costPerMtok","customFleetSource","decodeScenario","deriveDefaultFleetMembership","deriveInterlockFor","dialBounds","dialId","dialsFromRanges","displayedProcurementBasis","encodeScenario","energyMix","energyPerMtok","enumerateLegalWidths","evaluateAtPolicyBand","execSummaryRowTokens","explorationComputedBucket","explorationFlagshipMargin","explorationFlagshipWorkload","familyFactor","familyGroupOverrides","familyOf","feasibility","finalAnswer","fleetBaselineBlend","fleetEnergy","fleetEvidenceProfile","fleetRenderableClause","fleetRenderableDisclosure","formCorrectionDebt","heroSuppressionDecision","hardwareRow","hwHourCost","hwHourParts","inHalfOpenRange","interlockAfterEdit","interlockAfterEditChecked","interlockGroupOf","interlockInvariantHolds","interlockLockedGroup","interlockTokenConsistent","isCustomFleetId","landingHeroSuppressed","legProcurementBasis","legStatusSlots","legsInFamily","lensSpan","lensSpanMembershipNote","lessorSpread","leverDomainViolation","leverOverlapWarnings","leverThroughputMult","makeScenarioContext","marginBand","marginBandsPerDial","marginDriftNote","marginOnBasis","marginOnHw","matchTrafficProfile","membershipExclusionClause","membershipSensitivity","migrateV2Traffic","mixBand","mixRangesFromRanges","normalizeLinkTitle","normalizeModifiedIdentities","normalizePerspId","nvlinkCapCounterfactual","nvlinkCapFactor","nvlinkCapLegCode","nvlinkCapLegDisclosure","nvlinkCapLineageFor","nvlinkCapPhaseDisposition","nvlinkCapReadout","nvlinkCapReasonText","opPowerKw","overlayDivergesFromReplay","pairingSeverity","pairingWarning","pinReferenceLevers","policyCapacityClause","procurementBasisFor","projectCentresOntoSum","provenanceTierLabel","rankExplorations","reconcileLinkTraffic","registerCustomFleetSource","registerScenarioContext","resolveFleetLegs","resolveTraffic","restoreModifiedLinkState","restoreSavedPresetState","roleWidthEvidenceClause","sanitizeScenarioDiff","scenarioContext","selectDefaultFleet","solveCapacityWidth","specDecBaselineStatusFor","specDecCorrectionNotice","specDecDisposition","specDecFactor","specDecGateAllows","specDecLegDisclosure","specDecReasonText","specDecTokenConsistent","stackAtMtpFreeTick","stackRowsFor","statedReadingClause","tcoAssumptionVector","tokPerS","trendBaselineFor","trendDefaultMonths","trendFactor","trendLabNote","withinAuthoredRange","workload","workloadOnHw","worstByOrder"];
-  /* MIX-BAND re-mint (owner ruling q-sliders-fleet-util-point, 2026-08-09; delta manifest
-     research/b9-delta-manifests/mix-band-delta-manifest.md): ADDED the feasible-mix API — `mixBand`
+  /* MIX-BAND re-mint (the adopted decision, 2026-08-09; delta manifest
+     the declared changes): ADDED the feasible-mix API — `mixBand`
      and its three helpers (`blendBlocksFromRanges`, `projectCentresOntoSum`, `mixRangesFromRanges`)
      plus the constants `MIX_MAX_BLOCKS`, `MIX_AFFINE_EPS`, `MIX_SHARE_BOUNDS`. Like the margin-band
      API above it is a READ-ONLY derivation over states this engine already builds: it computes no
@@ -469,33 +469,33 @@ assert("blindness: solver + enumerator read no cost/margin functions",
      share ranges cuts out of the simplex. `mixRangesFromRanges` is the separator that keeps a
      coupled axis out of `dialsFromRanges`, so its presence here is load-bearing rather than
      convenience. Consciously edited, per this pin's own rule. */
-  /* row 499 re-mint, second pass (owner note 507081): ADDED the margin-band API — `marginBand`
+  /* case 499 re-mint, second pass (the author’s note): ADDED the margin-band API — `marginBand`
      plus the two small helpers that describe a dial (`applyDial`, `dialId`) and the corner budget
      `BAND_MAX_CORNER_DIALS`. It is a READ-ONLY derivation over states this engine already builds:
      it computes no new quantity, it evaluates the existing margin at corners of a declared box.
      Consciously edited, per this pin's own rule. */
-  /* row 499 re-mint (delta manifest research/b9-delta-manifests/row499-preset-structure-delta-manifest.md):
+  /* case 499 re-mint (delta manifest the declared changes):
      ADDED LANDING_DEFAULT_PERSP_ID — the id of the preset the page OPENS on. It is a selection
      constant, not a result surface: no computed value reads it, and the WIDE render grid proves
      it (0 of the 180 pre-existing model x perspective states moved). Consciously edited, per this
      pin's own rule. */
-  /* b9 M2 re-mint (delta manifest family 9): ADDED the form-correction debt API
+  /*  re-mint (delta manifest family 9): ADDED the form-correction debt API
      (formCorrectionDebt + FORM_DEBT_NOT_A_RESULT). This is a DISCLOSURE surface, not a
      result surface — it sizes what re-expressing a legacy-representation leg in the
      topology-aware representation would be worth WITHOUT re-deriving η, which is exactly
-     why it is not a repaired estimate (memo §3.5). Consciously edited, per this pin's own rule. */
-  /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §2): consciously add the
+     why it is not a repaired estimate. Consciously edited, per this pin's own rule. */
+  /* : consciously add the
      four section-composition entry points. The old sealed list remains literal above;
      sorting these explicit additions retains exact full-set equality. */
   enginePin.push("assertSectionsTyped", "composeSections", "mixProcurementBasis", "resolveFleetSections", "sectionBand");
-  /* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+  /*  ( T3 / §4, adjudicated 2026-08-22 2026-08-22):
      consciously add the fleet-composer, coverage-renderer and shared-schema surface.
      These are pure registry/state derivations; the WIDE digest remains separately sealed. */
   enginePin.push("COMPANY_MODELS", "bandSchema", "companyForModel", "composeFleetFromDcRows",
     "coverageClassForDonor", "coverageForFleetSections", "coverageLedgerForModel", "coverageSentenceParts", "dcRegions",
     "fleetModeRenderOptions", "fleetSectionsSchema", "registryRowClass", "registryRows",
     "registryPlanningRentHr","registryPlanningRentReceipt", "registrySectionFromRow", "validateFleetSections");
-  /* im-arc T4 fold (2026-08-24), memo §§1.5, 2, 2.1, 4: the fold adds nine pure derivations to the
+  /*  (2026-08-24), : the fold adds nine pure derivations to the
      sealed surface — the quote registry's two selectors, the capex-scope and PUE-class resolvers,
      the dated default-band table, the capital-recovery factor/increment/disclosure trio, the tier
      helper that exists precisely to prove a display tier carries no arithmetic, the one coverage
@@ -504,10 +504,10 @@ assert("blindness: solver + enumerator read no cost/margin functions",
   enginePin.push("DC_SCHEMA", "RENT_POLICY", "RENT_QUOTES", "capexProvenanceFor", "capitalRecoveryDisclosure", "capitalRecoveryFactor",
     "capitalRecoveryIncrementHr", "clusterOverheadFor", "coverageForPreset", "execSummaryRowState",
     "pueBandForClass", "registeredCapexFor", "rentQuoteByClass", "rentQuotesFor", "tcoDefaultBands", "tierRenderOptions");
-  /* im-arc T4 fold ROUND 4 (2026-08-25), memo :41/:123: reader-entered capex requires its input
+  /* The contract adopted on 2026-08-25 requires reader-entered capex to carry its input
      SCOPE, so two more pure derivations join the sealed surface — the per-leg overhead resolver
      (which is what makes a reader's declared scope win over the registry row's for a capex the
-     reader stated) and the effective-clustered-capex preview the memo asks the UI and MCP to
+     reader stated) and the effective-clustered-capex preview the specification asks the UI and MCP to
      show. Both are pure functions over a validated fleet; no WIDE digest moved. */
   enginePin.push("clusterOverheadForLeg", "readerCapexPreview");
   enginePin.sort();
@@ -522,7 +522,7 @@ assert("blindness: solver + enumerator read no cost/margin functions",
 // edit routing solver output through an already-rendered export (e.g. provenanceTierLabel,
 // consumed by app.js and both MCP claim paths) now trips this scan regardless of name pins,
 // file hashes, or the hand-listed render-path scan.
-/* R2 INVERSION (shipment plan §2, capacity-solver row "3 no-co-emission scans ... INVERT in the
+/* R2 INVERSION (shipment  row "3 no-co-emission scans ... INVERT in the
    same commit"): the R1 negative scan ("everything is solver-free") becomes the POSITIVE
    boundary — solver output reaches rendered surfaces ONLY via the REGISTERED render-path
    exports below; every other export stays solver-free. The replacement ships WITH the
@@ -534,7 +534,7 @@ assert("blindness: solver + enumerator read no cost/margin functions",
     "explorationFlagshipMargin", "explorationComputedBucket", "rankExplorations",
     "encodeScenario", "lensSpan", "applyModelSwitchWhileModified", "restoreModifiedLinkState",
     "restoreSavedPresetState",
-    // R3 (design memo D-1/D-6/D-10; deliberate, reviewed allowlist additions — the
+    // R3 (the design requirements; deliberate, reviewed allowlist additions — the
     // gate flagged these on introduction, as designed): the membership derivation +
     // its sensitivity record consume renderableUnderPolicy by definition; the
     // per-leg status population reads the solve's satisfiability; applyPresetSettings
@@ -567,7 +567,7 @@ assert("blindness: solver + enumerator read no cost/margin functions",
 assert("firewall: CAPACITY_BYTES_POLICY.fp4 (0.65 planning default) differs from the fp4 performance sW (0.5-class) by design",
   E.CAPACITY_BYTES_POLICY.fp4 === 0.65);
 
-// ---- R1 no-co-emission proof (legacy freeze; memo §0 P1-7) ----
+// ---- R1 no-co-emission proof (legacy freeze;  P1-7) ----
 // The solver's outputs are unreachable from every render path in R1: no live emitter
 // function's source references the solver, and the legacy width clause still renders
 // its pre-R1 text (parity guard covers the values; this covers the wiring).
@@ -577,13 +577,13 @@ assert("firewall: CAPACITY_BYTES_POLICY.fp4 (0.65 planning default) differs from
 { const clause = E.policyCapacityClause(E.blendedCosts(base, undefined, ctx).fleetRenderable);
   assert("R2 welded policy clause: names the loaded-bytes policy identity + solver provenance on the flagship fleet",
     /loaded-bytes planning policy \(1 B\/param/.test(clause) && /solver output — never an observed deployment/.test(clause), clause.slice(0, 160));
-  // R3 (Row 0): the clean DEFAULT is policy-clean by construction (h100 filtered out
+  // R3 (case 0): the clean DEFAULT is policy-clean by construction (h100 filtered out
   // pre-blend), so the unclean-leg reason now fixtures on a USER-CHOSEN blend that
   // re-includes h100 — the R2 welds are unchanged on scenario surfaces (D-3 contract).
   assert("R3 filtered default: the flagship clean default has ZERO policy-unclean legs (exclusion happens pre-blend, not via capped rendering)",
     !/not renderable under this policy/.test(clause), clause.slice(0, 240));
   const userBlend = structuredClone(base);
-  userBlend.total = 5000; // FA re-anchor (memo J-9): h100 is policy-clean at the revised default size; the capped-reason weld fixtures on the 5T size case, where batch-96 is unsatisfiable
+  userBlend.total = 5000; // FA re-anchor (specification J-9): h100 is policy-clean at the revised default size; the capped-reason weld fixtures on the 5T size case, where batch-96 is unsatisfiable
   userBlend.blend = { ...userBlend.blend, h100: 8 };
   E.registerScenarioContext(userBlend, ctx);
   const userClause = E.policyCapacityClause(E.blendedCosts(userBlend, undefined, ctx).fleetRenderable);
@@ -604,7 +604,7 @@ assert("firewall: CAPACITY_BYTES_POLICY.fp4 (0.65 planning default) differs from
     "mcp-server/worker/package.json"]; // R4 NEW-P2: ship-config scripts are scanned too
   const walk = (dir) => { for (const f of readdirSync(join(root, dir))) {
     const rel = dir + "/" + f; const st = statSync(join(root, rel));
-    /* 2026-08-22 Step 0 before im-arc T1: fa4a6da/f53301e added a generated,
+    /* 2026-08-22 Step 0 before : fa4a6da/f53301e added a generated,
        gitignored report archive whose source text legitimately mentions these
        identifiers. Match render-parity's exact generated-dir exclusion; authored
        Worker sources remain inside the boundary scan. */
@@ -628,7 +628,7 @@ assert("firewall: CAPACITY_BYTES_POLICY.fp4 (0.65 planning default) differs from
   assert("R2 positive boundary: app.js consumes the solver via the emitter-layer wrappers (landing gate + policy band), never the door",
     /landingHeroSuppressed|selectDefaultFleet/.test(appSrc) && /evaluateAtPolicyBand/.test(appSrc)
     && !/solveCapacityWidth\(/.test(appSrc));
-  /* R2 RETIREMENT (shipment plan §2 "solver-identifier occurrence count (20) | RETIRE —
+  /* R2 RETIREMENT (shipment  "solver-identifier occurrence count (20) | RETIRE —
      replacement = the P5 one-to-one coverage gate; retirement + replacement recorded
      together"): the count tripwire guarded against helper indirection while the solver
      was UNWIRED; with the render path legitimately consuming it, a raw occurrence count
@@ -637,7 +637,7 @@ assert("firewall: CAPACITY_BYTES_POLICY.fp4 (0.65 planning default) differs from
   const pkg = JSON.parse(readFileSync(join(root, "package.json"), "utf8"));
   assert("R2 retirement replacement: the P5 sink-coverage gate is in the release chain (occurrence-count pin retired)",
     /sink-coverage\.test\.mjs/.test(pkg.scripts.test)); }
-/* R2 (shipment plan §2 "legacy-width-clause freeze | RETIRE — replaced by the welded policy
+/* R2 (shipment  "legacy-width-clause freeze | RETIRE — replaced by the welded policy
    clause pin (same commit)"): the legacy clause + its export are GONE; the policy clause is
    pinned above (R2 welded policy clause assertions) and the retirement is structural here. */
 { assert("R2 retirement: replicaWidthSensitivityClause and the legacy width-case channel are no longer exported",

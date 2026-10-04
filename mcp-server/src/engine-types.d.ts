@@ -96,7 +96,7 @@ export interface ReplicaWidthSensitivity {
   }>;
 }
 
-/* R2 (§1.9): per-leg solver status riding the fleet DTO. */
+/* Solver status: per-leg solver status riding the fleet DTO. */
 export interface FleetLegStatus {
   hwKey: string;
   renderableUnderPolicy: boolean;
@@ -110,7 +110,7 @@ export interface FleetRenderable {
   totalLegs: number;
   renderableWeightShare: number;
   replicaWidthSensitivity?: ReplicaWidthSensitivity | null;
-  /* R2 (§1.9; memo §0-bis/§0-ter): the two-boolean contract + EMITTED five-status
+  /* The two-boolean contract + EMITTED five-status
      vector + policy identity + per-leg statuses, aggregated FAIL-CLOSED. */
   allLegsRenderableUnderPolicy?: boolean;
   placementVerified?: boolean;
@@ -119,7 +119,7 @@ export interface FleetRenderable {
   legStatuses?: FleetLegStatus[];
 }
 
-/* R2 (§1.6): evaluateAtPolicyBand output — SAMPLED three-point band, no continuity. */
+/* Policy band: evaluateAtPolicyBand output — SAMPLED three-point band, no continuity. */
 export interface PolicyBandResult {
   sampled: true;
   points: Array<{ policyPoint: number; value: number }>;
@@ -130,7 +130,7 @@ export interface PolicyBandResult {
   label: string;
 }
 
-/* R3 (design memo D-1): the typed membership-derivation DTO — the exclusion is DATA. */
+/* Membership derivation: the typed membership-derivation DTO — the exclusion is DATA. */
 export interface MembershipDerivation {
   fleetId: string;
   derivedAt: { trafficProfileId: string; ioRatio: number; cacheHit: number; basis: string };
@@ -140,7 +140,7 @@ export interface MembershipDerivation {
   memberLegCount: number;
   renormalizationBasis: number;
 }
-/* R2 (gate-6/7): selectDefaultFleet output over the typed evidence profiles. */
+/* Fleet selection: selectDefaultFleet output over the typed evidence profiles. */
 export interface FleetEvidenceProfileLeg {
   hw: string; declaredWeight: number; clusterId: string | null;
   throughputEvidenceClass: string | null; priceClass: string | null; evidenced: boolean;
@@ -246,7 +246,7 @@ export interface MarginClaim {
 export interface DossierEntry {
   attribution: string;
   who: string;
-  anchor: { quote: string; url?: string } | null;  // url absent = quoted from a reading with no public copy (bq-4610)
+  anchor: { quote: string; url?: string } | null;  // url absent = quoted from a reading with no public copy
   params: Record<string, { src: string; label: string }>;
   assumes: string[];
   falsifiers: string[];
@@ -280,7 +280,7 @@ export interface Engine {
   FORM_DEBT_NOT_A_RESULT: string;
 
   applyPresetSettings(m: ModelPreset, p: Perspective, sel?: TrafficSel): Record<string, any>;
-  /* b9 M5 (memo §15 / decision D-10): pin a derived state to the public-evidence reference —
+  /* Reference anchoring: pin a derived state to the public-evidence reference —
      algorithmic lead 0 months, family multipliers 1.0×. Mutates and returns the state. */
   pinReferenceLevers(s: Record<string, any>): Record<string, any>;
   resolveTraffic(m: ModelPreset, p: Perspective | null, sel?: TrafficSel): ResolvedTraffic;
@@ -289,7 +289,7 @@ export interface Engine {
   pairingSeverity(m: ModelPreset, p: Perspective): "hard" | "soft" | "ok";
   encodeScenario(S: Record<string, any>, modelId: string, perspId: string, traffic: { mode: string; profileId?: string | null; ioRatio: number; cacheHit: number }, modifiedFrom: string | null, identities: { fleet: string; totalCase: string }, opts?: { customFleet?: Record<string, any>; title?: string | null }): string;
   decodeScenario(str: string): Record<string, any> | null;
-  /* b9 spec-decode LEVER: the THIRD return field is the correction channel — an accepted value that
+  /* Speculative-decode lever: the THIRD return field is the correction channel — an accepted value that
      the D-SD-7 gate FORCED to another one. Distinct from `rejected`, which means refused. */
   sanitizeScenarioDiff(diff: Record<string, unknown> | undefined, traffic: { locked: boolean } | null, base?: Record<string, any>): { diff: Record<string, any>; rejected: string[]; corrections: Array<{ key: "specDec"; from: number; to: number; reasonCode: string }> };
   overlayDivergesFromReplay(m: ModelPreset, p: Perspective, cleanDiff: Record<string, unknown>): boolean;
@@ -299,13 +299,13 @@ export interface Engine {
       customDonor?: string; perspKind?: string | null; perspId?: string | null };
   workload(s: Record<string, any>, activeOverride?: number, context?: { modelId: string; profileId: string | null; customDonor?: string } | unknown, renderOpts?: { loadedWeightBytesPerParam?: number; customFleet?: Record<string, any> }): Workload;
   formCorrectionDebt(s: Record<string, any>, supplied?: unknown, renderOpts?: { loadedWeightBytesPerParam?: number }): Record<string, any>;
-  /* R2 additions (§1.2/§1.6; gate-6/7 surfaces) */
+  /* Policy band and fleet selection */
   evaluateAtPolicyBand(fn: (policyPoint: number) => number): PolicyBandResult;
   selectDefaultFleet(s: Record<string, any>, supplied?: unknown): DefaultFleetSelection;
-  /* R3 (design memo D-1/D-2): the ONE default-membership derivation + its typed
+  /* Default membership: the ONE default-membership derivation + its typed
      sensitivity record + the ONE exclusion formatter. */
   DEFAULT_FLEET_ID: string;
-  /* Slice C (memo C-7/C-8/C-11): the fleet registry + wire-identity surface. */
+  /* Fleet identity: the fleet registry + wire-identity surface. */
   FLEETS: Record<string, { name: string; class: string; models: string[]; legs: Record<string, number>; attribution: string; representativeness: string }>;
   TOTAL_CASES: Record<string, { totalB: number; label: string; citation: string; isDefault?: boolean; derived?: boolean }>;
   TOTAL_CASE_SCOPE: string[];
@@ -335,7 +335,7 @@ export interface Engine {
   mixBand(m: ModelPreset, p: Perspective, sel: TrafficSel, ranges: Record<string, any>,
     opts?: { base?: Record<string, any>; cornerEval?: (s: Record<string, any>, renderOpts?: Record<string, any>) => number; renderOpts?: Record<string, any> }): Record<string, any> | null;
   blendWeights(s: Record<string, any>): Record<string, number>;
-  /* im-arc T4 fold (2026-08-24): the receipt now carries the SELECTED QUOTE, or says the row is
+  /* The update of 2026-08-24: the receipt now carries the SELECTED QUOTE, or says the row is
      unavailable and offers its declared replay. */
   registryPlanningRentReceipt(hwKey: string, s: Record<string, any>): {
     donorKey: string; value: number | null; basis: string; source: string;
@@ -360,7 +360,7 @@ export interface Engine {
   RENT_POLICY: any;
   lessorSpread(hwKey: string, s: Record<string, any>, cfLeg?: Record<string, any>): { rentHr: number; tcoHr: number; ratio: number; impliedShare: number };
   /* `opts.shareOnly` returns the same four fields without the two discarded marginOnBasis
-     workloads that only fill rentCostPerMtok / tcoCostPerMtok (im-t5, 2026-08-28). */
+     workloads that only fill rentCostPerMtok / tcoCostPerMtok (updated 2026-08-28). */
   blendedLessorSpread(s: Record<string, any>, renderOpts?: { customFleet?: Record<string, any> }, opts?: { shareOnly?: boolean }): { rentHr: number; tcoHr: number; ratio: number; impliedShare: number };
   procurementBasisFor(perspective: Perspective, model: ModelPreset): string | null;
   finalAnswer(): { subject: string; identity: string; planningPoint: Record<string, any>;
@@ -368,7 +368,7 @@ export interface Engine {
     membershipSensitivity: Array<Record<string, any>> | null;
     lensSpan: Record<string, any> | null; trafficSpan: Record<string, any> | null;
     whatWouldChangeIt: string; evidenceAnnexId: string;
-    /* FA higher-justifications (memo im4-fa-justifications v7 J-2) */
+    /* Higher justifications */
     higherJustifications: Array<{ groupId: string;
       claims: Array<{ id: string; source: string; verbatim: string | null; claimedFigures: string | null }>;
       whatItClaims: string; whatItDoesNotClaim: string; bridge: string; wouldFlip: string; links: string[] }>;

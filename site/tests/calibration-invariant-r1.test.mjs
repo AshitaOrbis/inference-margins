@@ -1,10 +1,10 @@
-// CALIBRATION-INVARIANT R1 GUARD (feasibility-redesign memo §0-bis/§0-ter, v4.1) — the
+// CALIBRATION-INVARIANT R1 GUARD (feasibility-redesign ) — the
 // capacity-only loadedWeightBytesPerParam policy may NEVER reach a calibrated throughput:
 // (1) every CALIBRATION identity stays byte-stable through R1/R2; (2) the performance
 // tuple sW is the ONLY weight-bytes source in throughput terms (source-inspection pin);
 // (3) once the R1 solver lands, perturbing the policy across {0.55, 0.65, 1.05} must
 // leave every calibrated throughput identical, with any economic deltas captured into
-// policySensitivity receipts (§0-ter) — the three-point block below activates with the
+// policySensitivity receipts — the three-point block below activates with the
 // solver and FAILS LOUDLY if the solver ships without it.
 // Run: node site/tests/calibration-invariant-r1.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
@@ -22,10 +22,10 @@ const assert = (name, cond, detail = "") => {
   if (!cond) failures++;
 };
 
-// (1) Calibration identities byte-stable. b9 M1 RE-MINT (delta manifest
-// research/b9-delta-manifests/b9-m1-delta-manifest.md): this milestone deliberately moves
+// (1) Calibration identities byte-stable.  RE-MINT (delta manifest
+// the declared changes): this milestone deliberately moves
 // calibrated identities — that is the whole shipment — so the 3e7a356 pin is superseded.
-// EXACTLY THREE rows move, each enumerated in the manifest with its r4 §C1 basis:
+// EXACTLY THREE rows move, each enumerated in the manifest with its reviewed basis:
 //   gb200 0.585795 → 0.315997 (÷1.8538, the retired FP4 scalar de-embedded)
 //   gb300 0.477845 → 0.258295 (÷1.85, same defect) + status fitted → analyst-set
 //   tpu7  0.36142  → 0.55     (joint fit replaced by two same-platform diagnostics)
@@ -33,7 +33,7 @@ const assert = (name, cond, detail = "") => {
 // External adversarial review 2026-07-27: re-minted after H20 and Ascend
 // stopped claiming fitted calibration. Their etaDec values do not move; only
 // the status prefixes become source-informed neutral.
-// im-vet-six-repairs RE-MINT (2026-09-20, program bq-2835; vetting finding E1 + E2). This leg
+// registry repairs RE-MINT (2026-09-20, program the release; vetting finding E1 + E2). This leg
 // deliberately moves calibrated identities too, and EXACTLY THREE rows move:
 //   tpu7  0.55 -> 0.519, and its status prefix gains "on ONE DECLARED TIMING CONVENTION". One
 //         of the two same-platform endpoints was computed on Google's COMBINED input-plus-output
@@ -66,7 +66,7 @@ const roofSrc = readFileSync(new URL("../engine-roofline-v22.js", import.meta.ur
 assert("firewall: loadedWeightBytesPerParam never appears in the decode/prefill throughput term source",
   !/decodeRoofline[\s\S]{0,2000}loadedWeightBytesPerParam/.test(roofSrc)
   || !/loadedWeightBytesPerParam[\s\S]{0,200}(tokPerS|throughput|t_H|t_C)/.test(roofSrc),
-  "capacity policy is leaking toward a throughput term — memo §0-bis firewall violated");
+  "capacity policy is leaking toward a throughput term —  firewall violated");
 
 // (3) sW pins (R1-impl P1-4): every performance tuple's sW across HW_ROOFLINE is pinned;
 // the capacity policy can never masquerade as any of these.
@@ -84,7 +84,7 @@ assert("firewall: loadedWeightBytesPerParam never appears in the decode/prefill 
 //   (a) calibrated identities untouched; (b) decode THROUGHPUT at the live width is
 //   byte-identical (the policy cannot reach a throughput term); (c) the WIDTH movement
 //   is exactly the executed values (capacity 12/14/20; declared-op 14/18/28 at b=128) —
-//   the labeled economic-sensitivity channel, disclosed not denied (memo §0-ter).
+//   the labeled economic-sensitivity channel, disclosed not denied.
 //   Width-independence context: MoE decode throughput is structurally N-independent
 //   (wIter = A·sW; the slice-1b invariant), so the byte-identity below holds at ANY
 //   width — the policy has no route in. The policySensitivity RECEIPT (economicSpan on
@@ -115,7 +115,7 @@ if (solverExported) {
     JSON.stringify(Object.entries(ED.CALIBRATION).map(([k, v]) => [k, v.etaDec])) === calBefore);
   assert("perturbation: the WIDTH movement is the executed pin (capacity 12/14/20 — the disclosed economic channel)",
     JSON.stringify(capWidths) === JSON.stringify([12, 14, 20]), JSON.stringify(capWidths));
-  // b9 M1: gb300's declared balanced batch moved 128 → 64, so the declared-op widths this
+  // : gb300's declared balanced batch moved 128 → 64, so the declared-op widths this
   // probe reports fall accordingly (the probe still calls the roofline at b=128 directly,
   // which is why the byte-identity assertions above are untouched).
   assert("perturbation: declared-op width movement pinned (12/14/24 at the registry's balanced cell)",

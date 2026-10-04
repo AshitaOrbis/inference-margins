@@ -1,6 +1,6 @@
 /* SHARED TARIFF VALIDATOR — one implementation, both test twins.
  *
- * GPT Pro review pr-20260902T175643Z-034d27, findings 4-7. The first cut of the re-pointed
+ * GPT Pro review a research review on 2026-09-02, findings 4-7. The first cut of the re-pointed
  * stale-loudness alarm had four defects, all of which this closes:
  *   4. Date validation was `length === 10`, so "not-a-date" passed, `new Date()` returned Invalid,
  *      every comparison against it was false, and the alarm FAILED OPEN FOREVER — on exactly the
@@ -77,15 +77,15 @@ export function validateTariff(model, now = Date.now()) {
     if (by === null) e.push(`${id}.tariff.verification.reverifyBy must be a real YYYY-MM-DD day (a malformed one used to make this alarm fail open forever)`);
     if (at !== null && by !== null && by <= at)
       e.push(`${id}.tariff.verification.reverifyBy must be AFTER verifiedAt`);
-    /* MAXIMUM CADENCE, ENFORCED (GPT Pro pr-20260902T175643Z-034d27 finding 8). Without this the
+    /* MAXIMUM CADENCE, ENFORCED (GPT Pro a research review on 2026-09-02 finding 8). Without this the
        alarm is clearable by editing ONE date and never looking at the vendor: the long comments told
        the next editor not to do that, and comments do not enforce. 30 days is deliberate rather than
        cautious — the reviewer's reasoning is that a longer horizon is decorative in the CURRENT
        control environment, where one detector is blind by design, the detector that works feeds a
-       queue with no aging enforcement, and a MATERIAL item sat 21 days untouched (bq-1873). It may
+       queue with no aging enforcement, and a MATERIAL item sat 21 days untouched (the release). It may
        relax to ~90 once that intake gap is closed, and not before. */
     if (at !== null && by !== null && by - at > MAX_VERIFICATION_INTERVAL_DAYS * 86400000)
-      e.push(`${id}.tariff.verification: reverifyBy is ${Math.round((by - at) / 86400000)} days after verifiedAt, over the ${MAX_VERIFICATION_INTERVAL_DAYS}-day maximum. Shorten it, or close bq-1873 first and raise the maximum deliberately — a horizon longer than the intake can detect within is decorative.`);
+      e.push(`${id}.tariff.verification: reverifyBy is ${Math.round((by - at) / 86400000)} days after verifiedAt, over the ${MAX_VERIFICATION_INTERVAL_DAYS}-day maximum. Shorten it, or close the release first and raise the maximum deliberately — a horizon longer than the intake can detect within is decorative.`);
     /* Evidence must MOVE for the clock to move: verifiedAt has to be backed by a source observed on
        or after it, so editing the date alone cannot clear the alarm. */
     if (at !== null && t.current && Array.isArray(t.current.sources)) {

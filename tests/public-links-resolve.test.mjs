@@ -87,15 +87,18 @@ check("no shipped research Markdown uses a RELATIVE .html link (it resolves only
 for (const artifact of ["research/dc-registry.md", "site/research/dc-registry.html"]) {
   if (!existsSync(join(ROOT, artifact))) { check(`${artifact} exists`, false); continue; }
   const body = readFileSync(join(ROOT, artifact), "utf8");
-  const cited = [...body.matchAll(/research\/dives\/[A-Za-z0-9._/-]+\.md/g)].map(m => m[0]);
+  const cited = [...body.matchAll(/[A-Za-z][A-Za-z -]*study of \d{4}-\d{2}-\d{2}/g)].map(m => m[0]);
   const unique = [...new Set(cited)];
-  check(`${artifact} cites the unshipped dives at all (this check is not vacuous)`,
+  check(`${artifact} cites dated studies with plain descriptions (this check is not vacuous)`,
     unique.length > 0, `${unique.length} distinct`);
-  /* The Markdown emphasis renders as <em> in the annex HTML, so the label is matched by its
-     WORDS following the path, whatever markup carries them. */
-  const annotated = [...body.matchAll(/research\/dives\/[A-Za-z0-9._/-]+\.md[^|\n]{0,40}?private working note, not published/g)];
-  check(`${artifact} labels every unshipped dive citation as a private working note`,
+  const annotated = [...body.matchAll(/[A-Za-z][A-Za-z -]*study of \d{4}-\d{2}-\d{2}[^|\n]{0,60}?not published separately/g)];
+  check(`${artifact} labels every study not published separately`,
     annotated.length === cited.length, `${annotated.length} annotated of ${cited.length} citations`);
+  const privatePaths = [...body.matchAll(/research\/dives\/[A-Za-z0-9._/-]+\.md/g)];
+  const privateLinks = [...body.matchAll(/href=["'][^"']*research\/dives\//g)];
+  check(`${artifact} carries no private research paths or links`,
+    privatePaths.length === 0 && privateLinks.length === 0,
+    `${privatePaths.length} private paths, ${privateLinks.length} private links`);
 }
 
 /* A published citation must never be annotated: the label has to mean something. */

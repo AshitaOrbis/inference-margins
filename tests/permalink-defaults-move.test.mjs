@@ -1,16 +1,16 @@
-// PERMALINK ACROSS A BASELINE MOVE (row 499) — the test the 5-ter ruling said does not exist.
+// PERMALINK ACROSS A BASELINE MOVE (case 499) — the test the 5-ter ruling said does not exist.
 //
 // Why it exists: the permalink codec is RELATIVE by design — `encodeScenario` stores a diff and the
 // loader re-resolves that diff against a baseline at load time. The existing suite tests the codec's
 // ROUND TRIP (mint → decode → restore under the SAME engine). It has never tested the codec's
-// BEHAVIOUR ACROSS A BASELINE MOVE, which is the failure class the project's own IM1 epoch memo
+// BEHAVIOUR ACROSS A BASELINE MOVE, which is the failure class the project's own IM1 epoch specification
 // names first: "Any changed default silently shifts every field a modified link omitted because it
 // equalled the old default. Silent, no reject."
 //
 // Two properties, both executed:
-//   A. POSITIVE — moving which preset the page OPENS on (row 499's LANDING_DEFAULT_PERSP_ID) moves
+//   A. POSITIVE — moving which preset the page OPENS on (case 499's LANDING_DEFAULT_PERSP_ID) moves
 //      NO token: every minted link restores to the same computed margin, to the float. This is the
-//      whole reason row 499 implements the owner's page-open-default ruling as a landing-selection
+//      whole reason case 499 implements the page-open-default decision as a landing-selection
 //      change instead of a `DEFAULTS` move.
 //   B. NEGATIVE CONTROL — when the baseline genuinely DOES move, the restored margin must not be
 //      silently different: either it is unchanged, or `marginDriftNote` fires and names the epoch.
@@ -36,8 +36,8 @@ const state = (m, p) => E.applyPresetSettings(m, p, NATIVE);
 const marginOf = (s) => E.workload(s, undefined, E.makeScenarioContext(opus,
   { mode: "custom", ioRatio: s.ioRatio, cacheHit: s.cacheHit }, s.customDonor)).margin * 100;
 
-// The reader cases are row 492's own measured table: the four fields a reader actually moves, plus
-// a clean link (nothing moved — the case the memo says drifts hardest because it omits everything).
+// The reader cases are case 492's own measured table: the four fields a reader actually moves, plus
+// a clean link (nothing moved — the case the specification says drifts hardest because it omits everything).
 const CASES = [
   { name: "a clean link (nothing moved)", mutate: () => {} },
   { name: "occupancy moved to 60%", mutate: s => { s.util = 60; } },
@@ -100,7 +100,7 @@ const restore = (token) => {
 
 // ------------------------------------------------------- B. the shipped electricity baseline move
 {
-  /* im-arc T2 (memo §6): this is no longer a synthetic DEFAULTS mutation. Forge the
+  /* : this is no longer a synthetic DEFAULTS mutation. Forge the
      metadata of the token that the pre-move engine minted: its TCO state inherited
      kwh=0.07 and therefore omitted kwh from the relative diff. The current decoder
      resolves the same absent field from the adopted 0.0871 registry midpoint. */
@@ -141,7 +141,7 @@ const restore = (token) => {
     (E.decodeScenario("v4.eyJ1dGlsIjo2MH0=") || {}).__epochDeprecated === true);
 }
 
-// ------------------------------------------------- TITLED LINKS (row 499, option B: title-in-token)
+// ------------------------------------------------- TITLED LINKS (case 499, option B: title-in-token)
 {
   const S = state(opus, median);
   const mkT = (title) => E.encodeScenario(S, opus.id, median.id,

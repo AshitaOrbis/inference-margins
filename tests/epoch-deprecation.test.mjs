@@ -1,9 +1,9 @@
-// EPOCH DEPRECATION contract (IM1 / v2.2) — governing plan
-// the private plan im-reengineer-defaults-2026-07-16 §4 risk 1 (owner-RULED: DEPRECATION),
-// memo `research/im1-permalink-epoch-memo.md`, fixture README `tests/fixtures-minted-tokens-README.md`.
+// EPOCH DEPRECATION contract for v2.2.
+// The dated deprecation convention retains the original permalink-epoch behavior.
+// Fixtures are documented in `tests/fixtures-minted-tokens-README.md`.
 // Run: node tests/epoch-deprecation.test.mjs
 //
-// The acceptance property (plan §6, "permalink epoch corpus green"): EVERY real pre-v5 token minted
+// The acceptance property ("permalink epoch corpus green"): EVERY real pre-v5 token minted
 // by the shipped v2.1.11 encoder must, under the v2.2 engine, DETERMINISTICALLY hit the deprecation
 // path — decodeScenario returns the deprecation marker, NEVER a resolved object, NEVER null-with-a-
 // silent-default, and NO field of the old token leaks through. All testing here is against LOCAL
@@ -53,7 +53,7 @@ assert("deprecation marker is NOT null (would be a silent default — forbidden)
   E.decodeScenario(CORPUS.v4[0].token) !== null);
 assert("a genuinely unknown/garbage token still returns null (no false deprecation notice)",
   E.decodeScenario("not-a-token") === null && E.decodeScenario("v6." + Buffer.from("{}").toString("base64")) === null);
-// A live token resolves normally — it is NOT deprecated. b9 M4: the live codec is v6.
+// A live token resolves normally — it is NOT deprecated. : the live codec is v6.
 {
   const sel = { mode: "native" };
   const S = E.applyPresetSettings(E.MODELS.find(m => m.id === "opus"), E.PERSPECTIVES.find(p => p.id === "median"), sel);
@@ -61,7 +61,7 @@ assert("a genuinely unknown/garbage token still returns null (no false deprecati
   const d = E.decodeScenario(live);
   assert("a current v6 token resolves (not deprecated)", !!d && !d.__epochDeprecated && d._meta.schema === "v6");
 }
-// b9 M4 (memo D-4, plan D-8): a v5 token — the pre-M4 shipped shape, schema "v5",
+//  (the design requirements): a v5 token — the previously shipped shape, schema "v5",
 // fleet {id}, NO interlock — still RESOLVES (drift-warning path), never deprecated.
 {
   const sel = { mode: "native" };

@@ -1,6 +1,6 @@
 # GPT-5.6 Terra — GPT-6 Astra Pro estimate (2026-09-25)
 
-**Provenance.** One GPT-6 Astra Pro research run (ChatGPT, model `gpt-6-pro`), request `pr-20260925T070104Z-bfdf05`, answered 2026-09-25T09:21:38Z. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for GPT-5.6 Terra from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 `d455d8509f9677e8364d511018b0dd8b25ab0bece1672e521bd2a0ad93abac08`; as received, `f932ece5fe9f6d29cb8b26524022016ec7578320dec634b2fa91a8b1fabf7a69`).
+**Provenance.** one research run on 2026-09-25 by GPT-6 Astra Pro (ChatGPT, model `gpt-6-pro`), answered 2026-09-25T09:21:38Z. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for GPT-5.6 Terra from public evidence. The answer is reproduced below verbatim except for four presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; and where the answer repeats the run's own request identifier, an internal queue entry, it is withheld; its sources are cited by URL in the text (as-received answer SHA-256 `d455d8509f9677e8364d511018b0dd8b25ab0bece1672e521bd2a0ad93abac08`; published text SHA-256 `f1308b38264c2402fc8b55f553c0a4833b2c763a069894c2054e7dfb8f5ee7b1`; original capture SHA-256 `f932ece5fe9f6d29cb8b26524022016ec7578320dec634b2fa91a8b1fabf7a69`).
 
 ## What the site shows
 
@@ -54,7 +54,7 @@ The decisive assumption is 60B active parameters: a moderately sparse workhorse,
 
 ## 1 — PUBLIC FACTS.
 
-**GPT-6 Astra Pro · September 25, 2026 · PRO-BROKER-ID pr-20260925T070104Z-bfdf05#1.**
+**GPT-6 Astra Pro · September 25, 2026 · PRO-BROKER-ID [request identifier withheld].**
 
 This is a modeled **unit direct-serving contribution margin**, not OpenAI’s accounting gross margin or a verified provider margin. Dates below are publication dates where available; otherwise they are explicitly access dates. Source IDs also identify the evidence behind the input block.
 

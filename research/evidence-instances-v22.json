@@ -1,7 +1,7 @@
 {
  "_meta": {
   "title": "Evidence instances (IM2) — current anchors expressed through the WS-B phase-evidence schema + WS-C uncertainty contract",
-  "governingPlan": "im-reengineer-defaults-2026-07-16, a private workspace plan (IM2: contracts before D2)",
+  "governingPlan": "the release-07-16, a private workspace plan (IM2: contracts before D2)",
   "schema": "site/evidence-schema.js (WS-B) + site/uncertainty-contract.js (WS-C)",
   "sources": [
    "research/validation-ledger.md (anchor registry; three-status; primary-source verification)",
@@ -245,8 +245,8 @@
     "deployedOnInheritedProvenance": true,
     "recoveryPath": "Locate and archive the primary vLLM/GB200 DeepSeek-R1 decode disclosure behind '~10.1k decode tok/s/GPU'. Unlike the two h800-deepseek rows recovered on 2026-09-02, this one is NOT recoverable by transcription: the figure appears across the repository (d2-equation-set F4 10,108 tok/s/GPU; d2-receipt-pack) always marked 'vLLM R1 (inherited)', with no URL anywhere. It needs real source recovery, and attaching a plausible-looking URL without verifying it would be worse than the null this records.",
     "recordedOn": "2026-09-02",
-    "recordedBy": "GPT Pro 2026-07-29 rec 8, enforced after review pr-20260902T173936Z-a81123",
-    "note": "This row is DEPLOYED (engineFit.deployed=true) and eligible=true, which is exactly what makes the debt material rather than cosmetic. Forcing eligibility=false would drop the GB200 decode anchor and MOVE THE MODEL — an owner-court change, not a provenance repair, so it is recorded in BACKLOG.md instead of being made here."
+    "recordedBy": "GPT Pro 2026-07-29 rec 8, enforced after a research review on 2026-09-02",
+    "note": "This row is DEPLOYED (engineFit.deployed=true) and eligible=true, which is exactly what makes the debt material rather than cosmetic. Forcing eligibility=false would drop the GB200 decode anchor and MOVE THE MODEL — an authorial decision, not a provenance repair, so it is recorded in BACKLOG.md instead of being made here."
    }
   },
   {
@@ -996,7 +996,7 @@
    "uncertainty": null,
    "e1Eligible": true,
    "provenance": "FlexNPU full-system SLO-constrained: ~=633,000 gen tok/s system / ~=1,646 per card at TTFT<=1s, TPOT<=50ms (arrived 2026-07-15, additive).",
-   "notes": "RETRO; a DIFFERENT measurement basis from the FITTED isolated-decode point (ascend-cminfer-decode) -- the CM384-REFIT question (Q-AUTO-2026-07-15-CM384-REFIT). No public CM384 hourly rental price exists -- throughput anchored, cost unanchored. CLOSED (owner ruling 2026-07-18, memo research/im3-integration-design.md §9 'CM384 ruling'): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point (§4 registry), or calibration input. Closure label (verbatim, §9): 'delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged'. Corroboration: this and sibling full-system bases (6.43/8.11/8.57%) bracket the deployed ascend row's 7% default -- supportive context, not a fit input."
+   "notes": "RETRO; a DIFFERENT measurement basis from the FITTED isolated-decode point (ascend-cminfer-decode) -- the CM384-REFIT question (Q-AUTO-2026-07-15-CM384-REFIT). No public CM384 hourly rental price exists -- throughput anchored, cost unanchored. CLOSED (the adopted decision 2026-07-18, memo research/im3-integration-design.md §9 'CM384 ruling'): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point (§4 registry), or calibration input. Closure label (verbatim, §9): 'delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged'. Corroboration: this and sibling full-system bases (6.43/8.11/8.57%) bracket the deployed ascend row's 7% default -- supportive context, not a fit input."
   },
   {
    "id": "cm384-flexnpu-6p2d-decode",
@@ -1057,7 +1057,7 @@
    "engineFit": null,
    "uncertainty": null,
    "provenance": "FlexNPU static 6P2D baseline (96 prefill + 288 decode cards): decode pool STANDALONE throughput 811.52 req/s @1K/1K x 1,024 OSL / 288 = 2,885.4 tok/s/decode-card (arXiv:2606.04415 Table 3; second operating point of the CM384 family, registered/corrected pre-freeze 2026-07-16/17, additive).",
-   "notes": "RETRO; the STATIC 6P2D decode-pool observation -- a decode-pool STANDALONE CAPACITY ceiling, distinct from the DYNAMIC co-location delivered rate (cm384-flexnpu, ~1,646/card). Using 811.52 as the decode operating point overstates delivered load ~1.66x vs the 489.84 req/s the integrated 6P2D system actually sustains (prefill-bound). Same platform, different measurement basis -- the CM384-REFIT question. CLOSED (owner ruling 2026-07-18, memo §9): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point, or calibration input. Closure label (verbatim, §9): 'decode-pool standalone ceiling: 2,885 tok/s/decode-card ⇒ 14.2%, capacity ceiling, prefill hardware excluded'. A standalone ceiling with a 1.485x unexplained cross-paper gap to the full-system point -- not corroborating, not contradicting, a different measurand."
+   "notes": "RETRO; the STATIC 6P2D decode-pool observation -- a decode-pool STANDALONE CAPACITY ceiling, distinct from the DYNAMIC co-location delivered rate (cm384-flexnpu, ~1,646/card). Using 811.52 as the decode operating point overstates delivered load ~1.66x vs the 489.84 req/s the integrated 6P2D system actually sustains (prefill-bound). Same platform, different measurement basis -- the CM384-REFIT question. CLOSED (the adopted decision 2026-07-18, the design requirements): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point, or calibration input. Closure label (verbatim, §9): 'decode-pool standalone ceiling: 2,885 tok/s/decode-card ⇒ 14.2%, capacity ceiling, prefill hardware excluded'. A standalone ceiling with a 1.485x unexplained cross-paper gap to the full-system point -- not corroborating, not contradicting, a different measurand."
   },
   {
    "id": "cm384-flexnpu-prefill-projection",
@@ -1633,7 +1633,7 @@
     "statedSLO": false,
     "definedDenominator": false,
     "eligible": false,
-    "exclusionReason": "no fit exists -- effDec/effPre are analyst extrapolations from the H800 fit, not a measured anchor (validation-ledger row 22)"
+    "exclusionReason": "no fit exists -- effDec/effPre are analyst extrapolations from the H800 fit, not a measured anchor (validation-ledger entry 22)"
    },
    "verification": {
     "state": "n/a",
@@ -1663,7 +1663,7 @@
     "central": {
      "value": 0.313491,
      "unit": "etaDec (deployed roofline decode efficiency)",
-     "label": "live deployed identity: family-transfer eta_dec (engine-data-v22.js CALIBRATION.h200; retired scalar 0.085 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+     "label": "live deployed identity: family-transfer eta_dec (engine-data-v22.js CALIBRATION.h200; retired scalar 0.085 archived in engineFit.legacyScalar — migration of 2026-07-21)"
     },
     "components": [
      {
@@ -1721,7 +1721,7 @@
     }
    },
    "provenance": "no fit exists; effDec/effPre are analyst estimates (engine.js:19). these rows carry the transfer-error stress envelope in WS-C.",
-   "notes": "The canonical ANALYST_SET demonstration: no measured throughput, so the row exists to carry the decomposed stress envelope (owner ruling 1: band + central). Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5. TPU v7 / Trn2 / Trn3 unfitted engine rows share this ANALYST_SET treatment (their own records follow; their measured RETRO anchors are separate records above)."
+   "notes": "The canonical ANALYST_SET demonstration: no measured throughput, so the row exists to carry the decomposed stress envelope (the adopted decision 1: band + central). Band left unfilled -- composeBand() is the algebra; propagation is D2/IM5. TPU v7 / Trn2 / Trn3 unfitted engine rows share this ANALYST_SET treatment (their own records follow; their measured RETRO anchors are separate records above)."
   },
   {
    "id": "tpu7-analyst-set-dec",
@@ -1797,7 +1797,7 @@
     "central": {
      "value": 0.519,
      "unit": "etaDec (deployed roofline decode efficiency)",
-     "label": "live deployed identity: platform-native aggregate-form bridge eta_dec, midpoint of the 0.528/0.510 same-platform diagnostics, both on ONE stated timing convention (output tokens per second per chip over total serving wall time at 1K-in/8K-out) (engine-data-v22.js CALIBRATION.tpu7; VALID ONLY under decodeTrafficBasis replica-resident-distinct — b9 M1; retired joint-fit 0.36142 and scalar 0.130 archived)"
+     "label": "live deployed identity: platform-native aggregate-form bridge eta_dec, midpoint of the 0.528/0.510 same-platform diagnostics, both on ONE stated timing convention (output tokens per second per chip over total serving wall time at 1K-in/8K-out) (engine-data-v22.js CALIBRATION.tpu7; VALID ONLY under decodeTrafficBasis replica-resident-distinct — the model update; retired joint-fit 0.36142 and scalar 0.130 archived)"
     },
     "components": [
      {
@@ -1931,7 +1931,7 @@
     "central": {
      "value": 0.36142,
      "unit": "etaDec (deployed roofline decode efficiency)",
-     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn2; retired scalar 0.055 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn2; retired scalar 0.055 archived in engineFit.legacyScalar — migration of 2026-07-21)"
     },
     "components": [
      {
@@ -2065,7 +2065,7 @@
     "central": {
      "value": 0.36142,
      "unit": "etaDec (deployed roofline decode efficiency)",
-     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn3; retired scalar 0.080 archived in engineFit.legacyScalar — IM4 slice A migration 2026-07-21)"
+     "label": "live deployed identity: joint fleet fit eta_dec (engine-data-v22.js CALIBRATION.trn3; retired scalar 0.080 archived in engineFit.legacyScalar — migration of 2026-07-21)"
     },
     "components": [
      {
@@ -2169,7 +2169,7 @@
     "statedSLO": false,
     "definedDenominator": false,
     "eligible": false,
-    "exclusionReason": "chart-only projection -- no serving anchor exists (no MLPerf submission, no InferenceX result, no public price). NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, up to 10x tok/s/MW vs GB200), not an absolute anchor. Ineligible for any fit (validation-ledger row 23)."
+    "exclusionReason": "chart-only projection -- no serving anchor exists (no MLPerf submission, no InferenceX result, no public price). NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, up to 10x tok/s/MW vs GB200), not an absolute anchor. Ineligible for any fit (validation-ledger entry 23)."
    },
    "verification": {
     "state": "n/a",

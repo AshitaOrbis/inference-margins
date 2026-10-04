@@ -69,6 +69,13 @@ for (const rec of recs) {
   ok(existsSync(page) && readFileSync(page, "utf8").includes(rec.dive.id), `R4 ${rec.key}: review page exists and names ${rec.dive.id}`);
   const ans = join(ROOT, "research", "astra-pro-estimates", "answers", rec.key + ".md");
   ok(existsSync(ans) && createHash("sha256").update(readFileSync(ans, "utf8")).digest("hex") === rec.dive.answer_sha256, `R4 ${rec.key}: stored answer matches its sha256`);
+  // Each digest identifies a different byte sequence; none describes the HTML wrapper.
+  const generated = readFileSync(join(ROOT, "research", "astra-pro-estimates", rec.key + "-astra-pro.md"), "utf8");
+  const presented = generated.split("## The answer, verbatim\n\n")[1]?.slice(0, -1);
+  const publishedDigest = createHash("sha256").update(presented || "").digest("hex");
+  ok(generated.includes(`as-received answer SHA-256 \`${rec.dive.answer_sha256}\``), `R4 ${rec.key}: as-received stamp identifies stored answer`);
+  ok(generated.includes(`published text SHA-256 \`${publishedDigest}\``), `R4 ${rec.key}: published stamp hashes the presented answer`);
+  ok(readFileSync(page, "utf8").includes(`published text SHA-256 <code>${publishedDigest}</code>`), `R4 ${rec.key}: rendered page preserves published digest`);
   const rep = body.match(/<a class="ape-reproduce" href="\?s=([^"]+)"[^>]*>/);
   ok(!!rep, `R5 ${rec.key}: reproduce link present`);
   if (rep) {

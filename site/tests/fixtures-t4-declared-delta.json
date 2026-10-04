@@ -1,7 +1,7 @@
 {
-  "migration": "im-arc T4 fold — the registry and the generic defaults come onto the four evidence clusters",
-  "commission": "im-arc-t4-fold-20260824",
-  "spec": "research/im-arc-t4-fold-memo.md",
+  "migration": "The registry and the generic defaults come onto the four evidence clusters",
+  "commission": "registry-and-defaults-evidence-revision-20260824",
+  "spec": "Registry and defaults evidence revision of 2026-08-24",
   "asOf": "2026-08-24",
   "before": {
     "receipt": "22baff3775438ce937d186721f0768e82c5071e4c887ccf985ca521308df5003",

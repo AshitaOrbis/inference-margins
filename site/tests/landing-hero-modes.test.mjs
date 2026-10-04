@@ -1,6 +1,6 @@
 // R2 RELEASE TEST (assembly-notes R-4b: BOTH landing-hero branches implemented and
 // tested): drives the real app over CDP — branch B (policy-labeled, the SHIPPED
-// default per the owner pick 2026-07-23 q-im-landing-hero-pick) asserted live;
+// default per the adopted choice of 2026-07-23) asserted live;
 // branch A (suppress) via the window.__LANDING_HERO_MODE_TEST__ hook (console/
 // tests only, never link-encoded). Also covers scenario-surface behavior +
 // identity-strip gating.
@@ -104,8 +104,8 @@ const PROBE_A = `(() => {
   r.stripNotBareCentral = !/central scenario — clean default/.test(strip);
   r.feasWidths = /@ solved width/.test(document.getElementById('out-feas-note').textContent);
   // scenario surface: nudge a field off the preset -> number must render, welded.
-  // row 499: the page now OPENS on a named estimate preset, so this half of the probe selects the
-  // central scenario first — from here down it runs on exactly the state it ran on before row 499
+  // case 499: the page now OPENS on a named estimate preset, so this half of the probe selects the
+  // central scenario first — from here down it runs on exactly the state it ran on before case 499
   // (central + one nudged field, then the 5T derivation). The landing-state assertions above are
   // unchanged and now describe the new opening state, which is the point of the ruling.
   document.getElementById('persp-preset').value = 'median'; applyPreset();
@@ -124,10 +124,10 @@ const PROBE_A = `(() => {
   r.afterEditShows = /≈\\d+%/.test(r.afterEditMargin);
   r.afterEditBand = /sampled 3-point loaded-bytes policy sensitivity/.test(note());
   r.afterEditModified = /MODIFIED/.test(note());
-  // FA (memo J-9): the strict branch is UNREACHABLE on the clean landing at the revised
+  // Model-size revision: the strict branch is UNREACHABLE on the clean landing at the revised
   // size (nothing is excluded), so the suppressed-hero DOM formatter is probed DIRECTLY
   // against a 5T-derived state — real derivation, real formatter, no reachability claim.
-  /* row 499: the page now OPENS on a named estimate preset whose fleet is the preset's own explicit
+  /* case 499: the page now OPENS on a named estimate preset whose fleet is the preset's own explicit
      blend, so the derived-default membership is not what renders there and the exclusion clause is
      not applicable — welding it anyway would ship a false explanation. The property under test is
      about the DERIVED DEFAULT fleet, so the probe selects the central scenario first and then does
@@ -146,7 +146,7 @@ const PROBE_B = `(() => {
   const note = () => document.getElementById('out-margin-note').textContent;
   r.mode = LANDING_HERO_MODE;
   r.margin = document.getElementById('out-margin').textContent;
-  /* bq-3316 M2: the identity now sits in the status label IMMEDIATELY after the value node, inside the
+  /* the release M2: the identity now sits in the status label IMMEDIATELY after the value node, inside the
      same tile — the crop unit is the value + its label, not the value node alone. */
   { const v = document.getElementById('out-margin'), st = document.getElementById('out-margin-status');
     r.marginStatus = st ? st.textContent : null;
@@ -165,7 +165,7 @@ const url = "file://" + SITE;
 
 const a = await runPage(chrome, url, PROBE_A, "window.__LANDING_HERO_MODE_TEST__ = 'suppress';");
 assert("A: suppress branch active via the test hook", a.mode === "suppress", a.mode);
-// FA (memo J-9): at the revised flagship size the derivation excludes nothing, so the
+// FA (specification J-9): at the revised flagship size the derivation excludes nothing, so the
 // strict branch has nothing to suppress — the clean landing RENDERS under mode A too.
 assert("A (FA): clean landing RENDERS at the revised size (no exclusion to suppress on)", /≈\d+%/.test(a.margin), a.margin);
 assert("A (FA): no HERO SUPPRESSED lead on the clean landing", !a.suppressed);
@@ -185,17 +185,17 @@ assert("A @5T (formatter probe): the membership exclusion clause is the cause li
 assert("A @5T (formatter probe): margin suppressed to —", a.margin5TSuppressed === "—", a.margin5TSuppressed);
 
 const b = await runPage(chrome, url, PROBE_B);
-assert("B: policy-labeled is the SHIPPED default (owner pick)", b.mode === "policy-labeled", b.mode);
+assert("B: policy-labeled is the SHIPPED default (adopted choice)", b.mode === "policy-labeled", b.mode);
 assert("B: landing margin displays", /≈\d+%/.test(b.margin), b.margin);
 assert("B: POLICY-LABELED identity inline", b.policyLabeled);
 assert("B (FA): NO exclusion clause on the revised-size clean landing (the membership is complete; the 5T exclusion story lives on the size case)", b.exclusionAbsent);
-/* bq-3316 (2026-09-25; GPT Pro 09-12 finding 1, accepted: the qualifier "becomes a conspicuous normal-sized
+/* the release (2026-09-25; GPT Pro 09-12 finding 1, accepted: the qualifier "becomes a conspicuous normal-sized
    status label"). The D-3b crop bar is kept at the level it exists for — a crop of the number carries the
    identity — by requiring the label to be the value's NEXT SIBLING in the same tile, and the value to be the
    number alone. A missing, emptied, detached or relocated label fails; so does a qualifier left in the value. */
-assert("B (R3/bq-3316): the value token's own status label carries the policy-labeled identity, directly under the number (crop bar, memo D-3b)",
+assert("B (R3/the release): the value token's own status label carries the policy-labeled identity, directly under the number (crop bar, the design requirements)",
   /policy-labeled scenario/.test(b.marginStatus || "") && b.statusAdjacent, JSON.stringify({ status: b.marginStatus, adjacent: b.statusAdjacent }));
-assert("B (bq-3316): the value node is the number alone", /^≈\d+%$/.test(b.margin), b.margin);
+assert("B (the release): the value node is the number alone", /^≈\d+%$/.test(b.margin), b.margin);
 assert("B: band receipt present", b.bandInNote);
 assert("B: cost/price render", b.costShown);
 

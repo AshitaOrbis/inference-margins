@@ -136,7 +136,7 @@ export function handler(args: Args): ToolResult {
     `${unitCount} unit-serving (token-SKU) claim record${unitCount === 1 ? "" : "s"} and ${otherCount} record${otherCount === 1 ? "" : "s"} in other perimeters ` +
     `(company-GM, API/product-line, paid-user-cohort, bundle, analyst-assumption, unnamed-subject, disclosure-anchor, model-generated) that are different objects, never claimants for the unit metric. ` +
     `Floors relate as compatible-with — never intervals. These are cited claims, not derived estimates; ` +
-    // IM3 exit-gate fix 1/2/3 + R2 §1.4: the baseline fragment gates noun/token/weld on
+    // Baseline identity: the baseline fragment gates noun/token/weld on
     // the same central-eligibility decision as the receipt.
     `the calculator's ${flagshipBaselineFragment()}.` +
     (empty_statement ? ` Unit-serving records for this range: ${empty_statement}.` : "") +

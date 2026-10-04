@@ -6,7 +6,7 @@
 import { E } from "./engine.js";
 import type { MarginClaim, Perspective } from "./engine-types.js";
 
-/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+/* The update of 2026-08-22:
    policy tools draw their epistemic noun from one vocabulary registry. */
 export const CLAIM_VOCABULARY = Object.freeze({
   policyScenarioOutput: "policy-scenario output",
@@ -39,7 +39,7 @@ export const APPJS_MIRROR = {
   viewedOffScopePrefix: " VIEWED OFF AUTHORED SCOPE — currently ",
   viewedOffScopeSuffix: "; range membership was defined at the flagship scope and is recomputed live here.",
   landsAtPrefix: " At the current selection it lands at ≈",
-  /* b9 M5: a route's AUTHORED-RANGE verdict is a claim about its own construction, so it is
+  /* Reference anchoring: a route's AUTHORED-RANGE verdict is a claim about its own construction, so it is
      evaluated at the public-evidence reference — the broad levers (the ratified algorithmic-lead
      prior and the family multipliers) are an orthogonal scenario layer and must not decide whether
      a route "reached" its band. The live reading is stated alongside it. Single clause, welded to
@@ -52,8 +52,8 @@ export const APPJS_MIRROR = {
   frontDoorQuestionPrefix: "What would have to be true for a ",
   frontDoorQuestionSuffix: " modeled serving margin (at the flagship scope: Claude Opus 4.x @ Reference 15:1/60%)?",
   centralAnchorPrefix: "At the flagship scope the policy-labeled baseline scenario computes to ≈",
-  /* b9 M5 (fix-verify round): this clause used to read "it is the default state of the calculator
-     below". M5 moved the default onto the ratified algorithmic-lead prior, which made that FALSE:
+  /* The wording correction: this clause used to read "it is the default state of the calculator
+     below". The update moved the default onto the ratified algorithmic-lead prior, which made that FALSE:
      the value here is reference-pinned (explorationFlagshipWorkload), so it is the public-evidence
      reading, not the default state. The clause now names its basis on both surfaces. */
   centralAnchorSuffix: "% at the public-evidence reference (algorithmic lead 0 months, family multipliers 1.0×); the calculator's own default state carries the ratified algorithmic-lead prior and reads higher.",

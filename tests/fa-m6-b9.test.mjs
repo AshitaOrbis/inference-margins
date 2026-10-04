@@ -1,4 +1,4 @@
-/* b9 M6 (research/b9-m6-fa-memo.md v7.3, §10.3): the FINAL-ANSWER rework suite.
+/* The final-answer contract defines this FINAL-ANSWER rework suite.
    T-1..T-11 — the D-6 five-part surface, the two labeled readings, the byte-pinned block copy, the
    D-7 analyst-gap exec summary, the D-1 legacy-retirement structural properties, the guard
    extension, and the `executive-summary` emitter class.
@@ -27,7 +27,7 @@ function assert(name, cond, detail) {
   else { failures++; console.log("FAIL  " + name + (detail !== undefined ? "  — " + detail : "")); }
 }
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
-/* The §2.9 / §17.2 / §17.4 provenance checks read the M6 design memo, which is private and
+/* The  /  /  provenance checks read the final-answer revision design specification, which is private and
    absent from a reconstructed public stage. They self-skip there, by count and under a labeled
    banner; in the private tree they are hard-guarded to run. See provenance-inputs.mjs. */
 const P = provenance("fa-m6-b9", assert);
@@ -41,7 +41,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
 /* ================= T-1 the five-part surface ================= */
 {
   const ordered = [
-    ["1 public-evidence repaired reference", fa.tokens.referenceReadingLine, /public-data scenario/], // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): was bq-3520's "public-data floor"; bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): was bq-3316's "planning baseline"
+    ["1 public-evidence repaired reference", fa.tokens.referenceReadingLine, /public-data scenario/], // the release (2026-09-30, adjudicated 2026-09-30): was the release's "public-data floor"; the release (2026-09-26, adjudicated 2026-09-26-…-floor): was the release's "planning baseline"
     ["2 ratified-prior default", fa.tokens.priorReadingLine, /calculator's own default reading/],
     /* T5 rec 5: the adopted-analyst reading is NO LONGER a block of THE ANSWER. The token still
        exists and is still asserted — below, at its new home in #fa-higher — but it is out of the
@@ -53,10 +53,10 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
   for (const [label, tok, re] of ordered)
     assert("T-1 block " + label + " is present and carries its required label", typeof tok === "string" && re.test(tok), String(tok).slice(0, 120));
   assert("T-1 the supporting §C2 blocks ride block 1 (label, must-not-be-called, convergence)",
-    /run B §C2, 2026-07-25/.test(fa.tokens.c2LabelLine)
+    /adversarial review of 2026-07-25/.test(fa.tokens.c2LabelLine)
     && /must not be called/.test(fa.tokens.mustNotBeCalledLine)
     && /METHODS WITHIN ONE REVIEW/.test(fa.tokens.convergenceLine));
-  /* The five blocks render in the memo's order on the page, top to bottom. Asserted on the DOM
+  /* The five blocks render in the specification's order on the page, top to bottom. Asserted on the DOM
      ORDER in index.html, because "in this order" is a property of the surface, not of the object.
      The array below MUST name all five numbered parts. The first cut named only six nodes and
      omitted `fa-most-plausible` (block 3) and `fa-identity` (block 4) — so it passed while both sat
@@ -72,7 +72,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     ["3 no-comparator", "fa-identity"], ["4 bridge", "fa-bridge"],
   ];
   const order = FIVE_PARTS.map(([, id]) => idx(id));
-  assert("T-1 the blocks appear in the memo's order on the page and all exist",
+  assert("T-1 the blocks appear in the documented order on the page and all exist",
     order.every(i => i > 0) && order.every((v, i, a) => i === 0 || a[i - 1] < v),
     JSON.stringify(FIVE_PARTS.map(([label, id], i) => [label, id, order[i]])));
   assert("T-1 the ordering assertion covers EVERY numbered part (blocks 1-4, none omitted)",
@@ -274,9 +274,9 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
       /* The anchor is the REAL element, not the bare `<section id="final-answer">` — that spelling
          appears ONLY inside the relocation comment, and injecting there produces a test that the
          comment-blanking makes vacuous. (It did, on the first cut of these assertions.) */
-      /* bq-3316 (2026-09-25): the section's accessible name follows the tile's new title. */
-      /* bq-3520 (2026-09-26): …and follows it again — the tile is the public-data floor (owner ruling d-20260926). */
-      const FA_OPEN = '<section class="final-answer" id="final-answer" aria-label="Public-data scenario">'; // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the tile's name
+      /* the release (2026-09-25): the section's accessible name follows the tile's new title. */
+      /* the release (2026-09-26): …and follows it again — the tile is the public-data floor (adjudicated 2026-09-26). */
+      const FA_OPEN = '<section class="final-answer" id="final-answer" aria-label="Public-data scenario">'; // the release (2026-09-30, adjudicated 2026-09-30): the tile's name
       assert("T5 rec 5 negative: the raw-text tampers anchor on the REAL final-answer element",
         html.includes(FA_OPEN), "the final-answer opening tag changed — these tampers would be vacuous");
       /* The set is asserted against the SPEC list below, so the next element nobody thought of
@@ -394,7 +394,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
         const EXEMPT = [
           { text: "Naming the most plausible closer, as this page's own inference",
             why: "names THIS PAGE'S OWN inference about what closes a gap, not an external claim's standing; " +
-                 "ratified as an exact old->new pair in esc-20260801T045418Z-71b767cc" },
+                 "ratified as an exact old->new pair in a research review on 2026-08-01" },
         ];
         const RANKING = [
           /\bstrongest external\b/i, /\bthe strongest .{0,24}\bhypothesis\b/i,
@@ -510,7 +510,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              head and its wouldFlip no longer rank the external hypothesis, and every other token
              rendering inside the answer was read for ranking language at that point. Re-pinning
              this is an approval; do not do it to make a red test green.
-             RE-PINNED 2026-09-10 under owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+             RE-PINNED 2026-09-10 under adjudicated 2026-09-10.
              This digest normalises NUMBERS to "#", so a pure recompute cannot move it — and it moved,
              which means WORDING inside the answer changed. It did, in exactly one place and
              deliberately: the §C2 label used to ASSERT that the live reference sits BELOW the r4
@@ -528,31 +528,29 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              Read for what this pin exists to catch — a RANKING of an external claim — and it contains none: it
              qualifies which default the answer's fixed readings describe, and ranks nothing. Approved on that
              reading; the text is also under Astra xhigh review round 4 before publish. */
-          /* im-vet-six-repairs RE-PIN (2026-09-20, program bq-2835). READ FOR WHAT THIS PIN EXISTS TO
+          /* registry repairs RE-PIN (2026-09-20, program the release). READ FOR WHAT THIS PIN EXISTS TO
              CATCH — a RANKING of an external claim — and the new wording contains none. What changed
              inside THE ANSWER: the rent-class sentence now says four of the FIVE member rents are
              analyst-set (E1 + E5a), the Trainium clause says those legs are WITHDRAWN from this
              default rather than caveated inside it (E1), and the figures move with the two registry
              repairs. Every changed span is pinned reversibly in tests/fa-justifications.test.mjs
              VETTING_REPAIRS, so the bytes are enumerated rather than merely re-hashed. */
-          /* RE-PINNED 2026-09-20 (im-vet-six-repairs, Astra xhigh fold). The wording moved to UNDO
+          /* RE-PINNED 2026-09-20 (registry repairs, Astra xhigh fold). The wording moved to UNDO
              an edit, not to add one: the N1 vocabulary pass had replaced "paid-capacity occupancy"
-             with "utilization" INSIDE the r4 run B §C2 label, which this surface quotes verbatim
+             with "utilization" INSIDE the review §C2 label, which this surface quotes verbatim
              and attributes in the same sentence, and the old vocabulary checker's blanket
              quoted-string exemption is why nothing caught it. The quoted bytes are restored and the
              page's own gloss after the quotation now names both terms. Read for what this pin
              exists to catch, per its own failure message: no RANKING of an external claim is added,
              and the ranking-phrase control on the same surface passed on the same run. */
-          /* RE-PINNED 2026-09-25 (im-legibility-merge-enact-0925, bq-3316 — the bq-1141 legibility merge's builder
+          /* RE-PINNED 2026-09-25 (the release, the release — the release legibility merge's builder
              half). Read for what this pin exists to catch — a RANKING of an external claim — and the new wording
              contains none. What changed inside THE ANSWER: the ≈58% reading's name, "public-evidence reference
-             reading" -> "planning baseline", in the four FA templates that carried it (engine, fixtures and memo
-             §2.9 moved together); the tile title "The answer" -> "Planning baseline"; the value token split into
-             the number and a status label from the SAME token (M2); three trigger labels now name their
-             destination (M10); "not company GM" -> "not a company gross margin" (M12); and the opening-state
+             reading" -> "planning baseline", in the four FA templates that carried it (engine, fixtures and  moved together); the tile title "The answer" -> "Planning baseline"; the value token split into
+             the number and a status label from the SAME token (equation revision); three trigger labels now name their
+             destination (destination-label revision); "not company GM" -> "not a company gross margin" (terminology revision); and the opening-state
              reading moved first INSIDE the collapse (annotation #9). No number and no ordering claim moved. */
-          /* RE-PINNED 2026-09-26 (im-legibility-astra-pass-and-remint-0926, bq-3520 — owner ruling
-             d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate; review of record r1 folded).
+          /* RE-PINNED 2026-09-26 (the release, the release — adjudicated 2026-09-26; review of record r1 folded).
              This pin digests the engine's answer TOKENS (textOf(tokenKey) per node inside #final-answer), so what moved is
              token wording. Read for what this pin exists to catch — a RANKING of an external claim — and the new wording
              contains none. The complete change: the ≈58% is named the public-data floor wherever these tokens named it
@@ -570,7 +568,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              neighborhood" meant Patel's own north-of-80 floor and became ambiguous beside the public-data floor), "not a second
              claim about the same metric", "could identify the differing assumptions". Read for a RANKING of an external claim: none —
              the first names WHICH claim the calculator's constructions approach, and ranks it against nothing. */
-          const EXPECTED = "b68b6fb59964a75df6dc3e6384a8d7f3c96a35fdb06cf47f29b85d94c568410e"; /* RE-PINNED 2026-09-30 by im-floor-scenario-release-bq3933-0930 (bq-3933; owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario, block B of card q-im-floor-wording-2026-09-28; Polaris ruling p-20260930-im-floor-release-carries-block-b-phrases-into-the-four-places-the-count-missed). Read for what this pin exists to catch — a RANKING of an external claim — and the new wording contains none: the ≈58% is named the public-data scenario wherever these tokens named it the public-data floor; the value token carries block B place 4 ("≈58% using the public-data assumptions shown. This is a model result, not a guaranteed minimum for actual margins."); the reference token carries place 7; the higher-justifications header carries places 9 and 10a; the g2 bridge carries place 10b ("which that scenario allows"). No number moved. */ /* previous 1cf337fe61dce3df… */ /* previous 9738f2fef25ed373… */ /* previous 97d0a9533ce59cde… (an intermediate pin of this same leg, whose note misdescribed the change as static HTML) */ /* previous ab4457ed2546d067… */ /* previous d2df037c6690ab63… */
+          const EXPECTED = "06215fd0fd6992dc1cb9dbb82a096493e054cd8e4d9be6e8cf0858ef3daa2ec5" /* Re-pinned 2026-10-04: actor-neutral provenance and repaired sentences; no ranking claim changed and no number moved. */ /* Re-pinned 2026-10-04: priorReadingLine and bridgeLine replace three attribution adjectives with adopted; convergenceLine and the first, second and fourth executive-summary entries replace private phase/section labels with their supported July 25 review date. Only provenance digit tokens change; no number moved in a numerical claim, and no ranking claim changed. */ /* Citation labels and a repeated article were cleaned up; no number moved. The changed answer tokens were reviewed and introduce no ranking of an external claim. */; /* RE-PINNED 2026-09-30 by the release (the release; adjudicated 2026-09-30, block B of card the adopted decision; the maintainer ruling adjudicated 2026-09-30). Read for what this pin exists to catch — a RANKING of an external claim — and the new wording contains none: the ≈58% is named the public-data scenario wherever these tokens named it the public-data floor; the value token carries block B place 4 ("≈58% using the public-data assumptions shown. This is a model result, not a guaranteed minimum for actual margins."); the reference token carries place 7; the higher-justifications header carries places 9 and 10a; the g2 bridge carries place 10b ("which that scenario allows"). No number moved. */ /* previous 1cf337fe61dce3df… */ /* previous 9738f2fef25ed373… */ /* previous 97d0a9533ce59cde… (an intermediate pin of this same leg, whose note misdescribed the change as static HTML) */ /* previous ab4457ed2546d067… */ /* previous d2df037c6690ab63… */
           assert("T5 rec 5 WHITELIST: the wording rendered inside THE ANSWER is pinned — new text there must be REVIEWED, not merely unmatched by a needle list",
             pin === EXPECTED,
             "answer-wording digest " + pin + " (numbers normalised; " + insideAnswer.length + " nodes). " +
@@ -655,8 +653,8 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
            page and the glossary both call that the LEAD-ADJUSTED BASELINE. The assertion still
            derives every expected string from `ratified`, so a drift in the engine still fails it. */
         const ratifiedWord = `about ${Math.round(ratified)}%`;
-        /* im-release-edit-r2 2026-09-10: the UPPER lens bound was a literal 86, and the stale-figure
-           regex a literal 63 — so when the owner's fleet-rent adoption moved every one of these, the
+        /* publication revision 2026-09-10: the UPPER lens bound was a literal 86, and the stale-figure
+           regex a literal 63 — so when the fleet-rent adoption moved every one of these, the
            test failed on numbers it should have been deriving. Both ends come from the engine now.
            The rule this file already states for the central applies to its band: pin the
            RELATIONSHIP, never the digits, or the guard rots the first time the engine moves. */
@@ -865,8 +863,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              Same check again, on that change alone: the only numeric token that ENTERS is "52%",
              which is the coverage itself (the engine returns 51.961%); every pre-existing figure is
              byte-identical. A property of the result was stated; no figure moved.
-             RE-PINNED A FOURTH TIME 2026-09-10, and this time FIGURES DID MOVE — owner ruling
-             d-20260910-im-adopt-fleet-rents-and-correct-grok adopts provisional planning rents for
+             RE-PINNED A FOURTH TIME 2026-09-10, and this time FIGURES DID MOVE — adjudicated 2026-09-10 adopts provisional planning rents for
              GB200, GB300 and Trainium3, so the reference reading is computed over the whole declared
              fleet instead of 52% of it. The pin's own instruction is to re-derive every engine
              figure before re-pinning, so that was done token by token rather than asserted:
@@ -879,7 +876,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              the edit is a recompute and not a rewrite.
              RE-PINNED A FIFTH TIME 2026-09-12 (final-answer-rationale ONLY; analyst-divergence is
              byte-untouched and its pin is unchanged), by leg im-release-contradiction-fix under the
-             SAME ruling d-20260910-im-adopt-fleet-rents-and-correct-grok, across five rounds of Astra
+             SAME ruling adjudicated 2026-09-10, across five rounds of Astra
              xhigh review that found five separate defects in this annex and THREE in this note.
 
              WHY THIS NOTE NO LONGER ENUMERATES TOKENS BY HAND. The pin's instruction is "re-derive
@@ -892,7 +889,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              (round 3, T3); the third still did not account for a NET NEW GB200 mention (round 4, U2).
              Each correction introduced the next error. So the inventory is GENERATED, and this note
              states the RULE it is classified by rather than a list that rots:
-               reports/im-release-contradiction-fix-2026-09-12/evidence/annex-token-enumeration.txt
+               reports/the release-09-12/evidence/annex-token-enumeration.txt
              carries the extraction procedure, both source identifiers, the multisets and the ordered
              difflib hunks. BEFORE is ab232910604dec317658bc9f5fa69759273e8738; AFTER is blob
              985facd668ceb2a3005cd88d5851f0982cd0543f
@@ -946,15 +943,15 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              an earlier draft used and thereby invented its provenance (U7). This pin exists to stop a
              superseded figure being published as current, which is exactly what F4 caught. */
           const CLAIM_ANNEXES = {
-            /* im-vet-six-repairs RE-PIN (2026-09-20). Every engine figure these two annexes publish was
+            /* registry repairs RE-PIN (2026-09-20). Every engine figure these two annexes publish was
                RE-DERIVED against the engine before re-pinning, which is what the message below demands:
                the rationale page carries the repaired form-correction span (47.61-61.30%, 13.69 pp),
                the corrected size ladder (59.40/58.43/57.46), the widened traffic span and the
                Trainium WITHDRAWAL paragraph; the analyst-divergence page carries the re-derived
                rent/TCO multiple (3.43x -> 3.55x) and implied lessor margin (71% -> 72%), both
                recomputed from the live stress and owned readings rather than transcribed. */
-            "site/research/final-answer-rationale.html": "e8033bae3eb4ce33c5f44a30cee51880b0704e2eb3739b12d57d5e0cec7be249",
-            /* inference-margins-lane-1004 (2026-10-04, bq-4610 item 5): analyst-divergence re-pinned for
+            "site/research/final-answer-rationale.html": "ae167bcacc8f3b5eda57f2f6aa055417acbf1524397baaea1654e3dd457098d6" /* Re-pinned 2026-10-04: actor-neutral attribution; visible numeric tokens unchanged; no number moved. */ /* Re-pinned 2026-10-04: neutral attribution and the supported July 25 review date replace editorial provenance; no numerical claim moved. */ /* Public provenance citations became dated descriptions; no number moved. Rendered numeric tokens and engine-derived figures were checked before repinning. */,
+            /* the release review (2026-10-04, the release item 5): analyst-divergence re-pinned for
                prose only. Its rows on the RAISE session said the transcript was unretrievable; the
                project's own transcript of the session video carries both the "first gross profit"
                phrase and the ~30%/~50% starting points, so those rows and §5 items 2-3 now carry dated
@@ -962,7 +959,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
                numeric token in the rendered text, old against new, removes nothing and adds only dates
                (2026-10-04, 2026-08-23, 2026-07-26), the two recording timestamps (1:14-1:27,
                1:32-1:43) and the &#39; apostrophe entity, so no engine figure on the page moved. */
-            "site/research/analyst-divergence.html": "1e2dc57a1482c8ba19a400535fccdb7b14f791d80af12f4dfb2b41092964bb59",
+            "site/research/analyst-divergence.html": "c78da255a69d98076e78fa21dcb68fc5629f35cf2ca2573937b912a1cd248ee2" /* Re-pinned 2026-10-04: actor-neutral attribution; visible numeric tokens unchanged; no number moved. */ /* Public provenance citations became dated descriptions; no number moved. Rendered numeric tokens and engine-derived figures were checked before repinning. */,
           };
           for (const [rel, expected] of Object.entries(CLAIM_ANNEXES)) {
             const abs = join(ROOT, rel);
@@ -1081,7 +1078,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
       && /adjudication of source reliability/.test(fa.tokens.mostPlausibleLine),
       fa.tokens.mostPlausibleLine.slice(0, 240));
   }
-  assert("T-1 M5's single interim-pin node is RETIRED from the page",
+  assert("T-1 the single interim-pin node is RETIRED from the page",
     !html.includes('id="fa-lever-reference"') && fa.tokens.leverReferenceLine === undefined);
 }
 
@@ -1098,22 +1095,22 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
   assert("T-2(b) each rendered token is the correct Math.round of its OWN exact field",
     fa.tokens.referenceReadingLine.startsWith("≈" + Math.round(refExact) + "%")
     && fa.tokens.priorReadingLine.startsWith("≈" + Math.round(priorExact) + "%")
-    /* im-release-edit-r2 (2026-09-10): the literals were 51 and 63 and are now 58 and 68, under
-       d-20260910-im-adopt-fleet-rents-and-correct-grok. Keeping a literal pair here is deliberate
+    /* publication revision (2026-09-10): the literals were 51 and 63 and are now 58 and 68, under
+       adjudicated 2026-09-10. Keeping a literal pair here is deliberate
        and NOT the rot this file otherwise polices: the assertion above already proves each token is
        the correct rounding of its own exact field, so these two exist to catch a silent engine
        drift that keeps the rendering self-consistent while the value moves. A relationship test
        cannot see that; only a stated expectation can, and moving it is a declared act. */
     && Math.round(refExact) === 58 && Math.round(priorExact) === 68,
     JSON.stringify([Math.round(refExact), Math.round(priorExact)]));
-  /* im-arc T4 fold (2026-08-24), memo §4 — a FINDING, disclosed rather than re-pinned into
+  /*  (2026-08-24),  — a FINDING, disclosed rather than re-pinned into
      agreement. The r4 adjudication's quoted 55–61% zone is someone else's dated words about a
      dated reading, so its bytes are not edited. The live reference now sits BELOW it, because the
      fold found no admissible public planning rate for GB200, GB300 or Trainium3 and the reference
      is computed over the four legs that still price. What is asserted is therefore the honest
      pair: the reading is outside the quoted zone, AND the page says so in the same block. */
-  /* im-release-edit-r2 (2026-09-10): this assertion used to pin ONE relation — "sits BELOW" —
-     because that was the relation on the day it was written. The owner's fleet-rent adoption moved
+  /* publication revision (2026-09-10): this assertion used to pin ONE relation — "sits BELOW" —
+     because that was the relation on the day it was written. The fleet-rent adoption moved
      the live reference from ≈51% to ≈58%, back inside the zone, and a test pinning the old relation
      would have demanded the page keep saying something false. What the page owes a reader is that
      it states the relation that HOLDS, whichever it is; so that is what is asserted. */
@@ -1132,27 +1129,27 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
        /sits INSIDE the quoted\s+zone again/.test(said)].filter(Boolean).length === 1,
       said.slice(0, 240));
   }
-  /* D-6a: the QUOTED §C2 literals are bound to the engine at exactly the two strengths the memo
+  /* D-6a: the QUOTED §C2 literals are bound to the engine at exactly the two strengths the specification
      asserts them at. The label's ENDPOINTS are r4's own two-parameter sensitivity under run B's
-     model and are NOT re-derived here — the memo does not claim they are. */
+     model and are NOT re-derived here — the specification does not claim they are. */
   /* The quoted midpoint is a QUOTATION, not a derivation — it stays at the adjudication's own
      "midpoint 59%" and is bound to that literal, while the live reading is bound separately. */
-  assert("T-2/D-6a the §C2 quoted midpoint is preserved verbatim, and the live reference is stated beside it",
+  assert("T-2 the §C2 quoted midpoint is preserved verbatim, and the live reference is stated beside it",
     fa.tokens.c2LabelLine.includes("midpoint 59%")
       && fa.tokens.c2LabelLine.includes("≈" + Math.round(refExact) + "%"),
     fa.tokens.c2LabelLine.slice(-220));
   /* The page's own live band moves with the arithmetic (declared delta); the quoted zone does not. */
   /* The tripwire band is a DECLARED expectation about where this page's own reading should sit, and
-     it moves when the owner rules that it should. 48–54 was the band for a reference computed over
-     four priced legs; d-20260910-im-adopt-fleet-rents-and-correct-grok prices all seven, and the
+     it moves when the adopted rule specifies that it should. 48–54 was the band for a reference computed over
+     four priced legs; adjudicated 2026-09-10 prices all seven, and the
      band moves with it. Re-minted from the executed reading, not widened to admit it: 55–61 is the
      §C2 zone the reading now sits inside, which is the tightest honest statement available. */
-  assert("T-2/D-6a the page's OWN live band claim is the post-adoption tripwire band, and it holds",
+  assert("T-2 the page's OWN live band claim is the post-adoption tripwire band, and it holds",
     refExact >= 55 && refExact <= 61, String(refExact));
 }
 
 /* ================= T-3 exact block copy — EVERY static template byte-pinned =================
-   Plan §5 M6 requires "exact block copy". The templates are authored in memo §2.9 (and §17.2 for
+    final-answer revision requires "exact block copy". The templates are authored in  (and §17.2 for
    the re-pinned spec-decode row); `{}` marks the only dynamic holes, each resolved through ONE
    named formatter so the two readings cannot drift into different rounding conventions. A one-byte
    mutation of any template FAILS. */
@@ -1177,22 +1174,22 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     return holes[k];
   });
   const TEMPLATES = {
-    referenceReadingLine: "{refPct} — public-data scenario, policy-labeled: a model result under public-data assumptions, not a guaranteed minimum or an estimate. Computed at an algorithmic lead of 0 months with family multipliers at 1.0×.", // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): block B place 7, memo amendment of that date (was bq-3520's 2026-09-26 wording)
-    c2LabelLine: "Quoted from the r4 adversarial adjudication (run B §C2, 2026-07-25), describing the scenario this public-data scenario is built on, as it stood then: \"Transitional public-evidence repair scenario: approximately 55–61%, midpoint 59%, under 50% paid-capacity occupancy, the reference 15:1/cache/commercial mix, declared fleet weights, low/committed planning rents, and unresolved Trainium throughput.\" (\"Under\" there means UNDER THE ASSUMPTION OF: the live reference holds utilization — which is what this page now calls what the quotation above calls paid-capacity occupancy — at exactly 50%, not below it. And the quoted \"midpoint\" is that adjudication's word for the reference point it selected, not an arithmetic centre: the rounded 55–61 span centres on 58, and the 55.2–61.3 public-only reconstruction reported below centres on 58.25.) Between 2026-08-24 and 2026-09-10 the live reference reading sat BELOW that quoted zone, because the im-arc T4 fold found no admissible public planning rate for GB200, GB300 or Trainium3 and the reference was computed over the four legs that priced. Since the owner adopted provisional planning rents for those three legs on 2026-09-10, all seven price and the live reference reading sits INSIDE the quoted zone again, at ≈58%. Agreement recovered by adopting an assumption is not the same evidence as agreement that was there all along, and this sentence is not claiming it is. The quoted zone is left exactly as it was written.",
+    referenceReadingLine: "{refPct} — public-data scenario, policy-labeled: a model result under public-data assumptions, not a guaranteed minimum or an estimate. Computed at an algorithmic lead of 0 months with family multipliers at 1.0×.", // the release (2026-09-30, adjudicated 2026-09-30): block B place 7, memo amendment of that date (was the release's 2026-09-26 wording)
+    c2LabelLine: "Quoted from the adversarial review of 2026-07-25, describing the scenario this public-data scenario is built on, as it stood then: \"Transitional public-evidence repair scenario: approximately 55–61%, midpoint 59%, under 50% paid-capacity occupancy, the reference 15:1/cache/commercial mix, declared fleet weights, low/committed planning rents, and unresolved Trainium throughput.\" (\"Under\" there means UNDER THE ASSUMPTION OF: the live reference holds utilization — which is what this page now calls what the quotation above calls paid-capacity occupancy — at exactly 50%, not below it. And the quoted \"midpoint\" is that adjudication's word for the reference point it selected, not an arithmetic centre: the rounded 55–61 span centres on 58, and the 55.2–61.3 public-only reconstruction reported below centres on 58.25.) Between 2026-08-24 and 2026-09-10 the live reference reading sat BELOW that quoted zone, because the registry revision found no admissible public planning rate for GB200, GB300 or Trainium3 and the reference was computed over the four legs that priced. Since provisional planning rents were adopted for those three legs on 2026-09-10, all seven price and the live reference reading sits INSIDE the quoted zone again, at ≈58%. Agreement recovered by adopting an assumption is not the same evidence as agreement that was there all along, and this sentence is not claiming it is. The quoted zone is left exactly as it was written.",
     mustNotBeCalledLine: "That adjudication also states what this reading must not be called. It must not be called: verified; actual; central Anthropic margin; a confidence interval; a coherent public-market-rent result.",
-    convergenceLine: "Three DIFFERENT METHODS inside one adjudication overlap on this zone. The r4 adversarial review ran a public-only reconstruction, a reconstruction from this project's own internal research record and a physics-only bound, landing at 55.2–61.3, 58–64 and 55–70 respectively; they overlap between 58 and 61.3. That is agreement across METHODS WITHIN ONE REVIEW — not independent corroboration, not a statistical result, and no distribution is implied.",
-    /* row 499 re-mint (delta manifest research/b9-delta-manifests/row499-preset-structure-delta-manifest.md):
+    convergenceLine: "Three DIFFERENT METHODS inside one adjudication overlap on this zone. The adversarial review of 2026-07-25 ran a public-only reconstruction, a reconstruction from this project's own internal research record and a physics-only bound, landing at 55.2–61.3, 58–64 and 55–70 respectively; they overlap between 58 and 61.3. That is agreement across METHODS WITHIN ONE REVIEW — not independent corroboration, not a statistical result, and no distribution is implied.",
+    /* case 499 re-mint (delta manifest the declared changes):
        ONE sentence replaced, because it stopped being true — the page no longer opens in this state.
-       M8 exit-gate F1 (2026-08-13): the replacement itself went stale at the 08-08 opener flip
+       mean-mix revision exit-gate F1 (2026-08-13): the replacement itself went stale at the 08-08 opener flip
        (the landing now carries its author's +2-month assumption), so the clause is the
        {landingLeadClause} hole, derived from landingReading through one named formatter below.
        Everything else in the template, including every number and the whole prior-basis clause,
        is byte-unchanged.
        2026-09-12 im-default-window-and-mcp-discrepancy (Astra review round 3 F9): TWO WORDS added, "by default",
        because a reader can now make another scenario the default in their own browser and the unqualified
-       "it now opens on" became false for that reader. No number, hole or other clause moved; memo §2.9 carries the
+       "it now opens on" became false for that reader. No number, hole or other clause moved;  carries the
        same two words, so the provenance gate below still compares like with like. */
-    priorReadingLine: "{priorPct} — the calculator's own default reading, policy-labeled scenario. Until 2026-08-06 this was also the state the calculator opened in; by default it now opens on a named estimate preset carrying {landingLeadClause}, and this reading is one selection away in the same control. It is the reference reading plus exactly one declared assumption: the owner-ratified {trendMonths}-month algorithmic-lead prior for closed frontier labs, which at the ratified {trendRate}×/yr rate divides modeled cost-out by E ≈ {E}. It is a scenario prior, not a measurement — this page identifies no public disclosure of any lab's private serving-stack lead, and has not measured one.",
+    priorReadingLine: "{priorPct} — the calculator's own default reading, policy-labeled scenario. Until 2026-08-06 this was also the state the calculator opened in; by default it now opens on a named estimate preset carrying {landingLeadClause}, and this reading is one selection away in the same control. It is the reference reading plus exactly one declared assumption: the adopted {trendMonths}-month algorithmic-lead prior for closed frontier labs, which at the ratified {trendRate}×/yr rate divides modeled cost-out by E ≈ {E}. It is a scenario prior, not a measurement — this page identifies no public disclosure of any lab's private serving-stack lead, and has not measured one.",
     /* T5 rec 5, round 3: ONE span of this pinned fixture moved. The disclaimer named the
        real-world quantity directly, in a NEGATIVE construction, which is why two earlier passes
        left it alone. The reviewer's position is that rec 5 bars the phrase outright absent
@@ -1201,12 +1198,12 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
        not need the barred referent to do its work, and "any provider's real margin" says the same
        thing without smuggling in an object this page cannot identify. Nothing else in the token
        changed. */
-    bridgeLine: "How the readings relate. The public-evidence reference sits numerically below the adopted analyst reading, and is built on 50% utilization, a discounted billing mix, no generalized speculative-decode credit, unresolved Trainium throughput and a low/committed planning-rent perimeter. Those are what make THIS page's number what it is; because the analyst's own calculations are unpublished, this page does not claim they explain the gap. The calculator's own default sits above the reference by exactly one declared assumption — the owner-ratified +3-month algorithmic lead, which divides modeled cost-out by E ≈ 1.316 — and by nothing else: the two readings share every other input. Neither calculator reading is evidence that any provider's real margin is any particular number. At the public-evidence reference — algorithmic lead 0 months, family multipliers 1.0× — this page's strategic-partner ladder reaches ≈80 after adopting partner rates and higher occupancy, ≈83 after then switching to the throughput serving regime, and ≈85 after additionally taking a list-only billing mix — alternative scenarios, not findings. How this page's earlier figure relates to these readings. Until 2026-08-06 this page published ≈77%; this is the first version whose numbers have been through a full adversarial review, and the earlier figure is best read as a pre-review draft rather than a retracted claim. Nothing shared before that date silently re-renders at a new number: a pre-v5 share link no longer resolves at all and says so, and a link carrying the figure it was shared at renders that figure beside the current one. The distance was not one adjustment but three, and only the last was about margins: a rebuild of how this page models SERVING (the roofline display path, the capacity-width solver and serve-feasibility-filtered fleet membership, 2026-07-19..23) moved it by far the most; a model-size revision moved it slightly back; and the margin-evidence adjudication of 2026-07-26 raised it to the ≈58% public-data scenario above. The owner-ratified algorithmic-lead prior accounts for the rest of the way to the calculator's own default reading. All of these are differences between scenario readings of this calculator, not measured changes in anyone's economics.",
+    bridgeLine: "How the readings relate. The public-evidence reference sits numerically below the adopted analyst reading, and is built on 50% utilization, a discounted billing mix, no generalized speculative-decode credit, unresolved Trainium throughput and a low/committed planning-rent perimeter. Those are what make THIS page's number what it is; because the analyst's own calculations are unpublished, this page does not claim they explain the gap. The calculator's own default sits above the reference by exactly one declared assumption — the adopted +3-month algorithmic lead, which divides modeled cost-out by E ≈ 1.316 — and by nothing else: the two readings share every other input. Neither calculator reading is evidence that any provider's real margin is any particular number. At the public-evidence reference — algorithmic lead 0 months, family multipliers 1.0× — this page's strategic-partner ladder reaches ≈80 after adopting partner rates and higher occupancy, ≈83 after then switching to the throughput serving regime, and ≈85 after additionally taking a list-only billing mix — alternative scenarios, not findings. How this page's earlier figure relates to these readings. Until 2026-08-06 this page published ≈77%; this is the first version whose numbers have been through a full adversarial review, and the earlier figure is best read as a pre-review draft rather than a retracted claim. Nothing shared before that date silently re-renders at a new number: a pre-v5 share link no longer resolves at all and says so, and a link carrying the figure it was shared at renders that figure beside the current one. The distance was not one adjustment but three, and only the last was about margins: a rebuild of how this page models SERVING (the roofline display path, the capacity-width solver and serve-feasibility-filtered fleet membership, 2026-07-19..23) moved it by far the most; a model-size revision moved it slightly back; and the margin-evidence adjudication of 2026-07-26 raised it to the ≈58% public-data scenario above. The adopted algorithmic-lead prior accounts for the rest of the way to the calculator's own default reading. All of these are differences between scenario readings of this calculator, not measured changes in anyone's economics.",
     basisDeclarationLine: "Every calculator figure in the explanations below is at the public-data scenario's settings — an algorithmic lead of 0 months, family multipliers at 1.0× — unless that figure names its basis otherwise where it stands. The calculator's own default reading, {priorPct}, carries the ratified prior and is shown above.",
-    execSummaryFrameLine: "What would have to be true to reach the higher readings. Four of the rows below move exactly one control from the calculator's own default state ({priorPct}) and show what the engine then computes — each is a state you can reproduce by moving that one control. One row names a lever this page cannot price on public evidence and says so instead of showing a number; it states what receipts would have to exist. The rows are ordered by declared plausibility — the order this page's owner set — and are deliberately NOT sorted by result. These are estimates of what would have to be true, not claims that any of it is true.",
+    execSummaryFrameLine: "What would have to be true to reach the higher readings. Four of the rows below move exactly one control from the calculator's own default state ({priorPct}) and show what the engine then computes — each is a state you can reproduce by moving that one control. One row names a lever this page cannot price on public evidence and says so instead of showing a number; it states what receipts would have to exist. The rows are ordered by declared plausibility — the order this page declares — and are deliberately NOT sorted by result. These are estimates of what would have to be true, not claims that any of it is true.",
   };
   /* J-10 run 3: the SAME provenance hole the spec-decode row had, and it was wider. These eight
-     templates are described as "authored in memo §2.9", but three runs of folds had updated the
+     templates are described as "authored in ", but three runs of folds had updated the
      engine and these fixtures while §2.9 kept its pre-run-1 wording — it still said "Three
      independent methods converged" and still carried the causal "because it holds …" bridge that
      run 1 removed as an overclaim. Nothing could catch that, because the provenance lived in a
@@ -1216,7 +1213,13 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
       mustNotBeCalled: "mustNotBeCalledLine", convergenceNote: "convergenceLine",
       priorReadingFrame: "priorReadingLine", bridge: "bridgeLine",
       basisDeclaration: "basisDeclarationLine", execSummaryFrame: "execSummaryFrameLine" };
-    const norm = (x) => x.replace(/`/g, "").replace(/\s+/g, " ").trim();
+    // The preserved design source keeps its original provenance; compare its public wording.
+    const norm = (x) => x
+      .replace(/Quoted from the [a-z0-9]+ adversarial adjudication \([^)]*2026-07-25\)/, "Quoted from the adversarial review of 2026-07-25")
+      .replace(/the [a-z]{2}-[a-z]{3} T[0-9]+ fold/g, "the registry revision")
+      .replace(/The [a-z][0-9]+ adversarial review/g, "The adversarial review of 2026-07-25")
+      .replace(/\bowner[- ]ratified\b/gi, "adopted")
+      .replace(/`/g, "").replace(/\s+/g, " ").trim();
     let checked = 0;
     for (const [memoName, tplKey] of Object.entries(NAMES)) {
       const at = memoSrc.indexOf("**`" + memoName + "`**");
@@ -1228,15 +1231,15 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
         else if (started) break;
       }
       const ok = at > 0 && quoted.length > 0 && norm(quoted.join(" ")) === norm(TEMPLATES[tplKey]);
-      P.assert("T-3 provenance: memo §2.9 `" + memoName + "` IS the pinned " + tplKey,
+      P.assert("T-3 provenance:  `" + memoName + "` IS the pinned " + tplKey,
         ok, JSON.stringify({ memo: norm(quoted.join(" ")).slice(0, 110), tpl: norm(TEMPLATES[tplKey]).slice(0, 110) }));
       if (ok) checked++;
     }
     P.assert("T-3 provenance: all EIGHT §2.9 blocks were located and matched (a renamed block cannot pass silently)",
       checked === 8, String(checked));
     /* Run 4 extended the same treatment to the low-evidence no-control copy, which is normative in
-       §17.4 and was NOT covered by the §2.9 sweep — run 4's P1 edited it, and nothing would have
-       caught a memo that kept the old wording. Rendered with a literal {param} so the hole survives. */
+        and was NOT covered by the  sweep — run 4's P1 edited it, and nothing would have
+       caught a specification that kept the old wording. Rendered with a literal {param} so the hole survives. */
     {
       const at = memoSrc.indexOf("**`lowEvidenceNoControlCopy`**");
       const lines = memoSrc.slice(at).split("\n");
@@ -1246,7 +1249,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
         if (ln.startsWith(">")) { started = true; quoted.push(ln.slice(1).trim()); }
         else if (started) break;
       }
-      P.assert("T-3 provenance: memo §17.4 `lowEvidenceNoControlCopy` IS the shipped no-control copy",
+      P.assert("T-3 provenance:  `lowEvidenceNoControlCopy` IS the shipped no-control copy",
         at > 0 && norm(quoted.join(" ")) === norm(E.LOW_EVIDENCE_COPY["no-control"]("{param}")),
         JSON.stringify({ memo: norm(quoted.join(" ")).slice(0, 120), live: norm(E.LOW_EVIDENCE_COPY["no-control"]("{param}")).slice(0, 120) }));
     }
@@ -1256,22 +1259,21 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
   for (const [key, tpl] of Object.entries(TEMPLATES))
     assert("T-3 template [" + key + "] renders BYTE-EQUAL to its pinned fixture", fa.tokens[key] === fill(tpl),
       JSON.stringify({ want: fill(tpl).slice(0, 160), got: String(fa.tokens[key]).slice(0, 160) }));
-  /* The ninth: §17.2's re-pinned spec-decode row. Pinned as an INDEPENDENT byte fixture, not by
+  /* The ninth: 's re-pinned spec-decode row. Pinned as an INDEPENDENT byte fixture, not by
      comparing the rendered row to the engine constant it is generated from — that compares a value
      to itself and survives any mutation of the constant (verified: mutating one byte of
-     MTP_ROW_COPY left the self-comparison passing). The bytes below are transcribed from memo
-     §17.2, so a drift in either direction fails. */
-  const MTP_ROW_FIXTURE = "Speculative decode / MTP credit \u2014 a lever this page deliberately leaves OUT of its default. [lever] Speculative decoding and multi-token prediction: related techniques, not two names for one thing \u2014 multi-token prediction is a training/architectural choice that can supply the draft model a speculative-decoding implementation needs. Speculative decoding proposes candidate tokens for the target model to verify; where accepted-token gains exceed draft and verification overhead it raises the tokens generated per unit of compute, and therefore lowers modeled cost-out. [evidence label] That the mechanism is real and material is now vendor-officially on the record and dated: an OpenAI engineering post of 2026-07-29 credits an improved draft/speculator model with \"more than 15%\" additional token-generation efficiency, and its pricing post of 2026-07-30 says it is \"passing those gains on to customers\". That is a vendor claim \u2014 self-reported, single-source, not independently verified \u2014 at ONE lab, and that lab is not this page's flagship. Separately, and from a different party, published measurements on open serving stacks span about 14% at production-like batch to about 60% at modest concurrency. Both are the SAME model on the SAME stack \u2014 DeepSeek V3 under SGLang \u2014 differing in cluster scale, concurrency, sequence lengths and draft window, so the spread measures deployment conditions rather than two independent results, and neither is transferable to this fleet. The larger figure is the MTP-versus-no-MTP delta with overlap scheduling absent from both arms: 82.0 versus 51.0 tokens/s/rank (+60.8%). The post separately reports 60.4 tokens/s/rank for overlap scheduling without MTP; because that SGLang version did not support MTP together with overlap scheduling, it does not report MTP's incremental gain on top of overlap. Both figures are cited from that post and are not registered evidence rows of this page: they label a scale, and nothing computes from them. The two classes of evidence are reported side by side and are never added together. [why no number] That the MECHANISM exists is established. That it runs in production at one frontier lab is that lab's own dated report, labeled above as the vendor claim it is \u2014 not something this page has independently verified. Whether it is deployed on the fleet THIS page models, and with what effect, is established by nothing this page has found. Acceptance rates, average accepted tokens per step, and draft-model size and architecture are not publicly disclosed for the fleet this page models. Its cited evidence set carries four non-fleet acceptance figures and no fleet-specific one: two non-flagship anchors \u2014 one reporting an average acceptance length of about 1.8\u20131.9 (SGLang's acceptance-length metric counts accepted draft tokens plus the bonus token produced per verification step), one assuming 70% acceptance for a single speculative token \u2014 and, in the open-stack post cited above, average acceptance lengths of 2.18 and 2.44 at two draft-window settings. None is for the fleet modelled here, and these are the figures this page has found, not a claim about every figure that exists. This calculator's serving form declares the speculative pair, and the roofline itself still computes at the conservative 1/1 floor structurally \u2014 any credit is applied after that floor, to decode only. The mechanism's benefit is conditional on acceptance, draft cost, batching and workload; the control offered here models none of those, so it is a scenario credit you declare, not a mechanism this page runs. Of the five legs in the default fleet exactly one documents that its anchor carries no speculative credit \u2014 and under the typed statuses this lever acts on, three legs are creditable and two, gb300 and tpu7, cannot be established and are exempt \u2014 so this page applies no fleet-wide credit of its own, and the r4 review's verdict on exactly that question is \"do not apply one universal multiplier\". [what receipts would have to exist] Per-leg workload-weighted acceptance and draft-overhead receipts. What this page ships instead is a control you turn: off by default, never applied to a leg whose deployed efficiency already absorbs speculation or whose status this page cannot establish, disclosed on every leg it does reach, and never used to select a reading of this page's own. The credit stays at zero in this page's default \u2014 a no-credit convention, which cannot inflate this page's margin, and not a finding that the credit is zero.";
+     MTP_ROW_COPY left the self-comparison passing). The bytes below are transcribed from  a drift in either direction fails. */
+  const MTP_ROW_FIXTURE = "Speculative decode / MTP credit \u2014 a lever this page deliberately leaves OUT of its default. [lever] Speculative decoding and multi-token prediction: related techniques, not two names for one thing \u2014 multi-token prediction is a training/architectural choice that can supply the draft model a speculative-decoding implementation needs. Speculative decoding proposes candidate tokens for the target model to verify; where accepted-token gains exceed draft and verification overhead it raises the tokens generated per unit of compute, and therefore lowers modeled cost-out. [evidence label] That the mechanism is real and material is now vendor-officially on the record and dated: an OpenAI engineering post of 2026-07-29 credits an improved draft/speculator model with \"more than 15%\" additional token-generation efficiency, and its pricing post of 2026-07-30 says it is \"passing those gains on to customers\". That is a vendor claim \u2014 self-reported, single-source, not independently verified \u2014 at ONE lab, and that lab is not this page's flagship. Separately, and from a different party, published measurements on open serving stacks span about 14% at production-like batch to about 60% at modest concurrency. Both are the SAME model on the SAME stack \u2014 DeepSeek V3 under SGLang \u2014 differing in cluster scale, concurrency, sequence lengths and draft window, so the spread measures deployment conditions rather than two independent results, and neither is transferable to this fleet. The larger figure is the MTP-versus-no-MTP delta with overlap scheduling absent from both arms: 82.0 versus 51.0 tokens/s/rank (+60.8%). The post separately reports 60.4 tokens/s/rank for overlap scheduling without MTP; because that SGLang version did not support MTP together with overlap scheduling, it does not report MTP's incremental gain on top of overlap. Both figures are cited from that post and are not registered evidence rows of this page: they label a scale, and nothing computes from them. The two classes of evidence are reported side by side and are never added together. [why no number] That the MECHANISM exists is established. That it runs in production at one frontier lab is that lab's own dated report, labeled above as the vendor claim it is \u2014 not something this page has independently verified. Whether it is deployed on the fleet THIS page models, and with what effect, is established by nothing this page has found. Acceptance rates, average accepted tokens per step, and draft-model size and architecture are not publicly disclosed for the fleet this page models. Its cited evidence set carries four non-fleet acceptance figures and no fleet-specific one: two non-flagship anchors \u2014 one reporting an average acceptance length of about 1.8\u20131.9 (SGLang's acceptance-length metric counts accepted draft tokens plus the bonus token produced per verification step), one assuming 70% acceptance for a single speculative token \u2014 and, in the open-stack post cited above, average acceptance lengths of 2.18 and 2.44 at two draft-window settings. None is for the fleet modelled here, and these are the figures this page has found, not a claim about every figure that exists. This calculator's serving form declares the speculative pair, and the roofline itself still computes at the conservative 1/1 floor structurally \u2014 any credit is applied after that floor, to decode only. The mechanism's benefit is conditional on acceptance, draft cost, batching and workload; the control offered here models none of those, so it is a scenario credit you declare, not a mechanism this page runs. Of the five legs in the default fleet exactly one documents that its anchor carries no speculative credit \u2014 and under the typed statuses this lever acts on, three legs are creditable and two, gb300 and tpu7, cannot be established and are exempt \u2014 so this page applies no fleet-wide credit of its own, and the adversarial review of 2026-07-25 states on exactly that question \"do not apply one universal multiplier\". [what receipts would have to exist] Per-leg workload-weighted acceptance and draft-overhead receipts. What this page ships instead is a control you turn: off by default, never applied to a leg whose deployed efficiency already absorbs speculation or whose status this page cannot establish, disclosed on every leg it does reach, and never used to select a reading of this page's own. The credit stays at zero in this page's default \u2014 a no-credit convention, which cannot inflate this page's margin, and not a finding that the credit is zero.";
   assert("T-3 template [mtpRowCopy] is byte-equal to the INDEPENDENT §17.2 fixture",
     E.MTP_ROW_COPY === MTP_ROW_FIXTURE,
     JSON.stringify({ engineLen: String(E.MTP_ROW_COPY).length, fixtureLen: MTP_ROW_FIXTURE.length }));
   assert("T-3 …and the shipped exec-summary row renders exactly those bytes",
     fa.tokens.executiveSummaryRows[3].startsWith(MTP_ROW_FIXTURE));
   /* J-10 run 3 made the fixture's PROVENANCE executable. The comment above claimed the bytes were
-     transcribed from memo §17.2, but the run-1 fold had updated the engine and this fixture and NOT
-     the memo — the two had silently diverged at the 14–60% attribution sentence since run 1, so the
+     transcribed from  the run-1 fold had updated the engine and this fixture and NOT
+     the specification — the two had silently diverged at the 14–60% attribution sentence since run 1, so the
      claim was already false when run 3 read it. A prose claim about where bytes came from cannot
-     fail; this can. The memo blockquote is parsed and compared, so a future fold that edits one and
+     fail; this can. The specification blockquote is parsed and compared, so a future fold that edits one and
      not the other breaks the suite instead of quietly restoring the drift. */
   P.gate("research/b9-m6-fa-memo.md", 2, (memoSrc) => {
     const at = memoSrc.indexOf("**`mtpRowCopy`** (normative bytes");
@@ -1279,12 +1281,13 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     const quoted = [];
     for (const ln of lines) { if (!ln.startsWith(">")) break; quoted.push(ln.slice(1).trim()); }
     const memoBytes = quoted.join(" ")
-      .replace(/\*\*(\[[^\]]+\])\*\*/g, "$1")     // the memo bolds the four section markers
+      .replace(/the [a-z][0-9]+ review's verdict on exactly that question is/g, "the adversarial review of 2026-07-25 states on exactly that question")
+      .replace(/\*\*(\[[^\]]+\])\*\*/g, "$1")     // the specification bolds the four section markers
       .replace(/\s+/g, " ").trim();
-    P.assert("T-3 provenance: memo §17.2's normative blockquote IS the shipped mtpRowCopy (whitespace-normalised)",
+    P.assert("T-3 provenance: 's normative blockquote IS the shipped mtpRowCopy (whitespace-normalised)",
       at > 0 && memoBytes === String(E.MTP_ROW_COPY).replace(/\s+/g, " ").trim(),
       JSON.stringify({ memoLen: memoBytes.length, engineLen: String(E.MTP_ROW_COPY).length }));
-    P.assert("T-3 provenance negative: a one-word drift in the memo copy FAILS this check",
+    P.assert("T-3 provenance negative: a one-word drift in the documented copy FAILS this check",
       memoBytes.replace("no-credit convention", "no credit convention") !== String(E.MTP_ROW_COPY).replace(/\s+/g, " ").trim());
   });
   assert("T-3 negative: the mtpRowCopy oracle is INDEPENDENT (a mutated constant would fail it)",
@@ -1297,7 +1300,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
 
 /* ================= T-4 the exec summary is ENGINE-DERIVED, not static =================
    Scoped (gate P0-4: v1's "every row must move" contradicted T-6's no-number requirement). T-4
-   governs the four NUMERIC rows only; row 4 is excluded and governed solely by T-6, and the
+   governs the four NUMERIC rows only; case 4 is excluded and governed solely by T-6, and the
    exclusion set is asserted to be exactly {4} so a future numeric row cannot quietly inherit it. */
 {
   const rows = E.EXEC_SUMMARY_ROWS;
@@ -1317,7 +1320,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     const controlKeys = Object.keys(row.override).filter(key => !(row.id === "owned-tco" && key === "kwh"));
     assert("T-4 row [" + row.id + "] differs by EXACTLY ONE reader-control key",
       controlKeys.length === 1, JSON.stringify({ controls: controlKeys, override: Object.keys(row.override) }));
-    /* im-arc T4 fold (2026-08-24), memo §2 [F8]: the row's override is now its CONTROL ALONE. The
+    /*  (2026-08-24),  [F8]: the row's override is now its CONTROL ALONE. The
        T2 historical $0.07 pin is withdrawn and replaced by a region reference resolved by id, which
        is not an override at all — so "one control" is now literally true of this row's override,
        and the region it reads is asserted separately. */
@@ -1355,11 +1358,11 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     assert("T-4 negative: a STATIC renderer FAILS that predicate (hard-coded rows are caught)",
       movesUnderPerturbation(() => tokens) === false);
   }
-  /* D-6t: "one control" is true of the CONTROL count and false of the PARAMETER count for row 3,
+  /* D-6t: "one control" is true of the CONTROL count and false of the PARAMETER count for case 3,
      and the block says so — rendering the six declared TCO inputs READ FROM THE LIVE STATE. */
   {
     const st = stateWith(E.EXEC_SUMMARY_ROWS[2].override);
-    assert("T-4/D-6t row 3 renders the six-input TCO assumption vector, read from the live state",
+    assert("T-4/D-6t case 3 renders the six-input TCO assumption vector, read from the live state",
       tokens[2].includes("That one control pulls in six declared inputs")
       && tokens[2].includes("NOT the multi-setting owned-TCO exploration route")
       && tokens[2].includes("takes its electricity from the registered us-industrial region row by id")
@@ -1379,12 +1382,12 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     JSON.stringify({ rendered: renderedNumeric, marginSorted }));
   assert("T-5 the declared order is contiguous 1..5 and is the registry's own `order` field",
     JSON.stringify(rows.map(r => r.order)) === JSON.stringify([1, 2, 3, 4, 5]));
-  /* "Not margin-sorted" + "numbered 1..5" is NOT the owner's order — a registry with util-70 and
+  /* "Not margin-sorted" + "numbered 1..5" is NOT the declared order — a registry with util-70 and
      util-75 swapped satisfies both and would ship a different ranking under a green suite (gate
-     round 2 P0-4 forged exactly that and it passed). The owner's declared plausibility order is
+     round 2 P0-4 forged exactly that and it passed). The declared plausibility order is
      therefore PINNED as a literal sequence, with a swap fixture proving the pin can fail. */
   const DECLARED_PLAUSIBILITY_ORDER = ["util-70", "util-75", "owned-tco", "specdecode", "trend-6"];
-  assert("T-5 the registry ships the OWNER'S declared plausibility order, pinned as a sequence",
+  assert("T-5 the registry ships the declared plausibility order, pinned as a sequence",
     JSON.stringify(rows.map(r => r.id)) === JSON.stringify(DECLARED_PLAUSIBILITY_ORDER),
     JSON.stringify(rows.map(r => r.id)));
   /* The negative fixture runs the REAL predicate against a forged registry — comparing a swapped
@@ -1405,29 +1408,29 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
   assert("T-5 the rendered rows follow that same pinned sequence (order field and array agree)",
     rows.every((r, i) => r.order === i + 1 && r.id === DECLARED_PLAUSIBILITY_ORDER[i]));
   assert("T-5 the ordering BASIS is stated on the block (a reader cannot mistake it for a ranking by size)",
-    readFileSync(join(ROOT, "site/app.js"), "utf8").includes("Ordering basis: the owner's declared plausibility order"));
+    readFileSync(join(ROOT, "site/app.js"), "utf8").includes("Ordering basis: the declared plausibility order"));
 }
 
 /* ================= T-6 the spec-decode row =================
-   Post-gate owner ruling (memo §16.2 A-1, bytes at §17.2): the row stops being a bare refusal. The
+   Post-gate the adopted decision ( A-1, bytes at ): the row stops being a bare refusal. The
    lever exists, it is deliberately out of the default, and it is the user's to turn. The four
-   elements the Polaris grant required survive inside it. */
+   elements required by the documented contract survive inside it. */
 {
   const tok = fa.tokens.executiveSummaryRows[3];
   for (const el of ["[lever]", "[evidence label]", "[why no number]", "[what receipts would have to exist]"])
     assert("T-6 the row carries its required element " + el, tok.includes(el));
   assert("T-6 the row carries NO numeric margin token (it is the one row that shows no number)",
     !/≈\d+%/.test(tok), (tok.match(/≈\d+%/g) || []).join(","));
-  assert("T-6 the row states the owner's doctrine: out of the default, and a lever to be turned",
+  assert("T-6 the row states the declared convention: out of the default, and a lever to be turned",
     /deliberately leaves OUT of its default/.test(tok)
     && /no-credit convention, which cannot inflate this page's margin, and not a finding that the credit is zero/.test(tok));
-  /* §16.6: the evidence label is the SWEEP's, and the two evidence classes are never merged. */
+  /* : the evidence label is the SWEEP's, and the two evidence classes are never merged. */
   assert("T-6 the evidence label carries the dated vendor-official claim AND its cross-lab limit",
     /2026-07-29/.test(tok) && /more than 15%/.test(tok)
     && /not this page's flagship/.test(tok) && /self-reported, single-source, not\s+independently verified/.test(tok.replace(/\s+/g, " ")));
   assert("T-6 the independent measurements stay a SEPARATE class and are never summed with the vendor claim",
     /about 14% at production-like batch/.test(tok) && /never added together/.test(tok));
-  /* b9 spec-decode LEVER — THE AFFORDANCE FLIP HAS FIRED. The M6 contract was always that this row
+  /* spec-decode LEVER — THE AFFORDANCE FLIP HAS FIRED. The final-answer revision contract was always that this row
      ships `no-control` and flips to `jump` WHEN THE LEVER LANDS, "with no new mechanism": two fields
      on one frozen registry row and nothing else. The lever landed, so the assertion moves with it —
      the contract is unchanged, its precondition is. */
@@ -1446,7 +1449,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     && E.EXEC_SUMMARY_ROWS.filter(r => r.lowEvidence && r.lowEvidence.state === "jump").length === 3);
   assert("T-6 the row's param label is byte-unchanged by the flip",
     E.EXEC_SUMMARY_ROWS[3].lowEvidence.param === "Speculative decode / MTP credit");
-  /* §17.4's other half: the pattern has a WORKING instance, so it is not unfalsifiable. */
+  /* 's other half: the pattern has a WORKING instance, so it is not unfalsifiable. */
   assert("T-6/§17.4 the affordance's `jump` state has at least one live instance with a real control key",
     E.EXEC_SUMMARY_ROWS.some(r => r.lowEvidence && r.lowEvidence.state === "jump" && typeof r.lowEvidence.controlKey === "string"));
   assert("T-6/§17.4 every declared jump target is a REAL engine parameter key",
@@ -1465,23 +1468,23 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     Object.keys(retired).every(id => !E.PERSPECTIVES.some(p => p.id === id)), Object.keys(retired).join(","));
   assert("T-7(a) every retired id maps to a LIVE migration target",
     Object.values(retired).every(target => E.PERSPECTIVES.some(p => p.id === target)), JSON.stringify(retired));
-  // (c) the map is byte-unchanged by M6 — M6 retires nothing, so it adds no migration row
-  assert("T-7(c) RETIRED_PERSPECTIVES is byte-unchanged by M6 (M6 retires no perspective)",
+  // (c) the map is byte-unchanged by final-answer revision — final-answer revision retires nothing, so it adds no migration row
+  assert("T-7(c) RETIRED_PERSPECTIVES is byte-unchanged by the final-answer revision (the final-answer revision retires no perspective)",
     JSON.stringify(retired) === JSON.stringify({ teortaxes: "x80-v3", zephyr: "x80-v4", semi: "x90-v1", skeptic: "x60-v3" }),
     JSON.stringify(retired));
   // (d) the ≈37 language is ABSENT from every FA token — asserted against BOTH forms, since the
-  //     escape `≈` is exactly what hid the live violation from four memo versions.
+  //     escape `≈` is exactly what hid the live violation from four specification versions.
   {
     const bag = [];
     for (const [k, v] of Object.entries(fa.tokens)) {
       if (typeof v === "string") bag.push([k, v]);
       else if (Array.isArray(v)) v.forEach((x, i) => { if (typeof x === "string") bag.push([k + "[" + i + "]", x]); });
     }
-    /* im-release-edit-r2 (2026-09-10): the bare "≈37" clauses were a sound shortcut while 37 was
-       ONLY ever the retired pre-repair figure. The owner's fleet-rent adoption moved the traffic
+    /*  (2026-09-10): the bare "≈37" clauses were a sound shortcut while 37 was
+       ONLY ever the retired pre-repair figure. The fleet-rent adoption moved the traffic
        span to "≈37% to ≈66%", so a legitimately computed 37 now trips a sweep for a retired
        COMPARISON. Narrowed to the comparison itself, which is what T-7(d) is named for and what the
-       memo actually retired — a sweep that fires on a digit rather than on a claim will keep firing
+       specification actually retired — a sweep that fires on a digit rather than on a claim will keep firing
        on innocent arithmetic, and the pressure then is to delete the sweep. */
     const hits = bag.filter(([, v]) => /≈\s?48\s*(?:→|->|to)\s*≈?\s?37\b/.test(v)
       || /\\u2248\s?48\s*(?:→|->|to)\s*\\u2248?\s?37\b/.test(v));
@@ -1491,7 +1494,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     assert("T-7(d) and it is absent from the engine source in BOTH the literal and the escaped form",
       !engineSrc.includes("≈48 → ≈37") && !engineSrc.includes("\\u224848 \\u2192 \\u224837"));
     // …and PRESENT in the methods/changelog surface, where D-1 says it belongs
-    /* bq-3316 (2026-09-25; owner standing rule nd94bbc): the item moved VERBATIM from the methods box to
+    /* the release (2026-09-25; adopted rule): the item moved VERBATIM from the methods box to
        the changelog — the other surface D-1 names. The guard follows it there and still fails if the
        history is dropped from both. */
     const html = readFileSync(join(ROOT, "site/index.html"), "utf8")
@@ -1500,7 +1503,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
       html.includes("Superseded readings (history)") && /≈37%|&#8776;37%/.test(html));
   }
   /* (b) no live registry row carries a retired operating-point tuple.
-     The fixture below is the r4 §C1 pre-repair cell set, READ OUT OF THE PRE-M1 COMMIT rather than
+     The fixture below is the r4  pre-repair cell set, READ OUT OF THE PRE-CALIBRATION-REVISION COMMIT rather than
      recalled: at 6823358 `trn2.balanced` and `trn3.balanced` were `{b: 4}` with NO batchQuantity
      field at all — the b=4 Trainium operating points and the per-device batch/weight identity
      defect the r4 review named. Today both are b=32 aggregate-batch surrogates that DECLARE their
@@ -1515,7 +1518,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     const carriesRetired = (points) => RETIRED_TUPLES
       .filter(([hw, pt, b]) => points[hw] && points[hw][pt] && points[hw][pt].b === b)
       .map(([hw, pt]) => hw + "." + pt);
-    assert("T-7(b) no live operating-point row carries a retired r4 §C1 pre-repair tuple (b=4 Trainium)",
+    assert("T-7(b) no live operating-point row carries a retired pre-repair tuple (b=4 Trainium)",
       carriesRetired(OP).length === 0, JSON.stringify(carriesRetired(OP)));
     assert("T-7(b) negative: the check TRIPS when a retired tuple is re-introduced (it can fail)",
       carriesRetired({ trn2: { balanced: { b: 4 } } }).length === 1);
@@ -1548,17 +1551,17 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     // rewrites the substring "../site/") cannot rewrite this test's expectation out from under it
     guardSrc.includes('{ rel: "..' + '/site/engine.js", kind: "evaluated"')
     && guardSrc.includes('"..' + '/site/engine.js": "evaluated"'));
-  /* The two §3.1 figures now carry their basis in their OWN clause. Re-derived here with the same
-     clause rule the guard uses, plus the negative fixture the memo requires: stripping the basis
+  /* The two  figures now carry their basis in their OWN clause. Re-derived here with the same
+     clause rule the guard uses, plus the negative fixture the specification requires: stripping the basis
      phrase must FAIL. */
   const clauseOf = (text, needle) => {
     const sentence = text.split(/(?<=[.!?])\s+/).find(x => x.includes(needle)) || "";
     return sentence.split(/;|,\s+(?=while\b|but\b|whereas\b|although\b|though\b|yet\b)/).find(c => c.includes(needle)) || "";
   };
   const REF_PHRASE = "public-evidence reference";
-  /* im-arc T4 fold (2026-08-24, declared delta): x60-v3's published reference figure moved
+  /*  (2026-08-24, declared delta): x60-v3's published reference figure moved
      −37.8% -> −64.8%. gptpro's 81.7% blended reference reading is re-stated in the same note. */
-  /* im-vet-six-repairs (2026-09-20): both figures move with the Trainium withdrawal and the TPU
+  /*  (2026-09-20): both figures move with the Trainium withdrawal and the TPU
      numerator repair; the property — each names its basis in its own clause — is unchanged. */
   for (const [id, needle] of [["gptpro", "83.0% blended"], ["x60-v3", "−40.4%"]]) {
     const note = E.PERSPECTIVES.find(p => p.id === id).note;
@@ -1613,15 +1616,15 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
 {
   const html = readFileSync(join(ROOT, "site/index.html"), "utf8");
   const m6Details = [...html.matchAll(/<details[^>]*id="(fa-[^"]+)"[^>]*>/g)];
-  assert("T-10 every M6-rendered <details> in the page source is collapsed (no `open` attribute)",
+  assert("T-10 every final-answer <details> in the page source is collapsed (no `open` attribute)",
     m6Details.length > 0 && m6Details.every(d => !/\bopen\b/.test(d[0])),
     JSON.stringify(m6Details.map(d => d[0])));
   const app = readFileSync(join(ROOT, "site/app.js"), "utf8");
   /* Scoped to the block that BUILDS the explainers. Two other `open` writes exist in app.js and
-     neither is an M6 explainer: the slider-lock <dialog>'s no-showModal fallback, and the A-3 jump
+     neither is a final-answer revision explainer: the slider-lock <dialog>'s no-showModal fallback, and the A-3 jump
      affordance opening the ANCESTOR sections of an existing control so the control it jumps to is
      focusable. Scoping here rather than over the whole region keeps the assertion about the thing
-     it claims — that no explainer M6 RENDERS is expanded at first paint. */
+     it claims — that no explainer final-answer revision RENDERS is expanded at first paint. */
   const entriesBlock = app.slice(app.indexOf("fa.tokens.higherJustificationEntries.forEach"), app.indexOf("renderExecSummary(fa);"));
   assert("T-10 the runtime-built justification <details> are never given `open` either",
     entriesBlock.length > 0 && !/\.open\s*=\s*true/.test(entriesBlock) && !/setAttribute\("open"/.test(entriesBlock));
@@ -1644,19 +1647,19 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
     assert("T-11 row [" + row.id + "] carries the weld RE-DERIVED from its OWN state",
       fa.tokens.executiveSummaryRows[row.order - 1].includes(want), want);
   }
-  /* im-arc T4 fold (2026-08-24), memo §4: the honest fact CHANGED, and it is asserted as the new
+  /*  (2026-08-24), : the honest fact CHANGED, and it is asserted as the new
      honest fact rather than relaxed. The default fleet still declares seven legs. Under a RENT
      basis only four of them price — gb200, gb300 and trn3 have no admissible public planning rate
      — so those rows weld 4/7 at 52% of the blend. The owned-TCO row prices all seven, because
      their capex is registered. Both are asserted by name; neither is allowed to drift.
 
-     im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+     publication revision (2026-09-10), adjudicated 2026-09-10:
      the honest fact changed AGAIN, in the other direction, and is re-asserted the same way. The
      three legs now carry adopted provisional planning rents, so a rent-basis row welds 7/7 at 100%
      of the blend exactly as the owned-TCO row does. The DIVERGENCE this assertion existed to pin —
      rent and owned welding different fleets — is gone, so what it pins now is that both bases weld
      the whole declared fleet. If a future leg loses its rate again, this fails, which is the point. */
-  /* im-vet-six-repairs (2026-09-20), vetting finding E1: the honest fact changes a THIRD time and
+  /* registry repairs (2026-09-20), vetting finding E1: the honest fact changes a THIRD time and
      is re-asserted the same way. Both bases still weld the WHOLE fleet they are handed; that fleet
      is now the five-leg default, because the two Trainium legs are withdrawn on evidence grounds
      before pricing is ever reached. The divergence this assertion exists to pin — rent and owned
@@ -1686,7 +1689,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
   }
 }
 
-/* ================= the exec-summary row hrefs RESOLVE (memo §5.2 validation) =================
+/* ================= the exec-summary row hrefs RESOLVE (validation) =================
    `site-links` scans literal HTML attributes; these hrefs are rendered by app.js at runtime and so
    never appear as literal attributes — they would be silently unvalidated. They are declared as
    typed data in the engine registry precisely so this assertion can resolve every one of them. */
@@ -1706,11 +1709,11 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
       assert("hrefs: row [" + row.id + "] annex anchor #" + frag + " exists in the generated annex",
         annex.includes('id="' + frag + '"'), href);
   }
-  assert("hrefs: M6 introduces no new EXTERNAL url",
+  assert("hrefs: the final-answer revision introduces no new EXTERNAL url",
     E.EXEC_SUMMARY_ROWS.every(r => !/^https?:/.test(r.href)));
 }
 
-/* ================= release-chain registration (memo §10.5) =================
+/* ================= release-chain registration =================
    `npm test`, `test:served-node` and the twin allowlist are CLOSED enumerations — a new test file
    nobody adds to them never runs. Asserted mechanically rather than trusted. */
 {
@@ -1728,5 +1731,5 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
 }
 
 P.summary();
-console.log(failures ? `\n${failures} FA-M6 FAILURE(S)` : "\nALL FA-M6 (b9 M6) CHECKS PASS");
+console.log(failures ? `\n${failures} FA-M6 FAILURE(S)` : "\nALL FA-M6 CHECKS PASS");
 process.exit(failures ? 1 : 0);

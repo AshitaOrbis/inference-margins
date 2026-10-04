@@ -1,10 +1,10 @@
-/* im-arc T4 fold (2026-08-24) — the historical PIN BUNDLE, generated, not hand-listed.
-   Spec: research/im-arc-t4-fold-memo.md §6 [F10].
+/* Historical pin bundle of 2026-08-24 — generated, not hand-listed.
+   The design specifies the following requirement.
 
-   Memo §6 requires that "any arithmetic sink reachable by a historical state" have a historical
+   It requires that "any arithmetic sink reachable by a historical state" have a historical
    value, and that the bundle be GENERATED rather than transcribed. This module is the one place
    that turns the declared-delta manifest's recorded `before.defaults` block into a state overlay,
-   so every consumer — the T2 electricity gate, the render-parity receipts, any later leg —
+   so every consumer — the registry electricity gate, the render-parity receipts, any later leg —
    reproduces a pre-fold reading through the SAME bundle. Nothing here restates a value: every
    number is read out of tests/fixtures-t4-declared-delta.json, which the mint writes.
 
@@ -72,10 +72,10 @@ export function asPreT4(state, modelId) {
 }
 
 /* ---------------------------------------------------------------------------------------
-   im-arc T4 fold, relaunch r2 (2026-08-25) — the bundle's SECOND HALF, added because the
-   first half could not satisfy memo §6 on its own.
+   Extended 2026-08-25 — the bundle's SECOND HALF, added because the
+   first half could not satisfy  on its own.
 
-   §6 asks two different things of a pin bundle and only one of them is a state overlay:
+    asks two different things of a pin bundle and only one of them is a state overlay:
 
      "The 270-state historical hash must still reproduce through the extended pin bundle;
       the 273-state pre-T4 receipt must reproduce through the same bundle plus the pre-T4
@@ -85,7 +85,7 @@ export function asPreT4(state, modelId) {
    state *and* the registry that state resolves against — REGIONS, DATACENTERS, PROGRAMMES and
    the coverage ledger are module data, not scenario keys, so no amount of state pinning moves
    them back. Both halves below are generated: one from the manifest, one from the archived
-   pre-fold module bytes under im-arc/bak/. Nothing here restates a number.
+   pre-fold module bytes in the local archive. Nothing here restates a number.
    --------------------------------------------------------------------------------------- */
 
 import { createHash } from "node:crypto";
@@ -108,7 +108,7 @@ export function applyPreT4Defaults(state, _perspective, modelId) {
     if (JSON.stringify(state[key]) === JSON.stringify(E.DEFAULTS[key]))
       state[key] = structuredClone(value);
   }
-  /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+  /*  (2026-09-10), adjudicated 2026-09-10.
      A MODEL TARIFF is an input too, and until now the bundle did not restore one — it had never
      needed to, because no fold had moved a published price. This one does: Grok's cacheReadMult
      goes from the 2026-07-08 launch rate (25%) to the published 15%, and `applyPresetSettings`
@@ -137,13 +137,13 @@ export function applyPreT4Defaults(state, _perspective, modelId) {
 }
 
 /* ---- the registry half: the pre-fold module bytes, read out of GIT, never transcribed ----
-   r2b (2026-08-25, at landing): these bytes were first read from im-arc/bak/. That made `npm test`
+   r2b (2026-08-25, at landing): these bytes were first read from the local archive. That made `npm test`
    depend on an UNTRACKED sibling directory — fine on the machine the leg ran on, absent from a
    clean clone, which would have turned this gate into a confusing ENOENT rather than a check.
    The project already states its own position on that, in .gitignore: pre-edit archives are
    "redundant with git history once the edit lands". So the bundle reads the pre-fold bytes from
    git at the manifest's recorded base commit. Git is content-addressed, so this pin cannot drift,
-   and it costs the repository nothing to store twice. im-arc/bak/ remains the leg's archive-first
+   and it costs the repository nothing to store twice. The local archive remains the earlier
    record and is cross-checked against these bytes below when it is present. */
 const BASE_COMMIT = MANIFEST.before.baseCommit;
 const REPO_ROOT = fileURLToPath(new URL("../", import.meta.url));
@@ -219,7 +219,7 @@ export function withPreT4Registry(fn) {
      it is keyed on this explicit flag instead, so an opt-out is always something a caller said,
      never something the validator guessed from missing data. */
   entry.exports = { ...loadPreT4Module("./engine-data-dc-v1.js"), __preT4RegistryPin: true };
-  /* im-vet-model-estimates (2026-09-19). A model's DEFAULT TRAFFIC PROFILE is pinned here rather
+  /* tariff revision (2026-09-19). A model's DEFAULT TRAFFIC PROFILE is pinned here rather
      than in applyPreT4Defaults, because it is not a state key: `scenarioContext` resolves the
      profile id from the MODEL, and the roofline reads its absolute lengths from that id
      (TRAFFIC_OSL) — so restoring ioRatio/cacheHit onto the state leaves the context, and therefore
@@ -243,7 +243,7 @@ export function withPreT4Registry(fn) {
 }
 
 /* THE 2026-09-20 REGISTRY PIN, on its own so it can be used WITHOUT the pre-T4 state bundle.
-   im-vet-six-repairs, and the SAME argument the nativeTraffic pin in withPreT4Registry makes:
+   , and the SAME argument the nativeTraffic pin in withPreT4Registry makes:
      a historical receipt is re-earned, not re-minted to match a new number.
 
      TWO registry values moved on 2026-09-20 and both reach these grids:
@@ -316,7 +316,7 @@ export function preT4PinDigests() {
 }
 
 /* ---------------------------------------------------------------------------------------
-   ROUND 3 (2026-08-25) — the two things Polaris's second toss-back was right about.
+   ROUND 3 (2026-08-25) — the two things the maintainer's second revision request was right about.
 
    (a) THE STRESS FLEET IS PINNABLE AS DATA. Round 2 reported the pre-T4 273-state receipt as
    unreproducible through the live engine and offered a bounded residue instead. That was wrong.
@@ -330,7 +330,7 @@ export function preT4PinDigests() {
    capexAbsLeg, not a hand-fed answer. Both receipts reproduce with no residue.
 
    (b) THE BUNDLE IS GENERATED FROM THE FROZEN SINK REGISTRY. Round 2 substituted the declared
-   -delta manifest for the sink registry the memo names, on the grounds that the registry
+   -delta manifest for the sink registry the specification names, on the grounds that the registry
    enumerates output channels rather than scenario arithmetic. That reading of the file is
    correct and it is still not a licence to swap the instrument. The registry's pinned `files`
    array IS the authoritative release source graph, and the frozen scanner computes it — so the

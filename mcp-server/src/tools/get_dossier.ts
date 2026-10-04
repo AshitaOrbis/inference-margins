@@ -8,8 +8,8 @@ import { envelope, failClosed, registryReceipt, type ToolResult, registryEmitMet
 
 export const name = "get_dossier";
 
-/* IM3 exit-gate fix 3 made the evidence/engine identity fork reachable on this path;
-   IM4 slice A (schema rev 2.2, 2026-07-21) CLOSED that fork: every deployed record in the
+/* An earlier update made the evidence/engine identity fork reachable on this path;
+   the update of 2026-07-21 (schema rev 2.2) CLOSED that fork: every deployed record in the
    internal evidence registry now carries the discriminated live identity (fitClass, live
    per-row roofline eta bound by test equality to the engine's calibration registry, a
    calibrationRef naming its own registry row) with the retired scalar effDec/effPre fields

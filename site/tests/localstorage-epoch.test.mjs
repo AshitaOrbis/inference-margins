@@ -1,6 +1,6 @@
-// localStorage EPOCH deprecation contract (IM1 / v2.2) — the permanent automated gate for the
-// im_presets_v1 saved-scenario epoch check (governing plan §4 risk 1(c), memo
-// research/im1-permalink-epoch-memo.md §3). Run: node site/tests/localstorage-epoch.test.mjs
+// localStorage EPOCH deprecation contract (v2.2) — the permanent automated gate for the
+// im_presets_v1 saved-scenario epoch check (governing  risk 1(c), specification
+// the design analysis ). Run: node site/tests/localstorage-epoch.test.mjs
 //
 // Why raw CDP (no Playwright dependency): the browser suite (run-app-tests.sh) renders static DOM via
 // --dump-dom and cannot seed localStorage before load or click a control. This test drives Chrome over
@@ -71,7 +71,7 @@ const PROBE = `(() => {
   const r = {};
   localStorage.setItem('im_presets_v1', JSON.stringify({
     'Legacy scenario': { active: 200, total: 3000, __persp: 'median' },
-    /* A CURRENT record now also carries model + fleet identity (Polaris ruling 2026-09-19 on
+    /* A CURRENT record now also carries model + fleet identity (the maintainer ruling 2026-09-19 on
        Astra pack B P0-4). Seeding it without them made this fixture a PRE-v3.x record, which
        correctly raises the identity notice — so the "clears the notice" assertion below was
        testing the wrong record. The identity-incomplete case gets its own row instead. */
@@ -137,7 +137,7 @@ async function main() {
     // Wait for app init (classic scripts executed; saved-list present).
     let ready = false;
     for (let t = 0; t < 15000; t += 150) {
-      // CHROME 150 REGRESSION (b9 M1 close-out): readyState only reaches 'complete' once
+      // CHROME 150 REGRESSION (verified behavior): readyState only reaches 'complete' once
       // every subresource settles, and the page loads Cloudflare Turnstile from a remote
       // host that Chrome 150 waits on indefinitely (see tests/run-app-tests.sh for the full
       // diagnosis). The load-bearing readiness signals are the app symbols themselves; the

@@ -1,43 +1,43 @@
 /* =====================================================================================
-   custom-fleets.js — b9 M4 custom fleet builder: schema, validation, store, pure state
-   (memo research/b9-m45-ui-memo.md v2.1 — design gate closed at 28d4b25; plan §5 M4, D-4)
+   custom-fleets.js —  custom fleet builder: schema, validation, store, pure state
+   Design adopted 2026-07-28.
 
-   Script order: data → roofline → engine → custom-fleets → app (the IM3 slice-4
+   Script order: data → roofline → engine → custom-fleets → app (the
    reverse-dependency rule). engine.js loads BEFORE this file, so it never references
    these symbols at parse time — it consults the store through the registration hook
    `registerCustomFleetSource()` it defines (call-time binding only). NO DOM in this
    file: app.js owns the modal wiring; everything here is node-importable so the test
    suite exercises schema/validation/state with no browser.
 
-   Identity rules (memo §1): custom-fleet ids carry the reserved prefix "cf:"; ids
+   Identity rules: custom-fleet ids carry the reserved prefix "cf:"; ids
    arriving from URLs or storage resolve by OWN-PROPERTY lookup only — never through
    Object.prototype (codec-v5 precedent). Definitions live HERE, never inside the
-   scenario state S (the M3 side-registry/state-purity rule: applyPresetSettings copies
+   scenario state S (the side-registry/state-purity rule: applyPresetSettings copies
    keys into scenario state, and a fleet definition inside S would leak through preset
    application).
    ===================================================================================== */
 "use strict";
 
-/* ---------- schema constants (memo §2.2, §6.2 — the ONE closed shape) ---------- */
+/* ---------- schema constants (the ONE closed shape) ---------- */
 const CF_PREFIX = "cf:";
 const CF_ID_RE = /^cf:[a-z0-9]{4,16}$/;
 const CF_MAX_LEGS = 12;
 const CF_MAX_SECTIONS = 6;
 const CF_NAME_MAX = 60;
-/* Closed key sets at every level (memo §6.2: an unknown key at ANY level rejects the
+/* Closed key sets at every level (an unknown key at ANY level rejects the
    whole object — builder, store loader, and codec all consume THIS table). */
 const CF_FLEET_KEYS = Object.freeze(["id", "name", "epoch", "clonedFrom", "sections", "wireVersion", "wireLegacyBases"]);
 const CF_LEGACY_FLEET_KEYS = Object.freeze(["id", "name", "epoch", "clonedFrom", "legs", "wireVersion", "wireLegacyBases"]);
 const CF_SECTION_KEYS = Object.freeze(["id", "label", "sharePct", "basis", "rent", "electricity", "pue", "tco", "dcRef", "provenance", "fallbackReceipts", "shareRounding", "legs"]);
 const CF_LEG_KEYS = Object.freeze(["donorKey", "label", "sharePct", "overrides", "family"]);
 const CF_LEGACY_LEG_KEYS = Object.freeze([...CF_LEG_KEYS, "basisDeclared"]);
-/* T5 rec 4 (GPT Pro 2026-07-29 §6, "Make HBM capacity a typed quantity … do not use an
+/* T5 rec 4 (GPT Pro 2026-07-29 , "Make HBM capacity a typed quantity … do not use an
    unqualified `hbmGB` scalar"). The override is now stored in BYTES, the same normative unit
    `engine-data-v22.js` carries per row. `hbmGB` survives ONLY as a read-side alias so every
    saved fleet and every already-shared v6/v7 link keeps its exact previous meaning; the
    validator converts it at ×1e9 — the convention those links were minted under — and emits
    `hbmBytes`. Nothing writes `hbmGB` again. A fleet carrying BOTH keys is rejected whole
-   rather than silently preferring one (§6.2 fail-closed). */
+   rather than silently preferring one (fail-closed). */
 const CF_OVERRIDE_KEYS = Object.freeze(["rentPerHr", "capexUsd", "capexScope", "boardPowerW", "kwhPerKwh", "hbmBytes"]);
 const CF_OVERRIDE_LEGACY_KEYS = Object.freeze(["hbmGB"]);
 const CF_HBM_LEGACY_BYTES_PER_GB = 1e9;
@@ -56,8 +56,8 @@ const CF_TRIPLE_KEYS = Object.freeze(["lo", "mid", "hi"]);
 const CF_FALLBACK_RECEIPT_KEYS = Object.freeze(["field", "value", "source", "reason"]);
 const CF_SHARE_ROUNDING_KEYS = Object.freeze(["basis", "changes", "residualKeys"]);
 const CF_SHARE_ROUNDING_CHANGE_KEYS = Object.freeze(["scope", "key", "declared", "rounded"]);
-/* Typed bounds (memo §2.2). kwhPerKwh deliberately wider than the scenario slider's
-   0.03–0.15 — the per-datacenter case spans constrained grids (memo D-11, disclosed in
+/* Typed bounds. kwhPerKwh deliberately wider than the scenario slider's
+   0.03–0.15 — the per-datacenter case spans constrained grids (disclosed in
    the tip copy). */
 const CF_BOUNDS = Object.freeze({
   rentPerHr: Object.freeze([0.05, 50]),
@@ -67,7 +67,7 @@ const CF_BOUNDS = Object.freeze({
   /* T5 rec 4: the bound is now stated in the SAME unit the core checks in, so the validator and
      `engine-roofline-v22.js`'s plausibility window are comparable instead of the GB bound
      approximating it. The CEILING is that window's verbatim 1e12 B (unchanged: the old 1000 GB
-     was already this number). The FLOOR deliberately stays at the memo's 16 GB, expressed as
+     was already this number). The FLOOR deliberately stays at 16 GB, expressed as
      1.6e10 B — the same value it has always been — which keeps the validator strictly inside the
      core's [1e10, 1e12] window rather than widening what a reader may declare. No bound moves. */
   hbmBytes: Object.freeze([1.6e10, 1e12]),
@@ -121,22 +121,22 @@ function cfBases() {
 }
 function cfDcData() {
   if (typeof module !== "undefined" && module.exports) return require("./engine-data-dc-v1.js");
-  /* im-arc T4 fold ROUND 6 (2026-08-25): DC_SCHEMA was missing from this branch while being a
+  /*  (2026-08-25): DC_SCHEMA was missing from this branch while being a
      perfectly ordinary browser global (engine-data-dc-v1.js). Every Node consumer got the schema
      and every BROWSER consumer silently did not, which is how the reader-capex scope requirement
      came to be enforced on one surface and not the other. The omission was invisible to the whole
      Node suite by construction. */
   return { REGIONS, DATACENTERS, PROGRAMMES, DC_SCHEMA };
 }
-/* Donor family from the M3 registry field; "unclassified" is the only permitted
-   reassignment (memo §2.6 — never a DIFFERENT family: a Trainium-calibrated leg tagged
-   nvidia would silently ride the wrong M5 family multiplier). */
+/* Donor family from the registry field; "unclassified" is the only permitted
+   reassignment (never a DIFFERENT family: a Trainium-calibrated leg tagged
+   nvidia would silently ride the wrong family multiplier). */
 function donorFamily(donorKey) {
   const row = cfData().HW_ROOFLINE[donorKey];
   return row && typeof row.family === "string" ? row.family : "unclassified";
 }
 
-/* ---------- the ONE validator (memo §2.2/§6.2/§6.3 — fail-closed, reject-whole) ----------
+/* ---------- the ONE validator (fail-closed, reject-whole) ----------
    Returns { ok: true, fleet } with a normalized deep copy, or { ok: false, errors: [...] }.
    Never clamps, never repairs, never resolves through prototypes. `opts.requireId`
    distinguishes store/codec shapes (id required) from builder working copies (id absent
@@ -149,7 +149,7 @@ function validateCustomFleet(input, opts) {
     return { ok: false, errors: ["fleet: not an object"] };
   }
   const legacyV1 = Array.isArray(input.legs) && !("sections" in input);
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-4): wire provenance
+  /*  (corrected 2026-08-23): wire provenance
      survives normalization. It is not a pricing input; it only decides whether
      a semantically legacy fleet re-serializes through the v6 or v7 envelope. */
   const wireVersion = opts && opts.wireVersion !== undefined ? opts.wireVersion : input.wireVersion;
@@ -173,7 +173,7 @@ function validateCustomFleet(input, opts) {
   }
   /* impl-gate P1-2: stored/token shapes REQUIRE the epoch stamp (the builder's working
      copy — requireId:false — may omit it; Save stamps it). A fleet with no epoch can
-     never surface the §7.3 stale-defaults notice, so absence is a schema violation. */
+     never surface the  stale-defaults notice, so absence is a schema violation. */
   if (requireId) {
     if (typeof input.epoch !== "string" || !input.epoch.length) err("fleet.epoch: non-empty string required");
   } else if ("epoch" in input && typeof input.epoch !== "string") err("fleet.epoch: string required when present");
@@ -292,7 +292,7 @@ function validateCustomFleet(input, opts) {
       validateTco(section.tco, at + ".tco", bounded, HWO, err);
       validateFallbackReceipts(section.fallbackReceipts, at + ".fallbackReceipts", err);
       validateShareRounding(section.shareRounding, at + ".shareRounding", err);
-      /* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+      /* Adopted 2026-08-22:
          dcRef is the shared registry-row reference. Programme rows retain their
          programme coverage class; allowing them here does not relabel them as sites. */
       const dcData = cfDcData();
@@ -362,7 +362,7 @@ function normalizeSection(section) {
     legs: section.legs.map(normalizeLeg) };
   return out;
 }
-/* im-arc T3 FIX-2 B1 (2026-08-23): permalink sections intentionally omit
+/*  B1 (2026-08-23): permalink sections intentionally omit
    runtime-derived fallback/rounding receipts, and validation adds wire-version
    migration metadata. Neither class is caller authority. Use an explicit-key
    projection for same-id collision checks so key insertion order cannot create a
@@ -405,7 +405,7 @@ function validateRent(rent, at, bounded, HWO, err, legs) {
       if (!HWO.includes(key)) err(at + ".usdPerHrByHw: unknown hardware '" + key + "'");
       bounded(value, CF_BOUNDS.rentPerHr, at + ".usdPerHrByHw." + key);
     }
-    /* im-arc T2 fix (Sol review 2026-08-23, finding P1-7): the map is
+    /*  (corrected 2026-08-23): the map is
        total over the section's donor set. Missing is invalid, never NaN later. */
     if (rent.usdPerHrByHw && typeof rent.usdPerHrByHw === "object" && !Array.isArray(rent.usdPerHrByHw))
       for (const key of [...new Set((Array.isArray(legs) ? legs : []).map(leg => leg && leg.donorKey).filter(Boolean))])
@@ -417,7 +417,7 @@ function validateElectricity(electricity, at, bounded, err) {
   if (electricity === null) return;
   if (typeof electricity !== "object" || Array.isArray(electricity)) { err(at + ": null or object required"); return; }
   for (const k of Object.keys(electricity)) if (!CF_ELECTRICITY_KEYS.includes(k)) err(at + ": unknown key '" + k + "'");
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-5): region-only
+  /*  (corrected 2026-08-23): region-only
      electricity inherits the registry triple; an explicit value is an override
      and may retain regionRef only as informational context. */
   if (!("usdPerKwh" in electricity) && !("regionRef" in electricity))
@@ -428,11 +428,11 @@ function validateElectricity(electricity, at, bounded, err) {
   if ("regionRef" in electricity && !(typeof electricity.regionRef === "string"
       && Object.prototype.hasOwnProperty.call(cfDcData().REGIONS, electricity.regionRef))) err(at + ".regionRef: registered region required");
 }
-/* im-arc T4 fold round 4 (2026-08-25): the ONE place the reader-capex scope rule lives, so the
+/*  (2026-08-25): the ONE place the reader-capex scope rule lives, so the
    section path and the leg-override path cannot drift apart. `stated` is whether this object
    actually carries a capex of the reader's own. */
 /* The ONE way to opt out of the capex-scope rule: a historical replay must SAY it is one.
-   im-arc T4 fold ROUND 6 (2026-08-25). Round 4 keyed this escape on DC_SCHEMA being ABSENT, which
+    (2026-08-25). Round 4 keyed this escape on DC_SCHEMA being ABSENT, which
    made "the schema is missing" and "the caller is deliberately replaying history" the same
    condition — so a plain wiring omission in the browser branch of cfDcData() disabled the rule
    everywhere, silently, and the comment claiming the branch was unreachable outside a replay was
@@ -476,8 +476,8 @@ function validateTco(tco, at, bounded, HWO, err) {
       bounded(value, CF_BOUNDS.capexUsd, at + ".capexUsdByHw." + key);
     }
   }
-  /* im-arc T4 fold round 4 (2026-08-25), memo :41/:123: a stated capex is MEANINGLESS without the
-     input scope of the observation, and assuming one is the specific harm the memo names — an
+  /* Adopted 2026-08-25: a stated capex is MEANINGLESS without the
+     input scope of the observation, and assuming one is a specific harm — an
      installed-system price silently multiplied by the bare-card overhead invents a cluster cost
      the observation already contains. Required WITH capex, refused WITHOUT it. */
   validateCapexScope(tco, tco.capexUsdByHw !== undefined && tco.capexUsdByHw !== null, at, err);
@@ -537,7 +537,7 @@ function validateShareRounding(receipt, at, err) {
 }
 
 /* ---------- pure state helpers ---------- */
-/* The §1.3 blend-mirror aggregation: per-donorKey sums over HW_ORDER shape. Suite
+/* The  blend-mirror aggregation: per-donorKey sums over HW_ORDER shape. Suite
    invariant: aggregate(legs) == S.blend after every builder commit / cf: selection. */
 function aggregateLegsToBlend(fleet) {
   const HWO = cfHwOrder();
@@ -577,7 +577,7 @@ function makeLegFromDonor(donorKey, sharePct) {
 }
 function makeBlankSection(id, sharePct) {
   return { id, label: id === "s1" ? "Primary section" : "Section " + id.slice(1), sharePct,
-    /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §1.2): new sections are
+    /* : new sections are
        explicitly typed. `inherit` remains accepted solely for v1 store/token migration. */
     basis: "committed-planning-rent", rent: { mode: "registered", mult: 1 },
     electricity: null, pue: null, tco: null,
@@ -599,7 +599,7 @@ function normalizeShares(rows) {
 }
 function midpoint(value) { return isTriple(value) ? value.mid : Number(value); }
 
-/* ---------- localStorage store: im_custom_fleets_v1 (memo §7) ----------
+/* ---------- localStorage store: im_custom_fleets_v1 ----------
    Fail-closed, non-destructive: an unparseable/mis-shaped store yields an EMPTY
    in-memory map and storage is left untouched; individually invalid rows are skipped
    on load but PRESERVED in storage. Writes only on explicit save/delete, rewriting
@@ -608,7 +608,7 @@ const CF_STORE_KEY = "im_custom_fleets_v1";
 /* impl-gate P1-1: the loader returns BOTH maps — `valid` (what the app offers) and `raw`
    (every stored row verbatim, including rejected ones). Persistence writes RAW with only
    the touched key changed, so an invalid row survives every unrelated Save/Delete
-   byte-for-byte (memo §7.2 non-destructive, now actually true rather than
+   byte-for-byte (non-destructive, now actually true rather than
    true-until-the-next-write). */
 function loadCustomFleetStore() {
   if (typeof localStorage === "undefined") return { valid: Object.create(null), raw: Object.create(null) };
@@ -636,8 +636,8 @@ function persistCustomFleetStore(raw) {
 }
 
 /* ---------- runtime source (registered into the engine) ----------
-   The engine resolves cf: identities exclusively through this source (memo §3.1). The
-   ephemeral slot carries a link-restored by-value fleet (memo §6.5): loading a link
+   The engine resolves cf: identities exclusively through this source. The
+   ephemeral slot carries a link-restored by-value fleet: loading a link
    NEVER writes localStorage — "Save a copy" is the only write path. */
 const CF_RUNTIME = {
   saved: {},          // id -> VALIDATED fleet (what the app offers)

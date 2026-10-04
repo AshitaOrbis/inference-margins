@@ -561,7 +561,7 @@ A production model should apply explicit factors for occupancy/utilization, redu
 publication; original preserved in the archive copy.
 
 **Provenance routing:** any site change this dive justifies must enter through the update queue
-(`research/update-queue.md`), not via direct edits.
+(the recorded update queue), not via direct edits.
 
 <details><summary>Dispatched prompt (verbatim)</summary>
 

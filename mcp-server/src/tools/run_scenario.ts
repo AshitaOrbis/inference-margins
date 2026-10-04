@@ -34,7 +34,7 @@ export const config = {
     }).optional().describe("Traffic-mix selection; default = the model's native profile. Replays lock their traffic — selections cannot move them."),
     fleet: z.string().optional().describe("Named fleet id (see list_scenario_space.fleets) — seeds that registry fleet's blend exactly as the site switcher does (the default fleet reproduces the serve-feasibility-filtered derivation at the queried scenario; every other fleet seeds its DECLARED weights as a named scenario). Mutually exclusive with overrides.blend. Counterfactual-class fleets are explicitly labeled in the lead sentence and are never a default."),
     overrides: z.record(z.unknown()).optional().describe("State overrides validated against SCENARIO_BOUNDS (see list_scenario_space.override_bounds); invalid values are rejected, never clamped"),
-    /* im-arc T4 fold (2026-08-24), memo §2.1 [F6] and §2 [F5]. `capital_recovery` has ONE canonical
+    /* The update of 2026-08-24. `capital_recovery` has ONE canonical
        default — off — identical to the basic UI, the advanced UI and the v7 codec, so a shared link
        and an MCP request reproduce the same arithmetic. `capex_scope` is REQUIRED whenever the
        caller states a capex of their own: an observed capex is meaningless without its input scope,
@@ -113,7 +113,7 @@ export function handler(args: Args): ToolResult {
   const p = E.PERSPECTIVES.find((x) => x.id === pid);
   if (!p) return failClosed(`Unknown perspective "${args.perspective}". Valid ids: ${E.PERSPECTIVES.map((x) => x.id).join(", ")}.`);
 
-  // Slice C (memo C-11): the fleet input — fail-closed, mirroring the site switcher
+  // Fleet identity: the fleet input — fail-closed, mirroring the site switcher
   // through the SAME engine functions (the chokepoint discipline: site and MCP can
   // never disagree about what a fleet selection means).
   const fleetId: string | null = typeof args.fleet === "string" ? args.fleet : null;
@@ -153,16 +153,16 @@ export function handler(args: Args): ToolResult {
   const severity = E.pairingSeverity(m, p);
   const warn = E.pairingWarning(m, p);
   const { pct: centralPct, state: centralState, fleetRenderable: centralFleetRenderable } = centralForModel(m);
-  // IM3 exit-gate fix 1, verification round 2 (P1): computed once so every baseline sentence
+  // Baseline disclosure: computed once so every baseline sentence
   // below -- hard-pairing refusal, infeasible-fallback, and the closing comparison sentence --
-  // carries the SAME noun+weld decision. R2 (§1.4): the baseline is minted as a COMPARISON-role
+  // carries the SAME noun+weld decision. Baseline identity: the baseline is minted as a COMPARISON-role
   // claim with requestCentral -- the constructor's typed refusals drive the receipt's
   // policy_scenario_* gating, the noun, and the honestly-empty comparator slot.
   const comparison = mintCentralComparison(m, centralState, centralPct, centralFleetRenderable);
-  // R3 (D-3c): the central state's membership derivation rides the shared clause.
+  // Default membership: the central state's membership derivation rides the shared clause.
   const centralMembership = E.deriveDefaultFleetMembership(E.DEFAULT_FLEET_ID, centralState);
   const centralFormDebt = serializeFormCorrectionDebt(E.formCorrectionDebt(centralState));
-  // R3 (D-3c): the QUERIED state's own membership — attached ONLY when its blend IS the
+  // Default membership: the QUERIED state's own membership — attached ONLY when its blend IS the
   // derived default (the same blend-equality rule as the site's appDefaultMembership;
   // an explicit caller blend is a user blend and keeps the standard clause). Invoked
   // AFTER the queried state is built (the refusal branch above never reaches it).
@@ -223,15 +223,15 @@ export function handler(args: Args): ToolResult {
   const diveFallback = p.id === "dive" && !m.dive;
   const tr = E.resolveTraffic(m, p, sel);
   const base = E.applyPresetSettings(m, p, sel);
-  /* b9 spec-decode LEVER ([N-CORRECTION-LIFETIME] rule 2): MCP is a SEPARATE PROCESS with no access
+  /* Speculative-decode correction lifetime: MCP is a SEPARATE PROCESS with no access
      to page module state, so it never owns an `activeCorrection` — it returns `corrections[]` as a
      RESPONSE-LOCAL envelope field, on both finite and infeasible responses, never dropped when
      infeasible. Distinct from `rejected_overrides`: a rejection means a value was refused, a
      correction means an accepted value was FORCED to another one, and reporting a force as a
      rejection (or not at all) would tell the caller its input was ignored when it was overridden. */
-  /* im-arc T4 fold (2026-08-24), memo §2 [F5] and §2.1 [F6]: a caller-stated capex without its
+  /* The update of 2026-08-24: a caller-stated capex without its
      SCOPE is refused, never defaulted — a silent bare-card assumption is exactly the double count
-     the fold closed. `capital_recovery` defaults to off here for the same reason it does in the UI
+     the update of 2026-08-24 closed. `capital_recovery` defaults to off here for the same reason it does in the UI
      and the codec: one canonical default, so the same request reproduces wherever it is rendered. */
   const t4Stated: Record<string, unknown> = {};
   {
@@ -253,15 +253,15 @@ export function handler(args: Args): ToolResult {
   // `base` is fresh per request and carries the engine's non-serializable roofline identity.
   // Mutating that fresh object preserves the codec's existing workload(S) call unchanged.
   const state: Record<string, any> = Object.assign(base, structuredClone(clean));
-  // Slice C (memo C-11, C-1 semantics): seed the named fleet through the ONE shared
-  // baseline function — default fleet -> the D-1 derivation at the queried scenario
+  // Fleet identity: seed the named fleet through the ONE shared
+  // baseline function — default fleet -> the membership derivation at the queried scenario
   // (identical to the chokepoint seed on a clean query; parity-fixtured); non-default
-  // -> the DECLARED registry weights AS-IS (no filtering — D-5/D-7 boundary).
+  // -> the DECLARED registry weights AS-IS (no filtering).
   if (fleetId !== null) {
     const fb = (E as any).fleetBaselineBlend(fleetId, state, { modelId: m.id, customDonor: state.customDonor });
     if (fb) state.blend = fb;
   }
-  // C-2 discipline, MCP mirror: a fleet selection under a blend-owning replay/route
+  // Fleet-selection discipline, MCP mirror: a fleet selection under a blend-owning replay/route
   // falsifies it exactly as a blend override would — attribution removes, the share
   // link mints a modified identity (never a clean replay label over a foreign blend).
   const replayDiverges = p.kind === "replay" && !diveFallback && (E.overlayDivergesFromReplay(m, p, clean) || fleetId !== null);
@@ -269,7 +269,7 @@ export function handler(args: Args): ToolResult {
   const trafficSelectionIgnored = !!(t && t.mode !== "native" && tr.locked);
   const trafficOverridden = overrideKeys.includes("ioRatio") || overrideKeys.includes("cacheHit");
 
-  // Slice-3 review R7b P1 fix: state may carry a sanitized customDonor override (Object.assign
+  // Custom-donor correction: state may carry a sanitized customDonor override (Object.assign
   // above already applied it for model="custom"); the context passed to workload()/feasibility()
   // must include it too, or the response silently computes with the default dsr1 donor while
   // accepting and echoing back a different one (and shareUrl()'s encodeScenario, which already
@@ -283,19 +283,19 @@ export function handler(args: Args): ToolResult {
   const feasibility = {
     renderable_legs: feas.renderableLegs,
     total_legs: feas.totalLegs,
-    /* im-release-edit-r3 (2026-09-10), fallback-review finding F3: this is the THIRD surface that
+    /* The correction of 2026-09-10: this is the THIRD surface that
        publishes the renderable weight share, and the first pass at the ulp correction covered only
        the two on the selection receipt. Same schema bound, same one-ulp artifact, same helper. */
     renderable_weight_share: publishedShare(feas.renderableWeightShare),
     dominant_hw: E.HW[feas.domKey].name,
     dominant_op_basis: feas.dominant.opBasis,
-    // R2 (§1.9): the queried fleet's EMITTED five-status vector + two-boolean contract
+    // Solver status: the queried fleet's EMITTED five-status vector + two-boolean contract
     // + policy identity (fail-closed aggregates; UNVERIFIED is a first-class value).
     five_status: frQ.statusVector ?? null,
     renderable_under_policy_all_legs: frQ.allLegsRenderableUnderPolicy ?? null,
     placement_verified: frQ.placementVerified ?? null,
     policy: frQ.policy ?? null,
-    // R2 (§1.10): per-leg solver receipts — solved widths with objectives, declared-b
+    // Solver receipts: per-leg solver receipts — solved widths with objectives, declared-b
     // provenance, and the receipt welds where present.
     legs: feas.legs.map((leg: Record<string, any>) => {
       const rc = leg.capacityReceipt as Record<string, any> | null;
@@ -306,7 +306,7 @@ export function handler(args: Args): ToolResult {
         solved_width: leg.widthRendered ?? null,
         ...(leg.reason ? { reason: leg.reason } : {}),
         ...(leg.contextWindow ? { context_window: leg.contextWindow } : {}),
-        /* b9 spec-decode LEVER (§8.4/§9.5): the per-leg disclosure, CODES ONLY. A machine caller
+        /* Speculative-decode disclosure: the per-leg disclosure, CODES ONLY. A machine caller
            must not receive human copy it might display untranslated, and the codes are the stable
            contract — the browser renders the pinned bytes by calling the engine formatter at its
            own render site. `factor_applied` is the spec-decode factor ALONE, never the composed
@@ -345,10 +345,10 @@ export function handler(args: Args): ToolResult {
           observed_vs_analyst: rc.observedVsAnalyst,
         } : null };
     }),
-    // IM3 exit-gate fix 1: delegates to engine.js's shared fleetRenderableDisclosure (primary=false --
+    // Baseline disclosure: delegates to engine.js's shared fleetRenderableDisclosure (primary=false --
     // run_scenario computes any model, not always the flagship default, so no hardcoded family
     // claim) so this note never drifts from the browser's own wording.
-    note: E.fleetRenderableDisclosure(wl.fleetRenderable, false, computeQueryMembership(state)), // R3 D-3c: exclusion inline on the derived default
+    note: E.fleetRenderableDisclosure(wl.fleetRenderable, false, computeQueryMembership(state)), // Default membership: exclusion inline on the derived default
   };
 
   // epistemic status (mirrors the app.js state identities)
@@ -358,7 +358,7 @@ export function handler(args: Args): ToolResult {
   else if (p.kind === "exploration") status = explDiverges ? "modified-range-exploration" : "range-exploration-counterfactual";
   else if (p.kind === "replay" && !diveFallback) status = replayDiverges ? "modified-scenario" : "replay";
   else if (m.scenario) status = "tariff-scenario";
-  /* im-vet-model-estimates (2026-09-19), Polaris gen60 ruling. Sits AFTER the replay branch on
+  /* The update of 2026-09-19. Sits AFTER the replay branch on
      purpose: a replay of the provider's own published operating point keeps its own identity and
      is the provider claim. Only the shared-lens view of these rows is a scenario. */
   else if ((m as any).lensScenario) status = "lens-scenario";
@@ -536,12 +536,12 @@ export function handler(args: Args): ToolResult {
   if (status !== "derived-estimate") parts.push(label);
   if (severity === "soft" && warn) parts.push(APPJS_MIRROR.pairingNotePrefix + warn + ".");
   if (diveFallback) parts.push("(no §10 card for this model — using the evidence median instead)");
-  // IM3 exit-gate fix 1, verification round 2 (P1): the QUERIED result's own renderability
+  // Baseline disclosure: the QUERIED result's own renderability
   // condition, welded directly into the lead "computes to X%" sentence -- not left to a sibling
   // structured field (feasibility.note / selection_receipt) that a prose-only consumer never reads.
-  // R3 (D-3c): a membership exclusion is a renormalized-membership condition — the weld
+  // Default membership: a membership exclusion is a renormalized-membership condition — the weld
   // rides the LEAD sentence for it exactly as for a renormalized user fleet.
-  // Slice C (memo C-11/C-4): the named-fleet identity leads the sentence; a
+  // Fleet identity: the named-fleet identity leads the sentence; a
   // counterfactual-class fleet carries BOTH load-bearing labels inline (the MCP
   // crop bar — the lead-sentence contract makes this the quoted surface).
   if (fleetId !== null) {
@@ -571,7 +571,7 @@ export function handler(args: Args): ToolResult {
     `${formDebt.warning || "the public evidence does not identify the corrected form"}.`,
   );
   parts.push(
-    /* im-arc T1 fix (Sol review 2026-08-22, finding P2-1): rejected-only calls
+    /* The correction of 2026-08-22: rejected-only calls
        have no applied change and take the same no-change sentence as the clean path. */
     changed.length === 0
       ? `This IS ${centralNounLower} for ${m.name} (central lens @ model-default traffic)${centralWeld}.`

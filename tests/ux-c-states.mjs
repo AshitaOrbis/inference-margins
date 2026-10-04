@@ -1,6 +1,6 @@
-/* UX-C U-C0 shared state-drive vocabulary (§18.1 / §18.7 as amended by §18.10-11).
+/* UX-C U-C0 shared state-drive vocabulary (the shared state-drive design, as amended).
 //
-   ONE module used by BOTH the fixture mint (research/b9-ux-survey/ux-c-fixture-mint.mjs)
+   ONE module used by BOTH the fixture mint
    and the acceptance suite (tests/ux-c-cdp.test.mjs), so a captured state and a replayed
    state are driven by the SAME expression — a divergent copy of a drive is a parity bug
    factory. Every drive goes through the page's REAL controls and handlers (selects,
@@ -73,7 +73,7 @@ export const DRIVES = {
   /* a perspective, then ONE deterministic slider edit through the real input handler
      (drives crafted-MODIFIED on clean lenses, MODIFIED_FROM on replays, and
      modified-exploration on routes — the state machine decides, the capture records).
-     im-arc T3 FIX-4 (2026-08-24): the slider is addressed by its PARAM KEY, not by a global
+     Since 2026-08-24 the slider is addressed by its PARAM KEY, not by a global
      range-input index. T3 assigns every SECTIONS param a tier and renders the basic ones
      before the advanced <details>, so the DOM position that resolved to `active` when this
      fixture was minted now resolves to `total` — a different scenario replayed against a

@@ -34,7 +34,7 @@ All four agents independently fetched the live page and its `engine.js`/`app.js`
 
 15. **Model/perspective verdicts with strong convergence:**
     - **DeepSeek V4-Flash → SHIP** (well-grounded 284B/13B + first-party pricing; fleet/throughput labeled low-confidence). `[unanimous]`
-    - **Kimi K2.6 → do NOT add separately; fold into a "Kimi 1T/32B lineage" or version subselector** (economically redundant with K2.7). `[unanimous]`
+    - **Kimi K2.6 → do NOT add separately; include in a "Kimi 1T/32B lineage" or version subselector** (economically redundant with K2.7). `[unanimous]`
     - **GPT-5.6 Terra/Luna → not as point-estimate architecture presets;** tariff-only / family-variant / range-first (price known, dominant cost driver unidentified → circularity if size is back-inferred from price). `[unanimous]`
     - **Gemini 3.5 Flash → pricing-only / range-first,** clearly labeled fast-tier comparator, not in the normalized frontier table. `[unanimous]`
     - **Anthropic-strategic-partner → merge/rename the existing GPT-Pro/SemiAnalysis lens,** don't add a near-duplicate that manufactures disagreement. `[unanimous]`
@@ -55,7 +55,7 @@ All four agents independently fetched the live page and its `engine.js`/`app.js`
 **D2 — GLM-4.7: ship or hold?**
 - **Ship** (Skeptic-cautiously, Risk Analyst, Empiricist): 355B/32B + FP8 checkpoint + public pricing are first-party disclosed; strong workhorse comparator at an economically interesting price.
 - **Hold** (Architect): GLM-5.2 is already present; add 4.7 only if it owns a uniquely useful production anchor, else it's surface area.
-- **Adjudication — ship, but only if it earns a distinct role.** 3-of-4 with the strongest evidence grounding favor shipping, and the grounding is genuinely first-party (Empiricist confirmed both architecture and pricing at source). But the Architect's redundancy point is valid *conditionally*: if 4.7 resolves to nearly the same economics as the existing GLM-5.2 entry, it's another sibling with no new identification. Resolution: ship 4.7 **only if** its tariff/architecture produces a materially different price-floor point than 5.2; otherwise make it a version variant. This is the same "distinct anchor or fold into lineage" test everyone applied to Kimi.
+- **Adjudication — ship, but only if it earns a distinct role.** 3-of-4 with the strongest evidence grounding favor shipping, and the grounding is genuinely first-party (Empiricist confirmed both architecture and pricing at source). But the Architect's redundancy point is valid *conditionally*: if 4.7 resolves to nearly the same economics as the existing GLM-5.2 entry, it's another sibling with no new identification. Resolution: ship 4.7 **only if** its tariff/architecture produces a materially different price-floor point than 5.2; otherwise make it a version variant. This is the same "distinct anchor or include in lineage" test everyone applied to Kimi.
 
 **D3 — Grok 4.3: ship-as-speculative or hold entirely?**
 - **Ship, explicitly speculative** (Skeptic, Risk Analyst, Empiricist): price/endpoint disclosed; Musk's 0.5T is a first-party *social* claim (Empiricist: a tweet, not an architecture report); ship with active parameters prominently unidentified and a wide range.

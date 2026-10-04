@@ -1,5 +1,5 @@
-// b9 UX-A — the §20 R-1/R-2/R-3 dialog coordinator + tooltip reachability, over CDP.
-// Design contract: research/b9-ux-memo.md §16 (UX-A leg spec, gate-A folded, 0 P0 / 4 P1).
+// development — the  R-1/R-2/R-3 dialog coordinator + tooltip reachability, over CDP.
+// Design contract: the design analysis  (UX-A leg spec, gate-A folded, 0 P0 / 4 P1).
 //
 // WHY THIS FILE EXISTS AND WHAT IT DELIBERATELY DOES NOT ASSERT:
 //   * The defect this leg exists to fix is not "small text" — it is text that could not be reached
@@ -258,7 +258,7 @@ async function main() {
     assert("U-20 the dialog's aria-labelledby resolves to exactly one heading", r.labelledBy);
     assert("U-9 zero duplicate ids while a dialog is open", r.duplicateIds === 0, String(r.duplicateIds));
     assert("U-11/U-22 tip -> M6 leaves exactly ONE dialog", r.afterCrossOpen === 1, String(r.afterCrossOpen));
-    assert("U-11/U-22 …and it is the M6 one (ownership crossed cleanly)", r.crossIsFa);
+    assert("U-11/U-22 …and it is the final-answer revision one (ownership crossed cleanly)", r.crossIsFa);
     assert("U-11 closing leaves none, phase idle, body unlocked",
       r.afterClose === 0 && r.phaseIdle && r.bodyUnlocked);
     assert("U-21 hash navigation while open closes the dialog", r.hashClosed);

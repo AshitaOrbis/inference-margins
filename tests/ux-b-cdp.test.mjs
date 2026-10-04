@@ -1,5 +1,5 @@
-// b9 UX-B — the §20 R-1/R-3/R-4 document explainers + the first REAL relocation, over CDP.
-// Design contract: research/b9-ux-memo.md §17 (UX-B leg spec, gate-folded: 5 P0 / 8 P1 / 3 P2).
+// development — the  R-1/R-3/R-4 document explainers + the first REAL relocation, over CDP.
+// Design contract: the design analysis  (UX-B leg spec, gate-folded: 5 P0 / 8 P1 / 3 P2).
 //
 // WHAT THIS FILE IS FOR, AND THE CONTROLS THAT MAKE IT MEAN SOMETHING:
 //   * UX-A shipped the relocation TRANSACTION vacuously (EXPLAIN.sources was always empty). UX-B is
@@ -323,7 +323,7 @@ const PROBE_HASH = `(async () => {
   r.s5Focused = document.activeElement === document.getElementById('s5');
   // a target genuinely nested inside a section body still needs the ancestor walk
   document.querySelectorAll('#report > details.report-section').forEach(d => { d.open = false; });
-  // (re-anchored 2026-09-25, bq-3351: the nested heading this used, #s10-normalized, was removed with its
+  // (re-anchored 2026-09-25, the release: the nested heading this used, #s10-normalized, was removed with its
   // section; #s10-astra-pro is the heading that took its place, nested the same way inside §10's body)
   location.hash = '#s10-astra-pro'; await wait(140);
   r.nestedVisible = vis(document.getElementById('s10-astra-pro'));
@@ -363,7 +363,7 @@ const PROBE_PRINT = `(async () => {
     restoredExactly: JSON.stringify(snapshotBefore) === JSON.stringify(restored), openedForPrint, closedForPrint });
 })()`;
 
-/* ---------------- U-22: M6 <-> generic cross-ownership ---------------- */
+/* ---------------- U-22: final-answer revision <-> generic cross-ownership ---------------- */
 const PROBE_M6 = `(async () => {
   const wait = ms => new Promise(r => setTimeout(r, ms));
   const dialogs = () => document.querySelectorAll('dialog[data-explain-dialog]').length;
@@ -530,7 +530,7 @@ async function main() {
     const r = JSON.parse(await evalExpr(send, PROBE_HASH));
     assert("U-5 NEGATIVE CONTROL: the ancestors-only handler leaves §5's body collapsed (the draft defect)",
       r.naiveLeavesCollapsed);
-    assert("U-5 a deep link to #s5 — M6's own shipped citation — opens the section and reveals its body", r.s5Open);
+    assert("U-5 a deep link to #s5 — the final-answer section's shipped citation — opens the section and reveals its body", r.s5Open);
     assert("U-5 …and moves focus to the hash target", r.s5Focused);
     assert("U-5 a target nested INSIDE a section body is revealed by the ancestor walk", r.nestedVisible);
     assert("U-21 a hash change while a dialog is open closes it and restores the source",
@@ -554,7 +554,7 @@ async function main() {
     if (!ready) return;
     const r = JSON.parse(await evalExpr(send, PROBE_M6));
     assert("U-22 a generic relocated payload opens", r.genericOpen);
-    assert("U-22 generic -> M6 leaves exactly ONE dialog, the M6 one, with the source restored",
+    assert("U-22 generic -> M6 leaves exactly ONE dialog, the final-answer revision one, with the source restored",
       r.afterM6.dialogs === 1 && r.afterM6.isFa && r.afterM6.sourceRestored && r.afterM6.sourcesDrained, JSON.stringify(r.afterM6));
     assert("U-22 …and closing leaves none, phase idle, registry drained",
       r.afterClose.dialogs === 0 && r.afterClose.phase === "idle" && r.afterClose.sources === 0, JSON.stringify(r.afterClose));

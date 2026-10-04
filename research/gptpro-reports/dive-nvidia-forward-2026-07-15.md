@@ -425,7 +425,7 @@ For a quantitative forward model, I would encode the platforms as follows:
 | **Conversation URL** | archived privately |
 | **Request ID** | `req_1784158082704_k7uqxx` |
 | **Completion** | `complete` at elapsed `53m11s`; `completion_path: api`; project `Ashitaorbis` confirmed |
-| **Commissioned** | by owner 2026-07-15, round 2 (follow-on to the "Targeted 4"). NVIDIA's HISTORICAL/Hopper side is already the site's best-anchored platform (DeepSeek H800 disclosure); this dive targets the FORWARD side only. |
+| **Commissioned** | on 2026-07-15, round 2 (follow-on to the "Targeted 4"). NVIDIA's HISTORICAL/Hopper side is already the site's best-anchored platform (DeepSeek H800 disclosure); this dive targets the FORWARD side only. |
 
 ## Provenance
 
@@ -440,10 +440,10 @@ For a quantitative forward model, I would encode the platforms as follows:
   `fileciteturn…file…L…`). They were first normalized to readable `[cite: …]` markers; on 2026-10-01 the
   58 markers were removed from the report text, as the July 15 hygiene pass did for the TPU, Trainium
   and blinded-replication dives. The pre-removal copy is archived at
-  `research/gptpro-reports/archive/pre-marker-strip-2026-10-01/`. Most claims carry a direct URL in-text
+  the pre-release archive of 2026-10-01. Most claims carry a direct URL in-text
   and in the "Five most load-bearing sources" list. Report text is otherwise verbatim; numeric figures
   untouched.
-- **Provenance routing:** any site change this dive justifies enters through `research/update-queue.md`
+- **Provenance routing:** any site change this dive justifies enters through the recorded update queue
   (Q-AUTO items), never via direct edits to the site/engine/annex/tracked numbers.
 
 <details><summary>Dispatched prompt (verbatim)</summary>

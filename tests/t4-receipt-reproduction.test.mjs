@@ -234,12 +234,33 @@ const registryGrid = (Engine, mutate = (state) => state, renderOptsFor = () => u
   return { live, projected, meta };
 };
 
+/* DECLARED HISTORICAL TEXT (2026-10-04, the public-text cleanup of internal references). Three
+   citation parentheticals that these receipts serialize were reworded in the LIVE engine's code and
+   data so the public page no longer names private memos, packs or archive paths. They are words
+   inside strings, not values: over all 270 states, 88,089 record leaves, a deep diff of the
+   pre-cleanup and cleaned engines changed 0 numeric leaves and 982 string leaves, every one of them
+   one of these three phrases. The pin bundle restores historical DATA but cannot restore wording
+   that lives in engine code, so R1 and R2 map exactly these phrases back to their historical form
+   before hashing — and the receipts they must reproduce stay the historical ones R3 reaches from
+   the archived bytes. Any OTHER text change still breaks the receipts, and each pair must actually
+   occur (asserted below), so the map cannot go stale silently. */
+const HISTORICAL_TEXT = [
+  ["(the design analysis naming rule)", "(memo \u00a70-bis naming rule)"],
+  ["(the source-receipt summary; architecture constants, item 1)", "(d2-receipt-pack \u00a71a; im3-arch-constants row 1)"],
+  ["(the dated source archive of 2026-07-18)", "(research/primary-sources/deepseek-day6-inference-2026-07-18/)"],
+];
+const liveSha = (value) => {
+  let text = JSON.stringify(value);
+  for (const [now, then] of HISTORICAL_TEXT) text = text.split(now).join(then);
+  return crypto.createHash("sha256").update(text).digest("hex");
+};
+
 /* ---------------- R1 — the live engine reproduces the historical 270 ---------------- */
 const pinned = withPreT4Registry(() => registryGrid(E, applyPreT4Defaults));
 assert("T4-REPRO-R1 the pin bundle covers the full historical registry grid",
   pinned.live.length === 270, `got ${pinned.live.length}`);
 assert("T4-REPRO-R1 the LIVE engine + the pre-T4 pin bundle reproduces the historical 270-state receipt f98b97a1…",
-  sha(pinned.projected) === HISTORICAL_270_PROJECTED, sha(pinned.projected));
+  liveSha(pinned.projected) === HISTORICAL_270_PROJECTED, liveSha(pinned.projected));
 
 /* ---------------- R2 — the LIVE engine reproduces BOTH receipts ----------------
    ROUND 3 (2026-08-25, Polaris toss-back #2). Round 2 reported that the pre-T4 273-state receipt
@@ -254,7 +275,7 @@ assert("T4-REPRO-R1 the LIVE engine + the pre-T4 pin bundle reproduces the histo
    about. The retraction is recorded in the report rather than quietly dropped. */
 const pinnedLive = withPreT4Registry(() => registryGrid(E, applyPreT4Defaults, preT4RenderOpts));
 assert("T4-REPRO-R2 the LIVE engine + the pin bundle reproduces the pre-T4 live 270-state grid 8c4bdffd…",
-  sha(pinnedLive.live) === HISTORICAL_270_LIVE, sha(pinnedLive.live));
+  liveSha(pinnedLive.live) === HISTORICAL_270_LIVE, liveSha(pinnedLive.live));
 /* im-vet-six-repairs (2026-09-20): the audit tail runs INSIDE the pin, like the grid above it.
    It was outside, which was invisible while no pinned registry value had moved — the three audit
    states then read LIVE calibration, price-evidence classes and fleet membership into a receipt
@@ -262,15 +283,23 @@ assert("T4-REPRO-R2 the LIVE engine + the pin bundle reproduces the pre-T4 live 
 const pinned273 = withPreT4Registry(() => [...pinnedLive.live,
   ...auditStatesFor(E, applyPreT4Defaults).map((audit) => auditSurface(E, audit))]);
 assert(`T4-REPRO-R2 the LIVE engine + the pin bundle reproduces the pre-T4 ${PRE_T4_STATES}-state receipt 22baff37… — no residue`,
-  pinned273.length === PRE_T4_STATES && sha(pinned273) === PRE_T4_273,
-  `${pinned273.length} states, ${sha(pinned273)}`);
+  pinned273.length === PRE_T4_STATES && liveSha(pinned273) === PRE_T4_273,
+  `${pinned273.length} states, ${liveSha(pinned273)}`);
+{ const liveText = JSON.stringify(pinned273);
+  const expectedCounts = [935, 72, 18]; // Counted on the current 273-state grid; text-only cleanup, no number moved.
+  for (const [i, [now, then]] of HISTORICAL_TEXT.entries()) {
+    const count = liveText.split(now).length - 1;
+    assert(`T4-REPRO-R2 no historical phrase survives in the live grid: ${then}`, !liveText.includes(then));
+    assert(`T4-REPRO-R2 exact replacement count ${i}`, count === expectedCounts[i], `observed ${count}, expected ${expectedCounts[i]}`);
+  }
+}
 assert("T4-REPRO-R2 the manifest's recorded before-receipt is the receipt the live engine reproduces",
   PRE_T4_RECEIPT === PRE_T4_273, PRE_T4_RECEIPT);
 /* Non-vacuity: the stress pin must be doing real work. Without it the grid does NOT reproduce —
    if this ever starts passing, the pin has become decorative and the gate above proves nothing. */
 const withoutStressPin = withPreT4Registry(() => registryGrid(E, applyPreT4Defaults));
 assert("T4-REPRO-R2 the stress-fleet pin is load-bearing: WITHOUT it the historical grid does not reproduce",
-  sha(withoutStressPin.live) !== HISTORICAL_270_LIVE,
+  liveSha(withoutStressPin.live) !== HISTORICAL_270_LIVE,
   "the grid reproduced without the pin — the pin is decorative and this gate is vacuous");
 
 /* ---------------- R3 — the archived bytes reproduce all three pre-fold receipts ------------- */

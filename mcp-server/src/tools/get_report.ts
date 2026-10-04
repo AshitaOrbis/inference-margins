@@ -6,7 +6,7 @@ import { z } from "zod";
 import { envelope, failClosed, registryReceipt, type ToolResult, registryEmitMeta } from "../shape.js";
 import { ARCHIVE_NOTE, htmlToText, reportCatalog, validReportIds, type ReportEntry } from "../reports.js";
 
-/* R3 D-9: the honest note for the ONE live entry (everything else stays archived-verbatim). */
+/* Live answer: the honest note for the ONE live entry (everything else stays archived-verbatim). */
 /* ══ ROUND 4b P1 — the MACHINE half of rec 5. ═══════════════════════════════════════════════
    `registryEmitMeta` bakes this string into the emitted claim's estimand ("modeled unit
    direct-serving contribution margin (flagship baseline carried by a ${responseKind}
@@ -91,7 +91,7 @@ export function handler(args: Args): ToolResult {
   return envelope(
     sentence,
     registryReceipt(entry.kind === "final-answer"
-      ? `live final-answer render: ${entry.id} — engine-derived policy-labeled estimates (D-9 result surface)`
+      ? `live final-answer render: ${entry.id} — engine-derived policy-labeled estimates`
       : entry.kind === "analyst-hypothesis"
       ? `live analyst-hypothesis render: ${entry.id} — adopted ranking of external claims, not a calculator output`
       : `verbatim archive fetch: ${entry.id} — quoted material, no derived estimate`),

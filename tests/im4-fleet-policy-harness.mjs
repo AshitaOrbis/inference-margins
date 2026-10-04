@@ -1,4 +1,4 @@
-// IM4 entry harness — read-only fleet-policy diagnostic against the live v2.2 engine.
+// Fleet-policy diagnostic harness — read-only fleet-policy diagnostic against the live v2.2 engine.
 // Run: node tests/im4-fleet-policy-harness.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.
@@ -47,7 +47,7 @@ const throughputEligible = key =>
 // recognizable provenance classes in HW[*].note, and the numeric test requires a dollar rate tied
 // to /hr or explicitly parenthesized IDC/hyperscaler rental context. A bare `rent` scalar, a
 // $/M-token engineering result, "estimates", or an explicit no-public-rate statement does not pass.
-// b9 M1: two published-rate provenance phrases added (r4 defect D4 repair) — Google's
+// : two published-rate provenance phrases added (r4 defect D4 repair) — Google's
 // published 3-year committed TPU rate and AWS Capacity Blocks for Trainium2. Both name a
 // public rate, which is exactly what this class means; the rate pattern gains "chip-hr"
 // because non-GPU accelerators are priced per chip-hour.
@@ -61,7 +61,7 @@ const priceBasis = key => priceEligible(key) ? "observed/source-named rent" : "a
 
 const opus = E.MODELS.find(model => model.id === "opus");
 const median = E.PERSPECTIVES.find(perspective => perspective.id === "median");
-/* b9 M5 fixture scope (M5 delta manifest) — REFERENCE-CLASS harness: it certifies fleet
+/*  (scenario-prior revision delta manifest) — REFERENCE-CLASS harness: it certifies fleet
    MEMBERSHIP, policy and disclosure behaviour across model sizes (leg counts and weight
    shares are the property under test; the margins are incidental pins). Those are
    lever-invariant, so the base state is pinned to the trend-0 / family-1.0 reference and
@@ -98,7 +98,7 @@ const fleetReceipt = (state, supplied = baseContext) => {
     rendered: share > 0 ? renderable.map(leg => [leg.hwKey, leg.weight / share]) : [],
   };
 };
-/* R2: the fleetReceiptAtNShard helper is RETIRED with its channel (memo §0 P1-7) —
+/* R2: the fleetReceiptAtNShard helper is RETIRED with its channel ( P1-7) —
    section (g) below reports the SOLVER width receipts instead. */
 
 const emitFleetLine = ({ label, margin, receipt, extra = "", numeric = Number.isFinite(margin) }) => {
@@ -229,14 +229,14 @@ emitFleetTransitionLine(`LANDING-FLEET FIXTURE SPAN 5.90T->5.95T margin=${pct(fi
   `renderableWeightShare=${pct(fixture2000.receipt.renderableWeightShare)}->${pct(fixture2500.receipt.renderableWeightShare)} ` +
   `membership=${membershipKey(fixture2000.receipt)}->${membershipKey(fixture2500.receipt)}`,
   [fixture2000.receipt, fixture2500.receipt]);
-/* im-vet-six-repairs (2026-09-20), vetting finding E1 — A REAL CONSEQUENCE, recorded rather than
+/* registry repairs (2026-09-20), vetting finding E1 — A REAL CONSEQUENCE, recorded rather than
    re-pinned away: the 5.90T -> 5.95T upward jump is GONE, because the leg that dropped out there
    was trn2, and both Trainium legs are now withdrawn from the default on evidence grounds before
    any size sweep reaches them. The non-monotonicity this diagnostic exists to surface is a
    property of the fleet, not of the sweep, so with a five-leg default there is nothing to surface
    at that boundary. The gate-6 suppression it motivates is UNCHANGED and still unconditional —
    see tests/fleets.test.mjs, where the strict branch now suppresses at the baseline itself. */
-/* PROMOTED FROM DIAGNOSTIC TO ASSERTION 2026-09-20 (im-vet-six-repairs, bq-2895), after the Astra
+/* PROMOTED FROM DIAGNOSTIC TO ASSERTION 2026-09-20 (registry repairs, the release), after the Astra
    xhigh review showed that an injected 10-point jump here logged a mismatch and still exited ZERO,
    and the completion gate ruled that gap inside the frozen "no guard was edited to pass" criterion.
    The promotion is not a mechanical tightening: this line used to OBSERVE a discontinuity the page
@@ -248,17 +248,17 @@ emitFleetTransitionLine(`LANDING-FLEET FIXTURE SPAN 5.90T->5.95T margin=${pct(fi
 assertionCheck("the 5.90T->5.95T survivorship discontinuity is GONE with the Trainium legs withdrawn",
   violations.length === 0,
   `${violations.length} upward jump(s): ${violations.map(v => `${totalLabel(v.previous.totalB)}->${totalLabel(v.current.totalB)}`).join(",") || "none"}`);
-/* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): the two landing-fleet
+/*  (2026-08-24, tests/fixtures-t4-declared-delta.json): the two landing-fleet
    fixtures re-mint on the folded defaults. The MEMBERSHIP behaviour they exist to pin — 7/7 at
    5.90T, 6/7 at 5.95T with the weight share dropping to 92% — is byte-unchanged; only the
    margins moved.
-   im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+    (2026-09-10), adjudicated 2026-09-10:
    re-minted again, and again ONLY the margins move. The membership behaviour these fixtures exist
    to pin is byte-identical — still 7/7 at 100% weight at 5.90T, still 6/7 at 92% at 5.95T, still
    exactly one upward discontinuity at that boundary. Adopting planning rents for GB200, GB300 and
    trn3 changes what each surviving leg COSTS, not which legs survive, which is why the margins move
    (-59.75% -> 0.20%, 42.59% -> 54.36%) and every membership number does not. */
-/* im-vet-six-repairs (2026-09-20): both fixtures re-mint, and this time the MEMBERSHIP moves as
+/*  (2026-09-20): both fixtures re-mint, and this time the MEMBERSHIP moves as
    well as the margins — the default is five legs, and at both sizes all five render, which is why
    the discontinuity above disappeared. Declared, not absorbed. */
 assertionCheck("landing-fleet fixture 5.90T = 51.37%, 5/5 legs, renderableWeightShare=100%",
@@ -286,7 +286,7 @@ const BAND_TIERS = {
   "fitted-inherited": { id: "(b) anchored-family", low: 0.41, high: 1.59, basis: "stress-envelope" },
   "family-transfer": { id: "(b) anchored-family", low: 0.41, high: 1.59, basis: "stress-envelope" },
   "joint-fit": { id: "(c) out-of-domain MoE decode", low: 0.55, high: 1.00, basis: "holdout-error" },
-  // b9 M1: the two new tiers keep the (c) out-of-domain stress band. Neither is a
+  // : the two new tiers keep the (c) out-of-domain stress band. Neither is a
   // measured same-platform reproduction, so neither earns the tighter (a)/(b) envelopes;
   // fail-closed, the wider band applies.
   "platform-native-aggregate-bridge": { id: "(c) platform-native aggregate-form bridge", low: 0.55, high: 1.00, basis: "holdout-error (representation-bound diagnostics, not a reproduction)" },
@@ -353,7 +353,7 @@ for (const result of candidateResults) {
 }
 
 section("(g) NVL72 SOLVER CAPACITY WIDTHS + RETIRED-CHANNEL GUARD — DIAGNOSTIC ONLY");
-/* R2 REWRITE (memo §0 P1-7; shipment plan §1.2): the declared N_shard-case sweep is
+/* R2 REWRITE ( P1-7; shipment ): the declared N_shard-case sweep is
    RETIRED with its channel — widths come from the capacity solver's declared-operating-
    point output; topology cases survive as EVIDENCE ANNOTATIONS on the hw rows. This
    section now reports the live solver receipts and proves the retirement is loud. */
@@ -427,14 +427,14 @@ console.log(disclosureFailures === 0
 console.log(topologyGuardFailures === 0
   ? "PASS  IM4 N_shard-only topology guard"
   : `FAIL  IM4 N_shard-only topology guard — ${topologyGuardFailures} failure(s)`);
-/* CHANGED 2026-09-20 (im-vet-six-repairs, bq-2895). The line that used to sit here said diagnostic
+/* CHANGED 2026-09-20 (registry repairs, the release). The line that used to sit here said diagnostic
    mismatches "remain review observations" and the exit code excluded them — so a mismatch printed
    and the harness passed. That is a defensible design only while every diagnostic is genuinely
    undecided, and it stopped being true: the one diagnostic in this file now asserts a property
    this release created. Mismatches reach the exit status from here on. The counter is reported
    separately from assertion failures so a reader can still tell the two registers apart. */
 console.log(diagnosticMismatches === 0
-  ? "PASS  IM4 diagnostic observations (mismatches now reach the exit code, bq-2895)"
+  ? "PASS  IM4 diagnostic observations (mismatches now reach the exit code, the release)"
   : `FAIL  IM4 diagnostic observations — ${diagnosticMismatches} mismatch(es), and they are no longer excused`);
 process.exit(assertionFailures === 0 && disclosureFailures === 0 && topologyGuardFailures === 0
   && diagnosticMismatches === 0 ? 0 : 1);

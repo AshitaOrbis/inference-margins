@@ -1,4 +1,4 @@
-/* T-1 PRE-LEG ORACLE generator — b9 spec-decode LEVER leg.
+/* T-1 PRE-LEG ORACLE generator — spec-decode LEVER leg.
  *
  * Captures the engine's decode/prefill throughput and cost surface BEFORE the spec-decode
  * lever exists, so T-1 can prove the DEFAULT path is byte-identical after it lands.

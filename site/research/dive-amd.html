@@ -88,7 +88,7 @@
 <li><strong>The reasoning synopsis is still substantively useful</strong> — it contains concrete, specific findings (MI355X-not-MI350X source correction; total-vs-generated throughput split; a derived $/M-output-token anchor; MLPerf/Azure/Oracle anchor-quality negatives). Those are captured in the update queue.</li>
 <li><strong>Recovery:</strong> the conversation persists in the ChatGPT conversation history. Checking it directly (same approach as <code>recovered-deepseek-dive-2026-07-15.md</code>) <strong>may</strong> yield more if the model wrote any additional text server-side after the MCP stopped polling — worth attempting, but the flat 770-char partial suggests little-to-no final-answer body was produced within 120 min.</li>
 <li><strong>Sibling dives:</strong> TPU, Trainium, and the blinded replication completed during a poller dormancy gap and expired from the 5-min MCP cache (<code>check() = not_found</code>) — recovered separately from the ChatGPT conversation history.</li>
-<li><strong>Routing:</strong> any site change this justifies enters through <code>research/update-queue.md</code> (Q-AUTO items), never via direct edits to the site/engine/tracked numbers.</li>
+<li><strong>Routing:</strong> any site change this justifies enters through the recorded update queue (automatically queued items), never via direct edits to the site/engine/tracked numbers.</li>
 <li><strong>Citation anchors:</strong> no raw citation markers were present in this dive&#39;s captured text (hard-timeout truncation); as with the sibling dives, the original is preserved unmodified in the archive copy.</li>
 </ul>
 <h2>Goal (as dispatched)</h2>
@@ -111,7 +111,7 @@
 <li><strong>MLPerf</strong> has an <strong>audited MI355X latency-qualified</strong> result, but the <strong>405B submission prunes layers</strong>, limiting its economics usefulness.</li>
 <li><strong>Anchor-quality negatives:</strong> <strong>Azure</strong> (ND MI300X v5) exposes <strong>no public chip-tied rate</strong>; <strong>Oracle&#39;s</strong> audited result <strong>lacks cloud pricing</strong>. Net: no clean <em>production interactive</em> AMD $/token anchor exists publicly as of 2026-07-15; the only derivable number is the synthetic-sweep figure in (2).</li>
 </ol>
-<p>These items are queued in <code>research/update-queue.md</code> as Q-AUTO-2026-07-15 entries, marked QUEUED-AUTO and flagged as reasoning-summary-derived pending recovery from ChatGPT conversation history for exact source URLs/dates.</p>
+<p>These items are queued in the recorded update queue as automatically queued entries of 2026-07-15 and flagged as reasoning-summary-derived pending recovery from ChatGPT conversation history for exact source URLs/dates.</p>
 
 </section>
 <footer class="footer"><p>Reference material for <a href="../index.html">margins.ashitaorbis.com</a>. Selected public artifacts, lightly edited for release (provenance headers condensed — conversation IDs and raw interface markers removed; conclusions unchanged); each file states its own provenance class. Confidence labels are the authoring engine's own.</p></footer>

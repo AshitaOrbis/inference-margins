@@ -2,7 +2,7 @@
 
    The Cloudflare Worker has no filesystem, so the Node module this replaces (../src/dcmap/
    substrate.ts) cannot exist here. The alternative it replaces is worse than absent, and this
-   repo has already paid for it once: before rec 6 / C-6 (bq-1253) the Worker fetched report
+   repo has already paid for it once: before the correction of 2026-08-21 the Worker fetched report
    CONTENT from the live site at call time, so a Worker built at one release served another
    release's prose under the words "archived verbatim" — measured live on 2026-08-21. A calculator
    is the same failure with numbers instead of prose, so the substrate release is baked in by

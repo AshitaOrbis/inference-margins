@@ -1,4 +1,4 @@
-/* im-arc T3 (plan §1 T3 / §4.2, owner answer d-20260822-4c26 2026-08-22):
+/* The update of 2026-08-22:
    advanced by-value fleet composition. UI, engine and MCP all validate the exact
    site/custom-fleets.js section schema through E.validateFleetSections. */
 import { z } from "zod";
@@ -23,7 +23,7 @@ export const config = {
     dc_rows: z.array(z.string()).optional().describe("Data-center/programme registry ids to compose"),
     fill: z.enum(["generic-us", "generic-cn"]).optional().describe("Required with dc_rows; supplies un-attributed modeled share"),
     overrides: z.record(z.unknown()).optional().describe("Optional state overrides validated by the same SCENARIO_BOUNDS as run_scenario"),
-    /* im-arc T4 fold (2026-08-24), memo §2.1 [F6] and §2 [F5]. `capital_recovery` has ONE canonical
+    /* The update of 2026-08-24. `capital_recovery` has ONE canonical
        default — off — identical to the basic UI, the advanced UI and the v7 codec, so a shared link
        and an MCP request reproduce the same arithmetic. `capex_scope` is REQUIRED whenever the
        caller states a capex of their own: an observed capex is meaningless without its input scope,
@@ -49,7 +49,7 @@ interface Args {
 }
 
 const round6 = (value: number): number => Math.round(value * 1e6) / 1e6;
-/* im-arc T4 fold (2026-08-24), memo §4: a section every one of whose legs has NO admissible public
+/* The update of 2026-08-24: a section every one of whose legs has NO admissible public
    planning rate has no cost band to report — and that is a fact about the evidence, not a
    malformed request. It is reported as an unpriced section with its reason, the same way an
    unpriced LEG is reported, instead of failing the whole call closed. Every other refusal still
@@ -108,9 +108,9 @@ export function handler(args: Args): ToolResult {
 
   const base = E.applyPresetSettings(model, perspective, { mode: "native" });
   const tr = E.resolveTraffic(model, perspective, { mode: "native" });
-  /* im-arc T4 fold (2026-08-24), memo §2 [F5] and §2.1 [F6]: a caller-stated capex without its
+  /* The update of 2026-08-24: a caller-stated capex without its
      SCOPE is refused, never defaulted — a silent bare-card assumption is exactly the double count
-     the fold closed. `capital_recovery` defaults to off here for the same reason it does in the UI
+     the update of 2026-08-24 closed. `capital_recovery` defaults to off here for the same reason it does in the UI
      and the codec: one canonical default, so the same request reproduces wherever it is rendered. */
   const t4Stated: Record<string, unknown> = {};
   {
@@ -217,9 +217,9 @@ export function handler(args: Args): ToolResult {
     const coverage = E.coverageSentenceParts(E.coverageForFleetSections(fleet.sections, model.id));
     if (!coverage) return failClosed("coverage ledger could not render from the composed fleet.");
     /* The generic preset twin also rides the response through the same pure row
-       renderer, so T4 can replace three-part company rows with preset-keyed
+       renderer, so the registry update can replace three-part company rows with preset-keyed
        four-part rows without touching this tool. */
-    /* im-arc T4 fold (2026-08-24) [F3]: derived by the one resolver, never read off a stored row. */
+    /* The update of 2026-08-24: derived by the one resolver, never read off a stored row. */
     const presetCoverage = E.coverageSentenceParts(E.coverageForPreset(model.id) ?? {});
     const share = shareUrl(base, model.id, perspective.id,
       { mode: tr.mode, profileId: tr.profileId, ioRatio: tr.ioRatio, cacheHit: tr.cacheHit },
@@ -235,7 +235,7 @@ export function handler(args: Args): ToolResult {
       thisPct: blendedWorkload.margin * 100,
       origin: "advanced by-value fleet sections policy scenario", changed, comparison });
     const warning = "policy scenario, not a measured margin and not a company gross margin";
-    /* im-arc T3 FIX-3 (2026-08-23, item C2): a dc_rows caller can name a registry row
+    /* The correction of 2026-08-23: a dc_rows caller can name a registry row
        that receives no donor allocation; the composer drops it, and until now the tool
        said nothing. The engine's ONE composition function records that drop and
        coverageForFleetSections surfaces it, so both the page and this tool speak from

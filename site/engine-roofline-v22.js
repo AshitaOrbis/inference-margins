@@ -1,5 +1,5 @@
-/* IM3 slice-1b — roofline core (no DOM). Originated as a PARALLEL PATH (no display wiring, this
-   header un-updated since) — IM3 exit-gate fix 5 (P2, skeptic + risk-analyst): that description
+/* Roofline core (no DOM). Originated as a PARALLEL PATH (no display wiring, this
+   header un-updated since) — documentation correction: that description
    is stale and is corrected here. Slice 3 (commit a996f54) ACTIVATED this module as the live
    display path: engine.js's tokPerS/rooflinePoint delegate to renderPoint()/decodeRoofline()/
    prefillRoofline() below for every rendered decode and prefill number, and slice 4 removed this
@@ -8,10 +8,10 @@
    IS the compute path. (roofline-parallel-diff.mjs still exists as a switched-vs-parallel identity
    harness/regression gate — that is a TEST tool re-deriving the same numbers a second way, not
    evidence this module is unwired.)
-   Implements the cycle-2 decode/prefill roofline per research/im3-integration-design.md v3.1
-   (§1a core equations, §4 operating points, §5 feasibility, §7 stackMult, §8 prefill, §3 traffic
+   Implements the cycle-2 decode/prefill roofline under the adopted roofline design
+   (core equations, operating points, feasibility, stackMult, prefill, traffic
    fixed-OSL rule + customDonor codec delta), transcribed from the FROZEN
-   research/d2-equation-set-v2.md §1–§2 (read-only; this file edits nothing frozen).
+   research/d2-equation-set-v2.md  (read-only; this file edits nothing frozen).
 
    DATA SOURCES (hard rule): every model-defining value comes from the slice-1a reviewed
    registries in engine-data-v22.js (as amended by the slice-1b review R5 fix pass: nShard
@@ -22,15 +22,15 @@
    code, e.g. roofline-parallel-diff.mjs, still separately combines this file's exports with
    engine.js's MODELS array for composing test scenarios — that is a caller concern, not a
    dependency of this file). No model-defining numeric literal appears in this file. Literal numerics below are exclusively: equation-structure constants of the
-   frozen forms (the 2s/4s of §1.1, the C8 10% workspace), the 1e9 params/B-param unit
+   frozen forms (the 2s/4s of , the C8 10% workspace), the 1e9 params/B-param unit
    conversion, and dimensional-validation scale bounds.
 
-   RENDER RULE (memo §2, verification-R2 fix): q = 1, a = 1 on every path — no q/a parameter
+   RENDER RULE (fixed): q = 1, a = 1 on every path — no q/a parameter
    exists in any public API. t_cc comes ONLY from TCC_CONSTANTS (τ is not a function parameter;
    the exploratory τ band is unreachable from this module by construction).
 
-   Product extension (marked, memo §1a): stackMult enters ONLY as η_eff = η × stackMult inside
-   t_roof (and η_pre_eff = η_pre × stackMult in prefill). t_cc is NEVER scaled (§7).
+   Product extension (marked): stackMult enters ONLY as η_eff = η × stackMult inside
+   t_roof (and η_pre_eff = η_pre × stackMult in prefill). t_cc is NEVER scaled.
 
    Loads in plain node (require) and, later, the browser (classic script AFTER
    engine-data-v22.js ONLY, as of the slice-4 script-order cleanup — this file no longer needs
@@ -42,7 +42,7 @@
 /* ---------- module plumbing (node require / browser globals) ---------- */
 const RD_IS_NODE = (typeof module !== "undefined" && !!module.exports);
 const RD_DATA = RD_IS_NODE ? require("./engine-data-v22.js") : null;
-/* Slice-4 cleanup (memo §13 backlog): this file used to also require("./engine.js") (RD_ENGINE)
+/* Dependency cleanup: this file used to also require("./engine.js") (RD_ENGINE)
    for TRAFFIC_PROFILES alone — the one roofline->engine reverse dependency, and the reason the
    script tags could not previously load as data -> roofline -> engine -> app (TRAFFIC_PROFILES
    moved into engine-data-v22.js precisely so this file never needs to reach into engine.js).
@@ -62,8 +62,8 @@ const RD_TRAFFIC_PROFILES = RD_IS_NODE ? RD_DATA.TRAFFIC_PROFILES : TRAFFIC_PROF
 const RD_TOPOLOGY_DIMENSIONS = RD_IS_NODE ? RD_DATA.TOPOLOGY_DIMENSIONS : TOPOLOGY_DIMENSIONS;
 const RD_TOPOLOGY_EVIDENCE_CLASSES = RD_IS_NODE ? RD_DATA.TOPOLOGY_EVIDENCE_CLASSES : TOPOLOGY_EVIDENCE_CLASSES;
 const RD_HW_DOMAINS = RD_IS_NODE ? RD_DATA.HW_DOMAINS : HW_DOMAINS; // R2: the live render path solves widths in the browser too
-const RD_DECODE_TRAFFIC_BASES = RD_IS_NODE ? RD_DATA.DECODE_TRAFFIC_BASES : DECODE_TRAFFIC_BASES; // b9 M1
-const RD_BATCH_QUANTITIES = RD_IS_NODE ? RD_DATA.BATCH_QUANTITIES : BATCH_QUANTITIES; // b9 M2
+const RD_DECODE_TRAFFIC_BASES = RD_IS_NODE ? RD_DATA.DECODE_TRAFFIC_BASES : DECODE_TRAFFIC_BASES; //
+const RD_BATCH_QUANTITIES = RD_IS_NODE ? RD_DATA.BATCH_QUANTITIES : BATCH_QUANTITIES; //
 const RD_WEIGHT_PLACEMENT = RD_IS_NODE ? RD_DATA.WEIGHT_PLACEMENT : WEIGHT_PLACEMENT;
 const RD_PRECISION_TIER_MAP = RD_IS_NODE ? RD_DATA.PRECISION_TIER_MAP : PRECISION_TIER_MAP;
 // Capacity feasibility may enter the renderer only from this module's own solver. The
@@ -88,7 +88,7 @@ const RD_CAPACITY_SOLVE_META = new WeakMap();
    different brand and a solve still cannot be replayed against other geometry. */
 const RD_CAPACITY_SOLVE_ROWS = new WeakMap();
 
-/* ---------- typed errors (absent ⇒ hard error, memo §6 — never a silent default) ---------- */
+/* ---------- typed errors (absent ⇒ hard error,  — never a silent default) ---------- */
 class RooflineDataError extends Error {
   constructor(msg) { super(msg); this.name = "RooflineDataError"; }
 }
@@ -104,7 +104,7 @@ function rdNum(v, what) {
   return v;
 }
 
-/* im-t5 MERGE (2026-08-29), grafted from the `maximal` candidate. `what` was the message PREFIX
+/* Merged 2026-08-29, grafted from the `maximal` candidate. `what` was the message PREFIX
    and it used to be built EAGERLY by the caller -- `hwKey + ".topologySensitivity.cases[" + index
    + "]"` -- at 279,632 calls per adjust_rental_rate invocation, for a string that is only ever
    read when the assertion throws. It is now the two PARTS, joined at throw time by rdCaseWhat
@@ -145,7 +145,7 @@ function assertTopologyCase(topologyCase, owner, caseIndex) {
    N_shard. A sensitivity input must be a complete, registered N_shard case from that row's list;
    N_domain/N_world/N_role/N_replicas and raw numbers hard-error before any arithmetic. */
 function resolveNShardValue(hwKey, row, nShardCase) {
-  // R2 (memo §0 P1-7): the caller-supplied sensitivity-case channel is RETIRED — the
+  // R2 (retired channel): the caller-supplied sensitivity-case channel is RETIRED — the
   // render path consumes solver capacity widths; topology cases are EVIDENCE
   // ANNOTATIONS. An explicit case is rejected LOUDLY (never silently ignored).
   if (nShardCase !== undefined)
@@ -174,7 +174,7 @@ function resolveNShardValue(hwKey, row, nShardCase) {
    NOT the TB/s / PFLOPS conventions of engine.js HW). The bounds are SCALE-PLAUSIBILITY
    guards, not model values: a TB/s-convention scalar (3.35) or a GB/s count (400, 900) in a
    B/s field, or a PFLOPS scalar (1.98) in a FLOP/s field, fails LOUDLY. ---------- */
-/* im-t5 MERGE (2026-08-29), grafted from the `maximal` candidate: the scale check was an arrow
+/* Merged 2026-08-29, grafted from the `maximal` candidate: the scale check was an arrow
    function allocated fresh on every one of ~17,700 calls per invocation purely to close over
    `hwKey`. Hoisted to module scope with `hwKey` as an argument -- same checks, same messages,
    same order, no closure. assertHwRowUnits' own exported signature is unchanged. */
@@ -236,7 +236,7 @@ function resolveArch(modelId, customDonor) {
   return rec;
 }
 
-/* Which frozen forms an arch row's terms use — the branch authority (memo §3: out-of-model
+/* Which frozen forms an arch row's terms use — the branch authority (out-of-model
    rows resolve through their DECLARED fAttnForm/kvForm, never the stated MLA/GQA branches). */
 function archFormsUsed(arch) {
   if (!arch || typeof arch !== "object" || !arch.attnClass) throw new RooflineDataError("arch record absent/malformed");
@@ -263,7 +263,7 @@ function resolveHwRoofline(hwKey) {
   return { row, hbmBytes: row.hbmBytes };
 }
 
-/* Precision resolution — via PRECISION_TUPLES ONLY (memo §6). Absent/ineligible ⇒ typed
+/* Precision resolution — via PRECISION_TUPLES ONLY. Absent/ineligible ⇒ typed
    error; NEVER an implementer default. Returns the reviewed tuple + the resolved FLOP/s. */
 function resolvePrecisionTuple(hwKey, precision) {
   const rowTuples = Object.prototype.hasOwnProperty.call(RD_PRECISION_TUPLES, hwKey) ? RD_PRECISION_TUPLES[hwKey] : undefined;
@@ -279,7 +279,7 @@ function resolvePrecisionTuple(hwKey, precision) {
            fallback: tuple.fallback ?? null, naming: tuple.naming ?? null };
 }
 
-/* ---------- frozen §1.1 term forms ---------- */
+/* ---------- frozen  term forms ---------- */
 function fAttnPerPos(arch, L) {                                    // FLOPs of attention per target position
   const f = archFormsUsed(arch);
   if (f.fAttnForm === "mla")
@@ -296,7 +296,7 @@ function kvBytesPerToken(arch, sKV) {                              // KV bytes p
     return arch.layers * arch.kvHeads * arch.headDim * sKV;
   throw new RooflineDataError("no KV form for declared kvForm '" + f.kvForm + "'");
 }
-function fabricBytesPerPos(arch, sAct, N) {                        // §1.1 fabric payload per target position, per device
+function fabricBytesPerPos(arch, sAct, N) {                        //  fabric payload per target position, per device
   if (arch.mode === "moe-ep") {
     rdNum(arch.moeLayers, "arch.moeLayers (MoE fabric term)"); rdNum(arch.topK, "arch.topK (MoE fabric term)");
     return 2 * arch.moeLayers * arch.topK * arch.hidden * sAct;    // dispatch+combine, local 1 / remote 0, α_rtt 0
@@ -306,61 +306,61 @@ function fabricBytesPerPos(arch, sAct, N) {                        // §1.1 fabr
   throw new RooflineDataError("unknown arch mode '" + String(arch.mode) + "'");
 }
 
-/* ---------- decode weight-traffic basis (b9 M1, decision M1-D1) ----------
+/* ---------- decode weight-traffic basis (typed declaration) ----------
    A CLOSED typed enum declared per CALIBRATION row (set lives in engine-data-v22.js
    beside the rows it types). Absent ⇒ the historical default, so every unmigrated row
    behaves byte-identically. An unknown value is a hard error (fail-closed): a mistyped
    basis must never silently fall back to the surrogate, because the row's η is only
-   valid in its declared representation (run B §A4).
+   valid in its declared representation (run B ).
 
-   FIREWALL (feasibility-redesign memo §0-bis): the replica-resident basis divides the
+   FIREWALL (feasibility-redesign ): the replica-resident basis divides the
    replica's distinct weight traffic by the row's DECLARED replica width — never by the
    solved capacity width. Decode throughput therefore stays independent of the capacity
    solver and of `loadedWeightBytesPerParam`, exactly as under the surrogate basis. Using
    the solved width here would give the capacity-only planning policy a route into a
-   calibrated throughput term, which the memo forbids in every phase. */
+   calibrated throughput term, which the contract forbids. */
 function decodeTrafficBasis(cal, hwKey) {
   const v = cal && cal.decodeTrafficBasis;
-  // b9 M2 (memo §3.1.1): the field NO LONGER DEFAULTS. M1 let it default so unmigrated rows
+  // The field NO LONGER DEFAULTS. It previously defaulted so unmigrated rows
   // stayed byte-identical; that kindness expires here. An implementer default is exactly how a
   // unit conflation gets re-introduced silently, so absence is a typed error.
   if (v === undefined || v === null)
-    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no decodeTrafficBasis — REQUIRED since b9 M2 (closed set {" + RD_DECODE_TRAFFIC_BASES.join(", ") + "}); there is no implementer default");
+    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no decodeTrafficBasis — REQUIRED since the adopted model (closed set {" + RD_DECODE_TRAFFIC_BASES.join(", ") + "}); there is no implementer default");
   if (!RD_DECODE_TRAFFIC_BASES.includes(v))
     throw new RooflineDataError("unknown decodeTrafficBasis '" + String(v) + "' (closed set {" + RD_DECODE_TRAFFIC_BASES.join(", ") + "})");
-  // b9 M2 (memo §3.1.2): run B §A4 promoted from prose to a type — an η may not be read in any
+  // : run B  promoted from prose to a type — an η may not be read in any
   // representation other than the one it was derived in. The two are a matched pair.
   const rep = cal.etaRepresentation;
   if (rep === undefined || rep === null)
-    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no etaRepresentation — REQUIRED since b9 M2 (run B §A4: the coefficient and the representation are a matched pair)");
+    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no etaRepresentation — REQUIRED since the adopted model (run B §A4: the coefficient and the representation are a matched pair)");
   if (rep !== v)
     throw new RooflineDataError("CALIBRATION." + String(hwKey) + " reads η calibrated in '" + String(rep) + "' under decodeTrafficBasis '" + v + "' — FORBIDDEN (run B §A4). Re-derive the coefficient or restore the basis; never transplant.");
   return v;
 }
-/* b9 M2 (memo §4, decision M2-D2): N_phys is a DECLARED registry constant, never the solved
-   capacity width. Generalises M1's `declaredReplicaWidth`. The firewall matters MORE under the
-   topology-aware bases than it did at M1: under the surrogate W_iter is width-independent so the
+/* Declared topology: N_phys is a DECLARED registry constant, never the solved
+   capacity width. Generalises the original `declaredReplicaWidth`. The firewall matters MORE under the
+   topology-aware bases than it did originally: under the surrogate W_iter is width-independent so the
    guarantee holds trivially, but here N_phys divides the traffic term directly, so a solved width
    would hand the capacity-only loadedWeightBytesPerParam policy a route into a calibrated
-   throughput term. §2.1 measures this parameter at ±5.9pp on the headline — it is the most
+   throughput term.  measures this parameter at ±5.9pp on the headline — it is the most
    sensitive un-evidenced quantity in the new form. */
 function nPhysDeclared(cal, hwKey) {
   const n = cal && cal.nPhysDeclared;
   if (!Number.isFinite(n) || n < 1)
-    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no finite nPhysDeclared — REQUIRED since b9 M2 (declared registry replica width; NEVER the solved capacity width)");
+    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " has no finite nPhysDeclared — REQUIRED since the adopted model (declared registry replica width; NEVER the solved capacity width)");
   return n;
 }
-/* b9 M2 — run B §C4's distinct-expert traffic term, per replica:
+/*  — run B 's distinct-expert traffic term, per replica:
      W_distinct(B) = W_shared + Σ_e W_e·[1 − (1 − p_e)^{B_rep·q}]
    where p_e is the probability that expert e appears in one token's top-k set.
    Uniform top-k routing gives p_e = k/E and is the coverage-MAXIMISING setting
-   (concavity + Jensen; design gate R5), so
+   (concavity and Jensen), so
    this is an upper bound on MODELLED traffic and NO bound on actual traffic. Callers must supply
    a placement record explicitly — there is no fallback, because a silently-defaulted placement is
    how an unevidenced expert geometry would reach a headline. */
 function wDistinctReplicaBytes(placement, bRep, q, hwKey) {
   if (!placement || typeof placement !== "object")
-    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " declares decodeTrafficBasis 'expert-coverage' without a placement record (memo §6.2); no default exists");
+    throw new RooflineDataError("CALIBRATION." + String(hwKey) + " declares decodeTrafficBasis 'expert-coverage' without a placement record (the design analysis); no default exists");
   const { wSharedBytes, wExpertBytes, expertsPerLayer, moeLayers, topK } = placement;
   rdNum(wSharedBytes, hwKey + ".placement.wSharedBytes"); rdNum(wExpertBytes, hwKey + ".placement.wExpertBytes");
   rdNum(expertsPerLayer, hwKey + ".placement.expertsPerLayer"); rdNum(moeLayers, hwKey + ".placement.moeLayers");
@@ -377,8 +377,8 @@ function wDistinctReplicaBytes(placement, bRep, q, hwKey) {
   return { bytes: wSharedBytes + moeLayers * expertsPerLayer * wExpertBytes * coverage, coverage, draws };
 }
 
-/* ---------- decode core (frozen §1.1–§1.2 + §1.5; memo §1a/§7) ----------
-   q = 1 / a = 1 FIXED (memo §2 render rule): kvScans = q = 1, T̂ = b·a/t_iter = b/t_iter.
+/* ---------- decode core (frozen) ----------
+   q = 1 / a = 1 FIXED (render rule): kvScans = q = 1, T̂ = b·a/t_iter = b/t_iter.
    Unknown option fields (q, a, tauCc, osl, …) are structurally IGNORED — only the
    destructured names below ever enter the computation. */
 function decodeRoofline(opts) {
@@ -393,7 +393,7 @@ function decodeRoofline(opts) {
   const forms = archFormsUsed(arch);
   // R2: width from the capacity solver's declared-operating-point output (sealed door)
   // wherever a domain is registered; the registry row path survives ONLY for no-domain
-  // rows (rubin) — the legacy sensitivity-case channel is RETIRED (memo §0 P1-7).
+  // rows (rubin) — the legacy sensitivity-case channel is RETIRED (retired channel).
   const resolvedNShard = declaredOperatingWidth != null
     ? { nShard: assertDeclaredOperatingWidth(hwKey, declaredOperatingWidth),
         topologyDimension: "N_shard", caseId: null, widthSource: "declared-operating-point" }
@@ -404,27 +404,27 @@ function decodeRoofline(opts) {
   const phi = 2 * A + fAttnPerPos(arch, L);                        // Φ(m, L)
   const kvSeq = kvBytesPerToken(arch, tup.sKV) * L;                // K(L), per sequence, unsharded
   const dense = arch.mode === "dense-tp";
-  const phiDev = dense ? phi / N : phi;                            // §1.2 shares
+  const phiDev = dense ? phi / N : phi;                            //  shares
   const kDevSeq = dense ? kvSeq / N : kvSeq;
-  // §1.1 weight reads. Dense-TP has always read the replica's resident share (Total·s_W/N).
-  // For MoE-EP the basis is a TYPED per-row declaration (b9 M1 / decision M1-D1, memo §2):
+  //  weight reads. Dense-TP has always read the replica's resident share (Total·s_W/N).
+  // For MoE-EP the basis is a TYPED per-row declaration (typed declaration):
   //   "active-parameter-surrogate"  — the historical default: the full active-parameter
   //                                   read charged to every device, width-independent.
-  //   "replica-resident-distinct"   — the local-device form of run B §A1: the replica's
+  //   "replica-resident-distinct"   — the local-device form of run B : the replica's
   //                                   distinct weight traffic shared across its N devices,
   //                                   paired with b = B_rep/N (the per-chip output share).
   // The two forms are algebraically equivalent to run B's aggregate form; the basis is
-  // matched to the row's η by construction (§A4: the aggregate coefficient is valid ONLY
-  // in the topology-aware representation). M2 replaces the enum with W_distinct(B).
-  // b9 M2: N_phys is the DECLARED registry width (memo §4). B_rep is DERIVED from the cell's
+  // matched to the row's η by construction (the aggregate coefficient is valid ONLY
+  // in the topology-aware representation). The topology-aware representation replaces the enum with W_distinct(B).
+  // : N_phys is the DECLARED registry width. B_rep is DERIVED from the cell's
   // typed batch quantity rather than read off an untyped `b` — that derivation is the structural
-  // kill for defect D1 (run B §A3: B_rep, N_phys, D_attn, EP and TP must be retained separately).
+  // kill for defect D1 (run B : B_rep, N_phys, D_attn, EP and TP must be retained separately).
   const basis = decodeTrafficBasis(cal, hwKey);
   const nPhys = basis === "active-parameter-surrogate" ? null : nPhysDeclared(cal, hwKey);
   const bRep = nPhys != null ? b * nPhys : null;                   // b is the per-chip output share
   let coverageInfo = null;
-  // NOTE (memo §10.1): each branch must evaluate through the SAME floating-point expression it
-  // used before M2 — byte-identity is the acceptance and IEEE-754 is not associative, so an
+  // NOTE: each branch must evaluate through the SAME floating-point expression it
+  // used before the topology-aware representation — byte-identity is the acceptance and IEEE-754 is not associative, so an
   // algebraically-equal rearrangement here is a defect, not a simplification.
   let wIter;
   if (dense) wIter = Total * tup.sW / N;
@@ -439,11 +439,11 @@ function decodeRoofline(opts) {
   const tH = (wIter + b * kDevSeq) / row.bwHBM;                    // kvScans = q = 1
   const tN = b * dBytes / row.fabric;
   const bindingTerm = (tH >= tC && tH >= tN) ? "t_H" : (tC >= tN) ? "t_C" : "t_N";
-  const etaEff = cal.etaDec * stackMult;                           // product extension (memo §1a/§7): η_eff = η_dec × stackMult
+  const etaEff = cal.etaDec * stackMult;                           // product extension: η_eff = η_dec × stackMult
   if (!isFinite(etaEff) || etaEff <= 0 || etaEff > 1)
     throw new RooflineUnitError("effective decode efficiency must be in (0, 1] (got " + etaEff + ")");
   const tRoof = Math.max(tC, tH, tN) / etaEff;
-  const tCc = dense ? RD_TCC.collectivesPerLayer * arch.layers * RD_TCC.tauCc : 0; // §1.5: dense-TP only; τ from declared constants, NEVER a parameter
+  const tCc = dense ? RD_TCC.collectivesPerLayer * arch.layers * RD_TCC.tauCc : 0; // : dense-TP only; τ from declared constants, NEVER a parameter
   const tIter = tRoof + tCc;                                       // frozen form verbatim; t_cc OUTSIDE η, unscaled by stackMult
   return {
     tokPerS: b / tIter,                                            // T̂ = b·a/t_iter, a = 1
@@ -452,12 +452,12 @@ function decodeRoofline(opts) {
     mode: arch.mode, nShard: N, topologyDimension: resolvedNShard.topologyDimension,
     nShardCaseId: resolvedNShard.caseId, widthSource: resolvedNShard.widthSource,
     etaDec: cal.etaDec, etaEff, decodeTrafficBasis: basis,
-    // b9 M2 topology surface (memo §6.1) — DERIVED, not stored: B_rep = b x N_phys.
+    //  topology surface — DERIVED, not stored: B_rep = b x N_phys.
     etaRepresentation: cal.etaRepresentation, nPhysDeclared: nPhys, bRep,
     expertCoverage: coverageInfo ? coverageInfo.coverage : null,
     expertDraws: coverageInfo ? coverageInfo.draws : null,
-    // b9 M2 (memo §7): q/a are now DECLARED in the operating-point registry (all cells 1/1, the
-    // "explicitly conservative floor" of run B §B10) and REPORTED here. They are deliberately NOT
+    // : q/a are now DECLARED in the operating-point registry (all cells 1/1, the
+    // "explicitly conservative floor" of run B ) and REPORTED here. They are deliberately NOT
     // read from caller opts: the standing anti-injection guard requires that injected q/a/kvScans
     // be structurally ignored, so that a caller can never buy throughput by asserting speculation.
     // A future milestone moving a row off 1/1 must route through the registry, never through opts,
@@ -469,7 +469,7 @@ function decodeRoofline(opts) {
   };
 }
 
-/* ---------- feasibility (memo §5; frozen §1.3/§1.4) ----------
+/* ---------- feasibility (frozen ) ----------
    W_resident + b·LPeak·kvTok_basis + 0.10·HBM ≤ HBM (C8 workspace),
    W_resident = Total·s_w/N_shard. Capacity reserves terminal live KV at
    LPeak = ISL + OSL; decode performance separately uses representative L.
@@ -479,7 +479,7 @@ function feasibilityRoofline(opts) {
   if (opts.nShardCase !== undefined) throw new RooflineDataError("feasibilityRoofline: the nShardCase channel is RETIRED (R2) — never silently ignored");
   rdNum(totalB, "totalB"); rdNum(L, "L"); rdNum(LPeak, "LPeak");
   const { row, hbmBytes: hbmRegistry } = resolveHwRoofline(hwKey);
-  /* b9 M4 (memo §2.9): a custom-fleet leg's user-declared HBM capacity threads through
+  /* : a custom-fleet leg's user-declared HBM capacity threads through
      this ONE options channel to the single registry consumption point — a declared
      capacity number, not a calibration transfer. Same plausibility window the registry
      rows pass (1e10–1e12 B), fail-closed. Never a default: undefined = registered value. */
@@ -505,7 +505,7 @@ function feasibilityRoofline(opts) {
     if (trusted.arch !== arch || trusted.totalB !== totalB || trusted.hwKey !== hwKey ||
         trusted.precision !== precision || trusted.LPeak !== LPeak
         || (trusted.hbmBytesOverride ?? null) !== (opts.hbmBytesOverride ?? null))
-      throw new RooflineDataError("feasibilityRoofline: trusted capacity solve inputs do not match this render (incl. hbmBytesOverride identity — b9 M4)");
+      throw new RooflineDataError("feasibilityRoofline: trusted capacity solve inputs do not match this render (incl. hbmBytesOverride identity — the adopted model)");
     if (declaredOperatingWidth == null)
       throw new RooflineDataError("feasibilityRoofline: trusted capacity solve requires its declared operating width");
     /* The rows must carry THIS solve's brand -- not merely be some solve's rows, and not a
@@ -534,14 +534,14 @@ function feasibilityRoofline(opts) {
            mode: arch.mode, capacitySolveApplied: false };
 }
 
-/* ---------- capacity-width solver (feasibility-redesign memo v4.1; live since R2) ----------
+/* ---------- capacity-width solver (trusted live feasibility solve) ----------
    LIVE since R2: the render path calls this solver and passes its trusted result into
    feasibility/rendering. Reuses the EXACT feasibility terms
    above (same kvTok basis, same C8 workspace, same floor) with two deliberate deltas:
    (1) width comes from an explicit caller-supplied legal list (domain enumerator), never
    from resolveNShardValue/registry cases; (2) the WEIGHT term may use the capacity-only
-   loadedWeightBytesPerParam policy (memo §0-bis) — the performance tuple sW is never
-   touched (calibration-invariant guard enforces). Returns BOTH solves (memo §0-ter):
+   loadedWeightBytesPerParam policy — the performance tuple sW is never
+   touched (calibration-invariant guard enforces). Returns BOTH solves:
    capacityMinimumUnderUniformPolicy (min width with bFeas >= 1) and
    declaredOperatingPointWidth (min width with bFeas >= bDeclared). */
 function rdEnumerateLegalWidths(shapes) {
@@ -554,7 +554,7 @@ function rdEnumerateLegalWidths(shapes) {
     default: throw new RooflineDataError("unknown hardwareLegalShapes kind '" + String(shapes.kind) + "'");
   }
 }
-/* R2 (im4-r2-shipment-plan §1.2; memo §0-bis): the LIVE render path consumes the
+/* Trusted feasibility: the LIVE render path consumes the
    capacity solver's declared-operating-point width. This is the sealed door those
    widths re-enter the roofline through — the width must be a member of the REGISTERED
    domain enumeration for its hardware (the domain enumerator remains the only source
@@ -602,7 +602,7 @@ function capacityWidthSolve(opts) {
   if (bDeclared != null && (typeof bDeclared !== "number" || !Number.isFinite(bDeclared) || bDeclared < 1))
     throw new RooflineDataError("capacityWidthSolve: bDeclared must be a finite batch >= 1 (declared operating point; fail-closed)");
   const { hbmBytes: hbmRegistry } = resolveHwRoofline(hwKey);
-  /* b9 M4 (memo §2.9): same ONE-channel override as feasibilityRoofline, same
+  /* : same ONE-channel override as feasibilityRoofline, same
      plausibility window, and it JOINS the trusted-solve identity below — a solve
      without the override can never be paired with a render that carries it. */
   const hbmBytes = hbmBytesOverride != null
@@ -617,7 +617,7 @@ function capacityWidthSolve(opts) {
     throw new RooflineUnitError("loadedWeightBytesPerParam " + String(bytesPerParam) + " implausible");
   const dense = arch.mode === "dense-tp";
   const workspace = 0.10 * hbmBytes;                                // C8, identical to live
-  /* R2 §1.5 (placement registry): placement residency is derived HERE from a registered
+  /* R2  (placement registry): placement residency is derived HERE from a registered
      model row. A raw per-width byte map is deliberately not an input: now that capacity
      feasibility caps the live batch, accepting one would be a direct throughput-injection
      channel. Exact checkpoint identity and precision tier are revalidated at this boundary. */
@@ -668,14 +668,14 @@ function capacityWidthSolve(opts) {
      the same record as their own brand instead -- see RD_CAPACITY_SOLVE_ROWS above. */
   const meta = Object.freeze({
     arch, totalB, hwKey, precision, LPeak,
-    hbmBytesOverride: hbmBytesOverride != null ? hbmBytesOverride : null, // b9 M4: part of the solve identity
+    hbmBytesOverride: hbmBytesOverride != null ? hbmBytesOverride : null, // : part of the solve identity
   });
   RD_CAPACITY_SOLVE_META.set(result, meta);
   RD_CAPACITY_SOLVE_ROWS.set(perWidth, meta);
   return result;
 }
 
-/* ---------- operating points (memo §4 registry + §5 cap semantics) ----------
+/* ---------- operating points (registry and cap semantics) ----------
    opBasis ∈ {anchor-stated, analyst-declared, capped, infeasible}.
    regime ∈ {balanced, batch, fast}; b_declared per the reviewed registry (batch = rule cell
    mult × balanced); b_render = min(b_declared, b_feas); capped ⇒ opBasis "capped" (declared
@@ -684,20 +684,20 @@ function capacityWidthSolve(opts) {
    ceiling inversion — resolution only ever moves b DOWNWARD from the declared value. */
 function resolveOperatingPoint(opts) {
   const { hwKey, regime, arch, totalB, precision, L, LPeak, declaredOperatingWidth, capacitySolve,
-          hbmBytesOverride } = opts; // b9 M4: forwarded to feasibility (memo §2.9 channel)
+          hbmBytesOverride } = opts; // Forwarded to feasibility.
   const reg = Object.prototype.hasOwnProperty.call(RD_OPERATING_POINTS, hwKey) ? RD_OPERATING_POINTS[hwKey] : undefined;
   if (!reg) throw new RooflineDataError("no OPERATING_POINTS row for '" + String(hwKey) + "'");
   const cell = Object.prototype.hasOwnProperty.call(reg, regime) ? reg[regime] : undefined;
-  if (!cell) throw new RooflineDataError("row '" + hwKey + "' declares no '" + String(regime) + "' regime (absent by design ⇒ hard error, memo §4/§6)");
-  // b9 M2 (memo §6.1, run B §A3): every cell must state WHICH batch quantity it carries. An untyped
+  if (!cell) throw new RooflineDataError("row '" + hwKey + "' declares no '" + String(regime) + "' regime (absent by design ⇒ hard error, the design analysis)");
+  //  (batch basis): every cell must state WHICH batch quantity it carries. An untyped
   // `b` that silently means different quantities in different terms IS defect class D1.
   if (!RD_BATCH_QUANTITIES.includes(cell.batchQuantity))
     throw new RooflineDataError("OPERATING_POINTS." + String(hwKey) + "." + String(regime) +
-      " has no valid batchQuantity — REQUIRED since b9 M2 (closed set {" + RD_BATCH_QUANTITIES.join(", ") + "})");
+      " has no valid batchQuantity — REQUIRED since the adopted model (closed set {" + RD_BATCH_QUANTITIES.join(", ") + "})");
   let bDeclared;
   if (typeof cell.b === "number") bDeclared = cell.b;
   else if (cell.rule && typeof cell.mult === "number" && reg.balanced && typeof reg.balanced.b === "number")
-    bDeclared = cell.mult * reg.balanced.b;                        // §4 rule cell: min(mult×balanced, b_feas) — the min happens below
+    bDeclared = cell.mult * reg.balanced.b;                        //  rule cell: min(mult×balanced, b_feas) — the min happens below
   else throw new RooflineDataError("operating-point cell " + hwKey + "." + regime + " is neither a declared b nor a well-formed rule cell");
   const feas = feasibilityRoofline({ arch, totalB, hwKey, precision, L, LPeak, declaredOperatingWidth, capacitySolve, hbmBytesOverride });
   const declaredOpCitation = cell.opBasis === "anchor-stated" ? cell.basis : null;
@@ -712,7 +712,7 @@ function resolveOperatingPoint(opts) {
            declaredOpBasis: cell.opBasis, declaredOpCitation,
            regime, hwKey, feasibility: feas };
 }
-/* ---------- traffic → context (memo §3 fixed-OSL rule) ----------
+/* ---------- traffic → context (fixed-OSL rule) ----------
    OSL is registry data per profile FAMILY (never encoded, never a parameter);
    ISL = ioRatio × OSL; representative decode L = ISL + OSL/2 (C5);
    peak live KV LPeak = ISL + OSL; prefill L_in = ISL.
@@ -802,7 +802,7 @@ function contextWindowStatus(arch, lengths, limitSource = null) {
   };
 }
 
-/* ---------- prefill (frozen §2 verbatim; memo §8 universal transfer) ----------
+/* ---------- prefill (frozen  verbatim;  universal transfer) ----------
    t_tok = max(Φ_pre_dev/FLOPS, D/B_fabric)/η_pre_eff; Φ_pre = 2·A + F_attn(m, L_in/2);
    Φ_pre_dev = Φ_pre (MoE-EP) | Φ_pre/N (dense-TP); NO t_cc (amortized, stated);
    η_pre = the single frozen F7 value for EVERY row (h800 FITTED identity, all others
@@ -822,10 +822,10 @@ function prefillRoofline(opts) {
   const A = activeB * 1e9;
   const dense = arch.mode === "dense-tp";
   const phiPre = 2 * A + fAttnPerPos(arch, LIn / 2);               // causal-average attention
-  const phiPreDev = dense ? phiPre / N : phiPre;                   // frozen branch, restored verbatim (memo §1a)
+  const phiPreDev = dense ? phiPre / N : phiPre;                   // frozen branch, restored verbatim
   const dBytes = fabricBytesPerPos(arch, tup.sAct, N);
   const tCompute = phiPreDev / tup.flops, tFabric = dBytes / row.fabric;
-  const etaPreEff = etaPre * stackMult;                            // memo §7: stackMult multiplies η_pre identically
+  const etaPreEff = etaPre * stackMult;                            // : stackMult multiplies η_pre identically
   if (!isFinite(etaPreEff) || etaPreEff <= 0 || etaPreEff > 1)
     throw new RooflineUnitError("effective prefill efficiency must be in (0, 1] (got " + etaPreEff + ")");
   const tTok = Math.max(tCompute, tFabric) / etaPreEff;
@@ -835,14 +835,14 @@ function prefillRoofline(opts) {
            topologyDimension: resolvedNShard.topologyDimension, nShardCaseId: resolvedNShard.caseId };
 }
 
-/* ---------- full render composition (IM3 exit-gate fix 5, P2: was "slice 3 will wire the
+/* ---------- full render composition (previously described as "slice 3 will wire the
    display path through this shape" -- slice 3 did, in engine.js's rooflinePoint(); this IS the
    live display-path shape now, plus still used by the diff harness and the slice-1b guard
    tests) ---------- */
 function renderPoint(opts) {
   const { arch, activeB, totalB, hwKey, regime, precision, stackMult = 1, profileId = null, ioRatio = null,
           declaredOperatingWidth, capacitySolve, contextLimitSource = null,
-          hbmBytesOverride } = opts; // b9 M4: forwarded through resolveOperatingPoint → feasibility
+          hbmBytesOverride } = opts; // : forwarded through resolveOperatingPoint → feasibility
   const lengths = resolveTrafficLengths({ profileId, ioRatio });
   const contextWindow = contextWindowStatus(arch, lengths, contextLimitSource);
   if (contextWindow.state === "exceeded-registered-limit") {
@@ -862,14 +862,14 @@ function renderPoint(opts) {
   });
   const provenance = { opBasis: op.opBasis, opCitation: op.opCitation };
   if (op.infeasible) return { infeasible: true, ...provenance, op, lengths }; // explicit infeasible state — NO numbers
-  // b9 M2 (memo §7): op.q / op.a are declared in the registry and validated by the b9 suite; they
+  // : op.q / op.a are declared in the registry and validated by the contract suite; they
   // are NOT forwarded here, because caller-supplied q/a must stay structurally ignored (the
   // anti-injection guard). The declared floor is 1/1 on every cell, so the compute is unchanged.
   const decode = decodeRoofline({ arch, activeB, totalB, hwKey, b: op.b, L: lengths.L, precision, stackMult, declaredOperatingWidth });
   return { infeasible: false, ...provenance, tokPerS: decode.tokPerS, decode, op, lengths };
 }
 
-/* ---------- customDonor codec DELTA (memo §3 R2 contract) ----------
+/* ---------- customDonor codec DELTA (codec contract) ----------
    Standalone functions — engine.js's live codec is NOT touched here; slice 3 wires them.
    Axis: customDonor ∈ CUSTOM_DONOR_ENUM.values, default CUSTOM_DONOR_ENUM.default;
    encoded ONLY when model === "custom" AND value ≠ default; a token lacking the field

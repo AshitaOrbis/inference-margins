@@ -1,4 +1,4 @@
-/* Worker runtime bridge for the R2 claim contracts — the SAME interface as
+/* Worker runtime bridge for the claim contracts — the SAME interface as
    ../src/claims.ts, resolved via the bundler (workerd has no Node loader), exactly
    the engine.ts bridge pattern. site/engine-contracts-v22.js is dependency-free
    dual-mode CommonJS (pure-JS sha256 fallback, no window/document access), so the

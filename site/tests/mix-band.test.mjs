@@ -1,5 +1,5 @@
 // THE FEASIBLE-MIX BAND — max / min / median over provider distributions that sum to 100.
-// (owner ruling `q-sliders-fleet-util-point`, 2026-08-09T14:57:56Z)
+// (the adopted decision `the adopted decision`, 2026-08-09T14:57:56Z)
 //
 // What is asserted here is the property that makes the feature honest, and it is the same property
 // `margin-band.test.mjs` asserts for the box: the band is the ATTAINABLE range over the feasible
@@ -121,7 +121,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
 /* "If they use three points, the median should be summing to 100%." GPT Pro's declared shares are
    60 / 40 / 0, which do. So the median must be its own mix, not something this page computed. */
 {
-  assert("centres that already sum to 100 ARE the median (the owner's fixed case)",
+  assert("centres that already sum to 100 ARE the median (the declared case)",
     band.medianIsDeclared === true && Math.abs(band.mid - band.point) < 1e-9,
     `medianIsDeclared=${band.medianIsDeclared} mid=${band.mid} point=${band.point}`);
   const pointBlend = E.applyPresetSettings(opus, gptC, SEL).blend;
@@ -227,7 +227,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
 }
 
 // ---------------------------------------------------------------- 9. ONE BOUNDED PROVIDER IS PINNED
-/* Σ = 100 fixes the last free block. Not a defect — the owner's own rule — but the readout has to
+/* Σ = 100 fixes the last free block. Not a defect — the fixed-case rule — but the readout has to
    name the mechanism instead of showing a zero-width range a reader would read as broken. */
 {
   const one = { "blend.fam.tpu": { lo: 35, hi: 50 } };
@@ -297,7 +297,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
    forbids, so the band measures it at every reported mix. Forced here by inflating the model past
    what the smaller legs can hold, because on today's presets nothing is infeasible (0 of 272). */
 {
-  /* im-arc T4 fold (2026-08-24), memo §4: "every leg servable" is the PREMISE of this case, and
+  /*  (2026-08-24), : "every leg servable" is the PREMISE of this case, and
      under the default rent basis it is no longer true — gb200, gb300 and trn3 have no admissible
      public planning rate. The premise is restored on the OWNED basis, where every registered row
      is priced, so the case still tests what it was written to test: with nothing renormalizing,
@@ -337,7 +337,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
 
 // ---------------------------------------------------------------- 13. AFFINENESS IS PROBED, NOT ASSUMED
 {
-  /* im-arc T4 fold (2026-08-24), memo §4: affineness in the shares is a property of a band whose
+  /*  (2026-08-24), : affineness in the shares is a property of a band whose
      legs are ALL priced — the mix is affine only where every vertex evaluates. Under the default
      rent basis three legs now have no admissible public planning rate, so vertices that move
      weight onto them renormalize and the measured deviation is no longer float noise. Both facts
@@ -382,11 +382,11 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
     JSON.stringify(proMix["blend.fam.trainium"]));
 
   const pb = E.mixBand(opus, gptR3, SEL, proMix);
-  /* im-release-edit-r2 (2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok):
+  /* publication revision (2026-09-10, adjudicated 2026-09-10):
      the POINT moves with the adopted planning rents, 83.75 -> 82.42. The property this assertion is
      named for is untouched and is the second half of it: the declared reference IS the point, so the
      author's own median was not displaced by a computed midpoint. */
-  /* im-vet-six-repairs (2026-09-20): 82.42 -> 82.33 with the TPU numerator repair. This preset
+  /* registry repairs (2026-09-20): 82.42 -> 82.33 with the TPU numerator repair. This preset
      declares its own blend (NVIDIA + TPU, Trainium at zero weight by its author's own choice), so
      the Trainium withdrawal does not reach it and only the coefficient does. The property this
      assertion is named for is untouched. */
@@ -408,11 +408,11 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
     Object.values(fabMix).every(r => r.mid === undefined), JSON.stringify(fabMix));
 
   const fb = E.mixBand(opus, fableR3, SEL, fabMix);
-  /* im-arc T4 fold (2026-08-24, declared delta): the author's DECLARED ranges are byte-untouched;
+  /*  (2026-08-24, declared delta): the author's DECLARED ranges are byte-untouched;
      what moved is the arithmetic the engine measures them through.
-     im-release-edit-r2 (2026-09-10): same again under the rent adoption — the declared ranges are
+     publication revision (2026-09-10): same again under the rent adoption — the declared ranges are
      byte-untouched for the second time, and only the arithmetic they are measured through moves. */
-  /* im-vet-six-repairs (2026-09-20) — A DESIGNED REFUSAL NOW FIRES, and it is a real consequence
+  /* registry repairs (2026-09-20) — A DESIGNED REFUSAL NOW FIRES, and it is a real consequence
      of the repair rather than a test artefact, so it is asserted rather than worked around.
      This preset declares NO blend of its own, so it seeds from the default fleet; the default
      withdrew both Trainium legs on evidence grounds, and its author declared a Trainium share of
@@ -440,7 +440,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
    attains its extrema at vertices — so a band can read non-affine and still be exact. Verified
    against a dense grid in the consult; asserted here so the distinction cannot rot back. */
 {
-  /* im-arc T4 fold (2026-08-24), memo §4: "nothing renormalizing" is this case's PREMISE, and it
+  /*  (2026-08-24), : "nothing renormalizing" is this case's PREMISE, and it
      needs a basis on which every registered leg is priced — three now have no admissible public
      planning rate under a rent basis. The distinction the case exists to protect (a band may read
      non-affine and still be exact, because a constant survivor set makes the objective
@@ -475,12 +475,12 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
   }
 }
 
-/* ---------------------------------------------------------------- THE MEAN MIX (M8 wiring, bq-231)
-   Owner MEAN ruling (2026-08-11); decision memo research/three-point-middle-point-decision-2026-08-11.md.
-   The stat is the margin AT the exact centroid of P = box ∩ {Σ = T}. These rows are the memo's own
-   §3 trap table — the midpoint-projection shortcut and the unweighted vertex average BOTH pass the
+/* ---------------------------------------------------------------- THE MEAN MIX (mean-mix revision wiring, the release)
+   The exact mean-mix convention was adopted on 2026-08-11.
+   The stat is the margin AT the exact centroid of P = box ∩ {Σ = T}. These rows form a
+   trap table — the midpoint-projection shortcut and the unweighted vertex average BOTH pass the
    symmetric GPT-Pro case and are silently wrong elsewhere, so the asymmetric rows are the
-   load-bearing ones. Expected values are the memo's measured numbers, external to this code. */
+   load-bearing ones. Expected values are the specification's measured numbers, external to this code. */
 {
   // (1) the symmetric reference case: centroid = 55/40/5, agreeing with both consult arms
   const mb = E.mixBand(opus, gptC, SEL, DECLARED);
@@ -496,9 +496,9 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
   assert("mean mix: the mean mix sums to the band's own T",
     Math.abs(mb.meanBlocks.reduce((a, b) => a + b, 0) - mb.T) < 1e-9);
 
-  // (2) the asymmetric case — Fable r3's declaration; memo-measured 50.922/28.156/20.921
+  // (2) the asymmetric case — Fable r3's declaration; specification 50.922/28.156/20.921
   const fable = E.centroidOnSum([35, 15, 5], [65, 40, 35], 100);
-  assert("mean mix: Fable-r3 ranges give the memo's measured centroid (50.922/28.156/20.921)",
+  assert("mean mix: Fable-r3 ranges give the measured centroid (50.922/28.156/20.921)",
     !!fable && Math.abs(fable[0] - 50.922) < 2e-3 && Math.abs(fable[1] - 28.156) < 2e-3
     && Math.abs(fable[2] - 20.921) < 2e-3, JSON.stringify(fable));
   // the TRAP row: the midpoint projection gives 50.833/28.333/20.833 here — an implementation
@@ -507,7 +507,7 @@ assert("the landing subject computes a mix band", band && !band.refused, band &&
     !!fable && Math.abs(fable[0] - 50.8333) > 0.05, JSON.stringify(fable));
 
   // (3) the skewed case — unconstrained box, so the centroid must be 85/7.5/7.5 (5 pp from the
-  // projection's 80/10/10; hand-provable per the memo)
+  // projection's 80/10/10; hand-provable per the specification)
   const skew = E.centroidOnSum([0, 5, 5], [90, 10, 10], 100);
   assert("mean mix: the skewed case lands on the hand-provable 85/7.5/7.5",
     !!skew && Math.abs(skew[0] - 85) < 1e-9 && Math.abs(skew[1] - 7.5) < 1e-9

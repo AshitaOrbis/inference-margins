@@ -1,6 +1,6 @@
 /* =====================================================================================
    T5 rec 1 — THE INITIAL-LOAD DUAL-DEFAULT REGRESSION TEST
-   (GPT Pro repo review 2026-07-29, §6 rank 1, BLOCKER — WRONG; finding SV-1 / defect C-1)
+   (GPT Pro repo review 2026-07-29,  rank 1, BLOCKER — WRONG; finding SV-1 / defect C-1)
 
    The recommendation, verbatim:
 
@@ -14,8 +14,8 @@
    WHAT THIS REPO DOES, STATED PLAINLY. The recommendation contains two remedies and BOTH are
    now in place.
 
-     (1) The presentation remedy — "shipping both readings together". Under M6/row-499 the block
-         renders every default reading at once instead of one, which is the branch the M6 rework
+     (1) The presentation remedy — "shipping both readings together". Under final-answer revision/row-499 the block
+         renders every default reading at once instead of one, which is the branch the final-answer revision rework
          chose and the reason SV-1's specific harm is gone.
      (2) The mechanism remedy — the `referenceState` fingerprint. `finalAnswer()` returns one
          (frozen), and `refreshFinalAnswerDiffers()` compares the live canonical state identity
@@ -24,7 +24,7 @@
    (2) was NOT done before T5, and skipping it had already cost something. This file was written
    first, against the shipped tree, and it FAILED at both viewports: on a completely untouched
    page the block announced "The scenario currently selected above DIFFERS from this thesis
-   baseline", naming an edit the reader had not made. Cause: row 499 moved the opening state off
+   baseline", naming an edit the reader had not made. Cause: case 499 moved the opening state off
    `median` and split `isCentralClean()` in two, migrating the other callers and missing this
    one. That is SV-1's mirror image — a notice wrong about the default state, just wrong in the
    other direction — and it is what the rec's own second sentence was aimed at. Both directions
@@ -35,7 +35,7 @@
    was never the warning element as such; it was that a reader saw ONE default answer while a
    materially different default answer was suppressed — "the live hero as the project's default
    answer; and the block literally titled THE ANSWER as the project's default answer", with the
-   divergence notice hidden on the clean landing state. Under M6/row-499 the block now renders
+   divergence notice hidden on the clean landing state. Under final-answer revision/row-499 the block now renders
    EVERY default reading at once — the landing preset the page opens on, the calculator's own
    ratified-prior default, and the trend-zero public-evidence reference — each carrying its own
    basis inside its own token, plus a bridge line relating them. There is no suppressed second
@@ -124,7 +124,7 @@ const evalExpr = async (send, expression) => {
 const E = require(ENGINE);
 const fa = E.finalAnswer();
 const READINGS = {
-  landing: fa.landingReading.marginPct,     // the preset the page OPENS on (row 499)
+  landing: fa.landingReading.marginPct,     // the preset the page OPENS on (case 499)
   prior: fa.priorReading.marginPct,         // the calculator's own ratified-prior default
   reference: fa.planningPoint.marginPct,    // trend-zero, family 1.0 public-evidence reference
 };

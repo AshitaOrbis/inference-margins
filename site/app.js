@@ -3,7 +3,7 @@
 "use strict";
 
 let S = structuredClone(DEFAULTS);
-/* b9 spec-decode LEVER ([N-CORRECTION-LIFETIME]). EXACTLY ONE browser-owned correction record. Its
+/* spec-decode LEVER ([N-CORRECTION-LIFETIME]). EXACTLY ONE browser-owned correction record. Its
    producers are every browser call site of sanitizeScenarioDiff — the saved-scenario restore and
    the two URL paths — enumerated rather than described, because naming a function instead of its
    call sites is how two of the three were missed once already.
@@ -13,7 +13,7 @@ let S = structuredClone(DEFAULTS);
    about the CURRENT design, not a permanent firewall — any future remote response that can set S
    must extend this block, with its own producer and transaction, BEFORE it lands. */
 let activeCorrection = null;
-/* b9 spec-decode LEVER: the D-SD-7 reset announcement. A separate record from `activeCorrection`
+/* spec-decode LEVER: the D-SD-7 reset announcement. A separate record from `activeCorrection`
    because they are separate events with separate ratified bytes — a correction reports a value a
    LINK or a SAVED SCENARIO carried and this page overrode; a reset reports a value THIS USER set
    and this page zeroed when they moved the gate. Conflating them would print the wrong sentence. */
@@ -51,18 +51,18 @@ function commitScenario(produce) {
 /* Traffic-mix axis selection (v2.1.2). Modes: native | explicit | custom | legacy-custom.
    Replays override any selection (atomic operating points) — resolveTraffic() is the authority. */
 let TRAFFIC = { mode: "native", profileId: null };
-/* ---------- Slice C (design memo im4-sliceC-design-memo v9, C-3/C-8): the STORED
+/* ---------- Fleet identity: the STORED
    identity enums. NEVER inferred from weights at display time; initialization runs
    ONLY on IDENTITY-RESETTING preset applications (first paint + model switch —
    tracked via LAST_APPLIED_MODEL; reset gestures null the tracker explicitly);
    every other event follows the C-3/C-8 transition tables. ---------- */
 let FLEET_ID = "preset";      // a FLEETS id | "custom" | "preset"
-let GENERIC_FLEET_ID = null;   // im-arc T3: UI return point; the numeric advanced state lives in v7 sections
+let GENERIC_FLEET_ID = null;   // : UI return point; the numeric advanced state lives in v7 sections
 let TOTAL_CASE_ID = "preset"; // a TOTAL_CASES id | "custom" | "preset"
 let LAST_APPLIED_MODEL = null; // null => next preset application is IDENTITY-RESETTING
 function isNamedFleetId(id) { return Object.prototype.hasOwnProperty.call(FLEETS, id); }
 // Mirror of the D-2 chokepoint's blendExplicit predicate (applyPresetSettings) — the
-// initialization condition is the CHOKEPOINT PREDICATE, not blend equality (memo C-3).
+// initialization condition is the CHOKEPOINT PREDICATE, not blend equality (identity contract).
 function presetStackOwnsBlend(m, p) {
   const pset = (p.id === "dive") ? (m.dive || PERSPECTIVES.find(x => x.id === "median").set) : p.set;
   return ("blend" in (m.set || {})) || ("blend" in (pset || {}))
@@ -93,7 +93,7 @@ function applyIdentitiesAfterPresetApplication(m, p) {
   } else {
     if (owns) FLEET_ID = "preset";
     else if (isNamedFleetId(FLEET_ID) || isCustomFleetId(FLEET_ID)) {
-      // b9 M4 impl-gate P0-1: a cf: identity survives a non-resetting preset/lens
+      //  impl-gate P0-1: a cf: identity survives a non-resetting preset/lens
       // application and its aggregate MIRROR must re-seed exactly like a named fleet's
       // baseline — v1 left the mirror to zero out, and the encoder then emitted a blend
       // key beside the cf: identity, minting a token its own decoder rejected.
@@ -104,12 +104,12 @@ function applyIdentitiesAfterPresetApplication(m, p) {
         && TOTAL_CASES[TOTAL_CASE_ID].totalB !== S.total) TOTAL_CASE_ID = "custom";
   }
 }
-/* Scenario-axis edit hook (memo C-3/C-8 rows): a total edit clears the bookmark to
+/* Scenario-axis edit hook (identity contract): a total edit clears the bookmark to
    "custom" (one direction); a total/precision edit while the DEFAULT fleet is
    selected re-derives the seeded members SYNCHRONOUSLY (a SYSTEM re-seed — never a
    user blend edit, never forks identity; the blend state is never stale relative
    to the D-1 inputs, so the encoder's CURRENT-state baseline equality holds). */
-/* b9 spec-decode LEVER (§6.1 UI staleness). Lock/disabled state is captured during buildParam, and a
+/* spec-decode LEVER (UI staleness). Lock/disabled state is captured during buildParam, and a
    stackMult edit calls onChange() WITHOUT rebuilding controls — so once the gate moves, the specDec
    row is stale: a disabled control beside an open gate, or a live one beside a shut gate.
 
@@ -117,14 +117,14 @@ function applyIdentitiesAfterPresetApplication(m, p) {
    `stackMult` input the user is DRAGGING, losing pointer capture after the first movement of the
    drag, and "rebuilt or locally refreshed" wording that permits it is what T-19's negative assertion
    forbids. Replacing one sibling row leaves the dragged input untouched, node identity included. */
-/* ---------- SHARED REVEAL (owner annotations 2026-08-17: ndadaca, n12b450, n45cb3d) ----------
+/* ---------- SHARED REVEAL (adopted 2026-08-17) ----------
    Three of his annotations are the same complaint in three places — the control that answers the
    question exists, and the page will not take you to it ("the edits are in sections collapsed to
    the left but that's not ergonomic"). This is that move, factored once: open every collapsed
    ancestor, scroll the row into view, hand focus to a caller-chosen control.
 
    Deliberately NOT a rewire of lowEvidenceAffordance, which does the same three things. That one's
-   focus policy is pinned by the b9 CDP suite (T-14 asserts the two utilization rows still focus
+   focus policy is pinned by the browser suite (T-14 asserts the two utilization rows still focus
    their enabled `util` control exactly as before, and the `.info`/range-handle exclusions exist
    because two earlier fixes failed against that code). Its behaviour is evidence, not convention,
    so it keeps its own copy rather than inheriting a generalization written for other callers. */
@@ -143,13 +143,13 @@ function revealParamRow(key, pickFocus) {
   return true;
 }
 /* ---------- CHART BAR → THE CONTROLS FOR THAT ACCELERATOR ----------
-   Owner annotations n12b450 ("If I click these accelerators I should be able to edit their
-   details, the edits are in sections collapsed to the left but that's not ergonomic") and n45cb3d
+   Adopted 2026-08-16: ("If I click these accelerators I should be able to edit their
+   details, the edits are in sections collapsed to the left but that's not ergonomic") and
    ("Same as above, should be able to edit costs by clicking on accelerators to expand them").
 
    What it does NOT do is build a second editor inside the chart. There is already exactly one
    control per accelerator per question, and a duplicate would be a second place to set the same
-   number — the shape this page refuses everywhere else. His complaint is reachability, so the fix
+   number — the shape this page refuses everywhere else. The issue is reachability, so the fix
    is reachability: the bar takes you to the control that already exists, opening the section on
    the way. No value is written, so nothing here can move a rendered number.
 
@@ -190,7 +190,7 @@ function makeHwMarkNavigable(node, hwKey, kind, label) {
   node.addEventListener("click", go);
   node.addEventListener("keydown", ev => { if (ev.key === "Enter" || ev.key === " ") go(ev); });
 }
-/* The spec-decode gate's unlock affordance (owner annotation ndadaca). Rendered only under the
+/* The spec-decode gate's unlock affordance (adopted affordance). Rendered only under the
    D-SD-7 gate; see the call site for why the replay lock is excluded. */
 function specDecGateJump() {
   const b = document.createElement("button");
@@ -218,13 +218,13 @@ function reconcileSpecDecRow() {
   row.replaceWith(buildParam(param));                        // value, ticks, disabled, why-line, reset
 }
 function afterScenarioAxisEdit(k) {
-  /* b9 M5 (§10.3): the interlock transitions ONLY here — i.e. only on slider-machinery writes.
+  /* : the interlock transitions ONLY here — i.e. only on slider-machinery writes.
      applyPresetSettings seeding the ratified trend prior never routes through this hook, which is
      what makes "ratified DEFAULTS do not count as user edits" structural. */
   applyInterlockAfterEdit(k);
-  /* b9 spec-decode LEVER (D-SD-7, the reverse direction) — a one-directional gate is not a gate.
+  /* spec-decode LEVER (D-SD-7, the reverse direction) — a one-directional gate is not a gate.
      Moving stackMult OFF the tick while credit is selected resets specDec to 1.00 LOUDLY and with
-     attribution, mirroring the M5 D-12 zeroing rule so a headline move is never silent.
+     attribution, mirroring the lead-zeroing rule so a headline move is never silent.
 
      The announcement is cleared at the START of this hook and set by it, never by the generic
      edit-clear: noteUserEdit() runs AFTER this in the same oninput tick, so sharing that clear
@@ -268,7 +268,7 @@ function appEngineContext(m = currentModel(), tr = resolvedTraffic(), state = S)
   return makeScenarioContext(m, tr, state && state.customDonor,
     perspective && perspective.kind, perspective && perspective.id);
 }
-/* b9 M4 (memo §3.1): the live custom-fleet selection rides the EXPLICIT
+/* : the live custom-fleet selection rides the EXPLICIT
    renderOpts.customFleet channel. Scoped by OBJECT IDENTITY to the live S — chart
    callers that compute on structuredClones (per-accelerator counterfactuals, spans)
    deliberately fall back to the aggregated per-donor blend mirror; leg-level detail
@@ -285,33 +285,33 @@ function appWorkload(state = S, activeOverride, m = currentModel(), tr = resolve
 function appWorkloadOnHw(hw, state = S, activeOverride, m = currentModel(), tr = resolvedTraffic(), renderOpts) {
   return workloadOnHw(hw, state, activeOverride, appEngineContext(m, tr, state), renderOpts);
 }
-// b9 M3 (memo §3.4): the energy surface's app-side wrapper — same context threading as
+// : the energy surface's app-side wrapper — same context threading as
 // appWorkload so energy always describes the same operating point as the rendered costs.
 function appFleetEnergy(state = S, activeOverride, m = currentModel(), tr = resolvedTraffic(), renderOpts) {
-  // b9 M4 impl-gate P0-3: the energy surface must describe the SAME fleet as the cost
+  //  impl-gate P0-3: the energy surface must describe the SAME fleet as the cost
   // mix — the active custom fleet (section procurement/electricity plus leg physical
   // overrides) rides the identical merge appWorkload uses.
   const cf = appActiveCustomFleet(state);
   if (cf) renderOpts = { ...(renderOpts || {}), customFleet: cf };
   return fleetEnergy(state, activeOverride, appEngineContext(m, tr, state), renderOpts);
 }
-/* R2 (im4-r2-shipment-plan §1.2/§1.3; assembly-notes R-4b) — the landing-hero
+/* Landing display — the landing-hero
    decision point. ONE constant, consulted at exactly ONE site (updateTiles); both
    branches implemented and tested so a mode change is a bounded constant-flip +
    pin re-mint, never a redesign.
-   OWNER PICK 2026-07-23 (q-im-landing-hero-pick): **Option B — "policy-labeled"**:
+   Adopted 2026-07-23: **Option B — "policy-labeled"**:
    the landing hero displays the full-fleet number as an explicitly policy-labeled
    scenario output with every policy-unclean (capped) leg welded INLINE; a leg with
    NO achievable operating point still suppresses (gate-6 IFF clause ii is
    amended ONLY for the capped-not-infeasible case). The "suppress" branch
    (Option A) remains implemented and release-tested via the window hook.
-   NOTE (same ruling, R3-shaping): the owner further ruled default fleet
+   NOTE (adopted 2026-07-23): default fleet
    MEMBERSHIP should be serve-feasibility-filtered (an unservable leg belongs at
-   weight 0 in the default, not rendered capped) — that is the top R3 design row
-   in BACKLOG.md, not a change to this shipped R2 contract. */
+   weight 0 in the default, not rendered capped) — that is the top design row
+   in BACKLOG.md, not a change to this shipped contract. */
 const LANDING_HERO_MODE = (typeof window !== "undefined" && window.__LANDING_HERO_MODE_TEST__ === "suppress")
   ? "suppress" : "policy-labeled"; // window hook = the R-4b BOTH-BRANCHES test channel (console/tests only — never link-encoded, never persisted; flipping the shipped mode means editing THIS constant)
-/* R2 (§1.6; memo §0-ter): the hero's three-point loaded-bytes policy-sensitivity
+/* R2: the hero's three-point loaded-bytes policy-sensitivity
    receipt — evaluateAtPolicyBand recomputes THIS SURFACE's own metric (blend margin,
    %) at the three SAMPLED points. argMin/argMax computed, no continuity implied,
    never encoded into links. */
@@ -328,7 +328,7 @@ function policyBandReceiptText(band, unit) {
 // Landing-surface predicate + the gate-6 decision (engine-owned): suppression can
 // only ever apply to the clean central default — any user edit is a scenario
 // surface and shows the disclosed, welded number instead.
-// R3 (memo D-3a/D-4): the decision is mode-aware over the DERIVED membership —
+// R3 (the design requirements): the decision is mode-aware over the DERIVED membership —
 // "policy-labeled" suppresses only on EMPTY derived membership (honest null);
 // "suppress" (the strict tested branch) suppresses on ANY exclusion.
 function appLandingHeroSuppressed() {
@@ -344,7 +344,7 @@ function appDefaultMembership() {
   return HW_ORDER.every(k => (S.blend[k] || 0) === implied[k]) ? d : null;
 }
 // Gate-7 central eligibility for the CURRENT state's landing fleet (identity-strip
-// + hero-identity gate; memo §0-ter: any central label requires placement-verified
+// + hero-identity gate; : any central label requires placement-verified
 // eligibility — structurally impossible for closed models in R2).
 function appLandingCentralEligible() {
   const sel = selectDefaultFleet(S, appEngineContext());
@@ -353,7 +353,7 @@ function appLandingCentralEligible() {
 function appMarginOnHw(hwKey, state = S, activeOverride, m = currentModel(), tr = resolvedTraffic(), renderOpts) {
   return marginOnHw(hwKey, state, activeOverride, appEngineContext(m, tr, state), renderOpts);
 }
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): the paired
+/* Adopted 2026-08-22: the paired
    cards use the engine's basis switch. The active custom fleet remains an explicit render option. */
 function appMarginOnBasis(state = S, basis, renderOpts) {
   const cf = appActiveCustomFleet(state);
@@ -366,7 +366,7 @@ function appBlendedLessorSpread(state = S, renderOpts) {
   return blendedLessorSpread(state, renderOpts);
 }
 function appFeasibility(state = S, m = currentModel(), tr = resolvedTraffic()) {
-  // b9 M4 impl-gate P0-2: the feasibility tile must see the SAME fleet the mix
+  //  impl-gate P0-2: the feasibility tile must see the SAME fleet the mix
   // computes — the active custom fleet rides the identical merge appWorkload uses.
   const cf = appActiveCustomFleet(state);
   return feasibility(state, appEngineContext(m, tr, state), cf ? { customFleet: cf } : undefined);
@@ -385,7 +385,7 @@ function appNoNumberLabel(reason) {
     ? "context exceeds registered maxPos"
     : "infeasible at declared topology";
 }
-// IM3 exit-gate fix 1 + 2026-07-20 GPT Pro topology correction: delegates to engine.js's shared
+// Topology correction of 2026-07-20: delegates to engine.js's shared
 // fleetRenderableDisclosure (primary=false), including any N_shard-only sensitivity clause. This
 // chip is generic/dynamic, so it must not hardcode a family-correlation claim that is only true for
 // the flagship default.
@@ -394,7 +394,7 @@ function fleetRenderableText(wl) {
   // blend is the derived default (exclusions welded inline, canonical anchor named).
   return readerClause(fleetRenderableDisclosure(wl && wl.fleetRenderable, false, appDefaultMembership()));
 }
-/* bq-1141 M11 (GPT Pro 09-12 finding 4a, 09-25 finding 10): the shared engine clause is the MCP's and
+/* Shared explanation: the shared engine clause is the MCP's and
    the historical receipts' text, so it is not reworded at the source — the T4 receipts reproduce it
    byte for byte. What a READER sees in captions, chips and the comparison table says the same thing in
    words: the solver's term "renderable at declared serving topology" and the policy's code identifier
@@ -415,7 +415,7 @@ function renderFleetRenderableChip(wl) {
     const chip = document.createElement("span"); chip.className = "id-chip id-state"; chip.textContent = text;
     el.append(chip);
   }
-  // R2 (§1.9): the EMITTED five-status vector + two-boolean contract — the site's
+  // R2: the EMITTED five-status vector + two-boolean contract — the site's
   // fleet-status emission point (one per result surface; the MCP transports carry the
   // same fields structurally). UNVERIFIED is a first-class value, never hidden.
   const f = wl && wl.fleetRenderable;
@@ -462,7 +462,7 @@ function renderFormCorrectionDebt() {
       ? resid.map(leg => leg.hwKey + "'s topology-aware charge carries the §C4 replication residual: "
           + leg.replicationResidual + ". ").join("")
       : "")
-    /* q-im-fp4-gb300-batch-disclosure: an ASSUMED operating point states itself here, on the leg,
+    /* the adopted decision: an ASSUMED operating point states itself here, on the leg,
        alongside the other open debts — the ruling's named mechanism. Engine-computed from the
        cell's registered sensitivity band; no counterfactual is authored in this file. */
     + debt.legs.filter(leg => leg.declaredBatchExposure)
@@ -516,16 +516,16 @@ const SECTION_INJECT = {
   "Traffic mix (I/O + cache)": ["traffic-picker-group"],
 };
 function buildControls() {
-  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /* §18.11 P0-a: an aborted builder is a FULL-level pending (a bare render cannot rebuild controls) */
+  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /*  P0-a: an aborted builder is a FULL-level pending (a bare render cannot rebuild controls) */
   // Rescue the injected pickers back to the hidden holder BEFORE the wipe (they currently live in
   // section bodies), so textContent="" can't destroy them.
   const holder = $("picker-holder");
   if (holder) Object.values(SECTION_INJECT).flat().forEach(id => { const el = $(id); if (el) holder.appendChild(el); });
   controlsEl.textContent = "";
-  // b9 M5 (§12.4): while the scroll-lock is live, the adjustments column carries the lock icon and
-  // tapping it reopens the choice. Distinct icon+copy from the interlock's lock (§10) by design.
+  // : while the scroll-lock is live, the adjustments column carries the lock icon and
+  // tapping it reopens the choice. Distinct icon+copy from the interlock's lock by design.
   if (slidersLocked()) controlsEl.appendChild(sliderLockChip());
-  controlsEl.appendChild(pointModeControl());   // row 499: the 1/2/3-point toggle, above every slider
+  controlsEl.appendChild(pointModeControl());   // the recorded review: the 1/2/3-point toggle, above every slider
   SECTIONS.forEach(sec => {
     if (sec.showIf && !sec.showIf(S)) return;
     const det = document.createElement("details");
@@ -548,7 +548,7 @@ function buildControls() {
     const visible = sec.params.filter(p => !p.showIf || p.showIf(S));
     visible.filter(p => p.tier === "basic").forEach(p => body.appendChild(buildParam(p)));
     const advanced = visible.filter(p => p.tier === "advanced");
-    /* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+    /* Adopted 2026-08-22:
        every box exposes the same Basic → Advanced grammar. Open state is UI-only;
        singleton boxes say that their complete control set is already basic. */
     const adv = document.createElement("details"); adv.className = "ctl-advanced";
@@ -559,7 +559,7 @@ function buildControls() {
     advanced.forEach(p => advBody.appendChild(buildParam(p)));
     if (!advanced.length) advBody.appendChild(mkEl("p", "hw-meta", "No additional controls — this box's complete control set is basic."));
     adv.append(advSum, advBody); body.appendChild(adv);
-    // b9 M5 (§10): the lever group's lock state, transition line, unlock affordance, trend
+    // : the lever group's lock state, transition line, unlock affordance, trend
     // readout/citations/refusal note and the non-blocking overlap warnings.
     if (sec.interlockGroup) body.appendChild(interlockGroupPanel(sec.interlockGroup));
     det.appendChild(body);
@@ -567,7 +567,7 @@ function buildControls() {
   });
 }
 
-/* b9 UX-A: every .info is a dialog trigger, and its accessible name is CONTEXTUAL. Forty-eight
+/* development: every .info is a dialog trigger, and its accessible name is CONTEXTUAL. Forty-eight
    controls all named "Explanation" are indistinguishable in an assistive-technology control list,
    which is the same defect the visible short label has and the reason the payload title is folded
    into the name rather than the visible text. */
@@ -583,14 +583,14 @@ function infoBtn(tipKey) {
 
 function buildParam(p) {
   const wrap = document.createElement("div"); wrap.className = "param";
-  /* b9 M6 (§16.2 A-3 / memo §17.4): a stable per-parameter hook so the low-evidence affordance can
+  /*  (low-evidence affordance): a stable per-parameter hook so the low-evidence affordance can
      JUMP to a named control and focus it. Presentation-inert; it carries no claim and no value. */
   wrap.dataset.paramKey = p.k;
   if (p.type === "blend") return buildBlend(wrap, p);
   if (p.type === "rent-discounts") return buildRentDiscounts(wrap, p);
   if (p.type === "rent-absolute") return buildRentAbsolute(wrap, p);
   if (p.type === "nullable-number") return buildNullableNumber(wrap, p);
-  /* b9 spec-decode LEVER (§6.2, round-12 Sol): focusing the row is the right mechanical resolution
+  /* spec-decode LEVER (round-12 Sol): focusing the row is the right mechanical resolution
      for a jump onto a gated control, but this wrapper is a generic <div> with no role and no
      accessible name — so DOM adjacency does not make assistive technology announce the disabled
      control or the why-line, and a screen-reader user is jumped to an unnamed container and told
@@ -605,13 +605,13 @@ function buildParam(p) {
   const val = document.createElement("span"); val.className = "param-val";
   head.append(name, val); wrap.appendChild(head);
 
-  /* b9 M5: a lever-group control is disabled while its group is locked — by the interlock (§10)
-     or, for the trend group, by a replay's lock-at-0 (§9.4). Each renders its own why-line. */
+  /* : a lever-group control is disabled while its group is locked — by the interlock
+     or, for the trend group, by a replay's lock-at-0. Each renders its own why-line. */
   const leverLock = leverLockState(interlockGroupOf(p.k));
   if (p.type === "select") {
     const sel = document.createElement("select");
     sel.setAttribute("aria-label", p.label);
-    // b9 M5: `numeric: true` keeps a numeric enum (trendRate) numeric — a DOM select value is a
+    // : `numeric: true` keeps a numeric enum (trendRate) numeric — a DOM select value is a
     // string, and a string 3 would fail the codec's closed numeric domain and the bounds table.
     p.options.forEach(([v, l]) => { const o = document.createElement("option"); o.value = String(v); o.textContent = l; sel.appendChild(o); });
     sel.value = String(S[p.k]);
@@ -645,7 +645,7 @@ function buildParam(p) {
     const dp = p.step >= 1 ? 0 : p.step >= 0.05 ? 2 : 3;
     const rendered = (p.unit === "$/Mtok" ? "$" : "") + Number(v).toFixed(dp).replace(/\.0+$/, m => p.step >= 1 ? "" : m) + (p.unit && p.unit !== "$/Mtok" ? " " + p.unit : "")
       + (p.nullable !== undefined && S[p.k] === null ? " (" + p.nullable + ")" : "")
-      + presetDefaultMark(p.k);   // row 499 null convention: an inherited default is marked, never silent
+      + presetDefaultMark(p.k);   // the recorded review null convention: an inherited default is marked, never silent
     val.textContent = rendered;
     // The DOM range is normalized to 0..1000 for log/linear mapping. Expose the
     // domain value a user sees, not that implementation coordinate.
@@ -654,8 +654,8 @@ function buildParam(p) {
   const isTrafficKey = p.k === "ioRatio" || p.k === "cacheHit";
   const tr = isTrafficKey ? resolvedTraffic() : null;
   /* Three independent lock sources, each with its own why-line: the replay traffic lock (shipped),
-     the b9 M5 lever locks (interlock / replay lock-at-0), and the b9 M5 touch scroll-lock. */
-  /* b9 spec-decode LEVER (D-SD-7 / D-SD-5). The gate contributes to the SAME `locked` boolean the
+     the  lever locks (interlock / replay lock-at-0), and the  touch scroll-lock. */
+  /* spec-decode LEVER (D-SD-7 / D-SD-5). The gate contributes to the SAME `locked` boolean the
      range AND its ticks consult — a disabled range alone leaves ticks clickable and able to write
      specDec > 1 behind the engine's back, because tick onclick is `if (locked) return`. The engine
      backstop would still refuse the credit, so this is an affordance defect rather than a numbers
@@ -676,7 +676,7 @@ function buildParam(p) {
     : "🔒 sliders are locked for scroll safety on this device — tap the lock above the adjustments to change it.";
   input.oninput = () => {
     if (locked) { input.value = Math.round(sliderPos(p, S[p.k]) * 1000); return; }
-    // b9 M5 (§12.1): first slider interaction on a coarse pointer offers the scroll-lock choice
+    // : first slider interaction on a coarse pointer offers the scroll-lock choice
     // and SUPPRESSES this edit; fine pointers and keyboard/AT are never asked.
     if (offerSliderLock()) { input.value = Math.round(sliderPos(p, effVal()) * 1000); return; }
     let v = sliderVal(p, input.value / 1000);
@@ -691,7 +691,7 @@ function buildParam(p) {
     afterScenarioAxisEdit(p.k);
     if (isTrafficKey) switchToCustomTraffic();
     if (noteUserEdit()) { show(); return; }
-    if (isTrafficKey) { show(); refreshTrafficDisplay(); return; } // a traffic edit on ANY kind (lens OR synthetic modified state) must resync the dossier line + note label with resolveTraffic()/S (M4 round-4 centralization)
+    if (isTrafficKey) { show(); refreshTrafficDisplay(); return; } // a traffic edit on ANY kind (lens OR synthetic modified state) must resync the dossier line + note label with resolveTraffic()/S (centralized traffic display)
     show(); onChange();
   };
   show();
@@ -701,7 +701,7 @@ function buildParam(p) {
     if (specDecLock) { lockNote.id = "specdec-why"; wrap.setAttribute("aria-describedby", "specdec-why"); }
     lockNote.textContent = lockWhy;
     wrap.appendChild(input); wrap.appendChild(lockNote);
-    /* OWNER ANNOTATION ndadaca (2026-08-16, verbatim: "This needs to jump you to the setting to
+    /* Adopted 2026-08-16: "This needs to jump you to the setting to
        allow it, or include a toggle for it, as it is I'd have no idea how to activate it").
 
        The why-line already NAMES the stack setting; what it could not do is take him there, so a
@@ -722,14 +722,14 @@ function buildParam(p) {
     const ticks = document.createElement("div"); ticks.className = "ticks";
     p.ticks.forEach(tk => {
       const b = document.createElement("button"); b.className = "tick" + (tk.alt ? " tk-alt" : ""); b.type = "button";
-      /* b9 spec-decode LEVER: a GATED tick is `disabled`, not merely inert. `tabindex="-1"` does not
+      /* spec-decode LEVER: a GATED tick is `disabled`, not merely inert. `tabindex="-1"` does not
          set `disabled`, and the low-evidence jump picks the first descendant matching `!el.disabled`
          — so an inert-but-enabled tick can still take programmatic focus, which is the failure the
          jump narrowing below exists to prevent. Scoped to this lever deliberately: making every
          locked tick `disabled` is the right general behaviour but would change three surfaces this
          leg does not own, and the browser app suites could not be run here. Logged in BACKLOG.md. */
       if (specDecLock) b.disabled = true;
-      /* Owner annotation ndadaca: the gate jump lands on the tick that OPENS the gate, so the tick
+      /* Gate affordance: the gate jump lands on the tick that OPENS the gate, so the tick
          needs an identity a querySelector can name. Value-typed, not label-typed — the predicate
          that owns the gate is numeric (stackAtMtpFreeTick), and matching on copy would let a label
          edit silently break the jump. */
@@ -746,14 +746,14 @@ function buildParam(p) {
     });
     wrap.appendChild(ticks);
   }
-  /* row 499: 2/3-point handles — but NEVER on a control the reader cannot move. Declaring a range
+  /* the recorded review: 2/3-point handles — but NEVER on a control the reader cannot move. Declaring a range
      on a gated or locked dial is incoherent: it invites a claim about a value the page has just told
      the reader is unavailable, and it would compute a band through a lever the gate exists to keep
      out of the arithmetic. Found by the spec-decode CDP suite, whose jump-focus contract broke the
      moment handles started rendering under a shut gate. */
   { const rh = locked ? null : rangeHandles(p); if (rh) wrap.appendChild(rh); }
   if (p.k === "total") { const bk = buildTotalCaseBookmarks(); if (bk) wrap.appendChild(bk); }
-  /* b9 spec-decode LEVER, manifest row 15 ([N-CORRECTION-LIFETIME] rule 4): ONE state-level notice,
+  /* spec-decode LEVER, manifest the recorded review ([N-CORRECTION-LIFETIME] rule 4): ONE state-level notice,
      adjacent to the spec-decode control — NOT beside each leg, because the force is a property of
      the state and a per-leg echo would print N copies of one event. The bytes come from the ONE
      engine-owned formatter, so page, MCP and Worker cannot disagree about them. */
@@ -769,7 +769,7 @@ function buildParam(p) {
     note.textContent = specDecCorrectionNotice(activeCorrection.from);
     wrap.appendChild(note);
   }
-  /* d-im-h800 (owner note aca09d): the lever's LIVE readout, adjacent to the control — what the
+  /* the adopted decision (the author's note): the lever's LIVE readout, adjacent to the control — what the
      engine's own fabric term says at the current operating point and what moving the lever does.
      COMPUTED by nvlinkCapReadout (one engine computation also feeding the hardware-chart note); the
      renderer only formats. A slider whose consequence a reader has to go looking for hides the
@@ -782,7 +782,7 @@ function buildParam(p) {
   }
   return wrap;
 }
-/* d-im-h800 — the ONE formatter for the readout on both surfaces (`control` = beside the lever;
+/* the adopted decision — the ONE formatter for the readout on both surfaces (`control` = beside the lever;
    `chart` = under the hardware chart). Nothing numeric is authored here: every figure is a field of
    the engine's readout. */
 function nvlinkCapReadoutSafe() {
@@ -831,7 +831,7 @@ function nvlinkCapReadoutText(rd, surface) {
   return parts.join(" ");
 }
 
-/* ---------- Slice C (memo C-8/C-10): totalCase bookmarks on the total axis.
+/* ---------- Fleet identity: totalCase bookmarks on the total axis.
    Rendered ONLY for in-scope models (presentation on top of the MACHINE guard —
    the state machine refuses out-of-scope bookmark selection regardless). A
    bookmark is a labeled citation of the CHOICE; a hand-typed coincidence stays
@@ -860,7 +860,7 @@ function buildTotalCaseBookmarks() {
     b.setAttribute("aria-pressed", String(TOTAL_CASE_ID === id && S.total === c.totalB));
     b.onclick = () => {
       const mm = currentModel();
-      if (!mm || !TOTAL_CASE_SCOPE.includes(mm.id)) return; // the MACHINE guard (memo C-8, R7 P2-1)
+      if (!mm || !TOTAL_CASE_SCOPE.includes(mm.id)) return; // the MACHINE guard (identity contract)
       S.total = c.totalB;
       TOTAL_CASE_ID = id; // bookmark selection: the one event that assigns a case id
       afterScenarioAxisEdit("__total-case-bookmark"); // NOT "total": the bookmark sets the id itself…
@@ -876,7 +876,7 @@ function buildTotalCaseBookmarks() {
   return row;
 }
 
-/* ---------- Slice C (memo C-1/C-2/C-5/C-6): the fleet switcher ---------- */
+/* ---------- Fleet identity: the fleet switcher ---------- */
 let FLEET_SPAN_CACHE = null; // flagship-baseline presented values; derivation, never a pinned string (C-6)
 function fleetPresentedSpan() {
   if (FLEET_SPAN_CACHE) return FLEET_SPAN_CACHE;
@@ -991,13 +991,13 @@ function renderFleetCoverageLine() {
     const model = currentModel();
     row = coverageForFleetSections(fleet.sections, model ? model.id : null);
   }
-  /* im-arc T4 fold (2026-08-24) [F3]: the generic path now asks the ONE resolver for the derived
+  /*  (2026-08-24) [F3]: the generic path now asks the ONE resolver for the derived
      partition instead of reading stored percentages off the ledger row. The stored ledger holds
      evidence, not numbers. */
   else { const model = currentModel(); row = model ? coverageForPreset(model.id) : null; }
   const rendered = coverageSentenceParts(row);
   line.textContent = rendered ? rendered.sentence : "Coverage: no provider ledger row is registered for this model.";
-  /* memo §1.5 (review question 3): the prominent bar stays THREE-part. The SKU/workload
+  /*  (review question 3): the prominent bar stays THREE-part. The SKU/workload
      count-backed share is a SUBORDINATE line, and it says in words that it is not part of the
      partition above it — a reader must never add it to the other three. */
   if (rendered && rendered.subordinate) {
@@ -1013,14 +1013,14 @@ function renderFleetCoverageLine() {
 function buildFleetSwitcher() {
   const m = buildTimeModel(); // same detached-window-safe resolution as the bookmarks
   const offered = m ? Object.keys(FLEETS).filter(id => FLEETS[id].models.includes(m.id)) : [];
-  /* b9 M4 custom fleets are model-agnostic. im-arc T3 extends the box itself to
+  /*  custom fleets are model-agnostic.  extends the box itself to
      every model: even without a named-fleet row, readers need the generic/advanced
      toggle, provider coverage ledger and registry composer. */
   const cfSrc = typeof customFleetSource === "function" ? customFleetSource() : null;
   const cfIds = cfSrc ? cfSrc.ids() : [];
   const cfEphemeralId = cfSrc && cfSrc.ephemeral ? cfSrc.ephemeral.id : null;
   const box = document.createElement("div"); box.className = "fleet-switcher";
-  TIPS["fleet-switcher"] = { t: "Named fleet scenarios", b: "A registry of named, source-attributed fleets. Selecting one SEEDS the blend sliders (they stay live — any slider edit is a Custom fork). The default presents its serve-feasibility-filtered derivation; every other fleet presents its declared construction; counterfactual fleets are explicitly labeled and are never a default. No per-fleet margin preview is shown here — select a fleet to see its labeled, welded value.", s: "Design: research/im4-sliceC-design-memo.md (gate closed 2026-07-23)." };
+  TIPS["fleet-switcher"] = { t: "Named fleet scenarios", b: "A registry of named, source-attributed fleets. Selecting one SEEDS the blend sliders (they stay live — any slider edit is a Custom fork). The default presents its serve-feasibility-filtered derivation; every other fleet presents its declared construction; counterfactual fleets are explicitly labeled and are never a default. No per-fleet margin preview is shown here — select a fleet to see its labeled, welded value.", s: "Design closed after review on 2026-07-23." };
   const head = document.createElement("div"); head.className = "param-head";
   const name = document.createElement("span"); name.className = "param-name";
   name.append("Named fleet", infoBtn("fleet-switcher"));
@@ -1035,7 +1035,7 @@ function buildFleetSwitcher() {
   offered.forEach(id => { const o = document.createElement("option"); o.value = id;
     o.textContent = FLEETS[id].name + (FLEETS[id].class === "counterfactual" ? " \u2014 COUNTERFACTUAL" : "");
     sel.appendChild(o); });
-  /* b9 M4 (memo §5.1): saved custom fleets in their own optgroup, after the named
+  /* : saved custom fleets in their own optgroup, after the named
      entries; an ephemeral (link-restored, unsaved) fleet lists too, labeled. */
   if (cfIds.length || cfEphemeralId) {
     const og = document.createElement("optgroup"); og.label = "Your custom fleets";
@@ -1060,13 +1060,13 @@ function buildFleetSwitcher() {
     const v = sel.value;
     if (v === "__preset") return;
     if (v === "__custom") { FLEET_ID = "custom"; if (noteUserEdit()) { fullRefresh(); return; } fullRefresh(); return; }
-    /* b9 M4 (memo §1.4): a cf: selection follows the SAME C-2 mutate-then-notify
+    /* : a cf: selection follows the SAME C-2 mutate-then-notify
        pattern — identity, blend-mirror seed, then noteUserEdit/refresh. Model-agnostic:
-       no models-scope check (memo D-3). */
+       no models-scope check (the design requirements). */
     if (isCustomFleetId(v)) {
       FLEET_ID = v;
       const fb = fleetBaselineBlend(v, S, { modelId: currentModel() ? currentModel().id : null, customDonor: S.customDonor });
-      if (fb) S.blend = fb; // §1.3 mirror invariant: aggregate(legs) == S.blend
+      if (fb) S.blend = fb; //  mirror invariant: aggregate(legs) == S.blend
       if (noteUserEdit()) { fullRefresh(); return; }
       fullRefresh(); return;
     }
@@ -1096,7 +1096,7 @@ function renderFleetCompositionLine() {
     : "Composition: unavailable — no typed section receipt.";
   return line;
 }
-/* b9 M4 (memo §5.2): the management row — the builder's entry point plus per-saved-fleet
+/* : the management row — the builder's entry point plus per-saved-fleet
    Edit/Delete chips, the Edit affordance visible EVEN WHEN NOT SELECTED (D-4 verbatim). */
 function cfManagementRow() {
   const row = document.createElement("div"); row.className = "cf-manage-row";
@@ -1117,7 +1117,7 @@ function cfManagementRow() {
     del.onclick = () => {
       if (!confirm("Delete custom fleet “" + def.name + "”? This cannot be undone.")) return;
       src.remove(id);
-      if (FLEET_ID === id) { // reselect the default through the NORMAL selection path (memo §4.4)
+      if (FLEET_ID === id) { // reselect the default through the NORMAL selection path
         FLEET_ID = DEFAULT_FLEET_ID;
         const fb = fleetBaselineBlend(DEFAULT_FLEET_ID, S, appEngineContext());
         if (fb) S.blend = fb;
@@ -1135,7 +1135,7 @@ function cfManagementRow() {
     save.textContent = idTaken
       ? "Save the link version of “" + src.ephemeral.name + "” as a copy"
       : "Save a copy of “" + src.ephemeral.name + "”";
-    save.onclick = () => { // the ONLY storage write paths for link fleets (memo §6.5)
+    save.onclick = () => { // the ONLY storage write paths for link fleets
       if (!idTaken) { src.save(src.ephemeral); fullRefresh(); return; }
       const copy = { ...structuredClone(src.ephemeral), id: newCustomFleetId(src.ids()),
         name: (src.ephemeral.name + " (link copy)").slice(0, 60) };
@@ -1146,15 +1146,15 @@ function cfManagementRow() {
   }
   return row;
 }
-/* ============================ b9 M4: the custom fleet builder ============================
-   Memo §4 — one <dialog>, JS-built (all textContent, never innerHTML), editing a WORKING
-   CLONE: the saved object and the live page mutate ONLY on Save (§4.3). Read-only mode is
+/* ============================ : the custom fleet builder ============================
+    — one <dialog>, JS-built (all textContent, never innerHTML), editing a WORKING
+   CLONE: the saved object and the live page mutate ONLY on Save. Read-only mode is
    the D-9.2 drill-down for named fleets. */
-/* im-arc T2 (memo research/im-arc-t2-sections-memo.md §§1,7): app-side readers
+/* : app-side readers
    consume the one normalized section shape. The legacy fallback is display-only for
    a pre-migration value that has not yet passed through validateCustomFleet. */
 function cfSectionsOf(def) {
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-4): every readout
+  /*  (corrected 2026-08-23): every readout
      consumes resolver output. `inherit` remains accepted at the migration
      boundary but can never become visible text or arithmetic state. */
   if (!def) return [];
@@ -1165,7 +1165,7 @@ function cfPointValue(value, fallback) {
   if (value && typeof value === "object" && Number.isFinite(value.mid)) return value.mid;
   return Number.isFinite(Number(value)) ? Number(value) : fallback;
 }
-/* im-arc T2 fix (Sol review 2026-08-23, findings P1-5/P1-8): visible
+/*  (corrected 2026-08-23): visible
    electricity uses the same resolved registry/override receipt as pricing.
    Region-only sections therefore display the registry triple's middle point. */
 function cfElectricityPoint(section) {
@@ -1204,14 +1204,14 @@ function cfPerLegPanel() {
         : fl.capped ? "capped (declared batch reduced to feasible)" : "renders";
       row.appendChild(mkEl("span", "cf-leg-status" + (fl && fl.infeasible ? " cf-leg-status-bad" : ""),
         "status: " + status));
-      /* b9 spec-decode LEVER (§9.5): the per-leg disclosure. A custom leg is typed by its
+      /* spec-decode LEVER: the per-leg disclosure. A custom leg is typed by its
          calibration DONOR — the row whose performance identity it borrows — so the DTO the engine
          attached already resolved through hwKeyFor and this render site needs no donor logic of
          its own. Copy comes from the ONE engine-owned formatter; the DTO carries codes only. */
       if (fl && fl.specDec)
         row.appendChild(mkEl("span", "cf-leg-specdec",
           specDecReasonText(fl.specDec.reasonCode, fl.specDec.factorApplied)));
-      /* d-im-h800: the NVLink-cap lineage/disposition, same contract — the DTO already resolved
+      /* the adopted decision: the NVLink-cap lineage/disposition, same contract — the DTO already resolved
          through the calibration DONOR, codes only, copy from the ONE engine-owned formatter. */
       if (fl && fl.nvlinkCap)
         row.appendChild(mkEl("span", "cf-leg-nvlinkcap",
@@ -1262,11 +1262,11 @@ function cfDialogShell(title) {
     show() { dlg.showModal(); },
     close() { dlg.close(); dlg.remove(); } };
 }
-/* im-arc T2 fix (Sol review 2026-08-23, finding P1-7): donor edits
+/*  (corrected 2026-08-23): donor edits
    atomically rebuild a by-hardware rent receipt. Stale donor keys disappear and
    every live donor receives either its retained price or the registry default. */
 /* ===================== T5 rec 4 — the typed HBM capacity control =====================
-   GPT Pro 2026-07-29 §6 rec 4, verbatim: "Make HBM capacity a typed quantity … Derive donor
+   GPT Pro 2026-07-29  rec 4, verbatim: "Make HBM capacity a typed quantity … Derive donor
    display values from normative `hbmBytes`, displaying both decimal GB and GiB where useful."
 
    What was wrong: this control showed `HW[key].hbm` — a legacy round label, 144 for Trainium3 —
@@ -1382,7 +1382,7 @@ function cfRebuildByHwRentMap(section) {
     [...new Set((section.legs || []).map(leg => leg.donorKey))]
       .map(key => [key, Number.isFinite(cfPointValue(prior[key], NaN)) ? prior[key] : HW[key].rent]));
 }
-/* The leg editor (memo §4.5): identity → editable cost/power/capacity fields (each with
+/* The leg editor: identity → editable cost/power/capacity fields (each with
    donor default + delta) → read-only spec table with the LOAO lock reason. */
 function cfLegEditor(leg, idx, readOnly, opts) {
   opts = opts || {};
@@ -1430,7 +1430,7 @@ function cfLegEditor(leg, idx, readOnly, opts) {
     const i = txt(cur, v => { const n = numOrNull(v); if (n === null) delete leg.overrides[key]; else leg.overrides[key] = n; }, { type: "number", step, bounds: CF_BOUNDS[key] });
     return field(labelText + " (donor: " + donorVal + ")", i);
   };
-  /* im-arc T2 (memo §7.2): procurement, rent, electricity and TCO are section
+  /* : procurement, rent, electricity and TCO are section
      properties. Advanced leg controls retain only physical/capacity overrides. */
   if (opts.advanced || readOnly) {
     box.appendChild(ovField("boardPowerW", "Operating power W", Math.round(donor.tdp * 1000) + " W (TDP proxy)", "10"));
@@ -1441,7 +1441,7 @@ function cfLegEditor(leg, idx, readOnly, opts) {
     selF.value = leg.family;
     selF.oninput = () => { leg.family = selF.value; };
     box.appendChild(field("Family (donor's, or unclassified = exempt from family adjustments, disclosed)", selF)); }
-  { /* impl-gate P1-6 (memo §4.5): the COMPLETE donor-derived locked specification —
+  { /* impl-gate P1-6: the COMPLETE donor-derived locked specification —
        peak rates, bandwidth, HBM, the η calibration identity, and the row's provenance
        note — not just three headline numbers. */
     const spec = document.createElement("div"); spec.className = "cf-spec-table";
@@ -1466,7 +1466,7 @@ function cfLegEditor(leg, idx, readOnly, opts) {
     { const prov = mkEl("div", "cf-spec-row cf-spec-prov", "Row provenance: " + donor.note);
       prov.title = donor.note; spec.appendChild(prov); }
     spec.appendChild(mkEl("p", "cf-spec-lock", "Performance identity carried from " + donor.name
-      + " — the page's own cross-platform test (LOAO) refuses MFU transfer; editing the peak under a carried η would fabricate throughput. Peak-rate and η fields are therefore read-only (memo D-6, gate-adjudicated amendment to plan D-9.2)."));
+      + " — the page's own cross-platform test (LOAO) refuses MFU transfer; editing the peak under a carried η would fabricate throughput. Peak-rate and η fields are therefore read-only (the author's design decision)."));
     box.appendChild(spec); }
   if (!readOnly && opts.sectionCount > 1) {
     const move = document.createElement("select"); move.className = "cf-move-leg";
@@ -1489,7 +1489,7 @@ function cfValueField(labelText, owner, key, opts) {
   const wrap = document.createElement("div"); wrap.className = "cf-field cf-value-field";
   const raw = owner[key];
   const isRange = !!(raw && typeof raw === "object" && Number.isFinite(raw.mid));
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-8): these triples
+  /*  (corrected 2026-08-23): these triples
      declare assumptions, not samples from a statistical distribution. */
   wrap.appendChild(mkEl("span", "cf-field-label", labelText + (isRange && !opts.advanced ? " (middle assumption)" : "")));
   const numberInput = (value, member) => {
@@ -1554,7 +1554,7 @@ function cfSectionEditor(section, sectionIndex, working, readOnly, advanced, rer
       rerender(); revalidate();
     };
     box.appendChild(field("Procurement basis — this section is priced on it", select)); }
-  { /* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+  { /* Adopted 2026-08-22:
        the section editor consumes the same registry-row resolver as the composer
        and MCP. Programme rows keep their coverage label; selecting one never
        promotes it into facility evidence. */
@@ -1594,7 +1594,7 @@ function cfSectionEditor(section, sectionIndex, working, readOnly, advanced, rer
     if (advanced) {
       const uniqueDonors = [...new Set(section.legs.map(leg => leg.donorKey))];
       section.tco.capexUsdByHw = section.tco.capexUsdByHw || {};
-      /* im-arc T4 fold round 4 (2026-08-25), memo :41: a capex the READER states is meaningless
+      /* Adopted 2026-08-25: a capex the READER states is meaningless
          without the input scope of the observation, and the validator now refuses the pair without
          it. The control is therefore not optional decoration — it is seeded to the scope the
          registry rows for these donors already agree on (so the box opens on the truth rather than
@@ -1777,13 +1777,13 @@ function cfOpenBuilder(mode, fleetId, seed) {
   }
   dlg.show();
 }
-/* Per-fleet disclosure (memo C-5; fleet memo §2.4 ruling c): typed DTO fields only.
+/* Per-fleet disclosure (typed fleet disclosure): typed DTO fields only.
    Deliberately NO per-fleet margin preview (anti-shopping; the span line gives the
    honest range). */
 function renderFleetDisclosure() {
   const d = document.createElement("div"); d.className = "fleet-disclosure";
   const m = currentModel();
-  /* b9 M4 (memo §5.3): the user-custom disclosure — class chip, fixed attribution, the
+  /* : the user-custom disclosure — class chip, fixed attribution, the
      live two-boolean feasibility readout, and the derived electricity chip. NO evidence
      numbers: the typed profile carries them as null-with-reason and nothing here may
      invent one. */
@@ -1794,7 +1794,7 @@ function renderFleetDisclosure() {
       "user-custom — never a default; user composition");
     d.appendChild(chip);
     d.appendChild(mkEl("p", "fleet-attribution", "Attribution: " + prof.attribution));
-    { // impl-gate P1-2 (memo §7.3): a stale-epoch fleet still loads, LOUDLY.
+    { // impl-gate P1-2: a stale-epoch fleet still loads, LOUDLY.
       const defSel = customFleetSource().resolve(FLEET_ID);
       if (defSel && defSel.epoch !== DEFAULTS_EPOCH) {
         d.appendChild(mkEl("p", "fleet-attribution", "⚠ This fleet was saved under an older defaults epoch ("
@@ -1806,7 +1806,7 @@ function renderFleetDisclosure() {
     if (fr) d.appendChild(mkEl("p", "fleet-live-readout",
       "At the CURRENT scenario: " + fr.renderableLegs + " of " + fr.totalLegs + " legs render ("
       + Math.round((fr.renderableWeightShare || 0) * 100) + "% of weight)."));
-    { /* im-arc T2 (memo §7.1): electricity is disclosed by section, never
+    { /* : electricity is disclosed by section, never
          weight-averaged across rented and owned sections into a false fleet scalar. */
       const def = customFleetSource().resolve(FLEET_ID);
       const sections = cfSectionsOf(def);
@@ -1823,7 +1823,7 @@ function renderFleetDisclosure() {
         + (ownedShare > 0 ? "explicit on " + Math.round(ownedShare * 100) + "% owned share"
           + (ownedRates.length ? " (" + ownedRates.map(rate => "$" + rate.toFixed(3) + "/kWh").join(", ") + ")" : "") : "no owned share")
         + "; " + (rentedShare > 0 ? "embedded in rent on " + Math.round(rentedShare * 100) + "% rented share." : "no rented share.");
-      /* im-arc T2 director fix (browser suite B-8, 2026-08-23): the two b9 M4 disclosures stay on
+      /*  director fix (browser suite B-8, 2026-08-23): the two  disclosures stay on
          the chip when legs carry $/kWh overrides — the weight-averaged price, labelled DERIVED, and
          the honesty clause that on rented sections those overrides price nothing (D-2). The section
          composition above does not replace them; a reader who typed an override must be told. */
@@ -1831,7 +1831,7 @@ function renderFleetDisclosure() {
         .filter(x => x.leg.overrides && x.leg.overrides.kwhPerKwh != null);
       if (ovLegs.length) {
         const allLegs = sections.flatMap(sec => (sec.legs || []).map(leg => ({ sec, leg })));
-        /* im-arc T2 fix (Sol review 2026-08-23, finding P1-8): every
+        /*  (corrected 2026-08-23): every
            point-or-triple enters disclosure arithmetic through its middle point. */
         const sum = allLegs.reduce((a, x) => a
           + (cfPointValue(x.sec.sharePct, 0) / 100) * cfPointValue(x.leg.sharePct, 0), 0) || 1;
@@ -1876,16 +1876,16 @@ function renderFleetDisclosure() {
     const memb = appDefaultMembership();
     if (memb) d.appendChild(mkEl("p", "fleet-membership-head", membershipExclusionClause(memb)));
   }
-  /* b9 M4 (memo §4.6/D-9.2): the read-only drill-down entry on named fleets — the same
+  /* : the read-only drill-down entry on named fleets — the same
      builder surface, fully locked, "Clone to edit" banner. */
   { const view = document.createElement("button"); view.type = "button"; view.className = "cf-chip";
     view.textContent = "View legs…";
     const fid = FLEET_ID;
     view.onclick = () => cfOpenBuilder("view", null, cloneFromNamedFleet(fid));
     d.appendChild(view); }
-  // b9 M3 (memo §3.4; plan D-2): named/default fleets carry ONE blended electricity price —
+  //  (plan D-2): named/default fleets carry ONE blended electricity price —
   // the owned-TCO input s.kwh, surfaced as a labeled chip so the single-price assumption is
-  // visible even under rent lenses (where it prices nothing). im-arc T2 moves custom
+  // visible even under rent lenses (where it prices nothing).  moves custom
   // electricity to the section/data-center channel; hardware rows never price it.
   { const kwhChip = mkEl("p", "fleet-kwh-chip",
       "Blended electricity cost (owned-TCO input): $" + S.kwh.toFixed(3) + "/kWh — one blended price across all legs"
@@ -1896,7 +1896,7 @@ function renderFleetDisclosure() {
   return d;
 }
 
-/* ---------- THE 1 / 2 / 3-POINT SLIDER MODE (row 499, owner note 507081) ----------
+/* ---------- THE 1 / 2 / 3-POINT SLIDER MODE (the recorded review, the author's note) ----------
    One toggle above the sliders. 1 point is what this page always did. 2 points asks for a lower and
    an upper bound. 3 points adds a MEDIAN between them — median, not mode, because the published
    comparison of three-point shapes finds median-characterised distributions fit better than the
@@ -1907,16 +1907,16 @@ function renderFleetDisclosure() {
    distribution shape, and both adjudicators explicitly declined to supply one. The engine finds the
    range by probing each dial for monotonicity and evaluating corners — see `marginBand`. */
 let POINT_MODE = 1;
-/* owner ruling q-sliders-fleet-util-point, note 52e1be (2026-08-09): the derived-fleets overlay is a
+/* the adopted decision, dated note (2026-08-09): the derived-fleets overlay is a
    TOGGLE, and he allowed it off by default. Off is the honest default too — the envelope's three
    numbers are the answer; the three fleets behind them are the audit. */
 let MIX_OVERLAY_OPT_IN = false;
-/* SAY WHAT THE RANGE IS, never what it is not (owner ruling, 2026-08-07). The earlier wording
+/* SAY WHAT THE RANGE IS, never what it is not (the adopted decision, 2026-08-07). The earlier wording
    disclaimed \u2014 "not a probability interval", "no distribution is assumed" \u2014 and a disclaimer is a
    poor instrument here: it puts the words "probability" and "distribution" in front of a reader who
    was not thinking them, and half of them will remember the term and not the negation. The positive
    statement is also the more complete one, because reachability is the entire claim. */
-/* AMENDED 2026-09-19 (Polaris ruling on Astra pack A P0-2). The positive-statement rule above is
+/* AMENDED 2026-09-19 (the review decision of 2026-09-19). The positive-statement rule above is
    unchanged; what changed is which positive statement is true. "No setting reaches outside it"
    asserts exhaustiveness, and the page searches — corners, plus a handful of samples per axis —
    so where the modeled fleet changes shape between samples a legal setting CAN compute outside
@@ -1979,7 +1979,7 @@ function rangeHandlesFor(id, label, min, max, step, point) {
   if (POINT_MODE < 2) return null;
   if (!dialBounds(id)) return null;          // a dial with no declared domain carries no range
   const cur = (S.dialRanges && S.dialRanges[id]) || {};
-  /* WHERE THE HANDLES START (owner ruling 2026-08-07 18:55Z): a mode change never moves a handle the
+  /* WHERE THE HANDLES START (the adopted decision 2026-08-07 18:55Z): a mode change never moves a handle the
      reader already placed. Second handle stacked on the first; third at the midpoint of the two.
      The arithmetic is the engine's, so it can be checked over every combination rather than eyeballed. */
   const at = bandHandleDefaults(cur, point, min, max, step);
@@ -1996,7 +1996,7 @@ function rangeHandlesFor(id, label, min, max, step, point) {
     if (next.mid != null && next.hi != null) next.mid = Math.min(next.mid, next.hi);
     S.dialRanges[id] = next;
   };
-  /* OWNER ANNOTATION n9c61af (2026-08-16, verbatim: "not what I envisioned, 3 stacked dots should
+  /* Adopted 2026-08-16: "not what I envisioned, 3 stacked dots should
      be on a single line, then have them be able to move on that line, we don't want 4 separate
      lines, that's confusing and clunky").
 
@@ -2075,7 +2075,7 @@ function fmtRangeEnd(v, step) {
 }
 function rangeHandles(p) { return rangeHandlesFor(p.k, p.label, p.min, p.max, p.step, S[p.k]); }
 
-/* ---------- PRESET NULL CONVENTION (row 499, owner ruling) ----------
+/* ---------- PRESET NULL CONVENTION (the recorded review, the adopted decision) ----------
    "When an adjudicator preset doesn't specify a dial, fill with the default value MARKED with an
    asterisk — every dial gets a value with provenance."
 
@@ -2101,7 +2101,7 @@ function presetDefaultMark(key) {
   return Object.prototype.hasOwnProperty.call(authored, key) ? "" : PRESET_DEFAULT_MARK;
 }
 
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): nullable
+/* Adopted 2026-08-22: nullable
    absolute prices need a real blank state; a range handle cannot represent "use registered". */
 function buildNullableNumber(wrap, p) {
   const head = mkEl("div", "param-head");
@@ -2113,7 +2113,7 @@ function buildNullableNumber(wrap, p) {
   input.min = p.min; input.max = p.max; input.step = p.step; input.placeholder = p.nullable;
   input.value = S[p.k] == null ? "" : String(S[p.k]); input.setAttribute("aria-label", p.label);
   const clear = mkEl("button", "abs-clear", "Use rates"); clear.type = "button";
-  /* im-arc T1 fix (Sol review 2026-08-22, finding P2-3). */
+  /*  (corrected 2026-08-22). */
   clear.setAttribute("aria-label", "Rental price, all accelerators: use registered rates");
   const apply = () => {
     if (input.value === "") S[p.k] = null;
@@ -2128,7 +2128,7 @@ function buildNullableNumber(wrap, p) {
   return wrap;
 }
 
-/* im-arc T4 fold (2026-08-24), memo §4: three registered rows now carry NO admissible public
+/*  (2026-08-24), : three registered rows now carry NO admissible public
    planning rate, so a control that assumed a number here threw. A row with no rate says so, and
    names the declared replay a reader can state instead — never a fabricated figure and never a
    blank that reads as zero. */
@@ -2153,7 +2153,7 @@ function buildRentAbsolute(wrap, p) {
     input.value = S.rentAbsLeg && S.rentAbsLeg[k] != null ? String(S.rentAbsLeg[k]) : "";
     input.setAttribute("aria-label", HW[k].name + " absolute rental price per accelerator-hour");
     const clear = mkEl("button", "abs-clear", "Use fallback"); clear.type = "button";
-    /* im-arc T1 fix (Sol review 2026-08-22, finding P2-3). */
+    /*  (corrected 2026-08-22). */
     clear.setAttribute("aria-label", HW[k].name + ": use fallback rental rate");
     const apply = () => {
       const next = { ...(S.rentAbsLeg || {}) };
@@ -2170,7 +2170,7 @@ function buildRentAbsolute(wrap, p) {
   return wrap;
 }
 
-/* ---------- PER-ACCELERATOR PROCUREMENT DISCOUNTS (row 499, completeness doctrine) ----------
+/* ---------- PER-ACCELERATOR PROCUREMENT DISCOUNTS (the recorded review, completeness doctrine) ----------
    The ruling: anything an adjudicator assumes, this calculator must be able to compute — an
    assumption we can only carry internally is not acceptable. Both round-2 adjudicators priced
    procurement PER ACCELERATOR; one of them, having no such control to point at, wrote its
@@ -2203,7 +2203,7 @@ function buildRentDiscounts(wrap, p) {
 
   const FAMS = [["nvidia", "NVIDIA"], ["tpu", "TPU"], ["trainium", "Trainium"], ["ascend", "Ascend"]];
   const fmt = v => (v == null ? "registered rate (1.00×)*" : v.toFixed(2) + "×");
-  /* The asterisk is the row-499 NULL CONVENTION (owner ruling): a dial nobody declared still shows
+  /* The asterisk is the row-499 NULL CONVENTION (the adopted decision): a dial nobody declared still shows
      a value, and the value is marked as the page's default rather than presented as a choice. */
 
   const famBox = mkEl("div", "disc-fam");
@@ -2247,7 +2247,7 @@ function buildRentDiscounts(wrap, p) {
   legs.forEach(k => {
     const hw = HW[k];
     const row = mkEl("div", "disc-row");
-    /* Owner annotation n45cb3d — the chart-stack bar for this accelerator jumps HERE, so the row
+    /* Chart cost affordance — the chart-stack bar for this accelerator jumps HERE, so the row
        needs a stable identity. Typed by kind as well as key: "cost" is the procurement dial he
        named ("should be able to edit costs"), and the traffic-share row below is a different
        question about the same accelerator. */
@@ -2283,15 +2283,15 @@ function buildBlend(wrap, p) {
   name.append("Traffic share by accelerator", infoBtn(p.tip));
   head.appendChild(name); wrap.appendChild(head);
   { const sw = buildFleetSwitcher(); if (sw) wrap.appendChild(sw); }
-  /* b9 M4 (memo §1.5/§5.4): while a custom fleet is selected the HW_ORDER share
+  /* While a custom fleet is selected, the HW_ORDER share
      sliders are NOT rendered — composition changes happen ONLY in the builder (the
-     owner's clear mental separation, D-4); in their place, the read-only per-leg panel.
+     clear separation of controls); in their place, the read-only per-leg panel.
      The slider-edit → "custom" fork is thereby unreachable from a cf: state. */
   if (isCustomFleetId(FLEET_ID)) { wrap.appendChild(cfPerLegPanel()); return wrap; }
   HW_ORDER.forEach(k => {
     const hw = HW[k];
     const row = document.createElement("div"); row.className = "hw-row";
-    row.dataset.hwKey = k; row.dataset.hwKind = "share";   // owner annotation n12b450: chart-hw jump target
+    row.dataset.hwKey = k; row.dataset.hwKind = "share";   // Chart affordance: chart-hw jump target
     const nm = document.createElement("span"); nm.className = "hw-name";
     nm.append(hw.name, infoBtn("hw-" + k));
     TIPS["hw-" + k] = { t: hw.name, b: hw.note, s: `FP8 dense ${hw.flopsFp8} PF · ${hw.hbm} GB HBM @ ${hw.bw} TB/s · ${Math.round(hw.tdp * 1000)} W · default ${fmt$(hw.rent)}/hr` };
@@ -2304,7 +2304,7 @@ function buildBlend(wrap, p) {
     pct.textContent = w[k] ? Math.round(w[k] * 100) + "%" : "—";
     input.setAttribute("aria-valuetext", input.value + " relative-weight units; "
       + (w[k] ? Math.round(w[k] * 100) + "% normalized share" : "excluded from the normalized blend"));
-    /* b9 spec-decode LEVER (§9.5): the per-leg disclosure on DEFAULT and NAMED fleets. Before this,
+    /* spec-decode LEVER (§9.5): the per-leg disclosure on DEFAULT and NAMED fleets. Before this,
        the only surface that said anything per leg was cfPerLegPanel, which renders for CUSTOM
        fleets only — so the promise that "every leg it does reach says so" had no surface on two of
        the three fleet kinds. Rendered only for legs that are actually in the mix: a 0%-weight leg
@@ -2314,13 +2314,13 @@ function buildBlend(wrap, p) {
     const sdNote = (w[k] && sdLeg && sdLeg.specDec)
       ? mkEl("div", "hw-specdec", specDecReasonText(sdLeg.specDec.reasonCode, sdLeg.specDec.factorApplied))
       : null;
-    /* d-im-h800 (owner note aca09d): the NVLink-cap disposition on the same per-leg surface. On the
+    /* the adopted decision (the author's note): the NVLink-cap disposition on the same per-leg surface. On the
        H800 leg it says the leg IS the measured, export-capped anchor; on H100/H200 it names the
        borrowed-efficiency assumption the page is making (and the factor when one is selected). */
     const nvNote = (w[k] && sdLeg && sdLeg.nvlinkCap)
       ? mkEl("div", "hw-nvlinkcap", nvlinkCapReasonText(sdLeg.nvlinkCap.reasonCode, sdLeg.nvlinkCap))
       : null;
-    // R3 (memo D-3d): an excluded leg sits at 0 with the exclusion attached at the
+    // R3 (the design requirements): an excluded leg sits at 0 with the exclusion attached at the
     // slider row — the percentages stay first-class (the user may raise it; doing so
     // is a user-chosen blend and the welds/caps machinery applies).
     { const memb = appDefaultMembership();
@@ -2348,7 +2348,7 @@ function buildBlend(wrap, p) {
     if (sdNote) row.appendChild(sdNote);
     if (nvNote) row.appendChild(nvNote);
     wrap.appendChild(row);
-    /* owner ruling q-sliders-fleet-util-point (2026-08-09): a traffic share carries a RANGE like any
+    /* the adopted decision (2026-08-09): a traffic share carries a RANGE like any
        other assumption, and the combinations inside those ranges that sum to 100 % are what the mix
        band solves over. Same handles, same `dialRanges` map, same share links.
 
@@ -2376,7 +2376,7 @@ function buildBlend(wrap, p) {
   return wrap;
 }
 
-/* b9 M5 (fix-verify round): the LIVE central default — what the calculator below actually
+/*  (fix-verify round): the LIVE central default — what the calculator below actually
    computes. The board's own anchor is reference-pinned (explorationFlagshipWorkload), which is
    right for judging a route's construction but is NOT the default state any more, so every
    surface that shows the pinned value now shows this one beside it. Derived, never pinned. */
@@ -2395,15 +2395,15 @@ function fillPresetSelects() {
   const ps = $("persp-preset");
   ps.textContent = "";
   PERSPECTIVES.forEach(m => { const o = document.createElement("option"); o.value = m.id; o.textContent = m.name; ps.appendChild(o); });
-  /* row 499 (owner ruling 0c8102): the page OPENS on the adjudicated estimate preset with no
+  /* the recorded review (the adopted decision): the page OPENS on the adjudicated estimate preset with no
      algorithmic lead — not on the central scenario. `DEFAULTS` is untouched by design, so no
      previously shared link changes what it renders (see LANDING_DEFAULT_PERSP_ID in engine.js).
      The central scenario keeps its own id and stays one click away in this same selector. */
-  /* note-20260912T180812Z-c9eaac: a reader's own default in this browser, else the page's. A shared
+  /* the note of 2026-09-12: a reader's own default in this browser, else the page's. A shared
      link applied after this still wins — loadScenarioFromURL runs later in init. */
   { const o = openingScenario(); ms.value = o.model; ps.value = o.persp; }
   buildTrafficSelect();
-  // Switching the MODEL re-collapses its assumptions panel (owner directive: "keeps it collapsed"),
+  // Switching the MODEL re-collapses its assumptions panel (collapsed by default),
   // then applyPreset refills it with the new model's content. Perspective/traffic changes leave it.
   ms.oninput = () => { const c = $("model-dossier-card"); if (c) c.open = false; applyPreset(); };
   ps.oninput = () => applyPreset();
@@ -2429,9 +2429,9 @@ function fillPresetSelects() {
       /* Astra rounds 8 F5 and 9 F4: an edited state whose base is a lens (loaded from a save, or arriving by a link) keeps that
          lens as its origin when it is saved. */
       __persp: EXPLORATION_ORIGIN ? EXPLORATION_ORIGIN.id : saveOriginId(),
-      __interlock: INTERLOCK, // b9 M5 §10.6: the machine state rides saved scenarios alongside the identity
+      __interlock: INTERLOCK, //  §10.6: the machine state rides saved scenarios alongside the identity
       __epoch: DEFAULTS_EPOCH, // IM1: stamp the defaults epoch so a later engine can deprecate stale presets non-destructively
-      /* MODEL AND FLEET IDENTITY RIDE THE RECORD (Polaris ruling 2026-09-19 on Astra pack B
+      /* MODEL AND FLEET IDENTITY RIDE THE RECORD (the adopted decision 2026-09-19 on Astra pack B
          P0-4). A saved scenario stored its numeric state and its origin LENS, and nothing else:
          restoring it used whatever model happened to be selected at load time and reset the
          fleet to the donor blend. Astra saved Kimi/median at 67.762158%, selected Opus, reloaded
@@ -2499,7 +2499,7 @@ function loadSavedPreset(name) {
   hideEpochDeprecationNotice();
   const saved = structuredClone(store[name]); delete saved.__traffic; delete saved.__epoch;
   const savedPersp = saved.__persp; delete saved.__persp;
-  /* MODEL AND FLEET IDENTITY (Polaris ruling 2026-09-19 on Astra pack B P0-4). Records written
+  /* MODEL AND FLEET IDENTITY (the adopted decision 2026-09-19 on Astra pack B P0-4). Records written
      before this round carry neither, and they are NOT migrated and NOT re-interpreted: a record
      with no `__model` restored under whatever model was selected at load time, which is how a
      saved Kimi scenario reloaded as Opus with a different number under the words "Loaded saved
@@ -2512,7 +2512,7 @@ function loadSavedPreset(name) {
   if (!savedFleet) identityGaps.push("fleet");
   const savedModel = savedModelId ? MODELS.find(x => x.id === savedModelId) : null;
   if (savedModelId && !savedModel) identityGaps.push("model (“" + savedModelId + "” is no longer in this page)");
-  const savedInterlock = saved.__interlock; delete saved.__interlock; // b9 M5 §10.6 (never a state key — stripped before schema validation)
+  const savedInterlock = saved.__interlock; delete saved.__interlock; //  §10.6 (never a state key — stripped before schema validation)
   // Slice-3 review R7b fix: delegates to engine.js's restoreSavedPresetState (the ACTUAL
   // production state-construction + context-registration site — the same function the regression
   // tests exercise, review R7's own tests having been found vacuous for calling
@@ -2552,7 +2552,7 @@ function loadSavedPreset(name) {
   /* Astra round 7 F7: a lens origin is a scenario of this page, so the window can still offer that scenario's own settings.
      Its id is kept beside the breadcrumb and holds only while MODIFIED_FROM reads that breadcrumb. */
   MODIFIED_BASE = (sp && sp.kind !== "exploration" && sp.kind !== "replay") ? { from: MODIFIED_FROM, id: sp.id } : null;
-  /* b9 M5 (§10.6): the machine state rides the saved row. A row saved BEFORE M5 carries none, and
+  /*  (§10.6): the machine state rides the saved row. A row saved BEFORE the lead-prior migration carries none, and
      an editable store can hold a state that no longer fits its values — both resolve through the
      same honest reconstruction a pre-machine link gets, never an assumed FREE. Every saved load
      lands a MODIFIED identity (above), so the baseline is the inherited months. */
@@ -2564,7 +2564,7 @@ function loadSavedPreset(name) {
   fullRefresh();
   /* The notice a pre-v3.x record earns: what was not recorded, named, so the reader is never
      told a number is theirs when part of the state it depends on was reconstructed from the
-     page instead (Polaris ruling 2026-09-19). No migration: the record is left exactly as it
+     page instead (the adopted decision 2026-09-19). No migration: the record is left exactly as it
      was found. */
   const identityNote = identityGaps.length
     ? " ⚠ Saved before v3.x: " + identityGaps.join(" and ") + " not recorded, so the page's current "
@@ -2736,7 +2736,7 @@ function applyPreset(keepTraffic) {
   // The deprecation paths call applyPreset() and RAISE the notice immediately AFTER, so this hide
   // never suppresses an intended notice (ordering verified in loadScenarioFromURL/loadSavedPreset).
   hideEpochDeprecationNotice();
-  /* row 499: the reader has chosen a scenario of their own, so the shared link no longer describes
+  /* the recorded review: the reader has chosen a scenario of their own, so the shared link no longer describes
      what is on screen. Cleared HERE, at the same chokepoint the epoch notice uses, so every path
      that changes the scenario clears it exactly once. */
   hideSharedLinkBanner();
@@ -2754,7 +2754,7 @@ function applyPreset(keepTraffic) {
   FORCE_EXPLORATORY = false;
   MODIFIED_FROM = null;
   EXPLORATION_ORIGIN = null;
-  resetInterlock(); // b9 M5 (§10.2 last row): any preset/model/perspective selection returns the machine to FREE
+  resetInterlock(); //  (§10.2 last row): any preset/model/perspective selection returns the machine to FREE
   { const o = $("persp-preset").querySelector('option[value="__modified"]'); if (o && $("persp-preset").value !== "__modified") o.remove(); }
   { const o = $("persp-preset").querySelector('option[value="__modified-exploration"]'); if (o && $("persp-preset").value !== "__modified-exploration") o.remove(); }
   const tr = resolveTraffic(m, p, currentTrafficSel());
@@ -2778,7 +2778,7 @@ function applyPreset(keepTraffic) {
   } else {
     // The MODEL note (m.note — sizing/assumptions prose) lives with the Model selector (renderModelDossier),
     // NOT in this top perspective note: it carries only perspective/route + pairing/boundary + traffic.
-    /* bq-1141 M1 (2026-09-25; owner standing rule nd94bbc, GPT Pro 09-25 finding 6): the preset's
+    /* Adopted 2026-09-25: the preset's
        ~300-word note stood always-open between the intro and the calculator. The visible line now
        names the scenario and its traffic; the note itself opens first inside the dossier below
        (renderDossier), unshortened. Boundary labels and pairing warnings stay on this line. */
@@ -2795,7 +2795,7 @@ function copyScenarioLink() {
   // A synthetic "[modified …]" state serializes as a MODIFIED identity (engine encodeScenario):
   // the origin breadcrumb rides along so the reloaded link restores the same counterfactual
   // warning — copy-after-mutation must never mint a link that reloads under a clean identity.
-  /* row 499 (titled share links, option B): the name the reader already typed for this scenario
+  /* the recorded review (titled share links, option B): the name the reader already typed for this scenario
      travels INSIDE the token. No new control and no second concept — the field that names a saved
      scenario names a shared one. Only a name the reader actually typed is sent: the auto-generated
      placeholder is not a title anyone chose, and shipping it would put words in their mouth. */
@@ -2808,7 +2808,7 @@ function copyScenarioLink() {
   try {
     token = encodeScenario(S, $("model-preset").value, $("persp-preset").value, resolvedTraffic(),
       EXPLORATION_ORIGIN ? EXPLORATION_ORIGIN.id : shareModifiedOrigin(), // round 8 F5: a saved lens's base travels by its name
-      { fleet: FLEET_ID, totalCase: TOTAL_CASE_ID, interlock: INTERLOCK }, // b9 M5 §6.2/§10.4: UNLOCKED is a user CHOICE, so the machine state travels explicitly
+      { fleet: FLEET_ID, totalCase: TOTAL_CASE_ID, interlock: INTERLOCK }, //  §6.2/§10.4: UNLOCKED is a user CHOICE, so the machine state travels explicitly
       linkTitle ? { title: linkTitle } : undefined);
   } catch (e) {
     const msg = "This exact state cannot be shared as a link — the encoder refused to mint a token its own decoder would reject. The state on screen is unaffected. (" + String(e && e.message).slice(0, 160) + ")";
@@ -2816,7 +2816,7 @@ function copyScenarioLink() {
     console.error("copyScenarioLink: encoder invariant failure", e);
     return;
   }
-  /* b9 M4 (memo §6.4): the size guard — an oversize token mints NOTHING (no URL, no
+  /* : the size guard — an oversize token mints NOTHING (no URL, no
      clipboard, no truncation). 4,000 chars leaves headroom under the ~8KB practical
      URL ceiling; only a large custom-fleet-by-value block can reach it. */
   if (token.length > 4000) {
@@ -2826,9 +2826,7 @@ function copyScenarioLink() {
   }
   const url = location.origin + location.pathname + "?s=" + encodeURIComponent(token);
   history.replaceState(null, "", url);
-  (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(
-    () => { const msg = "Scenario link copied. It freezes the full numeric state plus schema, engine revision and data-as-of date - and it CONTAINS any private rates or discounts you typed in; review before sharing."; $("preset-note").textContent = msg; setSaveNote(msg); },
-    () => { const msg = "Scenario URL set in the address bar (clipboard unavailable)."; $("preset-note").textContent = msg; setSaveNote(msg); }
+  (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then( () => { const msg = "Scenario link copied. It freezes the full numeric state plus schema, engine revision and data-as-of date - and it CONTAINS any private rates or discounts you typed in; review before sharing."; $("preset-note").textContent = msg; setSaveNote(msg); }, () => { const msg = "Scenario URL set in the address bar (clipboard unavailable)."; $("preset-note").textContent = msg; setSaveNote(msg); }
   );
 }
 /* ---------- epoch deprecation notice (IM1 / v2.2) ---------- */
@@ -2856,7 +2854,7 @@ function showEpochDeprecationNotice(schema, kind) {
 function hideEpochDeprecationNotice() {
   const el = $("epoch-deprecation-notice"); if (el) { el.hidden = true; el.textContent = ""; }
 }
-/* ---------- SHARED-LINK BANNER (row 499, owner ruling ccb4a1) ----------
+/* ---------- SHARED-LINK BANNER (the recorded review, the adopted decision) ----------
    A reader who arrives on a ?s= link is looking at SOMEBODY ELSE'S saved parameters. Until now the
    page said so only inside the scenario note, below the hero — so the headline number could be read,
    screenshotted and quoted without the reader ever learning it was not this page's own answer. This
@@ -2916,8 +2914,8 @@ function dialDisplayName(id) {
 }
 
 /* A DECLARED RANGE ON A LOCKED DIAL IS NOT A BAND INPUT, and both ways of getting that wrong are
-   live on the algorithmic-lead axis specifically — the one the owner singled out as the axis readers
-   most want three points on (note 74103a).
+   live on the algorithmic-lead axis specifically — the axis readers
+   most want three points on (dated note).
 
    Two locks reach the lead dial, and they fail in OPPOSITE directions:
 
@@ -2943,7 +2941,7 @@ function lockedBandDials(dials) {
   return out;
 }
 
-/* THE AUTHOR'S OWN STATED READING, directly beneath the headline number (owner ruling 19:02Z, as
+/* THE AUTHOR'S OWN STATED READING, directly beneath the headline number (the adopted decision 19:02Z, as
    adjudicated 2026-08-08: the QUOTED-adjudicator reading, "displayable the same way they have been
    framing it").
 
@@ -2977,7 +2975,7 @@ function renderStatedReading() {
   el.hidden = false;
 }
 
-/* THE FEASIBLE-MIX BAND (owner ruling q-sliders-fleet-util-point, 2026-08-09) — min, median and max
+/* THE FEASIBLE-MIX BAND (the adopted decision, 2026-08-09) — min, median and max
    over the provider distributions that sum to 100 %.
 
    Rendered in its own element rather than folded into the compounded band, and the separation is
@@ -3021,9 +3019,9 @@ function renderMixBand() {
     ? "sums to the " + Math.round(band.T) + " the bounded providers carry between them"
     : "sums to 100 %";
 
-  /* VOCABULARY (owner card q-im-median-vocabulary, default C; both consult arms). The UI says
+  /* VOCABULARY (adopted vocabulary). The UI says
      REFERENCE and ENVELOPE, never "median" — a median is a statistical term and these sets carry no
-     probability. The owner's own phrase "the median system" survives in prose, defined there as an
+     probability. The phrase "the median system" survives in prose, defined there as an
      adjudicated central scenario, which the GPT Pro arm explicitly permits. */
   el.appendChild(mkEl("p", "band-head", "The declared mix envelope — what the FLEET COMPOSITION alone "
     + "reaches, across the provider distributions that " + sumsClause + " inside the shares you bounded."));
@@ -3043,7 +3041,7 @@ function renderMixBand() {
     return;
   }
 
-  /* END LABELS THAT CANNOT FLIP (Fable arm). The owner describes the bounds as cost-driven fleet
+  /* END LABELS THAT CANNOT FLIP (Fable arm). The bounds are described as cost-driven fleet
      compositions; on the MARGIN axis the cheap fleet is the HIGH number, so "top of the range" is
      ambiguous and "cheapest declared fleet" is not, whichever axis the reader has in mind. Ordered
      ascending by margin so the line still reads left-to-right as a range. */
@@ -3064,14 +3062,14 @@ function renderMixBand() {
       + "that does, which this page computed rather than any author declaring: "
       + mixBlocksText(band, band.medianBlocks) + "."));
 
-  /* THE MEAN MIX (owner MEAN ruling 2026-08-11; M8 wiring of the 6b1c71c construction). The
+  /* THE MEAN MIX (mean construction adopted 2026-08-11). The
      derived-fleets stat is the margin AT the exact mean mix — the centroid of every distribution
      summing to 100 % inside the declared ranges, the one construction that adds no claim beyond
      the bounds the author stated. Kept SEPARATE from the reference above: the reference is an
      author's declared (or transparently repaired) point; the mean is DERIVED by this page. The
      stronger "also the expected margin" sentence renders ONLY when the engine's regime signature
      licenses it (meanIsExpected) — at a varying regime the number is still exact as "margin at
-     the mean mix" and claims nothing more (§2 amendment; the trap-guarded exact route, memo §3). */
+     the mean mix" and claims nothing more (the trap-guarded exact route). */
   if (band.mean !== null && band.meanMix) {
     const mp = mkEl("p", "band-mean", null);
     mp.appendChild(mkEl("span", "band-mix-label", "Derived fleet allocation — the mean mix "));
@@ -3084,7 +3082,7 @@ function renderMixBand() {
     el.appendChild(mp);
   }
 
-  /* THE DERIVED-POINTS OVERLAY (owner ruling 2026-08-09, note 52e1be). Off by default, which he
+  /* THE DERIVED-POINTS OVERLAY (the adopted decision 2026-08-09, dated note). Off by default, which he
      allowed; the toggle is the requirement. It exists so the derivation is VISIBLE — each dot is a
      real fleet the reader can read off, positioned where its margin falls in the envelope, so the
      three numbers above stop being assertions and become three compositions. */
@@ -3101,7 +3099,7 @@ function renderMixBand() {
   el.hidden = false;
 }
 
-/* The three derived fleets, drawn on the envelope they span. Colour follows the owner's own
+/* The three derived fleets, drawn on the envelope they span. Colour follows the declared
    assignment — green high margin, yellow the reference, red low margin — and colour is never the
    only channel: each dot carries its percentage, its role in words, and the mix that produces it,
    so the row survives being read by someone who cannot separate the hues. */
@@ -3181,7 +3179,7 @@ function renderMarginBand() {
 
   /* PER-DIAL, FIRST-CLASS, widest first \u2014 the ordering is itself the answer to the question a
      reader asked by bounding anything at all. */
-  /* THE RANGES ARE COMPUTED ON WHAT IS ON SCREEN (Polaris ruling 2026-09-19 on Astra pack B
+  /* THE RANGES ARE COMPUTED ON WHAT IS ON SCREEN (the adopted decision 2026-09-19 on Astra pack B
      P0-3). These two calls passed no base, so they swept the dials against the PRESET's values
      while the headline above them was computed on the reader's edited state — and the two then
      disagreed in a way that reads as a contradiction rather than an edit. Astra's case: on
@@ -3212,7 +3210,7 @@ function renderMarginBand() {
     else {
       li.appendChild(mkEl("strong", "band-range", " " + pct(b.lo) + " \u2013 " + pct(b.hi)));
       li.appendChild(mkEl("span", "band-width", " (" + (b.hi - b.lo).toFixed(1) + " points wide)"));
-      /* The basis line renders on EVERY band, not only a non-exact one (Polaris ruling
+      /* The basis line renders on EVERY band, not only a non-exact one (the adopted decision
          2026-09-19 on Astra pack A P0-2). It used to appear only when `exact` was false, which
          meant the one case that made the strongest claim — the retired exhaustiveness wording —
          was also the one case the reader never saw stated. Both labels now say the range was
@@ -3281,7 +3279,7 @@ function renderMarginBand() {
    2026-08-08 adjudication: that line rendered the compounded whole-box value by default, which is
    the thing the frozen presentation requirement forbids, whatever element it was written into.
    Removed rather than hidden — a hidden renderer is a default-render one flag away, and #out-margin
-   -range is now gone from the markup too. The owner's header-framing note is escalated as an
+   -range is now gone from the markup too. The header-framing note is escalated as an
    unresolved conflict rather than half-built. */
 
 function showSharedLinkBanner(detail, title) {
@@ -3289,7 +3287,7 @@ function showSharedLinkBanner(detail, title) {
   el.textContent = "";
   const lead = mkEl("strong", "slb-lead", SHARED_LINK_BANNER_LEAD);
   el.appendChild(lead);   // F3 (review): the WARNING first — see the note on the title below
-  /* row 499: a titled link says what its sharer called it. mkEl sets textContent, so a title
+  /* the recorded review: a titled link says what its sharer called it. mkEl sets textContent, so a title
      containing markup renders as the characters the sharer typed and nothing else — the title is
      attacker-controlled by construction (anyone can craft a link) and is never trusted as markup.
      It is rendered as a QUOTATION, attributed to the sharer, so a reader cannot mistake a chosen
@@ -3336,13 +3334,13 @@ function v5DriftNote(meta, state) {
   if (!meta || typeof meta.displayedMargin !== "number") return "";
   const wl = appWorkload(state);
   const dn = marginDriftNote(meta.displayedMargin, isFinite(wl.margin) ? wl.margin * 100 : NaN);
-  // Slice C (memo C-7, pinned copy, ADDITIVE): a named-fleet token's drift note
+  // Fleet identity: a named-fleet token's drift note
   // additionally states that the selection re-derives — appended, never replacing,
   // so every existing drift fixture passes byte-unchanged.
   const fleetDrift = (meta.fleet && isNamedFleetId(meta.fleet.id))
     ? " The named fleet's membership and weights re-derive under the current engine — what this link selects, not what it froze."
     : "";
-  /* J-9 size-move migration (FA memo v7): the decode-side epoch-transition rewrite
+  /* Size-move migration: the decode-side epoch-transition rewrite
      marks the token; the note states the size move. ADDITIVE — appended after the
      existing drift text (which carries the link's own numeric movement dynamically),
      and emitted even when the numeric drift is inside tolerance, so the migration is
@@ -3438,7 +3436,7 @@ function loadScenarioFromURL() {
   } else if (meta.fleet !== undefined && typeof meta.fleet !== "object") {
     meta.fleet = null;
   }
-  /* b9 M4 (memo §6.5): a cf: token restores its BY-VALUE fleet as an EPHEMERAL
+  /* : a cf: token restores its BY-VALUE fleet as an EPHEMERAL
      (unsaved) source entry — loading a link NEVER writes localStorage; "Save a copy"
      is the only write path. Same-id-different-content: the link's value WINS for
      rendering, labeled (numbers-identity — the link reproduces the sharer's numbers). */
@@ -3492,11 +3490,11 @@ function loadScenarioFromURL() {
       downgradeExplorationToModified(PERSPECTIVES.find(x => x.id === normalizePerspId(meta.modified.from)));
     else
       downgradeReplayToModified(typeof meta.modified.from === "string" && meta.modified.from ? meta.modified.from : "a shared scenario");
-    /* Slice C (memo C-7 normative order, modified branch): identities restore from
+    /* Fleet identity (modified branch): identities restore from
        the validated token; a named fleet seeds via fleetBaselineBlend on the
        POST-merge state (decode guarantees no blend rode the diff). */
     FLEET_ID = meta.fleet.id; TOTAL_CASE_ID = meta.totalCase;
-    /* b9 M5 (§10.3/§10.4): a v6 link's machine state is the SHARER's choice and restores verbatim
+    /*  (§10.3/§10.4): a v6 link's machine state is the SHARER's choice and restores verbatim
        (decode has already proved it consistent with the restored levers). A v5 link predates the
        machine, so there is no choice to preserve — reconstruct the state its values represent
        rather than assuming FREE, which would render a stacked link with no banner. */
@@ -3505,7 +3503,7 @@ function loadScenarioFromURL() {
     INTERLOCK_NOTE = ""; UNLOCK_ARMED = false;
     captureModifiedTrendBaseline(); // the link's months ARE this modified identity's baseline
     LAST_APPLIED_MODEL = mm0.id;
-    if (isNamedFleetId(FLEET_ID) || isCustomFleetId(FLEET_ID)) { // b9 M4: cf: seeds the same way (mirror invariant)
+    if (isNamedFleetId(FLEET_ID) || isCustomFleetId(FLEET_ID)) { // : cf: seeds the same way (mirror invariant)
       const fb = fleetBaselineBlend(FLEET_ID, S, { modelId: mm0.id, customDonor: S.customDonor });
       if (fb) S.blend = fb;
     }
@@ -3517,7 +3515,7 @@ function loadScenarioFromURL() {
         ? "a MODIFIED RANGE EXPLORATION derived from a page-authored route but since edited; the route identity and its ranking metadata do not apply to these numbers."
         : "a MODIFIED SCENARIO; no clean lens/replay identity applies to these numbers.")
       + rej + drift + epochDrift + cfLinkNote + " Use “Return to central scenario” to reset.";
-    showSharedLinkBanner(identitySummary(), meta.title);   // row 499: modified-identity links get the banner too
+    showSharedLinkBanner(identitySummary(), meta.title);   // the recorded review: modified-identity links get the banner too
     return true;
   }
   // Retired-preset migration (P0-6): normalize the perspective id BEFORE the PERSPECTIVES.find()
@@ -3564,20 +3562,20 @@ function loadScenarioFromURL() {
   Object.assign(S, structuredClone(sane.diff));
   activeCorrection = sane.corrections.length === 1 ? sane.corrections[0] : null;
   if (tr0 && tr0.locked && !diverges) { S.ioRatio = tr0.ioRatio; S.cacheHit = tr0.cacheHit; } // replay integrity: locked traffic always wins over link overlays
-  /* Slice C (memo C-7 NORMATIVE restore order, clean branch): identity → base →
+  /* Fleet identity (clean branch): identity → base →
      NON-blend diff (just applied; decode guarantees no blend key under a named or
      preset identity) → blend = fleetBaselineBlend at the POST-diff state. The
      seed-then-diff order is the R3-round executed hazard (42.2272 vs 33.2652 at
      total:10000) and is structurally unreachable here. */
   FLEET_ID = meta.fleet.id; TOTAL_CASE_ID = meta.totalCase;
   LAST_APPLIED_MODEL = m.id;
-  if (isNamedFleetId(FLEET_ID) || isCustomFleetId(FLEET_ID)) { // b9 M4: cf: seeds the same way (mirror invariant; the ephemeral was installed above)
+  if (isNamedFleetId(FLEET_ID) || isCustomFleetId(FLEET_ID)) { // : cf: seeds the same way (mirror invariant; the ephemeral was installed above)
     const fb = fleetBaselineBlend(FLEET_ID, S, { modelId: m.id, customDonor: S.customDonor });
     if (fb) S.blend = fb;
   }
   if (diverges) downgradeReplayToModified(pp.name); // a link that changes a replay's pinned fields is NOT that replay — attribution removed
   if (expDiverges) downgradeExplorationToModified(pp); // a link that changes a route's numbers is NOT that route — vN identity + ranking metadata removed
-  /* b9 M5 (§10.3/§10.4): same rule as the modified branch — carry a v6 token's machine state
+  /*  (§10.3/§10.4): same rule as the modified branch — carry a v6 token's machine state
      verbatim (decode proved it consistent), reconstruct a v5 token's from its values. A divergence
      downgrade above only LOOSENS the FREE rule (a modified identity has no identity default), so a
      state consistent as a clean identity stays consistent after it. */
@@ -3585,7 +3583,7 @@ function loadScenarioFromURL() {
     ? meta.interlock : deriveInterlockFor(S, trendBaselineFor(m, (diverges || expDiverges) ? null : pp));
   INTERLOCK_NOTE = ""; UNLOCK_ARMED = false;
   if (diverges || expDiverges) captureModifiedTrendBaseline(); // a downgraded link's months are its baseline
-  /* TRAFFIC STATE-CONSISTENCY INVARIANT (M4, plan P0-B): the traffic identity the selector
+  /* TRAFFIC STATE-CONSISTENCY INVARIANT (shared traffic contract): the traffic identity the selector
      DISPLAYS, the values resolveTraffic() RESOLVES, and the ioRatio/cacheHit the margin
      computation READS from S must ALWAYS be the same numbers. A traffic value that arrived in
      the link's numeric diff and disagrees with the link's DECLARED traffic identity therefore
@@ -3627,7 +3625,7 @@ function loadScenarioFromURL() {
   // Preserve lens/state identity in the summary (public-release P0: never collapse to a bare "Loaded a
   // shared scenario"). identitySummary() reads the just-restored state → model · traffic · lens · state.
   $("preset-note").textContent = "Loaded a shared scenario (" + (meta.dataAsOf || "undated") + ") — " + identitySummary() + "." + retiredNote + trafficNote + rej + drift + expNote + epochDrift + cfLinkNote + " Use “Return to central scenario” to reset.";
-  showSharedLinkBanner(identitySummary(), meta.title);   // row 499: the ruling — above the fold, on every resolved link
+  showSharedLinkBanner(identitySummary(), meta.title);   // the recorded review: the ruling — above the fold, on every resolved link
   return true;
 }
 
@@ -3657,7 +3655,7 @@ function downgradeReplayToModified(pName) {
     PENDING_DOWNGRADE = { kind: "replay", name: pName }; escalatePending("full"); return;
   }
   MODIFIED_FROM = pName;
-  captureModifiedTrendBaseline(); // b9 M5 gate P1: the inherited months become this identity's FREE baseline
+  captureModifiedTrendBaseline(); //  gate P1: the inherited months become this identity's FREE baseline
   EXPLORATION_ORIGIN = null; // the two modified identities are exclusive — never both prefixes/breadcrumbs at once
   const ps = $("persp-preset");
   let o = ps.querySelector('option[value="__modified"]');
@@ -3670,7 +3668,7 @@ function downgradeReplayToModified(pName) {
   const body = $("dossier-body"); if (body) { body.textContent = "Modified scenario — the replay's position dossier no longer applies to these numbers. "; appendEffectiveTrafficLine(body); }
   renderModelDossier(currentModel(), false); // model cards stay under the Model selector; the route-only #model-context panel clears
 }
-/* Range-exploration identity exit (v2.1.3 M3, P0-5): a loaded exploration config is an explicit
+/* Range-exploration identity exit (v2.1.3): a loaded exploration config is an explicit
    page-authored counterfactual with a vN identity and ranking metadata. ANY divergent edit —
    sliders, ticks, radios, selects, blend inputs, URL overlays, saved-preset loads — EXITS that
    identity into "[modified range exploration]": the route id and its ranking metadata no longer
@@ -3692,7 +3690,7 @@ function downgradeExplorationToModified(p) {
     PENDING_DOWNGRADE = { kind: "exploration", id: p.id, persp: p }; escalatePending("full"); return;
   }
   EXPLORATION_ORIGIN = { id: p.id, subtitle: p.subtitle || p.name };
-  captureModifiedTrendBaseline(); // b9 M5 gate P1: same capture on the route-exit path
+  captureModifiedTrendBaseline(); //  gate P1: same capture on the route-exit path
   MODIFIED_FROM = null; // the two modified identities are exclusive — never both prefixes/breadcrumbs at once
   const ps = $("persp-preset");
   let o = ps.querySelector('option[value="__modified-exploration"]');
@@ -3721,7 +3719,7 @@ function explorationRestoreBtn() {
   btn.onclick = () => { if (!EXPLORATION_ORIGIN) return; $("persp-preset").value = EXPLORATION_ORIGIN.id; applyPreset(); };
   return btn;
 }
-/* ================= b9 M5: the broad-lever interlock (memo §10, D-5 + Amendment 2) =================
+/* ================= : the broad-lever interlock (overlap contract) =================
    The engine owns the MACHINE (pure, DOM-free: interlockAfterEdit / interlockInvariantHolds /
    interlockTokenConsistent). This layer owns the machine's STATE for the live page, the lock
    affordances, and the loud attribution line the zeroing rule requires. */
@@ -3776,7 +3774,7 @@ function leverLockState(group) {
      The calculator's controls were unusable on load.
 
      A null group is not a lever group and can never BE the locked group; the identity comparison
-     needed a guard that the two nulls do not mean the same thing. Pre-existing since the M5
+     needed a guard that the two nulls do not mean the same thing. Pre-existing since the lead-prior
      interlock landed — `leverLockState` is byte-identical at 7a68442, before this leg — and invisible
      to the suites because none of them asserted that a control is ENABLED. */
   if (group !== null && interlockLockedGroup(INTERLOCK) === group)
@@ -3820,7 +3818,7 @@ function interlockGroupPanel(group) {
     line("lever-lab", "Lab: " + ((m && m.lab) || "none") + " — ratified prior "
       + (m ? trendBaselineFor(m, p || null) : 0) + " months"
       + (labNote ? " (" + labNote + ")" : "")
-      + ". Owner-ratified SCENARIO PRIOR, not a measurement.");
+      + ". Adopted SCENARIO PRIOR, not a measurement.");
     if (Math.abs(Number(S.trendMonths)) > TREND_SOFT_WARN_MONTHS)
       line("lever-warn", "⚠ beyond ±" + TREND_SOFT_WARN_MONTHS + " months this leaves the evidence band every algorithmic-lead voice kept the default inside — a stress setting, not a defensible default.");
     line("lever-cite", "Rate basis: Gundlach et al., arXiv:2511.23455 (MIT FutureTech) with Epoch AI data — ≈3×/yr algorithmic efficiency, halving ≈7.57 months.");
@@ -3846,7 +3844,7 @@ function interlockGroupPanel(group) {
   return box;
 }
 
-/* ================= b9 M5: the slider scroll-lock popup (memo §12, D-9.1) =================
+/* ================= : the slider scroll-lock popup =================
    Touch scroll-safety only — a DIFFERENT mechanism from the interlock above, with its own icon
    and its own why-line. Coarse pointers only: a fine pointer or a keyboard/AT interaction cannot
    scroll-hijack, so they are never asked. */
@@ -3948,7 +3946,7 @@ function refreshModifiedState() {
     + " — traffic mix is now " + tr.ioRatio + ":1 / " + tr.cacheHit + "% (" + tr.label + "); the selector, the resolved traffic and the computed margin all use the same numbers. Pick any preset to reset.";
   fullRefresh();
 }
-/* Centralized traffic-display sync (M4 round 4). After ANY traffic-key change to S (slider drag or
+/* Centralized traffic-display sync (shared traffic contract). After ANY traffic-key change to S (slider drag or
    tick click, on ANY perspective kind), make the DISPLAYED traffic identity match resolveTraffic()
    and the numbers workload(S) uses — the dossier ".dossier-traffic" line AND the preset-note's
    "Traffic mix: {label}" figure. Does NOT reset S (no applyPresetSettings — that would wipe a
@@ -3981,7 +3979,7 @@ function refreshTrafficDisplay() {
 /* ---------- position dossier panel ---------- */
 function fmtDossierVal(k, v) {
   if (k === "blend") return Object.entries(v).filter(([, s]) => s > 0).map(([hw, s]) => `${HW[hw] ? HW[hw].name : hw} ${s}`).join(" / ");
-  /* im-share-ready-0920 (2026-09-21, browser-QA finding 1): `blend` was the only object-valued key
+  /* the research run (2026-09-21, browser-QA finding 1): `blend` was the only object-valued key
      this formatter knew, so any other object reached the dossier table as a literal
      "[object Object]" in a <td> — two of them were live. Same defect class as the route-card
      summary above and fixed the same way: render the entries, never the default stringification. */
@@ -4095,7 +4093,7 @@ function renderModelDossier(m, isExpl) {
     setModelContextPanel(null);
     if (card) card.hidden = true;
   }
-  wireExplainTriggers();   // b9 UX-B: re-assert the trigger and mirror the card's `hidden`
+  wireExplainTriggers();   // the interface: re-assert the trigger and mirror the card's `hidden`
 }
 function renderDossier(m, p) {
   if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /* §18.11 P0-a: abort BEFORE any DOM write */
@@ -4104,8 +4102,8 @@ function renderDossier(m, p) {
   const pd = DOSSIERS.perspectives[p.id];
   const tr = resolveTraffic(m, p, currentTrafficSel());
   const isExpl = p.kind === "exploration"; // D3: model provenance renders OUTSIDE the route dossier
-  if (!isExpl && p.note) body.append(mkEl("p", "dossier-attr", "About this scenario's assumptions: " + p.note)); // bq-1141 M1
-  /* row 499 null convention: the asterisk needs a legend or it is a mystery mark. Rendered FIRST in
+  if (!isExpl && p.note) body.append(mkEl("p", "dossier-attr", "About this scenario's assumptions: " + p.note)); // Typed margin claim.
+  /* the recorded review null convention: the asterisk needs a legend or it is a mystery mark. Rendered FIRST in
      the dossier, listing the dials this preset did not author, so a reader can see the boundary of
      what the preset is actually claiming before reading a word of its position. */
   { /* F12 (review): only dials a reader can SEE carry the mark, so only those belong in the legend —
@@ -4145,7 +4143,7 @@ function renderDossier(m, p) {
 
 /* ---------- tooltips ---------- */
 const tipEl = $("tooltip");
-/* b9 UX-A (§20 R-1; memo §16.3): the clamp is TWO-SIDED ON BOTH AXES.
+/* the interface (two-sided clamp): the clamp is TWO-SIDED ON BOTH AXES.
    The old form was `Math.min(innerHeight - r.height - 10, Math.max(8, y + 14))`: the outer
    `max(8, …)` guards the POINTER-DERIVED term, not the clamp, so a box taller than the viewport
    produced a NEGATIVE coordinate that nothing rescued. Measured at bedcc23: TIPS.specDec (3,352
@@ -4173,7 +4171,7 @@ function tipContent(key) {
   if (t.s) { const s = document.createElement("div"); s.className = "tt-src"; s.textContent = t.s; frag.append(s); }
   return frag;
 }
-/* b9 UX-A (§20 R-2/R-3; memo §16.3): hover PRESENTATION is gated on a hover-capable pointer.
+/* the interface (pointer-gated presentation): hover PRESENTATION is gated on a hover-capable pointer.
    On coarse pointers there is no hover at all, so the tooltip channel used to depend entirely on a
    16x12 CSS-px tap producing a focus event. Keyboard focus presentation stays available on EVERY
    pointer class — gating it would remove the only non-pointer route. */
@@ -4275,7 +4273,7 @@ function appendChartTable(el, headers, rows, summary = "Table view") {
   el.appendChild(det);
 }
 
-/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+/* Adopted 2026-08-22:
    point inputs stay one number. A section triple renders its middle as the
    primary value and its exact corner/share-polytope bottom–top beneath it. */
 function sectionBandHasTriple(band) {
@@ -4320,7 +4318,7 @@ let HW_CHART_NARROW = null;
 function renderHwChart() {
   const el = $("chart-hw"); el.textContent = "";
   const w = blendWeights(S);
-  // b9 M3 (memo §3.4): per-leg physical energy intensity rides the same surface — the leg
+  // : per-leg physical energy intensity rides the same surface — the leg
   // "alone" framing appMarginOnHw uses (per-leg energy is blend-independent by construction).
   const legEnergy = k => {
     const ctx = appEngineContext();
@@ -4335,7 +4333,7 @@ function renderHwChart() {
       renderable: isFinite(r.margin), inBlend: !!w[k], reason };
   });
   const blended = appWorkload(S);
-  /* bq-3550 visual pass: padT 8 → 26 gives the blend marker's label a band of its own above the first bar
+  /*  visual pass: padT 8 → 26 gives the blend marker's label a band of its own above the first bar
      (it used to sit on the first bar's value label), and the blend LINE is drawn under the bars instead of
      over them, so it never strikes through a value label (which also carries a halo, styles.css). Geometry
      and paint order only; every value, label string, accessible name and the text order are unchanged.
@@ -4391,7 +4389,7 @@ function renderHwChart() {
         ...(roleWidths ? [["Role widths (published)", roleWidths]] : []),
       ]);
     }, `${r.name}: ${fmtPct(r.margin)} margin, ${fmt$(r.cost)} per million tokens${r.inBlend ? `, ${Math.round(w[r.k] * 100)}% of current blend` : ", not in current blend"}`);
-    /* Owner annotation n12b450. AFTER attachMarkTip deliberately: that call sets role="img" for the
+    /* Chart affordance. AFTER attachMarkTip deliberately: that call sets role="img" for the
        tooltip, and the mark is a button now — it does something when you activate it. The tooltip's
        own focus/pointer listeners are untouched, so hovering and focusing still read the numbers;
        only the role, the cursor and the label change, and the label keeps the numbers and adds the
@@ -4408,13 +4406,13 @@ function renderHwChart() {
     blendLabel.classList.add("chart-value-label");
     svg.append(blendLabel);
   }
-  /* Owner annotation n12b450: the affordance has to SAY it is there. The same complaint he made
+  /* Chart affordance: the affordance has to SAY it is there. The same issue reported
      about the spec-decode slider ("I'd have no idea how to activate it") applies to a bar that is
      clickable and looks exactly like a bar that is not. */
   $("chart-hw-sub").textContent = "click any bar to open that accelerator's controls · at current settings; gray bars are accelerators with 0 traffic share; vertical line = your blend"
     + " · energy = physical Wh per M mixed tokens at the operating point (no idle allocation)"
     + (fleetRenderableText(blended) ? " · " + fleetRenderableText(blended) : "");
-  $("chart-hw-sub").title = TIPS.energy.b; // b9 M3: the energy tip rides the subtitle
+  $("chart-hw-sub").title = TIPS.energy.b; // : the energy tip rides the subtitle
   el.appendChild(svg);
   renderHwChartNvlinkNote();
   appendChartTable(el, ["Accelerator", "Margin", "Cost / Mtok", "Energy (Wh/Mtok, mix)", "Current blend"],
@@ -4425,8 +4423,8 @@ function renderHwChart() {
   renderHwTwoTables();
 }
 
-/* BEGIN im-arc T1 pure presentation helpers */
-/* im-arc T1 fix (Sol review 2026-08-22, findings P1-1/P1-2/P1-3): these builders
+/* BEGIN  pure presentation helpers */
+/*  (corrected 2026-08-22): these builders
    are DOM-free so the Node T1 suite executes the exact branches the renderer consumes. */
 function nonEmpty(value) {
   return !!value && typeof value === "object" && Object.keys(value).length > 0;
@@ -4435,7 +4433,7 @@ function readerRentActive(state) {
   return state.rentAbsAll != null || nonEmpty(state.rentAbsLeg) || state.rentMult !== 1
     || nonEmpty(state.rentMultLeg) || nonEmpty(state.rentMultFam);
 }
-/* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): rent labels are
+/*  (corrected 2026-08-23): rent labels are
    receipts over the section composition. Flat/by-hardware section prices are
    reader-stated even when the old global rent controls are untouched. */
 function rentSourceLabel(state, receipt) {
@@ -4474,7 +4472,7 @@ function counterpartBandText(band) {
   return "middle assumption · selected span (compounded over the declared ranges): ≈"
     + Math.round(band.lo) + "% – ≈" + Math.round(band.hi) + "%";
 }
-/* im-arc T1 director fix (fix-verify 2026-08-23, rounds 1–2, P1-1 residual): the accessible stack
+/*  director fix (fix-verify 2026-08-23, rounds 1–2, P1-1 residual): the accessible stack
    table's DISPLAYED cells must add up to the DISPLAYED total, in every locale. When rent is shown,
    every cell of the row is printed at a UNIFORM three decimals with toFixed (which never inserts a
    grouping separator, so "$1234.567" cannot be read as a grouped integer the way a de-DE "$1.234"
@@ -4495,9 +4493,9 @@ function stackRawDeltaRow(row, money) {
   return ["rent − modelled TCO (raw, signed)", money(row.rentMinusTco)];
 }
 const STACK_SIGNED_HEADING = "rent − modelled TCO (signed; the residual that closes this row, all cells at 3 decimals — raw per-row value in the bar's tooltip)";
-/* END im-arc T1 pure presentation helpers */
+/* END  pure presentation helpers */
 
-/* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): keep the
+/*  (corrected 2026-08-23): keep the
    presentation helpers pure for Node execution; this app adapter derives the
    section receipt flags. Global rent controls never relabel a section-owned
    registered receipt because the engine gives that receipt precedence. */
@@ -4512,12 +4510,12 @@ function appRentReceipt(state) {
   };
 }
 
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): the two
+/* Adopted 2026-08-22: the two
    procurement bases stay adjacent and use the same single-accelerator engine path. */
 function renderHwTwoTables() {
   const host = $("hw-two-tables"); if (!host) return;
   host.textContent = "";
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): both adjacent
+  /*  (corrected 2026-08-23): both adjacent
      tables consume the same all-section, per-accelerator composition as the
      stack toggle. A mixed custom fleet must never collapse to the global lens. */
   const tableFleet = appActiveCustomFleet(S);
@@ -4559,8 +4557,8 @@ function renderHwTwoTables() {
     "Point assumptions render as one number. Section triples render the middle assumption with the exact bottom–top corner/share-polytope span beneath it."));
 }
 
-/* d-im-h800 (owner note aca09d, 2026-08-18): the disclosure under the hardware chart — the surface
-   on which the owner saw the H800 bar above the H100 bar. It is COMPUTED, not written: the same
+/* the adopted decision (the author's note, 2026-08-18): the disclosure under the hardware chart — the surface
+   on which the chart showed the H800 bar above the H100 bar. It is COMPUTED, not written: the same
    nvlinkCapReadout feeds it and the control-side readout, so the two can never state different
    exposures. Not a tooltip — a disclosure you have to hover to find reproduces the defect (the
    08-16 GB300 note precedent). */
@@ -4577,7 +4575,7 @@ function renderHwChartNvlinkNote() {
   note.hidden = false;
 }
 
-/* d-im-h800: an ordinary slider edit calls onChange() WITHOUT rebuilding controls (the standing
+/* the adopted decision: an ordinary slider edit calls onChange() WITHOUT rebuilding controls (the standing
    pattern), so the readout beside the control and the per-leg lines on the share rows — both built
    with the controls — would go stale the moment the lever moved. They re-render here on every
    renderAll, from the SAME readout and the SAME canonical legs, so a moved lever is disclosed where
@@ -4609,7 +4607,7 @@ let STACK_CHART_NARROW = null;
 function renderStackChart() {
   const el = $("chart-stack"); el.textContent = "";
   const toggle = $("stack-rent-toggle");
-  /* im-arc T1: checkbox state is local presentation state — never scenario state, never encoded
+  /* : checkbox state is local presentation state — never scenario state, never encoded
      in a permalink. Before the reader touches it, a basis switch resets to that basis's default. */
   if (toggle) {
     if (STACK_RENT_MODE !== S.hwMode && !STACK_RENT_TOUCHED) toggle.checked = S.hwMode === "rent";
@@ -4620,9 +4618,9 @@ function renderStackChart() {
     }
   }
   const showRent = !!(toggle && toggle.checked);
-  /* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): the renderer consumes the
+  /*  (corrected 2026-08-22): the renderer consumes the
      same signed row model the Node suite sums; negative rows get one rent-total bar. */
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): section receipts
+  /*  (corrected 2026-08-23): section receipts
      travel into the per-accelerator rows; the chart cannot fall back to the
      global lens when the active custom fleet is mixed. */
   const stackFleet = appActiveCustomFleet(S);
@@ -4645,7 +4643,7 @@ function renderStackChart() {
   const legendKeys = showRent
     ? [...STACK_KEYS, ...(hasRentAbove ? [STACK_RENT_KEY] : []), ...(hasRentBelow ? [STACK_RENT_BELOW_KEY] : [])]
     : STACK_KEYS;
-  // b9 M3 (memo §3.4; plan D-2): under a rent-basis lens, electricity dollars are EMBEDDED in
+  //  (plan D-2): under a rent-basis lens, electricity dollars are EMBEDDED in
   // the rent — decomposing rent without TCO assumptions would be fabrication. The chart below
   // is always the owned/strategic-TCO counterfactual build-up; under rent this chip says so
   // and carries the implied physical energy intensity (info-only, no dollars).
@@ -4654,7 +4652,7 @@ function renderStackChart() {
     .filter(row => row.basis !== "owned-strategic-tco").reduce((sum, row) => sum + row.share, 0);
   if (S.hwMode !== "tco" || rentedSectionShare > 0) {
     const fe = feForStack;
-    // M3 gate P1 fix: the LABEL is the LENS basis (declared), never the mix's row basis —
+    // Procurement basis: the LABEL is the LENS basis (declared), never the mix's row basis —
     // chinacloud must read "public-capacity rent", and the owned-strategic replays expressed
     // as rent scalars (xaicash, gemini/grok dives) must say so rather than be mislabeled.
     const db = displayedProcurementBasis(currentPersp(), currentModel(), fe);
@@ -4685,7 +4683,7 @@ function renderStackChart() {
       appEngineContext(currentModel(), resolvedTraffic(), state), opts).costMix);
     const cell = sectionBandCell(band, fmt$);
     if (cell) { const line = mkEl("p", "chart-section-band"); line.appendChild(cell); el.appendChild(line); } }
-  /* bq-3550 visual pass: the legend WRAPS (it was laid out on one line from a 5.4-units-per-character
+  /*  visual pass: the legend WRAPS (it was laid out on one line from a 5.4-units-per-character
      guess, and the fifth key was clipped to "rent — lessor's cu"), and below 760 px the chart takes the
      narrow layout renderHwChart() and renderAstraProChart() use — names above bars, a 320-unit viewBox —
      so its text is not drawn at ~5 px on a phone. Geometry only; every value, string and label is unchanged. */
@@ -4702,7 +4700,7 @@ function renderStackChart() {
   const padT = (legendPlaced.length ? legendPlaced[legendPlaced.length - 1].y : 13) + 13;
   const H = padT + rows.length * rowH + 26;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Cost decomposition per accelerator. Tab to inspect each cost segment." });
-  /* im-arc T1: preserve the pre-toggle expression exactly when rent is hidden; even a
+  /* : preserve the pre-toggle expression exactly when rent is hidden; even a
      floating-point-equivalent segment sum must not perturb today's unchecked SVG geometry. */
   const xmax = Math.max(...rows.filter(r => r.renderable).map(r => showRent
     ? Math.max(r.total, r.segs.reduce((a, g) => a + g.v, 0))
@@ -4743,12 +4741,11 @@ function renderStackChart() {
           ];
       if (showRent && r.rent && r.rent.source)
         tooltipRows.push(["Rent source", r.rent.source]);
-      attachMarkTip(rect,
-        () => ttRows(r.name + " — " + fmt$(r.total) + "/Mtok", tooltipRows),
+      attachMarkTip(rect, () => ttRows(r.name + " — " + fmt$(r.total) + "/Mtok", tooltipRows),
         r.rentBelowTco
           ? `${r.name}, ${seg.name}: ${fmt$(seg.v)} per million tokens; the four modelled TCO components exceed this reader-stated rent`
           : `${r.name}, ${seg.name}: ${fmt$(seg.v)} per million tokens; total ${fmt$(r.total)}`);
-      /* Owner annotation n45cb3d — "edit costs by clicking on accelerators". Every segment of the
+      /* Chart cost affordance — "edit costs by clicking on accelerators". Every segment of the
          row jumps to the same place, because the reader clicks the bar, not the arithmetic: this
          chart decomposes ONE accelerator's cost, and the dial that moves that cost is its
          procurement multiplier whichever segment the pointer happened to land on. */
@@ -4776,7 +4773,7 @@ function renderStackChart() {
 let SENS_CHART_NARROW = null;
 function renderSensChart() {
   const el = $("chart-sens"); el.textContent = "";
-  /* bq-3550: below 760 px a 380-unit viewBox (not 720) so the labels are drawn near their stated size on a
+  /* : below 760 px a 380-unit viewBox (not 720) so the labels are drawn near their stated size on a
      phone; every position below derives from W and H. Re-rendered when the width crosses the breakpoint. */
   const narrow = window.innerWidth < 760; SENS_CHART_NARROW = narrow;
   const W = narrow ? 380 : 720, H = narrow ? 260 : 300, padL = narrow ? 50 : 56, padR = narrow ? 22 : 20, padT = 12, padB = 40;
@@ -4788,7 +4785,7 @@ function renderSensChart() {
   const xmax = Math.min(800, S.total);
   const xmin = Math.min(10, Math.max(1, xmax / 10));
   const xs = v => padL + (Math.log(v) - Math.log(xmin)) / (Math.log(xmax) - Math.log(xmin)) * (W - padL - padR);
-  // IM3 exit-gate fix 2 (verification round 2, P1) + B2/B4 correction (final re-verification,
+  // Membership-stability correction (verified
   // 2026-07-20): the council's #11 membership-stability contract arriving early -- this sweep was
   // joining finite points into one continuous path across FLEET-MEMBERSHIP changes (crossing a
   // feasibility boundary deletes/adds legs and can move the margin discontinuously). CORRECTION:
@@ -4802,7 +4799,7 @@ function renderSensChart() {
   // a boundary. Signature caveat: `renderableLegs:renderableWeightShare` identifies membership by
   // COUNT+WEIGHT, not by actual hardware keys -- two different leg sets with equal count and equal
   // weight would collide (not reachable in the current registry, unverified in general). Deriving
-  // the signature from actual hardware keys is carried to IM5 #11 (the membership-stability
+  // the signature from actual hardware keys is deferred (the membership-stability
   // contract), not fixed here.
   const pts = [];
   for (let i = 0; i <= 120; i++) {
@@ -4876,8 +4873,7 @@ function renderSensChart() {
     svg.append(c);
     svg.append(chartText(xs(mk.a), ys(Math.max(ymin, m)) + (mk.below ? 18 : -10), mk.l, { anchor: "middle", size: 10, fill: "var(--ink-2)" }));
     const markerCost = appWorkload(S, mk.a).costMix;
-    attachMarkTip(c,
-      () => ttRows(mk.l + " (" + mk.a + "B active)", [["margin", fmtPct(m)], ["cost / Mtok", fmt$(markerCost)]]),
+    attachMarkTip(c, () => ttRows(mk.l + " (" + mk.a + "B active)", [["margin", fmtPct(m)], ["cost / Mtok", fmt$(markerCost)]]),
       `${mk.l}, ${mk.a} billion active parameters: ${fmtPct(m)} margin, ${fmt$(markerCost)} per million tokens`);
   });
   // current position marker
@@ -4885,8 +4881,7 @@ function renderSensChart() {
   if (isFinite(cur)) {
     const currentMarker = svgEl("circle", { cx: xs(S.active), cy: ys(Math.max(ymin, cur)), r: 5.5, fill: "var(--ink-1)", stroke: "var(--surface-1)", "stroke-width": 2 });
     svg.append(currentMarker);
-    attachMarkTip(currentMarker,
-      () => ttRows("Current setting (" + fmtNum(S.active) + "B active)", [["margin", fmtPct(cur)], ["cost / Mtok", fmt$(currentWl.costMix)]]),
+    attachMarkTip(currentMarker, () => ttRows("Current setting (" + fmtNum(S.active) + "B active)", [["margin", fmtPct(cur)], ["cost / Mtok", fmt$(currentWl.costMix)]]),
       `Current setting, ${fmtNum(S.active)} billion active parameters: ${fmtPct(cur)} margin, ${fmt$(currentWl.costMix)} per million tokens`);
   }
   // crosshair
@@ -4928,7 +4923,7 @@ function renderGenChart() {
   const gens = [...GEN_TIMELINE.map(k => ({ key: k, hw: HW[k] })), { key: "rubin", hw: RUBIN }];
   const cols = gens.map((g, i) => {
     const wl = appWorkloadOnHw(g.hw, S); // single source of truth — same billing math as the hero
-    /* q-im-fp4-gb300-batch-disclosure: the declared operating point travels WITH the bar. The
+    /* the adopted decision: the declared operating point travels WITH the bar. The
        audit's finding was not that the batch was undocumented — it is documented in the data
        file — but that the chart rendering its consequence said nothing about it. */
     const opCell = (OPERATING_POINTS[g.key] || {})[S.interact] || null;
@@ -4937,7 +4932,7 @@ function renderGenChart() {
       key: g.key, op: opCell,
       reason: appNoNumberReason(wl) };
   });
-  /* bq-3550: the same narrow viewBox as the other charts below 760 px (re-rendered at the breakpoint). */
+  /* : the same narrow viewBox as the other charts below 760 px (re-rendered at the breakpoint). */
   const narrow = window.innerWidth < 760; GEN_CHART_NARROW = narrow;
   const W = narrow ? 400 : 720, H = narrow ? 270 : 300, padL = narrow ? 52 : 56, padR = 16, padT = 26, padB = 34;
   const svg = svgEl("svg", { viewBox: `0 0 ${W} ${H}`, role: "group", "aria-label": "Cost per generation. Tab to inspect each column." });
@@ -4964,8 +4959,7 @@ function renderGenChart() {
       svg.append(chartText(x + bw / 2, midY - 4, "unpriced", { anchor: "middle", size: 10.5, weight: 600, fill: "var(--ink-3)" }));
       svg.append(chartText(x + bw / 2, midY + 9, "projection", { anchor: "middle", size: 9.5, fill: "var(--ink-3)" }));
       svg.append(chartText(x + bw / 2, H - padB + 15, c.name, { anchor: "middle", size: 10.5, fill: "var(--ink-2)" }));
-      attachMarkTip(ph,
-        () => ttRows(c.name, [["status", "unpriced projection"], ["basis", "no public rack rate, serving benchmark, or purchase price"]]),
+      attachMarkTip(ph, () => ttRows(c.name, [["status", "unpriced projection"], ["basis", "no public rack rate, serving benchmark, or purchase price"]]),
         `${c.name}: unpriced projection; no public rack rate, serving benchmark, or purchase price`);
       return;
     }
@@ -5002,8 +4996,7 @@ function renderGenChart() {
     "Cost and margin by accelerator generation");
   renderGenChartOpNote(cols);
 }
-/* The disclosure the audit found missing (reports/im-fp4-precision-audit-2026-08-01 §4, owner
-   ruling q-im-fp4-gb300-batch-disclosure). It is COMPUTED, not written: the counterfactual comes
+/* The disclosure the audit found missing (reports/the research run-08-01 §4, the adopted decision). It is COMPUTED, not written: the counterfactual comes
    from the cell's own registered sensitivity band, run through the same billing math as the bars,
    so it cannot drift away from what the chart is showing. It prints only when a rendered
    generation actually declares an assumed operating point. */
@@ -5067,7 +5060,7 @@ function buildSubControls() {
 let SUB_CHART_NARROW = null;
 function renderSubChart() {
   const el = $("chart-sub"); el.textContent = "";
-  SUB_CHART_NARROW = window.innerWidth < 760; // before any early return (bq-3550 internal review R5)
+  SUB_CHART_NARROW = window.innerWidth < 760; // before any early return (layout initialization)
   const wl = appWorkload(S);
   const sub = $("chart-sub-sub");
   if (sub) sub.textContent = "What heavy users might cost under the selected serving scenario"
@@ -5090,7 +5083,7 @@ function renderSubChart() {
     { name: "Direct cost to serve", v: cost, color: cost > S.subPlan ? "var(--bad)" : "var(--good)" }, // status tokens: critical / good
     { name: "Value at list API prices", v: S.subUsage, color: "var(--baseline)" },
   ];
-  /* bq-3550: names above bars in a 320-unit viewBox below 760 px, like the other bar charts. */
+  /* : names above bars in a 320-unit viewBox below 760 px, like the other bar charts. */
   const narrow = SUB_CHART_NARROW;
   const W = narrow ? 320 : 720, rowH = narrow ? 44 : 36, padL = narrow ? 16 : 210, padR = narrow ? 64 : 90, padT = 8;
   const H = padT + rows.length * rowH + 30;
@@ -5109,7 +5102,7 @@ function renderSubChart() {
   el.appendChild(svg);
   appendChartTable(el, ["Metric", "Per month"], rows.map(r => [r.name, fmt$(r.v)]),
     "Subscription economics");
-  /* bq-3550: the verdict sentence and the appended fleet qualifier are two runs of the same text, so the
+  /* : the verdict sentence and the appended fleet qualifier are two runs of the same text, so the
      verdict can be bold and coloured while the qualifier reads at secondary weight (it was one bold coral
      paragraph). Same words, same order; the colours are the ones the inline style used. */
   const verdictBox = document.createElement("div");
@@ -5129,10 +5122,10 @@ function renderSubChart() {
   el.appendChild(verdictBox);
 }
 
-/* ---------- §10 "Astra Pro estimates" chart (bq-3351) ----------
+/* ---------- §10 "Astra Pro estimates" chart ----------
    Replaces the §10 normalized comparison table (renderNormalized), which priced every provider
-   through one page-authored lens and read as a ranking; the owner ruled it dropped
-   (d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section). This chart draws
+   through one page-authored lens and read as a ranking; it was dropped
+   (adjudicated 2026-09-25). This chart draws
    the category that took its place: each model's recorded operating points from
    astra-pro-estimates.js, computed HERE by the engine at page load (astraProReplay — the same
    pipeline the build uses for the card faces and the MCP uses for run_scenario). Rows keep the
@@ -5199,7 +5192,7 @@ function renderAstraProChart() {
     "Astra Pro estimates — serving margin at list, grouped by provider (not a ranking)");
 }
 
-/* ---------- margin-range evidence board (v2.1.3 preset redesign, M3) ----------
+/* ---------- margin-range evidence board (v2.1.3 preset redesign) ----------
    First-class, causally SECONDARY: renders the typed claims registry (engine.js MARGIN_CLAIMS /
    MARGIN_BUCKETS — bins claims, not people) plus the page-authored exploration routes, and maps
    the CURRENT mechanism-first scenario's derived margin onto the buckets. It never writes the
@@ -5316,7 +5309,7 @@ function boardFieldVal(k, v) {
 }
 function boardChangedSummary(p) {
   const central = PERSPECTIVES.find(x => x.id === "median").set;
-  /* im-share-ready-0920 (2026-09-21, browser-QA finding 1): this summary must exclude the SAME
+  /* the research run (2026-09-21, browser-QA finding 1): this summary must exclude the SAME
      migration pins `changedFieldsFromCentral` excludes, and for the same reason — they are
      migration metadata, not authored levers. Omitting the exclusion here did two visible things:
      the enumerated deltas disagreed with the row's own "(N changed)" count, and the pin keys
@@ -5341,7 +5334,7 @@ function boardConfigRow(p, rank, total) {
   head.append(tag);
   row.append(head);
   const n = changedFieldsFromCentral(p);
-  // IM3 exit-gate fix 1: weld the renderable-weight-share condition (primary=false — a route
+  // Renormalization disclosure: weld the renderable-weight-share condition (primary=false — a route
   // card is a labeled counterfactual, not the flagship-default surface fix 3's caveat targets).
   const fwl = explorationFlagshipWorkload(p);
   const fm = fwl.margin * 100;
@@ -5364,7 +5357,7 @@ function boardConfigRow(p, rank, total) {
 function loadExploration(id) {
   $("persp-preset").value = id;
   applyPreset();
-  /* §18.13 C-2 (R6 refinement): the load intent ENQUEUES AFTER applyPreset — so the head's
+  /*  C-2 (R6 refinement): the load intent ENQUEUES AFTER applyPreset — so the head's
      stale-intent cancel can never eat the click that just set it — and executes immediately
      on the normal path (no stranded close, nothing pending: behavior byte-identical). */
   NAV_INTENT = { kind: "load-scroll" };
@@ -5393,14 +5386,14 @@ function centralReturnRow() {
   btn.textContent = "↺ Load the central scenario into the calculator — the policy-labeled baseline scenario, not a counterfactual";
   btn.onclick = () => {
     returnToCentral();
-    NAV_INTENT = { kind: "load-scroll" };            // §18.13 C-2: enqueue after the transaction
+    NAV_INTENT = { kind: "load-scroll" };            //  C-2: enqueue after the transaction
     if (EXPLAIN.phase === "idle" && !PENDING_LEVEL) runNavIntent();
   };
   row.append(btn);
   return row;
 }
-/* §10 preserve-links (selector dissolve, 2026-07-12): the Perspective dropdown is hidden, so the
-   report's "Load this operating point ↑" links reach each §10 replay/lens by setting the model +
+/*  preserve-links (selector dissolve, 2026-07-12): the Perspective dropdown is hidden, so the
+   report's "Load this operating point ↑" links reach each  replay/lens by setting the model +
    (hidden) perspective select and running the ordinary applyPreset path, then scrolling to the
    output tiles. Same mechanism as loadExploration; fail-closed identity and pairing are unchanged. */
 function loadPerspective(modelId, perspId) {
@@ -5410,23 +5403,23 @@ function loadPerspective(modelId, perspId) {
   if (modelId) { $("model-preset").value = modelId; const c = $("model-dossier-card"); if (c) c.open = false; }
   if (perspId) $("persp-preset").value = perspId;
   applyPreset();
-  /* §18.13 C-2 (R6 refinement): the load intent ENQUEUES AFTER applyPreset — so the head's
+  /*  C-2 (R6 refinement): the load intent ENQUEUES AFTER applyPreset — so the head's
      stale-intent cancel can never eat the click that just set it — and executes immediately
      on the normal path (no stranded close, nothing pending: behavior byte-identical). */
   NAV_INTENT = { kind: "load-scroll" };
   if (EXPLAIN.phase === "idle" && !PENDING_LEVEL) runNavIntent();
 }
 /* ---------- LOAD OPS ON THE HIGHER-JUSTIFICATION ENTRIES ----------
-   Owner annotation nd4f4c7: "Need to be able to load them into the calculator with clear
+   Loading affordance: "Need to be able to load them into the calculator with clear
    indication of their publicly stated positions vs our inferences about their positions."
 
    The mechanism the estimate cards already use, extended to these entries — one `loadPerspective`
    call, the same validation, the same scroll intent. What is added here is the LABELLING, because
-   this is exactly the surface where the two things he wants distinguished sit side by side: the
+   this is exactly the surface where the two things this surface distinguishes sit side by side: the
    entry's own links go to the STATED position (registry rows carrying the verbatim quote and its
    source), and the button below loads a vector this page authored to probe that position. So the
    button says whose claim it is anchored to and that the vector is ours, rather than reading as
-   "load X's numbers" — which is the misreading the annotation is guarding against.
+   "load X's numbers" — which is the misreading the affordance is guarding against.
 
    Entries with no authored route render the null finding instead of a button. The ops come from
    the engine's typed anchor (`hjLoadOps`); app.js chooses no targets of its own. */
@@ -5461,7 +5454,7 @@ function wireLoadOpLinks() {
   });
 }
 function renderBoard() {
-  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /* §18.11 P0-a */
+  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /*  P0-a */
   const grid = $("board-grid"); if (!grid) return;
   grid.textContent = "";
   const ranked = rankExplorations(), total = ranked.length;
@@ -5509,7 +5502,7 @@ function boardNoRouteStatement(bid) {
     ? "No page-authored route is offered for this range: the central scenario itself (§5) lands here and is this range's own anchor — no route needs constructing."
     : "No page-authored route is offered for this range — the registry carries no popular-discourse position that points here.";
 }
-/* ---------- range-explorer front door (v2.1.3 remediation, owner directive) ----------
+/* ---------- range-explorer front door (v2.1.3 remediation) ----------
    The FIRST surface of the board section: pick a range you've heard claimed → see the
    page-authored route(s) it would take, one "Load into calculator" away. Causally SECONDARY by
    construction — selection renders route cards only; loading goes through the ordinary
@@ -5545,7 +5538,7 @@ function selectFrontDoorRange(bid) {
   renderFrontDoorDetail();
 }
 function renderFrontDoorDetail() {
-  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /* §18.11 P0-a */
+  if (!explainGuardBeforeMutation()) { escalatePending("full"); return; }   /*  P0-a */
   const det = $("front-door-detail"); if (!det) return;
   det.textContent = "";
   if (!FRONT_DOOR_SEL) { det.hidden = true; return; }
@@ -5558,14 +5551,14 @@ function renderFrontDoorDetail() {
   else det.append(mkEl("p", "fd-null", boardNoRouteStatement(b.id)));
   if (b.id === centralFlagshipBucketId()) {
     const median = PERSPECTIVES.find(x => x.id === "median");
-    // IM3 exit-gate fix 1/3: welds the renderable-weight-share condition + Hopper-family
+    // Renormalization disclosure: welds the renderable-weight-share condition + Hopper-family
     // correlation caveat (primary=true — always the flagship-scope computation). Appended AFTER
     // the existing sentence (not restructured into it) so the mirrored prefix/suffix substrings
     // mcp-server/src/labels.ts's APPJS_MIRROR.centralAnchorPrefix/Suffix depend on stay byte-exact
     // (mcp-server/test/contract.test.mjs's grep-parity test).
     {
       const fwl = explorationFlagshipWorkload(median);
-      // R2 (§1.4): the flagship board anchor carries the policy-labeled noun + the FULL
+      // R2: the flagship board anchor carries the policy-labeled noun + the FULL
       // welded disclosure (renormalization clause + policy clause — the width story).
       det.append(mkEl("p", "fd-null", "At the flagship scope the policy-labeled baseline scenario computes to ≈" + Math.round(fwl.margin * 100) + "% at the public-evidence reference (algorithmic lead 0 months, family multipliers 1.0×); the calculator's own default state carries the ratified algorithmic-lead prior and reads higher. The calculator below computes to ≈" + Math.round(liveCentralDefaultPct()) + "%. " + fleetRenderableDisclosure(fwl.fleetRenderable, true, fwl.membership) + "."));
     }
@@ -5688,17 +5681,17 @@ function isCentralClean() {
   const m = currentModel(), p = currentPersp();
   return !!(m && p && m.id === "opus" && p.id === "median" && TRAFFIC.mode === "native" && !MODIFIED_FROM && !EXPLORATION_ORIGIN && presetIsClean());
 }
-/* row 499: the state the page OPENS in, unedited. Before row 499 that was always the clean central,
+/* the recorded review: the state the page OPENS in, unedited. Before the recorded review that was always the clean central,
    so `isCentralClean()` carried both jobs; the page now opens on a named estimate preset, and the
    two jobs came apart. The one that must follow the OPENING state is the policy-labeled identity
-   chip — the owner's picked landing-hero mode. Losing it because the opening preset is no longer
+   chip — the adopted landing-hero mode. Losing it because the opening preset is no longer
    `median` would silently drop a labeling guarantee from the first thing a visitor reads, which is
-   the exact regression class the R3 memo note at its call site warns about. Central-RETURN sync,
+   the exact regression class the contract note at its call site warns about. Central-RETURN sync,
    suppression, and gate-7 eligibility keep using `isCentralClean()`: those are about the central
    scenario itself, not about what the page opens on. */
 function isLandingClean() {
   const m = currentModel(), p = currentPersp();
-  /* note-20260912T180812Z-c9eaac: a reader who made another scenario their default OPENS on it, and the
+  /* the note of 2026-09-12: a reader who made another scenario their default OPENS on it, and the
      opening-state label follows the opening state (the reason this function exists). */
   /* Astra round 2 F10: only on Opus. The mandatory text this predicate switches on states that placement is
      unverified, which is true of the closed flagship and false of a model whose placement IS verified
@@ -5733,7 +5726,7 @@ function computeIdentity() {
       stateLabel = "MODIFIED — fields off the “" + lensBare(p.name) + "” preset default"
         + (oob.length ? "; CRAFTED (values outside the slider range: " + oob.join(", ") + ")" : "");
     } else if (m && m.id === "opus" && p.id === "median" && TRAFFIC.mode === "native") {
-      // R2 (§1.4; memo §0-ter): the strip's central state GATES on placement-verified
+      // R2: the strip's central state GATES on placement-verified
       // central eligibility (gate-7). A closed model can never satisfy it in R2, so the
       // clean default carries a policy-scenario identity, never a bare "central" claim.
       isCentral = true; cls = "id-central";
@@ -5750,7 +5743,7 @@ function computeIdentity() {
 }
 function identitySummary() { const id = computeIdentity(); return id.modelName + " · " + id.trafficTxt + " · " + id.lensName + " · " + id.stateLabel; }
 /* ================= THE ONE WINDOW, AND THE READER'S DEFAULT =================
-   Owner voice note note-20260912T180812Z-c9eaac (2026-09-12T18:08Z), verbatim: "if our default
+   the author's note (2026-09-12T18:08Z), verbatim: "if our default
    assumptions are going to be GPT Pro's then we can leave that as the one window and it can be
    highlighted as the default window and they should be able to swap. There should actually be a
    button on every assumption to set as the defaults so that they can set fable as the default or
@@ -5763,7 +5756,7 @@ function identitySummary() { const id = computeIdentity(); return id.modelName +
    it names: loadScenarioFromURL runs after the opening selection and wins by construction, and
    loading a link never writes this key.
 
-   The same tile carries the calculation (bq-2345): both operands, the division, and the engine's
+   The same tile carries the calculation: both operands, the division, and the engine's
    own result at one decimal. The decimal is not decoration: the rounded cents land on the other
    side of a whole-percent boundary from the result (1 - 0.65/3.72 = 82.53 % against the engine's
    82.42 % at the page default), so the face says the dollar amounts are rounded. */
@@ -5772,7 +5765,7 @@ const WINDOW_PRIMARY = Object.freeze(["gptpro-r3", "fable-r3", "stress-public-ra
 const WINDOW_SHORT_NAMES = Object.freeze({
   "gptpro-r3": "GPT-5.6 Pro estimate",
   "fable-r3": "Fable 5 estimate",
-  "stress-public-rate": "Public-data scenario", // bq-3520: owner ruling d-20260926 — a floor from public data, never a baseline or an estimate
+  "stress-public-rate": "Public-data scenario", // : adjudicated 2026-09-26 — a floor from public data, never a baseline or an estimate
   "median": "Central scenario",
 });
 function readReaderDefault() {
@@ -5894,7 +5887,7 @@ function setReaderDefault(modelId, perspId) {
   const p = PERSPECTIVES.find(x => x.id === perspId);
   if (!p) return;
   /* Every scenario the window offers can be a reader's default on every model the selector offers, the Custom model
-     included (note-20260912T180812Z-c9eaac: "a button on every assumption"; gate verdict 20260912T212606Z requeued the
+     included (the note of 2026-09-12: "a button on every assumption"; gate verdict 20260912T212606Z requeued the
      round-2 refusal that left Custom's scenarios without one). A default is a model id and a scenario id, and the page
      rebuilds that scenario's own settings from them. Custom's starting settings are page code like any named model's
      (MODELS "custom".set), so nothing about an unedited Custom scenario lives only in this visit. What no default carries
@@ -5958,9 +5951,9 @@ function renderHeroCalc(wl) {
     calc.append(mkEl("div", "calc-warn", "Cache-write billing is 0%; modeled billings may be incomplete."));
   calc.hidden = false; calc.classList.add("tile-calc");
 }
-/* NOT DONE, deliberately: bq-2345 also proposed shrinking the hero's policy-label suffix to a normal-sized
+/* NOT DONE, deliberately:  also proposed shrinking the hero's policy-label suffix to a normal-sized
    status label. That needs the suffix in an element of its own, and tests/run-app-tests.sh pins the
-   SERIALIZED value token as one run of text (the single-node crop bar, memo D-3b). A standing guard
+   SERIALIZED value token as one run of text (the single-node crop bar, the design requirements). A standing guard
    outranks a layout preference, so the value token is left exactly as it was. */
 function renderScenarioWindow() {
   const box = document.getElementById("win-head"); if (!box) return;
@@ -5973,7 +5966,7 @@ function renderScenarioWindow() {
   const refocus = had ? { cls: [...had.classList].find(c => c.startsWith("win-")) || "", persp: (had.dataset && had.dataset.persp) || "" } : null;
   const tile = box.closest(".tile-hero"); if (tile) tile.classList.toggle("win-default", isDefault);
   box.textContent = "";
-  /* bq-3550: identity above the number, facts under its qualifier, controls after the tile's disclosures —
+  /* : identity above the number, facts under its qualifier, controls after the tile's disclosures —
      three containers in reading order (index.html). Both extra containers are optional: a page without them
      (a stale cached document) gets the whole window in #win-head, as before. */
   const idBox = document.getElementById("win-identity") || box, factsBox = document.getElementById("win-facts") || box;
@@ -6070,7 +6063,7 @@ function renderScenarioWindow() {
     items.append(item);
   });
   all.append(items);
-  /* §18.6: the hero tile carries no live region (tests/ux-c-cdp.test.mjs). A confirmation is announced by
+  /* : the hero tile carries no live region (tests/ux-c-cdp.test.mjs). A confirmation is announced by
      taking focus instead (setReaderDefault), so the note is focusable but not live. */
   const winNote = mkEl("p", "win-note"); winNote.id = "win-note"; winNote.tabIndex = -1;
   box.append(all, winNote);
@@ -6105,7 +6098,7 @@ function renderIdentityStrip() {
   el.append(chip("traffic " + id.trafficTxt, "id-traffic"));
   el.append(chip(id.lensName, "id-lensname"));
   el.append(chip(id.stateLabel, "id-state"));
-  // R2 (§1.3 hero flip): the epistemic chip names the POLICY-LABELED identity whenever
+  // R2 (hero identity): the epistemic chip names the POLICY-LABELED identity whenever
   // the landing fleet is not placement-verified central-eligible (always, for closed
   // models in R2) — the number is a policy-labeled scenario output, never central.
   el.append(chip(appLandingCentralEligible()
@@ -6121,7 +6114,7 @@ function renderFeasibilityTile(f) {
     ? "fleet infeasible"
     : f.renderableLegs + " of " + f.totalLegs + " legs renderable";
   $("out-feas").textContent = label;
-  // R2 (§1.10): solver receipts surfaced per leg — the SOLVED width rides every line
+  // R2: solver receipts surfaced per leg — the SOLVED width rides every line
   // (capacity-min/declared-operating-point width for clean legs; widest legal for capped).
   $("out-feas-note").textContent = f.legs.map(leg => {
     const name = HW[leg.hwKey].name;
@@ -6134,7 +6127,7 @@ function renderFeasibilityTile(f) {
     return name + ": finite at declared b=" + leg.b + " (" + leg.opBasis + ")" + w;
   }).join(" · ");
 }
-/* R2 (§1.2 Option A — the gate-6 closed-contract default): the typed landing
+/* R2 (Option A — the gate-6 closed-contract default): the typed landing
    suppression tile. NO headline number and NO derived cost/price values render (they
    are the same fleet computation the gate refused to headline); solver receipts, the
    five-status vector (via the fleet chip), the per-leg feasibility tile and the
@@ -6149,7 +6142,7 @@ function renderSuppressedHero(wl) {
   // itself renders fully, so the cause is the exclusion (shared formatter), not a
   // failing rendered leg.
   const memb = appDefaultMembership();
-  /* §18.10 P0-e: the suppressed clause is MANDATORY; its policy-band unit is a RECEIPT —
+  /*  P0-e: the suppressed clause is MANDATORY; its policy-band unit is a RECEIPT —
      split into the typed regions so it participates in coarse hiding, relocation and
      trigger sync exactly like the main flow's. textContent is byte-identical (U-C0). */
   TAIL.mandatory = "HERO SUPPRESSED — no landing headline under the declared loaded-bytes policy (gate-6): "
@@ -6177,21 +6170,21 @@ function returnToCentral() {
   applyPreset(); // resets MODIFIED_FROM / EXPLORATION_ORIGIN and rebuilds S = clean central
   history.replaceState(null, "", location.origin + location.pathname); // drop any ?s= permalink so the reset truly resets
 }
-/* ================= b9 UX-C (memo §18 v6): the TYPED TAIL — three ordered regions =================
+/* ================= TYPED TAIL: the TYPED TAIL — three ordered regions =================
    The hero tail stops accumulating one string on #out-margin-note. Every terminal path of
    updateTiles()/renderSuppressedHero() composes a typed TAIL and commits it ATOMICALLY (gate Q4):
    `.tile-mandatory` (every state-identity label, always inline) → `.tile-receipts` (the ` · `
    supplemental units, atomic label/value spans — the ONLY thing that ever relocates) →
    `.tile-actions` (trailing mandatory affordances — never relocated, never hidden). The withdrawn
-   §4.7 regex is dead: an honesty invariant never parses prose — composition is typed at the
+    regex is dead: an honesty invariant never parses prose — composition is typed at the
    WRITE sites. Separators are TEXT NODES (` · `), never CSS ::before, so textContent is
    byte-identical to the pre-refactor flat string (U-C0 pins it against the minted fixture).
-   Wrappers are JS-built ONLY — MCP `front-page` reads the whole of index.html (§18.5). */
+   Wrappers are JS-built ONLY — MCP `front-page` reads the whole of index.html. */
 const TAIL = { mandatory: "", receipts: [], actions: [] };
 function tailReset() { TAIL.mandatory = ""; TAIL.receipts = []; TAIL.actions = []; }
 function commitTail() {
   const note = $("out-margin-note"); if (!note) return;
-  /* §18.4/§18.5: class-keyed typography stamped in JS ONLY (index.html is never edited — MCP
+  /* : class-keyed typography stamped in JS ONLY (index.html is never edited — MCP
      front-page reads the whole file); idempotent by classList semantics. */
   note.classList.add("tile-explain");
   { const un = document.getElementById("out-margin-unanchored"); if (un) un.classList.add("tile-explain"); }
@@ -6208,7 +6201,7 @@ function commitTail() {
   const act = document.createElement("div"); act.className = "tile-actions";
   for (const a of TAIL.actions) act.append(a); // strings become text nodes (the breadcrumb's " ")
   note.replaceChildren(man, rec, act);
-  syncTailTrigger(); // §18.3: content-dependent trigger visibility lives HERE, not in the rebuild wiring
+  syncTailTrigger(); // : content-dependent trigger visibility lives HERE, not in the rebuild wiring
 }
 function updateTiles() {
   const wl = appWorkload(S);
@@ -6229,7 +6222,7 @@ function updateTiles() {
     TAIL.actions.push(btn);
     $("out-cost").textContent = "—"; $("out-price").textContent = "—";
     $("out-cost-out").textContent = "—"; $("out-cost-in").textContent = "";
-    /* §18.1 P0-1 + §18.10 P0-d, the leg's ONE declared behavioral delta: the early return used
+    /*  P0-1 +  P0-d, the leg's ONE declared behavioral delta: the early return used
        to leave whatever a previous state wrote in the disclosure and the feasibility PAIR —
        stale receipts rendering under an "n/a — no headline is computed" tile. The pair clears
        AS A PAIR: the tile never shows a value whose receipt was removed, or vice versa. */
@@ -6251,11 +6244,11 @@ function updateTiles() {
     $("out-cost-out").textContent = "—"; $("out-cost-in").textContent = "";
     const pn = document.getElementById("out-price-note"); if (pn) pn.textContent = "";
     const un = document.getElementById("out-margin-unanchored"); if (un) un.textContent = "";
-    renderFeasibilityTile(appFeasibility(S)); // §18.1: this branch is mandatory + FEASIBILITY receipts — the pair repopulates here
+    renderFeasibilityTile(appFeasibility(S)); // : this branch is mandatory + FEASIBILITY receipts — the pair repopulates here
     commitTail();
     return;
   }
-  /* R2 (§1.2 gate-6 wiring; assembly-notes R-4b) as amended by R3 (memo D-3a): the
+  /* Typed hero wiring: the
      landing-hero decision — the ONE LANDING_HERO_MODE consultation site (the mode now
      rides INTO the engine predicate via appLandingHeroSuppressed, so BOTH branches
      route through this single suppression check: policy-labeled mode suppresses only
@@ -6271,7 +6264,7 @@ function updateTiles() {
   // R3 (D-3b, pinned value-token grammar): the identity is welded INTO the single value
   // node — the shareable unit alone carries the policy-labeled qualifier (screenshot-crop
   // bar); central-eligible states (structurally impossible for closed models) drop it.
-  /* bq-1141 M2 (GPT Pro 09-12 finding 1, accepted): the token is still minted as ONE string with the
+  /* Value identity: the token is still minted as ONE string with the
      identity welded to the number, and split only at the last step — number into the value node, the
      identity into #out-margin-status directly beneath it, a normal-sized status label inside the same
      tile. A crop of the number takes the label with it; a 48 px qualifier over three lines it did not. */
@@ -6297,7 +6290,7 @@ function updateTiles() {
     const idc = computeIdentity();
     TAIL.mandatory = "USER-DEFINED SCENARIO — Custom is a scratch model with no provider and no sourced parameters; this ≈" + Math.round(wl.margin * 100) + "% is not a provider estimate and is not compared to any cited claim range. It " + (idc.isModified ? "is edited" : "inherits the " + idc.lensName + " scenario preset + the model-default hardware blend") + ".";
   }
-  // R3 (memo D-3b — replaces the R2 Option-B suppression-coupled block, closing the
+  // R3 (the design requirements — replaces the R2 Option-B suppression-coupled block, closing the
   // latent regression: once the filtered default is policy-clean, heroSuppressedNow
   // goes false and a suppression-gated identity would silently vanish): the
   // policy-labeled identity is decided by the constructor's refusals, INDEPENDENT of
@@ -6323,7 +6316,7 @@ function updateTiles() {
       + ", NOT the clean central scenario. " + TAIL.mandatory;
   }
   if (curP && curP.kind === "analyst") TAIL.mandatory = "SITE-AUTHORED RECONSTRUCTION SCENARIO — not a source estimate. " + TAIL.mandatory;
-  // Slice C (memo C-4): a NON-default named-fleet selection leads with its identity +
+  // Fleet identity: a NON-default named-fleet selection leads with its identity +
   // class; the full attribution chain lives in the switcher disclosure + receipts.
   if (isNamedFleetId(FLEET_ID) && FLEET_ID !== DEFAULT_FLEET_ID)
     TAIL.mandatory = "NAMED FLEET SCENARIO — “" + FLEETS[FLEET_ID].name + "” (" + FLEETS[FLEET_ID].class
@@ -6331,8 +6324,8 @@ function updateTiles() {
       + TAIL.mandatory;
   if (MODIFIED_FROM) TAIL.mandatory = "MODIFIED SCENARIO (derived from " + MODIFIED_FROM + ") — not the published operating point; replay attribution removed. " + TAIL.mandatory;
   if (curM && curM.scenario) TAIL.mandatory = "TARIFF SCENARIO — architecture unidentified; this borrows the selected serving assumptions and is NOT a provider estimate. " + TAIL.mandatory;
-  /* im-vet-model-estimates (2026-09-19), Polaris gen60 ruling under owner note
-     note-20260919T142116Z-6b5c83. A row whose architecture IS identified but whose fleet this page
+  /* Model estimate correction adopted 2026-09-19.
+     Adjudicated 2026-09-19. A row whose architecture IS identified but whose fleet this page
      documents as owned or domestic-Chinese cannot be read as a provider claim through the shared
      rent lens at 50% utilization: that pairing is what drove grok to -0.7% against its own replay's
      +63.2%, and glm47 to -39.3%. The label is only for the LENS view — a replay of the provider's
@@ -6345,7 +6338,7 @@ function updateTiles() {
       ? "LENS SCENARIO — a rented-capacity planning lens at this page's utilization, applied to a fleet this page documents as owned or domestic. NOT a provider claim; this row has no published replay, so it has no provider claim at all — scenario only. "
       : "LENS SCENARIO — a rented-capacity planning lens at this page's utilization, applied to a fleet this page documents as owned or domestic. NOT a provider claim; the provider claim for this row is its §10 replay. ") + TAIL.mandatory;
   if (curM && curP && pairingSeverity(curM, curP) === "hard" && FORCE_EXPLORATORY) TAIL.mandatory = "⚠ EXPLORATORY (forced incompatible pairing) — " + TAIL.mandatory;
-  // Range-exploration hero identity (v2.1.3 M3): a loaded route is an explicit counterfactual,
+  // Range-exploration hero identity (v2.1.3): a loaded route is an explicit counterfactual,
   // never an estimate — the prefix is persistent while the config is active, plus a live drift
   // line whenever the current model/traffic selection moves the result off the authored range.
   // FIX 2: route identity reflects off-authored-scope viewing on THREE surfaces — the selector
@@ -6364,7 +6357,7 @@ function updateTiles() {
     }
   }
   if (curP && curP.kind === "exploration") {
-    // R3 (memo D-2e): the FULL integrity surface — the range NOUN and the
+    // R3 (the design requirements): the FULL integrity surface — the range NOUN and the
     // inside/OUTSIDE boolean — anchors to the typed authoredRange (fixed authorship
     // metadata, the shared half-open algebra), NEVER to the computed bucket (which
     // remains board-grouping truth only). Rebinding only the boolean would
@@ -6373,9 +6366,9 @@ function updateTiles() {
     const arLabel = authoredRangeLabel(curP);
     const curPct = wl.margin * 100;
     const trNow = resolvedTraffic();
-    /* b9 M5: a route's AUTHORED-RANGE verdict is a claim about its own construction — the
+    /* : a route's AUTHORED-RANGE verdict is a claim about its own construction — the
        procurement, utilization and stack vector it declares. The algorithmic-lead prior and the
-       family multipliers are an orthogonal scenario layer (plan §6.7), and letting them decide
+       family multipliers are an orthogonal scenario layer, and letting them decide
        whether a route "reached" its band would credit the construction for something it did not
        do: at the ratified +3 prior the ≥90 route clears 90 without a single one of its own
        assumptions changing. The verdict therefore evaluates the SAME construction at the
@@ -6418,7 +6411,7 @@ function updateTiles() {
   $("out-price").textContent = fmt$(wl.priceMix);
   { const pn = document.getElementById("out-price-note");
     if (pn) pn.textContent = (S.cacheHit > 0 && (S.cacheWriteShare || 0) === 0) ? "cache reads are modeled, but cache-write billing is 0% — effective price may be incomplete" : ""; }
-  renderHeroCalc(wl); // bq-2345: the operands and the division on the face, from the same state
+  renderHeroCalc(wl); // : the operands and the division on the face, from the same state
   $("out-cost-out").textContent = fmt$(wl.cOut);
   $("out-cost-in").textContent = "fresh input: " + fmt$(wl.cIn) + " · cache read: " + fmt$(wl.cCache);
   { const w = blendWeights(S);
@@ -6440,7 +6433,7 @@ function updateTiles() {
   commitTail(); // gate Q4: ONE atomic write per terminal path — this is the main-flow terminal
 }
 
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): rent is a
+/* Adopted 2026-08-22: rent is a
    visible component of the headline, described as an implied spread over this modelled TCO. */
 function renderRentSegment() {
   const el = $("out-rent-segment"); if (!el) return;
@@ -6458,7 +6451,7 @@ function renderRentSegment() {
     return;
   }
   const delta = spread.rentCostPerMtok - spread.tcoCostPerMtok;
-  /* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): a negative spread is a
+  /*  (corrected 2026-08-22): a negative spread is a
      different claim, not a zero lessor cut. Its bar is the one rental-basis total. */
   if (delta < 0) {
     el.append(document.createTextNode(rentSegmentText(spread, fmt$)));
@@ -6470,7 +6463,7 @@ function renderRentSegment() {
   }
   const cut = Math.max(0, delta);
   const share = spread.rentCostPerMtok > 0 ? Math.max(0, Math.min(1, cut / spread.rentCostPerMtok)) : 0;
-  /* bq-3550 (GPT Pro expert review F01): the sentence's own two phrases key the bar's two segments — the same
+  /*  (GPT Pro expert review F01): the sentence's own two phrases key the bar's two segments — the same
      words, wrapped so each carries its segment's swatch — and the lessor segment is drawn at the stated share to
      the percent (rent-pct-N) instead of snapped to tens (rent-share-N drew a stated 65% as 60%). */
   /* Inline, not a helper: the sink registry anchors this sentence's writes to renderRentSegment, and a write
@@ -6494,7 +6487,7 @@ function renderBasisCounterpart() {
   if (!value || !label || !note || !bandEl) return;
   let current;
   try { current = appWorkload(S); } catch { current = null; }
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): explicit sections
+  /*  (corrected 2026-08-23): explicit sections
      outrank the global lens when choosing the actual counterpart direction. */
   const bases = current && Array.isArray(current.composition)
     ? current.composition.map(row => row.basis) : [];
@@ -6530,7 +6523,7 @@ function renderBasisCounterpart() {
   const m = currentModel(), p = currentPersp();
   const dials = dialsFromRanges(S.dialRanges);
   if (!m || !p || !dials.length) return;
-  /* im-arc T1 fix (Sol review 2026-08-22, finding P1-2): this card promises the
+  /*  (corrected 2026-08-22): this card promises the
      selected span, so it renders the compounded corner box or stays hidden on refusal. */
   let band;
   try {
@@ -6551,7 +6544,7 @@ function renderBasisCounterpart() {
     bandEl.hidden = false;
   }
 }
-/* ================= b9 M6 (FA memo §6.1 D-6h): BYTE-NEUTRAL display segmentation =================
+/* =================  (FA  D-6h): BYTE-NEUTRAL display segmentation =================
    The justification tokens already carry their own internal separators, so the renderer splits on
    those PINNED boundaries into labeled paragraphs instead of inventing new prose. The split must be
    byte-neutral: rejoining the rendered segments with the same separators reproduces the token
@@ -6562,7 +6555,7 @@ function renderBasisCounterpart() {
 const FA_SEGMENT_SEPARATORS = [
   { label: "What it claims", seps: [" · What it claims: "] },
   { label: "What it does not claim", seps: [" · What it does not claim: ", " · Not claimed: "] },
-  { label: "Why the public-data scenario differs", seps: [" · Why the public-data scenario differs: "] }, // bq-3520: the ≈58% is the public-data floor (owner ruling d-20260926)
+  { label: "Why the public-data scenario differs", seps: [" · Why the public-data scenario differs: "] }, // : the ≈58% is the public-data floor (adjudicated 2026-09-26)
   { label: "What would flip it", seps: [" · What would flip it: "] },
 ];
 function segmentJustification(txt) {
@@ -6591,9 +6584,9 @@ function renderSegmentedInto(el, txt) {
     el.appendChild(para);
   });
 }
-/* ================= b9 M6 (§20 R-2): the explain popup =================
-   Reuses the M4 <dialog> + showModal() PATTERN rather than reinventing it, with ONE deliberate
-   difference the owner's ruling requires: an OPAQUE page-coloured ::backdrop, because
+/* =================  (§20 R-2): the explain popup =================
+   Reuses the existing <dialog> + showModal() PATTERN rather than reinventing it, with ONE deliberate
+   difference the adopted design requires: an OPAQUE page-coloured ::backdrop, because
    `.cf-dialog::backdrop`'s rgba(0,0,0,0.45) dim is exactly the "grayed-out background" R-2 rules
    out.
    ON "one dialog element": stated precisely, because the loose phrasing was false. Exactly like
@@ -6609,8 +6602,8 @@ const FA_EXPLAIN_SPECS = {
 };
 let FA_EXPLAIN_RETURN_FOCUS = null;
 
-/* ================= b9 UX-A: the ONE explanation-dialog coordinator =================
-   WHY THIS EXISTS. M6 built a dialog that closes through a PRIVATE closure and removes by its own
+/* ================= the interface: the ONE explanation-dialog coordinator =================
+   WHY THIS EXISTS. The original implementation built a dialog that closes through a PRIVATE closure and removes by its own
    marker (`querySelectorAll("dialog[data-fa-explain]").forEach(d => d.remove())`). That was correct
    while the FA card was the only client. UX-A adds a second client (the tooltip payload), and the
    design gate showed two uncoordinated dialog systems can leave two dialogs open, can strand a
@@ -6623,7 +6616,7 @@ let FA_EXPLAIN_RETURN_FOCUS = null;
    dormant relocation helper ships, and no test pretends relocation is exercised here. */
 const EXPLAIN = { phase: "idle", dialog: null, sources: [], returnFocus: null, scrollY: 0, bodyOverflow: "" };
 
-/* b9 UX-B: the PRODUCER the UX-A skeleton was waiting for. It writes NO content — it changes a
+/* the interface: the PRODUCER the UX-A skeleton was waiting for. It writes NO content — it changes a
    parent — so it is not a claim sink; every figure the dialog shows was emitted and classified by
    the source surface's own registered emitter. The recovery coordinates are recorded HERE, before
    the move, because they are unrecoverable afterwards. */
@@ -6643,7 +6636,7 @@ function explainRelocate(node, body) {
    swallowed a failed replaceWith, cleared `sources`, and let closeActiveExplain() remove the dialog
    with the live node still inside it. Returns TRUE only if every source is back in the document. */
 function explainRestoreSources() {
-  /* b9 UX-C (memo §18.11 A-1): the restore is TRANSACTIONAL over the whole plan. With a
+  /* the interface (transactional restore): the restore is TRANSACTIONAL over the whole plan. With a
      multi-source payload, independent per-source restoration was a fracture factory — one
      receipt back on the page (where the coarse rule hides it at rest) while the other
      strands in the kept dialog. Three phases:
@@ -6702,7 +6695,7 @@ function closeActiveExplain() {
   EXPLAIN.phase = "closing";
   const returnFocus = EXPLAIN.returnFocus, scrollY = EXPLAIN.scrollY;
   const restored = explainRestoreSources();       // sources FIRST, removal after — never the reverse
-  /* b9 UX-B (design gate P0-4) as redesigned by UX-C (§18.2b/§18.10 P1-a): removal is
+  /* the interface (design gate P0-4) as redesigned by UX-C (§18.2b/§18.10 P1-a): removal is
      CONDITIONAL on every relocated source being back in the document. On a failed restore the
      close now REPORTS the failure instead of lying about it: phase = "stranded" (not "idle"),
      the dialog and the COMPLETE source plan stay retained, and focus/scroll are NOT restored —
@@ -6738,7 +6731,7 @@ function closeActiveExplain() {
   return true;
 }
 
-/* ============ b9 UX-C (memo §18.11 B-1/§18.12-13): pending work + navigation intents ============
+/* ============ the interface (navigation dispatcher): pending work + navigation intents ============
    PENDING_LEVEL is a MONOTONE level (null → "render" → "full"), never downgraded by a lesser
    abort. PENDING_DOWNGRADE is the persisted continuation of an aborted identity downgrade
    ({kind, originId/originName}); every identity-transaction head clears it (the clear IS the
@@ -6758,7 +6751,7 @@ function runNavIntent() {
   const intent = NAV_INTENT; NAV_INTENT = null;
   if (!intent) return;
   if (intent.kind === "load-scroll") {
-    /* q-im-tile-position (2026-08-18): the headline tile left .hero-row for the projections block,
+    /* the adopted decision (2026-08-18): the headline tile left .hero-row for the projections block,
        so the target is the TILE. ".hero-row" survives as the fallback rather than as the target —
        scrolling a reader to the supporting cost/price tiles after they asked to load an estimate
        would land them below the number they asked to see. */
@@ -6878,14 +6871,14 @@ window.addEventListener("pagehide", () => { if (EXPLAIN.phase !== "idle") closeA
 window.addEventListener("pageshow", (e) => { if (e.persisted && EXPLAIN.phase !== "idle") closeActiveExplain(); });
 
 
-/* ---------- b9 UX-B: the document/explainer payload registry ---------- */
-/* Every payload resolves its nodes LIVE, at open time (memo D-B6). A startup-captured reference
+/* ---------- the interface: the document/explainer payload registry ---------- */
+/* Every payload resolves its nodes LIVE, at open time (the design requirements). A startup-captured reference
    would go stale the moment buildControls() rebuilds a panel, and hand the dialog a detached node.
    `anchor` is what the trigger is inserted BEFORE — never inside the relocated node, and never
    after the disclosure: after it, a reader who expands §10 finds the affordance 33,472 characters
-   below where they started, i.e. they must first take exactly the reading path owner ruling R-2
+   below where they started, i.e. they must first take exactly the reading path the adopted decision R-2
    rejects in order to reach the thing that replaces it (design gate P0-1). */
-/* bq-1141 M10 (GPT Pro 09-12 finding 9, accepted; 09-25 finding 12): fourteen-plus identical "Deeper
+/* Shared explanation coordinator: fourteen-plus identical "Deeper
    explanation" buttons made a reader relearn every one. Each trigger now names its destination; the
    labels are unique by construction (one payload id, one label). */
 const EXPLAIN_PROVIDER_NAMES = { openai: "OpenAI", google: "Google", xai: "xAI", deepseek: "DeepSeek", zhipu: "Zhipu", moonshot: "Moonshot" };
@@ -6929,7 +6922,7 @@ const EXPLAIN_PAYLOADS = (() => {
   list.push({ id: "front-door", anchor: q("#front-door-detail"), src: q("#front-door-detail"), scope: "",
     title: () => { const c = document.querySelector("#range-chips .range-chip[aria-pressed='true']"); return c ? c.textContent.trim() : "Range detail"; },
     mirrorHidden: q("#front-door-detail") });
-  /* b9 UX-C (memo §18.2): the first MULTI-source payload — the hero's receipt region and the
+  /* the interface: the first MULTI-source payload — the hero's receipt region and the
      feasibility receipt, two nodes in two tiles, POPUP-SPLIT: mandatory labels stay inline and
      visible; ONLY receipts relocate. Anchor #out-margin-note is STABLE and never a source (only
      its .tile-receipts child moves). Title is fixed authored copy (gate Q3, §5 copy table).
@@ -6947,7 +6940,7 @@ const EXPLAIN_PAYLOADS = (() => {
 /* §18.3: the tails trigger's hidden-state derives LIVE from both sources at every commit —
    content-dependent visibility cannot live in rebuild-time wiring. Empty means genuinely
    empty (no text, no elements); a deliberately cleared pair therefore hides the trigger. */
-/* q-im-tile-position (2026-08-18): the hoisted headline tile's tail collapses behind one summary
+/* the adopted decision (2026-08-18): the hoisted headline tile's tail collapses behind one summary
    line, and that line's own visibility is content-dependent for the same reason syncTailTrigger()'s
    is — a "there is more here" affordance that opens onto nothing is a promise the page does not
    keep. The three children inside #hero-full each hide themselves when they have nothing to say
@@ -7013,7 +7006,7 @@ function wireExplainTriggers() {
   document.documentElement.dataset.explainReady = "1";
 }
 /* Delegated, so a trigger re-created by any rebuild is live immediately and can never be
-   double-bound. The three M6 triggers keep their own exclusive wiring (they re-assign onclick on
+   double-bound. The three original triggers keep their own exclusive wiring (they re-assign onclick on
    every renderFinalAnswer, so a second listener here would double-open). */
 document.addEventListener("click", e => {
   const b = e.target.closest("[data-explain]:not([data-fa-explain])");
@@ -7039,7 +7032,7 @@ function openExplain(payloadId, trigger) {
   }
   const p = explainPayload(payloadId); if (!p) return;
   const isEmptyNode = (el) => !el || (!el.textContent.trim() && !el.firstElementChild);
-  /* b9 UX-C (memo §18.2, P1-7): a MULTI-source payload probes-to-open on AT LEAST ONE source
+  /* the interface: a MULTI-source payload probes-to-open on AT LEAST ONE source
      non-empty; inside the build callback every source is re-resolved after the predecessor
      restored — ABSENT (resolver null: a structural defect) throws and rolls back the whole
      open; DELIBERATELY EMPTY (resolved, no content) relocates anyway, keeping the
@@ -7062,7 +7055,7 @@ function openExplain(payloadId, trigger) {
   if (isEmptyNode(probe)) return;   // never open an empty dialog
   explainOpen({ id: "explain-" + payloadId, title: p.title(), fa: false }, (body) => {
     /* The dialog body re-establishes the payload's ANCESTOR CONTEXT. Measured, not assumed
-       (research/b9-ux-survey/ancestor-css-probe.mjs): under a bare .explain-body wrapper 18
+       (the layout probe): under a bare .explain-body wrapper 18
        selectors change and the loss is STRUCTURAL, not typographic — `table` renders display:block,
        the two-column .kk grid collapses, provider cards lose border/background/padding, and the
        evidence badges lose their colour. With the payload's own scope class, the round trip is
@@ -7083,10 +7076,10 @@ function openExplain(payloadId, trigger) {
   }, trigger);
 }
 
-/* M6 compatibility adapter — kept so the sink registry's function-anchored `final-answer` rule and
+/* Dialog compatibility adapter — kept so the sink registry's function-anchored `final-answer` rule and
    the gate-closed CDP suite both still see the names they pin. It builds nothing itself now. */
 function faExplainShell(spec) {
-  /* Superseded by explainShell() + the coordinator (UX-A). M6's original body removed dialogs
+  /* Superseded by explainShell() + the coordinator (UX-A). The original body removed dialogs
      directly — `querySelectorAll("dialog[data-fa-explain]").forEach(d => d.remove())` — which
      bypassed phase transitions, focus restore, scroll cleanup and the generic dialog entirely, and
      could leave a dangling reference to a removed node. Its own native-`close` listener was also
@@ -7099,14 +7092,14 @@ function faExplainShell(spec) {
 function openFaExplain(kind, trigger) {
   const spec = FA_EXPLAIN_SPECS[kind]; if (!spec) return;
   const fa = FINAL_ANSWER_CACHE || (FINAL_ANSWER_CACHE = finalAnswer());
-  /* Payload construction is UNCHANGED from M6 — the two-node must-not-be-called inventory, the
+  /* Payload construction is UNCHANGED from the original implementation — the two-node must-not-be-called inventory, the
      segmentation and the exec payload all render exactly as before. Only WHO owns the shell and
      the close path changed. */
   explainOpen({ ...spec, fa: true }, (dialogBody) => {
   const sh = { body: dialogBody };
   const para = (txt, cls, id) => { const d = mkEl("div", cls || "explain-body", txt); if (id) d.id = id; sh.body.appendChild(d); return d; };
   if (kind === "answer") {
-    para(fa.tokens.landingReadingLine);   // row 499: the dialog carries it too, in the same order
+    para(fa.tokens.landingReadingLine);   // the recorded review: the dialog carries it too, in the same order
     para(fa.tokens.referenceReadingLine);
     para(fa.tokens.c2LabelLine);
     /* The SECOND node of the closed two-node vocabulary inventory. Trigger 1's payload is blocks
@@ -7148,12 +7141,12 @@ function faExplainExecPayload(fa, para) {
 function faCoarsePointer() {
   return typeof window.matchMedia === "function" && window.matchMedia("(pointer: coarse)").matches;
 }
-const FA_EXEC_ORDERING_BASIS = "Ordering basis: the owner's declared plausibility order. These rows are NOT sorted by result — reading them as a ranking by size would be reading a ranking this page did not make.";
-/* R3 Row 1 (design memo D-9): the final-answer block renders from engine
+const FA_EXEC_ORDERING_BASIS = "Ordering basis: the declared plausibility order. These rows are NOT sorted by result — reading them as a ranking by size would be reading a ranking this page did not make.";
+/* R3 the recorded review (the design requirements): the final-answer block renders from engine
    finalAnswer() ONLY — the thesis baseline (clean derived flagship default), static
    per engine data, cached per page load. Live slider state can never move these
    values; the differs-note is the only live element. Visible under BOTH hero modes. */
-/* bq-1141 M2: a value token is "<number> — <identity>". The number goes to the value node; the
+/* Value identity: a value token is "<number> — <identity>". The number goes to the value node; the
    identity to the status node directly under it. Both come from the SAME string, so the label can
    never describe a different number than the one above it. Pure: the writes stay at their surfaces,
    where the sink registry classifies them (hero-tile vs final-answer never alias). */
@@ -7167,23 +7160,23 @@ function renderFinalAnswer() {
   if (!document.getElementById("final-answer")) return;
   if (!FINAL_ANSWER_CACHE) FINAL_ANSWER_CACHE = finalAnswer();
   const fa = FINAL_ANSWER_CACHE;
-  { const [v, full] = splitToken(fa.tokens.planningPoint); // bq-1141 M2: one token, number + status label (D-3b crop unit = the tile)
-    /* bq-3520: the token names the reading ("public-data floor, …") so it stays a complete crop unit on every other
+  { const [v, full] = splitToken(fa.tokens.planningPoint); // Value identity: one token, number + status label (D-3b crop unit = the tile)
+    /* : the token names the reading ("public-data floor, …") so it stays a complete crop unit on every other
        transport; on the tile the title directly above already says "Public-data floor", so the status label starts
-       after the name rather than repeating it (bq-1141 review residual (a)). Same string, a prefix dropped; the two
+       after the name rather than repeating it (identity display). Same string, a prefix dropped; the two
        DOM writes below are byte-identical to before, so the sink registry is unchanged. */
     const st = full.startsWith(FA_TILE_NAME_PREFIX) ? full.slice(FA_TILE_NAME_PREFIX.length) : full;
     $("fa-planning-point").textContent = v;
     $("fa-planning-status").textContent = st; }
   $("fa-subject").textContent = fa.subject;
-  /* Owner annotation nbc7fc1: the title-length line above the fold. Both come from the engine and
+  /* Title-length display: the title-length line above the fold. Both come from the engine and
      are minted side by side there, so the short form can never say something the full declaration
      under it does not. */
   { const el = document.getElementById("fa-subject-short"); if (el) el.textContent = fa.subjectShort; }
   $("fa-identity").textContent = fa.tokens.identityLine;
-  /* b9 M6 (§2.1 D-6): the five-part surface. M5's single interim-pin line is retired; each token
+  /*  (§2.1 D-6): the five-part surface. The single interim-pin line is retired; each token
      now states its OWN basis inside itself, which is what a second visible reading requires. */
-  $("fa-landing-reading").textContent = fa.tokens.landingReadingLine;   // row 499: the hero the page opens on
+  $("fa-landing-reading").textContent = fa.tokens.landingReadingLine;   // the recorded review: the hero the page opens on
   $("fa-reference-reading").textContent = fa.tokens.referenceReadingLine;
   $("fa-c2-label").textContent = fa.tokens.c2LabelLine;
   $("fa-must-not-be-called").textContent = fa.tokens.mustNotBeCalledLine;
@@ -7196,14 +7189,14 @@ function renderFinalAnswer() {
      than inside #fa-full. Assigning it here (rather than in the higher-justifications block
      below) keeps ONE assignment site for every FA token, which is what the render-parity fixture
      walks; the relocation is expressed in index.html, where placement belongs. */
-  $("fa-most-plausible").textContent = fa.tokens.mostPlausibleLine; // Authority-2 token (memo J-5)
+  $("fa-most-plausible").textContent = fa.tokens.mostPlausibleLine; // Authority-2 token (shared engine token)
   $("fa-band-line").textContent = fa.tokens.bandLine;
   $("fa-lens-span").textContent = fa.tokens.lensSpanLine || "";
   $("fa-traffic-span").textContent = fa.tokens.trafficSpanLine || "";
   $("fa-exclusion").textContent = fa.tokens.exclusionLine || "";
   $("fa-invitation").textContent = fa.tokens.invitationLine;
   $("fa-annex-link").href = "research/" + encodeURIComponent(fa.evidenceAnnexId) + ".html";
-  /* FA higher-justifications subsection (memo v7 J-2): tokens render byte-intact —
+  /* FA higher-justifications subsection (shared engine tokens): tokens render byte-intact —
      the summary shows the entry's own head segment; the body is the FULL token
      string; links come from the typed records (claim URL + registry surfaces). */
   $("fa-decomposition").textContent = fa.tokens.decompositionLine;
@@ -7243,7 +7236,7 @@ function renderFinalAnswer() {
   wireFaExplainTriggers();
   refreshFinalAnswerDiffers();
 }
-/* ================= b9 M6 (FA memo §5, D-7): the analyst-gap EXECUTIVE SUMMARY =================
+/* =================  (FA ): the analyst-gap EXECUTIVE SUMMARY =================
    Emitter class `executive-summary` (weld-required). Four rows move exactly ONE control from the
    calculator's own default state and show what the engine then computes; the fifth names a lever
    this page cannot price on public evidence and says so instead of showing a number. Every string
@@ -7270,7 +7263,7 @@ function renderExecSummary(fa) {
     wrap.appendChild(box);
   });
 }
-/* The low-evidence affordance (owner ruling 2026-07-30; memo §16.2 A-3 as scoped by §17.4). TWO
+/* The low-evidence affordance (the adopted decision 2026-07-30;  A-3 as scoped by §17.4). TWO
    typed states, because the honest state of the world has two: a parameter that HAS a control
    (jump to it and focus it — spec-decode's sibling case, and the state that proves the pattern
    actually fires), and a lever with NO control yet, which says so rather than rendering a dead
@@ -7302,7 +7295,7 @@ function lowEvidenceAffordance(le) {
        <body>. The affordance never releases the lock on the reader's behalf (that is the reader's
        choice, and the lock is a deliberate feature); it takes them to the row and lands focus there
        so the row is announced and keyboard navigation continues from it. */
-    /* b9 spec-decode LEVER (§6.2). The A-3 affordance says "Set your own" and jumps to the control —
+    /* spec-decode LEVER (§6.2). The A-3 affordance says "Set your own" and jumps to the control —
        but from the default state the spec-decode control is DISABLED by the D-SD-7 gate, so the jump
        would land on something the reader cannot use.
 
@@ -7319,10 +7312,10 @@ function lowEvidenceAffordance(le) {
 
        THIS IS A SHARED AFFORDANCE — the two utilization rows use it too, and T-14's regression guard
        asserts they still focus their enabled `util` control exactly as before. */
-    /* row 499: a 2/3-point BOUND handle is not "the control this affordance is for" either — it is a
+    /* the recorded review: a 2/3-point BOUND handle is not "the control this affordance is for" either — it is a
        second statement about the same dial, and landing a reader on "lower bound" when they asked to
        set the value is the same miss the `.info` exclusion above already names. */
-    /* Owner annotation ndadaca (2026-08-17), caught by T-14 rather than by inspection: the gate's
+    /* Adopted 2026-08-17: the gate's
        own unlock button now lives inside the specDec row, and it is a `button`, is not `.info`,
        and is ENABLED under exactly the gate that disables everything else — so this search found
        it and focused it, which is the T-14 failure verbatim. It belongs with `.info` in the
@@ -7352,9 +7345,9 @@ function wireFaExplainTriggers() {
    compares the live canonical state identity against `finalAnswer().referenceState` — the
    fingerprint of the readings the block actually prints.
 
-   Why it had to change, concretely: before row 499 the page opened on `median`, so
+   Why it had to change, concretely: before the recorded review the page opened on `median`, so
    `isCentralClean()` and "the reader has not moved off the opening state" were the same
-   predicate. Row 499 moved the opening state to a named preset and split them — and it migrated
+   predicate. The adopted design moved the opening state to a named preset and split them — and it migrated
    the OTHER callers (central-return sync, hero suppression, gate-7 eligibility keep
    `isCentralClean()`, which is correct: those are about the central scenario itself). This one
    was missed. The visible consequence was a notice reading "The scenario currently selected
@@ -7490,14 +7483,14 @@ refreshSkinToggle();
 refreshThemeToggle();
 
 /* ---------- init ---------- */
-SLIDER_LOCK = loadSliderLock(); // b9 M5 §12.3: the persisted scroll-lock choice, fail-closed
+SLIDER_LOCK = loadSliderLock(); //  §12.3: the persisted scroll-lock choice, fail-closed
 fillPresetSelects();
-renderBoard(); // static registry render (M3); per-state highlight rides renderAll → updateBoard
+renderBoard(); // static registry render (typed registry); per-state highlight rides renderAll → updateBoard
 renderFrontDoor(); // range-explorer entry point above the catalog; renders route cards only — never writes the hero state
 if (loadScenarioFromURL()) { fullRefresh(); } else { applyPreset(); }
-renderAstraProChart(); // §10 Astra Pro estimates (bq-3351): static registry render, independent of the calculator state
+renderAstraProChart(); // §10 Astra Pro estimates: static registry render, independent of the calculator state
 window.addEventListener("resize", () => { if ((window.innerWidth < 760) !== ASTRA_PRO_CHART_NARROW) renderAstraProChart(); });
-/* bq-3550 (internal review R5): a breakpoint redraw rebuilds the chart's subtree, so it hands focus back to the
+/*  (internal review R5): a breakpoint redraw rebuilds the chart's subtree, so it hands focus back to the
    same mark (by position among the chart's focusable marks) and re-opens any table view that was open. */
 function rerenderChartKeepingState(id, render) {
   const el = document.getElementById(id);
@@ -7519,12 +7512,12 @@ window.addEventListener("resize", () => {
 });
 { const b = document.getElementById("share-scenario"); if (b) b.onclick = copyScenarioLink; }
 wireLoadOpLinks(); // §10/§6 "Load this operating point ↑" links (selector dissolve)
-wireSetDefaultButtons(); // note-20260912T180812Z-c9eaac: "set as default" on the estimate and stress cards
-wireExplainTriggers(); // b9 UX-B: the document/explainer popup routes (idempotent; re-run on rebuild)
-explainRevealHashTarget(); // b9 UX-B: a deep link arriving on FIRST LOAD, not only on hashchange
-/* ---------- b9 UX-B: deep links, and print ---------- */
+wireSetDefaultButtons(); // the note of 2026-09-12: "set as default" on the estimate and stress cards
+wireExplainTriggers(); // the interface: the document/explainer popup routes (idempotent; re-run on rebuild)
+explainRevealHashTarget(); // the interface: a deep link arriving on FIRST LOAD, not only on hashchange
+/* ---------- the interface: deep links, and print ---------- */
 /* THE DRAFT'S HANDLER WAS BROKEN, and executing it is what showed that
-   (research/b9-ux-survey/hash-print-probe.mjs). Every in-repo deep link into the report targets
+   (the hash-print probe). Every in-repo deep link into the report targets
    `#sN` — site/engine.js:2067 (#s3), :2081 (#s5), the claim anchors at :3819-3856, and the ten TOC
    links — and by the §17.2 contract the <h3 id="sN"> sits OUTSIDE its <details>, precisely so the
    MCP slicers keep working. So "open every ancestor <details> of the target" opens NOTHING: the

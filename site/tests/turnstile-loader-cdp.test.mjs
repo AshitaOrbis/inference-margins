@@ -1,7 +1,7 @@
 // TURNSTILE LOADER STATE MACHINE — deterministic release coverage, over CDP.
 //
 // WHY THIS FILE EXISTS. The feedback form's challenge loader was given a bounded-failure path
-// (im-share-finalization, 2026-09-02) and GPT Pro review pr-20260902T153840Z-bce1bb finding 3
+// (im-share-finalization, 2026-09-02) and GPT Pro review a research review on 2026-09-02 finding 3
 // observed, correctly, that NO release suite reached it: run-app-tests.sh performs no form
 // interaction by design, and its 5,000 ms virtual-time budget / 8,000 ms process timeout are both
 // shorter than the 10,000 ms branch. A loader repair no gate executes is a correct-by-comment

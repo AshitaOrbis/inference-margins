@@ -1,11 +1,11 @@
-/* R2 claim-contract TYPES — shared verbatim by the Node package and the Worker build.
+/* Claim-contract TYPES — shared verbatim by the Node package and the Worker build.
    The runtime bridge lives in claims.ts (Node: createRequire) and
    worker/overrides/claims.ts (Worker: bundler import) — BOTH resolve to the ONE
    runtime source of truth, site/engine-contracts-v22.js; this package never
    re-implements a contract. */
-/* R2 claim contracts on the MCP side — TS DISCRIMINATED UNIONS over the migrated
-   engine contracts (im4-r2-shipment-plan §1.1; harness-R1 assignment: type-level
-   closure lands with R2 on the MCP transports; the WeakSet-brand runtime lives in
+/* Claim contracts on the MCP side — TS DISCRIMINATED UNIONS over the migrated
+   engine contracts (type-level
+   closure covers the MCP transports; the WeakSet-brand runtime lives in
    site/engine-contracts-v22.js — ONE runtime source of truth, typed here).
 
    The unions make illegal states unrepresentable at compile time: a claim is EITHER
@@ -92,8 +92,8 @@ export interface MintSpec {
 }
 
 /* ---------- emission boundary ---------- */
-/* b9 M6: this union was ALREADY STALE — it lacked `final-answer`, which entered the
-   closed set at R3. M6 fixes that pre-existing drift while adding its own class. */
+/* This union was ALREADY STALE — it lacked `final-answer`, which entered the
+   closed set earlier. This update fixes that pre-existing drift while adding its own class. */
 export type EmitterClass =
   | "hero-tile" | "hardware-lens-tile" | "identity-strip" | "evidence-board"
   | "share-string" | "mcp-json" | "mcp-text" | "report-dossier"

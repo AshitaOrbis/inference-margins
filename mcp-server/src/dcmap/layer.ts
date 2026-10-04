@@ -19,7 +19,7 @@ import type { EconomicsContext, LegacyEngine, LegacyRegistry } from "./economics
 import type { Release } from "./economics/release.js";
 import type { ToolResult } from "../shape.js";
 
-/* The legacy context U3 asks for: the unchanged engine, and the unchanged T4 registry module whose
+/* The legacy context U3 asks for: the unchanged engine, and the unchanged datacenter registry module whose
    `validateDcRegistry` gates a release's adapter rows before they price anything.
 
    `profiles` is EMPTY, deliberately. A registered comparison profile is producer/ledger state —
@@ -81,12 +81,11 @@ export function releaseRefusal(tool: ToolName, closed: ClosedLayer): ToolResult 
 /** Run one datacenter tool. The envelope's PRODUCER fields are U3's, unmodified; this layer adds
     exactly one field of its own, and adds it on every path.
 
-    bq-2188. `release_binding` says WHERE the bytes were loaded from — filesystem on the Node
+    `release_binding` says WHERE the bytes were loaded from — filesystem on the Node
     server, embedded at build time in the Worker. It is this layer's fact, not U3's, which is why
     `OutputSchemas` is strict without it, and it was published on the refusal path only.
 
-    BE PRECISE ABOUT WHAT WAS MISSING, because the first version of this comment was not (Astra
-    xhigh review, 2026-09-10, finding B4). A successful response ALWAYS named its release: U3's
+    BE PRECISE ABOUT WHAT WAS MISSING, because the first version of this comment was not (corrected 2026-09-10). A successful response ALWAYS named its release: U3's
     `respond` sets `release_id` from `release.manifest.release_id` on every envelope. What the
     success path omitted was LOADING PROVENANCE — not which release, but whether these bytes were
     read off a filesystem or baked into a bundle. That is the axis on which Node and Worker legally

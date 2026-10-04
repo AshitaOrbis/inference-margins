@@ -1,17 +1,17 @@
-/* Frontier Inference Margins — WS-C uncertainty & provenance contract (IM2, v2.2 re-engineer).
+/* Frontier Inference Margins — uncertainty and provenance contract (v2.2).
    Pure data-contract module: no DOM, no engine, node-importable for tests. Follows the engine.js
    idiom (plain functions; module.exports guard + browser-global fallback at the bottom).
 
-   Governing plan: im-reengineer-defaults-2026-07-16 (private workspace plan) — §3 WS-C ("contract
-   first"), §2 design principle 2 (uncertainty decomposed by component, each basis labeled; NO
-   fit-residual-as-uncertainty). Council packet P0-1 (the ten components, each with a basis label).
-   Owner ruling 1 (2026-07-16): the displayed output is a BAND + a labeled central SCENARIO.
+   Contract adopted 2026-07-16.
+   Uncertainty is decomposed by component (each basis labeled; NO
+   fit-residual-as-uncertainty). There are ten components, each with a basis label.
+   Adopted 2026-07-16: the displayed output is a BAND + a labeled central SCENARIO.
 
    THIS MODULE DEFINES THE ALGEBRA; IT DOES NOT PROPAGATE.
    composeBand() combines the STATED component ranges (multiplicative factors on the central value)
    into a displayed band — the composition algebra the contract must specify precisely. It does NOT
    push named input ranges through the engine cost function; that grid / published-seed Monte-Carlo
-   propagation is D2 / IM5 work and is deliberately absent here (plan §3 WS-C "propagation after D2").
+   propagation is deferred work and is deliberately absent here.
 
    NO COVERAGE / CONFIDENCE LANGUAGE. Enforced two ways: (a) the band label is drawn from a closed
    set {"stress envelope", "selected span"} — never "confidence interval" / "CI"; (b)
@@ -20,7 +20,7 @@
 
 "use strict";
 
-/* ---------- the ten uncertainty components (council P0-1), fixed canonical order ---------- */
+/* ---------- the ten uncertainty components (typed component contract), fixed canonical order ---------- */
 const UNCERTAINTY_COMPONENTS = [
   "measurement",      // reading/measurement error in the source figure itself
   "price",            // $/device-hr: market rate, contract base, procurement scalar
@@ -45,20 +45,20 @@ const BASES = [
 
 /* ---------- composition rules: the ALGEBRA by which component ranges combine into a band ----------
    Named + specified here so the contract is concrete and testable. The engine-side propagation that
-   would evaluate the real cost function at grid corners is IM5 and is intentionally NOT implemented. */
+   would evaluate the real cost function at grid corners is deferred and is intentionally NOT implemented. */
 const COMPOSITION_RULES = [
   "linear-worst-case",   // all downside factors multiply; all upside factors multiply
   "grid-envelope",       // min/max over a discrete corner grid (== worst-case for independent factors;
-                         //   the IM5 engine version evaluates the real cost fn at the corners)
+                         //   a future engine version evaluates the real cost fn at the corners)
   "quadrature",          // combine log-space deviations in quadrature (uncorrelated-factor assumption)
   "dominant-component",  // the single widest component sets the band (the others are folded in)
 ];
 
 /* ---------- band-display contract: the ONLY permitted band labels ---------- */
-// Owner ruling 1: band + central scenario. No coverage/confidence vocabulary anywhere.
+// the adopted decision 1: band + central scenario. No coverage/confidence vocabulary anywhere.
 const BAND_LABELS = ["stress envelope", "selected span"];
 
-/* ---------- appliesTo: which quantity a component's range decorates (IM2 gate P0-1/P1-4) ----------
+/* ---------- appliesTo: which quantity a component's range decorates (range-component contract) ----------
    A component must name the quantity it applies to. This is what makes council P0-1 structurally
    enforceable in the schema: on a FITTED/RETRO/PROSPECTIVE (measured) row, a component scoped to the
    measured quantity itself (`throughput`) is REJECTED there (evidence-schema.js) — you cannot dress a
@@ -69,9 +69,9 @@ const APPLIES_TO = ["throughput", "price", "margin", "fleet-share"];
 /* ---------- forbidden vocabulary (WS-C naming rule; imported by evidence-schema.js) ----------
    Coverage/confidence statistics language that would imply a calibrated interval the evidence does
    not support (council P0-1; cold-review #3's "80%-confidence interval"). No coverage/confidence
-   language until prospective post-freeze coverage exists (plan §6; protocol §8: not before >=5
+   language until prospective post-freeze coverage exists (protocol : not before >=5
    PROSPECTIVE scores AND a published coverage analysis). */
-// Hardened after the IM2 gate (P1-2): stems + abbreviations + dotted forms, not just whole words.
+// Hardened by the vocabulary contract: stems + abbreviations + dotted forms, not just whole words.
 const FORBIDDEN_VOCAB = [
   /\bconfiden\w*/i,                     // confidence / confident / "95%-confident" (stem)
   /\bconf\./i,                          // "conf." abbreviation
@@ -108,7 +108,7 @@ function makeUncertaintyObject(f = {}) {
   const components = Array.isArray(f.components) ? f.components : [];
   const composition = f.composition || "linear-worst-case";
   const band = f.band || {
-    low: null, high: null,           // null in IM2: the band is filled by composeBand()/IM5 propagation
+    low: null, high: null,           // null here: the band is filled by composeBand() and future propagation
     unit: f.central ? f.central.unit : undefined,
     label: bandLabelFor(components),
     derived: false,
@@ -132,7 +132,7 @@ function bandLabelFor(components) {
 // Returns { low, high, unit, label, derived:true }. This is the algebra the contract specifies;
 // it does not run the engine cost function.
 function composeBand(u) {
-  // bq-291: refuse to DERIVE unless every input is finite.
+  // : refuse to DERIVE unless every input is finite.
   //
   // The old guard was `typeof u.central.value !== "number"`, which admits NaN and
   // Infinity. A NaN central produced band.low/high = NaN while still returning
@@ -155,7 +155,7 @@ function composeBand(u) {
       error: "cannot compose a band from non-finite component multipliers (" + nonFinite.length + " component(s))" };
   }
   if (comps.length === 0) {
-    // An empty component set is a rejection, not a zero-width band (IM2 gate P2): a band with no
+    // An empty component set is a rejection, not a zero-width band (component contract): a band with no
     // decomposed source is exactly the unpropagated point the contract exists to forbid.
     return { low: null, high: null, unit: u.central.unit, label: bandLabelFor(comps), derived: false,
       error: "cannot compose a band from an empty component set" };
@@ -234,12 +234,12 @@ function validateUncertaintyComponent(c, path) {
   const errors = [];
   if (!c || typeof c !== "object") return [path + " missing"];
   if (!UNCERTAINTY_COMPONENTS.includes(c.component))
-    errors.push(path + '.component "' + c.component + '" not one of the ten (council P0-1)');
+    errors.push(path + '.component "' + c.component + '" not one of the ten (the uncertainty contract)');
   if (!APPLIES_TO.includes(c.appliesTo))
-    errors.push(path + '.appliesTo "' + c.appliesTo + '" not one of ' + APPLIES_TO.join("/") + " (which quantity the range decorates — IM2 gate P0-1)");
+    errors.push(path + '.appliesTo "' + c.appliesTo + '" not one of ' + APPLIES_TO.join("/") + " (which quantity the range decorates)");
   if (!c.basis || !BASES.includes(c.basis))
     errors.push(path + '.basis "' + c.basis + '" missing/invalid — every component MUST carry a basis (P0-1)');
-  // bq-291: Number.isFinite, not typeof. `typeof NaN === "number"` and
+  // : Number.isFinite, not typeof. `typeof NaN === "number"` and
   // `typeof Infinity === "number"`, so a typeof gate admits both — and every
   // comparison that follows is then vacuously false (NaN <= 0 is false, and
   // NaN > NaN is false), so a NaN multiplier passed the floor AND the ordering
@@ -259,9 +259,9 @@ function validateUncertaintyObject(u, path) {
   path = path || "uncertainty";
   const errors = [];
   if (!u || typeof u !== "object") return [path + " missing"];
-  // bq-291: finite, not merely "a number" — see the note in the component validator.
+  // : finite, not merely "a number" — see the note in the component validator.
   if (!u.central || !Number.isFinite(u.central.value))
-    errors.push(path + ".central.value required and must be FINITE — the display is always a band + a labeled central scenario (owner ruling 1); NaN/Infinity rejected");
+    errors.push(path + ".central.value required and must be FINITE — the display is always a band + a labeled central scenario (the adopted decision 1); NaN/Infinity rejected");
   if (!Array.isArray(u.components) || u.components.length === 0)
     errors.push(path + ".components must be a non-empty array (uncertainty is decomposed by component — P0-1)");
   else u.components.forEach((c, i) => errors.push(...validateUncertaintyComponent(c, path + ".components[" + i + "]")));

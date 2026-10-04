@@ -1,10 +1,10 @@
-// b9 UX-C — the claim-bearing tails: typed three-region split, the two-source POPUP-SPLIT
+// development — the claim-bearing tails: typed three-region split, the two-source POPUP-SPLIT
 // payload, and the whole-lifecycle close-path redesign, over CDP.
-// Design contract: research/b9-ux-memo.md §18 (v6: gate-folded through SIX rounds, §18.9–§18.13).
+// Design contract: typed rendering and lifecycle invariants.
 //
 // WHAT THIS FILE IS FOR, AND THE CONTROLS THAT MAKE IT MEAN SOMETHING:
-//   * RE-MINTED 2026-09-10 (im-release-edit-r3), owner ruling
-//     d-20260910-im-adopt-fleet-rents-and-correct-grok: 20 of 22 states moved, all of them
+//   * RE-MINTED 2026-09-10, the adopted decision
+//     adjudicated 2026-09-10: 20 of 22 states moved, all of them
 //     engine-derived readings following the adoption of planning rents for GB200, GB300 and
 //     Trainium3 — cost-lens spans 62.9–86.1% -> 68.0–87.2%, the renderable disclosure "5/8 legs,
 //     52% of declared weight" -> "7/7 legs, 100%", and each state's own margin. Two states moved
@@ -14,7 +14,7 @@
 //     archived/fixtures/fixtures-ux-c-tails.pre-rent-adoption-2026-09-10.json. No note changed
 //     SHAPE: the same regions, separators and receipt units, which U-C0's structural assertions
 //     below check independently of the bytes.
-//   * RE-MINTED AGAIN 2026-09-20 (im-vet-six-repairs, program bq-2835): 21 of 22 states moved,
+//   * RE-MINTED AGAIN 2026-09-20 (program the release): 21 of 22 states moved,
 //     all of them engine-derived readings following the two registry repairs — the two Trainium
 //     legs WITHDRAWN from the default fleet on evidence grounds (so every renderable disclosure
 //     reads "5/5 default member legs" behind the withdrawal clause, and the clause itself now
@@ -126,7 +126,7 @@ async function withPage(fn, { emulate = null, htmlPath = HTML } = {}) {
   }
 }
 
-/* im-arc T4 fold (2026-08-24): the MINT AID, opt-in and off by every default — the same house
+/*  (2026-08-24): the MINT AID, opt-in and off by every default — the same house
    pattern as DUMP_PARITY_HASHES in the MCP report-parity gate. UX_C_MINT=1 re-captures the
    fixture through the SAME drive module the replay uses, so capture and replay still cannot
    diverge, and prints what moved. It exists because the fold moved the calculator readings these
@@ -139,7 +139,7 @@ async function main() {
 
   /* ================= U-C0 — fixture replay: byte parity + structure ================= */
   await withPage(async (send, nav) => {
-    const declaredDelta = new Set(["incompatible"]); // §18.1 P0-1/§18.10 P0-d: the pair-clear states
+    const declaredDelta = new Set(["incompatible"]); //  P0-1/ P0-d: the pair-clear states
     for (const [sid, row] of Object.entries(FIXTURE.states)) {
       await nav(row.permalink ? "?s=" + encodeURIComponent(row.permalink.token) : "");
       if (!row.permalink) { try { await evalExpr(send, DRIVES[row.driveKind](...row.params)); } catch (e) { assert(`U-C0 ${sid}: drive`, false, e.message); continue; } }
@@ -189,8 +189,7 @@ async function main() {
         if (JSON.stringify(next.states[sid].capture) !== JSON.stringify(cap)) moved++;
         next.states[sid].capture = cap;
       }
-      /* im-release-edit-r3 (2026-09-10): this label was a HARDCODED CONSTANT naming the im-arc T4
-         fold, so every future mint would have stamped the fixture with the wrong provenance — a
+      /* publication revision (2026-09-10): this label was a HARDCODED CONSTANT naming the , so every future mint would have stamped the fixture with the wrong provenance — a
          mislabel that is worse than no label, because it reads as deliberate. It now comes from the
          minter, and an unset one says so loudly rather than inheriting somebody else's reason. */
       next.mintedUnder = process.env.UX_C_MINT_LABEL
@@ -618,7 +617,7 @@ async function main() {
     // startup-reorder mutation: reveal BEFORE the permalink load → the combined row must fail
     const broken = await patchedRun(
       src => {
-        const b = 'explainRevealHashTarget(); // b9 UX-B: a deep link arriving on FIRST LOAD, not only on hashchange';
+        const b = 'explainRevealHashTarget(); // the interface: a deep link arriving on FIRST LOAD, not only on hashchange';
         if (!src.includes(b)) throw new Error("patch anchor missing");
         return src.replace(b, "/* startup reveal wire REMOVED (mutation control) */");
       },

@@ -3,10 +3,9 @@
    Single endpoint /mcp; GET → 405 (no SSE notification stream in stateless mode); body capped
    at 64 KB. Request bodies are NEVER logged — they may contain a caller's private rates.
 
-   Robustness (Pro review 2026-07-29 rec 2 / findings C-4, C-5 — independently re-found as
-   bq-1014, bq-1251, bq-1196, bq-1252): a malformed Host header used to crash the process
-   (C-5), and the oversized-body path tore the socket down before the documented 413 could
-   be written (C-4). Every guard below traces back to one of those two findings; see the
+   Robustness (identified 2026-07-29 and independently confirmed): a malformed Host header used to crash the process,
+   and the oversized-body path tore the socket down before the documented 413 could
+   be written. Every guard below traces back to one of those two findings; see the
    inline comments at each site. */
 import http from "node:http";
 import type { Socket } from "node:net";
@@ -27,7 +26,7 @@ function logSafely(where: string, err: unknown): void {
 }
 
 function deny(res: http.ServerResponse, status: number, message: string): void {
-  // C-4: guard against writing to a response that already went out (e.g. the body-cap path
+  // Response handling: guard against writing to a response that already went out (e.g. the body-cap path
   // hitting the limit right as the client also finished sending) — a duplicate completion
   // must not throw ERR_STREAM_WRITE_AFTER_END.
   if (res.headersSent || res.writableEnded) return;
@@ -42,7 +41,7 @@ function deny(res: http.ServerResponse, status: number, message: string): void {
 }
 
 const httpServer = http.createServer(async (req, res) => {
-  // C-5: the whole body below is one try/catch so any throw — synchronous, or from an
+  // Exception handling: the whole body below is one try/catch so any throw — synchronous, or from an
   // awaited rejection — produces a 400 instead of escaping as an uncaught exception. The
   // req.on("end", async () => {...}) listener further down runs on its OWN call stack (a
   // separate async event-listener invocation), so this try/catch does not reach into it —
@@ -54,7 +53,7 @@ const httpServer = http.createServer(async (req, res) => {
     req.on("aborted", () => { /* client disconnected mid-request; nothing to respond to */ });
     res.on("error", (err) => logSafely("response stream", err));
 
-    // C-5: never interpolate the client-controlled Host into the URL base — a raw
+    // Exception handling: never interpolate the client-controlled Host into the URL base — a raw
     // `Host: a b` (or `Host: [`, `Host: [::1`) makes `new URL()` throw synchronously, which
     // used to kill the whole process from inside this listener. req.url is parsed against a
     // FIXED base; only the request path is ever needed here.
@@ -65,7 +64,7 @@ const httpServer = http.createServer(async (req, res) => {
       return deny(res, 405, "Method not allowed — this server runs stateless streamable HTTP; POST /mcp only");
     }
 
-    // C-4: reject by a valid, parseable Content-Length BEFORE reading any body at all.
+    // Response handling: reject by a valid, parseable Content-Length BEFORE reading any body at all.
     const declaredLength = req.headers["content-length"];
     if (declaredLength !== undefined) {
       const n = Number(declaredLength);
@@ -81,7 +80,7 @@ const httpServer = http.createServer(async (req, res) => {
       if (size > BODY_CAP) {
         capped = true;
         chunks.length = 0; // reject — never hold bytes past the cap (never logged either way)
-        // C-4: the previous code called req.destroy() HERE, before deny() had written
+        // Response handling: the previous code called req.destroy() HERE, before deny() had written
         // anything, tearing the socket down mid-response — the client saw a connection
         // reset instead of the documented JSON 413. Stop pulling more body in, write the
         // response, and only destroy once it has actually flushed (res "finish").
@@ -94,7 +93,7 @@ const httpServer = http.createServer(async (req, res) => {
     });
     req.on("end", async () => {
       // Own call stack (async event-listener invocation) — the outer try/catch above does
-      // not cover this; it needs its own guard (C-5).
+      // not cover this; it needs its own guard (exception handling).
       try {
         if (capped) return; // 413 already sent — see the "data" handler above
         let body: unknown;
@@ -137,7 +136,7 @@ const httpServer = http.createServer(async (req, res) => {
   }
 });
 
-// C-5 (rec 2): malformed request lines or header syntax can trip Node's own HTTP parser
+// Exception handling: malformed request lines or header syntax can trip Node's own HTTP parser
 // before a `req` object ever reaches the handler above — this is the only place that catches
 // that class. Canonical Node pattern: skip ECONNRESET / an already-non-writable socket (the
 // write would throw), otherwise hand back a bare 400 and close. No caller data to log.
@@ -147,7 +146,7 @@ httpServer.on("clientError", (err: NodeJS.ErrnoException, socket: Socket) => {
   socket.end("HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n");
 });
 
-// Last-resort guards (rec 2, same review): a throw that somehow still escapes every
+// Last-resort guards (exception handling): a throw that somehow still escapes every
 // per-request guard above must not take the whole server down. Log the error's shape only —
 // NEVER the request, a header value, or the body (see file header) — and keep serving.
 process.on("unhandledRejection", (reason) => logSafely("unhandledRejection", reason));

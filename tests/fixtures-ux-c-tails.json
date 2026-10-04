@@ -1,6 +1,6 @@
 {
   "mintedAt": "42e404a",
-  "generator": "research/b9-ux-survey/ux-c-fixture-mint.mjs",
+  "generator": "Shared state-drive fixture mint",
   "settleMs": 300,
   "armsCovered": [
     "50-80",

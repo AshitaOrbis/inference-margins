@@ -1,5 +1,5 @@
 /* Frontier Inference Margins — R2 PRODUCTION CONTRACTS (engine migration of the pre-R2
-   contract harness; feasibility-redesign memo v4.1 §0-quinquies P0-A/P0-B).
+   contract harness and trusted feasibility contracts).
 
    This module IS the shipped form of the council-settled contracts the 9-round contract
    harness proved (harness/{contract-algebra,claim-identity,emission-boundary}.mjs,
@@ -81,7 +81,7 @@ function sha256Hex(str) {
 }
 
 /* ================================================================================
-   POINTWISE RESULT ALGEBRA (memo §0-quinquies P0-B; harness contract-algebra.mjs)
+   POINTWISE RESULT ALGEBRA ( P0-B; harness contract-algebra.mjs)
    ================================================================================ */
 
 /* ---------- central metric-descriptor registry ---------- */
@@ -299,7 +299,7 @@ function discontinuity(type, at, invalidatedMetricKeys, note) {
     note: note ?? null });
 }
 
-// bq-292: a discontinuity must actually SUPPRESS something, or it is a false record.
+// : a discontinuity must actually SUPPRESS something, or it is a false record.
 //
 // applyDiscontinuity used to append `disc` to t.discontinuities unconditionally,
 // while only suppressing leaves whose key happened to match. A discontinuity naming
@@ -612,7 +612,7 @@ function treeLeafKeys(t) {
 }
 
 /* ================================================================================
-   TYPED CLAIM-LEVEL PROVENANCE (memo §0-quinquies P0-A; harness claim-identity.mjs)
+   TYPED CLAIM-LEVEL PROVENANCE ( P0-A; harness claim-identity.mjs)
    ================================================================================ */
 
 const CLAIM_ROLES = Object.freeze(["result", "comparison"]);
@@ -647,7 +647,7 @@ function checkTaint(derivation) {
 
 /* Selection cleanliness is a CLOSED discriminator, never prose scanning — every basis
    outside the clean enum is rejected structurally. */
-/* THE CLAIMS CONTRACT IS VERSIONED (Polaris ruling 2026-09-19 on Astra pack A P1-4). v2 is the
+/* THE CLAIMS CONTRACT IS VERSIONED (the review's decision 2026-09-19 on Astra pack A P1-4). v2 is the
    first version in which a central claim carries the evidence it was admitted on and in which
    that evidence is part of the content address. A consumer that compares claim ids across
    versions is comparing two different functions, and the version says so on the claim itself
@@ -672,7 +672,7 @@ function constructCentral(spec, evidence) {
     checkSelection(spec.selectionReceipt),
   ].filter(Boolean);
   if (failures.length) return { central: null, refusals: failures };
-  /* THE ADMISSION EVIDENCE TRAVELS WITH THE CLAIM (Polaris ruling 2026-09-19 on Astra pack A
+  /* THE ADMISSION EVIDENCE TRAVELS WITH THE CLAIM (the review's decision 2026-09-19 on Astra pack A
      P1-4). Every field above is CHECKED here and then thrown away: the minted claim carried
      neither the selection receipt, nor the legs, nor the clusters, nor the derivation, so a
      reader of the artifact could see that a claim was branded central-verified but never on
@@ -749,7 +749,7 @@ function treesCoincide(a, b) {
   return treesSemanticallyEqual(a.tree, b.tree);
 }
 
-/* The honest empty-comparison slot (owner Q1 default). */
+/* The honest empty-comparison slot (adopted default). */
 function emptyComparisonSlot(subject) {
   return Object.freeze({
     subject, role: "comparison", identity: "policy-scenario",
@@ -759,20 +759,20 @@ function emptyComparisonSlot(subject) {
 }
 
 /* ================================================================================
-   CLOSED REGISTERED EMISSION BOUNDARY (memo §0-quinquies P0-A; harness
+   CLOSED REGISTERED EMISSION BOUNDARY ( P0-A; harness
    emission-boundary.mjs). Presentation travels in an EMISSION ENVELOPE around the
    UNCHANGED branded claim; the weld is ENFORCED AT THE BOUNDARY for weld-required
    classes; sidecar claim IDs are CONTENT-ADDRESSED; pointers are RFC 6901 and RESOLVE
    into the actual emitted artifact.
    ================================================================================ */
 
-/* R3 (design memo D-9): ONE deliberate closed-set amendment — the `final-answer`
-   emitter class (the owner's Row-1 result surface). A new class rather than a
+/* Closed emission boundary: ONE deliberate closed-set amendment — the `final-answer`
+   emitter class (the final result surface). A new class rather than a
    hero-tile alias: the two surfaces move independently, so their pins must never
    alias. It is WELD-REQUIRED (the shareable unit carries its identity inside the
    value tokens — the screenshot-crop bar). The contract harness carries one real
    instance per class, this one included (§0-quinquies rule, mechanical). */
-/* b9 M6 (FA memo §5.4, D-6m/D-6u): the SECOND deliberate closed-set amendment —
+/*  (FA ): the SECOND deliberate closed-set amendment —
    `executive-summary`, the analyst-gap bridge block. A new class rather than a
    `final-answer` alias for the same reason `final-answer` was not a `hero-tile`
    alias: the two surfaces move independently, so their pins must never alias. It is

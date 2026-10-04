@@ -9,7 +9,7 @@ const E = require("../engine.js");
 const BASE = require("./fixtures-baseline-v22.json");
 /* The pre-adoption baseline, archived 2026-09-10 so the re-mint invariant below stays checkable. */
 const PRE_ADOPTION = require("./fixtures-baseline-v22-pre-rent-adoption.json");
-/* im-vet-six-repairs (2026-09-20): the live fixture as it stood at master 6f10192, immediately
+/*  (2026-09-20): the live fixture as it stood at master 6f10192, immediately
    before the Trainium withdrawal and the TPU numerator repair. */
 const PRE_VETTING = require("./fixtures-baseline-v22-pre-vetting-repairs.json");
 const vettingExposed = (pre) => !!pre && ["tpu7", "trn2", "trn3"].some(k => pre.blend && pre.blend[k] > 0);
@@ -48,7 +48,7 @@ assert("xaiopp is a replay", P("xaiopp").kind === "replay");
 
 // ---------- 1b. Exploration routes (v2.1.3): perspective-space only, resolve like a lens ----------
 const EXPLORATIONS = E.PERSPECTIVES.filter(p => p.kind === "exploration");
-// 2026-08-16 (owner notes aa315c + c72950): FIVE routes now. x90-v2 adds the mechanism named in
+// 2026-08-16 (the author’s note + c72950): FIVE routes now. x90-v2 adds the mechanism named in
 // the 90→95% claim — the batch lever applied alone to the ≥90% route — which the v2.1.3 redesign
 // dropped for falling short of the range it was authored for. The count moved because the
 // registry moved; the four originals keep their ids, since permalinks bind to them.
@@ -140,10 +140,10 @@ for (const m of E.MODELS) {
 }
 
 // ---------- 3. Parity vs the freshly minted v2.2 baseline ----------
-// The v2.1.1 fixture is archived for IM6. This fixture pins all 15 provider rows × all 12 live
+// The v2.1.1 fixture is archived for historical comparison. This fixture pins all 15 provider rows × all 12 live
 // perspectives after the display-path switch, including explicit non-finite zero-renderable cases.
 //
-// RE-MINTED 2026-09-10 under owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok, and the
+// RE-MINTED 2026-09-10 under adjudicated 2026-09-10, and the
 // SHAPE of the re-mint is the evidence that it is a procurement change and nothing else:
 //   72 of 180 pairs moved; 108 are byte-identical.
 //   EVERY moved pair carries at least one of the three adopted legs (gb200, gb300, trn3) — the set
@@ -162,7 +162,7 @@ for (const m of E.MODELS) {
     const w = E.workload(s);
     const marginOk = frozen.margin === null ? !isFinite(w.margin) : Math.abs(w.margin * 100 - frozen.margin) < 5e-4;
     const trafficOk = s.ioRatio === frozen.ioRatio && s.cacheHit === frozen.cacheHit;
-    /* im-arc T2 adds a typed section receipt without changing any frozen field.
+    /*  adds a typed section receipt without changing any frozen field.
        Compare the historical projection, then assert the additive contract. */
     const legacyFleet = { ...w.fleetRenderable }; delete legacyFleet.sections;
     const fleetOk = JSON.stringify(legacyFleet) === JSON.stringify(frozen.fleetRenderable);
@@ -178,13 +178,13 @@ for (const m of E.MODELS) {
      archived pre-adoption fixture so it keeps meaning after this fixture is re-minted again. */
   {
     const ADOPTED = ["gb200", "gb300", "trn3"];
-    /* im-vet-model-estimates (2026-09-19) adds the THIRD admissible cause, and it is a billing one:
+    /* tariff revision (2026-09-19) adds the THIRD admissible cause, and it is a billing one:
        five presets carried a price their vendor no longer charges and were corrected against the
        vendors' own pages (gpt, terra, luna, dsv4, dsv4f). A tariff is a revenue input, so unlike a
        planning rent it reaches EVERY route a model appears on, owned-TCO ones included — which is
        why the owned-route invariant below now excludes it explicitly rather than widening. */
     const TARIFF_CORRECTED = ["gpt", "terra", "luna", "dsv4", "dsv4f"];
-    /* …and a FOURTH cause, from the same day and the same owner note, but a different kind of
+    /* …and a FOURTH cause, from the same day and the same the author’s note, but a different kind of
        change: the two Zhipu rows' DEFAULT TRAFFIC moved from the ncode-informed profile to the
        page's Reference convention. It is a traffic default, not a price and not a rent, so it
        shows up as ioRatio/cacheHit moving alongside margin — which is how the check below tells
@@ -209,7 +209,7 @@ for (const m of E.MODELS) {
       const viaCache = m.id === "grok" && s.cacheHit > 0;
       const viaTariff = TARIFF_CORRECTED.includes(m.id);
       const viaProfile = PROFILE_DEFAULT_CHANGED.includes(m.id);
-      /* im-vet-six-repairs (2026-09-20) adds the FIFTH admissible cause, and it is a COST one: the
+      /* registry repairs (2026-09-20) adds the FIFTH admissible cause, and it is a COST one: the
          two Trainium legs left the default fleet's membership on evidence grounds and the TPU v7
          decode coefficient was corrected onto a decode-only numerator. Both reach a pair through
          its FLEET, so the predicate is exposure to one of the three affected legs in the state the
@@ -218,7 +218,7 @@ for (const m of E.MODELS) {
          pairs this cause is about. */
       const viaVetting = vettingExposed(PRE_VETTING.pairs[`${m.id}|${p.id}`]);
       if (!viaRent && !viaCache && !viaTariff && !viaProfile && !viaVetting) movedWithoutAdoptedLeg.push(`${m.id}|${p.id}`);
-      /* im-release-edit-r3 (2026-09-10), fallback-review finding F5. This used to read
+      /* publication revision (2026-09-10), fallback-review finding F5. This used to read
          `p.id === "x90-v1" && !viaRent && !viaCache`, which is a STRICT SUBSET of the line above:
          it could not be non-empty unless that assertion had already failed, so it was vacuous as an
          independent check while its message promised a guarantee of its own. The invariant it means
@@ -228,7 +228,7 @@ for (const m of E.MODELS) {
          changelog citing it for "no owned-TCO route moved at all", which is false: grok|x90-v1
          moved 71.54 -> 69.06 via the CACHE correction, which reaches it because that state runs at
          cacheHit 60.) */
-      /* im-vet-model-estimates (2026-09-19): `&& !viaTariff` added, and it is not a loosening.
+      /* tariff revision (2026-09-19): `&& !viaTariff` added, and it is not a loosening.
          The claim this line makes is specifically that CAPEX PRICES AN OWNED-TCO ROUTE, SO A
          PLANNING RENT CANNOT REACH ONE. gpt|x90-v1, terra|x90-v1 and luna|x90-v1 now differ from
          the pre-adoption baseline because their LIST PRICE was corrected, which is a revenue input
@@ -237,15 +237,15 @@ for (const m of E.MODELS) {
          it or to leave a known-wrong price in the engine. */
       if (p.id === "x90-v1" && viaRent && !viaCache && !viaTariff && !viaProfile && !viaVetting) ownedRouteMoved.push(`${m.id}|${p.id}`);
     }
-    /* im-release-edit-r3 (2026-09-10): the COUNT is asserted too, not only the two invariants.
+    /* publication revision (2026-09-10): the COUNT is asserted too, not only the two invariants.
        The note above states "72 of 180 pairs moved; 108 are byte-identical" and then says both
        halves are asserted below — which was true of the two invariants and NOT of the count itself.
        A count stated in a comment and checked nowhere is the shape this file exists to refuse, so
        it is checked now. Re-mint it only alongside a declared reason the split changed. */
-    /* im-vet-model-estimates (2026-09-19): 72/108 -> 99/81. The 27 additional moved pairs are the
+    /* tariff revision (2026-09-19): 72/108 -> 99/81. The 27 additional moved pairs are the
        five tariff-corrected rows on the perspectives whose margins the price reaches. The split is
        re-minted here BECAUSE a declared reason exists, which is the condition the note below sets. */
-    /* im-vet-six-repairs (2026-09-20): 119/61 -> 146/34. The 27 additional moved pairs are the
+    /* registry repairs (2026-09-20): 119/61 -> 146/34. The 27 additional moved pairs are the
        fleet-exposed rows the Trainium withdrawal and the TPU numerator repair reach, and every one
        of them is accounted for by the fifth cause above. Re-minted BECAUSE a declared reason
        exists, which is the condition this block sets for itself. */
@@ -258,7 +258,7 @@ for (const m of E.MODELS) {
   }
 
   /* ---- The 2026-09-19 tariff correction's own re-mint invariant ----
-     Owner note note-20260919T142116Z-6b5c83: "sanity check those numbers (I strongly doubt anyone is
+     the author’s note of 2026-09-19: "sanity check those numbers (I strongly doubt anyone is
      negative serving margin on API costs)". Five presets carried a price their vendor no longer
      charges; each was verified live on the vendor's own page on 2026-09-19 and corrected. That moves
      published numbers, so the fixture is re-minted — and a re-minted fixture with no invariant behind
@@ -280,12 +280,12 @@ for (const m of E.MODELS) {
     const CORRECTED = ["gpt", "terra", "luna", "dsv4", "dsv4f"];
     const PRICE_FIELDS = ["priceIn", "priceOut", "margin", "cacheReadMult"];
     /* The Zhipu rows moved for a DIFFERENT reason on the same day: their default traffic changed
-       from the ncode-informed profile to Reference, under the same owner note. A traffic default
+       from the ncode-informed profile to Reference, under the same the author’s note. A traffic default
        cannot move a price, so the fields it is allowed to touch are disjoint from the price set,
        and that disjointness is what this block asserts rather than assumes. */
     const PROFILE_CHANGED = ["glm", "glm47"];
     const PROFILE_FIELDS = ["margin", "ioRatio", "cacheHit"];
-    /* im-vet-six-repairs (2026-09-20): this block compares against the PRE-TARIFF fixture, so it
+    /* registry repairs (2026-09-20): this block compares against the PRE-TARIFF fixture, so it
        now also sees every pair the 2026-09-20 fleet repairs moved. That is a FIFTH cause with a
        different signature from the four above — a cost-side change, so the only field it may move
        is `margin`, never a price, a traffic dial, utilization or the regime. Counted and
@@ -438,7 +438,7 @@ for (const m of E.MODELS) {
   assert("span is traffic-conditional", !!a && !!b && (a.lo !== b.lo || a.hi !== b.hi));
 }
 
-// ---------- 5. Permalinks: v5 schema (live) + pre-v5 DEPRECATION (IM1 / v2.2) ----------
+// ---------- 5. Permalinks: v5 schema (live) + pre-v5 DEPRECATION (v2.2) ----------
 // The live codec is v5 (successor to v4): same relative diff + identity structure, additionally
 // embedding a defaults-epoch and the displayed headline margin. Pre-v5 tokens (v2/v3/v4) are
 // deprecated wholesale on this branch (see §5d and tests/epoch-deprecation.test.mjs).
@@ -449,14 +449,14 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   const sel = { mode: "explicit", profileId: "ncode" };
   const s = E.applyPresetSettings(M("glm"), P("median"), sel);
   const link = E.encodeScenario(s, "glm", "median", E.resolveTraffic(M("glm"), P("median"), sel), null, { fleet: "preset", totalCase: "preset" });
-  assert("v6 prefix (b9 M4 schema bump)", link.startsWith("v6."));
+  assert("v6 prefix (schema revision)", link.startsWith("v6."));
   const dec = E.decodeScenario(link);
   assert("v5 meta carries traffic identity", dec && dec._meta.traffic.profileId === "ncode" && dec._meta.traffic.ioRatio === 8 && dec._meta.traffic.cacheHit === 41);
   assert("v5 meta carries engine revision + preset ids", dec._meta.model === "glm" && dec._meta.persp === "median" && dec._meta.engine === "v3.0.0-2026-08-13");
-  /* im-arc T4 fold (2026-08-24): the epoch bumps because the generic defaults moved
+  /*  (2026-08-24): the epoch bumps because the generic defaults moved
      (tests/fixtures-t4-declared-delta.json enumerates every moved sink). The property is
      unchanged — a token carries the epoch it was minted under. */
-  assert("codec metadata carries the im-arc T4 fold epoch",
+  assert("codec metadata carries the  epoch",
     dec._meta.epoch === E.DEFAULTS_EPOCH && E.DEFAULTS_EPOCH === "v25-im-arc-t4-fold-20260824");
   assert("v5 meta embeds the displayed margin (3dp)", typeof dec._meta.displayedMargin === "number"
     && Math.abs(dec._meta.displayedMargin - E.workload(s).margin * 100) < 5e-4);
@@ -468,7 +468,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   const s = E.applyPresetSettings(M("opus"), P("x90-v1"), sel);
   const link = E.encodeScenario(s, "opus", "x90-v1", E.resolveTraffic(M("opus"), P("x90-v1"), sel), null, { fleet: "custom", totalCase: "custom" });
   const dec = E.decodeScenario(link);
-  /* im-arc T4 fold (2026-08-24): x90-v1 is an ARCHIVED reading and carries the memo §6 pin
+  /*  (2026-08-24): x90-v1 is an ARCHIVED reading and carries the  pin
      bundle, so its computed bucket is UNMOVED at b8090 — the pin is what keeps it reproducing. */
   assert("v5 exploration route identity round-trips (persp + explore{rangeId,configId})",
     !!dec && dec._meta.persp === "x90-v1" && !!dec._meta.explore
@@ -479,7 +479,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   // the now-REQUIRED epoch/displayedMargin so each token reaches its INTENDED rejection (the identity/
   // explore conflict), not the required-field gate; the missing-field cases below omit them on purpose.
   const forge = obj => "v5." + Buffer.from(JSON.stringify(obj)).toString("base64");
-  const vm = extra => ({ schema: "v5", epoch: E.DEFAULTS_EPOCH, displayedMargin: null, fleet: { id: "custom" }, totalCase: "custom", ...extra }); // im-arc T2: current epoch keeps each forgery reaching its INTENDED rejection, not a missing-identity reject
+  const vm = extra => ({ schema: "v5", epoch: E.DEFAULTS_EPOCH, displayedMargin: null, fleet: { id: "custom" }, totalCase: "custom", ...extra }); // : current epoch keeps each forgery reaching its INTENDED rejection, not a missing-identity reject
   const T = { mode: "explicit", profileId: "reference", ioRatio: 15, cacheHit: 60 };
   assert("v5 persp/configId conflict rejected",
     E.decodeScenario(forge({ _meta: vm({ model: "opus", persp: "x90-v1", traffic: T, explore: { rangeId: "b8090", configId: "x80-v3" } }) })) === null);
@@ -515,7 +515,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   assert("unknown future prefix rejected (forward-boundary rule)", E.decodeScenario("v6." + Buffer.from("{}").toString("base64")) === null);
 }
 {
-  // v5 embedded margin + drift display (IM1 item 3): a v5 token records the margin the sharer saw;
+  // v5 embedded margin + drift display (embedded-margin contract): a v5 token records the margin the sharer saw;
   // when a later table moves it, the drift note surfaces both rather than pretending continuity.
   assert("DEFAULTS_EPOCH exported", E.DEFAULTS_EPOCH === "v25-im-arc-t4-fold-20260824");
   assert("marginDriftNote exported (pure)", typeof E.marginDriftNote === "function");
@@ -542,7 +542,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   assert("non-finite margin never drifts (infeasible scenario)", E.marginDriftNote(NaN, 80) === null && E.marginDriftNote(80, Infinity) === null);
 }
 {
-  // v5 round-trip MATRIX (IM1 item 5b): mint fresh v5 tokens across the corpus category matrix and
+  // v5 round-trip MATRIX (round-trip contract): mint fresh v5 tokens across the corpus category matrix and
   // assert BOTH the input vector and the headline margin round-trip. A pure port of the loader's
   // restore (applyPresetSettings + sanitizeScenarioDiff overlay), no DOM.
   const NUMKEYS = Object.keys(E.DEFAULTS).filter(k => typeof E.DEFAULTS[k] === "number");
@@ -595,7 +595,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   }
 }
 {
-  // DEPRECATION (IM1 / v2.2): v2/v3/v4 links no longer decode to a resolved object — each returns the
+  // DEPRECATION (v2.2): v2/v3/v4 links no longer decode to a resolved object — each returns the
   // deprecation marker, so the loader shows the LOUD notice and renders the central scenario. The
   // marker is a fresh object with no _meta (nothing of the old token leaks). The full 84-token
   // real-corpus proof lives in tests/epoch-deprecation.test.mjs.
@@ -625,7 +625,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
 }
 {
   // migrateV2Traffic is retained as a PURE utility (still exported), though the loader no longer
-  // calls it — v2 links deprecate before reaching any migration path (IM1). These assertions pin
+  // calls it — v2 links deprecate before reaching any migration path (epoch deprecation). These assertions pin
   // the pure function's behaviour so the numeric-migration logic stays correct if ever re-used.
   assert("migrateV2Traffic exported", typeof E.migrateV2Traffic === "function");
   // (a) plain v2 link, model that owned its traffic: gpt|median → 9/78, mode legacy-custom
@@ -643,8 +643,8 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
 }
 
 // ---------- 6. Tariff records: coherence, binding, and stale-loudness ----------
-/* RE-POINTED 2026-09-02 (owner note d85f73), then REWRITTEN the same day after GPT Pro review
-   pr-20260902T175643Z-034d27 found four defects in the re-point itself. The story is the point:
+/* RE-POINTED 2026-09-02 (the author’s note), then REWRITTEN the same day after GPT Pro review
+   a research review on 2026-09-02 found four defects in the re-point itself. The story is the point:
    this alarm was built so the Sep-1-2026 Sonnet flip "cannot be forgotten". It fired on schedule —
    and the flip had been CANCELLED three weeks earlier, so its own assertion name ("flip preset to
    $3/$15") was instructing its reader to make the page wrong. The first repair removed the remedy
@@ -696,7 +696,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
     const dateOnly = structuredClone(withTariff[0]);
     /* One day PAST the record's freshest source observation, so the control keeps biting when a
        re-verification legitimately adds a newer source (a fixed "2026-09-20" stopped biting the day
-       the 2026-09-29 reads landed — bq-3892). */
+       the 2026-09-29 reads landed — the release). */
     const freshest = dateOnly.tariff.current.sources.map(x => x.observedAt).sort().pop();
     const dayAfter = new Date(`${freshest}T00:00:00Z`); dayAfter.setUTCDate(dayAfter.getUTCDate() + 1);
     const horizon = new Date(dayAfter); horizon.setUTCDate(horizon.getUTCDate() + 15);
@@ -723,7 +723,7 @@ assert("decodeScenario exported (pure)", typeof E.decodeScenario === "function")
   assert("traffic overlay allowed when not locked", ok.diff.ioRatio === 42);
 }
 
-// ---------- 7b. Traffic state-consistency invariant (v2.1.3 M4; plan P0-B) ----------
+// ---------- 7b. Traffic state-consistency invariant (v2.1.3 preset revision; plan P0-B) ----------
 // Displayed traffic identity == resolveTraffic() output == the ioRatio/cacheHit the margin
 // computation reads. reconcileLinkTraffic is the single decision point the loader applies to
 // every share-link diff: traffic values that disagree with the link's declared identity must
@@ -777,22 +777,22 @@ for (const m of E.MODELS) if (m.dive)
   const w = E.workload(E.applyPresetSettings(M("opus"), P("median"), { mode: "native" }));
   assert("§7 pin: list $3.71875", Math.abs(w.priceMixList - 3.71875) < 1e-9, w.priceMixList);
   assert("§7 pin: realized $3.26785", Math.abs(w.priceMix - 3.26785156) < 1e-6, w.priceMix);
-  // b9 M1 re-mint (manifest family 1): the blended cost re-derives on the FILTERED
+  //  re-mint (manifest family 1): the blended cost re-derives on the FILTERED
   // na-blend default — $1.71618 → $2.11951 (R3, 6 members) → $2.05199 (FA J-9: 7 members
-  // at the revised flagship size) → $1.33392 (b9 M1: the §C1 repaired defaults —
+  // at the revised flagship size) → $1.33392 (the §C1 repaired defaults —
   // the Trainium legs stop costing $60/$52 per Mtok and the Blackwell η values stop
   // double-crediting FP4 precision).
-  /* b9 M5: §7's prose now states BOTH readings, so the alarm pins both. The reference reading is
+  /* : §7's prose now states BOTH readings, so the alarm pins both. The reference reading is
      computed at the trend-0 / family-1.0 pin (the same constructor the FA uses) and is
      BYTE-UNCHANGED; the ratified-prior reading is the live default, exactly the reference divided
      by E(+3 @ 3×/yr) on the cost side. Both are stale-loud against the prose. */
-  /* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): both readings move with
+  /*  (2026-08-24, tests/fixtures-t4-declared-delta.json): both readings move with
      the folded defaults — capex and cluster-overhead scope on the cost side, and three planning
      rents resolving as unavailable so the priced blend is a different, more expensive mix. The
      §7 prose is re-stated to these live values in the same commit; these pins are what keep the
      two from drifting apart again. */
   const wRef = E.workload(E.pinReferenceLevers(E.applyPresetSettings(M("opus"), P("median"), { mode: "native" })));
-  /* im-vet-six-repairs (2026-09-20): both pins move with the Trainium withdrawal and the TPU
+  /* registry repairs (2026-09-20): both pins move with the Trainium withdrawal and the TPU
      numerator repair, and the §7 dollar walk on the page moves with them (asserted in
      tests/snapshots.test.mjs, which recomputes the sentence rather than pinning it).
      RE-MINTED AGAIN the same day when the completion gate ruled that DISCLOSING E2's basis
@@ -847,7 +847,7 @@ for (const m of E.MODELS) if (m.dive)
   assert("overlayDivergesFromReplay flags active change", E.overlayDivergesFromReplay(M("grok"), P("xaiopp"), { active: 15 }) === true);
   assert("overlayDivergesFromReplay ignores no-op", E.overlayDivergesFromReplay(M("grok"), P("xaiopp"), {}) === false);
 
-  /* im-vet-model-estimates (2026-09-19). This read glm -> "ncode", which was a good test BECAUSE
+  /* tariff revision (2026-09-19). This read glm -> "ncode", which was a good test BECAUSE
      ncode is not the page default: it could tell "migrated to the model's own named profile" apart
      from "fell back to the global default". glm's default is now Reference, so that discrimination
      is gone if the line simply follows it. The assertion therefore MOVES to a row that still has a
@@ -874,10 +874,10 @@ for (const m of E.MODELS) if (m.dive)
 }
 
 /* =====================================================================================
-   SLICE C (design memo im4-sliceC-design-memo v9, GATE CLOSED): the wire-identity
+   SLICE C (design specification the development revision v9, GATE CLOSED): the wire-identity
    contract — C-7 fleet rows, C-8 decode table, the fleet-conditional encode baseline,
    the NORMATIVE restore order (hazard pair pinned by BLEND VECTOR + margin), and the
-   named round-trips. Every row of the memo's two decode tables is a fixture here.
+   named round-trips. Every row of the specification's two decode tables is a fixture here.
    ===================================================================================== */
 {
   const M2 = id => E.MODELS.find(x => x.id === id), P2 = id => E.PERSPECTIVES.find(x => x.id === id);
@@ -887,7 +887,7 @@ for (const m of E.MODELS) if (m.dive)
   const trafficArg = { mode: "native", profileId: null, ioRatio: tr.ioRatio, cacheHit: tr.cacheHit };
   const enc = (s, ids) => E.encodeScenario(s, "opus", "median", trafficArg, null, ids);
   const payloadOf = tok => JSON.parse(Buffer.from(tok.slice(3), "base64").toString("utf8"));
-  const forge2 = obj => "v6." + Buffer.from(JSON.stringify(obj)).toString("base64"); // b9 M4: live codec prefix (prefix must agree with the copied payload's schema)
+  const forge2 = obj => "v6." + Buffer.from(JSON.stringify(obj)).toString("base64"); // : live codec prefix (prefix must agree with the copied payload's schema)
   const base = E.applyPresetSettings(opus, median, sel);
 
   // ---- encode: REQUIRED identities parameter (fail loud, never guess) ----
@@ -940,18 +940,18 @@ for (const m of E.MODELS) if (m.dive)
     sStale.blend = E.fleetBaselineBlend(E.DEFAULT_FLEET_ID, sStale, { modelId: "opus", customDonor: sStale.customDonor });
     sStale.total = 10000;
     const mStale = E.workload(sStale, undefined, E.makeScenarioContext(opus, tr, sStale.customDonor)).margin * 100;
-    /* b9 M5 re-mint (default-state class): both orders now run at the ratified-prior default, so
+    /*  re-mint (default-state class): both orders now run at the ratified-prior default, so
        both move by exactly ÷E on the cost side. What this pair TESTS is the SEPARATION — the
        forbidden seed-then-diff order still lands somewhere else — and the gap is asserted
        explicitly below so a future re-mint cannot quietly collapse it.
-       im-arc T4 fold (2026-08-24, declared delta): re-minted for the folded defaults. The
+        (2026-08-24, declared delta): re-minted for the folded defaults. The
        SEPARATION is the property, and it survives — the two orders still land apart, and the gap
        assertion below is what proves this re-mint did not collapse it.
-       im-release-edit-r2 (2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok):
+       publication revision (2026-09-10, adjudicated 2026-09-10):
        re-minted again for the adopted planning rents, and the SEPARATION survives again — 2.6 points
        apart here against 1.6 before, so the hazard is if anything more visible. The gap assertion
        below is still what proves it. */
-    /* im-vet-six-repairs (2026-09-20): re-minted for the Trainium withdrawal and the TPU numerator
+    /* registry repairs (2026-09-20): re-minted for the Trainium withdrawal and the TPU numerator
        repair, and the SEPARATION is again what the re-mint has to preserve — it does, and it WIDENS
        to 6.1 points against 2.6 before, because the withdrawal removes the two legs the 10 T
        membership was going to drop anyway and leaves the stale seed holding h100 and gb200, which
@@ -981,7 +981,7 @@ for (const m of E.MODELS) if (m.dive)
   assert("C-7: named id + blend diff REJECTS whole (fleet-vs-blend contradiction)",
     E.decodeScenario(mut(q => { q.blend = { h100: 50, h200: 50 }; })) === null);
   assert("C-7: preset + blend diff REJECTS whole", E.decodeScenario(mut(q => { q._meta.fleet = { id: "preset" }; q._meta.totalCase = "custom"; q.blend = { h100: 50, h200: 50 }; })) === null);
-  /* M8 reconciliation fix (2026-08-12): the preset+blend contradiction is CLEAN-identity-scoped.
+  /* mean-mix revision reconciliation fix (2026-08-12): the preset+blend contradiction is CLEAN-identity-scoped.
      A MODIFIED identity restores off DEFAULTS with no perspective to derive a preset blend from
      (fleetBaselineBlend("preset") === null), so its diff's blend key is the only carrier of the
      sharer's on-screen blend — e.g. any exploration route whose authored blend differs from
@@ -1006,7 +1006,7 @@ for (const m of E.MODELS) if (m.dive)
     assert("C-7: the carve-out keeps the modified identity and preset fleet",
       !!decX && decX._meta.modified && decX._meta.modified.kind === "exploration" && decX._meta.fleet.id === "preset" && decX._meta.persp === null);
   }
-  /* M8 gate-R1 fold (finding M8-R1-01, 2026-08-12): the SAME asymmetry existed one row down —
+  /* mean-mix revision gate-R1 fold (finding mean-mix revision-R1-01, 2026-08-12): the SAME asymmetry existed one row down —
      totalCase "preset" + explicit total. Every model outside TOTAL_CASE_SCOPE carries
      totalCase "preset" with a preset total ≠ DEFAULTS.total, so a modified state of such a
      model made encodeScenario refuse its own token (Share threw). The C-7 row above could not
@@ -1050,7 +1050,7 @@ for (const m of E.MODELS) if (m.dive)
       E.normalizeModifiedIdentities(cf, "custom", oosM.id).fleet === cf);
   }
 
-  /* M8 gate-R2 fold (finding M8-R2-01, 2026-08-12): a model switch WHILE modified carries
+  /* mean-mix revision gate-R2 fold (finding mean-mix revision-R2-01, 2026-08-12): a model switch WHILE modified carries
      FLEET_ID / TOTAL_CASE_ID unchanged (refreshModifiedState freezes model-owned fields), so
      the mint can receive identity labels that no longer apply to the current model. The
      encoder now NORMALIZES stale labels to "custom" at the modified mint — values ride the

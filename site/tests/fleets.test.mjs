@@ -1,20 +1,20 @@
-// FLEETS registry + gate-6/7 contract (IM4 slice B) — design memo
-// research/im4-fleet-design-memo.md v3.1 §2.1–§2.3 + §7 owner ruling 2026-07-21.
+// FLEETS registry + gate-6/7 contract.
+// The fleet-policy conventions were adopted on 2026-07-21.
 // Run: node site/tests/fleets.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const E = require("../engine.js");
-/* b9 M5 fixture scope (M5 delta manifest) — REFERENCE-CLASS suite. M5 seeds every clean state
+/*  (scenario-prior revision delta manifest) — REFERENCE-CLASS suite. scenario-prior revision seeds every clean state
    with the ratified per-lab algorithmic-lead prior (+3 months for Anthropic), which multiplies
    achieved throughput by E = 1.3161 and therefore every cost/margin this suite pins. This suite
    certifies fleet membership, eligibility and hero-suppression behaviour — statements about the PUBLIC-EVIDENCE
    REFERENCE, not about the calculator's default scenario prior. Every state it derives is
    therefore pinned to trend 0 / family 1.0 through the SAME constructor the final-answer surface
-   uses (engine §15 / decision D-10), and every pinned digit below is BYTE-UNCHANGED. The default
+   uses (engine  / decision D-10), and every pinned digit below is BYTE-UNCHANGED. The default
    state's movement is carried, in full, by tests/fixtures-baseline-v22.json (regenerated) and the
-   render-parity WIDE hash — see the M5 delta manifest. */
+   render-parity WIDE hash — see the scenario-prior revision delta manifest. */
 const preset = (m, p, sel) => E.pinReferenceLevers(E.applyPresetSettings(m, p, sel));
 
 const ED = require("../engine-data-v22.js");
@@ -30,7 +30,7 @@ const median = E.PERSPECTIVES.find(p => p.id === "median");
 const base = preset(opus, median, { mode: "native" });
 const baseCtx = E.scenarioContext(base);
 
-// ============================ 1. Registry shape + owner-ruling rules ============================
+// ============================ 1. Registry shape + adopted rules ============================
 const FLEET_IDS = Object.keys(ED.FLEETS);
 assert("registry: 5 named fleets", FLEET_IDS.length === 5, JSON.stringify(FLEET_IDS));
 for (const [id, f] of Object.entries(ED.FLEETS)) {
@@ -44,20 +44,20 @@ for (const [id, f] of Object.entries(ED.FLEETS)) {
     Object.values(f.legs).reduce((a, b) => a + b, 0) === 100, JSON.stringify(f.legs));
   assert(`registry: ${id} legs are known hardware keys`,
     Object.keys(f.legs).every(k => E.HW_ORDER.includes(k)));
-  // OWNER RULING (2026-07-21): any fleet containing Chinese silicon MUST be counterfactual.
+  // the adopted decision (2026-07-21): any fleet containing Chinese silicon MUST be counterfactual.
   const cn = Object.keys(f.legs).some(k => ED.CHINESE_SILICON.includes(k));
-  assert(`owner ruling: ${id} Chinese-silicon ⇒ counterfactual class (cn=${cn})`,
+  assert(`the author’s decision: ${id} Chinese-silicon ⇒ counterfactual class (cn=${cn})`,
     !cn || f.class === "counterfactual");
   assert(`registry: ${id} scoped to the flagship (models:['opus']) in v1`,
     JSON.stringify(f.models) === JSON.stringify(["opus"]));
 }
-assert("owner ruling: DEFAULT_FLEET_ID names a registered NON-counterfactual fleet",
+assert("the adopted decision: DEFAULT_FLEET_ID names a registered NON-counterfactual fleet",
   ED.FLEETS[ED.DEFAULT_FLEET_ID] && ED.FLEETS[ED.DEFAULT_FLEET_ID].class !== "counterfactual"
   && !Object.keys(ED.FLEETS[ED.DEFAULT_FLEET_ID].legs).some(k => ED.CHINESE_SILICON.includes(k)));
-assert("owner ruling: landing default is the NA blend (banked adjudication im-fable-b-2026-07-21-fleet-landing-default-v2)",
+assert("the adopted decision: landing default is the NA blend (banked adjudication the release-07-21-fleet-landing-default-v2)",
   ED.DEFAULT_FLEET_ID === "na-blend");
 
-// NA-blend two-level structure (owner ruling): family shares sum 100; NVIDIA legs sum to the
+// NA-blend two-level structure (the adopted decision): family shares sum 100; NVIDIA legs sum to the
 // NVIDIA family share; TPU/Trainium likewise; attribution names the captured evidence.
 { const f = ED.FLEETS["na-blend"];
   const fam = f.familyShares;
@@ -67,13 +67,13 @@ assert("owner ruling: landing default is the NA blend (banked adjudication im-fa
   const trnSum = (f.legs.trn2 || 0) + (f.legs.trn3 || 0);
   assert("na-blend: NVIDIA legs sum to the NVIDIA family share", nvidiaSum === fam.nvidia, `${nvidiaSum} vs ${fam.nvidia}`);
   assert("na-blend: TPU + Trainium legs sum to their family shares", tpuSum === fam.tpu && trnSum === fam.trainium);
-  assert("na-blend: attribution preserves EVERY captured source limit (P1-1: prior-not-measured, secondhand, unnamed lab, relayer inference, unscoped compute, capture path)",
+  assert("na-blend: attribution preserves EVERY captured source limit (P1-1: prior-not-measured, secondhand, unnamed lab, relayer inference, unscoped compute, dated source archive)",
     /FAMILY-SHARE PRIOR, not a measured/.test(f.attribution)
     && /SECONDHAND/.test(f.attribution) && /Morgan Stanley/.test(f.attribution)
     && /UNNAMED/.test(f.attribution) && /relayer/.test(f.attribution)
     && /attribution inference/.test(f.attribution)
     && /unscoped/.test(f.attribution)
-    && /nvidia-anthropic-share-x-2026-07/.test(f.attribution));
+    && /source archive of 2026-07/.test(f.attribution));
   assert("na-blend: attribution declares the equal residual split as THIS PAGE'S choice",
     /THIS PAGE'S declared choice/.test(f.attribution));
   assert("na-blend: attribution declares within-family shares analyst-declared",
@@ -98,12 +98,12 @@ assert("blindness: centralEligibilityDecision + heroSuppressionDecision are scen
     p.renderableWeightShare, p.allLegsRenderableUnderPolicy, p.placementVerified, p.renderableIndependentEvidenceClusters]);
   assert("blindness: profile aggregates invariant under 7x prices / 3.14x rent / 40% discount", strip(a) === strip(b), strip(a) + " vs " + strip(b)); }
 // Expected aggregates at the evidenced baseline (derived in design; verified by execution).
-/* FA re-mint (memo J-9): at the revised flagship size every declared NA leg is
+/* FA re-mint (specification J-9): at the revised flagship size every declared NA leg is
    policy-renderable — na-blend and declared-topology flip to 100% (h100 serves its
    declared batch-96 at peak-KV solver width 112). The external review removed H20/Ascend live
    neutral identities from fitted throughput eligibility, so the anchored counterfactual
    now contains only GB200/H800; both are policy-clean at this size. */
-/* im-vet-six-repairs (2026-09-20), vetting finding E5a — the EVIDENCED share falls to zero on
+/* registry repairs (2026-09-20), vetting finding E5a — the EVIDENCED share falls to zero on
    every NVIDIA-bearing fleet, and that is the finding, not a regression. `evidenced` requires a
    FITTED throughput coefficient AND a named public price. GB200 was the only leg holding both;
    its price class moves observed-source-named -> analyst-set, because the rent this engine prices
@@ -144,7 +144,7 @@ assert("profile: h800 sole anchor renders under-policy at the revised size (FA);
   && byId["ascend-sole-anchor"].renderableWeightShare === 0 && byId["ascend-sole-anchor"].renderableIndependentEvidenceClusters === 0);
 
 // ============================ 3. Gate-7: central eligibility ============================
-assert("gate-7: NO fleet earns the central label at the evidenced baseline (memo §2.2 expected outcome)",
+assert("gate-7: NO fleet earns the central label at the evidenced baseline (expected outcome)",
   sel.centralEligible.length === 0, JSON.stringify(sel.centralEligible));
 assert("gate-7: landing selection = the banked DEFAULT_FLEET_ID, not a derivation",
   sel.landing === ED.DEFAULT_FLEET_ID);
@@ -169,7 +169,7 @@ assert("gate-7: MIN_CLUSTER_SUPPORT_SHARE predeclared at 0.10", E.MIN_CLUSTER_SU
   const selH = E.selectDefaultFleet(haiku);
   assert("gate-7/P1-4: non-flagship model → zero profiles, null landing, hero suppressed",
     selH.profiles.length === 0 && selH.landing === null && E.landingHeroSuppressed(haiku) === true); }
-/* R2 re-mint (§1.4 NEGATIVE contract; memo §0-bis): the 100B fixture FLIPS — even with
+/* The negative rendering contract was re-minted: the 100B fixture FLIPS — even with
    every leg policy-renderable and 2 supported clusters, a CLOSED model can never verify
    placement, so central eligibility is structurally impossible. The float-robustness the
    old fixture guarded (=== 1 fragility) survives in the allLegs boolean assertion; the
@@ -186,17 +186,17 @@ assert("gate-7: MIN_CLUSTER_SUPPORT_SHARE predeclared at 0.10", E.MIN_CLUSTER_SU
     E.centralEligibilityDecision(verified) === true); }
 
 // ============================ 4. Gate-6: suppression + survivorship fixtures ============================
-/* R3 (Row 0, memo D-3a/D-4 — SUPERSEDES the R2 unconditional-suppression fixture,
-   per the owner's membership ruling): the landing default IS the FILTERED
+/* R3 (case 0, the design requirements — SUPERSEDES the R2 unconditional-suppression fixture,
+   per the membership decision): the landing default IS the FILTERED
    membership. At the evidenced baseline the derivation excludes h100 (6 of 7
    declared legs) — the policy-labeled branch DISPLAYS (suppression only on empty
    derived membership); the strict branch suppresses on any exclusion. */
 { const d = E.deriveDefaultFleetMembership(ED.DEFAULT_FLEET_ID, base, baseCtx);
-  /* im-vet-six-repairs (2026-09-20), vetting finding E1: the baseline now derives FIVE members.
+  /* registry repairs (2026-09-20), vetting finding E1: the baseline now derives FIVE members.
      h100 still serves its declared batch-96 at peak-KV solver width 112 — no capacity exclusion
      exists at this size — and the two Trainium legs are excluded on EVIDENCE grounds, typed
      `ground: "withdrawn"` so a reader (and this assertion) can tell the two kinds apart. */
-  assert("FA membership (memo J-9 + E1): the revised-size baseline derives 5 of 7 — no capacity exclusion, and both Trainium legs WITHDRAWN on evidence grounds",
+  assert("FA membership (model-size revision and evidence withdrawal): the revised-size baseline derives 5 of 7 — no capacity exclusion, and both Trainium legs WITHDRAWN on evidence grounds",
     d.memberLegCount === 5 && d.declaredLegCount === 7 && d.excluded.length === 2
     && JSON.stringify(d.excluded.map(x => x.hwKey)) === JSON.stringify(["trn2", "trn3"])
     && d.excluded.every(x => x.ground === "withdrawn" && /WITHDRAWN from the default reading, not deleted/.test(x.reason))
@@ -208,21 +208,21 @@ assert("gate-7: MIN_CLUSTER_SUPPORT_SHARE predeclared at 0.10", E.MIN_CLUSTER_SU
   assert("gate-6: policy-labeled mode DISPLAYS at the revised-size baseline (the filtered default is policy-clean by construction)",
     E.landingHeroSuppressed(base, baseCtx) === false
     && E.landingHeroSuppressed(base, baseCtx, "policy-labeled") === false);
-  /* im-vet-six-repairs (2026-09-20): the STRICT branch now DOES have something to suppress at the
+  /* registry repairs (2026-09-20): the STRICT branch now DOES have something to suppress at the
      baseline, because an exclusion exists there for the first time — an evidence withdrawal rather
      than a capacity failure. The LIVE branches are unaffected and still display (asserted above);
      this records that the strict alternative behaves as its contract says on the new state. */
   assert("gate-6 (FA): the STRICT branch suppresses at the revised-size baseline (an evidence withdrawal IS an exclusion)",
     E.landingHeroSuppressed(base, baseCtx, "suppress") === true);
-  // The 5T size case preserves the whole R3 exclusion story (memo J-9: the old default
+  // The 5T size case preserves the whole R3 exclusion story (specification J-9: the old default
   // is the labeled alternative; the exclusion machinery fixtures HERE now).
   const b5 = preset(opus, median, { mode: "native" }); b5.total = 5000;
   const c5 = E.scenarioContext(b5);
   const d5 = E.deriveDefaultFleetMembership(ED.DEFAULT_FLEET_ID, b5, c5);
-  // b9 M1 re-mint: trn2 now joins h100 in exclusion at the 5T case. Its declared operating
+  //  re-mint: trn2 now joins h100 in exclusion at the 5T case. Its declared operating
   // point moved from the retired b=4 (an AWS tutorial demo value) to the b=32 aggregate-batch
   // surrogate, which is no longer satisfiable in-domain at 5T. Basis 92 → 84.
-  /* im-vet-six-repairs (2026-09-20): the 5T case is now THREE exclusions of TWO kinds, which is
+  /* registry repairs (2026-09-20): the 5T case is now THREE exclusions of TWO kinds, which is
      what makes it the better fixture for the distinction — h100 still fails on capacity at this
      size, and the two Trainium legs are withdrawn on evidence grounds at every size. Basis 84 -> 67. */
   assert("R3 membership @5T case: derives 4 of 7 — h100 excluded on capacity, both Trainium legs withdrawn on evidence, + the canonical traffic anchor",
@@ -278,7 +278,7 @@ assert("gate-7: MIN_CLUSTER_SUPPORT_SHARE predeclared at 0.10", E.MIN_CLUSTER_SU
    opus within SCENARIO_BOUNDS.total (tpu7's documented-slices domain reaches 2048) —
    recorded execution fact; empty-membership suppression is pinned at the decision DTO
    below. */
-// b9 M1 re-mint: the RUP flips move under the repaired operating points, so the probe
+//  re-mint: the RUP flips move under the repaired operating points, so the probe
 // totals were re-searched by execution on a 0.05T grid.
 // Post-review adjudication 2026-07-27: Trainium3 capacity reverts to the Neuron docs'
 // unit-explicit 144 GiB (the review's SI re-read of the marketing label is overturned),
@@ -287,7 +287,7 @@ assert("gate-7: MIN_CLUSTER_SUPPORT_SHARE predeclared at 0.10", E.MIN_CLUSTER_SU
 // Transitions found: 7→6 @3.35T · 6→5 @4.80T · 5→4 @7.70T · 4→3 @11.80T
 // · 3→2 @16.75T · 2→1 @17.45T.
 // The ladder still walks every count and is still monotone non-increasing.
-/* im-vet-six-repairs (2026-09-20): the ladder starts at FIVE, because the two Trainium legs are
+/* registry repairs (2026-09-20): the ladder starts at FIVE, because the two Trainium legs are
    withdrawn at every size rather than dropping out at one. The grid was RE-SEARCHED by execution on
    the same 0.05T step, and the capacity crossings themselves did not move — 3.35T, 7.70T, 11.80T
    and 16.75T are exactly where they were; what changed is that the two Trainium transitions
@@ -321,16 +321,16 @@ const marginAndReceipt = (blend, totalB) => {
 { const a = marginAndReceipt(ED.FLEETS["declared-topology"].legs, 5900);
   const b = marginAndReceipt(ED.FLEETS["declared-topology"].legs, 5950);
   /* R2 RE-FOUND (P7: the full fixture inventory survives — crossing totals re-searched
-     under solver widths; manifest row 2.00T/2.50T → 5.90T/5.95T, trn2 drops first): */
-  /* b9 M1: the crossing TOTALS are unchanged (5.90T → 5.95T, re-searched on the same
+     under solver widths; manifest case 2.00T/2.50T → 5.90T/5.95T, trn2 drops first): */
+  /* : the crossing TOTALS are unchanged (5.90T → 5.95T, re-searched on the same
      0.05T grid); only the margins re-mint. The council's point survives intact and gets
      sharper: making the model harder to serve still RAISES the displayed margin, now by
      34.0 points instead of 21.9. */
-  /* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): the crossing TOTALS are
+  /*  (2026-08-24, tests/fixtures-t4-declared-delta.json): the crossing TOTALS are
      unchanged again (5.90T → 5.95T on the same 0.05T grid, trn2 still drops first) and the
      council's point survives and sharpens further — making the model harder to serve still RAISES
      the displayed margin, now by 66.6 points. Only the margins re-mint. */
-  /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+  /* publication revision (2026-09-10), adjudicated 2026-09-10:
      re-minted a third time, and for the third time the crossing TOTALS and the MEMBERSHIP numbers
      are unchanged — 5.90T → 5.95T on the same grid, still 7/7 at 100% weight then 6/7 at 95%, trn2
      still dropping first. Only the margins move, because adopting planning rents for GB200, GB300
@@ -338,7 +338,7 @@ const marginAndReceipt = (blend, totalB) => {
      survives and softens: making the model harder to serve still RAISES the displayed margin, now
      by 33.9 points rather than 66.6 — smaller because the dropped leg is no longer being dropped
      from a blend that had renormalized three legs away. */
-  /* im-vet-six-repairs (2026-09-20): this fixture passes an EXPLICIT blend, so the withdrawal
+  /* registry repairs (2026-09-20): this fixture passes an EXPLICIT blend, so the withdrawal
      does not reach it and the membership numbers are untouched for the fourth time; only the
      margins move, with the TPU numerator repair. */
   assert("gate-6 council fixture (vetting-repairs re-mint): 5.90T → 20.94%, 7/7 legs, 100% weight",
@@ -404,7 +404,7 @@ const marginAndReceipt = (blend, totalB) => {
    0.70→0.75 ⇒ 5.90→5.95 (trn2) · 1.45→1.50 ⇒ 11.00→11.05 (h100 class) ·
    2.10→2.15 ⇒ 12.80→12.85 · 2.20→2.25 ⇒ 19.25→19.30. A fifth crossing
    (19.95→20.00, 2→1 legs) exists and is recorded in the manifest. */
-/* im-arc T4 fold (2026-08-24): the crossings are RE-SEARCHED on the same 0.05T grid, not
+/*  (2026-08-24): the crossings are RE-SEARCHED on the same 0.05T grid, not
    transcribed — the pathology is a property of the engine, and after the fold it occurs at
    5.90→5.95, 11.00→11.05 and 19.45→19.50. The 12.80→12.85 and 19.25→19.30 crossings from the
    pre-fold search no longer violate monotonicity and are dropped rather than forced; a fixture
@@ -422,10 +422,10 @@ const marginAndReceipt = (blend, totalB) => {
        is strictly stronger than renderability (probed by execution). */
   } }
 // R2 reproduction (design-gate review), RE-FOUND under solver widths: anchored-eligible
-// fleet, FP8 11.00T → 11.05T (h800 drops; manifest row 1.45/1.50 → 11.00/11.05).
+// fleet, FP8 11.00T → 11.05T (h800 drops; manifest case 1.45/1.50 → 11.00/11.05).
 { const a = marginAndReceipt(ED.FLEETS["anchored-eligible-equal"].legs, 11000);
   const b = marginAndReceipt(ED.FLEETS["anchored-eligible-equal"].legs, 11050);
-  /* im-arc T4 fold (2026-08-24) — a FINDING, recorded rather than re-pinned. An exhaustive
+  /*  (2026-08-24) — a FINDING, recorded rather than re-pinned. An exhaustive
      0.05T sweep from 1.00T to 20.00T finds NO margin-improving membership loss on this fleet
      after the fold; the R2 crossing at 11.00T→11.05T no longer occurs here because h800's
      installed-scope overhead correction moved its cost. The pathology is still live on
@@ -438,8 +438,8 @@ const marginAndReceipt = (blend, totalB) => {
     if (Number.isFinite(x.margin) && Number.isFinite(y.margin) && y.margin > x.margin && y.share < x.share)
       anchoredCrossings.push([t, t + 50]);
   }
-  /* im-release-edit-r2 (2026-09-10): AND THE PATHOLOGY IS BACK ON THIS FLEET, which is a finding
-     rather than a re-mint. The T4 fold's rent removal had emptied this sweep; the owner's rent
+  /* publication revision (2026-09-10): AND THE PATHOLOGY IS BACK ON THIS FLEET, which is a finding
+     rather than a re-mint. The removal of rents had emptied this sweep; the rent
      adoption re-introduces exactly one margin-improving membership loss, at 11.00T → 11.05T. That
      is the same crossing the two assertions below already exercise for suppression, so the
      behaviour is covered — what changes is that this sweep is no longer empty, and saying it is
@@ -457,8 +457,8 @@ const marginAndReceipt = (blend, totalB) => {
     && swB.fleetRenderable.allLegsRenderableUnderPolicy === false && b.share < 1); }
 
 // ============================ 5. B′1 — width cases, total cases (R2: selection contract RETIRED) ============================
-/* R2 RETIREMENT (§4.3 core; B′ memo header — the "width axis as user choice with fixed
-   defaults" interpretation was SUPERSEDED by the owner ruling; the render path now
+/* R2 RETIREMENT (§4.3 core; B′ specification header — the "width axis as user choice with fixed
+   defaults" interpretation was SUPERSEDED by the adopted decision; the render path now
    consumes SOLVER capacity widths): selectWidthCaseDefault / widthCaseApplicable /
    feasibilityAtNShard / workloadAtNShard are gone. The B′1 registries SURVIVE as typed
    EVIDENCE ANNOTATIONS (asserted below); the live width story is the solver receipt

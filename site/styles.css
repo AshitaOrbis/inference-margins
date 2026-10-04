@@ -17,7 +17,7 @@
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
-/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+/* Adopted 2026-08-22:
    fleet mode, prominent coverage denominator and middle/bottom–top band grammar. */
 .fleet-mode-toggle {
   display: grid;
@@ -286,7 +286,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .subtitle + .subtitle { margin-top: -6px; }
 .subtitle-numbers { color: var(--ink-1); }
 .masthead-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
-/* bq-1141 M13: skin + theme behind one "Appearance" control. */
+/* Appearance: skin + theme behind one "Appearance" control. */
 .appearance-menu { position: relative; }
 .appearance-menu > summary { list-style: none; cursor: pointer; }
 .appearance-options { position: absolute; right: 0; top: calc(100% + 4px); z-index: 20; display: flex; flex-direction: column; gap: 6px; padding: 8px; background: var(--tile); border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow-pop); }
@@ -314,7 +314,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .identity-strip .id-lead { color: var(--ink-3); }
 .identity-strip .id-model { font-weight: 700; color: var(--ink-1); }
 .identity-strip .id-state { font-weight: 600; }
-.identity-strip .id-epistemic { flex-basis: 100%; color: var(--ink-2); font-style: italic; font-size: 12.5px; max-width: 68ch; } /* b9 UX-C §18.4: promoted IN PLACE — an anti-conclusion-shopping label, never hidden */
+.identity-strip .id-epistemic { flex-basis: 100%; color: var(--ink-2); font-style: italic; font-size: 12.5px; max-width: 68ch; } /* development : promoted IN PLACE — an anti-conclusion-shopping label, never hidden */
 .identity-strip .id-reset { margin-left: auto; font-size: 12px; }
 .identity-strip.id-central { border-left-color: var(--good); }
 .identity-strip.id-central .id-state { color: var(--good); }
@@ -334,7 +334,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
   color: var(--ink-1); font-size: 13px; font-weight: 600; line-height: 1.4;
 }
 .epoch-deprecation-notice[hidden] { display: none; }
-/* SHARED-LINK BANNER (row 499): deliberately louder than the epoch notice — bigger type, a full
+/* SHARED-LINK BANNER (grid track 499): deliberately louder than the epoch notice — bigger type, a full
    accent border and its own background — because it answers a question the reader does not know
    to ask ("whose numbers am I looking at?"). Same hidden-attribute discipline. */
 .shared-link-banner {
@@ -347,11 +347,11 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .shared-link-banner .slb-title { display: block; font-style: italic; font-size: 14px; margin-bottom: 4px; color: var(--ink-2); }
 .shared-link-banner .slb-reset { margin-top: 10px; }
 .shared-link-banner[hidden] { display: none; }
-/* row 499: the 1/2/3-point toggle, its extra handles, and the band readout. */
+/* grid track 499: the 1/2/3-point toggle, its extra handles, and the band readout. */
 .point-mode { margin: 0 0 12px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; }
 .point-mode-label { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 6px; }
 .range-handles { margin: 4px 0 2px 12px; padding-left: 8px; border-left: 2px solid var(--line); }
-/* Owner annotation n9c61af (2026-08-16): ONE line carrying the three dots, replacing the three
+/* Adopted 2026-08-16: ONE line carrying the three dots, replacing the three
    stacked slider rows. The inputs are still native ranges (see rangeHandlesFor for why); they are
    stacked in the same grid cell with transparent tracks so only their thumbs show, and each input
    is pointer-transparent EXCEPT its thumb — otherwise the topmost input would swallow every press
@@ -401,13 +401,13 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 #out-margin-band .band-toggle { font: inherit; font-size: 12px; background: none; border: 1px solid var(--line);
   border-radius: 6px; padding: 3px 8px; color: var(--ink-2); cursor: pointer; }
 #out-margin-band .band-compounded-value { margin: 6px 0 0; font-size: 12px; }
-/* row 499: procurement-discount rows reuse the hw-row LOOK but never its class — composition and
+/* grid track 499: procurement-discount rows reuse the hw-row LOOK but never its class — composition and
    procurement are different questions and must stay separately selectable (custom-fleet suite). */
 .disc-row { display: grid; grid-template-columns: 1fr 2fr auto; gap: 8px; align-items: center; margin: 4px 0; }
 .disc-row .hw-name { font-size: 12px; color: var(--ink-2); }
 .disc-row .hw-pct { font-size: 12px; font-variant-numeric: tabular-nums; text-align: right; }
 .disc-fam, .disc-legs { margin: 6px 0 10px; }
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): nullable
+/* Adopted 2026-08-22: nullable
    absolute-rent inputs are values, not multiplier sliders. */
 .abs-row { display: grid; grid-template-columns: minmax(130px, 1fr) minmax(92px, 130px) auto; gap: 8px; align-items: center; margin: 5px 0; }
 .abs-row .hw-name { font-size: 12px; color: var(--ink-2); }
@@ -432,7 +432,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .tile-label { font-size: 12.5px; color: var(--ink-2); display: flex; align-items: center; gap: 5px; }
 .tile-value { font-size: 34px; font-weight: 600; margin-top: 2px; letter-spacing: -0.02em; font-family: var(--font-head); font-variant-numeric: tabular-nums; }
 .tile-hero .tile-value { font-size: 48px; }
-/* bq-1141 M2: the value token's identity, split from the number into a normal-sized status label
+/* Value identity: the value token's identity, split from the number into a normal-sized status label
    directly under it (GPT Pro 09-12 finding 1). Inside the tile, so a crop of the number keeps it. */
 .tile-status { font-size: 13px; font-weight: 600; color: var(--ink-2); margin-top: 2px; letter-spacing: 0.01em; }
 .tile-small { font-size: 20px; }
@@ -544,7 +544,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
   font: inherit; font-size: 13.5px; color: var(--ink-1); background: var(--tile);
   border: 1px solid var(--border); border-radius: 8px; padding: 5px 8px;
 }
-/* bq-4610: the named-fleet selector sized itself to its longest option (546 px) inside a
+/* : the named-fleet selector sized itself to its longest option (546 px) inside a
    328-390 px section that clips overflow, at every width. It fills its box instead; the open
    list still shows each option whole. */
 .fleet-switcher .fleet-select { display: block; width: 100%; max-width: 100%; }
@@ -569,8 +569,8 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 }
 .info:hover, .info:focus { color: var(--accent-ink); }
 .info:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-/* b9 UX-A: on coarse pointers the .info hit box was 16x12 CSS px across all 48 controls — the only
-   route to the tooltip channel, since no hover exists there. Held to the >=44x44 M6 already applies
+/* development: on coarse pointers the .info hit box was 16x12 CSS px across all 48 controls — the only
+   route to the tooltip channel, since no hover exists there. Held to the >=44x44 minimum already applied
    to `.explain-trigger` and the dialog X. Coarse ONLY: enlarging 48 inline glyphs on desktop would
    move layout for no accessibility gain, because pointer users have hover AND click. */
 @media (pointer: coarse) {
@@ -604,7 +604,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .chart-sub { font-size: 12px; color: var(--ink-3); }
 .stack-rent-toggle { display: inline-flex; align-items: center; gap: 6px; margin-top: 6px; font-size: 12px; color: var(--ink-2); cursor: pointer; }
 .stack-rent-toggle input { accent-color: var(--series-5); }
-/* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): distinct rental-basis
+/*  (corrected 2026-08-22): distinct rental-basis
    total when the reader-stated rent sits below the modelled TCO counterfactual. */
 .stack-rent-below { fill: var(--series-6); }
 .hw-two-tables { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 12px; border-top: 1px solid var(--grid); padding-top: 10px; }
@@ -613,7 +613,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .hw-two-note { grid-column: 1 / -1; margin: 0; font-size: 11.5px; color: var(--ink-3); }
 @media (max-width: 720px) { .hw-two-tables { grid-template-columns: 1fr; } }
 /* An operating-point disclosure printed UNDER the chart whose shape it explains
-   (q-im-fp4-gb300-batch-disclosure). Deliberately not a tooltip: the finding was that the
+   (the adopted decision). Deliberately not a tooltip: the finding was that the
    assumption was invisible on the surface that renders its consequence, and a disclosure you
    have to hover to find reproduces that. */
 .chart-note { font-size: 12px; line-height: 1.5; color: var(--ink-2); margin: 8px 0 0;
@@ -624,7 +624,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .chart text { font-family: var(--font-data); }
 
 /* Tooltip */
-/* b9 UX-A (§20 R-1; memo §16.3). `max-width: 320px` with NO max-height and NO overflow let
+/* Explanation layout. `max-width: 320px` with NO max-height and NO overflow let
    TIPS.specDec (3,352 chars) render a 1,328px box in an 844px viewport — and the JS clamp then
    placed it at top:-494px, off the TOP, so the BEGINNING of the note was unreachable. At a 320px
    viewport the width bound went negative too (320 - 320 - 10) and every tooltip sat 10px off.
@@ -659,7 +659,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report h2 { font-size: 24px; margin: 8px 0 4px; letter-spacing: -0.01em; }
 .report h3 { font-size: 18px; margin: 26px 0 6px; }
 .report h4 { font-size: 15px; margin: 18px 0 4px; }
-/* bq-1141 M9 (2026-09-25): report prose at the body size (15px) — ~12,000 words were set smaller than the rest of the page. */
+/* Adopted 2026-09-25: report prose at the body size (15px) — ~12,000 words were set smaller than the rest of the page. */
 .report p, .report li { color: var(--ink-2); font-size: 15px; }
 .report strong { color: var(--ink-1); }
 .report .byline { color: var(--ink-3); font-size: 15px; margin-bottom: 14px; }
@@ -689,15 +689,15 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report details { margin: 8px 0; }
 .report details summary { cursor: pointer; color: var(--ink-1); font-weight: 600; font-size: 14px; }
 
-/* ---- §5 ESTIMATE CARDS (owner rulings q-margins-estimates-legibility-rebuild = A and
-   q-margins-estimates-headline-basis = A, 2026-08-13; spec estimates-cards-SPEC-2026-08-13.md).
+/* ----  ESTIMATE CARDS (the adopted decisions the adopted decision = A and
+   the adopted decision = A, 2026-08-13; spec estimates-cards-SPEC-2026-08-13.md).
    Two QUOTED adjudicator readings SIDE BY SIDE at equal weight — this page does not adjudicate
    between them, so neither card may out-weigh the other in any dimension. The headline median is
    large, the range sits directly beneath it and is visibly subordinate, and the basis + range-type
    labels are present but quiet. The collapsed face carries NO prose: if a reader has to read a
    sentence to see the number, the card has failed. The ≈51% stress row sits below the pair as
    visually a third thing — a scenario of this page, not a third adjudicator. ---- */
-/* ---- DE-SCOPED 2026-08-18 (owner notes 11b102 / bb3f19). These rules used to read
+/* ---- DE-SCOPED 2026-08-18 (the author's notes ). These rules used to read
    `.report .est-*`. The estimate cards now render in the full-width #projections band ABOVE the
    calculator as well as being referenced from section 5, and a style that only fires inside
    #report is how the 2026-08-16 hoist shipped a pair of unstyled, border-less cards to both
@@ -783,20 +783,20 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .methods-box summary { cursor: pointer; font-size: 13.5px; }
 .methods-box li { font-size: 13px; color: var(--ink-2); margin: 4px 0; }
 
-/* §10/§6 "Load this operating point ↑" preserve-links (selector dissolve 2026-07-12) */
+/*  "Load this operating point ↑" preserve-links (selector dissolve 2026-07-12) */
 .report .load-op-row { font-size: 13px; margin: 8px 0 4px; color: var(--ink-2); }
 .report .load-op-row .load-op-lead { color: var(--ink-3); }
 .report a.load-op { font-weight: 600; color: var(--accent-ink); cursor: pointer; }
 .report a.load-op:hover { text-decoration: underline; }
 
 .footer { margin-top: 22px; color: var(--ink-3); font-size: 12.5px; text-align: center; }
-/* bq-1141 M20: build/manifest/connector mechanics behind one summary line. */
+/* Build status: build/manifest/connector mechanics behind one summary line. */
 .footer-build > summary { cursor: pointer; }
 .footer-build > p { text-align: left; }
 
 /* position dossier panel */
 .dossier { max-width: 100%; margin: 6px 0 14px; border: 1px solid var(--grid); border-radius: 10px; background: var(--tile); padding: 6px 14px; }
-/* q-im-desktop-followups (2026-08-18) item 1: the frame moves OUT to a wrapper so the scenario
+/* the adopted decision (2026-08-18) item 1: the frame moves OUT to a wrapper so the scenario
    identity note can sit beside the disclosure instead of inside its control. The wrapper draws
    exactly what .dossier used to draw and the nested .dossier draws nothing, so the rendered box
    is unchanged — the note simply stops being part of the affordance that the coarse-pointer rule
@@ -813,7 +813,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .dossier-who { font-size: 13px; color: var(--ink-2); margin: 2px 0 6px; }
 .dossier-body blockquote { margin: 6px 0; padding: 6px 12px; border-left: 3px solid var(--accent); background: var(--wash); border-radius: 0 8px 8px 0; font-size: 12.5px; color: var(--ink-2); }
 .dossier-params { border-collapse: collapse; width: 100%; font-size: 12px; margin: 6px 0; }
-/* bq-4610: long tokens in the Value and Source cells (fleet lists, dotted dial names) set the
+/* : long tokens in the Value and Source cells (fleet lists, dotted dial names) set the
    table's minimum width, which ran past a 390 px screen (436 px). `anywhere` lets those two
    columns break inside a token when nothing else fits; unlike break-word it lowers the
    min-content width the table is laid out from. Parameter and Evidence keep whole words: given
@@ -844,7 +844,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 
 .verdict-provenance { font-size: 12px; color: var(--ink-3); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 6px; }
 
-/* margin-range evidence board (v2.1.3 preset redesign, M3).
+/* margin-range evidence board (v2.1.3 preset redesign).
    First-class but causally secondary: it renders the claims registry and page-authored routes;
    it never sets the hero. Mobile (P0-9): grid collapses to one column, every child min-width:0,
    quotes wrap, buttons wrap — no horizontal overflow (LUR-1 class). */
@@ -970,13 +970,13 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .config-note { font-size: 12px; color: var(--ink-2); margin: 4px 0; }
 .ghost-btn.btn-wrap { white-space: normal; text-align: left; }
 
-/* b9 M3 (energy/electricity dimension): the two info chips — the blended-$/kWh chip on named
+/*  (energy/electricity dimension): the two info chips — the blended-$/kWh chip on named
    fleets and the embedded-in-rent chip above the TCO-counterfactual stack chart. */
 .fleet-kwh-chip { font-size: 12px; color: var(--ink-3); margin: 4px 0; }
 .energy-rent-chip { font-size: 12px; color: var(--ink-2); margin: 2px 0 8px; }
 
-/* ============================ b9 M4: custom fleet builder ============================
-   (memo research/b9-m45-ui-memo.md §4/§5/§13 — chips, management row, per-leg panel,
+/* ============================ : custom fleet builder ============================
+   (chips, management row, per-leg panel,
    the <dialog> builder, and the mobile sheet behavior.) */
 .cf-manage-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 6px 0; }
 .cf-manage-item { display: inline-flex; gap: 4px; align-items: center; border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; }
@@ -991,7 +991,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .cf-leg-ident { color: var(--ink-1, inherit); }
 .cf-leg-share { font-weight: 600; }
 .cf-leg-ov, .cf-leg-cal { font-size: 11.5px; color: var(--ink-3); margin: 0 0 4px; }
-/* ===== b9 M6 (§20 owner rulings R-1..R-4): legible explanation typography + the popup =====
+/* ===== Explanation layout: legible explanation typography + the popup =====
    R-1 was DIAGNOSED BY MEASUREMENT, not guessed: the FA card is `.tile` -> `--surface-1`, on which
    --ink-3 computes 5.50:1 and --ink-2 9.40:1 against --page in the default dark skin. The current
    text therefore PASSES WCAG AA today — the defect is TYPOGRAPHIC and STRUCTURAL (12px, no measure,
@@ -1036,7 +1036,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .fa-exec-summary-line { cursor: pointer; font-size: 13.5px; color: var(--ink-1); }
 .fa-exec-row { margin-top: 12px; padding-top: 10px; border-top: 1px dashed var(--border); }
 .fa-exec-row-value { font-size: 15px; color: var(--ink-1); }
-/* The low-evidence affordance (owner ruling 2026-07-30; memo §16.2 A-3, §17.4). Two typed states:
+/* The low-evidence affordance (adopted 2026-07-30). Two typed states:
    `jump` scrolls its control into view and focuses it; `no-control` says plainly that no control
    exists yet rather than rendering a dead link. */
 .low-evidence { margin-top: 6px; font-size: 13px; color: var(--ink-2); }
@@ -1076,7 +1076,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .cf-spec-lock { font-size: 11px; color: var(--ink-3); font-style: italic; }
 .cf-errors { font-size: 12px; color: #b23b3b; min-height: 1em; }
 @media (max-width: 720px) {
-  /* memo §13: full-screen sheet, stacked legs, 44px targets, sticky action bar. */
+  /* : full-screen sheet, stacked legs, 44px targets, sticky action bar. */
   .cf-dialog { width: 100vw; height: 100vh; max-height: 100vh; max-width: none; border-radius: 0; border: 0; }
   .cf-chip { min-height: 44px; min-width: 44px; }
   .cf-leg-row { flex-direction: column; gap: 2px; }
@@ -1086,13 +1086,13 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
   .cf-manage-name { max-width: 110px; }
 }
 
-/* ---------- b9 M5: broad-lever interlock + touch scroll-lock (memo §§10, 12, 13) ---------- */
+/* ---------- : broad-lever interlock + touch scroll-lock ---------- */
 .lever-panel { margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--line); }
 .lever-head { font-size: 11.5px; color: var(--ink-3); display: flex; flex-wrap: wrap; align-items: center; gap: 2px; }
 .lever-readout { font-size: 13px; font-weight: 600; color: var(--ink-1, inherit); margin-top: 2px; }
 .lever-lab, .lever-cite, .lever-refusal { font-size: 11.5px; color: var(--ink-3); margin-top: 2px; }
 .lever-warn, .lever-overlap { font-size: 11.5px; color: #b23b3b; margin-top: 3px; }
-/* The two locks read differently ON PURPOSE (§12.4): the interlock is a correctness guard, the
+/* The two locks read differently ON PURPOSE: the interlock is a correctness guard, the
    scroll-lock is an input-safety guard. Same icon, different copy and different placement. */
 .lever-lock { font-size: 12px; color: var(--ink-2); border-left: 3px solid var(--accent-ink); padding-left: 8px; margin-top: 4px; }
 .lever-transition { font-size: 12px; font-weight: 600; color: var(--ink-1, inherit); border-left: 3px solid var(--accent-ink); padding-left: 8px; margin-top: 4px; }
@@ -1105,7 +1105,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
   .lever-unlock, .slider-lock-chip { min-height: 44px; }
 }
 
-/* ===== b9 UX-B (§20 owner rulings R-1/R-3/R-4): the document explainers =====
+/* ===== Explanation layout: the document explainers =====
    R-4 enacted: the ten report sections collapse. The <h3 id="sN"> deliberately stays OUTSIDE its
    <details> (both MCP slicers cut h3 -> next h3), so the page still reads as a ten-section report
    when collapsed and every deep link lands on a visible heading. */
@@ -1133,11 +1133,11 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 @media (pointer: coarse) {
   html[data-explain-ready] .report-section > summary,
   /* The methods box was never brought under R-2, so it offered BOTH routes on BOTH pointer
-     types — owner annotation 2026-08-16, verbatim: "this is a duplicate of the expansion right
+     types — identified 2026-08-16: "this is a duplicate of the expansion right
      below it". It joins the rule here (coarse: popup only) and its trigger is suppressed on
      fine pointers below, so exactly one route to this content exists on any device. */
   html[data-explain-ready] details.scope-note.methods-box > summary,
-  /* q-im-desktop-followups (2026-08-18) item 1: #dossier joins on the same terms. Its <summary>
+  /* the adopted decision (2026-08-18) item 1: #dossier joins on the same terms. Its <summary>
      is now the affordance ALONE — #preset-note, which carries the loaded-link identity warnings,
      was promoted out of it into .dossier-block and stays visible at every pointer type. */
   html[data-explain-ready] #dossier > summary { display: none; }
@@ -1147,10 +1147,10 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
    disclosure on desktop; this stops it being offered twice. */
 @media (pointer: fine) {
   html[data-explain-ready] #explain-trigger-methods,
-  /* q-im-desktop-followups (2026-08-18) item 1 — the SAME ruled treatment for #dossier, which
+  /* the adopted decision (2026-08-18) item 1 — the SAME ruled treatment for #dossier, which
      the 2026-08-18 dual-viewport probe measured at dossierRoutesVisible = 2 on BOTH viewports:
-     the injected popup trigger and the inline <summary> both rendered. Owner: "dedupe #dossier
-     to ONE route … match the treatment he ruled for the methods box one element higher." The
+     the injected popup trigger and the inline <summary> both rendered. The dossier uses one route, matching
+     the treatment of the methods box one element higher. The
      scenario-identity note is no longer inside that <summary> (see index.html), so the coarse
      rule above hides an affordance and never an honesty label. */
   html[data-explain-ready] #explain-trigger-dossier { display: none; }
@@ -1164,13 +1164,12 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .dossier-body li, .dossier-body p, .dossier-body blockquote,
 .board-catalog-body .board-note, .bucket-configs p, .bucket p,
 .front-door-detail p { line-height: 1.65; max-width: 68ch; }
-/* Scenario-honesty and provenance text is not decoration: --ink-3 -> --ink-2 on the surfaces owner
-   ruling R-1 named. (The result-tile tails and .id-epistemic are UX-C and are NOT touched here.) */
+/* Scenario-honesty and provenance text is not decoration: --ink-3 -> --ink-2 on the surfaces the adopted decision R-1 named. (The result-tile tails and .id-epistemic are UX-C and are NOT touched here.) */
 .report .prov .prov-body p, .report .prov .prov-body li { color: var(--ink-2); }
 .board-note { color: var(--ink-2); }
 .fd-claims-line { color: var(--ink-2); }
 /* The trigger sits BEFORE its disclosure so its position is stable whether the section is open or
-   closed — after it, an expanded §10 puts the affordance 33,472 characters further down. */
+   closed — after it, an expanded  puts the affordance 33,472 characters further down. */
 .explain-trigger + details, .explain-trigger + .front-door-detail { margin-top: 2px; }
 .report .explain-trigger { margin-top: 2px; }
 /* Inside the dialog the payload keeps its own ancestor context (the wrapper carries the payload's
@@ -1181,7 +1180,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .fa-explain-body .explain-body table { max-width: none; }
 .fa-explain-body .explain-body p, .fa-explain-body .explain-body li { max-width: 68ch; }
 
-/* THE DERIVED-FLEETS OVERLAY (owner ruling 2026-08-09, note 52e1be). Colour carries the owner's own
+/* THE DERIVED-FLEETS OVERLAY (the adopted decision 2026-08-09, dated note). Colour carries the declared
    assignment — green high margin, yellow reference, red low margin — but it is never the only
    channel: every dot is repeated as a labelled row with its percentage and its fleet, so the
    information survives for a reader who cannot separate the hues, and the track is aria-labelled. */
@@ -1199,7 +1198,7 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .mix-overlay-list { list-style: none; padding-left: 0; margin: 0; }
 .mix-overlay-row { margin: 0.2rem 0; }
 
-/* ================= b9 UX-C (memo §18.4/§18.10 P0-c/P1-c): the typed hero tail ================= */
+/* ================= development ( P0-c/P1-c): the typed hero tail ================= */
 /* Every rule below is keyed on this leg's own classes; in-dialog rendering equals in-page
    (U-3b asserts both sides, both skins). The wrappers are block elements so the measure is
    real — max-width on an inline span is inert. */
@@ -1208,10 +1207,10 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
    render identically inside the dialog, where no .tile-explain ancestor exists (U-3b) */
 .tile-mandatory, .tile-receipts, .tile-actions {
   font-size: 13.5px; line-height: 1.55; color: var(--ink-2); max-width: 68ch; }
-/* §18.10 P0-c: the at-rest coarse-pointer hide is PAGE-PARENT-SCOPED, so it stops matching
+/*  P0-c: the at-rest coarse-pointer hide is PAGE-PARENT-SCOPED, so it stops matching
    the moment the receipts relocate into a dialog (relocation changes parentage only), and it
    is gated on the JS-readiness flag exactly like the report sections — no JS, nothing hides
-   (owner R-2 enacted only when the replacement demonstrably exists). Mandatory regions never
+   (the replacement must demonstrably exist). Mandatory regions never
    hide on any pointer class. */
 @media (pointer: coarse) {
   html[data-explain-ready] .tile > .tile-receipts,
@@ -1227,10 +1226,10 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
   html[data-explain-ready] .tile-delta > .tile-receipts { display: block; }
 }
 
-/* The projections block hoisted to the top of the page, 2026-08-16 (owner annotations: the
+/* The projections block hoisted to the top of the page, 2026-08-16 (adopted changes: the
    estimates "should be at the top", "collapsed, not fully expanded and rambling"). It is a
    <details> because that is the only honest way to have it be both first and short. */
-/* PROJECTIONS BAND (owner notes 11b102 + bb3f19, 2026-08-18; ruling q-im-tile-position).
+/* PROJECTIONS BAND (the author's notes , 2026-08-18; ruling the adopted decision).
    FULL PAGE WIDTH, above .layout — not inside the 390 px controls rail. On a desktop screen the
    83% tile and the two estimates sit ALONGSIDE each other, which is what his ruling asked for and
    what a 390 px sidebar made impossible. Below 980 px it stacks, matching .layout's own collapse,
@@ -1254,8 +1253,8 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .projections .final-answer{ grid-column: 2; grid-row: 2; }
 /* T5 rec 5: the analyst-hypothesis section is a FOURTH child of this band, added when the
    external claim moved out of the answer tile. It needs explicit placement for the same reason
-   the other three do — every cell in rows 1-2 is already claimed, so auto-placement drops it
-   into row 3 COLUMN 1, the 340-390 px column, and leaves column 2 empty beside it. An
+   the other three do — every cell in grid track 1-2 is already claimed, so auto-placement drops it
+   into grid track 3 COLUMN 1, the 340-390 px column, and leaves column 2 empty beside it. An
    independent review caught that; the ancestry tests assert containment and say nothing about
    layout. It spans the full width on its own row: it is a prose block, not a numeral, and the
    narrow column is the wrong shape for it. */
@@ -1277,20 +1276,20 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .est-top > .est-pair { margin-top: 12px; }
 .est-top > .est-stress { margin-bottom: 14px; }
 .est-moved { font-size: 14px; color: var(--ink-2); }
-/* Owner annotation nd4f4c7 (2026-08-16): the load ops under each higher-justification entry. The
+/* Adopted 2026-08-16: the load ops under each higher-justification entry. The
    provenance line is quieter than the button deliberately — the button is the action, the line is
    the standing caveat that the claim is theirs and the vector is ours. */
 .fa-higher-loadops { margin-top: 6px; font-size: 12.5px; }
 .fa-higher-loadops .loadop-lead { color: var(--ink-3); }
 .fa-higher-loadops-none { color: var(--ink-3); font-style: italic; }
 .fa-higher-loadops .loadop-provenance { margin-top: 3px; font-size: 11.5px; color: var(--ink-3); }
-/* Owner annotation nbc7fc1 (2026-08-16): the answer tile collapses to number + short subject +
+/* Adopted 2026-08-16: the answer tile collapses to number + short subject +
    the reading the page opens on; the full scope declaration and every band/span line sit behind
    this one summary line rather than running down the page. */
 .fa-full { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; }
 .fa-full > .fa-full-summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 2px 0; list-style: revert; }
 .fa-full[open] > .fa-full-summary { margin-bottom: 6px; }
-/* The hoisted headline tile's own tail collapse (owner ruling q-im-tile-position, 2026-08-18) —
+/* The hoisted headline tile's own tail collapse (the adopted decision, 2026-08-18) —
    deliberately the SAME treatment .fa-full got for annotation nbc7fc1, so the two collapsed
    projections at the top of the column read as one pattern rather than two inventions. */
 .hero-full { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; }
@@ -1314,9 +1313,9 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .gl dt:target { scroll-margin-top: 12px; }
 .gl dt:target a.gl-self { text-decoration: underline; }
 
-/* THE ONE WINDOW (owner voice note note-20260912T180812Z-c9eaac, 2026-09-12): the headline tile names its
+/* THE ONE WINDOW (the author's note, 2026-09-12): the headline tile names its
    scenario, is highlighted when that scenario is the default, swaps in place, and carries the calculation
-   (bq-2345). Wraps at every width; nothing here scrolls horizontally. */
+  Wraps at every width; nothing here scrolls horizontally. */
 .tile-hero.win-default { box-shadow: inset 0 0 0 2px var(--accent); }
 .win-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; font-size: 13.5px; color: var(--ink-2); }
 .win-kicker { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
@@ -1345,7 +1344,7 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .set-default-btn { margin-left: 6px; font-size: 12px; }
 .set-default-btn[aria-pressed="true"] { color: var(--accent); font-weight: 700; }
 
-/* Phone-width reachability (leg im-share-ready-0920, 2026-09-20). A 7-column data table inside a
+/* Phone-width reachability (leg the research run, 2026-09-20). A 7-column data table inside a
    chart card's <details> measured 535px in a 390px viewport while EVERY ancestor sat at
    overflow-x: visible and the document itself did not scroll (documentElement.scrollWidth == 390),
    so three of its seven columns were unreachable on a phone rather than merely cramped. This is
@@ -1356,8 +1355,8 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 }
 
 /* ======================================================================================
-   VISUAL SYSTEM — 2026-09-27 (bq-3550, owner commission d-20260927-dividing-line-and-
-   inference-margins-visual-polish…). A VISUAL pass: no word and no number on the page moves
+   VISUAL SYSTEM — 2026-09-27.
+   The adopted visual polish changes presentation only. A VISUAL pass: no word and no number on the page moves
    (the leg's numbers-diff test walks every text node before and after). Everything below is
    appended so the history above stays readable; it wins by source order at equal specificity.
    Review of record: Astra xhigh + Opus visual reviews, merged in the leg's VISUAL-REVIEW.md
@@ -1417,7 +1416,7 @@ h1 { font-size: var(--fs-h1); line-height: 1.15; letter-spacing: -0.025em; }
 @media (min-width: 981px) { .subtitle { font-size: 16px; } }
 
 /* ---- the headline tile: ≈82% is THE number (V2, V3, V9) ------------------------------------
-   The window is three containers in reading order (index.html, bq-3550 internal review R1/R2): its identity
+   The window is three containers in reading order (index.html,  internal review R1/R2): its identity
    above the number, the scenario's assumptions under the gross-margin line, and its controls after every
    sentence that qualifies the number. Source, keyboard and visual order agree; nothing is reordered by CSS. */
 .projections .tile-hero {
@@ -1552,7 +1551,7 @@ h1 { font-size: var(--fs-h1); line-height: 1.15; letter-spacing: -0.025em; }
 .rent-key-tco { text-decoration-color: var(--c-owned); }
 .rent-key-cut { text-decoration-color: var(--series-5); }
 
-/* ---- GPT Pro fold (bq-3550, expert + enthusiast perspectives) --------------------------------- */
+/* ---- GPT Pro fold (expert + enthusiast perspectives) --------------------------------- */
 /* F03: the range the current scenario lands in is marked on its header, and on a 4-up row its card takes two
    columns so its note reads at twice the measure instead of as a narrow tower. Source order is unchanged. */
 .range-chip:has(.chip-current) { border-top: 3px solid var(--accent-ink); }

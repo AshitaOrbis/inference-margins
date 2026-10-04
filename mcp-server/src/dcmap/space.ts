@@ -2,7 +2,7 @@
    schemas, metrics and compatibility versions").
 
    It is the U3 layer's OWN `list_scenario_space` response, unwrapped — not a second listing
-   assembled here. That matters for the same reason the T4 fold's discovery does: a caller must be
+   assembled here. That matters for the same reason the finding of 2026-08-24 does: a caller must be
    able to read the ids and schemas the validator actually enforces, and a transcription can drift
    from the validator while a projection cannot. When no release is open, the block says so with
    the typed status and reasons instead of publishing an empty registry that reads like "there are

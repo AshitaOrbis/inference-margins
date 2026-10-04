@@ -28,7 +28,7 @@ of a phone screen, and the selector is no longer clipped on desktop.
 
 **Added — one card in §10 "Astra Pro estimates".** GPT-6.1 Sol (OpenAI, `gpt-6.1-sol`, released 2026-09-29 as
 GPT-6 Sol's successor; $2 per million input tokens, $0.10 cached input, $10 output), one GPT-6 Astra Pro research
-run on 2026-10-01 (request `pr-20261001T142917Z-7bb1e4`), worked through this calculator exactly as the sixteen
+run on 2026-10-01, worked through this calculator exactly as the sixteen
 before it: the number on the card is this calculator's result on the run's recorded inputs, never typed, with the
 run's own stated figure beside it. The model was two days old, so the run was given the GPT-6 Sol estimate
 (2026-09-28) as context rather than a target, and says input by input what it carried over, what it changed and
@@ -40,8 +40,7 @@ now carries seventeen models.
 ## Astra Pro estimates — 2026-09-28 (Claude Sonnet 5.5 and GPT-6 Sol added)
 
 **Added — two cards in §10 "Astra Pro estimates".** Claude Sonnet 5.5 (Anthropic, launched 2026-09-28) and
-GPT-6 Sol (OpenAI, released 2026-09-22), one GPT-6 Astra Pro research run each on 2026-09-28 (requests
-`pr-20260928T182812Z-e802e3` and `pr-20260928T182812Z-844f4e`), worked through this calculator exactly as
+GPT-6 Sol (OpenAI, released 2026-09-22), one GPT-6 Astra Pro research run each on 2026-09-28, worked through this calculator exactly as
 the fourteen before them: the number on each card is this calculator's result on the run's recorded
 inputs, never typed, with the run's own stated figure beside it. Sonnet 5.5 launched the day its run was
 made and GPT-6 Sol six days before its run, so each run was given its nearest sibling's published estimate (Claude Sonnet 5 and GPT-6 Astra, 2026-09-25) as
@@ -59,7 +58,7 @@ the run's recorded inputs — regenerated from them, never typed — with the ru
 it; the category has its own chart, drawn from the same function. The cards are grouped by provider in a
 fixed order and are not a ranking. The first release carries fourteen models: Anthropic Claude Fable 5.1, Anthropic Claude Opus 5.5, Anthropic Claude Sonnet 5, Anthropic Claude Haiku 4.5, OpenAI GPT-6 Astra, OpenAI GPT-5.6 Terra, OpenAI GPT-5.6 Luna, Google Gemini 3.8 Flash, Google Gemini 3.1 Pro, xAI Grok 4.6, DeepSeek V4.1-Flash, Alibaba Qwen3.8-Max, Moonshot AI Kimi K3 and Zhipu GLM-5.3. GPT-6 Astra Pro itself has no card: it has no API tariff, so it has no API serving margin to estimate.
 
-**Removed — the §10 table "Same-assumption scenario outputs — one normalized lens (not a ranking)".** The owner judged it the first place a reader sees models side by
+**Removed — the §10 table "Same-assumption scenario outputs — one normalized lens (not a ranking)".** It was judged the first place a reader sees models side by
 side, screenshottable, and speculation not directly relevant to anything in reality: it priced every
 provider through one page-authored lens (one procurement vector, 50% utilization, the Reference traffic)
 while keeping each row's own lead prior, so its row order encoded this page's assumptions more than any
@@ -78,7 +77,7 @@ text, verbatim as it last stood:
 A presentation release: **no computed number moved.** Three model families' legibility reviews
 agreed on what made a first reading hard (the long scenario note above the calculator, the qualifier
 typeset as part of the headline number, two tiles competing to be "the answer", version history in
-the reader's path). This release fixes those without changing any figure. The owner's standing rule
+the reader's path). This release fixes those without changing any figure. The standing rule
 is that version history belongs in a changelog, so the passages below moved here **verbatim**.
 
 - The one-paragraph standfirst replaces three; its figures and its data-date paragraph now open the
@@ -133,11 +132,11 @@ Where it diverges from the GPT-5.6 Pro estimate: occupancy 60 against 65 — and
 
 ### The Fable 5 scenario's note, as it read before this release
 
-Fable 5's self-authored reading of this page, measured through the calculator before it was declared: 77.31 % on the engine of 2026-08-07, where every value its author declared reproduced to the decimal. The calculator has changed since (the generic-defaults move of 2026-08-24, then the fleet-rent adoption of 2026-09-10) while this vector has not, and it computes 76.33 % here today; the stated ≈77 % is its author's and is not re-tuned toward the engine. THE HEADLINE WAS COMPUTED rather than computed-and-then-annotated — the serving-stack credit that supports it is carried IN the calculator rather than riding beside the vector as prose: its exact months-equivalence at the ratified 3×/yr is 0.9159 months, and because the lead dial is integer-only the preset represents it with a one-month midpoint (the 77.31 % of 2026-08-07 and today's 76.33 % are both computed at one month). WHAT THE DIAL CARRIES, which is the double-count question and the author's own answer to it: at mid it carries the CREDIT re-expressed in months, not a lead prior; at hi it carries the OpenAI-anchored lead bound INSTEAD of the credit, never on top of it — stackMult stays 1.0 and speculative decoding stays off at every point, so the mechanism is counted exactly once. THE UPPER BOUND is anchored to the strongest first-party quantified datapoint (OpenAI 2026-07-29, agent-written kernels, '-20% end-to-end serving costs' = 2.437 months at 3×/yr) and then INTEGER-FLOORED to 2 rather than rounded, on the author's stated ground that the evidence is OpenAI's while this page's subject is Anthropic, that it is a rate-of-improvement datapoint rather than a standing gap, and that transfer to the serving layer is well under 1. THE BAND IS 65–82, whose floor prices the rates downside explicitly (64.67 measured on the engine of 2026-08-07 at half-strategic, util 50, lead 0). The author's declared common basis for any cross-arm comparison is lead 0. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog.
+Fable 5's self-authored reading of this page, measured through the calculator before it was declared: 77.31 % on the engine of 2026-08-07, where every value its author declared reproduced to the decimal. The calculator has changed since (the generic-defaults move of 2026-08-24, then the fleet-rent adoption of 2026-09-10) while this vector has not, and it computes 76.33 % here today; the stated ≈77 % is its author's and is not re-tuned toward the engine. THE HEADLINE WAS COMPUTED rather than computed-and-then-annotated — the serving-stack credit that supports it is carried IN the calculator rather than riding beside the vector as prose: its exact months-equivalence at the ratified 3×/yr is 0.9159 months, and because the lead dial is integer-only the preset represents it with a one-month midpoint (the 77.31 % of 2026-08-07 and today's 76.33 % are both computed at one month). WHAT THE DIAL CARRIES, which is the double-count question and the author's own answer to it: at mid it carries the CREDIT re-expressed in months, not a lead prior; at hi it carries the OpenAI-anchored lead bound INSTEAD of the credit, never on top of it — stackMult stays 1.0 and speculative decoding stays off at every point, so the mechanism is counted exactly once. THE UPPER BOUND is anchored to the strongest first-party quantified datapoint (OpenAI 2026-07-29, agent-written kernels, '-20% end-to-end serving costs' = 2.437 months at 3×/yr) and then INTEGER-FLOORED to 2 rather than rounded, on the author's stated ground that the evidence is OpenAI's while this page's subject is Anthropic, that it is a rate-of-improvement datapoint rather than a standing gap, and that transfer to the serving layer is well under 1. THE BAND IS 65–82, whose floor prices the rates downside explicitly (64.67 measured on the engine of 2026-08-07 at half-strategic, util 50, lead 0). The author's declared common basis for any cross-arm comparison is lead 0. Method and derivation: the scenario derivation of 2026-08-08; how this reading arrived at its current form is in the changelog.
 
 ### The GPT-5.6 Pro scenario's note, as it read before this release
 
-GPT-5.6 Pro's self-authored reading of this page: a headline of 83.06 % on the engine of 2026-08-07, worked by its author from the calculator's own 79.65 % no-lead reading (the connector it could reach did not yet carry this preset, so the figure did not come through the MCP; that day's engine computed 83.0561 % for the same settings). The calculator has changed since (the generic-defaults move of 2026-08-24, then the fleet-rent adoption of 2026-09-10) while these settings have not, and they compute 82.42 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure — in its own words, it has 'no independent reason to select 2.6269 months; choosing it would be precisely the target tuning this commission prohibits.' THE LEAD IS A RANGE, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately BELOW the 2.4374 months a 1.25× efficiency multiplier implies; 4 as the ratified upper scenario, explicitly WITHOUT importing the rejected anonymous >2× claim. PROCUREMENT IS COUNTED ONCE: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. THE STATED SPAN IS 68–92 %, and it is the author's SELECTED span, not a live-engine corner band — the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog.
+GPT-5.6 Pro's self-authored reading of this page: a headline of 83.06 % on the engine of 2026-08-07, worked by its author from the calculator's own 79.65 % no-lead reading (the connector it could reach did not yet carry this preset, so the figure did not come through the MCP; that day's engine computed 83.0561 % for the same settings). The calculator has changed since (the generic-defaults move of 2026-08-24, then the fleet-rent adoption of 2026-09-10) while these settings have not, and they compute 82.42 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure — in its own words, it has 'no independent reason to select 2.6269 months; choosing it would be precisely the target tuning this commission prohibits.' THE LEAD IS A RANGE, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately BELOW the 2.4374 months a 1.25× efficiency multiplier implies; 4 as the ratified upper scenario, explicitly WITHOUT importing the rejected anonymous >2× claim. PROCUREMENT IS COUNTED ONCE: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. THE STATED SPAN IS 68–92 %, and it is the author's SELECTED span, not a live-engine corner band — the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: the scenario derivation of 2026-08-08; how this reading arrived at its current form is in the changelog.
 
 ## Follow-up release — 2026-09-20 (five tariffs corrected to what the vendors now charge, an accelerator withdrawn from the default fleet, and one name per idea)
 
@@ -251,7 +250,7 @@ source commit named in the publish, are what distinguish them.
 
 ## Follow-up release — 2026-09-12 (every scenario can be your default on every model, the Custom model included)
 
-Owner voice note `note-20260912T180812Z-c9eaac` asked for a set-as-default button on every assumption. The
+The author’s note of 2026-09-12 asked for a set-as-default button on every assumption. The
 release below left gaps. With the Custom model selected, the window offered every scenario without that
 button, and the scenario on screen had no button of its own while a different traffic mix was selected or
 its settings were edited. Every scenario the window names now carries one, on every model. The one exception
@@ -270,7 +269,7 @@ No number on the page changes.
 
 ## Follow-up release — 2026-09-12 (one window, a default you can choose, and the headline shows its working)
 
-Owner voice note `note-20260912T180812Z-c9eaac` and burn-queue rows `bq-2345` and `bq-2334`.
+The author’s note of 2026-09-12 and the follow-up work it requested.
 
 **The headline tile is now the one window.** It names the scenario it is showing, marks it when that
 scenario is the default, and swaps scenario in place. The page still opens on the GPT-5.6 Pro
@@ -306,8 +305,7 @@ and the archived GPT-5.6 Pro contextual estimate (about 79 % at list and 76 % on
 
 ## Follow-up release — 2026-09-10 (the r3 lead-only diagnostic is recomputed, and this entry exists because the last move of it was not recorded)
 
-Owner ruling `d-20260910-im-r3-lead-diagnostic-recompute`, answering card
-`q-im-r3-lead-diagnostic-designation`: **A — recompute on all three surfaces and keep it
+Adjudicated 2026-09-10 on the lead-only diagnostic: **A — recompute on all three surfaces and keep it
 recomputed.**
 
 **The GPT-5.6 Pro round-3 lead-only diagnostic moves 80.48–86.47 % → 78.89–85.37 %** across 0–4
@@ -329,7 +327,7 @@ toward 84.0. The percentages then track that dial exactly at two independent eng
 corner band. Only the field the author never wrote is recomputed.
 
 Three surfaces published two different values before this entry — the card face and the registry at
-80.48–86.47 %, and the paragraph below at 79.65–85.89 %, false since the 2026-08-24 fold. All three
+80.48–86.47 %, and the paragraph below at 79.65–85.89 %, false since the 2026-08-24 revision. All three
 now read 78.89–85.37 %. The `2026-08-17` entry below carries the corrected figure inline rather than
 a second copy, so this page states the diagnostic once.
 
@@ -340,15 +338,14 @@ written down, and so is this instance of it.
 
 ## v3.2.0 — 2026-09-10 (the declared fleet is priced, and the Grok cache-read rate is corrected)
 
-Owner ruling `d-20260910-im-adopt-fleet-rents-and-correct-grok`, answering card
-`q-im-unpriced-legs-and-grok-cache`. Two changes, both of which move published numbers, and both
-declared here rather than folded quietly into a release that had promised not to move any.
+Adjudicated 2026-09-10 on pricing the declared fleet and correcting the cache-read rate. Two changes, both of which move published numbers, and both
+declared here rather than incorporated quietly into a release that had promised not to move any.
 
-**The owner-adopted scenario rents for GB200, GB300 and Trainium3.** From the im-arc T4 fold of
+**The adopted scenario rents for GB200, GB300 and Trainium3.** From the fleet-rent revision of
 2026-08-24 until today, those three legs carried no admissible public planning rate. The engine
 renormalized them out and computed the headline over the remaining **52% of declared fleet weight**,
-disclosing that it did so. The owner ruled that disclosure was not enough and the declared fleet
-should be priced. The three rows the fold had kept as declared provisional replays — GB200 $4.50,
+disclosing that it did so. The decision was that disclosure was not enough and the declared fleet
+should be priced. The three rows the revision had kept as declared provisional replays — GB200 $4.50,
 GB300 $6.00, Trainium3 $2.20 per accelerator-hour — are now registered quotes and are what
 `RENT_POLICY` selects. **The numbers are unchanged from those replays; the selection is the change.**
 
@@ -375,17 +372,16 @@ Two authored reconstructions that had fallen outside their 80–90% band when th
 their rates re-enter it (x80-v3 81.0, x80-v4 80.0). That is the assumption returning, not evidence
 arriving, and the disclosure says so.
 
-### Declared owner-ruled exceptions
+### Declared exceptions
 
 Everything in this release that departs from a standing rule is listed here with the arithmetic it
-changed and the ruling that authorised it. Ruling id for all of them:
-`d-20260910-im-adopt-fleet-rents-and-correct-grok` (owner, 2026-09-10T05:50Z / 22:50 MST
-2026-09-09), answering card `q-im-unpriced-legs-and-grok-cache`.
+changed and the ruling that authorised it. The decision covering all of them was recorded on 2026-09-10T05:50Z / 22:50 MST
+2026-09-09, on pricing the declared fleet and correcting the cache-read rate.
 
 **Exception 1 — a provisional rate is selected as a planning default.** The standing rule is that
 `RENT_POLICY` selects a rate of the low/committed planning class. No such rate is published for
-GB200, GB300 or Trainium3, and the page had excluded them for that reason since 2026-08-24. The
-owner ruled that the declared fleet should be priced anyway. The three rows are registered
+GB200, GB300 or Trainium3, and the page had excluded them for that reason since 2026-08-24.
+The decision was that the declared fleet should be priced anyway. The three rows are registered
 `basis: provisional`, `unavailableReason` is kept rather than deleted, and each source line says
 plainly that no rate of the planning class exists for that leg.
 Arithmetic: reference reading **51.1786 → 57.8814** at effective price and **57.0982 → 62.9883** at
@@ -403,21 +399,21 @@ not for this. States that run with cache on do move for this, downward, because 
 input rather than a cost one. The `knownStaleInputs` row is kept with a `resolvedAt` rather than
 deleted.
 
-**Exception 3 — byte-frozen surfaces are re-minted.** Each carries its own declared note naming
+**Exception 3 — byte-frozen surfaces are repinned.** Each carries its own declared note naming
 what changed and why, and each moved set is bounded by an assertion rather than by a claim:
 
 - **six of eleven MCP report-text slices** (report-s4, s5, s6, s7, s10 and the front page); the
   other five are byte-identical, which is what makes the moved set meaningful;
-- **two R1 freezes** — the concatenated MCP TypeScript hash, and `site/index.html`, the latter for a
+- **two render-parity freezes** — the concatenated MCP TypeScript hash, and `site/index.html`, the latter for a
   one-character repair described in exception 5 below;
-- **the 180-pair v2.2 traffic-contract baseline**, whose re-mint shape is itself the evidence that
+- **the 180-pair v2.2 traffic-contract baseline**, whose repinning scope is itself the evidence that
   this was a procurement change: of 180 provider/perspective pairs **72 moved and 108 are
   byte-identical**, and the set of pairs that moved without carrying an adopted leg or being
   Grok-with-cache is **empty**. One owned-TCO route did move — `grok|x90-v1`, 71.54% → 69.06% — and
   it moved for the second admissible cause rather than the first: a planning rent cannot reach a
   route that prices from capex, but that state runs with cache on, so the cache-read correction
   reaches it, downward, which is the direction a revenue cut implies;
-- **20 of 22 UX-C rendered-tail fixture states**, with the pre-adoption fixture archived;
+- **20 of 22 interface rendered-tail fixture states**, with the pre-adoption fixture archived;
 - **seventeen pinned figures in the application-level release tests** and **two rendered-answer
   digests**, every one of them re-derived from the rendered DOM rather than from arithmetic. One of
   those is not a digit swap: the gap against an analyst's stated figure was *0.6 points above what
@@ -443,7 +439,7 @@ reproductions — for a field both publication surfaces already round to "100%" 
 Destroying a reproduction proof of what the engine used to compute, to remove one ulp from a number
 no reader sees at full precision, is the wrong trade. **No published figure changes either way.**
 The engine-internal identity, and a sibling of the same defect on the per-section share, are filed
-as `bq-2194` for a release that is not already carrying a number move.
+for a release that is not already carrying a number move.
 
 **Exception 5 — a one-character repair to the served page, on a release that changes no prose.** The
 number sweep left an unclosed `<strong>` in §4. A browser's parser nests everything after such a tag
@@ -451,11 +447,11 @@ inside it, so report sections 5–10 and their headings stopped being children o
 and **six of the ten sections became unreachable by deep link**. No static check saw it — a strict
 parser reading the file reports all ten correctly, and the byte freeze was green because the bytes
 were exactly what the sweep wrote. The repair is the missing `</strong>` and nothing else; no text a
-reader sees changes. A tag-balance check now runs in the test suite. Filed as `bq-2195`.
+reader sees changes. A tag-balance check now runs in the test suite. Recorded in the revision history.
 
 ## v3.1.0-dev — 2026-08-22 (section-scoped fleet procurement and the named generic-electricity migration)
 
-The im-arc T2 build (`research/im-arc-t2-sections-memo.md`) makes procurement and electricity
+The fleet-section build of 2026-08-22 makes procurement and electricity
 properties of explicit fleet sections. Mixed rented/owned fleets now retain an executable
 `composition[]` basis map; section electricity affects owned/TCO pricing only; legacy flat fleets
 load through a one-section migration shim; and codec v7 carries sections by value. The hardware
@@ -496,10 +492,10 @@ the top and three dated inline markers at the points where ¥0.38 is stated as t
 preserved — the page is a verbatim archive and corrections are annotations on it, following the
 2026-07-10 precedent on the Ascend web sweep.
 
-**What did NOT change: any engine value.** Nothing in the engine, the data layer or the memos consumes
+**What did NOT change: any engine value.** Nothing in the engine, the data layer or the design studies consumes
 ¥0.38 (grepped). The calculator's global electricity default stays at **$0.07/kWh**, whose label "US
 industrial ≈$0.06–0.09" spans the EIA figure. Whether that default should move to $0.0871 is an open
-owner decision and is deliberately not settled here.
+authorial decision and is deliberately not settled here.
 
 **Size of the correction, stated.** Raising the electricity term from ¥0.38 to the coastal ¥0.65
 is **+72%** on that term ($0.0494 → $0.0849 per accelerator-hour at PUE 1.25), **+2.5%** on H800
@@ -511,11 +507,11 @@ sentence — "depreciation and utilization dominate, not power" — was right.
 
 ## Engine lever — 2026-08-18 (the H800/H100 differential becomes a named, adjustable assumption: `nvlinkCapMinRatio`)
 
-Owner voice note aca09d (2026-08-18): the H800's difference from the H100 must be modeled somewhere —
+The author’s note of 2026-08-18: the H800's difference from the H100 must be modeled somewhere —
 he believes it matters mostly for training and less for inference, "but there is no way that it doesn't
 matter at all"; whichever assumption the model adopts must be explicit and adjustable, so a reader who
 disagrees in either direction can play with it and see the consequence. A GPT-5.6 Pro pre-decision
-review (2026-08-18) was folded before shipping: the first design's unconditional multiplier was rejected
+review (2026-08-18) was incorporated before shipping: the first design's unconditional multiplier was rejected
 as double counting and replaced by the matched-counterfactual floor below; the copy moved from "uplift"
 to "fit-transfer assumption"; the bounds were tightened; H200 got its own lineage value.
 
@@ -559,7 +555,7 @@ model's overlap formulation, not an empirical bound), and the blend and stand-al
 versus the current setting plus a neutral slope per +0.05 — rendered beside the control and under the
 per-accelerator chart. Nothing numeric is authored in a renderer.
 
-**No computed value moves at the default**: the WIDE 270-state render parity re-mint is purely additive
+**No computed value moves at the default**: the WIDE 270-state render parity repinning is purely additive
 (stripping the one new typed leg field reproduces the prior baseline hash exactly), both tripwires
 re-derive exact, the default-state permalink bytes are unchanged, and the all-H800 DeepSeek replays are
 invariant under any value by construction. The sensitivity is real when moved: at ×1.10 the H100
@@ -569,12 +565,12 @@ setting is a declared belief about a fit-transfer effect, not a measurement.
 
 ## Page revision — 2026-08-17 (the estimate cards' round-2 readings move here, where version history belongs)
 
-Owner standing rule, 2026-08-16: *"do not give any info about changes from previous versions on the
+Standing rule of 2026-08-16: *"do not give any info about changes from previous versions on the
 page, a change log buried where someone looking can find it is plenty, otherwise quite confusing to
 users who have no idea what the old systems were."* The 2026-08-16 sweep applied that rule across
 the page, and then the cards-vintage rebuild later the same day put round-over-round comparison back
-into the two estimate expanders — the faces moved to the round-3 readings (owner ruling
-`q-margins-cards-vintage`, 2026-08-16T14:17Z) and the expanders narrated the move. The faces stay
+into the two estimate expanders — the faces moved to the round-3 readings (the author’s decision of
+2026-08-16T14:17Z) and the expanders narrated the move. The faces stay
 where that ruling put them; the narration moves here, in full, so nothing published is lost:
 
 **GPT-5.6 Pro card.** The round-2 pair the estimates rebuild was ruled on: **81.8 % effective
@@ -592,13 +588,13 @@ parity over all 270 states is byte-identical across it. The expanders keep every
 naming which authored statement each face quotes and which contextual review the analysis beneath it
 came from — that is citation, not version history, and the rule is about the latter.
 
-## Engine v3.0.0 — 2026-08-13 (the b9 arc complete: claim-bearing tails, the range calculator's mean mix, and three Share crashes fixed)
+## Engine v3.0.0 — 2026-08-13 (the serving-model revision complete: claim-bearing tails, the range calculator's mean mix, and three Share crashes fixed)
 
-The version badge moves 2.2 → 3.0 (plan D-10, ruled at M8): since 2.1 this line rebuilt the entire
-form (M1–M6), repaired the published numbers under adversarial review, added the two-reading
+The version badge moves 2.2 → 3.0 (the release decision): since 2.1 this line rebuilt the entire
+form, repaired the published numbers under adversarial review, added the two-reading
 FINAL-ANSWER surface, and now ships the last two development lines together. New in this release:
-the UX-C claim-bearing tails (typed tail commits, relocatable receipts, an honest close path); the
-M7 citation repairs; the provider-range calculator's derived-fleets statistic as the margin at the
+the interface claim-bearing tails (typed tail commits, relocatable receipts, an honest close path); the
+citation repairs; the provider-range calculator's derived-fleets statistic as the margin at the
 EXACT mean mix — the centroid of every distribution summing to 100 % inside the declared ranges,
 computed in exact integer arithmetic after float cancellation was twice shown to certify wrong
 answers — with the expected-margin claim rendered only when the serving regime and renormalization
@@ -609,9 +605,9 @@ labels speak the bounded providers' own total; and this changelog's earlier affi
 its dated correction below. No computed reading moved: 255/255 production states verified
 byte-identical against v2.2.0 (research annex: headline-invariance evidence).
 
-## Engine v2.3.1-r499 — 2026-08-09 (a fleet mix is a range too: max/min/median over the distributions that sum to 100 %)
+## Engine v2.3.1 — 2026-08-09 (a fleet mix is a range too: max/min/median over the distributions that sum to 100 %)
 
-Owner ruling `q-sliders-fleet-util-point`, answering a question about whether fleet occupancy should
+Adjudicated 2026-08-09, answering a question about whether fleet occupancy should
 become a POINT. It reverses that and generalises it: *"if there's a range for providers, then there
 should just be an algorithm to sample the max and min based on those ranges … anything that doesn't
 sum to 100 is going to be not included in the calculator because you need 100%."* Single points, in
@@ -630,7 +626,7 @@ Trainium 0.
 corner-enumerates INDEPENDENT dials over a box. Shares are coupled by `Σ = 100`, so their feasible
 set is a box sliced by a hyperplane — a polytope whose extremes sit at vertices.
 
-*Correction (2026-08-13, M8 exit gate).* This entry originally claimed margin is AFFINE in the
+*Correction (2026-08-13, release review).* This entry originally claimed margin is AFFINE in the
 shares and that measured affineness is what licenses the exactness. The dual consult of
 2026-08-10 sharpened that argument and the engine has carried the sharper form since: with the
 renderable set fixed, renormalization makes cost a ratio of two affine functions —
@@ -652,7 +648,7 @@ never rescales a declared range to make it fit.
 No computed value moved: 255 of 255 render states byte-identical, 255 of 255 saved links resolve to
 the same margin (`worstDelta: 0`), no `DEFAULTS` move and no epoch bump.
 
-## b9 M7 citation-debt leg — 2026-08-09 (primary pinned; axes corrected; quote-dated)
+## Citation revision citation-debt leg — 2026-08-09 (primary pinned; axes corrected; quote-dated)
 
 **What.** The three pre-public citation-verification debts are resolved as attribution and
 scope-label repairs only. The Amodei "compute multipliers" term is pinned to the 2023-08-08
@@ -671,9 +667,9 @@ while the confirmed +37–40%/year hardware line remains. The attributed 10–50
 inference-price band could not be re-confirmed at that URL on 2026-08-09. That is a failure to
 re-confirm, not evidence Epoch removed it; the inference-price class remains carried by Epoch's
 dedicated data insight in §2.3. **No computed value moved.** Resolution ledger:
-`research/b9-m7-citation-debts.md`.
+the citation-verification ledger of 2026-08-09.
 
-**Two further corrections, folded from the leg's own documentation gate (round 1, HOLD).** The
+**Two further corrections, incorporated from the leg's own documentation gate (round 1, HOLD).** The
 OpenAI row said the "few hundred GPUs" figure covered **free-tier** ChatGPT. It does not: the
 confirmed segment is the **logged-out guest/visitor tier**, explicitly outside the free
 *registered* tier — a scope this repository's own x-sources record already called "the
@@ -684,7 +680,7 @@ own two figures** and no others — an overclaim in the opposite direction from 
 no more true.
 
 **A third round was needed, and the record says why.** Gate round 2 confirmed both folds above and
-then caught two claims the fold itself had introduced: an archive conclusion drawn from **two**
+then caught two claims the revision itself had introduced: an archive conclusion drawn from **two**
 inspected captures while asserting coverage of all thirteen, and a gross-margin figure whose
 provenance had been silently upgraded to "audited-document reporting" by sitting next to a figure
 that genuinely carries that attribution. The first was answered by **fetching all 13 listed captures**
@@ -699,7 +695,7 @@ milestone that hid its own three-attempt convergence would be the wrong kind of 
 per-dial bands under the hero at page open, with the compounded whole-box range behind an explicit
 opt-in — never the headline. Both round-3 self-authored presets land (GPT-5.6 Pro and Fable 5, each
 authored through the calculator itself), and the page-open default moves from the round-2 contextual
-Pro preset to **the round-3 self-authored Pro preset** (owner-accepted 2026-08-08): the first number
+Pro preset to **the round-3 self-authored Pro preset** (adopted 2026-08-08): the first number
 a visitor sees is now ≈83% at the author's own +2-month lead, beside the author's own stated
 ≈83.1% (68–92%) and a derived gap line reading 0 points. The author's six identical NVIDIA leg
 ranges are carried as one family-scoped range (values unchanged), so the landing default's
@@ -709,7 +705,7 @@ compounded band computes — 10 bounded assumptions, point 83.0561 unmoved to fo
 This release also puts the corrected +2.4-months stack-multiplier equivalence on the served page —
 the v2.2.0 hotfix below was published to the mirror on 2026-08-07 but not deployed until now.
 
-## b9 UX-C — 2026-08-09 (the claim-bearing tails: typed split, relocatable receipts, honest close path)
+## Interface revision — 2026-08-09 (the claim-bearing tails: typed split, relocatable receipts, honest close path)
 
 **What.** The hero tile's tail — every state-identity label, supplemental receipt and trailing
 affordance under the headline margin — is now composed as a TYPED three-region structure
@@ -725,8 +721,8 @@ relocated source aborts while it stands, and pending work replays through one le
 dispatcher once the close succeeds. `.id-epistemic` (the anti-conclusion-shopping label) is
 promoted in place. **No computed value moved**; the tail's fresh-state text is byte-identical
 across a 21-state pre/post fixture; sinks 390→389 with zero class moves; index.html untouched.
-Spec: `research/b9-ux-memo.md` §18 v6 (six adversarial design-gate rounds, P0 funnel
-7→5→3→2→1→0). Manifest: `research/b9-delta-manifests/b9-ux-c-delta-manifest.md`. Implementation
+Spec: the interface design study of 2026-08-09 (design revision 6) (six adversarial design-gate rounds, P0 funnel
+7→5→3→2→1→0). Manifest: the interface revision record of 2026-08-09. Implementation
 `047428e`.
 ## Engine v2.2.0 hotfix — 2026-08-07 (one wrong number, in the page's own arithmetic)
 
@@ -750,17 +746,17 @@ label before today — and pinned the typo with it, asserting the literal string
 hard-coded number could verify itself. A future edit that moves the trend model, the default rate,
 or the sentence will now fail the chain instead of shipping.
 
-Found by the row-499 algorithmic-lead investigation while re-deriving every months-equivalent this
+Found by the algorithmic-lead investigation while re-deriving every months-equivalent this
 project quotes.
 
-## Engine v2.2.0 — 2026-08-06 (the b9 arc goes public: the landing headline moves ≈77% → ≈69%)
+## Engine v2.2.0 — 2026-08-06 (the serving-model revision goes public: the landing headline moves ≈77% → ≈69%)
 
 **The headline number changed, and this entry exists to say so plainly.** Until today this page's
 landing default — the number a first-time visitor sees before touching a control, `opus` at the
 `median` perspective — read **≈77%**. It now reads **≈69%**, with **≈59%** carried beside it as a
 second, labeled *public-evidence reference* reading. Both are scenario readings of this calculator.
 Neither is a measurement of anyone's margin, and neither has become "more correct" than the other:
-they differ by exactly one declared assumption, the owner-ratified algorithmic-lead prior, and by
+they differ by exactly one declared assumption, the adopted algorithmic-lead prior, and by
 nothing else.
 
 **Why it moved — three mechanisms, not one, and they run in opposite directions.** Each delta below
@@ -771,8 +767,8 @@ was measured by executing that revision's own engine at the landing default, not
 | 0 | the previously published engine (v2.1.x) | — | 76.7784% | — |
 | 1 | **serving-model re-engineering** — the activated roofline display path, the parallel capacity-width solver, and serve-feasibility-filtered default fleet membership | 2026-07-19 → 07-23 | 35.1404% | **−41.64** |
 | 2 | **the model-size revision** — the current flagship adopting the 2–3 T community band at a 2.5 T scalar, in place of the earlier 5 T Musk-relative reading | 2026-07-24 | 37.2066% | **+2.07** |
-| 3 | **the margin-evidence adjudication** — the r4 run B §C1 repaired defaults | 2026-07-26 | 59.1806% | **+21.97** |
-| 4 | the owner-ratified algorithmic-lead prior (b9 M5) — the one assumption separating the two published readings | 2026-07-28 | 68.9840% | **+9.80** |
+| 3 | **the margin-evidence adjudication** — the adversarial-review repaired defaults | 2026-07-26 | 59.1806% | **+21.97** |
+| 4 | the adopted algorithmic-lead prior (Efficiency revision) — the one assumption separating the two published readings | 2026-07-28 | 68.9840% | **+9.80** |
 
 The rebuild of how this page models serving is what moved the number most, and it moved it *down*;
 the two adjudications that followed moved it back *up*. The FA arc's own acceptance rows asked only
@@ -789,25 +785,24 @@ against moved tables. A **v5-or-later** link, which carries the margin its share
 renders the drift notice on the whole-percent hero convention: *"originally shared: ≈77% — current
 engine: ≈69%"*. Neither path silently re-renders an old link at the new number.
 
-**What else this release makes public for the first time** (the whole b9 arc, previously development-
-only): the b9 M6 two-reading FINAL-ANSWER surface and its analyst-gap executive summary; the b9 M1
-repaired defaults; the b9 M2 form-correction debt disclosure; the b9 M3 energy/procurement-basis
-dimension; the b9 M4 custom fleet builder and permalink codec v6; the b9 M5 family sliders and
+**What else this release makes public for the first time** (the whole serving-model revision, previously development-
+only): the Final-answer revision two-reading FINAL-ANSWER surface and its analyst-gap executive summary; the Defaults revision
+repaired defaults; the Equation-form revision form-correction debt disclosure; the Energy revision energy/procurement-basis
+dimension; the Fleet-builder revision custom fleet builder and permalink codec v6; the Efficiency revision family sliders and
 algorithmic-lead prior; the user-tunable speculative-decoding lever (default 1.00×, no credit); the
-IM3 roofline display path and the IM4 fleet/capacity solver behind mechanism 1 above; and the UX-A
-and UX-B legs. Several §10 provider cards move with them — most loudly Zhipu/GLM's dive replay to
+roofline display path and the fleet/capacity solver behind mechanism 1 above; and the interface revisions. Several §10 provider cards move with them — most loudly Zhipu/GLM's dive replay to
 ≈−166% (policy-unclean, labeled as such on the card) and Google/Gemini's to ~84%.
 
-**Carried forward unchanged:** v2.1.12's two owner-approved RAISE Summit podcast claims and their
+**Carried forward unchanged:** v2.1.12's two approved RAISE Summit podcast claims and their
 `analyst-characterization` provenance tier. **Version identity:** `ENGINE_REVISION`, the footer
 release manifest and `package.json` all read v2.2.0; `DATA_AS_OF` stays at 2026-07-26, the date of
 the newest evidence incorporated.
 
-## Engine v2.1.12 — 2026-08-05 (weekly update: two owner-approved RAISE Summit podcast claims)
+## Engine v2.1.12 — 2026-08-05 (weekly update: two approved RAISE Summit podcast claims)
 
-**Why.** The 2026-07-27 owner ruling on `q-im-podcast-candidates` approved two claims for inclusion, both from Dylan Patel's (SemiAnalysis) on-stage remarks at the RAISE Summit 2026 (Paris; recorded 2026-07-09, published 2026-07-16) — surfaced by this project's podcast-mining pipeline on 2026-07-26. This is the first release to carry a podcast-transcript-sourced claim in the MARGIN_CLAIMS registry.
+**Why.** An adjudication of 2026-07-27 approved two claims for inclusion, both from Dylan Patel's (SemiAnalysis) on-stage remarks at the RAISE Summit 2026 (Paris; recorded 2026-07-09, published 2026-07-16) — surfaced by this project's podcast-mining pipeline on 2026-07-26. This is the first release to carry a podcast-transcript-sourced claim in the MARGIN_CLAIMS registry.
 
-**New provenance label: ANALYST-CHARACTERIZATION.** Both claims are Patel's own account of pre-IPO/private financials he says he has reviewed, not a company disclosure or filing — the owner ruling required this be carried explicitly, so a new `provenanceTier: "analyst-characterization"` value is introduced (free-text field, no enum to extend) alongside a `tierNote` on each record spelling out the caveat.
+**New provenance label: ANALYST-CHARACTERIZATION.** Both claims are Patel's own account of pre-IPO/private financials he says he has reviewed, not a company disclosure or filing — the decision required this be carried explicitly, so a new `provenanceTier: "analyst-characterization"` value is introduced (free-text field, no enum to extend) alongside a `tierNote` on each record spelling out the caveat.
 
 **Anthropic — first realized-profit claim.** Patel said Anthropic turned its first gross profit in Q2 (June 2026) and will book slightly over $1B of operating profit in Q3, describing these as the financials Anthropic is preparing to disclose in its IPO. Added as a new `patel-anthropic-first-gp-2626` MARGIN_CLAIMS record (`binnable: false` — a profit-milestone/dollar claim, not a percentage margin, so it cannot sit on the margin-% axis; carries its own `reason` per the registry's binnable:false convention) and as a dated paragraph in §7's reported-margin narrative, distinguishing it from every other figure in that section (all projections or modeled estimates, never a claimed realized profit).
 
@@ -815,7 +810,7 @@ the newest evidence incorporated.
 
 **No preset, parameter, MFU, price, tariff or architecture number changed** — both additions are evidence-board/narrative only, following the same pattern as the DeepSeek TI addition in v2.1.6. `ENGINE_REVISION` and `DATA_AS_OF` (now 2026-07-26, the date of the newest evidence incorporated) bumped accordingly; the footer release manifest and `package.json` version aligned.
 
-## Engine b9 spec-decode LEVER — 2026-08-02 (a user-tunable speculative-decoding credit)
+## Engine Speculative-decoding lever — 2026-08-02 (a user-tunable speculative-decoding credit)
 
 **What.** The calculator gains a `specDec` scenario lever: a post-roofline, **decode-only**
 throughput credit, default **1.00× (no credit)**, domain [1.00, 1.60]. It is available ONLY from the
@@ -847,18 +842,18 @@ instructive: the page claimed acceptance figures for speculative decoding are un
 lab", which is false against its own registry — two non-flagship anchors carry them. The true claim
 is a frontier-fleet absence, and it is now what the page says, in both files that made it.
 
-Full record: `research/b9-delta-manifests/b9-specdec-delta-manifest.md`.
+Full record: the speculative-decoding revision record of 2026-08-02.
 
-## Engine b9 M6 — 2026-07-30 (FINAL-ANSWER rework; analyst-gap summary; legacy retirement)
+## Engine Final-answer revision — 2026-07-30 (FINAL-ANSWER rework; analyst-gap summary; legacy retirement)
 
-**What.** The FINAL-ANSWER surface stops shipping one pinned reading and ships the five-part D-6
+**What.** The FINAL-ANSWER surface stops shipping one pinned reading and ships the five-part
 surface: **two labeled calculator readings** — the public-evidence repaired reference (algorithmic
 lead 0 months, family multipliers 1.0×) and the calculator's own ratified-prior default — plus the
 adopted analyst reading (above 80%, unchanged), the no-verified-central-comparator statement
 (unchanged), and a bridge saying how they relate. Beside it, a collapsible **analyst-gap executive
 summary** shows engine-computed single-control bridge rows from the default state, ordered by the
-owner's declared plausibility order and never by margin. Every explanatory surface the milestone
-reworks adopts the §20 owner rulings: legible explanation typography on the default skin
+declared plausibility order and never by margin. Every explanatory surface the milestone
+reworks adopts the explanation-design decisions: legible explanation typography on the default skin
 (`.explain-body`), a hyperlink-styled "Deeper explanation" trigger opening a near-fullscreen,
 **non-grayed**, internally scrollable popup with a top-right X, and nothing expanded by default.
 
@@ -875,13 +870,13 @@ than on the history, and the memo says so. One of those five is a copy amendment
 implementation gate holds should have been adjudicated first; it ships flagged as a declared,
 still-unadjudicated deviation rather than smoothed over.
 
-**No number moved.** M6 changes which readings are LABELED and SHOWN, and how explanations are
+**No number moved.** The final-answer revision changes which readings are LABELED and SHOWN, and how explanations are
 rendered — not one computed value. The reference blend (`0.5918058739356502`), the ratified default
 (`0.6898395363429421`), every fixture, every snapshot and the WIDE 180-state render hash are all
 byte-identical across the milestone. The FA keeps its reference-pinned derivation and GAINS a
 sibling prior reading; un-pinning it would have moved FA numeric fields.
 
-**Speculative decoding — a lever, deliberately out of the default.** Following an owner ruling of
+**Speculative decoding — a lever, deliberately out of the default.** Following the author’s decision of
 2026-07-30, the exec summary's spec-decode row is not a bare refusal: the lever exists, it is
 deliberately not in the default scenario, and the page says so and names what would be needed to
 price it. The mechanism is now vendor-officially on the record and dated (an OpenAI engineering post
@@ -893,27 +888,27 @@ batch to about 60% at modest concurrency) are reported as separate classes and n
 credit stays at zero here, stated as a conservative floor rather than as a finding that it is zero.
 Building the control itself is scoped as its own gated piece of work.
 
-**Superseded readings (history).** Before the b9 repair this page's evidence-informed blend read
-≈37% and its declared-topology blend ≈48%, on defaults the r4 adversarial review found defective
+**Superseded readings (history).** Before the defaults repair this page's evidence-informed blend read
+≈37% and its declared-topology blend ≈48%, on defaults the adversarial review found defective
 (per-device batch/weight identity, b = 4 Trainium operating points, cross-platform throughput
 coefficients, no explicit MTP, several low or analyst-set rents). Those readings are superseded by
 the repair and are preserved in git history. They are not selectable, and this page does not present
 them as a coherent public-market-rent case or as a central estimate of any provider's economics.
 This milestone moved the last live pre-repair comparison off the FINAL-ANSWER surface and into this
-note and the methods box, which is where plan D-1 says it belongs.
+note and the methods box, where the author’s design places it.
 
-**Legacy retirement, honestly reported.** The enumeration D-1 required was executed rather than
+**Legacy retirement, honestly reported.** The required enumeration was executed rather than
 asserted: all 12 perspectives, all 16 model presets, the three counterfactual fleets and the size
-bookmarks were inventoried at both bases. **Nothing needed retiring** — M1's data repair had already retired the broken
+bookmarks were inventoried at both bases. **Nothing needed retiring** — the defaults data repair had already retired the broken
 readings STRUCTURALLY: no live perspective, preset or exploration route resolves through a retired
 operating-point identity. That, and not numeric absence, is the property the plan actually needs;
 numeric absence would be the wrong claim in both directions, since an ordinary slider state can
 still round to a retired headline (several do) while a retired route could be reachable showing some
-other number. So what M6 owed was placement, basis-labeling and one guard-scope gap, not a deletion
+other number. So what the final-answer revision owed was placement, basis-labeling and one guard-scope gap, not a deletion
 pass. An enumeration that quietly found
 nothing and said nothing would look identical to one that was never run.
 
-## Engine b9 M5 — 2026-07-28 (family sliders; algorithmic-lead prior; interlock; NOT a ship)
+## Engine Efficiency revision — 2026-07-28 (family sliders; algorithmic-lead prior; interlock; NOT a ship)
 
 **What.** The mid-tier and big-picture levers (plan D-5/D-9.1; shared memo
 `research/b9-m45-ui-memo.md` v2.1 §§8–13, design gate closed at `28d4b25`). Two BROAD-UNSPECIFIED
@@ -959,15 +954,15 @@ different axis that is never this slider.
 flagship default goes **59.18% → 68.98%**, inside the plan's ratified-prior sanity band ≈66–71,
 and the move is exactly the reference with cost divided by E(+3 @ 3×/yr) = 1.31607. Everything
 else is byte-unchanged and proven so: the trend-0 reference blend holds at 0.5918058739356502,
-every numeric field of the FINAL-ANSWER surface is byte-equal to its pre-M5 value under an
+every numeric field of the FINAL-ANSWER surface is byte-equal to its pre-efficiency-revision value under an
 interim reference pin (the FA states, on its own surface, that it reads at 0 months and that the
 ratified-prior reading arrives with the final-answer rework), and feasibility, declared batch,
 capacity and the status vectors are lever-invariant. Full old→new ledger:
-`research/b9-delta-manifests/b9-m5-delta-manifest.md`.
+the revision record of 2026-07-28.
 
 **Not shipped.** No push, no deploy, no master commit — production stays v2.1.11.
 
-## Engine b9 M4 — 2026-07-28 (custom fleet builder; codec v6; NOT a ship)
+## Engine Fleet-builder revision — 2026-07-28 (custom fleet builder; codec v6; NOT a ship)
 
 **What.** The owner's max-granularity path (plan D-4/D-9.2; shared memo
 `research/b9-m45-ui-memo.md` v2.1, design gate closed in three Sol rounds at `28d4b25`): a
@@ -992,14 +987,14 @@ never writes device storage; "Save a copy" is the only write path). Persistence:
 
 **No shipped number moved**: reference blend margin byte-identical 0.5918058739356502; zero
 fixture regeneration; the leg-path refactor is equivalence-proven for every existing state.
-New suites: `tests/custom-fleets-b9.test.mjs` (75) + `tests/custom-fleets-cdp.test.mjs`
+New suites: the custom-fleet engine suite (75) + `tests/custom-fleets-cdp.test.mjs`
 (15, real-browser builder round-trip); browser chain 198 → 225. Delta manifest:
-`research/b9-delta-manifests/b9-m4-delta-manifest.md`. Production stays v2.1.11 — no deploy.
+the revision record of 2026-07-28. Production stays v2.1.11 — no deploy.
 
-## Engine b9 M3 — 2026-07-28 (energy/electricity dimension; three named procurement bases; NOT a ship)
+## Engine Energy revision — 2026-07-28 (energy/electricity dimension; three named procurement bases; NOT a ship)
 
-**What.** The calculator gains a physical energy surface and typed procurement bases (plan D-2/D-3;
-memo `research/b9-m3-energy-memo.md`). Serving energy (Wh per M tokens) is computed for every leg
+**What.** The calculator gains a physical energy surface and typed procurement bases (the author’s design;
+study the energy design study of 2026-07-28). Serving energy (Wh per M tokens) is computed for every leg
 and every lens — operating power × PUE ÷ achieved throughput at the engine's own operating point,
 with three declared conventions: TDP-as-operating-power proxy (typed `boardPowerW` override hook,
 null everywhere — no per-accelerator operating-power measurement is public), NO utilization divisor
@@ -1010,17 +1005,17 @@ the cost engine (suite-enforced to 1e-12). Every cost lens and every rent cell i
 three named procurement bases — **public-capacity rent** (the China public-cloud lens),
 **low/committed planning rent** (the registered planning vector, this page's default), and
 **owned/strategic TCO** — with a fail-closed mixing trap on every computed mix (load-bearing for
-M4's per-leg overrides). Electricity DOLLARS stay explicit only under owned/strategic TCO; rent
+the fleet builder’s per-leg overrides). Electricity DOLLARS stay explicit only under owned/strategic TCO; rent
 lenses carry an embedded-in-rent chip plus the implied Wh/Mtok (info-only), because decomposing
 rent without TCO assumptions would be fabrication. Registry rows additionally gain `family`
-(consumed by M5's family sliders). **No shipped number moved** — the flagship reference margin is
+(consumed by the efficiency controls’ family sliders). **No shipped number moved** — the flagship reference margin is
 byte-identical 0.5918058739356502, no fixture or snapshot regenerated, rent lenses byte-invariant
-under kwh/pue sweeps (new suite `tests/energy-model-b9.test.mjs`, 35 assertions after the gate
-fix round; browser suite 184→198 both copies, counting the full test:browser chain — run-app-tests.sh alone: 148→162; convention stated in the delta manifest). Full enumeration: `research/b9-delta-manifests/b9-m3-delta-manifest.md`.
+under kwh/pue sweeps (new suite the energy-model suite, 35 assertions after the gate
+fix round; browser suite 184→198 both copies, counting the full test:browser chain — run-app-tests.sh alone: 148→162; convention stated in the delta manifest). Full enumeration: the revision record of 2026-07-28.
 
-## Engine b9 M2 — 2026-07-26..28 (topology-aware equation form; structural D1 kill; NOT a ship)
+## Engine Equation-form revision — 2026-07-26..28 (topology-aware equation form; structural D1 kill; NOT a ship)
 
-**What.** The untyped per-device `b`/`W_iter` decode identity is replaced by run B §C4's
+**What.** The untyped per-device `b`/`W_iter` decode identity is replaced by the adversarial review’s
 topology-aware field set, delivered as TYPES with no implementer defaults: a REQUIRED
 `decodeTrafficBasis` (3-member closed set incl. `expert-coverage`), `etaRepresentation` bound to
 the basis (η may not be read outside the representation it was calibrated in), a REQUIRED
@@ -1031,31 +1026,31 @@ per-platform prefill hooks (every row still `universal-transfer`), and `resolveD
 with opus as a labeled declared-surrogate. **No shipped number moved** — the reference blend
 stays 59.1806% and every leg's throughput is byte-identical; six of seven legs keep the
 surrogate's numbers because the corrected ones are not identified by public evidence
-(memo §2.2–2.3), and every remaining D1 instance is typed, declared, disclosed and SIZED.
+(the design study), and every remaining D1 instance is typed, declared, disclosed and SIZED.
 
 **The disclosure surface (family 9).** Every calculator result carries an OPEN CALIBRATION DEBT
-aside: the engine-computed flagship span (53.24–64.17%, 10.93 pp — how far the §C4 form swings on
+aside: the engine-computed flagship span (53.24–64.17%, 10.93 pp — how far the topology-aware form swings on
 the `N_phys` declaration alone, both ends outside the sanity tripwire), per-leg η-held
-re-expression sizes, the Polaris-adjudicated trn2/trn3 "may be ~15× wrong" cross-quantity
-exposure (run B §A3-vs-§C1 self-contradiction, stated and typed rather than resolved without
-evidence), and the §C4 replication residual on topology-aware legs. Same surface on MCP
+re-expression sizes, the adjudicated trn2/trn3 "may be ~15× wrong" cross-quantity
+exposure (the adversarial review’s self-contradiction, stated and typed rather than resolved without
+evidence), and the topology-aware replication residual on topology-aware legs. Same surface on MCP
 `run_scenario`.
 
-**Amendment 3 fold (2026-07-28).** The external adversarial review corrected the coverage
+**Amendment 3 revision (2026-07-28).** The external adversarial review corrected the coverage
 exponent to per-token distinct selection — `1−(1−k/E)^{B_rep·q}` — superseding the
-with-replacement form the design memo carried; memo revised to v6, the identified span became
+with-replacement form the design study carried; study revised to v6, the identified span became
 engine-computed (a pinned literal would have stayed stale exactly as the v5 figures did), and
 probe8 re-derives every coverage-dependent figure both ways.
 
 **Also:** `tests/roofline-core.test.mjs` repaired (11 FAILs + a crash → 478 PASS) and promoted to
-GATING; new `tests/form-equivalence-b9.test.mjs` (155 assertions); family-9c browser assertions
-in both suite copies. Full enumeration: `research/b9-delta-manifests/b9-m2-delta-manifest.md`.
+GATING; new the equation-form equivalence suite (155 assertions); family-9c browser assertions
+in both suite copies. Full enumeration: the revision record of 2026-07-28.
 Production continues to serve v2.1.11; nothing here is deployed.
 
-## Engine b9 M1 — 2026-07-26 (adversarial-review repaired defaults + registry hygiene; NOT a ship)
+## Engine Defaults revision — 2026-07-26 (adversarial-review repaired defaults + registry hygiene; NOT a ship)
 
-**Why.** An owner-commissioned granular adversarial review of the calculator's input defaults
-(`research/reviews/im-adv-r4-REPORT.md`; three independent legs — an Exa academic sweep and two
+**Why.** A commissioned granular adversarial review of the calculator's input defaults
+(the adversarial input review of 2026-07-25; three independent legs — an Exa academic sweep and two
 GPT Pro dives, blind-public and internal-registries) found that the ≈37% headline was manufactured
 by a small set of identifiable defects that all pushed the same direction, concentrated in the
 50% of fleet weight the engine's own eligibility harness already marked as failing both its
@@ -1069,7 +1064,7 @@ at its midpoint 59.20. The Trainium legs land at +34.8% and +65.1%. This is **no
 production continues to serve v2.1.11, and nothing here is deployed.
 
 **The defects repaired (each cell carries the review's own basis; full enumeration in
-`research/b9-delta-manifests/b9-m1-delta-manifest.md`):**
+the revision record of 2026-07-26):**
 - **Blackwell precision double-credit.** The GB200 and GB300 decode coefficients still embedded a
   retired ×1.85 FP4 scalar and were then applied in the FP8 default scenario. De-embedded
   (0.585795 → 0.315997, 0.477845 → 0.258295). The corrected GB200 value now reproduces within
@@ -1128,7 +1123,7 @@ owed at the gate.
 
 ## Engine v2.1.11 — 2026-07-16 (cold-review-v2.1.10 follow-up — labeling/hygiene only, no engine numbers changed)
 
-**Why.** A fresh cold public-only GPT-5.6 Pro review of the v2.1.10 site (`research/gptpro-reports/cold-review-v2110-2026-07-16.md`) returned the same structural verdict as the v2.1.8 run: **NOT SOUND for wide sharing as a quantitative provider-margin estimate / ranking, but a strong, unusually transparent scenario workbench.** The reviewer credits the site's candor and holds that the remaining blockers are structural (the fitted-residual/extrapolation identification gap, prefill-driven default cost, unanchored default fleet) — remedied only by held-out validation or by removing provider point estimates, both of which are escalated to the owner, not attempted here. This release banks the review's cheap, non-structural, clearly-valid fixes.
+**Why.** A fresh cold public-only GPT-5.6 Pro review of the v2.1.10 site (the archived review of 2026-07-16) returned the same structural verdict as the v2.1.8 run: **NOT SOUND for wide sharing as a quantitative provider-margin estimate / ranking, but a strong, unusually transparent scenario workbench.** The reviewer credits the site's candor and holds that the remaining blockers are structural (the fitted-residual/extrapolation identification gap, prefill-driven default cost, unanchored default fleet) — remedied only by held-out validation or by removing provider point estimates, both of which are escalated for an authorial decision, not attempted here. This release banks the review's cheap, non-structural, clearly-valid fixes.
 
 **Fixes applied (labeling/hygiene; no preset/parameter/engine number changed):**
 - **Gemini card self-contradiction removed** (cold #3, BLOCKING): the "Why the interval is 89–98%" paragraph asserted a floor and that sub-90% was unlikely — directly contradicting the same card's reframed "not publicly identifiable / mid-60s downside" headline. Rewritten as "Why there is no identified interval," carrying the mid-60s downside and stating no coverage probability is assigned.
@@ -1138,11 +1133,11 @@ owed at the gate.
 - **LOAO naming** (cold #25): the methods note is renamed a "single-anchor (H800-trained) cross-platform transfer test," with a naming note that "leave-one-anchor-out" was a misnomer (it fits one global coefficient and predicts the rest; it does not iteratively refit).
 - **Per-card range language** (cold #19): every provider card's "Why the interval is X–Y%" header is now "Why the scenario range is X–Y%," consistent with the §10 intro's "uncalibrated, no coverage probability."
 
-**Deferred / escalated (owner decision — see `Q-AUTO-2026-07-15-COLDFIX` and the overnight handoff):** the structural blockers (calibrated uncertainty propagation into the headline; phase-specific MoE serving model; default-fleet reweighting to fitted rows; per-dive component models; separate evidence boards per estimand; removing/replacing the normalized table; annex raw-report "80% CI" language). These are the honest floor of what a scenario calculator can be, and the two cold reviews agree the site is sound *as a scenario workbench* — the gap is positioning, not defects. Credited to the 2026-07-16 external cold review.
+**Deferred / escalated (authorial decision — see `the 2026-07-15 review` and the overnight review):** the structural blockers (calibrated uncertainty propagation into the headline; phase-specific MoE serving model; default-fleet reweighting to fitted rows; per-dive component models; separate evidence boards per estimand; removing/replacing the normalized table; annex raw-report "80% CI" language). These are the honest floor of what a scenario calculator can be, and the two cold reviews agree the site is sound *as a scenario workbench* — the gap is positioning, not defects. Credited to the 2026-07-16 external cold review.
 
 ## Engine v2.1.10 — 2026-07-15 (cold-review epistemics/labeling pass — no engine numbers changed)
 
-**Why.** The public-only cold GPT-5.6 Pro review of v2.1.8 (`research/gptpro-reports/cold-review-v218-2026-07-15.md`) returned NOT SOUND *as a quantitative margin estimate / provider ranking* while praising the site as a transparent scenario workbench. A full-context council (4 GPT-5.6 Sol perspectives + Opus synthesis; `reports/codex-council/2026-07-15-margins-v218-review-*/`) adjudicated **GO-WITH-FIXES**: the numbers are faithful to their source dives and the epistemic machinery (registry classes, weights, ranges) is correctly built — the defects are in the prose that sits on top of it. Finding-by-finding adjudication: `research/adjudication-cold-review-2026-07-15.md`. This release lands the safe labeling/disclosure fixes; the structural residue (calibrated uncertainty propagation, a phase-specific MoE serving model, default-fleet reweighting) is escalated to the owner and the queue, not attempted here. **No preset, parameter, MFU, price, tariff or architecture number changed — labeling and disclosure only.**
+**Why.** The public-only cold GPT-5.6 Pro review of v2.1.8 (the archived review of 2026-07-15) returned NOT SOUND *as a quantitative margin estimate / provider ranking* while praising the site as a transparent scenario workbench. A full-context council (4 GPT-5.6 Sol perspectives + Opus synthesis; the review of 2026-07-15) adjudicated **GO-WITH-FIXES**: the numbers are faithful to their source dives and the epistemic machinery (registry classes, weights, ranges) is correctly built — the defects are in the prose that sits on top of it. Finding-by-finding adjudication: the review adjudication of 2026-07-15. This release lands the safe labeling/disclosure fixes; the structural residue (calibrated uncertainty propagation, a phase-specific MoE serving model, default-fleet reweighting) is escalated for an authorial decision and the queue, not attempted here. **No preset, parameter, MFU, price, tariff or architecture number changed — labeling and disclosure only.**
 
 **Blocking overclaims removed (P0).** (1) §5 no longer calls the 2026-07-15 blinded GPT-5.6 Pro run an "independent blinded replication" that "corroborates the central band" — it is relabeled a **blinded model-generated cross-check** and explicitly framed as a robustness comparison, *not* an independent empirical measurement or matched-estimand validation (same model family, different basket/workload; the 47–89% band is wide enough that containing ~77% is weak corroboration). The registry `who` string is renamed to match; the record keeps its `model-generated` class, zero claimant weight and 47–89 range. Every council perspective plus the cold review flagged this — the highest-convergence fix on the site. (2) The Google/Gemini §10 card headline is reframed from "unit CM ~96%" to **"not publicly identifiable"**: the ~96% is demoted to an explicitly-unanchored internal-cost scenario, aligned with the card's own "no public basis to compute Gemini's margin from TPU economics" admission. The engine value and the calculator's dive-replay are unchanged; only the card's prominent, screenshot-bound label changed.
 
@@ -1166,7 +1161,7 @@ owed at the gate.
 
 ## Engine v2.1.8 — 2026-07-15 (EXPEDITED release #2: GB300/B300/GB200/Rubin + CloudMatrix/Ascend anchors)
 
-**Why expedited.** Second same-day expedited release: a round-2 GPT-5.6 Pro dive package targeted the NVIDIA forward side (Blackwell-Ultra/Rubin) and Huawei Ascend/CloudMatrix — two of the model's remaining anchor-quality gaps — and the owner ordered both applied immediately ("Expedite tonight") rather than held for the next weekly cycle.
+**Why expedited.** Second same-day expedited release: a round-2 GPT-5.6 Pro dive package targeted the NVIDIA forward side (Blackwell-Ultra/Rubin) and Huawei Ascend/CloudMatrix — two of the model's remaining anchor-quality gaps — and both were ordered applied immediately ("Expedite tonight") rather than held for the next weekly cycle.
 
 **GB300 NVL72 moves from throughput-unanchored-in-practice to audited.** MLPerf Inference v6.0 (Apr 1, 2026) contains valid, reproducible single-rack GB300 generated-throughput results on DeepSeek-R1 FP4 — NVIDIA Interactive 250,634 / Server 400,437 / Offline 647,076 gen tok/s/rack; Nebius Server 575,580 / Offline 673,936 (the strongest one-rack results). **GB300's rack rental price remains genuinely unanchored** — no numeric rate is public on AWS, CoreWeave, Nebius, GCP, Azure, OCI or Crusoe as of Jul 15, 2026 — so the model documents GB300 $/M-output as a function of rack-hour price rather than a point estimate. The cleanest present Blackwell-Ultra anchor is a same-provider B300 pair instead: Nebius's 8-GPU MLPerf Server result (60,413 gen tok/s) at its own public $7.85/GPU-hr rate ⇒ **$0.289/M generated output tokens**. A GB200 rack bridge via AWS's Capacity Block rate ($761.904/rack-hr) gives $0.881/$0.630/$0.435 per M output at Interactive/Server/Offline. Added to §4's narrative and hardware table, and to the `gb200`/`gb300` dossier notes in `engine.js` — no flagship engine numbers changed.
 
@@ -1184,13 +1179,13 @@ owed at the gate.
 
 **No preset or flagship engine numbers changed** — every item above is an evidence-quality upgrade or a precisely-scoped negative finding; the cost model's fitted MFUs, prices and architecture assumptions are untouched.
 
-**Addendum (same day, annex hygiene pass on four dive reports).** The TPU, Trainium, blinded-replication and AMD dive pages (`research/gptpro-reports/dive-{tpu,trainium,replication-blinded,amd}-2026-07-15.md`, all first published in v2.1.7) had their provenance headers condensed for public share ahead of wider circulation: recovery-mechanics language describing the private CDP/browser recovery technique was replaced with plain "recovered from the ChatGPT conversation history after the dispatching session failed" phrasing; internal conversation-ID values were removed from the provenance tables; raw `[cite: turn…viewN]` / `[filecite: …]` interface citation markers were stripped throughout (sentence text otherwise untouched); "commissioned by owner" became "commissioned". The AMD page's honest 120-minute-hard-timeout provenance narrative is preserved intact. Verbatim pre-edit copies are archived at `research/gptpro-reports/archive/pre-hygiene-2026-07-15/`. Beyond the header cleanup and marker removal, the findings/analysis prose is unedited — **no engine, data, or claim content changed.**
+**Addendum (same day, annex hygiene pass on four dive reports).** The TPU, Trainium, blinded-replication and AMD dive pages (`research/gptpro-reports/dive-{tpu,trainium,replication-blinded,amd}-2026-07-15.md`, all first published in v2.1.7) had their provenance headers condensed for public share ahead of wider circulation: recovery-mechanics language describing the private CDP/browser recovery technique was replaced with plain "recovered from the ChatGPT conversation history after the dispatching session failed" phrasing; internal conversation-ID values were removed from the provenance tables; raw `[cite: turn…viewN]` / `[filecite: …]` interface citation markers were stripped throughout (sentence text otherwise untouched); the commissioning attribution was removed. The AMD page's honest 120-minute-hard-timeout provenance narrative is preserved intact. Verbatim pre-edit copies are archived at the pre-release archive of 2026-07-15. Beyond the header cleanup and marker removal, the findings/analysis prose is unedited — **no engine, data, or claim content changed.**
 
 ## Engine v2.1.7 — 2026-07-15 (EXPEDITED release: TPU/Trainium anchors, blinded replication, AMD correction)
 
-**Why expedited.** Same-day second release: a "Targeted 4" GPT-5.6 Pro dive package landed four items the owner ordered applied immediately rather than held for the next weekly cycle — a correction to a figure already live in v2.1.6, plus three new evidence-quality upgrades. All four ship together as v2.1.7.
+**Why expedited.** Same-day second release: a "Targeted 4" GPT-5.6 Pro dive package landed four items ordered applied immediately rather than held for the next weekly cycle — a correction to a figure already live in v2.1.6, plus three new evidence-quality upgrades. All four ship together as v2.1.7.
 
-**Q-007 correction, PARTIAL (AMD/DeepSeek non-NVIDIA throughput).** v2.1.6 credited DigitalOcean/RadixArk's "3,500+ tokens/sec/GPU on AMD MI350X/MI355X" claim without qualification. A follow-up dive (reasoning-summary only — the source hit the ChatGPT-Pro MCP's 120-minute hard timeout) argued the chip is MI355X-only and the headline figure is total, not interactive, throughput. Verified against primary sources before shipping (full chain in `logs/weekly/2026-07-15-expedited.md`): **confirmed** — MI350X is not an InferenceX-benchmarked SKU at all, and the primary June 2026 InferenceX article independently describes extending the concurrency sweep to 1,024 as drawing out "the high-throughput, low-interactivity end of the frontier," closely matching the dive's own framing. **Not confirmed** — the dive's precise numeric split (3.56–3.67K total vs ~396–408 generated tok/s/GPU, 64–178s TTFT) and its derived ≈$2/M-output-token TensorWave anchor: this lives in InferenceX's interactive chart data, not extractable text, and could not be independently pinned. §10's DeepSeek card is corrected to reflect only what verified (chip identity, total-vs-interactive-throughput caveat); the unconfirmed figures are explicitly withheld and flagged for a future CDP recovery pass, not shipped as fact.
+**Q-007 correction, PARTIAL (AMD/DeepSeek non-NVIDIA throughput).** v2.1.6 credited DigitalOcean/RadixArk's "3,500+ tokens/sec/GPU on AMD MI350X/MI355X" claim without qualification. A follow-up dive (reasoning-summary only — the source hit the ChatGPT-Pro MCP's 120-minute hard timeout) argued the chip is MI355X-only and the headline figure is total, not interactive, throughput. Verified against primary sources before shipping (full chain in the expedited verification record of 2026-07-15): **confirmed** — MI350X is not an InferenceX-benchmarked SKU at all, and the primary June 2026 InferenceX article independently describes extending the concurrency sweep to 1,024 as drawing out "the high-throughput, low-interactivity end of the frontier," closely matching the dive's own framing. **Not confirmed** — the dive's precise numeric split (3.56–3.67K total vs ~396–408 generated tok/s/GPU, 64–178s TTFT) and its derived ≈$2/M-output-token TensorWave anchor: this lives in InferenceX's interactive chart data, not extractable text, and could not be independently pinned. §10's DeepSeek card is corrected to reflect only what verified (chip identity, total-vs-interactive-throughput caveat); the unconfirmed figures are explicitly withheld and flagged for a future CDP recovery pass, not shipped as fact.
 
 **TPU now has real cost-per-output-token anchors.** A dive found named-model, named-precision public serving benchmarks for TPU v5e, v6e and v7/Ironwood — the strongest is Qwen3-Coder-480B-A35B on four Ironwood chips, 518.86 output tok/s/chip, deriving $6.42/M output tokens on-demand ($2.89/M at 3-yr commitment) from current GCP list prices. This is real evidence-quality progress over "peak FLOPS only," added to the Google §10 card, the §3 anchor-fits methodology, the subtitle, the methods-box bullet and the hardware table — but the anchors are documented, not yet fitted into this roofline's MFU (no flagship engine numbers changed). The load-bearing negative from the same dive is preserved and stated explicitly: there remains no public basis to compute Gemini's margin from TPU economics — external rental list prices are not Google's internal fleet cost, and no Gemini-SKU→TPU mapping is public.
 
@@ -1220,7 +1215,7 @@ owed at the gate.
 
 **Smaller corrections.** §10 xAI no longer says the prospectus "discloses a fleet of >440k accelerators" — it disclosed cluster counts; the total is a derivation (the dive always labeled it SPECULATION-derived-from-DISCLOSED). Freshness stamps unified at July 15, 2026 (the landing text said July 11 while the engine said July 13; all 12 tracked list prices were re-verified against provider pricing pages today — 12/12 confirmed, including Kimi K2.7 Code's $0.19 cache-hit after a K2.6-page false alarm). The annex generator's skin-boot extraction is now genuinely fail-closed (exactly-one-match asserted, overmatch into a foreign script refused) — previously a duplicated or unterminated marker could silently ship wrong boot code despite the fail-closed claim. The live feedback form posts via its custom domain instead of the name-bearing workers.dev host (deployed same-day, ahead of this release).
 
-**Adjudicated, not changed (Sol inspection findings held up as design).** The Sonnet 5 tariff flip already has a stale-loud release gate (a traffic-contract assertion fails after 2026-08-31, and deploy.sh runs it before every deploy). Model switching in a MODIFIED state deliberately freezes model-owned fields (documented "Residual 2"; every surface labels the state modified and its permalinks travel the full numeric state, so nothing silently misattributes). Provider-dive uncertainty language lives in preserved consult documents, which this annex archives verbatim rather than edits. Queued for the next update (research/update-queue.md): grounding-ledger source rows gain URLs/dates; DeepSeek's announced mid-July peak surcharge needs live verification; Opus 4.7 fast-tier wording flips on its Jul 24 retirement; The Information's DeepSeek ~$500M ARR / 70–80% V4 API gross-margin report (Jul 14–15) enters the evidence board.
+**Adjudicated, not changed (Sol inspection findings held up as design).** The Sonnet 5 tariff flip already has a stale-loud release gate (a traffic-contract assertion fails after 2026-08-31, and deploy.sh runs it before every deploy). Model switching in a MODIFIED state deliberately freezes model-owned fields (documented "Residual 2"; every surface labels the state modified and its permalinks travel the full numeric state, so nothing silently misattributes). Provider-dive uncertainty language lives in preserved consult documents, which this annex archives verbatim rather than edits. Queued for the next update (the update queue): grounding-ledger source rows gain URLs/dates; DeepSeek's announced mid-July peak surcharge needs live verification; Opus 4.7 fast-tier wording flips on its Jul 24 retirement; The Information's DeepSeek ~$500M ARR / 70–80% V4 API gross-margin report (Jul 14–15) enters the evidence board.
 
 ## Engine v2.1.4 — 2026-07-13 (evidence-scent label pass + outside-review remediation)
 
@@ -1230,7 +1225,7 @@ owed at the gate.
 
 **Provenance upgraded, not just defended.** The Anthropic inference-infrastructure margin record (38% → >70%, SemiAnalysis) had been carried as reported-unverified via X relays under the registry's mis-attribution rule ("the newsletter is paywalled"). The margin sentence in fact sits in the newsletter's free portion; it was fetched directly, archived verbatim in this annex (curly apostrophe and all), and the record now quotes the primary source — the same upgrade pattern the Patel/Sequoia citation still awaits. The grounding ledger's version stamp — which claimed "cannot drift" while stamping the previous engine version — regenerates with this release (the no-drift guarantee now includes its own stamp).
 
-**Still owed (unchanged).** The five-human comprehension test remains the open ship gate; the Patel primary-citation swap and Zephyr re-capture remain flagged owner actions.
+**Still owed (unchanged).** The five-human comprehension test remains the open ship gate; the Patel primary-citation swap and Zephyr re-capture remain flagged authorial actions.
 
 ## Methodology v2.1.3 — 2026-07-12 (margin-range evidence board + de-named routes)
 
@@ -1264,7 +1259,7 @@ Two attribution-fidelity defects found live by the v2.1.2 plan-review round (fou
 
 ## v2.1.1 editorial addendum — 2026-07-10 (late)
 
-Removed the §1 "attribution check" passage about Jukan and the related §6/method-note handle-dispute sentences (owner call): since no margin claim of his was ever found, the two research engines' disagreement over his handle changed nothing in the analysis and spent reader attention on research-process trivia. His two substantive citations remain as bare links — "inference is memory" (§4) and the $5B-spend→$15B-ARR lease-economics read (now in §7, labeled a spend-to-revenue multiple, not a margin).
+Removed the §1 "attribution check" passage about Jukan and the related §6/method-note handle-dispute sentences (authorial decision): since no margin claim of his was ever found, the two research engines' disagreement over his handle changed nothing in the analysis and spent reader attention on research-process trivia. His two substantive citations remain as bare links — "inference is memory" (§4) and the $5B-spend→$15B-ARR lease-economics read (now in §7, labeled a spend-to-revenue multiple, not a margin).
 
 ## v2.1.1 — 2026-07-10 (final-review gate repair)
 
@@ -1318,14 +1313,14 @@ Revision driven by two independent external reviews, both archived unedited in t
 
 Initial publication: Anthropic-first investigation, interactive calculator, per-provider deep dives (§10), Chinese accelerator support, research annex.
 
-## b9 UX-B — the report stops shouting all of itself at once (2026-08-03, `f361c29`)
+## Interface revision — the report stops shouting all of itself at once (2026-08-03, `f361c29`)
 
-**What.** Owner ruling R-4 says the long explainers at the bottom "shouldn't be fully expanded to
+**What.** An adjudication of 2026-08-03 says the long explainers at the bottom "shouldn't be fully expanded to
 begin with." Measured, the full report was **63,907 characters visible at first paint** across ten
 always-open sections — the page's only violation of that ruling. Those ten sections now collapse,
 each keeping its heading visible, and every long explanatory surface on the page — the six provider
 dossiers, the methods box, the perspective and model dossiers, the evidence catalog, the range
-detail — gains a legible measure and a "Deeper explanation" route into the near-fullscreen popup M6
+detail — gains a legible measure and a "Deeper explanation" route into the near-fullscreen popup the final-answer revision
 built. On a touch screen the inline expansion is replaced by that popup, which is what R-2 asked
 for; on desktop the collapse stays and both routes work, which is what R-3 asked for.
 
@@ -1363,7 +1358,7 @@ test control.
 count of claim-bearing render sites is identical before and after — moving an already-rendered node
 into a dialog is not a second rendering of it.
 
-## b9 UX-A — the tooltip notes become reachable, and the page gets one dialog owner (2026-08-03, `032e32f`)
+## Interface revision — the tooltip notes become reachable, and the page gets one dialog owner (2026-08-03, `032e32f`)
 
 The page carried explanatory notes that no reader could reach. `TIPS.specDec` is 3,352 characters;
 it rendered a 1,328px box in an 844px viewport positioned at `top: -494px`, and because the tooltip

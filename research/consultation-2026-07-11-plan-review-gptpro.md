@@ -10,7 +10,7 @@ The central risk is precedence ambiguity when workload ownership collides with r
 
 **Overall verdict: proceed only after three P0 plan corrections:** define B’s state/precedence contract before coding; do not present a regenerated grounding pack as the original artifact; replace named-person role-play/“approval” in E with corpus-bounded representation audits.
 
-**§0 owner edit — APPROVE.** Remove the attribution-dispute narrative. Keep the two citations attached to the specific claims they support, rather than as contextless “bare links.” The current three-way repetition in §1, §6 and the method note is research-process debris, not useful evidence.
+**§0 authorial edit — APPROVE.** Remove the attribution-dispute narrative. Keep the two citations attached to the specific claims they support, rather than as contextless “bare links.” The current three-way repetition in §1, §6 and the method note is research-process debris, not useful evidence.
 
 ### A. Coherence cuts — **MODIFY**
 

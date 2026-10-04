@@ -20,7 +20,7 @@ const freshRegistered = () => E.applyPresetSettings(m, registeredPerspective, se
 /* im-arc T1 fix (Sol review 2026-08-22, findings P1-1/P1-2/P1-3): execute the
    renderer's pure string builders in Node, rather than duplicating their branches in this test. */
 const appSource = readFileSync(new URL("../site/app.js", import.meta.url), "utf8");
-const helperMatch = appSource.match(/\/\* BEGIN im-arc T1 pure presentation helpers \*\/([\s\S]*?)\/\* END im-arc T1 pure presentation helpers \*\//);
+const helperMatch = appSource.match(/\/\* BEGIN  pure presentation helpers \*\/([\s\S]*?)\/\* END  pure presentation helpers \*\//);
 assert("T1 renderer exposes a Node-renderable pure presentation-helper block", !!helperMatch);
 const appHelpers = helperMatch
   ? Function(`${helperMatch[1]}; return { readerRentActive, rentTableTitle, rentCounterpartNote, rentSegmentText, counterpartBandText, stackTableCells, stackRawDeltaRow };`)()

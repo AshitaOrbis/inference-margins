@@ -14,7 +14,7 @@ import { CONTRACTS } from "./claims.js";
 import type { Claim, EmptyComparisonSlot, FleetRenderableFields, SidecarEntry } from "./claims.js";
 
 /* ================================================================================
-   R2 (im4-r2-shipment-plan §1.1/§1.4/§1.6/§1.9) — the migrated claim contracts on
+   The migrated claim contracts govern
    the MCP surfaces. ONE runtime (site/engine-contracts-v22.js via claims.ts); the
    closed emission boundary wraps BOTH transports (stdio + streamable HTTP share
    buildServer → envelope below); every response carries content-addressed
@@ -36,7 +36,7 @@ for (const t of MCP_TOOL_IDS) {
 
 export type ToolId = (typeof MCP_TOOL_IDS)[number];
 
-/* ---------- the central-comparison mint (§1.4; memo §0-bis/§0-ter) ----------
+/* ---------- the central-comparison mint ----------
    The receipt's baseline ("the central estimate for {model}") is a COMPARISON-role
    claim minted with requestCentral: true. The engine's private constructor either
    brands it central-verified (placement-verified legs, ≥2 verified clusters, zero
@@ -47,7 +47,7 @@ export interface CentralComparison {
   claim: Claim;
   eligible: boolean;
   refusals: readonly string[];
-  emptySlot: EmptyComparisonSlot | null; // the RATIFIED honestly-empty comparator slot (owner ruling 2026-07-22 21:15Z)
+  emptySlot: EmptyComparisonSlot | null; // the RATIFIED honestly-empty comparator slot (adopted 2026-07-22 21:15Z)
 }
 
 /* The policyPoint metric-scope value: the uniform-policy scalar that drove the solve,
@@ -101,13 +101,13 @@ export function mintCentralComparison(
   return { claim, eligible, refusals, emptySlot: eligible ? null : CONTRACTS.emptyComparisonSlot(subject) };
 }
 
-/* This response's own three-point policy-sensitivity receipt (§1.6; memo §0-ter):
+/* This response's own three-point policy-sensitivity receipt:
    recomputed in THIS surface's units (margin %), SAMPLED, argMin/argMax computed,
    no continuity implied, never encoded into links. */
 export function policySensitivityFor(state: Record<string, any>, engineContext?: unknown) {
   const band = E.evaluateAtPolicyBand((p: number) =>
     E.workload(state, undefined, engineContext, { loadedWeightBytesPerParam: p }).margin * 100);
-  // R3 (design memo D-6): the band re-evaluates VALUES on the FIXED central-policy
+  // Policy sensitivity: the band re-evaluates VALUES on the FIXED central-policy
   // membership (the state's blend is the seeded default and is never re-derived per
   // point); THIS typed record separately discloses at which sampled points the
   // membership itself would differ. It never alters the band's points or
@@ -129,7 +129,7 @@ export function policySensitivityFor(state: Record<string, any>, engineContext?:
 }
 
 /* ---------- status-fused value strings ---------- */
-/* im-release-edit-r3 (2026-09-10), corrected after a fallback review finding (F3).
+/* The correction of 2026-09-10.
    THE FIRST VERSION OF THIS CLAMPED TOO MUCH, in both branches, and the review was right about both.
    It read `renderableLegs === totalLegs ? 1 : Math.min(1, share)`, which (a) published a LITERAL
    rather than a corrected measurement — an engine regression to 0.52 while all seven legs rendered
@@ -143,7 +143,7 @@ export function policySensitivityFor(state: Record<string, any>, engineContext?:
 
    The engine-internal identity — the same overshoot at its source, where the value is also the
    divisor of the blend renormalization and an input to byte-frozen historical receipt
-   reproductions — remains open as bq-2194. */
+   reproductions — remains deferred. */
 export const publishedShare = (share: number): number =>
   Number.isFinite(share) && Math.abs(share - 1) <= 1e-9 ? 1 : share;
 
@@ -160,7 +160,7 @@ export function fusedHeadlineValue(pct: number, status: string, centralEligible 
   const n = round(pct);
   switch (status) {
     case "derived-estimate":
-      // R2 (§1.3 hero flip): a policy-driven derived estimate carries the policy-labeled
+      // Policy-driven result: a policy-driven derived estimate carries the policy-labeled
       // identity WELDED into the value token — never a bare unit-serving claim that could
       // be quoted as verified/central.
       return centralEligible
@@ -207,9 +207,9 @@ export function renderClaimBound(c: MarginClaim): { type: string | null; lo: num
 }
 
 /* ---------- selection receipt ---------- */
-/* R2 (§1.4; memo §0-ter): the receipt's baseline fields GATE on placement-verified
+/* Claim contracts: the receipt's baseline fields GATE on placement-verified
    central eligibility, decided by the claim constructor (mintCentralComparison above).
-   - ELIGIBLE (structurally impossible for closed models in R2, and for every current
+   - ELIGIBLE (structurally impossible for closed models under these contracts, and for every current
      open-model fleet — Chinese silicon / no verified clusters): central_estimate_*.
    - INELIGIBLE: the SAME quantities emit as policy_scenario_* with is_central
      HARD-SET false and the constructor's typed refusals in
@@ -226,12 +226,12 @@ interface SelectionReceiptShared {
   selection_origin: string;
   changed_from_central: string[];
   five_status: Record<string, string> | null;               // baseline-scope fleet status vector (UNVERIFIED is first-class)
-  renderable_under_policy_all_legs: boolean | null;         // baseline scope, two-boolean contract (memo §0-bis)
+  renderable_under_policy_all_legs: boolean | null;         // baseline scope, two-boolean contract
   placement_verified: boolean | null;                       // baseline scope
   residency_basis: string | null;                           // "placement-registry" | "uniform-policy" (baseline solve)
   policy_sensitivity: ReturnType<typeof policySensitivityFor> | null;
   policy_sensitivity_scope: string | null;
-  /* R3 (D-1/D-3c): the default-membership derivation as DATA — exclusions, canonical
+  /* Default membership: the default-membership derivation as DATA — exclusions, canonical
      anchor, renormalization — for the baseline/central scope; null off fleet scope. */
   default_membership: {
     derived_at: { traffic_profile_id: string; io_ratio: number; cache_hit: number; basis: string };
@@ -272,7 +272,7 @@ function flagshipWorkload() {
 export function flagshipCentralPct(): number {
   return flagshipWorkload().margin * 100;
 }
-/* IM3 exit-gate fix 1/3: the flagship central estimate's own renormalization condition, welded
+/* Baseline disclosure: the flagship central estimate's own renormalization condition, welded
    onto every SelectionReceipt below (primary=true -- this is always the flagship-scope Opus @
    Reference / default-blend computation, so the fix-3 Hopper-family correlation caveat applies;
    see fleetRenderableClause's own doc comment in engine.js for the verified-not-guaranteed
@@ -296,16 +296,16 @@ export function centralForModel(m: ModelPreset): { pct: number; state: Record<st
   return { pct: wl.margin * 100, state, fleetRenderable: wl.fleetRenderable };
 }
 
-/* IM3 exit-gate fix 1, verification round 2 (P1): the noun AND the weld for every sentence that
+/* Baseline disclosure: the noun AND the weld for every sentence that
    names "the central estimate for {model}" -- renamed to "the interim renderable-subset scenario"
    and welded with the K-of-M-legs/percent-of-weight condition directly in the returned phrase
    whenever THAT MODEL's own central-lens fleet is renormalized (renderableWeightShare < 1), so a
    consumer who only reads/quotes the prose sentence -- never the sibling structured fields --
    still gets the true picture. Applies equally to the per-model blended "central estimates"
    (e.g. Grok/Sonnet/GPT) whose fleets are partial: the generic "central estimate" label over a
-   partial fleet contradicts the recorded IM4 100%/80% renderability gate, so those get the
+   partial fleet contradicts the recorded 100%/80% renderability gate, so those get the
    interim-subset language too, not just the flagship Opus case. */
-/* R3 (design memo D-3c): the flagship default's membership derivation, cached like
+/* Default membership: the flagship default's membership derivation, cached like
    the sibling flagship caches — rides the SAME shared clause on MCP so the exclusion
    weld can never drift from the site's. Null for models outside the fleet scope. */
 let flagshipMembershipCache: ReturnType<typeof E.deriveDefaultFleetMembership> | null | undefined;
@@ -322,14 +322,14 @@ export function centralNounAndWeld(
   membership: ReturnType<typeof E.deriveDefaultFleetMembership> = null,
 ): { nounLower: string; nounCap: string; weld: string } {
   const full = fleetRenderable.renderableWeightShare >= 1;
-  // R2 (§1.4): the noun itself gates on placement-verified central eligibility —
+  // Baseline identity: the noun itself gates on placement-verified central eligibility —
   // "the central estimate" may only ever name a constructor-branded central claim.
   const nounLower = !full
     ? "the interim renderable-subset scenario"
     : centralEligible ? "the central estimate" : "the policy-labeled baseline scenario";
-  // R2: the weld attaches whenever the shared disclosure is non-empty (the welded
+  // The weld attaches whenever the shared disclosure is non-empty (the welded
   // policy clause now rides every fleet, not only renormalized ones).
-  // R3 (D-3c): the membership story (exclusions, canonical anchor) rides the SAME
+  // Default membership: the membership story (exclusions, canonical anchor) rides the SAME
   // shared clause — one formatter, both transports, can never drift from the site.
   const disclosure = E.fleetRenderableDisclosure(fleetRenderable, false, membership);
   return {
@@ -355,10 +355,10 @@ export function computationReceipt(opts: {
   const central = round(opts.centralPct);
   const thisPct = opts.thisPct === null || !isFinite(opts.thisPct) ? null : round(opts.thisPct);
   const cf = opts.centralFleetRenderable as FleetRenderable;
-  /* im-release-edit-r3 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+  /* The update of 2026-09-10.
      THE CONNECTOR'S OWN SCHEMA SAYS max(1) — see dcmap/economics/dto.ts, which types both
      *_renderable_weight_share as `nonnegative.max(1)`. The engine's value is a float accumulation
-     over the declared weights, and once the owner's ruling made all seven legs render it started
+     over the declared weights, and once the update made all seven legs render it started
      returning 1.0000000000000002: a proportion above 1, published against a schema that forbids it.
      It could not be reached before this release, because while three legs carried no admissible
      planning rate the sum was ~0.52 and never approached its own upper bound.
@@ -370,12 +370,12 @@ export function computationReceipt(opts: {
      not guessed — for a field that both publication surfaces already round to "100%" when they show
      it. Destroying a reproduction proof of what the engine used to compute, in order to remove one
      ulp from a number nobody reads at full precision, is the wrong trade. What is actually wrong is
-     the PUBLISHED claim, and this is where the claim is made. The engine-internal identity is filed
-     as bq-2194 for a release that is not already carrying a number move. */
+     the PUBLISHED claim, and this is where the claim is made. The engine-internal identity is deferred
+     to a release that is not already carrying a number move. */
   const publishedWeightShare = (f: FleetRenderable): number => publishedShare(f.renderableWeightShare);
   // primary=false default: the Hopper-family correlation caveat is verified only for the
   // flagship scope (Opus @ Reference); not asserted about an arbitrary queried model's fleet.
-  // R3 (D-3c): the central computation's membership derivation rides the same clause.
+  // Default membership: the central computation's membership derivation rides the same clause.
   const note = E.fleetRenderableDisclosure(cf, opts.primaryDisclosure === true, opts.membership ?? null);
   const shared: SelectionReceiptShared = {
     this_result_pct: thisPct,
@@ -443,7 +443,7 @@ function flagshipSensitivity() {
   return flagshipSensitivityCache;
 }
 
-/* The R2-correct flagship-baseline sentence fragment shared by the registry tools'
+/* The contract-correct flagship-baseline sentence fragment shared by the registry tools'
    own emitters (noun + fused token + weld all gate on the SAME eligibility decision
    the receipt uses — the two can never disagree). */
 export function flagshipBaselineFragment(): string {
@@ -478,7 +478,7 @@ export function changedFromCentralState(centralState: Record<string, any>, state
   const out: string[] = [];
   for (const k of Object.keys(E.DEFAULTS)) {
     if (JSON.stringify(centralState[k]) === JSON.stringify(state[k])) continue;
-    /* im-arc T1 fix (Sol review 2026-08-22, finding P2-1): closed map-valued
+    /* The correction of 2026-08-22: closed map-valued
        overrides get stable donor/value receipts; absent values are stated as unset. */
     const mapKeys = new Set(["rentAbsLeg", "rentMultLeg", "rentMultFam"]);
     const fmt = (v: unknown) =>
@@ -499,7 +499,7 @@ export interface ToolResult {
   isError?: boolean;
 }
 
-/* R2 (§1.1): what a tool passes to the closed emission boundary. The claim is the
+/* Claim contracts: what a tool passes to the closed emission boundary. The claim is the
    response's minted headline claim (result role — policy-scenario by construction;
    central is impossible for a result claim). fleetRenderable feeds the ONE shared
    weld formatter; registry tools pass the flagship baseline's fields so the
@@ -553,7 +553,7 @@ export function failClosed(message: string): ToolResult {
   };
 }
 
-/* R2 (§1.1): mint the response's headline RESULT claim. Result-role claims are
+/* Claim contracts: mint the response's headline RESULT claim. Result-role claims are
    policy-scenario by construction (the constructor's role prohibition) — central
    identity can only ever attach to the separately-minted comparison claim. */
 export function mintHeadlineResultClaim(opts: {
@@ -604,17 +604,17 @@ export function metricIdentityRider(): string {
 }
 
 /* mint a share link under a truthful identity.
-   Slice C (memo C-7/C-8/C-11): the wire identities are REQUIRED call-site inputs —
+   Fleet identity: the wire identities are REQUIRED call-site inputs —
    the encoder never derives an identity, and neither does this wrapper. */
 export function shareUrl(state: Record<string, any>, modelId: string, perspId: string, traffic: { mode: string; profileId?: string | null; ioRatio: number; cacheHit: number }, modifiedFrom: string | null, identities: { fleet: string; totalCase: string }, opts?: { customFleet?: Record<string, any>; title?: string | null }): string {
   const token = E.encodeScenario(state, modelId, perspId, traffic, modifiedFrom ?? null, identities, opts);
   return SITE.calculator + "?s=" + encodeURIComponent(token);
 }
 
-/* Slice C (memo C-11): the MCP-side wire-identity derivation for a CLEAN-identity
+/* Fleet identity: the MCP-side wire-identity derivation for a CLEAN-identity
    query — mirrors the app's stored-enum initialization exactly (chokepoint predicate
    for the fleet; scope + value-match for the totalCase; explicit caller choices win).
-   A blend override is a custom blend; a total override is a custom total (the C-8
+   A blend override is a custom blend; a total override is a custom total (the identity
    stored-enum rule: a typed coincidence never borrows a case citation). */
 export function wireIdentitiesFor(m: Record<string, any>, p: Record<string, any>, state: Record<string, any>,
     opts: { fleetParam: string | null; blendOverridden: boolean; totalOverridden: boolean }): { fleet: string; totalCase: string } {

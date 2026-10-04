@@ -1,20 +1,20 @@
-/* im-arc T2 region, data-center, programme, and modeled-fleet coverage registry.
-   Provenance: research/im-arc-t2-sections-memo.md §§3–4 (v2, 2026-08-22).
-   T2 seeds only values already carried by checked-in dives/registries. Programme evidence
+/*  region, data-center, programme, and modeled-fleet coverage registry.
+   Provenance: the design analysis  (v2, 2026-08-22).
+   The registry seeds only values already carried by checked-in dives/registries. Programme evidence
    remains programme evidence; an accelerator commitment is never promoted to a facility.
 
-   im-arc T4 fold (2026-08-24), spec research/im-arc-t4-fold-memo.md v2:
+    (2026-08-24), spec the design analysis v2:
    the registry is brought onto the four evidence clusters. Three things changed shape.
    (1) `basis` is a CLOSED enum and a NEW orthogonal `observationKind` says what kind of
-       observation a triple is (§0.1) — the pseudo-ranges that encoded a ceiling as
+       observation a triple is — the pseudo-ranges that encoded a ceiling as
        {0, 1e6, 1e6} or a milestone pair as {500k, 500k, 1M} are gone.
    (2) A facility may carry a `mixedAggregate` — a disclosed installed total with NO public
        per-SKU split — under invariants the validator ENFORCES: it never coexists with
        per-SKU counts for the same observation, never names a hardware key, and can never
-       feed per-SKU arithmetic or count-backed coverage (§1.1, review §3.4).
+       feed per-SKU arithmetic or count-backed coverage (review ).
    (3) COVERAGE_LEDGER stores EVIDENCE keyed {company, preset} at the hardware-key level.
        It stores no percentages: those are DERIVED by the one resolver in engine.js from the
-       selected modeled blend (§1.5). A hand-stored percentage drifts when a blend changes.
+       selected modeled blend. A hand-stored percentage drifts when a blend changes.
    Everything here is validated at module load by validateDcRegistry() — fail closed. */
 "use strict";
 
@@ -28,8 +28,8 @@ const deepFreeze = value => {
 const point = value => deepFreeze({ lo: value, mid: value, hi: value });
 
 /* ============================================================================
-   The closed schema (im-arc T4 fold 2026-08-24, memo §0.1 and §7).
-   ONE schema for UI, engine and MCP (T2 memo §1.1) — every consumer reads THESE lists.
+   The closed schema adopted 2026-08-24.
+   ONE schema for UI, engine and MCP — every consumer reads THESE lists.
    ============================================================================ */
 
 /* `basis` says what KIND OF EVIDENCE stands behind a value. Closed [F1]: the strings removed
@@ -51,7 +51,7 @@ const SPAN_OBSERVATION_KINDS = deepFreeze(["selected-span", "load-state-average-
    endpoints are two public aggregate READINGS, so it is span-shaped but may never be read as
    an uncertainty interval on any single SKU. It is checked by its own invariant block below. */
 
-/* Facility CLASSIFICATION (memo §2, [F4]). A class is a classification of the site, never a
+/* Facility CLASSIFICATION ([F4]). A class is a classification of the site, never a
    measurement of it: the PUE band a class implies is resolved in scenario/default logic only,
    and `DATACENTERS[*].pue` stays null until a facility receipt exists. */
 const FACILITY_CLASSES = deepFreeze(["hyperscaler-owned", "purpose-built-ai", "neocloud", "legacy"]);
@@ -72,14 +72,14 @@ const CLUSTER_OH_BY_CAPEX_SCOPE = deepFreeze({
   "installed-system": { lo: 1.00, mid: 1.00, hi: 1.00 },
 });
 
-/* The ACTUAL deal class a rent quote belongs to (memo §4, [F7]). A singular class on one
+/* The ACTUAL deal class a rent quote belongs to ([F7]). A singular class on one
    planning row could not carry a default and its alternates at once. */
 /* Closed source-kind list (rec 14): a relay is not an issuer. */
 const SOURCE_KINDS = ["primary-vendor-page", "primary-notice", "secondary-report", "analyst-synthesis"];
 const RATE_CLASSES = deepFreeze(["one-year-low-committed", "reserved-1-2yr",
   "monthly-term-bare-metal", "capacity-block", "committed-3yr-list", "on-demand-public-slice",
   "managed-cloud-on-demand", "strategic-estimate", "tender-candidate",
-  /* Two further closed classes the memo names directly: §4's GB200 conditional-hold label,
+  /* Two further closed classes: the GB200 conditional-hold label,
      and a class name for the stress quote that STATES BOTH observations it spans. */
   "reserved-neocloud-estimate", "on-demand-public-slice-and-capacity-block"]);
 const PLANNING_POLICIES = deepFreeze(["low-committed"]);
@@ -120,7 +120,7 @@ function validateDcRegistry(registry) {
     }
     if (POINT_OBSERVATION_KINDS.includes(kind) && !(triple.lo === triple.mid && triple.mid === triple.hi))
       push(path + ": observationKind '" + kind + "' is a point kind — lo, mid and hi must be equal"
-        + " (the pseudo-range ban, memo §0.1)");
+        + " (the pseudo-range ban, the design analysis)");
     if (kind === "load-state-average-peak" && triple.mid !== triple.lo)
       push(path + ": load-state-average-peak carries lo = average as the middle assumption"
         + " and hi = peak — mid must equal lo (two load states, not uncertainty endpoints)");
@@ -158,7 +158,7 @@ function validateDcRegistry(registry) {
       push(path + ": facilityClass " + JSON.stringify(row.facilityClass) + " is outside the four closed classes");
     checkBasis(path + ".facilityClassBasis", row.facilityClassBasis);
     /* A class BAND is a scenario fallback. Writing one into a facility row would present an
-       analyst-set class as though the site had disclosed it (memo §2, review fold F4). */
+       analyst-set class as though the site had disclosed it (source classification). */
     if (row.pue !== null)
       push(path + ": pue must stay null — a facility row may not carry a PUE class band as though measured");
     /* A DATACENTERS row's narrative lives in `provenance`; the closed T2 key set has no
@@ -176,7 +176,7 @@ function validateDcRegistry(registry) {
     const aggregate = row.mixedAggregate;
     if (aggregate) {
       const aggPath = path + ".mixedAggregate";
-      /* The non-allocation invariants (memo §1.1, review §3.4) — these are the reason the
+      /* The non-allocation invariants — these are the reason the
          aggregate is allowed to exist at all instead of a bare count-empty note. */
       if ((row.accelerators || []).length)
         push(aggPath + ": a mixedAggregate may never coexist with per-SKU accelerator counts"
@@ -247,7 +247,7 @@ function validateDcRegistry(registry) {
     checkProvenance(path, quote);
     if (typeof quote.hwKey !== "string" || !quote.hwKey.length) push(path + ": missing hwKey");
     /* FX PROVENANCE INVARIANT (GPT Pro 2026-07-29 rec 14; enforced 2026-09-02 after review
-       pr-20260902T173936Z-a81123 observed that the first attempt added honest PROSE no validator,
+       a research run on 2026-09-02 observed that the first attempt added honest PROSE no validator,
        selector or renderer consumed — so deleting the flag, flipping it to true, changing the CNY
        values without the USD, or attaching the provenance to an unrelated USD figure would all have
        passed). A converted USD tariff must never be able to read as a first-party disclosed USD
@@ -329,7 +329,7 @@ function validateDcRegistry(registry) {
 }
 
 /* ============================================================================
-   REGIONS — im-arc T4 fold (2026-08-24): cluster 2 (electricity synthesis) §5.
+   REGIONS —  (2026-08-24): cluster 2 (electricity synthesis)
    ============================================================================ */
 const REGIONS = deepFreeze({
   "us-industrial": {
@@ -339,7 +339,7 @@ const REGIONS = deepFreeze({
     sourceFile: "research/dives/im-arc/electricity-gptpro-2026-08-23.md",
     sourceNeedle: "Oklahoma 6.17¢",
     asOf: "2026-07-23",
-    /* im-arc T4 fold (2026-08-24): the endpoints are a DECLARED HOST-STATE SELECTION, not a
+    /*  (2026-08-24): the endpoints are a DECLARED HOST-STATE SELECTION, not a
        hyperscale contract and not a national percentile. The Fable arm's wider
        {0.050, ..., 0.115} (ERCOT all-in low, PJM capacity-step high) is held as a note. */
     note: "Observed state-anchor selected span; the middle assumption is the US-weighted May-2026 industrial average. Held and not adopted: the Fable arm's wider {0.050, 0.0871, 0.115} envelope (ERCOT all-in low, PJM capacity-step high).",
@@ -360,15 +360,15 @@ const REGIONS = deepFreeze({
     sourceFile: "research/dives/im-arc/electricity-gptpro-2026-08-23.md",
     sourceNeedle: "cn-western = { 0.060, 0.071, 0.087 } $/kWh",
     asOf: "2026-08-01",
-    note: "ONE standard-grid region row (memo §5, review §6.5). Data-centre package prices are recorded below as structured provisional observations, never as a second peer generic row.",
-    /* im-arc T4 fold (2026-08-24): the Ulanqab / Zhongwei / Qingyang data-centre package
+    note: "ONE standard-grid region row (the design analysis, review §6.5). Data-centre package prices are recorded below as structured provisional observations, never as a second peer generic row.",
+    /*  (2026-08-24): the Ulanqab / Zhongwei / Qingyang data-centre package
        quotes are official-media figures whose demand-charge treatment is undisclosed, so they
        are structured observations on this row rather than a competing region. */
     provisionalObservations: [{
       label: "Western data-centre package prices (Ulanqab / Zhongwei / Qingyang)",
       usdPerKwh: { lo: 0.0442, mid: 0.0511, hi: 0.0587 },
       basis: "provisional", observationKind: "selected-span",
-      source: "Official-media quoted data-centre package prices of CNY 0.30-0.398 per kWh converted at 6.7817 CNY/USD; the demand-charge treatment inside the package is not disclosed. The needle anchors the LOW endpoint (Ulanqab, quoted 2026-08-13); the high endpoint is carried in the same file by the Qingyang quote \"电价降至0.398元/千瓦时\" (Sina 2026-01-05) and the Xinhua Gansu 2026-04-29 restatement. im-arc T4 fold r2 (2026-08-25): the previous needle \"0.30\" resolved nowhere - the file writes the figure as 0.3, never 0.30.",
+      source: "Official-media quoted data-centre package prices of CNY 0.30-0.398 per kWh converted at 6.7817 CNY/USD; the demand-charge treatment inside the package is not disclosed. The needle anchors the LOW endpoint (Ulanqab, quoted 2026-08-13); the high endpoint is carried in the same file by the Qingyang quote \"电价降至0.398元/千瓦时\" (Sina 2026-01-05) and the Xinhua Gansu 2026-04-29 restatement. the registry revision (2026-08-25): the previous needle \"0.30\" resolved nowhere - the file writes the figure as 0.3, never 0.30.",
       sourceFile: "research/dives/im-arc/electricity-subagent-china-tariffs-2026-08-23.md",
       sourceNeedle: "乌兰察布的电价大约在0.3元/千瓦时",
       asOf: "2026-08-01",
@@ -377,7 +377,7 @@ const REGIONS = deepFreeze({
 });
 
 /* ============================================================================
-   DATACENTERS — named facilities only. im-arc T4 fold: cluster 1 §1 and cluster 2 §5.
+   DATACENTERS — named facilities only. : cluster 1  and cluster 2
    ============================================================================ */
 const DATACENTERS = deepFreeze({
   "xai-colossus-c1": {
@@ -385,7 +385,7 @@ const DATACENTERS = deepFreeze({
     site: "Colossus C1, Memphis, Tennessee", region: "Memphis, Tennessee, US",
     regionRef: "us-industrial",
     facilityClass: "purpose-built-ai", facilityClassBasis: "analyst-set",
-    /* im-arc T4 fold (2026-08-24), memo §1.1 [F2]: the live point(200000) H100 row is
+    /*  (2026-08-24),  [F2]: the live point(200000) H100 row is
        contradicted by BOTH arms. No per-SKU count is public, so the accelerator list is
        deliberately empty and the aggregate below carries the site's inventory in ONE
        unambiguous shape. Never fabricate a split to satisfy a count-shaped consumer. */
@@ -411,7 +411,7 @@ const DATACENTERS = deepFreeze({
       { company: "xai", presets: [], role: "operator", allocation: "unsplit", asOf: "2026-05-06",
         source: "xAI operates and owns the site. Public statements place Grok TRAINING at Colossus and said in July 2025 that Grok inference was handled by cloud providers; no current site-level Grok serving allocation is disclosed." },
     ],
-    /* A dated INITIAL-GENERATION milestone, kept separate from current inventory (review §1.1).
+    /* A dated INITIAL-GENERATION milestone, kept separate from current inventory (review ).
        It is not a competing estimate of the aggregate above. */
     milestones: [{
       hwKey: "h100", count: point(100000),
@@ -421,7 +421,7 @@ const DATACENTERS = deepFreeze({
       sourceNeedle: "approximately **100,000 H100 processors**",
       asOf: "2026-06-05",
     }],
-    /* im-arc T4 fold (2026-08-24), memo §5 [F8] — the ONE Memphis instruction. The live GSA
+    /*  (2026-08-24),  [F8] — the ONE Memphis instruction. The live GSA
        energy-charge triple is withdrawn: GSA applies at <=5 MW contract demand and omits the
        fuel-cost adjustment and demand charges, and neither arm's Memphis envelope is xAI's
        bill. What stands is a Tennessee industrial REGION FILL, explicitly labeled as one. */
@@ -441,7 +441,7 @@ const DATACENTERS = deepFreeze({
   "xai-colossus-ii": {
     operator: "xAI", company: "xai",
     /* Precise Tennessee compute site. Southaven, Mississippi holds power assets and the
-       separate MACROHARDRR project — never a facility count for this row (memo §1.2). */
+       separate MACROHARDRR project — never a facility count for this row. */
     site: "Colossus 2, South Memphis/Whitehaven, Tennessee", region: "Memphis, Tennessee, US",
     regionRef: "us-industrial",
     facilityClass: "purpose-built-ai", facilityClassBasis: "analyst-set",
@@ -455,7 +455,7 @@ const DATACENTERS = deepFreeze({
         source: "SpaceXAI prospectus approved 2026-06-05: second cluster, approximately 110,000 GB300 processors, about 220 MW compute power.",
         asOf: "2026-06-05" },
     ],
-    /* im-arc T4 fold (2026-08-24), memo §5: MLGW does not supply Colossus 2 and the onsite
+    /*  (2026-08-24), : MLGW does not supply Colossus 2 and the onsite
        gas cost and dispatch share are not public, so no gas figure is registered and the row
        takes a TYPED generic-US inheritance — an explicit fallback, never a facility claim. */
     electricity: { inherit: "us-industrial" },
@@ -463,18 +463,18 @@ const DATACENTERS = deepFreeze({
     sourceFile: "research/dives/im-arc/electricity-subagent-named-facilities-2026-08-23.md",
     sourceNeedle: "MLGW is not supplying power to their supercomputer, Colossus 2",
     provenance: "As of 2026-06-05 the June-2026 prospectus supports two installed clusters of approximately 110,000 GB200 and 110,000 GB300; the later expansion of at least 220,000 further GB300 is planned, not installed, and stays out of inventory. The Memphis GSA claim is removed: the named-facilities report states MLGW is not supplying Colossus 2, and the onsite gas cost and share are undisclosed. These counts are valid PHYSICAL INVENTORY and are reported as such; by themselves they do not evidence a Grok inference allocation. The Anthropic allocation of the GB200 cluster by subtraction remains a note, not a count.",
-    note: "Physical inventory types present at this site are reported separately from any serving-evidence claim (memo §1.5).",
+    note: "Physical inventory types present at this site are reported separately from any serving-evidence claim (the design analysis).",
   },
 });
 
 /* ============================================================================
    PROGRAMMES — programme evidence stays programme evidence. A multi-data-center
-   programme milestone is NOT a named site (review fold F3).
+   programme milestone is NOT a named site (coverage classification).
    ============================================================================ */
 const PROGRAMMES = deepFreeze({
   "deepseek-h800-serving-2025": {
     operator: "DeepSeek", company: "deepseek", programme: "Disclosed V3/R1 production serving trace",
-    /* im-arc T4 fold (2026-08-24) [F9]: the 24-hour window is corrected (the live basis said
+    /*  (2026-08-24) [F9]: the 24-hour window is corrected (the live basis said
        "two-day") and the average/peak pair is TYPED as two load states rather than
        uncertainty endpoints. 226.75 x 8 = 1,814 average; 278 x 8 = 2,224 peak. */
     accelerators: [{ hwKey: "h800", count: { lo: 1814, mid: 1814, hi: 2224 },
@@ -497,7 +497,7 @@ const PROGRAMMES = deepFreeze({
     sourceFile: "research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md",
     sourceNeedle: "Rainier: nearly 500,000 Trn2 across multiple data centers.",
     asOf: "2025-10-29", coverage: "programme",
-    provenance: "A dated programme milestone across MULTIPLE data centers — which is why it is programme evidence and not named-site evidence (memo §1.3, review fold F3). It is not a facility inventory and not an uncertainty endpoint for Anthropic's later company-wide Trainium2 use.",
+    provenance: "A dated programme milestone across MULTIPLE data centers — which is why it is programme evidence and not named-site evidence (the design analysis F3). It is not a facility inventory and not an uncertainty endpoint for Anthropic's later company-wide Trainium2 use.",
   },
   "anthropic-trn2-in-use-2026": {
     operator: "AWS/Anthropic", company: "anthropic", programme: "Anthropic-wide Trainium2 in-use floor",
@@ -513,7 +513,7 @@ const PROGRAMMES = deepFreeze({
   },
   "anthropic-tpu-commitment": {
     operator: "Anthropic/Google", company: "anthropic", programme: "TPU v7 capacity commitment",
-    /* im-arc T4 fold (2026-08-24) [F9]: a CEILING typed as one. The live row rendered an
+    /*  (2026-08-24) [F9]: a CEILING typed as one. The live row rendered an
        up-to commitment as point(1000000) while its own basis said "not deployed", and v1's
        {0, 1e6, 1e6} pseudo-range read a ceiling as a selected span. Date corrected from the
        live month-end placeholder 2025-10-31 to the announcement date. */
@@ -539,7 +539,7 @@ const PROGRAMMES = deepFreeze({
     sourceNeedle: "first 400,000 TPUv7 systems are direct purchases",
     asOf: "2025-11-28", coverage: "programme",
     componentOf: "anthropic-tpu-commitment",
-    provenance: "A non-installed, non-facility COMPONENT observation. It is not an installed count and supplies no facility allocation. The finished-rack arithmetic it supports ($10bn / 400,000 = $25,000 per chip) attaches to the TPU v7 CAPEX row, not to a second evidence row (memo §1.3, fold F5.4).",
+    provenance: "A non-installed, non-facility COMPONENT observation. It is not an installed count and supplies no facility allocation. The finished-rack arithmetic it supports ($10bn / 400,000 = $25,000 per chip) attaches to the TPU v7 CAPEX row, not to a second evidence row (the author's capital-cost analysis).",
   },
   "anthropic-tpu7-gcp-rented-estimate": {
     operator: "Anthropic/Google Cloud", company: "anthropic",
@@ -572,7 +572,7 @@ const PROGRAMMES = deepFreeze({
     sourceFile: "research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md",
     sourceNeedle: "325,000 NVIDIA GPUs and $1.25 billion per month",
     asOf: "2026-06-05", coverage: "programme",
-    /* im-arc T4 fold (2026-08-24), memo §1.3: the implied all-in rate is recorded here and
+    /*  (2026-08-24), : the implied all-in rate is recorded here and
        kept OUTSIDE the planning-rent vector. It is reserved-capacity economics bundling CPUs,
        storage, networking, facility power and operations across two sites — not bare
        accelerator rent, and it can never be duplicated under a hardware key. */
@@ -611,7 +611,7 @@ const PROGRAMMES = deepFreeze({
     sourceFile: "site/engine-data-v22.js",
     sourceNeedle: "LMSYS/Ant 16×H20 Attention-DP16 + MoE-EP16 decode instance",
     asOf: "2025-09-26", coverage: "programme",
-    provenance: "Instance-topology evidence only; no facility allocation or fleet count is inferred. im-arc T4 fold (2026-08-24): the ad-hoc basis 'disclosed accelerator count per production decode instance' migrates to the closed basis plus an explicit point observationKind.",
+    provenance: "Instance-topology evidence only; no facility allocation or fleet count is inferred. The registry revision (2026-08-24): the ad-hoc basis 'disclosed accelerator count per production decode instance' migrates to the closed basis plus an explicit point observationKind.",
   },
   "huawei-cloudmatrix-384": {
     operator: "Huawei/SiliconFlow", company: "huawei", programme: "CloudMatrix 384 DeepSeek-R1 demonstration",
@@ -623,7 +623,7 @@ const PROGRAMMES = deepFreeze({
     sourceFile: "research/provider-dives/deepseek-gptpro.md",
     sourceNeedle: "Huawei/SiliconFlow demonstrated DeepSeek-R1 inference on CloudMatrix 384",
     asOf: "2025-06-18", coverage: "programme",
-    provenance: "Demonstration evidence only. It must not be represented as a DeepSeek facility or fleet allocation. im-arc T4 fold (2026-08-24): the ad-hoc basis 'disclosed system topology' migrates to the closed basis plus an explicit point observationKind.",
+    provenance: "Demonstration evidence only. It must not be represented as a DeepSeek facility or fleet allocation. The registry revision (2026-08-24): the ad-hoc basis 'disclosed system topology' migrates to the closed basis plus an explicit point observationKind.",
   },
   "deepseek-v4-ascend950-serving": {
     operator: "Huawei/cloud operators", company: "deepseek",
@@ -677,24 +677,24 @@ const PROGRAMMES = deepFreeze({
 });
 
 /* ============================================================================
-   RENT_QUOTES — the quote registry (memo §4, [F7]).
+   RENT_QUOTES — the quote registry ([F7]).
    A quote is an OBSERVATION of a named deal class. Selection is a separate statement:
    RENT_POLICY says which observation the planning vector takes and why.
    ============================================================================ */
 const RENT_QUOTES = deepFreeze({
   /* ============================================================================
-     OWNER-ADOPTED SCENARIO RENTS (2026-09-10), decision
-     `d-20260910-im-adopt-fleet-rents-and-correct-grok`, answering card
-     `q-im-unpriced-legs-and-grok-cache`.
+     ADOPTED SCENARIO RENTS (2026-09-10).
+     Adjudicated 2026-09-10.
+     The registered values are scenario assumptions.
 
      READ THE BASIS BEFORE THE NUMBER. These three rows are `provisional`, and that word is
      load-bearing: nobody publishes a GB200, GB300 or Trainium3 hour of the low/committed planning
-     class, and both blind research arms said so. The T4 fold of 2026-08-24 therefore set the
+     class, and both blind research arms said so. The decision of 2026-08-24 therefore set the
      planning selection to `null` for all three and kept the retired points as declared replays a
      scenario had to name explicitly — which is why the published headline was computed on 52% of
      the declared fleet, renormalized, for the sixteen days since.
 
-     The owner ruled that the disclosure was not enough and the fleet should be priced. That is a
+     The decision was that the disclosure was not enough and the fleet should be priced. That is a
      JUDGMENT ABOUT THE WORLD, not a measurement that arrived, and the row says so in the only place
      that matters — its `basis` and its `source`. The numbers themselves are unchanged from the
      replays they promote: the point is the selection, not a new estimate.
@@ -710,9 +710,9 @@ const RENT_QUOTES = deepFreeze({
     rateClass: "reserved-neocloud-estimate", term: "unspecified", region: "US, unspecified",
     configuration: "GB200 NVL72 accelerator-hour", bundleScope: "bare accelerator hour",
     basis: "provisional", observationKind: "point",
-    source: "Owner ruling of 2026-09-10 on card q-im-unpriced-legs-and-grok-cache, adopting the T4 fold's declared provisional replay as the planning selection so the declared fleet is priced rather than renormalized away. NOT a rate that became public: no GB200 hour of the low/committed planning class is published, which is why this row is basis `provisional`.",
+    source: "adjudicated 2026-09-10, adopting the registry revision's declared provisional replay as the planning selection so the declared fleet is priced rather than renormalized away. NOT a rate that became public: no GB200 hour of the low/committed planning class is published, which is why this row is basis `provisional`.",
     sourceFile: "research/changelog.md",
-    sourceNeedle: "owner-adopted scenario rents for GB200, GB300 and Trainium3",
+    sourceNeedle: "adopted scenario rents for GB200, GB300 and Trainium3",
     asOf: "2026-09-10",
     note: "Promotes provisionalReplays.gb200 unchanged at $4.50. The Pro arm's recommendation of null over $4.50 is not withdrawn; it is overridden by a stated judgment, and unavailableReason.gb200 is kept so the ground for it stays readable.",
   },
@@ -721,9 +721,9 @@ const RENT_QUOTES = deepFreeze({
     rateClass: "reserved-neocloud-estimate", term: "unspecified", region: "US, unspecified",
     configuration: "GB300 NVL72 accelerator-hour", bundleScope: "bare accelerator hour",
     basis: "provisional", observationKind: "point",
-    source: "Owner ruling of 2026-09-10 on card q-im-unpriced-legs-and-grok-cache. NOT a published rate: no GB300 NVL72 rack rental is published by any provider the arms checked, and the one relayed list price conflicts with the other arm — which is what `provisional` records.",
+    source: "adjudicated 2026-09-10. NOT a published rate: no GB300 NVL72 rack rental is published by any provider the arms checked, and the one relayed list price conflicts with the other arm — which is what `provisional` records.",
     sourceFile: "research/changelog.md",
-    sourceNeedle: "owner-adopted scenario rents for GB200, GB300 and Trainium3",
+    sourceNeedle: "adopted scenario rents for GB200, GB300 and Trainium3",
     asOf: "2026-09-10",
     note: "Promotes provisionalReplays.gb300 unchanged at $6.00. The GB300 row renders worse per token than GB200 at these pins, from its lower analyst-set decode efficiency against the higher pin; that ordering is inherited, not tuned here, and the round-4 estimate flagged doubting it.",
   },
@@ -732,9 +732,9 @@ const RENT_QUOTES = deepFreeze({
     rateClass: "reserved-neocloud-estimate", term: "unspecified", region: "US, unspecified",
     configuration: "Trainium3 accelerator-hour", bundleScope: "bare accelerator hour",
     basis: "provisional", observationKind: "point",
-    source: "Owner ruling of 2026-09-10 on card q-im-unpriced-legs-and-grok-cache. NOT a published rate: both arms agree no public Trainium3 instance or UltraServer price exists, so neither side of the $/token identity is public for this row.",
+    source: "adjudicated 2026-09-10. NOT a published rate: both arms agree no public Trainium3 instance or UltraServer price exists, so neither side of the $/token identity is public for this row.",
     sourceFile: "research/changelog.md",
-    sourceNeedle: "owner-adopted scenario rents for GB200, GB300 and Trainium3",
+    sourceNeedle: "adopted scenario rents for GB200, GB300 and Trainium3",
     asOf: "2026-09-10",
     note: "Promotes provisionalReplays.trn3 unchanged at $2.20.",
   },
@@ -866,7 +866,7 @@ const RENT_QUOTES = deepFreeze({
     rateClass: "capacity-block", term: "capacity block reservation", region: "US",
     configuration: "Trainium2 chip-hour", bundleScope: "published AWS Capacity Blocks rate",
     basis: "disclosed tariff", observationKind: "point",
-    source: "AWS published Capacity Blocks rate for Trainium2, $2.235 per chip-hour; unchanged by this fold and carried by both arms.",
+    source: "AWS published Capacity Blocks rate for Trainium2, $2.235 per chip-hour; unchanged by this revision and carried by both arms.",
     sourceFile: "research/dives/im-arc/rental-rates-synthesis-2026-08-23.md",
     sourceNeedle: "Both arms, AWS Capacity Blocks.",
     asOf: "2026-08-22",
@@ -929,7 +929,7 @@ const RENT_QUOTES = deepFreeze({
   },
 });
 
-/* Selection is a POLICY statement, separate from the quotes it selects (memo §4).
+/* Selection is a POLICY statement, separate from the quotes it selects.
    "One" is the policy — the low/committed planning observation for each hardware — not one
    literal contract class: H100 is about one-year/low-committed, H200 one-to-two-year reserved,
    H20 monthly/term bare metal, TPU v7 three-year committed, Trn2 Capacity Blocks. */
@@ -939,7 +939,7 @@ const RENT_POLICY = deepFreeze({
   defaultRateId: {
     h100: "h100-oneyear-lowcommitted-2026-08",
     h200: "h200-reserved-neocloud-2026-08",
-    /* im-arc T4 fold (2026-08-24), memo §4 GB200 CONDITIONAL, branch B.
+    /*  (2026-08-24),  GB200 CONDITIONAL, branch B.
        The condition was: keep point(4.50) ONLY if a sourceFile + sourceNeedle resolves to a
        checked-in dive or registry carrying the dated Jul-2026 neocloud range ($3.50-6/hr) the
        live row note cites. NONE resolves. Both blind arms failed to reproduce that range: the
@@ -952,9 +952,9 @@ const RENT_POLICY = deepFreeze({
        research/grounding-ledger.md) — citing the note as its own source is circular, not
        provenance. So the default takes the unavailable-row path and $4.50 survives only as the
        declared provisional replay below. */
-    /* 2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok: these three were
-       null from the T4 fold to 2026-09-10, which is what made the published headline a reading over
-       52% of the declared fleet. They now select the owner-adopted scenario rows above. The rows are
+    /* 2026-09-10, the adopted decision: these three were
+       null from the  to 2026-09-10, which is what made the published headline a reading over
+       52% of the declared fleet. They now select the adopted scenario entries above. The rows are
        `provisional` by basis and say why in their own source lines. */
     gb200: "gb200-owner-adopted-scenario-2026-09",
     gb300: "gb300-owner-adopted-scenario-2026-09",
@@ -973,15 +973,15 @@ const RENT_POLICY = deepFreeze({
     gb200: { usdPerHr: point(4.50), basis: "provisional", observationKind: "point",
       rateClass: "reserved-neocloud-estimate",
       reason: "The retired live default. No checked-in dive carries the dated Jul-2026 neocloud $3.50-6/hr range it rested on; the Pro arm recommends null over $4.50.",
-      declaredAs: "im-arc T4 fold declared provisional replay (2026-08-24)" },
+      declaredAs: "the registry revision declared provisional replay (2026-08-24)" },
     gb300: { usdPerHr: point(6.00), basis: "provisional", observationKind: "point",
       rateClass: "reserved-neocloud-estimate",
       reason: "The retired live default. The arms conflict directly — a one-arm Oracle $18 PAYG list against the Pro arm's finding that no NVL72 GB300 rack rate is published.",
-      declaredAs: "im-arc T4 fold declared provisional replay (2026-08-24)" },
+      declaredAs: "the registry revision declared provisional replay (2026-08-24)" },
     trn3: { usdPerHr: point(2.20), basis: "provisional", observationKind: "point",
       rateClass: "reserved-neocloud-estimate",
       reason: "The retired live default. Both arms agree there is no public Trainium3 instance or UltraServer price.",
-      declaredAs: "im-arc T4 fold declared provisional replay (2026-08-24)" },
+      declaredAs: "the registry revision declared provisional replay (2026-08-24)" },
   },
   unavailableReason: {
     gb200: "No public GB200 rate of the low/committed planning class resolves to a checked-in dive. The public slice and Capacity Block observations are a different, on-demand class and are registered as alternates, not as the planning default.",
@@ -991,12 +991,12 @@ const RENT_POLICY = deepFreeze({
 });
 
 const WORDING = "share of the MODELED fleet resting on DC-specific public evidence — not how much of the real fleet is known";
-/* im-arc T3 fix A1 (director reproduction, 2026-08-23): one lexical name is
+/*  A1 (director reproduction, 2026-08-23): one lexical name is
    consumed by engine.js in the browser and exported unchanged in Node. */
 const COVERAGE_WORDING = WORDING;
 
 /* ============================================================================
-   COVERAGE_LEDGER — im-arc T4 fold [F3]: EVIDENCE, keyed {company, preset}, at the
+   COVERAGE_LEDGER —  [F3]: EVIDENCE, keyed {company, preset}, at the
    hardware-key level. It stores NO percentages. The three-part partition and the
    non-additive SKU/workload count-backed share are DERIVED by the one resolver in
    engine.js (coverageForPreset) from the selected modeled blend, because a hand-stored
@@ -1027,7 +1027,7 @@ const COVERAGE_LEDGER = deepFreeze({
           { rowId: "anthropic-rainier-trainium", hwKeys: ["trn2"], asOf: "2025-10-29" },
           { rowId: "anthropic-trn2-in-use-2026", hwKeys: ["trn2"], asOf: "2026-04-20" }],
         countBacked: [],
-        notes: ["Rainier is a MULTI-data-center programme milestone and is counted as programme evidence, never as a named site (review fold F3).",
+        notes: ["Rainier is a MULTI-data-center programme milestone and is counted as programme evidence, never as a named site (review revision F3).",
           "No count-backed share: the C1 per-SKU split and the St. Joseph site count are not public."],
       },
       sonnet: {
@@ -1080,7 +1080,7 @@ const COVERAGE_LEDGER = deepFreeze({
     presets: {
       grok: {
         preset: "grok", blendRef: "state:blend",
-        /* im-arc T4 fold (2026-08-24), memo §3: the live 95% is withdrawn. The Colossus rows
+        /*  (2026-08-24), : the live 95% is withdrawn. The Colossus rows
            answer "do typed accelerator keys appear at a facility?", not "what share of the
            modeled Grok blend rests on site-specific SERVING evidence?" — and no current
            site/SKU Grok serving allocation is disclosed. Physical inventory is reported
@@ -1135,7 +1135,7 @@ const COVERAGE_LEDGER = deepFreeze({
 });
 
 /* Fail closed at load: a registry that does not satisfy its own schema never reaches a
-   consumer. This is the enforcement the memo's invariants rest on (§1.1, review §3.4). */
+   consumer. This is the enforcement the schema invariants rest on. */
 {
   const result = validateDcRegistry({ REGIONS, DATACENTERS, PROGRAMMES, RENT_QUOTES,
     RENT_POLICY, COVERAGE_LEDGER });

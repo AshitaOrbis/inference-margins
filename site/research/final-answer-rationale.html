@@ -53,7 +53,7 @@
 <p class="crumb"><a href="../index.html">← Frontier Inference Margins</a> · <a href="index.html">all research reports</a></p>
 <section class="report">
 <div class="raw-note"><strong>In today's words</strong> — This is an archived research artifact. Where it says <em>marginal serving gross margin</em>, <em>unit CM</em> or <em>serving contribution margin</em>, the site now says <strong>serving margin</strong>; where it states a confidence interval, the site treats it as a judgment range, not a calibrated one. What the site adopted from any artifact is stated in the <a href="../index.html#report">main report</a>, which is authoritative where the two differ.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>The final answer — rationale and evidence chain</h1>
-<p><strong>What this document is.</strong> The owner-level requirement behind this page&#39;s FINAL-ANSWER
+<p><strong>What this document is.</strong> The author’s requirement behind this page&#39;s FINAL-ANSWER
 block (2026-07-22, verbatim in the project record): &quot;we do need an obvious final
 answer … it needs to have the rationale clearly explained with links back to the
 evidence and therefore be defensible in the face of expert scrutiny.&quot; This annex is
@@ -62,8 +62,7 @@ the MCP <code>get_report</code> id <code>final-answer</code> — this document e
 from, what it assumes, and what disclosure would move it. Values quoted here are
 execution outputs from their own revision and are marked ≈ — most of them re-derived during the
 external review of 2026-07-27, but NOT all: passages carrying a later date or a named commit were
-computed then, and the September 2026 recomputations under
-<code>d-20260910-im-adopt-fleet-rents-and-correct-grok</code> are identified individually where they appear.
+computed then, and the September 2026 recomputations following adjudication on 2026-09-10 are identified individually where they appear.
 The live surfaces are authoritative, and where a figure here disagrees with them the figure here is
 the older one.</p>
 <p><strong>What the answer is NOT.</strong> Every <strong>calculator figure</strong> is a policy-labeled
@@ -71,7 +70,7 @@ scenario estimate, and the above-80 reading is a separately labeled <strong>adop
 analyst judgment</strong> — this page&#39;s source-reliability adjudication, not a
 calculator output and not provider disclosure. No placement map for Claude Opus 4.x
 is public to this page, so this page does not label any calculator result
-verified or central, and the comparison slot renders honestly empty (&quot;no verified central comparator exists&quot; — an owner-ratified
+verified or central, and the comparison slot renders honestly empty (&quot;no verified central comparator exists&quot; — an author-ratified
 design decision, 2026-07-22). The spans below are <strong>spans across declared
 alternatives</strong>, never statistical statements about a distribution — this page does
 not have the evidence to propagate input distributions, and pretending otherwise
@@ -82,7 +81,7 @@ tariff schedule under the reference cache/batch/discount mix:
 1 − (modeled direct serving cost ÷ modeled effective billings) at the Reference
 traffic mix (15:1 input:output, 60% cache hit). NOT a company gross margin — the
 report&#39;s §7 bridges the two. The fleet is the <strong>memory-feasibility-filtered
-evidence-informed default</strong> (owner rulings 2026-07-21 + 2026-07-23): the NA-blend
+evidence-informed default</strong> (the author’s decisions 2026-07-21 + 2026-07-23): the NA-blend
 family shares, with any leg that cannot serve the model under the loaded-bytes
 policy excluded at weight 0 (disclosed inline) and the remaining declared weights
 renormalized.</p>
@@ -109,7 +108,7 @@ it. This annex is planning-baseline throughout.</p>
 2.5 T (adjudicated 2026-07-24; size case <code>revised-band-central-2.5</code>) — informed
 by newer community estimates; Musk&#39;s public &quot;Grok is 0.5T = 1/10 Opus&quot;
 (April 2026) is read as likely referring to the prior flagship, Opus 4.6
-(owner-adjudicated planning interpretation; the referent is unverified), and
+(adopted planning interpretation; the referent is unverified), and
 its 5 T deduction is preserved as the labeled <code>community-central-5.0</code> size
 case. The headline is size-dependent and decreases monotonically across the
 three sampled totals: 2.0/2.5/3.0 T compute ≈59.39% / ≈58.41% / ≈57.43%
@@ -120,7 +119,7 @@ class, page-adopted.</p>
 <li><p><strong>Fleet membership + weights.</strong> NA-blend: NVIDIA 50% (a SECONDHAND Morgan
 Stanley summary of an NVIDIA NDR comment about an unnamed ASIC-heavy lab,
 attribution inference by a named relayer — the full chain and its limits are in
-<code>research/primary-sources/nvidia-anthropic-share-x-2026-07/</code>), TPU 25% /
+the archived source posts of 2026-07), TPU 25% /
 Trainium 25% (equal residual split across the two ~1M-chip-scale public
 commitments — this page&#39;s declared choice). Within-family splits carried from
 the v2.1 declared topology (no public basis exists). At the revised flagship
@@ -164,7 +163,7 @@ gb300 12, tpu7 16, trn2 48, trn3 32.</p>
 </li>
 <li><p><strong>Prices/rents.</strong> TPU v7 and Trainium2 are observed-source-named; h100 and h200
 are analyst-set; and gb200, gb300 and Trainium3 carry the <strong>provisional</strong> planning
-rents adopted 2026-09-10 under <code>d-20260910-im-adopt-fleet-rents-and-correct-grok</code>,
+rents adopted 2026-09-10 after adjudication,
 each declared as a judgment rather than a published rate of the low/committed class
 (each row cites its basis). Until that date those three carried no registered rent at
 all and the engine renormalized them out; the earlier text here described gb200 as
@@ -189,8 +188,7 @@ Until that date GB200, GB300 and Trainium3 carried no registered accelerator-hou
 engine renormalized them out, so the reading then was <strong>51.1786% effective computed over about 52% of
 declared fleet weight</strong> — not the 57.8814% above, and not over all seven legs. Both the number and
 its coverage changed. The excluded set contained GB200, the only leg whose decode coefficient is
-fitted to a matched observation, which is why the omission bit hardest there. Owner ruling
-<code>d-20260910-im-adopt-fleet-rents-and-correct-grok</code> adopted a <strong>provisional</strong> planning rent for each
+fitted to a matched observation, which is why the omission bit hardest there. The author’s decision of 2026-09-10 adopted a <strong>provisional</strong> planning rent for each
 of the three, so every declared leg carries a price. Membership is a separate question from pricing,
 and since 2026-09-20 the default renders <strong>5 of 7 declared legs</strong> — the two Trainium legs are
 withdrawn on evidence grounds (below), their declared weight renormalized over the remaining five,
@@ -236,15 +234,15 @@ traffic profiles. The Reference mix is the anchor; real traffic composition is
 undisclosed.</li>
 </ul>
 <p><a id="scenario-only-utilization"></a></p>
-<h3>Scenario-only ledger — fleet utilization (r4 §C3)</h3>
+<h3>Scenario-only ledger — fleet utilization (the adversarial review of 2026-07-25)</h3>
 <p>The 50% paid-capacity occupancy this page holds by default is <strong>a declared planning
 convention, not a measurement</strong>: no provider publishes occupancy telemetry by phase, so
-there is nothing to calibrate it against. It is enumerated in the r4 adversarial review&#39;s
-scenario-only ledger (§C3) for exactly that reason. Moving it is a legitimate scenario
+there is nothing to calibrate it against. It is enumerated in the adversarial review&#39;s
+scenario-only ledger (the scenario review) for exactly that reason. Moving it is a legitimate scenario
 question and the calculator exposes it as a live control — which is why the analyst-gap
 summary&#39;s first two rows move this one control and show what the engine then computes.</p>
 <p><a id="scenario-only-mtp"></a></p>
-<h3>Scenario-only ledger — speculative decode / MTP (r4 §B10, §C3)</h3>
+<h3>Scenario-only ledger — speculative decode / MTP (the adversarial review of 2026-07-25)</h3>
 <p>Acceptance rates for speculative decoding are unpublished for the fleet this page
 models. Its cited evidence set carries four non-fleet acceptance figures and no
 fleet-specific one: two non-flagship anchors — one reporting an average acceptance
@@ -253,8 +251,8 @@ plus the bonus token produced per verification step), one assuming 70% acceptanc
 single speculative token — and, in the
 open-stack post cited below, average acceptance lengths of 2.18 and 2.44 at two draft-window
 settings. These are the figures this page has found, not a claim about every figure that
-exists. The r4 review&#39;s verdict on applying a
-fleet-wide credit is explicit: <strong>&quot;do not apply one universal multiplier&quot;</strong> (§B10).
+exists. The adversarial review’s verdict on applying a
+fleet-wide credit is explicit: <strong>&quot;do not apply one universal multiplier&quot;</strong> (the counterfactual analysis).
 Published gains are workload-dependent — about 14% at production-like batch against
 about 60% at modest concurrency — so a single multiplier would be a workload assumption
 wearing a mechanism&#39;s clothes. Those two figures are the SAME model on the SAME stack
@@ -278,10 +276,10 @@ this page cannot establish, and never used to select a reading of this page&#39;
 <h2>4-bis. The strongest external analyst hypothesis, and why not the higher numbers</h2>
 <p><strong>Where these two things now sit, because it changed on 2026-08-27.</strong> The ruling of
 2026-07-24 put a calculator reading beside the adopted analyst reading on the FINAL-ANSWER
-surface. T5 rec 5 of the 2026-07-29 review separated them, and this annex describes the
+surface. The recommendation of the 2026-07-29 review separated them, and this annex describes the
 arrangement that is actually live rather than the one it used to describe.</p>
 <ul>
-<li><strong>THE ANSWER now carries calculator readings only</strong> — three of them, since the b9 M6 rework:
+<li><strong>THE ANSWER now carries calculator readings only</strong> — three of them, since the final-answer rework of 2026-07-30:
 the reading the page opens on, the calculator&#39;s own lead-adjusted baseline (≈68%), and the
 ≈58% public-evidence reference (the reproducible scenario output above). Each names its own
 basis where it stands.</li>
@@ -324,10 +322,7 @@ say honestly where no bridge is constructed.
 The current decomposition (≈58 → ≈58) carries its own line, read from the engine&#39;s own
 <code>decompositionLine</code>: the page-adjudicated evidence-informed weight rebind moves the result from
 58.40 to 57.88, a −0.5-point move; at the revised size the serve-feasibility rule removes nothing
-(under the Legacy 5 T case it computes ≈56 and the rule removes H100 and Trainium2). Full drafting
-history and review chain: <code>research/im4-fa-justifications-memo.md</code> (design gate,
-seven rounds + the dual GPT Pro review), raws under <code>research/reviews/</code>, and the
-cumulative concern ledger <code>research/gptpro-concern-ledger.md</code>.</p>
+(under the Legacy 5 T case it computes ≈56 and the rule removes H100 and Trainium2). The drafting history records seven review rounds + the dual GPT Pro review, followed by a cumulative concern ledger.</p>
 <h2>5. What would move or verify this answer</h2>
 <p>Only a direct same-scope margin disclosure, or matched disclosures of serving
 cost and realized billings, could verify actual margin. Short of that, the
@@ -345,13 +340,13 @@ evidence plus explicitly labeled page assumptions, revised the moment better
 data exists.</p>
 <h2>6. Provenance pointers</h2>
 <ul>
-<li>Evidence rows: <code>research/evidence-instances-v22.json</code> (the three-status evidence schema)</li>
-<li>Calibration: the frozen calibration set (the seven fits F1–F7, which the receipt pack itemizes), <code>research/d2-receipt-pack.md</code></li>
+<li>Evidence rows: the recorded evidence instances (the three-status evidence schema)</li>
+<li>Calibration: the frozen calibration set (the seven fits F1–F7, which the receipt pack itemizes), the calibration receipt pack</li>
 <li>Placement registry (published models): <code>WEIGHT_PLACEMENT</code> in engine data +
-sha256-pinned config captures (<code>research/primary-sources/hf-configs-placement-2026-07-22/</code>)</li>
-<li>Fleet attribution chain: <code>research/primary-sources/nvidia-anthropic-share-x-2026-07/</code></li>
+sha256-pinned config captures (configuration captures dated 2026-07-22)</li>
+<li>Fleet attribution chain: the archived source posts of 2026-07</li>
 <li>Claims registry (the discourse this answers): report §1–§2 + <code>MARGIN_CLAIMS</code></li>
-<li>Gate history (how every number above got reviewed): <code>research/im-gates-ledger.md</code></li>
+<li>Gate history (how every number above got reviewed): the recorded review history</li>
 </ul>
 
 </section>

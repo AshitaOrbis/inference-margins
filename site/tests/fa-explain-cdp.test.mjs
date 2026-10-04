@@ -1,4 +1,4 @@
-// b9 M6 — the §20 R-1..R-4 explain surface over CDP (memo research/b9-m6-fa-memo.md §10.4, D-6x).
+//  — the  R-1..R-4 explain surface over CDP.
 // WHY THIS FILE EXISTS: tests/run-app-tests.sh drives headless Chrome with --dump-dom and greps the
 // result. It cannot click a trigger, read getComputedStyle(dialog, "::backdrop"), measure a touch
 // target, check focus, or emulate a coarse pointer — so B-1..B-6 were unrunnable as written. The
@@ -118,7 +118,7 @@ const PROBE_FINE = `(async () => {
   exec.open = true;
   r.basisVisibleOpen = basis.getClientRects().length > 0 && /Ordering basis/.test(basis.textContent);
   r.execRowCount = document.querySelectorAll('#fa-exec-rows .fa-exec-row').length;
-  /* b9 spec-decode LEVER: the affordance FLIPPED. The M6 contract was always no-control now, jump
+  /* spec-decode LEVER: the affordance FLIPPED. The final-answer contract was always no-control now, jump
      when the lever lands, with no new mechanism — so this probe follows the contract to its other
      side rather than being deleted. It now asserts the flipped state AND that the flip target is
      the real control, which is what makes the affordance useful rather than decorative.
@@ -187,7 +187,7 @@ const PROBE_FINE = `(async () => {
   r.dlgDisclaimerNode = !!q('#fa-must-not-be-called-dlg');
   r.disclaimersMatch = r.dlgDisclaimerNode
     && q('#fa-must-not-be-called-dlg').textContent === q('#fa-must-not-be-called').textContent;
-  // ---- the RENDERED-DOM vocabulary sweep (memo §2.7 (ii)): remove EXACTLY the two inventoried
+  // ---- the RENDERED-DOM vocabulary sweep ( (ii)): remove EXACTLY the two inventoried
   //      nodes from a clone of the union (#final-answer + the open dialog) and require zero hits.
   {
     const FORBIDDEN = [/\\brange\\b/i, /\\binterval\\b/i, /±/, /\\bconfidence\\b/i, /\\buncertaint/i, /\\bstd\\.? ?dev/i, /\\bC\\.?I\\.?\\b/];
@@ -384,14 +384,14 @@ const ANSWER_IDS_PIN = [
     "fa-must-not-be-called",
     "fa-planning-line",
     "fa-planning-point",
-    "fa-planning-status", // bq-3316 M2 (2026-09-25): the value token's identity label, split from the SAME engine token
+    "fa-planning-status", // the release M2 (2026-09-25): the value token's identity label, split from the SAME engine token
     "fa-prior-reading",
     "fa-reference-reading",
     "fa-subject",
     "fa-subject-short",
     "fa-traffic-span"
   ];
-/* RE-MINTED 2026-09-10 (im-release-edit-r3), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+/* RE-MINTED 2026-09-10, adjudicated 2026-09-10.
    BOTH pins moved, and they moved for different reasons — which is the whole point of pinning them
    separately, so it is worth saying that the split did its job here.
 
@@ -400,7 +400,7 @@ const ANSWER_IDS_PIN = [
    planningPoint 57.88 (the reference, rendered ≈58), priorReading 68.00 (the calculator's own
    default state) and landingReading 82.42, and those are the values the rendered answer carries.
 
-   THE WORDING moved because the §C2 disclosure is now DERIVED rather than asserted. The digest
+   THE WORDING moved because the  disclosure is now DERIVED rather than asserted. The digest
    normalises numbers out, so a pure figure sweep could not have moved it; what moved it is that the
    sentence describing where this page's live reading falls against the r4 adjudication's quoted
    55–61 zone changed from a hardcoded "sits BELOW" to a computed branch, and at 57.88 the branch
@@ -414,11 +414,11 @@ const ANSWER_IDS_PIN = [
 
    The reading this message asks for was only possible after adding the DUMP_ANSWER_SURFACE aid
    below; this test demanded a reading it gave no way to perform. */
-/* im-vet-six-repairs RE-PIN (2026-09-20, program bq-2835): the DIGITS a reader receives move with
+/*  RE-PIN (2026-09-20, program the release): the DIGITS a reader receives move with
    the two registry repairs (E1 the Trainium withdrawal, E2 the TPU numerator) — every one of them
    re-derived against the engine by tests/fa-m6-b9.test.mjs and tests/trendline-interlock-b9.test.mjs
    before this pin was touched. */
-/* RE-PINNED 2026-09-20 (im-vet-six-repairs ROUND 2, completion-gate FAIL). Note WHICH of the
+/* RE-PINNED 2026-09-20 ( ROUND 2, completion-gate FAIL). Note WHICH of the
    two pins moved, because the pair is designed to tell exactly this apart: the DIGITS moved and
    the TEXT digest did NOT — it is byte-identical to the value pinned above. That is the shape a
    pure basis correction should have. Putting E2's two diagnostics on one timing convention
@@ -426,9 +426,8 @@ const ANSWER_IDS_PIN = [
    a point and changed no sentence, no claim and no qualifier. If the text digest had moved too,
    this would have been prose drifting behind a number, which is the failure class this file was
    built for. */
-/* RE-PINNED 2026-09-30 (im-floor-scenario-release-bq3933-0930, bq-3933 — owner ruling
-   d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario, block B of card q-im-floor-wording-2026-09-28;
-   Polaris ruling p-20260930-im-floor-release-carries-block-b-phrases-into-the-four-places-the-count-missed). Read with
+/* RE-PINNED 2026-09-30 (the release, the release — adjudicated 2026-09-30, block B of card the adopted decision;
+   the maintainer ruling adjudicated 2026-09-30). Read with
    DUMP_ANSWER_SURFACE=1 and diffed word by word against the base commit's dump (evidence/answer-surface-worddiff.txt in the
    leg's work dir); the COMPLETE list of changes: every "public-data floor" / "floor" naming the ≈58% -> "public-data
    scenario" / "scenario" (tile title, aria-labels, read-in-full trigger, tokens, bridges, entry labels); the tile's status
@@ -437,7 +436,7 @@ const ANSWER_IDS_PIN = [
    "exceeding a scenario is not a disagreement" (10a) and "which that scenario allows" (10b). No RANKING of an external claim
    added. The DIGITS pin moves by exactly ONE added number: the stream gains a leading "58" — block B's tile body repeats
    "≈58%" under the ≈58% value; no published figure moved (c3714685… -> d07f0b5f…). */
-const ANSWER_DIGITS_PIN = "d07f0b5fb1f8bf4b426a8c8c416acb249a886d058d3d04634c14497688bc685a"; // previous c3714685e9652c15…
+const ANSWER_DIGITS_PIN = "031e299a154d1a6d03a1400ce8b0e3e92cd7b9cffab5defd473ea5c3c866ad02"; /* RE-MINTED 2026-10-04: against the pre-cleanup answer, the digit stream lost only digits of internal labels (round, section and phase numbers) and gained 2026-07-25 four times, the date the same review states elsewhere on the page; a sequence diff of the dumped streams shows no other change, so no published figure moved. Previous: 42ac1199a50ae0e0… */ // previous c3714685e9652c15…
 /* RE-PINNED 2026-09-12 (im-default-window-and-mcp-discrepancy; Astra review round 3 F9), THE WORDING ONLY. The
    digits pin above did not move: the rendered digit stream is byte-identical. Read with DUMP_ANSWER_SURFACE=1 on
    both sides (the pre-change tree 9dcb54e reproduces the previous pin 9a69431e... exactly, so the dump measures
@@ -446,36 +445,35 @@ const ANSWER_DIGITS_PIN = "d07f0b5fb1f8bf4b426a8c8c416acb249a886d058d3d04634c144
    default in their own browser)" and the prior-reading line "by default it now opens on". A reader can now choose
    their own default, so the unqualified claim became false for that reader. Read for a RANKING of an external
    claim, as the failure message asks: none; the words qualify which default the answer's fixed readings describe.
-   Evidence: answer-surface-diff.txt in the im-default-window-2026-09-12 work folder (private workspace) */
-/* im-vet-six-repairs RE-PIN (2026-09-20): the WORDING moves too, and it was read for what this pin
+   Evidence: answer-surface-diff.txt in the release-09-12 work folder (private workspace) */
+/*  RE-PIN (2026-09-20): the WORDING moves too, and it was read for what this pin
    exists to catch — a RANKING of an external claim — and contains none. What changed inside THE
    ANSWER: the rent-class sentence (four of the FIVE member rents are analyst-set), the Trainium
    clause (WITHDRAWN rather than caveated), and the vocabulary release edit's one-name-per-idea
    renames. Every changed span is pinned reversibly in tests/fa-justifications.test.mjs
    VETTING_REPAIRS. */
-/* RE-PINNED 2026-09-20 (im-vet-six-repairs, Astra xhigh fold). The rendered answer's WORDING
+/* RE-PINNED 2026-09-20 (Astra xhigh fold). The rendered answer's WORDING
    moved and its DIGITS did not — the digit pin above stayed green through this change, which is
    the separation that makes re-pinning the text safe here. What moved is one clause, and it moved
    to UNDO an edit: the N1 vocabulary pass had replaced "paid-capacity occupancy" with
-   "utilization" INSIDE the r4 run B §C2 label, which this surface quotes verbatim and attributes
+   "utilization" INSIDE the review  label, which this surface quotes verbatim and attributes
    in the same sentence. The quoted bytes are restored, and the page's own gloss after the
    quotation now names both terms so a reader is not left to reconcile them. Read for what this
    pin exists to catch, per its own failure message: the new text adds no RANKING of an external
    claim, and the ranking-phrase control below passed on the same run. */
-/* RE-PINNED 2026-09-25 (im-legibility-merge-enact-0925, bq-3316). Read with DUMP_ANSWER_SURFACE=1 and diffed word by
+/* RE-PINNED 2026-09-25 (the release, the release). Read with DUMP_ANSWER_SURFACE=1 and diffed word by
    word against the previous pin's dump; the COMPLETE list of changes: "The answer"/"The final answer" -> "Planning
    baseline" (tile title, section name); "public-evidence reference reading" -> "planning baseline" (x5, one name for
    ≈58%); "not company GM" -> "not a company gross margin"; three "Deeper explanation" triggers -> "Read the planning
    baseline in full" / "Why the higher readings are higher" / "Open the executive summary"; the landing reading moved
    first inside the collapse. No RANKING of an external claim added; the separate DIGITS pin is UNCHANGED. */
-/* RE-PINNED 2026-09-26 (im-legibility-astra-pass-and-remint-0926, bq-3520 — owner ruling
-   d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate; review of record r1 folded). Read with
+/* RE-PINNED 2026-09-26 (the release, the release — adjudicated 2026-09-26; review of record r1 folded). Read with
    DUMP_ANSWER_SURFACE=1 and diffed word by word against the base commit's dump (evidence/answer-surface-worddiff-r2.txt in
    the leg's work dir); the COMPLETE list of changes: "Planning baseline"/"planning baseline" -> "Public-data floor"/
    "public-data floor" (tile title, both aria-labels, read-in-full trigger, reference token, bridge, basis declaration);
    the tile's status label drops the name the title carries and reads "policy-labeled scenario: a bare minimum from public
    data known to be wrong; real margins cannot be lower. Not an estimate."; the reference token adds "a bare minimum from
-   public data, not an estimate"; the §C2 frame reads "describing the scenario this public-data floor is built on, as it
+   public data, not an estimate"; the  frame reads "describing the scenario this public-data floor is built on, as it
    stood then" (quotation byte-untouched); every "conservative (planning) case" naming the ≈58% -> "public-data floor";
    the header's closing identity -> "a floor from public data — a bare minimum, reproducible, and not an estimate"; its
    disagreement sentence and the g2 bridge now say a claim above a floor is compatible with it ("exceeding a floor is not
@@ -486,7 +484,7 @@ const ANSWER_DIGITS_PIN = "d07f0b5fb1f8bf4b426a8c8c416acb249a886d058d3d04634c144
    Patel's claim" (was "reproduces the floor's neighborhood", ambiguous beside the public-data floor), "not a second claim about
    the same metric", "could identify the differing assumptions". Diff: evidence/answer-surface-worddiff-final.txt. DIGITS
    still c3714685… (the reviewer's "above-80%" was left out so no figure enters the answer). */
-const ANSWER_TEXT_PIN = "db29f5b161442a46916e6d240a77e22d182d8e3ac1fdfb0af23afd370fa0310e"; // bq-3933 (see the RE-PINNED note above ANSWER_DIGITS_PIN); previous 3b4bffaf19b858f9… // previous 801905f921dfdf1f… (intermediate pins of this leg, ce322c8f… and 5f2fe255…, never shipped) (previous aeb617203282b991…)
+const ANSWER_TEXT_PIN = "5e43f2705cbfa257b83eaacb51eb41704c85916ee79a56b97817162712fba9c0"; /* RE-MINTED 2026-10-04: the answer's wording changed only where internal labels became plain words: a review named by its date, a registry revision named as such, and adoption decisions described without naming who made them; the dumped texts were read for ranking language and none was added. Previous: fbc1134343554acb… */ // the release (see the RE-PINNED note above ANSWER_DIGITS_PIN); previous 3b4bffaf19b858f9… // previous 801905f921dfdf1f… (intermediate pins of this leg, ce322c8f… and 5f2fe255…, never shipped) (previous aeb617203282b991…)
 
 const RANKING_PATTERNS = [
   /\bstrongest external\b/i, /\branked strongest\b/i, /\bthe strongest [^.;]{0,24}hypothesis\b/i,
@@ -658,7 +656,7 @@ async function main() {
           /* 3. THE WORDING a reader receives is pinned, numbers normalised out. This is the
                 control the ranking heuristic is not: it does not care HOW text arrived. */
           const digest = createHash("sha256").update(surface.text).digest("hex");
-          /* im-release-edit-r3 (2026-09-10): a minting aid, the one this test was missing. Its own
+          /*  (2026-09-10): a minting aid, the one this test was missing. Its own
              failure message says to re-derive the digits against the engine and READ the new text
              before re-pinning — and then gave the re-minter no way to see either without editing
              the test. report-text-parity has had DUMP_PARITY_HASHES for exactly this reason. With

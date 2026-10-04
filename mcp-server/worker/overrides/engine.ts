@@ -6,13 +6,13 @@
    Exports the exact same interface as ../src/engine.ts (E, SITE, engineStamp). */
 // @ts-expect-error — plain dual-mode CJS with no .d.ts; typed via engine-types below.
 import engineModule from "../../../../site/engine.js";
-// @ts-expect-error — same dual-mode CJS shape; the T4 registry module has no .d.ts either.
+// @ts-expect-error — same dual-mode CJS shape; the datacenter registry module has no .d.ts either.
 import registryModule from "../../../../site/engine-data-dc-v1.js";
 import type { Engine } from "./engine-types.js";
 
 export const E: Engine = engineModule as Engine;
 
-/* U5: the T4 datacenter registry, bridged exactly as E is — bundler import, never createRequire.
+/* Datacenter registry: the datacenter registry, bridged exactly as E is — bundler import, never createRequire.
    Same module engine.js already pulls in; `validateDcRegistry` is what the dc-map economics layer
    runs a release's adapter rows through before any of them price a token. */
 export const DC_REGISTRY = registryModule as {

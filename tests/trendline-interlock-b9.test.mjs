@@ -568,7 +568,7 @@ const PRE_M5_FA = {
       E.workload(unpinnedTraffic, undefined, E.scenarioContext(unpinnedTraffic)).margin * 100
         !== fa.trafficSpan.contributors[0].marginPct);
   }
-  /* b9 spec-decode LEVER (chunk A): the closed set gains `specDec`, per memo §10 — the FA
+  /* spec-decode LEVER (chunk A): the closed set gains `specDec`, per memo §10 — the FA
      reference reading must pin the lever at NO CREDIT, or a caller setting specDec could move
      the page's own published value. Pinning it at 1.00 is what keeps the FA inert to the lever
      while the lever remains fully available to a reader's scenario. */

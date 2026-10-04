@@ -5,15 +5,15 @@ import { assertNoOrphanRegistrations, provenance } from "./provenance-inputs.mjs
 const require = createRequire(import.meta.url);
 const E = require("../engine.js");
 const DC = require("../engine-data-dc-v1.js");
-/* b9 M5 fixture scope (M5 delta manifest) — REFERENCE-CLASS suite. M5 seeds every clean state
+/* REFERENCE-CLASS suite. The scenario-prior revision seeds every clean state
    with the ratified per-lab algorithmic-lead prior (+3 months for Anthropic), which multiplies
    achieved throughput by E = 1.3161 and therefore every cost/margin this suite pins. This suite
    certifies reviewed calibration points, chart parity and published-report bridges — statements about the PUBLIC-EVIDENCE
    REFERENCE, not about the calculator's default scenario prior. Every state it derives is
    therefore pinned to trend 0 / family 1.0 through the SAME constructor the final-answer surface
-   uses (engine §15 / decision D-10), and every pinned digit below is BYTE-UNCHANGED. The default
+   uses, and every pinned digit below is BYTE-UNCHANGED. The default
    state's movement is carried, in full, by tests/fixtures-baseline-v22.json (regenerated) and the
-   render-parity WIDE hash — see the M5 delta manifest. */
+   render-parity WIDE hash — see the scenario-prior revision delta manifest. */
 const preset = (m, p, sel) => E.pinReferenceLevers(E.applyPresetSettings(m, p, sel));
 
 const R = require("../engine-roofline-v22.js");
@@ -32,7 +32,7 @@ const P = provenance("snapshots", assert);
 const settings = (mid, pid) => preset(E.MODELS.find(m => m.id === mid), E.PERSPECTIVES.find(p => p.id === pid));
 const marginPct = s => E.workload(s).margin * 100;
 
-// IM3 slice 3 — the live display path consumes the reviewed roofline core. Mixed fleets
+// Roofline — the live display path consumes the reviewed roofline core. Mixed fleets
 // renormalize over finite+capped legs and disclose that structural fact; an all-infeasible
 // fleet remains explicitly non-numeric.
 {
@@ -42,56 +42,56 @@ const marginPct = s => E.workload(s).margin * 100;
   const parallel = R.renderPoint({ arch: R.resolveArch("opus"), activeB: s.active, totalB: s.total,
     hwKey: "h200", regime: s.interact, precision: s.precision, stackMult: s.stackMult,
     profileId: m.nativeTraffic, ioRatio: s.ioRatio });
-  assert("IM3 switch: live h200 decode equals the reviewed parallel point",
+  assert("Roofline switch: live h200 decode equals the reviewed parallel point",
     Math.abs(live - parallel.tokPerS) < 1e-9, `${live} vs ${parallel.tokPerS}`);
   const wl = E.workload(s);
-  // FA re-mint (memo J-9): at the revised flagship size (2.5T) EVERY declared leg
+  // FA re-mint (specification J-9): at the revised flagship size (2.5T) EVERY declared leg
   // serves its declared operating point — the chokepoint seeds all 7 members and the
   // 5T exclusion story lives on the labeled size case (see the fleets suite). The
   // D-10 statuses populate (fullMemory covers weights + peak KV + the flat 10%-HBM
   // reserve, while runtime-specific workspace demand and fragmentation stay
   // unverified; economics = the worst evidence-quality pair on the blend).
-  /* im-arc T4 fold (2026-08-24), memo §4: the default fleet still has SEVEN member legs — what
+  /*  (2026-08-24), : the default fleet still has SEVEN member legs — what
      changed is that three of them (gb200, gb300, trn3) have no admissible public planning rate,
      so under the page's default rent basis only four are PRICED and the weld clause says so. The
      membership property this assertion was written for is unchanged and is asserted below; the
      renderable count is the honest consequence of refusing to invent three rates. */
-  /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+  /* publication revision (2026-09-10), adjudicated 2026-09-10:
      and the three legs are priced again, so the honest consequence reverses — 7 of 7 at 100% weight.
      The MEMBERSHIP property this assertion was written for has been unchanged throughout both moves,
      which is the point of asserting it separately from the priced count. */
-  /* im-vet-six-repairs (2026-09-10 -> 2026-09-20): the MEMBERSHIP property this assertion was
+  /* registry repairs (2026-09-10 -> 2026-09-20): the MEMBERSHIP property this assertion was
      written for is what moves this time, and deliberately: the two Trainium legs are withdrawn
      from the default on evidence grounds, so the default is FIVE member legs and all five render.
      "all member legs render, policy-clean" is unchanged and is still what is asserted. */
-  assert("IM3 mixed fleet (FA): the filtered default renders 5 of 5 member legs, policy-clean, statuses populated",
+  assert("Roofline mixed fleet (FA): the filtered default renders 5 of 5 member legs, policy-clean, statuses populated",
     isFinite(wl.margin) && wl.fleetRenderable && wl.fleetRenderable.renderableLegs === 5
     && wl.fleetRenderable.totalLegs === 5
     && Math.abs(wl.fleetRenderable.renderableWeightShare - 1) < 5e-3
     && wl.fleetRenderable.allLegsRenderableUnderPolicy === true
     && wl.fleetRenderable.placementVerified === false
     && wl.fleetRenderable.statusVector.fullMemory === "weights+peak-KV+flat-10%-HBM-reserve fit at the declared operating point under the policy (runtime-specific workspace demand and fragmentation unmodeled)"
-    && wl.fleetRenderable.statusVector.economics === "evidence-quality: analyst-set-assumed-op throughput · analyst-set price", // b9 M1: gb300 relabelled fitted → analyst-set-assumed-op, which is the worst class on this blend
+    && wl.fleetRenderable.statusVector.economics === "evidence-quality: analyst-set-assumed-op throughput · analyst-set price", // : gb300 relabelled fitted → analyst-set-assumed-op, which is the worst class on this blend
     JSON.stringify(wl.fleetRenderable));
   // R2 re-mint: gb200-only@5T now RENDERS at the solver width (the redesign's whole point);
   // the honest-null fixture moves to trn2@10T (the solver's own counterexample pin — no
   // legal width fits, typed infeasible, NO numbers).
   const zero = preset(m, p, { mode: "native" }); zero.blend = { trn2: 100 }; zero.total = 10000;
   const zw = E.workload(zero);
-  assert("IM3 mixed fleet (R2): honest-null blend (trn2@10T) returns no numeric margin",
+  assert("Roofline mixed fleet (R2): honest-null blend (trn2@10T) returns no numeric margin",
     !isFinite(zw.margin) && zw.fleetRenderable && zw.fleetRenderable.renderableLegs === 0
     && zw.fleetRenderable.totalLegs === 1 && zw.fleetRenderable.renderableWeightShare === 0,
     JSON.stringify(zw));
 }
 
-// IM3 slice-3 review R7 P1 fix (restructured per review R7b — the original version below was
+// Roofline review R7 P1 fix (restructured per review R7b — the original version below was
 // found VACUOUS: it called E.registerScenarioContext() directly inside the test, so all three
 // still passed even with the a17cc99 production fix fully reverted, because the test re-did the
 // registration itself). These tests now call the exact PRODUCTION functions app.js's three call
 // sites delegate to (engine.js: restoreSavedPresetState, restoreModifiedLinkState,
 // applyModelSwitchWhileModified) — the test performs NO registration of its own. A reversion of
 // those functions' internal registerScenarioContext() call is proven, not asserted, to fail these
-// tests (see the R7b section of research/im3-slice3-packet.md for the revert-run-restore record).
+// tests (see the R7b section of the documented contract for the revert-run-restore record).
 {
   const opus = E.MODELS.find(x => x.id === "opus"), grok = E.MODELS.find(x => x.id === "grok");
   const median = E.PERSPECTIVES.find(x => x.id === "median");
@@ -111,7 +111,7 @@ const marginPct = s => E.workload(s).margin * 100;
     const original = preset(opus, median, { mode: "native" });
     const saved = structuredClone(original); // what localStorage would hold
     const loadTraffic = E.resolveTraffic(grok, median, { mode: "native" });
-    /* b9 spec-decode LEVER ([N-CORRECTION-LIFETIME] rule 1): the return contract is now
+    /* spec-decode LEVER ([N-CORRECTION-LIFETIME] rule 1): the return contract is now
        {state, corrections} — the function used to compute a sanitize result and discard it, so a
        forced correction had nowhere to go. Every field of the old return is `.state`. */
     const restored = E.restoreSavedPresetState(saved, grok, loadTraffic); // the production call, no test-side registration
@@ -200,7 +200,7 @@ const marginPct = s => E.workload(s).margin * 100;
   }
 }
 
-// IM3 slice-3 review R7 P1 fix — customDonor codec contract activated live (memo §3 R2). Slice 1b
+// Roofline review R7 P1 fix — customDonor codec contract activated live ( R2). Slice 1b
 // left standalone helpers (engine-roofline-v22.js: encodeCustomDonor/decodeCustomDonor/CUSTOM_DONOR_BOUNDS)
 // for slice 3 to wire through DEFAULTS, SCENARIO_BOUNDS, the sanitizer, the live codec and
 // makeScenarioContext — the switch never did. These are END-TO-END live-engine round-trip tests
@@ -239,7 +239,7 @@ const marginPct = s => E.workload(s).margin * 100;
     const decoded = JSON.parse(Buffer.from(tok.slice(3).replace(/-/g, "+").replace(/_/g, "/"), "base64").toString());
     assert("customDonor codec: custom+non-default donor is encoded", decoded.customDonor === "qwen3c", JSON.stringify(decoded));
   }
-  // Codec — encode: custom + DEFAULT donor must NOT be encoded (memo §3: default is never encoded).
+  // Codec — encode: custom + DEFAULT donor must NOT be encoded (default is never encoded).
   {
     const s = preset(custom, median, { mode: "native" }); s.customDonor = "dsr1";
     const tok = E.encodeScenario(s, "custom", "median", traffic, null, { fleet: "preset", totalCase: "preset" });
@@ -247,7 +247,7 @@ const marginPct = s => E.workload(s).margin * 100;
     assert("customDonor codec: custom+default donor is NOT encoded", !("customDonor" in decoded), JSON.stringify(decoded));
   }
   // Codec — encode: a non-custom model must NEVER encode customDonor, even if S carries a stray
-  // non-default value (memo §3: "encoded ONLY when model=custom").
+  // non-default value ("encoded ONLY when model=custom").
   {
     const s = preset(opus, median, { mode: "native" }); s.customDonor = "qwen3c";
     const tok = E.encodeScenario(s, "opus", "median", traffic, null, { fleet: "custom", totalCase: "custom" });
@@ -297,7 +297,7 @@ const marginPct = s => E.workload(s).margin * 100;
   }
 }
 
-// IM3 slice 4 — CM384 evidence-record annotations (memo im3-integration-design.md §9, owner ruling
+// Roofline — CM384 evidence-record annotations (specification the development revision §9, the adopted decision
 // 2026-07-18: NO fit change, NO WS-E upgrade). The two FlexNPU bases (delivered full-system SLO
 // point ~1,648 tok/s/card => 8.1%; decode-pool standalone ceiling ~2,885 tok/s/decode-card => 14.2%)
 // are EVIDENCE-RECORD ANNOTATIONS ONLY -- research/evidence-instances-v22.json entries
@@ -322,7 +322,7 @@ const marginPct = s => E.workload(s).margin * 100;
     // R2 re-mint (manifest row): ascend renders at the solver's widest legal width (144,
     // the frozen 6P2D decode observation) instead of the fixed co-loc 128 — b moves with
     // bFeas at the rendered width; the evidence annotation itself is unchanged.
-    // FA re-mint (memo J-9 delta manifest): capacity widths re-solve at the revised
+    // FA re-mint (specification J-9 delta manifest): capacity widths re-solve at the revised
     // flagship size — the ascend decode operating point moves with per-chip residency.
     ["opus", "batch", 211.09388823526263],
     ["opus", "balanced", 211.09388823526263],
@@ -338,13 +338,13 @@ const marginPct = s => E.workload(s).margin * 100;
       Math.abs(got - expected) < 1e-9, `got ${got}, expected ${expected}`);
   }
 
-  // 3. Structural non-reachability: neither CM384 closure number (the memo's rounded 1,648/2,885,
+  // 3. Structural non-reachability: neither CM384 closure number (the specification's rounded 1,648/2,885,
   // nor the underlying evidence-record 1,646/2,885.4) appears anywhere in the compute-consumed
   // roofline registries (CALIBRATION.etaDec/calObs/impliedEta, OPERATING_POINTS) -- only in the
   // known-inert CALIBRATION.ascend.additionalObs documentation field, the engine.js display-copy
   // note, and the evidence-instances-v22.json record. A grep-based structural guard on the JSON
   // shape of just the compute-relevant sub-objects, not the whole file (additionalObs is expected
-  // to carry them, by design, exactly as memo §9 requires).
+  // to carry them, by design, exactly as  requires).
   const calNoObs = { ...D.CALIBRATION.ascend }; delete calNoObs.additionalObs;
   const calStr = JSON.stringify(calNoObs);
   const opStr = JSON.stringify(D.OPERATING_POINTS.ascend);
@@ -363,18 +363,18 @@ const marginPct = s => E.workload(s).margin * 100;
 // R2 re-mint (manifest rows; assembly-notes R-6): gpt 92.9→94.5 (4/4 legs render), grok
 // Peak-KV correction re-mint: GLM −163.0→−165.6; DSV4 74.3→73.8; Grok remains
 // within its rounded 64-point card while the exact replay moves to 63.7153.
-/* im-arc T4 fold (2026-08-24, declared delta): every replay moves. The dominant term is not a
+/*  (2026-08-24, declared delta): every replay moves. The dominant term is not a
    default nudge — it is that gb200, gb300 and trn3 now have NO admissible public planning rate, so
    under a rent basis those legs drop out of the priced blend and the remainder is a different,
    more expensive mix. dsv4's blend carries none of the three and is byte-stable, which is the
    control that shows the movement is the unavailable-rate path and not a global scalar. */
-/* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+/* publication revision (2026-09-10), adjudicated 2026-09-10:
    the two NVIDIA-heavy dive replays move because GB200 and GB300 now price — gpt 91.8 -> 93.2,
    grok 60.1 -> 63.2. dsv4 and glm are byte-unchanged because their declared fleets carry neither
    leg, which is the cleanest available evidence that this ruling touched procurement and nothing
    else. Grok's cacheReadMult correction 25 -> 15 moves NONE of these: every Grok replay runs at the
    dive's Uncached 3:1 / 0% convention, so a cache-read price has nothing to multiply. */
-/* im-vet-model-estimates (2026-09-19), owner note note-20260919T142116Z-6b5c83 "sanity check those
+/* tariff revision (2026-09-19), the author’s note of 2026-09-19 "sanity check those
    numbers (I strongly doubt anyone is negative serving margin on API costs)": five presets carried a
    price their vendor no longer charges, verified live on the vendors' own pages. Two dive replays move
    with the corrected tariff and nothing else does — gpt 93.2 -> 90.4 (list $5/$30 -> $4/$20) and
@@ -382,7 +382,7 @@ const marginPct = s => E.workload(s).margin * 100;
    because neither row's tariff moved, which is the control that shows this is the price path and not
    a global scalar. The same correction is what clears dsv4 (-9.1% -> +43.8%) and dsv4f (-11.5% ->
    +31.8%, and its dive replay -22.2% -> +25.3%) off the negative side of zero. */
-/* im-vet-model-estimates (2026-09-19), second change, owner ruling relayed by Polaris gen60: no
+/* tariff revision (2026-09-19), second change, the adopted decision relayed by the maintainer: no
    negative margin ships. glm moves -153.2 -> 31.3 because its DEFAULT TRAFFIC changed from the
    ncode-informed profile to the page's Reference convention. The replay's traffic is locked to the
    model's native profile, so changing the default moves the replay with it; nothing about the
@@ -394,12 +394,12 @@ for (const [mid, target] of Object.entries(DIVE_TARGETS)) {
 }
 {
   const wl = E.workload(settings("gemini", "dive"));
-  // R2 re-mint (manifest row; the owner's cited FALSE NEGATIVE fixed): tpu7 solves at a
+  // R2 re-mint (manifest row; the reported FALSE NEGATIVE fixed): tpu7 solves at a
   // legal width — the dive replay now renders ≈87.4 instead of a spurious infeasible.
-  // b9 M1 re-mint: still 1/1 rendering (the false negative stays fixed); the value moves
+  //  re-mint: still 1/1 rendering (the false negative stays fixed); the value moves
   // 87.4 → 84.0 because this is a tpu7-only fleet and tpu7 now carries the repaired rent
   // ($4.20 → $5.40) against the platform-native η bridge.
-  // im-vet-six-repairs re-mint (2026-09-20): a tpu7-only fleet, so it carries the TPU numerator
+  // registry repairs re-mint (2026-09-20): a tpu7-only fleet, so it carries the TPU numerator
   // repair (η 0.55 -> 0.519, the live value; 0.521 was a retired same-day intermediate) in full — 84.0 -> 83.6. The false negative stays fixed.
   assert("dive replay gemini (R2): the false negative is FIXED — 1/1 legs render, margin ≈83.6",
     isFinite(wl.margin) && Math.abs(wl.margin * 100 - 83.6) <= 0.1
@@ -434,14 +434,14 @@ for (const pid of ["median", "x80-v3", "x80-v4", "x90-v1", "x60-v3"]) {
      into historical reproduction receipts (T4-REPRO-R1/R2) and is gated as its own data milestone —
      see the record in render-parity-r1.test.mjs and BACKLOG §2. This guard's own purpose is
      unchanged: the provider-true billing field must survive every perspective's merge. */
-  /* im-release-edit-r2 (2026-09-10): CLOSED by owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok.
+  /* publication revision (2026-09-10): CLOSED by adjudicated 2026-09-10.
      These assertions existed to pin a KNOWN-STALE input in place so it could not drift silently while
      it waited for a decision — 25% was the 2026-07-08 launch rate, superseded by a published 15%. The
      decision came; the adopted value is the verified one. The assertion is kept rather than deleted,
      inverted to pin the corrected value, because the thing worth guarding is unchanged: this input
      must be what the source says, and must not drift. */
     assert(`grok cacheReadMult=15 under ${pid} (the verified rate, adopted 2026-09-10)`, settings("grok", pid).cacheReadMult === 15);
-  /* im-vet-model-estimates (2026-09-19): same inversion as the grok assertion above, same reason.
+  /* tariff revision (2026-09-19): same inversion as the grok assertion above, same reason.
      This pinned 1 (the 0.83%-of-input cache read under the $0.435 tariff). DeepSeek's page now prices
      v4-pro cache reads at $0.022 against a $0.66 input — 3.33% — so the assertion is re-pointed at the
      verified value rather than deleted. What is guarded is unchanged: this input must be what the
@@ -471,7 +471,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   const arch = R.resolveArch("dsr1");
   const points = [
     ["h800", 96, 4989, "fp8", 1873.0], ["h20", 48, 4096, "fp8", 680.0],
-    // b9 M1 (r4 defect D3): the Blackwell reproduction targets divide out the retired
+    //  (r4 defect D3): the Blackwell reproduction targets divide out the retired
     // precision scalars — 18750.0 / 1.8538 = 10114.36 and 15875.0 / 1.85 = 8581.08.
     // gb200's new target lands within 0.06% of its own MEASURED F4 anchor (10,108
     // tok/s/GPU), which the double-credited value overshot by 85%.
@@ -526,7 +526,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     hero.margin === chart.margin, `${hero.margin} vs ${chart.margin}`);
   // Concrete regression fixture (matches the reproduction in the 2026-07-15 expedited run
   // The billing-parity fixture is re-derived on the activated roofline path.
-  /* im-arc T4 fold (2026-08-24, declared delta): re-minted for the H200 capex and planning-rent
+  /*  (2026-08-24, declared delta): re-minted for the H200 capex and planning-rent
      moves. The PROPERTY is unchanged and is what the assertion above proves — the hero and the
      chart compute the same number through the same engine function. */
   assert("chart(h200).margin matches the activated billing-parity fixture (≈65.28%)",
@@ -636,7 +636,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   }
   // Provider-card cross-surface parity: static summaries must match the exact dive state
   // loaded by each card's "Reproduce" link, including current fleet membership.
-  // bq-3316 (2026-09-25, M11): the static cards carry the READER wording of the membership clause
+  // the release (2026-09-25, membership-wording revision): the static cards carry the READER wording of the membership clause
   // ("fit their declared serving setup"), the same words app.js readerClause() shows in captions; the
   // engine clause itself is unchanged (the T4 receipts reproduce it). The counts are still bound here.
   const card = id => html.match(new RegExp(`<details class="prov" id="${id}">[\\s\\S]*?</details>`))?.[0] || "";
@@ -667,16 +667,16 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   // P1-1 hero unanchored-share warning: no longer claims TPU/Trainium have NO anchors; names GB300 price
   assert("P1-1: hero warning drops the false 'no public serving anchors' claim", !/have no public serving anchors/.test(app));
   assert("P1-1: hero warning names the GB300 analyst-price leg (state-aware)", /on GB300, priced from/.test(app) && /analyst-estimated \$6\/GPU-hr base/.test(app));
-  // IM4 slice A: the registry/engine identity fork is CLOSED (schema rev 2.2) — the §3
+  // Registry reconciliation: the registry/engine identity fork is CLOSED (schema rev 2.2) — the §3
   // notice must state the reconciled status; the open-fork language must stay gone.
-  assert("IM4 slice A: §3 notice states the reconciled rev-2.2 identity", /Registry\/engine identity — reconciled \(schema rev 2\.2/.test(html));
-  assert("IM4 slice A: open-fork 'not yet implemented' language is gone", !/planned next-phase gate, not yet implemented/.test(html));
+  assert("Registry reconciliation: §3 notice states the reconciled rev-2.2 identity", /Registry\/engine identity — reconciled \(schema rev 2\.2/.test(html));
+  assert("Registry reconciliation: open-fork 'not yet implemented' language is gone", !/planned next-phase gate, not yet implemented/.test(html));
   // P1-6 persistent scenario-not-estimate identity chip
   assert("P1-6: identity strip carries the 'selected scenario output — not an identified estimate' chip", /selected scenario output — not an identified estimate or probability interval/.test(app));
   // P1-4 press-reported (not company-reported) DeepSeek 70-80%
   assert("P1-4: DeepSeek 70-80% labeled press-reported, not company-reported", !/first company-reported post-V4/.test(html) && /first press-reported \(The Information/.test(html));
   // #28 realized -> effective on the hero price tile
-  /* im-vet-six-repairs (2026-09-20), the vocabulary release edit (reader's reading, finding N1):
+  /* registry repairs (2026-09-20), the vocabulary release edit (reader's reading, finding N1):
      the tile loses the "Blended" qualifier, because style/VOCABULARY.md §1.2 makes **effective
      price** the one name for this idea and retires "blended effective price" as a variant of it.
      What #28 was written to protect is the word REALIZED never returning to a modeled denominator,
@@ -705,7 +705,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       && rubinWorkload.fleetRenderable.renderableLegs === 0,
       JSON.stringify({ price: D.PRICE_EVIDENCE.rubin, rubinParts,
         costMix: rubinWorkload.costMix, margin: rubinWorkload.margin }));
-    /* im-arc T4 fold (2026-08-24), memo §4: this invariant is SPLIT, because the fold introduced a
+    /*  (2026-08-24), : this invariant is SPLIT, because the fold introduced a
        distinction that did not exist before it. Rubin is STRUCTURALLY unpriced — no economics at
        all. gb200, gb300 and trn3 are fully priced as OWNED capacity (their capex is registered)
        but have no admissible public planning RENT: no dive resolves a rate of the low/committed
@@ -718,9 +718,9 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
         && Number.isFinite(E.hwHourCost(E.HW[k], Object.assign(structuredClone(rubinState), { hwMode: "tco" })))),
       JSON.stringify(E.HW_ORDER.map(k => [k, E.hwHourCost(E.HW[k],
         Object.assign(structuredClone(rubinState), { hwMode: "tco" }))])));
-    /* im-release-edit-r2 (2026-09-10): the INVARIANT is unchanged and is the whole value of this
+    /* publication revision (2026-09-10): the INVARIANT is unchanged and is the whole value of this
        assertion — a row is unpriced under RENT if and only if its policy selects no quote. What
-       changed is the membership of that set: the owner's ruling gives gb200, gb300 and trn3 a
+       changed is the membership of that set: the adopted decision gives gb200, gb300 and trn3 a
        selected quote, so the set is now EMPTY on both sides. The equality still binds, and the
        moment any row loses its selection this fires again. The literal expectation moves with it
        rather than being deleted, so an accidental un-selection cannot pass as "empty is fine". */
@@ -744,7 +744,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     const build = fs.readFileSync(new URL("../../build-research-html.mjs", import.meta.url), "utf8");
     assert("realized→effective: no 'Blended realized price' tooltip in engine.js", !/Blended realized price/.test(eng));
     assert("realized→effective: no 'Realized price /Mtok' column in app.js", !/Realized price \/Mtok/.test(app));
-    /* im-vet-six-repairs (2026-09-20), the vocabulary release edit (reader's reading, finding N1):
+    /* registry repairs (2026-09-20), the vocabulary release edit (reader's reading, finding N1):
        style/VOCABULARY.md §1.2 makes **effective price** the one name for this denominator and
        retires "effective billings" as a variant of it, so the tooltip now says "the modeled
        effective price". The property this line protects is that the denominator is named as
@@ -756,7 +756,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     assert("annex generator: index intro is 'full public', not 'full, unedited'", !/full, unedited/.test(build) && /full public research artifacts/.test(build));
   }
   // #27 version identity: footer engine string aligned to ENGINE_REVISION
-  assert("#27: footer engine version string is current", /engine v3\.0\.0-2026-08-13/.test(html)); // v3.0 badge ruled at M8 (D-10, esc-1df204c8)
+  assert("#27: footer engine version string is current", /engine v3\.0\.0-2026-08-13/.test(html)); // v3.0 badge ruled at mean-mix revision (D-10, esc-1df204c8)
   assert("#27: ENGINE_REVISION is current", /ENGINE_REVISION = "v3\.0\.0-2026-08-13"/.test(eng));
   assert("capacity documentation names terminal peak-KV residency and the live solver",
     /b·LPeak·kvTok_basis/.test(roofline)
@@ -769,7 +769,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       && /LIVE R2 capacity-width solver contract/.test(capacityTest)
       && !/render-parity guard separately proves no rendered surface consumes it/.test(capacityTest)
       && !/free of solver identifiers until R2's shipment|false negative is dead in the PARALLEL solver/.test(capacityTest)
-      && !/feasibility-redesign memo v4\.1; PARALLEL/.test(roofline)
+      && !/feasibility-redesign [^;]+; PARALLEL/.test(roofline)
       && /live roofline path/.test(rooflineTest)
       && !/roofline PARALLEL PATH/.test(rooflineTest));
   assert("renormalization documentation carries no stale numeric crossing fixture",
@@ -800,8 +800,8 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   const pkg = require("../../package.json");
   const fa = E.finalAnswer();
   const rounded = Math.round(fa.planningPoint.marginPct);
-  /* im-release-edit-r2 (2026-09-10): the `!/≈37%/` clause was a sound shortcut while 37 was ONLY ever
-     the retired pre-repair headline. The owner's rent adoption moved the TRAFFIC SPAN to ≈37%–≈66%,
+  /* publication revision (2026-09-10): the `!/≈37%/` clause was a sound shortcut while 37 was ONLY ever
+     the retired pre-repair headline. The rent adoption moved the TRAFFIC SPAN to ≈37%–≈66%,
      so a legitimately computed 37 now appears in this annex. Narrowed to the retired CLAIM — 37 as a
      planning-point reading — rather than the digit, which is the same correction T-7(d) needed in
      fa-m6-b9 for the same reason on the same day. */
@@ -815,7 +815,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     rationale.includes(`≈${Math.round(fa.lensSpan.loPct)}% to ≈${Math.round(fa.lensSpan.hiPct)}%`));
   assert("final-answer rationale carries the live traffic span",
     rationale.includes(`≈${Math.round(fa.trafficSpan.loPct)}% to ≈${Math.round(fa.trafficSpan.hiPct)}%`));
-  /* b9 M5 (gate round 6): this pin used to hardcode "53.29% to 64.17%" — the SUPERSEDED
+  /*  (gate round 6): this pin used to hardcode "53.29% to 64.17%" — the SUPERSEDED
      with-replacement span — which is precisely what kept the wrong number alive in a published,
      MCP-cataloged annex through five review rounds. It now DERIVES the endpoints from the engine
      (at the public-evidence reference, where the span is computed), so the annex can never again
@@ -834,7 +834,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     E.PERSPECTIVES.find(x => x.id === "dive"), { mode: "native" });
   const dsv4Margin = E.workload(dsv4).margin * 100;
   const dsv4Pct = dsv4Margin.toFixed(1);
-  /* im-vet-model-estimates (2026-09-19) — a DOUBLE-ROUNDING defect this assertion had, surfaced by
+  /* tariff revision (2026-09-19) — a DOUBLE-ROUNDING defect this assertion had, surfaced by
      the tariff correction and fixed rather than worked around. The second clause used to read
      `Math.round(Number(dsv4Pct))`: it rounded the engine result to one decimal and THEN to an
      integer. The §10 provider-card assertion above rounds the raw margin once
@@ -871,7 +871,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
      renormalizes it out of the blended cost rather than pricing it at $6. The assertion now also
      requires that disclosure to be present, so the share can never again be published beside a
      claim that the leg is priced. */
-  /* im-release-edit-r2 2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+  /* publication revision 2026-09-10, adjudicated 2026-09-10:
      the disclosure this assertion demands INVERTS, and demanding the old one would now require the
      page to say something false. GB300 is priced. What must not be lost is the reason the assertion
      exists: the share must never be published beside a claim that overstates what the price IS. So
@@ -897,9 +897,8 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       && (app.match(/appendChartTable\(/g) || []).length >= 6
       && /createElement\("caption"\)[\s\S]*caption\.textContent = summary/.test(app)
       && /if \(head\) cell\.scope = "col"/.test(app)
-      /* re-anchored 2026-09-25 (bq-3351): the §10 normalized table carried its own caption and
-         col-scoped headers and was pinned here by name; it was removed by owner ruling
-         d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section. The chart that
+      /* re-anchored 2026-09-25 (the release): the §10 normalized table carried its own caption and
+         col-scoped headers and was pinned here by name; it was removed by adjudicated 2026-09-25. The chart that
          replaced it must expose the same table view, through the shared captioned builder above. */
       && /appendChartTable\(el,/.test((app.split("function renderAstraProChart()")[1] || "").split("\n}\n")[0]));
   assert("generated sliders expose domain labels and values instead of internal range coordinates",
@@ -1049,9 +1048,10 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
         .map(match => `sha256-${crypto.createHash("sha256").update(match[1]).digest("base64")}`)));
     const scriptHashes = inlineHashes("script");
     const styleHashes = inlineHashes("style");
+    // The boot-script provenance comment changed; executable script behavior and every number are unchanged.
     const expectedScriptHashes = new Set([
       "sha256-w2Cf7l3VXuSHM/egSfa+rwViFlX92oxucarggJ7RF9o=",
-      "sha256-uAFjbX1MiN68RJqKCDippd+1Xpz0Armd4aSMZSwM5Z4=",
+      "sha256-7NW1hIlfPvY8ueqVe3DUVV1izwLmUWp75OCNx76JlEA=",
     ]);
     const expectedStyleHashes = new Set([
       "sha256-5EP55QxCCERsCRddWDR8ZCz7UB70i3bTmFgpm/GeulM=",
@@ -1065,7 +1065,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
     assert("published HTML has no inline style attributes outside the hashed style blocks",
       htmlSources.every(source => !/\sstyle=/.test(source)));
     const csp = headers.match(/Content-Security-Policy:\s*([^\n]+)/)?.[1] || "";
-    /* GPT Pro review pr-20260902T153840Z-bce1bb finding 5: this assertion said "only reviewed"
+    /* GPT Pro review a research review on 2026-09-02 finding 5: this assertion said "only reviewed"
        while merely checking that each expected hash appears SOMEWHERE in the policy string. It
        never parsed the directives and never rejected EXTRAS, so re-adding a retired inline-script
        hash alongside the current one would have passed a test whose name promises the opposite —
@@ -1221,7 +1221,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
   // The literal 20 is not taken on trust: in the private tree, where this body always runs,
   // P.gate compares it against the assertions that actually ran and fails if it has gone stale.
   const PUBLISHER_STRUCTURE_ASSERTIONS = 27; // +2: the staged-inventory guard and the two-phase privacy scan (2026-09-19)
-                                             // +4 (2026-09-20, im-repo-replacement, after an Astra xhigh review): the
+                                             // +4 (2026-09-20, prose revision, after an Astra xhigh review): the
                                              // any-tag refusal, the scanner-could-not-run refusal, the credential-filename
                                              // rule with .npmrc judged by content, and the UTC commit-date stamp + read-back.
   P.gate("scripts/publish.sh", 2 + annexInputs.length + PUBLISHER_STRUCTURE_ASSERTIONS, (publish) => {
@@ -1243,7 +1243,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       !isAllowed("scripts/publish.sh"));
     P.assert("publish keeps the private master-only deployment entrypoint out of the public snapshot",
       !isAllowed("deploy.sh"));
-    /* STRENGTHENED 2026-09-20 (im-repo-replacement, after an Astra xhigh review): this used to
+    /* STRENGTHENED 2026-09-20 (prose revision, after an Astra xhigh review): this used to
        pin `ls-remote --heads origin`, and that is exactly the defect. `--heads` does NOT list
        tags, so "origin is empty" meant "origin has no BRANCHES" — an origin carrying the exposed
        annotated tag and no branch satisfied every check, got a "verified an empty origin"
@@ -1290,7 +1290,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
        it is followed by `|| {`, and that it precedes the push — and stayed green when `exit 1` in
        that block's body was replaced with `:`, which would let a REJECTED commit fall through to
        the push. The rejection branch has to be shown to LEAVE, so its body is read too. The
-       behavioural twin lives in im-repo-replacement-work/exercise-publish-guards.sh, which runs
+       behavioural twin lives in prose revision-work/exercise-publish-guards.sh, which runs
        the extracted block against a stub guard that rejects and asserts the push is never
        reached; this is the structural half that travels with the repository. */
     const utcCall = publish.indexOf('python3 "$UTC_GUARD"');
@@ -1492,10 +1492,10 @@ for (const p of E.PERSPECTIVES) {
   }
 }
 
-// 9. Preset redesign (v2.1.3 M4): exploration configs, claims registry, interval algebra, ranking.
+// 9. Preset redesign (v2.1.3 preset revision): exploration configs, claims registry, interval algebra, ranking.
 {
   const EXPL = E.PERSPECTIVES.filter(p => p.kind === "exploration");
-  // 2026-08-16 (owner notes aa315c + c72950): FIVE. x90-v2 ships the mechanism named in the
+  // 2026-08-16 (the author’s note + c72950): FIVE. x90-v2 ships the mechanism named in the
   // 90→95% claim — the batch lever applied alone to the ≥90% route — which v2.1.3 dropped for
   // landing short of its authored range. The four originals keep their ids (permalink anchors).
   assert("exactly the 5 discourse-tied exploration routes ship",
@@ -1506,24 +1506,24 @@ for (const p of E.PERSPECTIVES) {
   // 9a. Flagship-scope margin pins (±0.1pp): Claude Opus 4.x @ explicit Reference 15:1/60%.
   // R3 re-mint (D-2e broad inheritance, manifest family 27): route margins re-derive on
   // the FILTERED na-blend seed; the computed bucket keeps its board-grouping role and
-  // the AUTHORED-range integrity discloses separately (typed authoredRange — after the b9
-  // M1 repair x90-v1 still lands OUTSIDE its authored range while x80-v3, x80-v4 and
+  // the AUTHORED-range integrity discloses separately (typed authoredRange — after the
+  // calibration repair x90-v1 still lands OUTSIDE its authored range while x80-v3, x80-v4 and
   // x60-v3 land INSIDE theirs; asserted below).
-  // b9 M1 re-mint: every route re-derives on the REPAIRED default seed. Two routes now
+  //  re-mint: every route re-derives on the REPAIRED default seed. Two routes now
   // land INSIDE the band they were authored for (see AUTHORED below) — the repair moved
   // them, not a re-authoring; no route definition changed in this milestone.
-  /* im-arc T4 fold (2026-08-24, tests/fixtures-t4-declared-delta.json): every route re-derives on
+  /*  (2026-08-24, tests/fixtures-t4-declared-delta.json): every route re-derives on
      the folded defaults. NO route definition changed — the authored ranges and the reader-set
      vectors are untouched; what moved is the arithmetic beneath them, dominated by three planning
      rents resolving as unavailable so each rent-basis route prices a different, more expensive
      remainder. The disposition consequences are disclosed under AUTHORED below, and they are a
      FINDING of the fold, not a re-authoring. */
-  /* im-arc T4 fold: x90-v1 and x90-v2 are ARCHIVED readings and carry the memo §6 pin bundle, so
+  /* : x90-v1 and x90-v2 are ARCHIVED readings and carry the historical pin bundle, so
      they are UNMOVED. The three routes without an archived reading move with the folded
      arithmetic, and their disposition consequences are disclosed under AUTHORED below. */
-  /* im-release-edit-r2 (2026-09-10): x90-v1 is byte-unchanged (owned-TCO basis prices from capex,
+  /* publication revision (2026-09-10): x90-v1 is byte-unchanged (owned-TCO basis prices from capex,
    which the rent adoption does not touch); the three rent-basis routes move with it. */
-/* im-vet-six-repairs (2026-09-20, program bq-2835; vetting findings E1 + E2): every route rides
+/* registry repairs (2026-09-20, program the release; vetting findings E1 + E2): every route rides
    the default fleet seed, so all four move with the two registry repairs — the two Trainium legs
    WITHDRAWN from the default's membership on evidence grounds, and the TPU v7 decode coefficient
    corrected from 0.55 to 0.519 after one of its two endpoints was found to be computed on Google's
@@ -1536,17 +1536,17 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
   }
   // ...and each route's COMPUTED bucket matches the range its name declares (membership is
   // derived via explorationComputedBucket, never hand-set).
-  // b9 M1: x80-v3/x80-v4 computed buckets move b6080 → b8090 (they now compute inside the
+  // : x80-v3/x80-v4 computed buckets move b6080 → b8090 (they now compute inside the
   // 80–90 band their names declare); x90-v1 stays b8090 (89.1 is still short of 90).
-  /* im-arc T4 fold (2026-08-24): two of those moves REVERSE and one completes. x90-v1 crosses 90
+  /*  (2026-08-24): two of those moves REVERSE and one completes. x90-v1 crosses 90
      (89.1 → 90.0) and enters b90plus; x80-v3 and x80-v4 fall back to b6080 (81.7 → 77.6,
      80.7 → 76.4); x60-v3 stays b60minus. The bucket is DERIVED from the computed margin, so this
      table records where the routes now land — it never sets where they land. */
-  /* im-release-edit-r2 (2026-09-10): and they move BACK. Adopting planning rents for the three
+  /* publication revision (2026-09-10): and they move BACK. Adopting planning rents for the three
      unpriced legs lifts x80-v3 to 81.0 and x80-v4 to 80.0, so both re-enter b8090 — the band they
      were authored for — and x60-v3 rises from −64.8 to −42.2 while staying in b60minus. The bucket
      is DERIVED from the computed margin; this table records where the routes land and never sets it. */
-  /* im-vet-six-repairs (2026-09-20): x80-v4 falls out of b8090 at 79.54 and lands in b6080. The
+  /* registry repairs (2026-09-20): x80-v4 falls out of b8090 at 79.54 and lands in b6080. The
      bucket is DERIVED from the computed margin; this table records where the routes land and never
      sets it — which is the whole reason it can record a route leaving the band its name declares. */
   const DECLARED = { "x90-v1": "b8090", "x80-v3": "b8090", "x80-v4": "b6080", "x60-v3": "b60minus" };
@@ -1556,11 +1556,11 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
   // R3 (D-2e, family 35): AUTHORED-range integrity — the typed authoredRange field on
   // every route, the SHARED half-open algebra, and the four flagship dispositions
   // (execution-pinned). The computed-bucket label NEVER stands in for the authored noun.
-  // b9 M1 disposition flip (a load-bearing honesty change, manifested): x80-v3 and x80-v4
+  //  disposition flip (a load-bearing honesty change, manifested): x80-v3 and x80-v4
   // were disclosed as landing OUTSIDE their authored 80–90 band at 79.6/78.5; on the
   // repaired defaults they compute 81.7/80.7 and land INSIDE it. The authored ranges are
   // untouched — only the computed margins moved. x90-v1 remains OUTSIDE its ≥90 band.
-  /* im-arc T4 fold (2026-08-24) — THREE dispositions move, and this is the most consequential
+  /*  (2026-08-24) — THREE dispositions move, and this is the most consequential
      single line in the fold's disclosure. The authored ranges are again untouched; only the
      computed margins moved, under the folded evidence:
        x90-v1  89.1 UNMOVED, OUTSIDE  (an archived reading; it carries the §6 pin bundle)
@@ -1570,7 +1570,7 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
      Two page-authored reconstructions of named analysts' 80–90% claims no longer compute inside
      the band they reconstruct once three rows lose their invented planning rates. That is a
      finding about the evidence, and it is disclosed here rather than tuned away. */
-  /* im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok
+  /* publication revision (2026-09-10), adjudicated 2026-09-10
      — and the two dispositions move BACK, worth stating as plainly as the fold stated their loss:
        x90-v1  89.1 UNMOVED, OUTSIDE  (an owned-TCO route; capex prices it, so rents do not move it)
        x80-v3  77.6 -> 81.0  OUTSIDE -> INSIDE
@@ -1578,9 +1578,9 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
        x60-v3  -64.8 -> -42.2  INSIDE, unchanged in disposition
      The authored ranges are untouched for the third time; only the computed margins moved. And the
      honest reading of the round trip is NOT that these reconstructions were vindicated: they left
-     the band when three legs lost their planning rates and re-entered it when the owner adopted
+     the band when three legs lost their planning rates and re-entered it when the page adopted
      rates for those legs. What carries them across is an adopted assumption, not new evidence. */
-  /* im-vet-six-repairs (2026-09-20) — ONE disposition moves, and it moves the honest way:
+  /* registry repairs (2026-09-20) — ONE disposition moves, and it moves the honest way:
        x90-v1  89.1 -> 89.3   OUTSIDE, unchanged in disposition
        x80-v3  81.0 -> 80.6   INSIDE, unchanged in disposition (it survives the repair by 0.6pp)
        x80-v4  80.0 -> 79.5   INSIDE -> OUTSIDE
@@ -1650,9 +1650,9 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
   // recomputed independently here — the displayed order may never drift from the basis.
   const central = E.PERSPECTIVES.find(p => p.id === "median").set;
   const changed = p => E.PERSPECTIVE_SPACE_KEYS.filter(k =>
-    /* im-arc T2 (memo §6, 2026-08-22): the explicit historical kwh pin is
+    /* : the explicit historical kwh pin is
        migration metadata that preserves the route, not a new authored lever.
-       im-arc T4 fold (2026-08-24, memo §6 [F10]): the T4 pin bundle is larger, and WHICH keys are
+        (2026-08-24,  [F10]): the T4 pin bundle is larger, and WHICH keys are
        migration metadata is now DECLARED by the route in `migrationPins` rather than hard-coded
        here — so this independent recomputation reads that declaration instead of a key list it
        would have to be kept in sync with by hand. */
@@ -1748,20 +1748,20 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
     `${(100 * E.workload(S).margin).toFixed(3)} → ${(100 * E.workload(S2).margin).toFixed(3)}`);
 }
 
-/* R2 RETIREMENT + REPLACEMENT (shipment plan §2 "snapshots — workloadAtNShard block +
+/* R2 RETIREMENT + REPLACEMENT (shipment  "snapshots — workloadAtNShard block +
    value pins"; §4.3 core retirements): the legacy replica-width sensitivity channel
    (workloadAtNShard / replicaWidthSensitivity + clause) is GONE — the render path
    consumes SOLVER capacity widths, and the width story is the solver receipt + the
    shared welded policy clause. The old block's load-bearing physics assertion
-   ("gb200-only 5T non-numeric at fixed width 8") was exactly the owner-cited
+   ("gb200-only 5T non-numeric at fixed width 8") was exactly the reported
    calculator error; its R2 replacement asserts the solved rendering + receipts. */
 {
   const m = E.MODELS.find(x => x.id === "opus"), p = E.PERSPECTIVES.find(x => x.id === "median");
   const s = preset(m, p, { mode: "explicit", profileId: "reference" });
   s.blend = { gb200: 100 };
   const baseline = E.workload(s);
-  /* im-arc T4 fold (2026-08-24), memo §4: the property this assertion exists to protect is a
-     CAPACITY one — the retired fixed-width-8 infeasibility that the owner cited as a calculator
+  /*  (2026-08-24), : the property this assertion exists to protect is a
+     CAPACITY one — the retired fixed-width-8 infeasibility that the report cited as a calculator
      error is gone, and a gb200-only fleet solves and renders at the solver capacity width. That
      property is unchanged and is asserted here under the OWNED basis, where gb200 is fully priced.
      Under the page's default RENT basis the same fleet now renders nothing, for an entirely
@@ -1775,7 +1775,7 @@ const FLAGSHIP_PINS = { "x90-v1": 89.3, "x80-v3": 80.6, "x80-v4": 79.5, "x60-v3"
   assert("R2 replacement: gb200-only (revised default size) RENDERS at the solver capacity width (the retired fixed-8 infeasibility was the cited artifact)",
     isFinite(ownedBaseline.margin) && ownedBaseline.fleetRenderable.renderableLegs === 1
     && ownedBaseline.fleetRenderable.renderableWeightShare === 1, JSON.stringify(ownedBaseline.fleetRenderable));
-  /* im-release-edit-r2 (2026-09-10): gb200 now carries an adopted planning rent, so this fleet
+  /* publication revision (2026-09-10): gb200 now carries an adopted planning rent, so this fleet
      prices under RENT as well as under TCO. The distinction the assertion exists to draw — UNPRICED
      is not INFEASIBLE — is still asserted, on the half that still carries it: the leg was never
      infeasible, and it is now also not unpriced. */

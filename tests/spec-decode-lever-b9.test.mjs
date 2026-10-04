@@ -1,5 +1,5 @@
 /* =====================================================================================
-   spec-decode-lever-b9.test.mjs — the b9 spec-decode LEVER leg (design memo
+   spec-decode-lever-b9.test.mjs — the spec-decode LEVER leg (design memo
    research/b9-spec-decode-lever-memo.md, FROZEN at v16; ratification
    esc-20260801T042349Z-20c444d8 + esc-20260801T045418Z-71b767cc).
 
@@ -234,7 +234,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
      table and neither can silently drift from the other. */
   const html8 = readFileSync(new URL("../site/index.html", import.meta.url), "utf8");
   const span8 = html8.slice(html8.indexOf("<li>", html8.indexOf("PINNED INSERTION BOUNDARIES")) + 4,
-    html8.lastIndexOf("</li>", html8.indexOf("<!-- b9 spec-decode LEVER — span (8) END -->")));
+    html8.lastIndexOf("</li>", html8.indexOf("<!-- spec-decode LEVER — span (8) END -->")));
   const COMPOSITION_SITES = {
     "gate why-line": { text: E.SPECDEC_WHY_LINE, contains: ["PORTABLE_TICK"] },
     "TIPS.specDec": { text: E.TIPS.specDec.b, contains: ["PORTABLE_TICK", "GATE_SEMANTICS", "CONSERVATISM"] },
@@ -290,32 +290,33 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
    provenance note moved every calibration citation below by +14; bytes remain unchanged. */
 {
   const ED = require("../site/engine-data-v22.js");
+  // Re-derived the two inheritance source quotes after provenance wording changed; no number moved.
   const BASIS_MANIFEST = {
     h800:   { status: "excluded", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 969, text: "obsQ: 1, obsA: 1" }] },
+      { kind: "quote", source: "site/engine-data-v22.js", line: 968, text: "obsQ: 1, obsA: 1" }] },
     h100:   { status: "excluded", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1000,
-        text: 'sourceRefs: ["inherits CALIBRATION.h800 (FITTED-inherited; memo §2)"]' },
+      { kind: "quote", source: "site/engine-data-v22.js", line: 999,
+        text: 'sourceRefs: ["inherits CALIBRATION.h800 (FITTED-inherited; the modeling convention)"]' },
       { kind: "probe", script: "tests/probes/specdec-eta-consistency.mjs",
         expect: "h100:0.313491;h800:0.313491;equal=true", stdout: "trim" }] },
     h200:   { status: "excluded", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1032,
-        text: 'sourceRefs: ["family-transfer off CALIBRATION.h800 (memo §1; derivations finding 4)"]' },
+      { kind: "quote", source: "site/engine-data-v22.js", line: 1031,
+        text: 'sourceRefs: ["family-transfer off CALIBRATION.h800 (the numerical derivation)"]' },
       { kind: "probe", script: "tests/probes/specdec-eta-consistency.mjs",
         expect: "h200:0.313491;h800:0.313491;equal=true", stdout: "trim" }] },
     h20:    { status: "included", evidence: [
       { kind: "quote", source: "research/im3-integration-design.md", line: 134,
         text: "Where an anchor's throughput embeds spec-decode (h20, gb300, ascend" }] },
     gb200:  { status: "excluded", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1103, text: "obsQ: 1, obsA: 1" }] },
+      { kind: "quote", source: "site/engine-data-v22.js", line: 1102, text: "obsQ: 1, obsA: 1" }] },
     gb300:  { status: "unknown", evidence: [        // ADJUDICATED unknown — Q-G, esc-...eea22b5c
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1136,
+      { kind: "quote", source: "site/engine-data-v22.js", line: 1135,
         text: "UNKNOWN — measured:null and no reconstructable q/a" }] },
     ascend: { status: "included", evidence: [
       { kind: "quote", source: "research/im3-integration-design.md", line: 135,
         text: "absorbed INTO the deployed" }] },
     tpu7:   { status: "unknown", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1213,
+      { kind: "quote", source: "site/engine-data-v22.js", line: 1212,
         text: "the joint fleet fit 0.36142 is REJECTED as evidence for this row" },
       /* Line 1244 -> 1750 (2026-09-02). The bytes did not change; the file grew above them when
          rec 8's provenance work added verification fields and a provenanceDebt record. A
@@ -336,7 +337,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
       { kind: "probe", script: "tests/probes/specdec-jointfit.mjs",
         expect: "trn3:etaDec=0.36142;jointEtaDec=0.36142;matchesJointFit=true;calObs=null", stdout: "trim" }] },
     rubin:  { status: "unknown", evidence: [
-      { kind: "quote", source: "site/engine-data-v22.js", line: 1310,
+      { kind: "quote", source: "site/engine-data-v22.js", line: 1309,
         text: 'throughputEvidenceClass: "projection"' }] },
   };
 
@@ -460,7 +461,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
      oracle, so the whole of rows 2-5 reduces to two equalities that cannot be argued with. */
   assert("rows 2-3 — the g1 bridge reproduces the ratified POST-EDIT digest exactly",
     digest(bridgeOf("g1-teortaxes-9095"))
-      === "8d74fa619113c287f97db71e8295f45fd4bd1b225a59890556be4b64dd7d5ff9",  // im-vet-six-repairs 2026-09-20: the g1 bridge moves with the repairs, every span pinned in tests/fa-justifications.test.mjs VETTING_REPAIRS
+      === "49027d7773b596b0b02347c6bf395be068a4c56092b1e4b1006bc655003e39e7",  /* RE-MINTED 2026-10-04: the only change to this bridge is "the b9 defaults" -> "the defaults" (an internal phase label removed from public text); no figure moved. Previous: 8d74fa619113c287… */  // im-vet-six-repairs 2026-09-20: the g1 bridge moves with the repairs, every span pinned in tests/fa-justifications.test.mjs VETTING_REPAIRS
     digest(bridgeOf("g1-teortaxes-9095")));
   assert("rows 4-5 — the g3 bridge reproduces the ratified POST-EDIT digest exactly",
     digest(bridgeOf("g3-gptpro-9294-lens"))
@@ -598,7 +599,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
     + METHODS_TAIL;
 
   const html = read("site/index.html");
-  const B0 = "<!-- b9 spec-decode LEVER — span (8) END -->";
+  const B0 = "<!-- spec-decode LEVER — span (8) END -->";
   const open = html.indexOf("<li>", html.indexOf("PINNED INSERTION BOUNDARIES"));
   const close = html.lastIndexOf("</li>", html.indexOf(B0));
   const shippedSpan8 = html.slice(open + 4, close);

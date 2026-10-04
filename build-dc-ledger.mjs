@@ -57,7 +57,14 @@ const PUBLISHED_SOURCE_PREFIXES = ["research/provider-dives/", "site/", "researc
 const sourceCitation = (path) => {
   if (typeof path !== "string" || !path) return "`" + String(path) + "`";
   const published = PUBLISHED_SOURCE_PREFIXES.some((prefix) => path.startsWith(prefix));
-  return "`" + path + "`" + (published ? "" : " *(private working note, not published)*");
+  if (published) return "`" + path + "`";
+  // A private research source is a dated description, rather than a path readers cannot open.
+  const date = path.match(/\d{4}-\d{2}-\d{2}/)?.[0];
+  const description = path.includes("fleet-composition") ? "fleet-composition study"
+    : path.includes("named-facilities") ? "named-facility study"
+    : path.includes("china-tariffs") ? "China electricity-tariff study"
+    : path.includes("electricity") ? "electricity study" : "research note";
+  return `${description}${date ? " of " + date : ""} *(not published separately)*`;
 };
 
 const table = (title, registry, describe, classOf) => {

@@ -1,6 +1,6 @@
 # Qwen3.8-Max — GPT-6 Astra Pro estimate (2026-09-25)
 
-**Provenance.** One GPT-6 Astra Pro research run (ChatGPT, model `gpt-6-pro`), request `pr-20260925T070105Z-4d5c81`, answered 2026-09-25T09:36:13Z. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for Qwen3.8-Max from public evidence. The answer is reproduced below verbatim except for three presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; and equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; its sources are cited by URL in the text (published text SHA-256 `a616239e57e33d07fc038c0eb78cc503293536e295f906c0fb9769634950a17e`; as received, `d457269f80893aace6aa8f5acac680a5d5487e034c1ef4cb9b5da3d612ce372c`).
+**Provenance.** one research run on 2026-09-25 by GPT-6 Astra Pro (ChatGPT, model `gpt-6-pro`), answered 2026-09-25T09:36:13Z. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for Qwen3.8-Max from public evidence. The answer is reproduced below verbatim except for four presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; and where the answer repeats the run's own request identifier, an internal queue entry, it is withheld; its sources are cited by URL in the text (as-received answer SHA-256 `a616239e57e33d07fc038c0eb78cc503293536e295f906c0fb9769634950a17e`; published text SHA-256 `4bae307de2103e7937cd0993e5031b11c014d72cfb36f83e7a3feb462e5d6c8d`; original capture SHA-256 `d457269f80893aace6aa8f5acac680a5d5487e034c1ef4cb9b5da3d612ce372c`).
 
 ## What the site shows
 
@@ -47,7 +47,7 @@ Carrier: the calculator's blank `custom` row on the `qwen3c` attention geometry 
 
 ## The answer, verbatim
 
-Estimator: **GPT-6 Astra Pro** · **September 25, 2026** · Commission `pr-20260925T070105Z-4d5c81#1`.
+Estimator: **GPT-6 Astra Pro** · **September 25, 2026** · Commission `[request identifier withheld]`.
 
 File receipt: both uploaded files opened and were read. `03-calculator-contract-live-2026-09-25.json` begins `{"result":{"content":[{"type":"text","text":"The scenario space of the Frontier Inference Margins ca` (truncated). `04-opus-4x-reference-dive-verbatim-2026-08-08.md` begins with the line ` ```json `.
 

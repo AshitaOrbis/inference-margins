@@ -9,8 +9,8 @@ const require = createRequire(import.meta.url);
 // Resolved relative to the compiled file (mcp-server/dist/engine.js → ../../site/engine.js).
 export const E: Engine = require("../../site/engine.js") as Engine;
 
-/* U5: the T4 datacenter registry module, which owns `validateDcRegistry` — the validator the
-   dc-map economics layer runs a release's T4 adapter rows through before pricing anything from
+/* Datacenter registry: the datacenter registry module, which owns `validateDcRegistry` — the validator the
+   dc-map economics layer runs a release's adapter rows through before pricing anything from
    them. It is the same module engine.js already requires internally, so this is the cached
    instance, not a second registry. Bridged here for the same reason E is: one entry point. */
 export const DC_REGISTRY = require("../../site/engine-data-dc-v1.js") as {

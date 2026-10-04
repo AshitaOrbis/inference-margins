@@ -1,5 +1,5 @@
-/* FA HIGHER-JUSTIFICATIONS + MODEL-SIZE REVISION suite (memo im4-fa-justifications v7,
-   J-1/J-2/J-6/J-9). Families: the nine-id enumeration fixture + predicate guard; the
+/* FA HIGHER-JUSTIFICATIONS + MODEL-SIZE REVISION suite.
+   Contracts J-1/J-2/J-6/J-9. Families: the nine-id enumeration fixture + predicate guard; the
    J-2 schema contract (wouldFlip REQUIRED everywhere, R5 N1); the process-language
    fixture (R5 N2, extended grep list); the stale-loud pinned-value re-derivations
    (every ≈ value a shipped string cites is re-derived here — drift fails loud); the
@@ -8,15 +8,15 @@
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const E = require("../engine.js");
-/* b9 M5 fixture scope (M5 delta manifest) — REFERENCE-CLASS suite. M5 seeds every clean state
+/* REFERENCE-CLASS suite. The scenario-prior revision seeds every clean state
    with the ratified per-lab algorithmic-lead prior (+3 months for Anthropic), which multiplies
    achieved throughput by E = 1.3161 and therefore every cost/margin this suite pins. This suite
    certifies the values quoted in FINAL-ANSWER copy, whose object is itself pinned — statements about the PUBLIC-EVIDENCE
    REFERENCE, not about the calculator's default scenario prior. Every state it derives is
    therefore pinned to trend 0 / family 1.0 through the SAME constructor the final-answer surface
-   uses (engine §15 / decision D-10), and every pinned digit below is BYTE-UNCHANGED. The default
+   uses, and every pinned digit below is BYTE-UNCHANGED. The default
    state's movement is carried, in full, by tests/fixtures-baseline-v22.json (regenerated) and the
-   render-parity WIDE hash — see the M5 delta manifest. */
+   render-parity WIDE hash — see the scenario-prior revision delta manifest. */
 const preset = (m, p, sel) => E.pinReferenceLevers(E.applyPresetSettings(m, p, sel));
 
 
@@ -74,7 +74,7 @@ for (const g of fa.higherJustifications) {
 
 /* ---------- 3. process-language fixture (R5 N2, extended list) over EVERY shipped string ---------- */
 const PROCESS = [/high-claim instruments/i, /FA-safe/i, /integrity noun/i, /gate exemption/i,
-  /discourse position/i, /dive-fold/i, /owner ruling/i, /owner-court/i, /\bR\d+ P\d+\b/, /best-supported/i,
+  /discourse position/i, /dive-fold/i, /owner\s+ruling/i, /owner-court/i, /\bR\d+ P\d+\b/, /best-supported/i,
   /claim constructor/i];
 const shipped = [];
 for (const [k, v] of Object.entries(fa.tokens)) {
@@ -110,15 +110,15 @@ function seededAt(totalB, mutate) {
 }
 const marg = s => E.workload(s, undefined, E.scenarioContext(s)).margin * 100;
 const m20 = marg(seededAt(2000)), m25 = marg(seededAt(2500)), m30 = marg(seededAt(3000));
-/* b9 M1 REPLACES the J-9 band-invariance fixture with a SIZE-DEPENDENCE fixture.
-   The old property — headline identical at 2.0/2.5/3.0 T — was never robustness: r4 §B7
+/*  REPLACES the J-9 band-invariance fixture with a SIZE-DEPENDENCE fixture.
+   The old property — headline identical at 2.0/2.5/3.0 T — was never robustness: the review
    diagnoses it as "evidence that the equation omits total/resident/distinct-expert
    geometry", because total parameters never entered decode weight traffic. With tpu7 on
    the replica-resident basis they do, so the headline now moves with size, MONOTONE
    DECREASING. The three values reproduce run B's own §B7 partial-correction table
    (52.5 / 51.2 / 49.8) to the printed digit — an independent confirmation, not a re-fit. */
-/* im-vet-six-repairs RE-MINT (2026-09-20, program bq-2835; vetting report
-   reports/inference-margins-vetting-2026-09-19.md, expert findings E1 and E2). TWO registry
+/* registry repairs RE-MINT (2026-09-20, program the release; vetting report
+   reports/the release review-09-19.md, expert findings E1 and E2). TWO registry
    repairs move every rung below, and neither is a re-authoring of any vector:
      (1) the two Trainium legs are WITHDRAWN from the default fleet's membership on evidence
          grounds (unresolved replica-global-vs-per-chip batch form, ~15.2x), so the default is
@@ -132,16 +132,16 @@ const m20 = marg(seededAt(2000)), m25 = marg(seededAt(2500)), m30 = marg(seededA
          disclosed inconsistency as a repair.
    (1) raises readings slightly, (2) lowers them; the ROUNDED ladder copy is unchanged at every
    rung, which is why only the exact pins move here. */
-assert("J-9 (b9 M1): the filtered headline now VARIES with total size, monotone decreasing across 2.0/2.5/3.0 T, reproducing run B §B7's SHAPE (59.4 / 58.4 / 57.4 after the Trainium withdrawal and the TPU numerator repair)",
+assert("J-9: the filtered headline now VARIES with total size, monotone decreasing across 2.0/2.5/3.0 T, reproducing the review's SHAPE (59.4 / 58.4 / 57.4 after the Trainium withdrawal and the TPU numerator repair)",
   m20 > m25 && m25 > m30 && near(m20, 59.3873) && near(m25, 58.4107) && near(m30, 57.4341),
   [m20, m25, m30].join(" / "));
 assert("J-9: the live default computes the SAME value (the preset seeds 2.5 T)", near(marg(seededAt(null)), 58.4107));
-/* im-vet-six-repairs: at 5 T the feasibility rule still removes h100, and BOTH Trainium legs are
+/* registry repairs: at 5 T the feasibility rule still removes h100, and BOTH Trainium legs are
    now removed at every size by the declared withdrawal rather than by capacity at this one. */
 assert("J-9: the 5 T alternative case re-derives 52.6393 (h100 excluded by capacity; both Trainium legs withdrawn)", near(marg(seededAt(5000)), 52.6393));
 assert("headline token cites ≈58", fa.tokens.planningPointLine.includes("≈58%"), fa.tokens.planningPointLine);
 /* the ladder — each pinned ≈ value in the g3 bridge re-derived */
-// b9 M1 re-mint: every rung re-derives on the repaired defaults. The ladder now starts at
+//  re-mint: every rung re-derives on the repaired defaults. The ladder now starts at
 // ≈59 instead of ≈37 and ends ABOVE the lens it was built to reach — see the g3 bridge,
 // which now attributes that last gap to blend composition rather than a further lever.
 const ladder = [
@@ -161,15 +161,15 @@ for (const [name, mut, pin, cited] of ladder) {
   assert("gptpro lens re-derives 83.0119 and the bridge cites ≈83.0", near(marg(sp), 83.0119) && g3.bridge.includes("≈83.0"));
   const implied = 0.75 * 90.6 + 0.25 * 93.3;
   assert("consult combine arithmetic 91.275 and the bridge cites ≈91", near(implied, 91.275, 1e-9) && g3.bridge.includes("≈91"));
-  const cost = 100 - 83.0119;  // im-vet-six-repairs: the lens moved with the two registry repairs
+  const cost = 100 - 83.0119;  // registry repairs: the lens moved with the two registry repairs
   assert("cost-cut arithmetic to 92/94 (56%/67%) matches the bridge citation",
     near((1 - 8 / cost) * 100, 52.89, 0.05) && near((1 - 6 / cost) * 100, 64.67, 0.05)
     && g3.bridge.includes("53% or 65%"));
 }
 const g1 = fa.higherJustifications.find(g => g.groupId === "g1-teortaxes-9095");
-// b9 M1: x80-v3/x80-v4 now land INSIDE their authored 80–90 band (the repair moved them,
+// : x80-v3/x80-v4 now land INSIDE their authored 80–90 band (the repair moved them,
 // not a re-authoring); x90-v1 still falls short of its ≥90 band. The g1 bridge says so.
-/* im-vet-six-repairs RE-MINT (2026-09-20): the Trainium withdrawal and the TPU numerator repair
+/* registry repairs RE-MINT (2026-09-20): the Trainium withdrawal and the TPU numerator repair
    move all three routes. x80-v4 leaves its authored 80-90 band (79.54) and the g1 bridge says so;
    the vector itself is untouched, which is the whole point of computing band membership rather
    than enforcing it. */
@@ -195,7 +195,7 @@ for (const [pid, pin, cited] of [["x90-v1", 89.2462, "≈89.2"], ["x80-v3", 80.5
     g1.bridge.includes("Opus flagship scope") && g1.bridge.includes("cross-model setting transfers")
     && !/the xAI cash-basis valuation replay \u224896/.test(g1.bridge));
 }
-/* im-vet-six-repairs: xaicash carries no blend of its own, so it rides the withdrawn default
+/* registry repairs: xaicash carries no blend of its own, so it rides the withdrawn default
    and the repaired TPU coefficient; deepseek pins its own H800 blend and is untouched. */
 for (const [pid, pin, cited] of [["xaicash", 96.0131, "≈96"], ["deepseek", 86.0058, "≈86"]]) {
   const sp = preset(opus, E.PERSPECTIVES.find(p => p.id === pid), { mode: "native" });
@@ -209,10 +209,10 @@ for (const [pid, pin, cited] of [["xaicash", 96.0131, "≈96"], ["deepseek", 86.
 /* decomposition: ≈48 declared-topology → ≈37 na-blend; membership step ZERO at the revised size */
 {
   const sDecl = seededAt(2500, s => { s.blend = { h100: 10, h200: 15, gb200: 25, gb300: 15, h800: 0, h20: 0, tpu7: 20, trn2: 5, trn3: 10, ascend: 0 }; });
-  // b9 M1: the fleet-weight substitution is no longer the dominant move — it was worth
+  // : the fleet-weight substitution is no longer the dominant move — it was worth
   // −10.5 points only because the retired Trainium operating points costed those legs at
   // $60/$52 per Mtok. Repaired, the same substitution is worth −1.0 point.
-  /* im-vet-six-repairs (2026-09-20): the declared topology is an EXPLICIT blend, so it keeps its
+  /* registry repairs (2026-09-20): the declared topology is an EXPLICIT blend, so it keeps its
      two Trainium legs and moves only with the TPU numerator repair. */
   assert("decomposition first step: declared-topology weights re-derive 58.2301 (≈58 in the line)",
     near(marg(sDecl), 58.2301) && fa.tokens.decompositionLine.includes("≈58"));
@@ -267,9 +267,9 @@ for (const [pid, pin, cited] of [["xaicash", 96.0131, "≈96"], ["deepseek", 86.
   const members = feas.legs.filter(l => s.blend[l.hwKey] > 0);
   const analystSet = members.filter(l => l.capacityReceipt
     && l.capacityReceipt.evidenceQuality && l.capacityReceipt.evidenceQuality.priceClass === "analyst-set");
-  // b9 M1: tpu7 and trn2 rents move analyst-set → observed-source-named (Google published
+  // : tpu7 and trn2 rents move analyst-set → observed-source-named (Google published
   // 3-yr commit; AWS Capacity Blocks), so the header's symmetry claim re-mints to four.
-  /* im-vet-six-repairs (2026-09-20): TWO moves land here. The default has FIVE member legs, the
+  /* registry repairs (2026-09-20): TWO moves land here. The default has FIVE member legs, the
      two Trainium ones being withdrawn; and gb200's price class moves observed-source-named →
      analyst-set, because the rent this engine actually prices with is the provisional $4.50 the
      registry itself calls "NOT a rate that became public". So four of five member rents are
@@ -289,26 +289,26 @@ const meta = extra => ({ dataAsOf: "2026-07-20", schema: "v5", engine: "vX", epo
   totalCase: "community-central-5.0", traffic, ...extra });
 {
   const d = E.decodeScenario(b64({ _meta: meta({}) }));
-  assert("transition row 1: pre-bump CLEAN token decodes; totalCase REWRITTEN to the new default; migration marked",
+  assert("transition case 1: pre-bump CLEAN token decodes; totalCase REWRITTEN to the new default; migration marked",
     !!d && d._meta.totalCase === "revised-band-central-2.5"
     && d._meta.sizeMoveMigrated && d._meta.sizeMoveMigrated.from === "community-central-5.0",
     JSON.stringify(d && d._meta.totalCase));
   const d2 = E.decodeScenario(b64({ total: 5000, _meta: meta({}) }));
-  assert("transition row 2: pre-bump EXPLICIT-5000 token keeps the 5 T identity, NO rewrite, no flag",
+  assert("transition case 2: pre-bump EXPLICIT-5000 token keeps the 5 T identity, NO rewrite, no flag",
     !!d2 && d2._meta.totalCase === "community-central-5.0" && !d2._meta.sizeMoveMigrated && d2.total === 5000,
     JSON.stringify(d2 && [d2._meta.totalCase, d2.total]));
   const d3 = E.decodeScenario(b64({ _meta: meta({ epoch: E.DEFAULTS_EPOCH, totalCase: "revised-band-central-2.5", displayedMargin: 37.207 }) }));
-  assert("transition row 3: post-bump clean token decodes under the new id, no flag",
+  assert("transition case 3: post-bump clean token decodes under the new id, no flag",
     !!d3 && d3._meta.totalCase === "revised-band-central-2.5" && !d3._meta.sizeMoveMigrated);
   const d4 = E.decodeScenario(b64({ total: 2500, _meta: meta({ epoch: E.DEFAULTS_EPOCH }) }));
-  assert("transition row 4: forged total:2500 + the OLD default id stays fail-closed NULL (a total key is never rewritten)",
+  assert("transition case 4: forged total:2500 + the OLD default id stays fail-closed NULL (a total key is never rewritten)",
     d4 === null);
   const d5 = E.decodeScenario(b64({ _meta: meta({ epoch: E.DEFAULTS_EPOCH, totalCase: "preset" }) }));
-  assert("transition row 5: in-scope totalCase 'preset' stays fail-closed NULL", d5 === null);
+  assert("transition case 5: in-scope totalCase 'preset' stays fail-closed NULL", d5 === null);
   const d6 = E.decodeScenario(b64({ _meta: { dataAsOf: "2026-07-20", schema: "v5", engine: "vX", epoch: "v22r3",
     displayedMargin: 35.14, model: "opus", persp: null, modified: { kind: "scenario", from: null },
     fleet: { id: "custom" }, totalCase: "community-central-5.0", traffic } }));
-  assert("transition row 6: pre-bump MODIFIED clean shape heals identically (same default-following semantics)",
+  assert("transition case 6: pre-bump MODIFIED clean shape heals identically (same default-following semantics)",
     !!d6 && d6._meta.totalCase === "revised-band-central-2.5" && !!d6._meta.sizeMoveMigrated,
     JSON.stringify(d6 && d6._meta.totalCase));
 }
@@ -320,7 +320,7 @@ assert("tokens: mostPlausibleLine/decompositionLine/higherJustificationsHeader a
   && Array.isArray(fa.tokens.higherJustificationEntries)
   && fa.tokens.higherJustificationEntries.length === 7
   && fa.tokens.higherJustificationEntries.every(x => typeof x === "string" && x.length > 0));
-/* im-vet-six-repairs (2026-09-20), the vocabulary release edit: "tariff schedule" -> "list-price
+/* registry repairs (2026-09-20), the vocabulary release edit: "tariff schedule" -> "list-price
    schedule", which is the same object under the canonical name. The DEFECT this guard exists for
    is unchanged and is still forbidden: the estimand may not claim the billing is AT LIST, because
    it is on the reference cache/batch/discount mix. Both halves are asserted. */
@@ -355,8 +355,8 @@ assert("mostPlausibleLine: attributed adoption grammar, no verification claim",
 
 
 /* ================================================================================
-   b9 M6 (FA memo §10.2) — J-2 the BOUNDED-DIFF ORACLE, J-3, J-4
-   M6 reopens this copy deliberately and minimally: a second visible reading makes an
+    (FA ) — J-2 the BOUNDED-DIFF ORACLE, J-3, J-4
+   final-answer revision reopens this copy deliberately and minimally: a second visible reading makes an
    UNLABELED reference figure ambiguous to a reader, so freezing these tokens and promising
    universal basis labeling could not both be delivered. What enters is bounded, and this is
    where that bound is proven rather than described.
@@ -376,6 +376,9 @@ assert("mostPlausibleLine: attributed adoption grammar, no verification claim",
   const pre = { mostPlausibleLine: PRE.mostPlausibleLine,
     higherJustificationsHeader: PRE.higherJustificationsHeader,
     decompositionLine: PRE.decompositionLine, ...PRE.entries };
+  // Keep the archived fixture untouched. Compare its public wording after the one
+  // editorial label removed from the historical spans; no claim or number changes.
+  for (const key of Object.keys(pre)) pre[key] = pre[key].replace(/\bb9 repaired defaults\b/g, "repaired defaults");
 
   /* Rule 2: the REOPENED SCOPE — ten tokens, closed. This is the set J-2 governs; it is NOT a
      promise that every one of them changes (two carry no calculator figure at all and are
@@ -388,19 +391,19 @@ assert("mostPlausibleLine: attributed adoption grammar, no verification claim",
     JSON.stringify(REOPENED.filter(k => !live[k] || !pre[k])));
 
   /* Rule 4: the baseline is TYPED PER TOKEN, in two closed classes. Class B is the STRONGER
-     treatment, not an exemption: a pinned post-M6 fixture PLUS a pinned reversible edit set means
+     treatment, not an exemption: a pinned post-revision fixture PLUS a pinned reversible edit set means
      the mandated edits are the ONLY edits, byte for byte. §17.3 grows class B from two tokens to
      three (g3 joins under the A-2 inference license) and generalises "the ONE pinned edit" to
      "the pinned edit SET" — g1 carries two. */
-  /* The class-B mandated edits, PINNED as (before → after) spans derived from the pre-M6 fixture.
-     Re-derived after the J-10 dual GPT-Pro gate's dive A found three defects in this copy that M6
+  /* The class-B mandated edits, PINNED as (before → after) spans derived from the pre-revision fixture.
+     Re-derived after the J-10 dual GPT-Pro gate's dive A found three defects in this copy that final-answer revision
      had inherited or introduced: the bridge explained the ANALYST's gap it cannot explain, the g1
      throughput sentence contradicted the g3 ladder it sits beside (list-only billing is NOT needed
      to reach the 80s, and the throughput step is ≈6 points alone but ~3 inside the ladder), and the
      exec row's "owned/strategic TCO" read as the multi-setting owned-TCO exploration route. Those
      folds enlarged g1's mandated span, so the span is pinned by BYTES here rather than described. */
-  const DECOMP_REMOVED = "Under the b9 repaired defaults the fleet-weight step is no longer dominant: before the repair the same substitution moved ≈48 → ≈37 (−10.5 points), almost all of it the Trainium legs, which the retired operating points costed at $60 and $52 per million output tokens. ";
-  /* T5 rec 5, round 3. These pinned spans must compare BYTE-EXACTLY against the pre-M6 fixture,
+  const DECOMP_REMOVED = "Under the repaired defaults the fleet-weight step is no longer dominant: before the repair the same substitution moved ≈48 → ≈37 (−10.5 points), almost all of it the Trainium legs, which the retired operating points costed at $60 and $52 per million output tokens. ";
+  /* T5 rec 5, round 3. These pinned spans must compare BYTE-EXACTLY against the pre-revision fixture,
    which means they have to contain the retired wording. But tests/ is mirrored into site/tests/
    and SERVED — 38 test files are in the asset manifest — so writing the phrase as a literal here
    publishes it on exactly the surface the rec cleared. A third review found it there. The string
@@ -413,11 +416,11 @@ const CLASS_B = {
     "g1-teortaxes-9095": [
       { why: "D-6q two-basis rewrite + §16.2 A-2 inference clause + J-10 run-1/run-2 ladder corrections",
         before: " — switching the serving regime to throughput is worth ≈6 points inside this page's own assumption ladder — but exercising it from the ≈51 conservative case lands in the 80s only after also adopting partner rates, higher utilization, and a list-only billing mix. On possibility: no page-authored route reaches 90 — the strongest, the owned-TCO route, computes ≈89.1 and is still disclosed as landing OUTSIDE the ≥90 band it was authored for", after: ": applied alone to the ≈51 public-evidence reference the throughput regime is worth ≈6 points, while inside the strategic-partner ladder — where partner rates and higher utilization have already moved the result to ≈76 — it adds about 3 more, to ≈79. Within the strategic-partner ladder, partner rates and higher utilization first move the result to ≈76; list-only billing is a later step from ≈79 to ≈81, not a prerequisite for entering the 80s in that ladder. Other constructions get there differently — the owned-TCO route substitutes a procurement basis rather than adopting partner rates. At the public-evidence reference no page-authored route reaches 90: the strongest, the owned-TCO route, computes ≈89.1 there and is disclosed as landing outside the ≥90 band it was authored for. Under the calculator's own ratified-prior default that same route computes ≈91.7 and does land inside it — the prior, not the evidence, is what carries it across. Naming the most plausible closer, as this page's own inference and not the claimant's stated method: a route into the 90s most plausibly assumes serving-stack efficiency this calculator does not credit at all — speculative decoding first among them, which a frontier lab has now confirmed it runs in production and credits with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). That is a different lab and a mechanism, never an Anthropic fleet parameter here. Although the conditional post names batching for 90 → 95, neither TeorTaxes post states how the presupposed ~90 starting point is reached; this page applies no speculative-decode credit at all — a no-credit convention, not a finding about Anthropic's actual deployment or benefit" },
-      /* b9 spec-decode LEVER — the ratified Q-B pairs (esc-20260801T045418Z-71b767cc), appended as
-         ADDITIONAL pinned members per memo §9.4. They sit INSIDE the M6 span above and are listed
-         after it so the reverse-order revert peels them off first, restoring M6's exact bytes before
-         the M6 edit itself reverts. The M6 record is not rewritten to absorb them — that would erase
-         what M6 shipped, which is the whole point of pinning it. */
+      /* spec-decode LEVER — the ratified Q-B pairs (a research review on 2026-08-01), appended as
+         ADDITIONAL pinned members. They sit INSIDE the final-answer revision span above and are listed
+         after it so the reverse-order revert peels them off first, restoring final-answer revision's exact bytes before
+         the final-answer revision edit itself reverts. The final-answer revision record is not rewritten to absorb them — that would erase
+         what final-answer revision shipped, which is the whole point of pinning it. */
       { why: "Q-B span (5)-i — the g1 A-2 clause qualifier: the no-credit claim is scoped to the readings this page authors",
         before: "does not credit at all — speculative decoding first among them,",
         after: "does not credit at all in this reference reading, and in every other reading this page authors — speculative decoding first among them," },
@@ -431,7 +434,7 @@ const CLASS_B = {
     "g3-gptpro-9294-lens": [
       { why: "§16.2 A-2 / §17.3 — the attributed spec-decode inference clause (J-10 dive-A wording)",
         before: "", after: "Naming the most plausible closer, as this page's own inference and not the consult's stated method: a mature-fleet scenario at that level most plausibly assumes serving-stack efficiency this calculator does not credit, speculative decoding first among them — vendor-confirmed in production at a different frontier lab, credited with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). That is a different lab and a mechanism, never an Anthropic fleet parameter here; carried here at no credit at all — a convention, not a finding about Anthropic's actual deployment or benefit. " },
-      /* b9 spec-decode LEVER — the ratified Q-B pairs for g3, same construction and same ordering
+      /* spec-decode LEVER — the ratified Q-B pairs for g3, same construction and same ordering
          rationale as g1's above. (6)-ii's `before` ends mid-word at "a mechanis" deliberately: the
          g1 and g3 parentheticals are byte-identical, so a shorter quotation would be ambiguous
          across hosts even though each is applied only to its own. */
@@ -457,7 +460,7 @@ const CLASS_B = {
        mostPlausibleLine, in the same reviewer finding (SV-2), so leaving them byte-locked would
        have shipped the phrase the rec retired under two other ids. Promotion is the mechanism's
        own path for a mandated edit: the edit is pinned, reversible, and the rest of each token
-       stays locked to the pre-M6 bytes. */
+       stays locked to the pre-revision bytes. */
     "higherJustificationsHeader": [
       /* Round 4 widened this edit. Renaming the phrase was not enough: the header still ASSERTED
          the adoption ("this page adopts that tier as the most reliable source"), i.e. it restated
@@ -476,7 +479,7 @@ const CLASS_B = {
          round 4 had not changed its semantic role. It is now removed outright rather than
          reworded; the ranking lives in mostPlausibleLine, whose node sits outside the answer.
          The span is anchored on the preceding word so the deletion stays a non-empty
-         substitution and the revert still reproduces the pre-M6 bytes exactly. */
+         substitution and the revert still reproduces the pre-revision bytes exactly. */
       { why: "T5 rec 5 / round 6 — the group's own HEADING carried the retired phrase, then a renamed RANKING; ranking is not permitted inside THE ANSWER at all, so the parenthetical is gone",
         before: "SemiAnalysis (the most plausible reading)".replace("most plausible reading", RETIRED_PHRASE.split(" of ")[0]),
         after: "SemiAnalysis" },
@@ -492,7 +495,7 @@ const CLASS_B = {
          reviewer barred naming a real-world quantity directly for a source that exposes neither
          estimand, accounting boundary, period, fleet nor billing basis, and asked for the claim
          to be renamed to the strongest external analyst hypothesis this registry carries. Pinned here as a reversible
-         span so the rest of the token stays byte-locked to the pre-M6 baseline. */
+         span so the rest of the token stays byte-locked to the pre-revision baseline. */
       { why: "T5 rec 5 — the retired opening asserted a posterior judgment about reality; renamed to the registry claim it can actually support",
         before: "The " + RETIRED_PHRASE + ": above 80%",
         after: "The strongest external analyst hypothesis carried by this registry: above 80%" },
@@ -506,12 +509,11 @@ const CLASS_B = {
   };
 
 /* ============================================================================================
-   THE 2026-09-10 RENT ADOPTION, kept as its own event (owner ruling
-   d-20260910-im-adopt-fleet-rents-and-correct-grok).
+   THE 2026-09-10 RENT ADOPTION, kept as its own event (adjudicated 2026-09-10).
 
-   The class-B apparatus below proves that M6's reopening of ten tokens changed ONLY what M6
-   mandated. The owner's adoption of planning rents for GB200, GB300 and Trainium3 recomputes
-   figures inside four of those same tokens, and folding those recomputes into M6's mandated-edit
+   The class-B apparatus below proves that final-answer revision's reopening of ten tokens changed ONLY what final-answer revision
+   mandated. The adoption of planning rents for GB200, GB300 and Trainium3 recomputes
+   figures inside four of those same tokens, and folding those recomputes into final-answer revision's mandated-edit
    list would conflate two different events — which is precisely what this apparatus exists to make
    impossible. So it is a SEPARATE reversal, applied first, and it carries its own claim:
 
@@ -525,7 +527,7 @@ const PRE_RENT_ADOPTION = {
   "mostPlausibleLine": "The strongest external analyst hypothesis carried by this registry: above 80% — the strongest analyst tier this page carries (SemiAnalysis: Dylan Patel's transcript statement \"north of 80 percent for the API price\" on an Opus token, a direct source for his own words; and a coverage-described above-80% API-business gross-margin estimate from its paywalled 3Q26 report), ranked strongest by this page's adjudication of source reliability — an adopted analyst judgment, not a calculator output or provider disclosure, and not this page's estimate of any actual margin; the analyst's underlying calculations are unpublished. The conservative planning case does not reach that neighborhood; separately labeled constructions that DO reach it include, among others, the strategic-partner lens (≈81.7 at the public-evidence reference), the strategic-partner ladder (≈79 after the throughput switch and ≈81 after list-only billing, at the public-evidence reference), the two aggressive planning-vector routes (≈77.6/≈76.4 at the public-evidence reference), and the separate multi-setting owned-TCO route (≈89.1 at the public-evidence reference).",
   "higherJustificationsHeader": "This page's conservative planning case — priced at low/committed planning rates, NOT at market rents — computes to ≈51% at the public-evidence reference — a policy-labeled scenario output at the page-adopted flagship size (a 2–3 T planning band, scalar 2.5 T; the result now VARIES monotonically across the three sampled totals 2.0/2.5/3.0 T, because total parameter count reaches decode weight traffic on the replica-resident leg — the former identical-at-all-three behaviour was a symptom of the equation omitting total/resident geometry, not evidence of size robustness). The claims examined below include an above-80% tier (SemiAnalysis — Dylan Patel's transcript statement \"north of 80 percent for the API price\" on an Opus token, and the coverage-described above-80% API-business gross-margin estimate), whose underlying calculations are unpublished. How this page RANKS that tier against the others it carries is stated separately, outside this answer, because ranking other people's claims is a statement about the evidence record rather than one of this calculator's readings. Other public claims point higher still (90–95); separately, a model-generated scenario — zero claimant weight, shown only as a labeled stress case — gives 92–94 for Opus. Most of the remaining differences come from different scopes, cost bases, commercial mixes, and operating points — the full entries below identify the calculator changes that move toward each higher claim and quantify any remaining unreproduced gap (only where the calculator actually reaches a claim's neighborhood does the entry say so), and the compact entries say honestly where no bridge is constructed. Where a claim targets the same quantity this page models, the public evidence genuinely disagrees with the conservative case, and the entry says so. This page's own inputs are as assumption-dependent as the claims it examines: the flagship's total size is a page-adopted planning band informed by community estimates (which include lower 1.5–2 T readings), the active size is a working estimate, four of seven rents are analyst-set (the other three name public rates, and every default rent still sits at or below its public comparator — this is a low/committed planning vector, not a purchasable market one), utilization is a declared convention, the 15:1/60% traffic anchor is a page-declared convention, several throughput legs are transferred, joint-fit or representation-bridged rather than provider-validated — the two Trainium legs in particular carry NO matched serving anchor and are scenario-only — and the fleet shares are inferred — the same standard cuts both ways. ≈51% at the public-evidence reference is a conservative, reproducible scenario, not a verified estimate of any provider's actual margin; above-80 is an adopted analyst reading, not a disclosure.",
   "decompositionLine": "At the page-adopted 2.5 T size, replacing the declared topology weights {10,15,25,15,20,5,10} with the page-adjudicated evidence-informed NA blend {8,11,19,12,25,8,17} moves the result from ≈51 (51.49) to ≈51 (51.18) — a −1.0 point move; the serve-feasibility rule removes nothing at this size. The Legacy 5 T Musk-relative size case (read as likely the prior flagship, Opus 4.6; referent unverified) now computes ≈43, and under it the rule removes H100 and Trainium2.",
-  "g1-teortaxes-9095": "TeorTaxes 90→95 (conditional) + the 90+ floor · What it claims: The conditional post (2026-06-27, conditional transition, names no lab): \"No, they'll just increase the batch size, have the same speed, and drive margins from 90% to 95%. You're welcome\". The floor post (2026-06-28, possibility floor; the wrapping straight quotes are the record's own): \"…no, they can't have 90%+ margins? Right? Right?\" THEY CAN. · What it does not claim: the conditional post — not an unconditional Anthropic point value; not any parameter of this calculator. The floor post — not a statement of where the figure tops out; not any named lab's audited figure. · Why the conservative case differs: Moving 90 → 95 means halving all-in cost per billed unit (cost falls from 10% to 5% of billings) — if only a fraction of cost is batch-sensitive, the move shrinks proportionally. The claim also presupposes the ~90 starting point, which no public disclosure establishes. A batching/throughput lever genuinely exists in this model: applied alone to the ≈51 public-evidence reference the throughput regime is worth ≈6 points, while inside the strategic-partner ladder — where partner rates and higher utilization have already moved the result to ≈76 — it adds about 3 more, to ≈79. Within the strategic-partner ladder, partner rates and higher utilization first move the result to ≈76; list-only billing is a later step from ≈79 to ≈81, not a prerequisite for entering the 80s in that ladder. Other constructions get there differently — the owned-TCO route substitutes a procurement basis rather than adopting partner rates. At the public-evidence reference no page-authored route reaches 90: the strongest, the owned-TCO route, computes ≈89.1 there and is disclosed as landing outside the ≥90 band it was authored for. Under the calculator's own ratified-prior default that same route computes ≈91.7 and does land inside it — the prior, not the evidence, is what carries it across. Naming the most plausible closer, as this page's own inference and not the claimant's stated method: a route into the 90s most plausibly assumes serving-stack efficiency this calculator does not credit at all in this reference reading, and in every other reading this page authors — speculative decoding first among them, which a frontier lab has now confirmed it runs in production and credits with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). A speculative-decode credit is available as a scenario lever a reader can turn, from the \"no MTP/disagg\" stack setting only; no reading this page selects applies it. That is a different lab and a mechanism, never an Anthropic fleet parameter here. Although the conditional post names batching for 90 → 95, neither TeorTaxes post states how the presupposed ~90 starting point is reached; this page applies no speculative-decode credit in any reading it authors — a no-credit convention, not a finding about Anthropic's actual deployment or benefit. A reader may apply one as their own scenario, from the \"no MTP/disagg\" stack setting only. The two aggressive planning-vector routes now compute ≈77.6/≈76.4, INSIDE the 80–90 band they were authored for; before the b9 repaired defaults they fell short at ≈79.6/≈78.5, so it is the repair — not a re-authoring — that moved them in. The strategic-partner lens computes ≈81.7. Applying the xAI cash-basis settings to the Opus flagship scope computes ≈95; applying the DeepSeek disclosure settings to that same Opus scope computes ≈86. Those are cross-model setting transfers, not actual xAI or DeepSeek operating-point replays, and they say nothing about Anthropic's own margins. · What would flip it: a disclosed Anthropic (or peer) production operating point showing sustained ~90% unit margins at published tariffs — or evidence reducing the ≈81.7 construction's cost share from ≈18.3% to ≈10% of billings (roughly a further 40% cut in cost per billed unit).",
+  "g1-teortaxes-9095": "TeorTaxes 90→95 (conditional) + the 90+ floor · What it claims: The conditional post (2026-06-27, conditional transition, names no lab): \"No, they'll just increase the batch size, have the same speed, and drive margins from 90% to 95%. You're welcome\". The floor post (2026-06-28, possibility floor; the wrapping straight quotes are the record's own): \"…no, they can't have 90%+ margins? Right? Right?\" THEY CAN. · What it does not claim: the conditional post — not an unconditional Anthropic point value; not any parameter of this calculator. The floor post — not a statement of where the figure tops out; not any named lab's audited figure. · Why the conservative case differs: Moving 90 → 95 means halving all-in cost per billed unit (cost falls from 10% to 5% of billings) — if only a fraction of cost is batch-sensitive, the move shrinks proportionally. The claim also presupposes the ~90 starting point, which no public disclosure establishes. A batching/throughput lever genuinely exists in this model: applied alone to the ≈51 public-evidence reference the throughput regime is worth ≈6 points, while inside the strategic-partner ladder — where partner rates and higher utilization have already moved the result to ≈76 — it adds about 3 more, to ≈79. Within the strategic-partner ladder, partner rates and higher utilization first move the result to ≈76; list-only billing is a later step from ≈79 to ≈81, not a prerequisite for entering the 80s in that ladder. Other constructions get there differently — the owned-TCO route substitutes a procurement basis rather than adopting partner rates. At the public-evidence reference no page-authored route reaches 90: the strongest, the owned-TCO route, computes ≈89.1 there and is disclosed as landing outside the ≥90 band it was authored for. Under the calculator's own ratified-prior default that same route computes ≈91.7 and does land inside it — the prior, not the evidence, is what carries it across. Naming the most plausible closer, as this page's own inference and not the claimant's stated method: a route into the 90s most plausibly assumes serving-stack efficiency this calculator does not credit at all in this reference reading, and in every other reading this page authors — speculative decoding first among them, which a frontier lab has now confirmed it runs in production and credits with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). A speculative-decode credit is available as a scenario lever a reader can turn, from the \"no MTP/disagg\" stack setting only; no reading this page selects applies it. That is a different lab and a mechanism, never an Anthropic fleet parameter here. Although the conditional post names batching for 90 → 95, neither TeorTaxes post states how the presupposed ~90 starting point is reached; this page applies no speculative-decode credit in any reading it authors — a no-credit convention, not a finding about Anthropic's actual deployment or benefit. A reader may apply one as their own scenario, from the \"no MTP/disagg\" stack setting only. The two aggressive planning-vector routes now compute ≈77.6/≈76.4, INSIDE the 80–90 band they were authored for; before the repaired defaults they fell short at ≈79.6/≈78.5, so it is the repair — not a re-authoring — that moved them in. The strategic-partner lens computes ≈81.7. Applying the xAI cash-basis settings to the Opus flagship scope computes ≈95; applying the DeepSeek disclosure settings to that same Opus scope computes ≈86. Those are cross-model setting transfers, not actual xAI or DeepSeek operating-point replays, and they say nothing about Anthropic's own margins. · What would flip it: a disclosed Anthropic (or peer) production operating point showing sustained ~90% unit margins at published tariffs — or evidence reducing the ≈81.7 construction's cost share from ≈18.3% to ≈10% of billings (roughly a further 40% cut in cost per billed unit).",
   "g2-patel-semianalysis-80": "The 80+ number — Dylan Patel / SemiAnalysis · What it claims: Dylan Patel, in the published Sequoia transcript (a direct source for his own statement, not Anthropic disclosure): \"Their margins on an Opus token, at least Opus 4.8 token, is north of 80 percent for the API price. They've got a lot of deals where their total corporate gross margins get clawed down a little bit because of how they do Bedrock deals and Vertex deals and things like that.\" Supporting publication: a paywalled SemiAnalysis 3Q26 report is publicly described (Dealroom coverage) as estimating an API-business gross margin above 80% (blended company gross margin mid-60% in the same report) on its bottom-up-by-SKU Tokenomics model — the load-bearing report text is not publicly available to this page. Calibration context — different accounting objects, scopes stated: the same firm's May 2026 analysis has inference-infrastructure margins rising from 38% to above 70%, and secondary coverage of a Wall Street Journal report said company compute costs were expected to decline from 71 to 56 cents per revenue dollar from Q1 into Q2 2026 (a company-level forecast, not an observed datum). · What it does not claim: not a statement of where the figure tops out — a floor compatible with 85 and with 95; not this page's parameter vector; no published fleet, rate, utilization, traffic mix, or calculation (the Tokenomics model is private). · Why the conservative case differs: Patel's statement targets the same quantity this page models (an Opus API-token unit margin): if both refer to the same unit, period, and accounting boundary, \">80\" and ≈51 contradict each other — they are not compatible readings. The grouped SemiAnalysis API-business figure is a broader accounting product-line metric — corroborating context from the same analyst family, not a second same-estimand contradiction. Where this page's ranking of that tier is concerned, the statement lives outside this answer; what matters here is why the calculator's own case differs. SemiAnalysis models these economics bottom-up by SKU, and this page treats that work as thorough while noting that its inputs — public, inferred, or private — cannot be seen from here. What the public record does not supply is the methodology that would let a reader diagnose which assumptions differ: this calculator reproduces the floor's neighborhood under labeled constructions (the strategic-partner ladder ≈81.7: partner rates at 0.70×, utilization 70, throughput regime, list-only billing; the separate owned-TCO route ≈89.1 at the public-evidence reference), and the assumption distance between those constructions and the conservative planning case is the disagreement — \"not publicly reproducible\" is this page's finding about the public record, not a claim that the source lacks a basis. · What would flip it: publication of the underlying fleet-cost basis, utilization, and operating point would allow a direct reconciliation and could settle the disagreement if every relevant boundary matches — or a disclosure showing procurement above this page's low/committed planning rates at moderate utilization would move the above-80 hypothesis back toward this page's conservative case; either publication would close most of the diagnosis gap.",
   "g3-gptpro-9294-lens": "GPT Pro consult 92–94 for Opus (model-generated) + the ≈81.7 lens · What it claims: \"approximately 92–94% for Opus and 94–96% for Sonnet on a mature 2026 fleet.\" (model-generated scenario analysis, 2026-07-09). For the flagship comparison the relevant figure is Opus 92–94; the registry record splits accordingly. A page-authored strategic-rate adaptation inspired by the consult's fleet economics computes ≈81.7 at the flagship scope — the high endpoint of the cost-lens span — and is not a faithful replay of the consult's 92–94 scenario: the consult's 75% occupancy central is adapted to 70 here, and its TPU-specific ~$1.60/hr estimate is generalized as a 0.70× multiplier across the lens fleet — both page choices, labeled. · What it does not claim: human endorsement — model-generated analysis with zero claimant weight, rendered only in its own provenance-labeled group. · Why the conservative case differs: The executed ladder from ≈51 to ≈81 (each step a calculator mutation from the conservative case, at the revised flagship size; cost shares of billings in parentheses): partner rates alone (0.70×) → ≈66 (≈34%); utilization 70 alone → ≈65 (≈35%); both → ≈76 (≈24%); plus the throughput serving regime → ≈79 (≈21%); plus list-only billing (no batch share, no discount) → ≈81 (≈19%). The lens itself lands slightly LOWER, at ≈81.7 (cost share ≈18.3%), because it also swaps the fleet — that last difference is blend composition, not a further cost lever. The serving-stack multiplier stays at 1.0× (no stack-efficiency step) — though the throughput-regime switch is itself an operating-point assumption, not a free lunch. The remaining distance from ≈81.7 to the consult's Opus 92–94 is the mature-fleet scenario the consult asserts beyond this adaptation (its own implied per-category economics combine near ≈91 at the reference mix; 92–94 implies an all-in cost share of 8–6%, so closing from ≈81.7 requires roughly a further 56% or 67% cut in cost per billed unit) — the part the public evidence does not ground. Naming the most plausible closer, as this page's own inference and not the consult's stated method: a mature-fleet scenario at that level most plausibly assumes serving-stack efficiency this calculator does not credit in this reference reading, and in every other reading this page authors, speculative decoding first among them — vendor-confirmed in production at a different frontier lab, credited with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). The credit is available as a scenario lever, from the \"no MTP/disagg\" stack setting only; no reading this page selects applies it. That is a different lab and a mechanism, never an Anthropic fleet parameter here; carried at no credit in any reading this page authors — a convention, not a finding about Anthropic's actual deployment or benefit; a reader's own scenario may credit it, from the \"no MTP/disagg\" stack setting only. The conservative case answers the published-tariff, low/committed-planning-rate, reference-traffic question on the serve-feasibility-filtered evidence-informed default fleet. · What would flip it: partner-rate disclosure plus utilization evidence plus a published production operating point (throughput/latency) and billing-mix evidence — the full set the ladder shows is needed (rates and utilization alone reach only ≈76); reaching the consult's 92–94 additionally requires evidence supporting an all-in cost share of at most 8–6% of billings.",
   "g5-baker-85": "Gavin Baker 85 (relayed reports) · What it claims: \"It's probably not going to trade at 10 times that number, and it will be very profitable at that scale because it'll be inference-dominated and people are reporting they have 85% gross margins on inference.\" (85, Anthropic inference gross margins, All-In E278 — the show's own published clip; the speaker attributes the figure to reports). · Not claimed: the speaker's own estimate (he attributes the figure to reports); a stated cost basis; a token-SKU operating point — the scope reads closer to an inference product-line estimate. · Why the conservative case differs: this page's owned-TCO construction computes ≈89.1 at the public-evidence reference, so it already exceeds 85 (not an accounting reconciliation from product-line gross margin to this page's unit metric); an 85% margin would tolerate roughly a 37% increase in cost per billed unit from that construction. · What would flip it: the underlying reports or sources being published with their cost boundary stated, and shown to support the figure at a matched scope.",
@@ -535,15 +537,15 @@ const PRE_RENT_ADOPTION = {
 };
 
 /* ============================================================================================
-   THE 2026-09-20 VETTING REPAIRS, kept as their OWN event (program bq-2835, leg
-   im-vet-six-repairs; report reports/inference-margins-vetting-2026-09-19.md, expert findings
+   THE 2026-09-20 VETTING REPAIRS, kept as their OWN event (program the release, leg
+   registry repairs; report reports/the release review-09-19.md, expert findings
    E1, E2 and E5a).
 
    Two registry repairs recompute figures inside seven of the ten reopened tokens, and unlike the
    2026-09-10 rent adoption they also change WORDS: withdrawing a leg from the default fleet is
    not a recompute a reader can be left to infer from a moved numeral, so the copy says it.
    That makes the digits-stripped claim below unavailable for this event, and the STRONGER
-   treatment applies instead — the same one class B uses for M6's mandated edits: every change is
+   treatment applies instead — the same one class B uses for final-answer revision's mandated edits: every change is
    pinned here as a reversible (before -> after) span with its reason, the revert runs FIRST, and
    everything downstream then compares against the pre-repair bytes unchanged. A word that moved
    under cover of a repair, or a repair edit that is not on this list, fails the comparison it
@@ -566,9 +568,8 @@ const PRE_RENT_ADOPTION = {
    moves no number at all.
    ============================================================================================ */
 /* ============================================================================================
-   THE 2026-09-26 FLOOR RENAME, kept as its OWN event (owner ruling
-   d-20260926-margins-open-on-82-the-58-is-a-floor-from-public-data-not-an-estimate; leg
-   im-legibility-astra-pass-and-remint-0926, bq-3520). The ≈58% reading is the PUBLIC-DATA FLOOR —
+   THE 2026-09-26 FLOOR RENAME, kept as its OWN event (adjudicated 2026-09-26; leg
+   the release, the release). The ≈58% reading is the PUBLIC-DATA FLOOR —
    "a bare minimum which it cannot be under. Nothing like a best estimate" — so every name these
    tokens gave it ("the conservative (planning) case") becomes that one name. WORDS ONLY: no numeral
    moves. Same treatment as the vetting repairs: every span pinned (before -> after) with its
@@ -610,12 +611,11 @@ const FLOOR_RENAME = {
 };
 
 /* ============================================================================================
-   THE 2026-09-30 SCENARIO RENAME, kept as its OWN event (owner ruling
-   d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario, block B of card
-   q-im-floor-wording-2026-09-28; Polaris ruling
-   p-20260930-im-floor-release-carries-block-b-phrases-into-the-four-places-the-count-missed; leg
-   im-floor-scenario-release-bq3933-0930, bq-3933). The ≈58% reading is the PUBLIC-DATA SCENARIO — "a model
-   result under public-data assumptions, not a guaranteed minimum" — so the name bq-3520 gave it becomes the
+   THE 2026-09-30 SCENARIO RENAME, kept as its OWN event (adjudicated 2026-09-30, block B of card
+   the adopted decision; the maintainer ruling
+   adjudicated 2026-09-30; leg
+   the release, the release). The ≈58% reading is the PUBLIC-DATA SCENARIO — "a model
+   result under public-data assumptions, not a guaranteed minimum" — so the name the release gave it becomes the
    new one and its guarantee wording takes block B's copy. WORDS ONLY: no numeral moves. It is now the newest
    event, so it is reverted FIRST, with every span pinned (before -> after); the floor rename below then faces
    its own pins unchanged, and a word that moved under cover of this rename fails there.
@@ -667,7 +667,7 @@ const VETTING_REPAIRS = {
     { why: "E1 + E2 — the in-ladder increment", before: "≈79 — it adds about 3 more, to ≈82.", after: "≈79 — it adds about 2 more, to ≈82." },
     { why: "E1 + E2 — the owned-TCO route at the reference and under the prior", before: "owned-TCO route, computes ≈89.1 there", after: "owned-TCO route, computes ≈89.2 there" },
     { why: "E1 + E2 — the same route under the ratified prior", before: "that same route computes ≈91.7 and does land inside it", after: "that same route computes ≈91.8 and does land inside it" },
-    { why: "E1 + E2 — x80-v4 leaves its authored band; the sentence now states band membership in both directions and names the two repairs that moved it", before: "The two aggressive planning-vector routes now compute ≈81.0/≈80.0, INSIDE the 80–90 band they were authored for; before the b9 repaired defaults they fell short at ≈79.6/≈78.5, so it is the repair — not a re-authoring — that moved them in. The strategic-partner lens computes ≈83.1.", after: "The two aggressive planning-vector routes now compute ≈80.6/≈79.5: the first INSIDE the 80–90 band it was authored for, the second just BELOW it. Neither vector has been re-authored — what moves them is the engine underneath. They first crossed into the band when the b9 defaults were repaired (before that they read ≈79.6/≈78.5); the vetting repairs of 2026-09-20 moved them back down, by withdrawing the two Trainium legs from the default fleet and correcting the TPU decode coefficient onto a decode-only numerator, and that carried the second route back out. Band membership is computed and disclosed here, never enforced. The strategic-partner lens computes ≈83.0." },
+    { why: "E1 + E2 — x80-v4 leaves its authored band; the sentence now states band membership in both directions and names the two repairs that moved it", before: "The two aggressive planning-vector routes now compute ≈81.0/≈80.0, INSIDE the 80–90 band they were authored for; before the repaired defaults they fell short at ≈79.6/≈78.5, so it is the repair — not a re-authoring — that moved them in. The strategic-partner lens computes ≈83.1.", after: "The two aggressive planning-vector routes now compute ≈80.6/≈79.5: the first INSIDE the 80–90 band it was authored for, the second just BELOW it. Neither vector has been re-authored — what moves them is the engine underneath. They first crossed into the band when the defaults were repaired (before that they read ≈79.6/≈78.5); the vetting repairs of 2026-09-20 moved them back down, by withdrawing the two Trainium legs from the default fleet and correcting the TPU decode coefficient onto a decode-only numerator, and that carried the second route back out. Band membership is computed and disclosed here, never enforced. The strategic-partner lens computes ≈83.0." },
     { why: "E1 + E2 — the wouldFlip cost-share arithmetic follows the lens", before: "reducing the ≈83.1 construction's cost share from ≈16.9% to ≈10% of billings (roughly a further 40% cut", after: "reducing the ≈83.0 construction's cost share from ≈17.0% to ≈10% of billings (roughly a further 41% cut" },
     { why: "N1 vocabulary release edit — style/VOCABULARY.md §1.2 makes **list price** the one name for the published per-token price and retires \"tariff\"", before: "sustained ~90% unit margins at published tariffs", after: "sustained ~90% unit margins at published list prices" },
   ],
@@ -713,7 +713,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     }
     return out;
   };
-  /* bq-3520: the floor rename is reverted FIRST (newest event), with each pinned span's presence asserted. */
+  /* the release: the floor rename is reverted FIRST (newest event), with each pinned span's presence asserted. */
   const revertFloor = (k, text) => {
     let out = text;
     for (const e of (FLOOR_RENAME[k] || [])) {
@@ -723,7 +723,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     }
     return out;
   };
-  /* bq-3933: the scenario rename is the newest event, so it is reverted FIRST, each pinned span's presence asserted. */
+  /* the release: the scenario rename is the newest event, so it is reverted FIRST, each pinned span's presence asserted. */
   const revertScenario = (k, text) => {
     let out = text;
     for (const e of (SCENARIO_RENAME[k] || [])) {
@@ -743,13 +743,13 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     JSON.stringify(REOPENED.filter(k => /conservative (planning )?case/.test(live[k]))));
   const preVet = Object.fromEntries(REOPENED.map(k => [k, revertVetting(k, preFloor[k])]));
 
-  /* Class A oracle: strip every canonical-phrase occurrence → BYTE-EQUAL to the pinned pre-M6
+  /* Class A oracle: strip every canonical-phrase occurrence → BYTE-EQUAL to the pinned pre-revision
      value. Rule 6 class A: any edit that survives the strip FAILS. */
   for (const k of CLASS_A)
-    assert("J-2 class A [" + k + "]: stripping the canonical phrase reproduces the pre-M6 bytes exactly",
+    assert("J-2 class A [" + k + "]: stripping the canonical phrase reproduces the pre-revision bytes exactly",
       strip(preVet[k]) === pre[k],
       JSON.stringify({ delta: preVet[k].length - pre[k].length, inserts: (preVet[k].split(CP).length - 1) }));
-  /* bq-3520: byte-identical once the pinned floor rename (their sub-heading label, and g5-teortaxes-2025's
+  /* the release: byte-identical once the pinned floor rename (their sub-heading label, and g5-teortaxes-2025's
      wouldFlip target) is reverted — the rename is the only thing that touched them. */
   assert("J-2 class A: the two figure-free tokens are BYTE-IDENTICAL apart from the pinned floor and scenario renames (zero insertions, R9's point)",
     preFloor["g5-huatai-80"] === pre["g5-huatai-80"] && preFloor["g5-teortaxes-2025"] === pre["g5-teortaxes-2025"]);
@@ -759,7 +759,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     !("g5-huatai-80" in VETTING_REPAIRS) && !("g5-teortaxes-2025" in VETTING_REPAIRS));
 
   /* Class B oracle: revert the pinned mandated edit SET and strip the canonical phrase →
-     BYTE-EQUAL to pre-M6. Rule 6 class B: any change beyond {phrase insertions} ∪ {the pinned
+     BYTE-EQUAL to pre-revision. Rule 6 class B: any change beyond {phrase insertions} ∪ {the pinned
      edit set} FAILS, because it survives both operations and the comparison then differs. */
   for (const [k, edits] of Object.entries(CLASS_B)) {
     let reverted = preVet[k];
@@ -780,10 +780,10 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
       // a deletion is reversed by re-inserting the pinned sentence at its pinned offset
       const at = pre[k].indexOf(DECOMP_REMOVED);
       reverted = pre[k].slice(0, at) + DECOMP_REMOVED + reverted.slice(at);
-      assert("J-2 class B [decompositionLine]: the removed text is byte-equal to the pinned pre-M6 sentence and appears in NO FA token afterwards",
+      assert("J-2 class B [decompositionLine]: the removed text is byte-equal to the pinned pre-revision sentence and appears in NO FA token afterwards",
         at > 0 && !Object.values(live).some(v => v.includes(DECOMP_REMOVED.trim())));
     }
-    assert("J-2 class B [" + k + "]: reverting the pinned edit set + stripping the phrase reproduces pre-M6 bytes exactly",
+    assert("J-2 class B [" + k + "]: reverting the pinned edit set + stripping the phrase reproduces pre-revision public wording exactly",
       strip(reverted) === pre[k],
       JSON.stringify({ gotLen: strip(reverted).length, wantLen: pre[k].length }));
   }
@@ -795,14 +795,14 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     assert("J-2 rule 6 negative (class A): any change that is not exactly a phrase insertion FAILS",
       strip(roguePhrase) !== pre["g5-baker-85"]);
     /* Class B: a change BEYOND the pinned edit set must survive BOTH the phrase strip and the edit
-       reversion, so the comparison against pre-M6 differs. Driven through the same CLASS_B table the
+       reversion, so the comparison against pre-revision differs. Driven through the same CLASS_B table the
        positive path uses, so the two can never test different things. */
-    /* bq-3520 review r1 finding 11: the rogue edit is injected into the SAME normalized input the positive path
+    /* the release review r1 finding 11: the rogue edit is injected into the SAME normalized input the positive path
        uses (floor rename and vetting repairs already reverted), so the only thing that can make the comparison
-       differ is the rogue edit itself; the unmodified input is shown to reproduce pre-M6 through the same steps. */
+       differ is the rogue edit itself; the unmodified input is shown to reproduce pre-revision through the same steps. */
     /* The positive path for g3 runs: the rent-adoption digits-only check + substitution (g3 is in PRE_RENT_ADOPTION),
        then the CLASS_B reversion, then the phrase strip. The negative path runs exactly those steps; a rogue word that
-       survives the digits-only check is caught by the pre-M6 comparison, one that does not is caught by that check. */
+       survives the digits-only check is caught by the pre-revision comparison, one that does not is caught by that check. */
     const K = "g3-gptpro-9294-lens";
     const revB = (x) => {
       let r = x;
@@ -813,7 +813,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
       for (const e of [...CLASS_B[K]].reverse()) if (e.after !== "") r = r.replace(e.after, e.before);
       return strip(r);
     };
-    assert("J-2 rule 6 negative (class B) CONTROL: the unmodified normalized g3 input reproduces pre-M6 through the negative path's own steps",
+    assert("J-2 rule 6 negative (class B) CONTROL: the unmodified normalized g3 input reproduces pre-revision through the negative path's own steps",
       revB(preVet[K]) === pre[K]);
     const rogueB = preVet[K].replace("The conservative case answers", "The conservative case now answers");
     assert("J-2 rule 6 negative (class B): the rogue edit actually landed in the normalized input", rogueB !== preVet[K]);
@@ -826,10 +826,10 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      while a published figure went unlabeled: an assertion that cannot fail for the case that
      matters.
 
-     The memo's grammar is `≈?\d+(\.\d+)?%?` — the ≈ is OPTIONAL, and §17.2 explicitly routes plain
+     The specification's grammar is `≈?\d+(\.\d+)?%?` — the ≈ is OPTIONAL, and §17.2 explicitly routes plain
      `15%`-style values to the allowlist. An earlier cut of this test narrowed the grammar to
      ≈-marked literals and called the difference a "stated limit". A manifest cannot narrow a
-     binding memo, and the narrowed form could not see `computes 42%` at all. Restored to the memo's
+     binding specification, and the narrowed form could not see `computes 42%` at all. Restored to the specification's
      grammar, with a TWO-STAGE rule:
 
        STAGE 1 — the CALCULATOR-FIGURE DETECTOR, which is not overridable. A literal is a calculator
@@ -845,9 +845,9 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      this page's prose actually attributes a number to the calculator. Kept deliberately wide: a
      false positive costs one allowlist entry, a false negative costs an unlabeled published figure. */
   const CALC_VERB = /(computes?|computed|computing|re-?derives?|re-?derived|reads?|returns?|yields?|produces?|gives?|lands? at|lands? in|comes? out at|evaluates? to|works? out (?:to|at)|is worth|are worth|outputs?|estimates?|calculates?|predicts?|projects?|forecasts?|prints?|shows?|reports?|puts? (?:it |the \\w+ )?at|settles? at|arrives? at|moves? (?:the result )?(?:from|to)|now (?:computes?|reads?))\s*(?:to\s*|at\s*|around\s*|about\s*|roughly\s*)?$/i;
-  /* ≈89.1 / ≈91.7 are the two ARCHIVED owned-TCO readings, which carry the memo §6 pin bundle and
-     are therefore UNMOVED by the T4 fold. ≈59% moves to ≈51% with the reference reading. */
-  /* im-vet-six-repairs (2026-09-20): every key below moves with the two registry repairs it names
+  /* ≈89.1 / ≈91.7 are the two ARCHIVED owned-TCO readings, which carry the historical pin bundle and
+     are therefore UNMOVED by the reference revision. ≈59% moves to ≈51% with the reference reading. */
+  /* registry repairs (2026-09-20): every key below moves with the two registry repairs it names
      in the event header, and each is still BOUND to a live derivation rather than allowlisted. */
   const GUARD_ENUMERATED = ["≈58%", "≈89.2", "≈91.8"];
   const derived = {
@@ -873,11 +873,11 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
   const CLAIM_ARITHMETIC = {
     "≈10%": "cost share of billings implied by the external 90→95 claim",
     "≈15%": "cost share implied by the consult's 92–94 claim",
-    /* im-arc T4 fold (2026-08-24, declared delta): every cost share is 100 minus its ladder rung,
+    /*  (2026-08-24, declared delta): every cost share is 100 minus its ladder rung,
        so each moved with the rung it belongs to. The classes are unchanged; only the values are. */
-    /* im-release-edit-r2 (2026-09-10, owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok):
+    /* publication revision (2026-09-10, adjudicated 2026-09-10):
        every cost share is still 100 minus its ladder rung, so each moved with the rung it belongs to.
-       The classes are unchanged; only the values are — the same declaration the T4 fold made. */
+       The classes are unchanged; only the values are — the same declaration the  made. */
     "≈17.0%": "cost share of the ≈83.0 lens construction (itself derivation-bound above)",
     "≈18%": "cost share at the throughput-regime ladder step",
     "≈21%": "cost share at the rates+utilization ladder step",
@@ -902,7 +902,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
        a nice-to-have rather than the only thing standing between the suite and an unlabeled figure.
        Every entry is a claim value or arithmetic about one; none is an engine reading. */
     { name: "enumerated-bare-percentage", set: new Set([
-        /* im-vet-six-repairs (2026-09-20): 8.5% -> 7.0% and 37% -> 40% with the owned-TCO route;
+        /* registry repairs (2026-09-20): 8.5% -> 7.0% and 37% -> 40% with the owned-TCO route;
            40% -> 41% in g1's counterfactual. Retired entries are REMOVED rather than left behind,
            because the EXHAUSTIVE counter-check below treats an unused entry as a defect. */
         "5%", "6%", "7.0%", "10%", "15%", "38%", "40%", "41%", "56%", "60%",
@@ -912,7 +912,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
     { name: "fleet-weight", re: /^\d{1,2}$/, why: "a declared fleet weight, leg count, tier index or ordinal inside an enumeration" },
     { name: "model-version", re: /^[45]\.\d$/, why: "a model version number (Opus 4.6/4.8)" },
     { name: "episode-or-id", re: /^\d{3}$/, why: "a source identifier (podcast episode number, report id)" },
-    /* im-release-edit-r2 (2026-09-10): the rent adoption narrowed the decomposition's first step
+    /* publication revision (2026-09-10): the rent adoption narrowed the decomposition's first step
        from a −1.0 point move to −0.5, and moved the two cost-cut percentages the consult's band
        implies. Both are ARITHMETIC ON figures already bound above, not new calculator readings. */
     { name: "decomposition-delta", set: new Set(["0.5"]), why: "the point delta between two derivation-bound readings in the same sentence" },
@@ -953,7 +953,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      wrote down with a reason, so nothing is discharged by matching a shape. The earlier phrasing
      "no allow-rule can rescue one" was too strong for what the code does, and a blanket
      `^\d+\.\d+$` escape really would have let ANY new decimal through; both are corrected here. */
-  /* im-vet-six-repairs: the declared-topology and withdrawn-default companions both move. */
+  /* registry repairs: the declared-topology and withdrawn-default companions both move. */
   const EXACT_COMPANIONS = ["58.23", "58.41"];
   const disposedBy = (x) =>
     GUARD_ENUMERATED.includes(x) ? "guard-enumerated"
@@ -1130,14 +1130,14 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
   }
 
   /* J-3: the basis declaration ships verbatim, and the x90-v1 claim is TRUE under the basis it
-     names at BOTH bases — the §4.2 finding that made this the highest-risk item in M6. */
+     names at BOTH bases — the §4.2 finding that made this the highest-risk item in final-answer revision. */
   assert("J-3 the basis declaration ships on the FA surface verbatim",
-    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is at the public-data scenario's settings")); // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the ruled name (was bq-3520's "public-data floor"); bq-3520 (2026-09-26, owner ruling d-20260926-…-floor): was bq-3316's "is the planning baseline" // bq-3316 (2026-09-25): one name for ≈58%
+    fa.tokens.basisDeclarationLine.startsWith("Every calculator figure in the explanations below is at the public-data scenario's settings")); // the release (2026-09-30, adjudicated 2026-09-30): the ruled name (was the release's "public-data floor"); the release (2026-09-26, adjudicated 2026-09-26-…-floor): was the release's "is the planning baseline" // the release (2026-09-25): one name for ≈58%
   {
     const refv = E.explorationFlagshipMargin(E.PERSPECTIVES.find(p => p.id === "x90-v1"));
     const st = E.applyPresetSettings(opus, E.PERSPECTIVES.find(p => p.id === "x90-v1"), E.FLAGSHIP_SCOPE.traffic);
     const priorv = E.workload(st, undefined, E.scenarioContext(st)).margin * 100;
-    /* im-vet-six-repairs (2026-09-20) re-mint: the route rides the default fleet, so it moves with
+    /* registry repairs (2026-09-20) re-mint: the route rides the default fleet, so it moves with
        the Trainium withdrawal and the TPU numerator repair. The PROPERTY this assertion exists for
        is unchanged and is what is asserted — outside the band at the reference, inside it under
        the prior — and only the two pins move. */
@@ -1155,7 +1155,7 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
      separators, exactly five parts, each with its pinned label prefix. */
   {
     const SEPS = [" · What it claims: ", [" · What it does not claim: ", " · Not claimed: "],
-      " · Why the public-data scenario differs: ", " · What would flip it: "]; // bq-3933 (2026-09-30, owner ruling d-20260930-inference-margins-floor-tile-becomes-a-public-data-scenario): the label names the ≈58% by its ruled name; bq-3520 (2026-09-26): the entry label names the ≈58% by its one name
+      " · Why the public-data scenario differs: ", " · What would flip it: "]; // the release (2026-09-30, adjudicated 2026-09-30): the label names the ≈58% by its ruled name; the release (2026-09-26): the entry label names the ≈58% by its one name
     let allOk = true, detail = [];
     fa.tokens.higherJustificationEntries.forEach((txt, i) => {
       let rest = txt, parts = [], used = [];

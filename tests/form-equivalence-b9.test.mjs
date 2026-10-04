@@ -196,16 +196,16 @@ const mutate = (hwKey, patch, fn) => {
 };
 mutate("tpu7", { decodeTrafficBasis: undefined }, () =>
   throws("guard: absent decodeTrafficBasis is a typed error, NOT a silent surrogate fallback",
-    () => call("tpu7"), /no decodeTrafficBasis — REQUIRED since b9 M2/));
+    () => call("tpu7"), /no decodeTrafficBasis — REQUIRED since the adopted model/));
 mutate("tpu7", { etaRepresentation: undefined }, () =>
   throws("guard: absent etaRepresentation is a typed error",
-    () => call("tpu7"), /no etaRepresentation — REQUIRED since b9 M2/));
+    () => call("tpu7"), /no etaRepresentation — REQUIRED since the adopted model/));
 mutate("tpu7", { etaRepresentation: "active-parameter-surrogate" }, () =>
   throws("guard: reading an η outside its declared representation is FORBIDDEN (run B §A4)",
     () => call("tpu7"), /FORBIDDEN \(run B §A4\)/));
 mutate("tpu7", { nPhysDeclared: undefined }, () =>
   throws("guard: a topology-aware basis without nPhysDeclared is a typed error",
-    () => call("tpu7"), /no finite nPhysDeclared — REQUIRED since b9 M2/));
+    () => call("tpu7"), /no finite nPhysDeclared — REQUIRED since the adopted model/));
 mutate("tpu7", { decodeTrafficBasis: "expert-coverage", etaRepresentation: "expert-coverage" }, () =>
   throws("guard: expert-coverage without a placement record refuses (no default geometry)",
     () => call("tpu7"), /without a placement record/));
@@ -509,8 +509,8 @@ for (const k of LEGS) {
       String(leg.crossQuantityExposure && leg.crossQuantityExposure.ratio));
     assert(`debt: ${k} carries the ratified "may be ~15× wrong" statement`,
       /may be ~15× wrong/.test(leg.crossQuantityNote), leg.crossQuantityNote);
-    assert(`debt: ${k} names run B's self-contradiction as the reason it is unsettled`,
-      /§C1's own prescription, which §A3 contradicts/.test(leg.crossQuantityNote));
+    assert(`debt: ${k} names the review's self-contradiction as the reason it is unsettled`,
+      /the review's own prescription, which its assumptions contradict/.test(leg.crossQuantityNote));
   }
   assert("debt: legs NOT carrying the surrogate batch tag have no cross-quantity exposure",
     d.legs.filter(r => r.batchQuantity !== "B_rep_consumed_as_B_out_per_chip")

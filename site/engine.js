@@ -1,5 +1,5 @@
 /* Frontier Inference Margins — pure model + data (no DOM). Loaded before app.js; node-importable for tests.
-   Methodology v2.2 (reviewed 2026-07-27 — see /research/im3-integration-design.md): live decode and
+   Methodology v2.2 (reviewed 2026-07-27): live decode and
    prefill use the reviewed roofline registries in engine-data-v22.js through
    engine-roofline-v22.js. Operating points resolve per hardware and service regime; traffic fixes
    sequence length; precision resolves through per-row tuples; q=1/a=1; and stackMult composes as
@@ -15,24 +15,24 @@
 const HW = {
   h100:  { name: "H100 SXM",        flopsFp8: 1.98, fp4: false, hbm: 80,  bw: 3.35, tdp: 0.70, rent: 2.40, capex: 25000, effDec: 0.070, effPre: 0.15, note: "2022. Anchor: DeepSeek served V3/R1 on H800 (H100-class compute). Prefill MFU is reconstructed FRESH-only (the disclosed 73.7k/node input flow includes the 56.3% disk-cache-hit share)." },
   h200:  { name: "H200",            flopsFp8: 1.98, fp4: false, hbm: 141, bw: 4.80, tdp: 0.70, rent: 2.90, capex: 32000, effDec: 0.085, effPre: 0.36, note: "Same compute as H100, 1.76× HBM capacity/1.4× bandwidth → better batching." },
-  gb200: { name: "GB200 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 186, bw: 8.00, tdp: 1.20, rent: 4.50, capex: 45000, effDec: 0.150, effPre: 0.42, note: "72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200's). The vLLM ~10.1k R1 decode observation anchors F4 at b=128/rank and L=3,000. The live coefficient is η=0.315997, and it is an FP4-BASIS coefficient used in the FP8 default render as a DECLARED CONSERVATIVE TRANSFER (owner ruling q-im-fp4-gb200-eta-basis, 2026-08-02; relabel only — no number moves). This sentence used to call it 'the live FP8-basis coefficient', which contradicted the calibration registry's own words on the same value — '0.315997 IS THE FP4-BASIS COEFFICIENT' — and the vetting round of 2026-09-19 found the two sides of the record disagreeing (finding E2). The registry is right and this note now says what it says: 0.315997 reproduces the 10,108 tok/s anchor on the FP4 tuple and yields 6,408.5 on the FP8 tuple, so at the FP8 default the row under-predicts its own best Blackwell measurement by ~1.58x. The source run's precision basis (possibly NVFP4) is not fully pinned, so treat the anchor as an upper one rather than reapplying an FP4 gain. Neocloud rates $3.50-6/hr (Jul 2026). 2026-07-15 dive: AWS Capacity Block $761.904/rack-hr ($10.582/GPU-hr) is the cleanest explicit full-rack market datum; paired with audited MLPerf v6.0 rack throughput it derives $0.881/$0.630/$0.435 per M output tok (Interactive/Server/Offline) — a rack-scale bridge anchor, not fitted into this row's rent (left at the existing neocloud estimate)." },
-  gb300: { name: "GB300 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 288, bw: 8.00, tdp: 1.40, rent: 6.00, capex: 55000, effDec: 0.127, effPre: 0.45, note: "Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. The SGLang >12k tok/s/GPU V4 Pro observation (FP4+MTP, 49B active) is not a fit: its batch and MTP acceptance are not reconstructable. The live η=0.258295 is analyst-set at a declared b=128/rank, L=2,740 operating point, and it is an FP4-BASIS coefficient used in the FP8 render as a DECLARED CONSERVATIVE TRANSFER, derived identically to gb200's (owner ruling q-im-fp4-gb200-eta-basis, 2026-08-02). This sentence used to call it 'the live FP8-basis η', contradicting the calibration registry's '0.258295 IS AN FP4-BASIS COEFFICIENT' on the same value; the registry is right (vetting finding E2, 2026-09-19). Unlike gb200 there is no measured anchor to under-predict — calObs.measured is null — so the 1.69x FP4-to-FP8 gap on this row is a magnitude statement, not a demonstrated error. InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates). 2026-07-15 dive: audited MLPerf v6.0 single-rack results now confirm generated-throughput at scale (NVIDIA Interactive 250,634 / Server 400,437 / Offline 647,076 gen tok/s; Nebius Server 575,580 / Offline 673,936 gen tok/s) — but NO numeric GB300 rack rental rate is public on any major provider checked (AWS/CoreWeave/Nebius/GCP/Azure/OCI/Crusoe, Jul 2026): model GB300 $/M-output as a function of rack-hour price, not a point estimate. Cleanest current Blackwell-Ultra pair is same-provider B300 (node-scale, not rack): Nebius 8-GPU MLPerf Server 60,413 gen tok/s at $7.85/GPU-hr ⇒ $0.289/M output." },
-  tpu7:  { name: "TPU v7 Ironwood", flopsFp8: 4.61, fp4: false, hbm: 192, bw: 7.37, tdp: 1.00, rent: 5.40, capex: 35000, effDec: 0.130, effPre: 0.40, note: "Google's inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). Rent = Google's PUBLISHED 3-year committed rate $5.40/chip-hr (b9 M1, r4 defect D4: the retired $4.20 sat BELOW every public comparator — 3-yr $5.40, DWS Flex $6, on-demand $12 — so it was never a purchasable market rate; this is a low/committed PLANNING rate, and it is labeled as one). 2026-07-15 dive: named-model accelerator-rental anchors exist (Qwen3-Coder-480B, 4 chips, 518.86 tok/s/chip ⇒ $6.42/M output on-demand, $2.89/M 3-yr) — barred from calibration as a RETRO evidence annotation (memo §2), though b9 M1 admits its aggregate-form weight-only efficiency reading (0.528) as one endpoint of this row's platform-native η bridge. The live decode path uses η_dec=0.519, the midpoint of that bridge (0.528 rental anchor / 0.510 Google Ironwood playbook). It read 0.55 with a 0.574 Google endpoint until 2026-09-20, when that endpoint was found to be using Google's COMBINED input-plus-output rate as if it were an output rate; both endpoints are now normalized to one output-only, total-wall-time convention, replacing the joint fleet fit that contained ZERO TPU observations. Google-internal fleet cost still unknown: no public Gemini-SKU→TPU mapping exists — estimates." },
-  trn2:  { name: "Trainium2",       flopsFp8: 1.30, fp4: false, hbm: 96,  bw: 2.90, tdp: 0.50, rent: 2.235, capex: 15000, effDec: 0.055, effPre: 0.30, note: "GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025, confirmed running Claude inference alongside training); Anthropic reported >1M Trainium2 in use across AWS by Apr 2026 — inference/training allocation, utilization and internal rate undisclosed. Rent = AWS Capacity Blocks PUBLISHED $2.235/chip-hr (b9 M1, r4 defect D4: the retired $1.50 sat below the only public comparator). 2026-07-15 dive: a narrow public ENGINEERING anchor exists (AWS Neuron tutorials, batch=1/concurrency=1: Llama 3.3 70B spec-decode $68.90/M output tokens, Llama 3.1 405B $98.65/M) — not a production-TCO measurement, not fitted into this roofline. b9 M1 operating point: the AWS Qwen3-235B recipe on one trn2.48xlarge states replica-global batch 16 online / 64 offline (16 chips, tp_degree 64, attention-DP8, MoE EP32/TP2); the surrogate midpoint 32 replaces the retired b=4, which was an AWS tutorial demo value read as a production point. Throughput remains UNVERIFIED — no matched serving anchor exists — so this leg is scenario-only." },
+  gb200: { name: "GB200 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 186, bw: 8.00, tdp: 1.20, rent: 4.50, capex: 45000, effDec: 0.150, effPre: 0.42, note: "72-GPU NVLink domain (~$3-3.5M/rack ⇒ ~$44-49k/GPU). Per-GPU dense FP8 = 5.0 PF (NVIDIA sparse/dense split, verified — the widely-copied 4.5 PF is B200's). The vLLM ~10.1k R1 decode observation anchors F4 at b=128/rank and L=3,000. The live coefficient is η=0.315997, and it is an FP4-BASIS coefficient used in the FP8 default render as a DECLARED CONSERVATIVE TRANSFER (the adopted decision, 2026-08-02; relabel only — no number moves). This sentence used to call it 'the live FP8-basis coefficient', which contradicted the calibration registry's own words on the same value — '0.315997 IS THE FP4-BASIS COEFFICIENT' — and the vetting round of 2026-09-19 found the two sides of the record disagreeing (finding E2). The registry is right and this note now says what it says: 0.315997 reproduces the 10,108 tok/s anchor on the FP4 tuple and yields 6,408.5 on the FP8 tuple, so at the FP8 default the row under-predicts its own best Blackwell measurement by ~1.58x. The source run's precision basis (possibly NVFP4) is not fully pinned, so treat the anchor as an upper one rather than reapplying an FP4 gain. Neocloud rates $3.50-6/hr (Jul 2026). 2026-07-15 dive: AWS Capacity Block $761.904/rack-hr ($10.582/GPU-hr) is the cleanest explicit full-rack market datum; paired with audited MLPerf v6.0 rack throughput it derives $0.881/$0.630/$0.435 per M output tok (Interactive/Server/Offline) — a rack-scale bridge anchor, not fitted into this row's rent (left at the existing neocloud estimate)." },
+  gb300: { name: "GB300 NVL72",     flopsFp8: 5.00, fp4: true,  hbm: 288, bw: 8.00, tdp: 1.40, rent: 6.00, capex: 55000, effDec: 0.127, effPre: 0.45, note: "Blackwell Ultra: 15 PF dense FP4 (1.67× B200), 288GB HBM. The SGLang >12k tok/s/GPU V4 Pro observation (FP4+MTP, 49B active) is not a fit: its batch and MTP acceptance are not reconstructable. The live η=0.258295 is analyst-set at a declared b=128/rank, L=2,740 operating point, and it is an FP4-BASIS coefficient used in the FP8 render as a DECLARED CONSERVATIVE TRANSFER, derived identically to gb200's (the adopted decision, 2026-08-02). This sentence used to call it 'the live FP8-basis η', contradicting the calibration registry's '0.258295 IS AN FP4-BASIS COEFFICIENT' on the same value; the registry is right (vetting finding E2, 2026-09-19). Unlike gb200 there is no measured anchor to under-predict — calObs.measured is null — so the 1.69x FP4-to-FP8 gap on this row is a magnitude statement, not a demonstrated error. InferenceX ~17× H100 FP8. xjdr served GLM 5.2 on these ($4-7/hr early rates). 2026-07-15 dive: audited MLPerf v6.0 single-rack results now confirm generated-throughput at scale (NVIDIA Interactive 250,634 / Server 400,437 / Offline 647,076 gen tok/s; Nebius Server 575,580 / Offline 673,936 gen tok/s) — but NO numeric GB300 rack rental rate is public on any major provider checked (AWS/CoreWeave/Nebius/GCP/Azure/OCI/Crusoe, Jul 2026): model GB300 $/M-output as a function of rack-hour price, not a point estimate. Cleanest current Blackwell-Ultra pair is same-provider B300 (node-scale, not rack): Nebius 8-GPU MLPerf Server 60,413 gen tok/s at $7.85/GPU-hr ⇒ $0.289/M output." },
+  tpu7:  { name: "TPU v7 Ironwood", flopsFp8: 4.61, fp4: false, hbm: 192, bw: 7.37, tdp: 1.00, rent: 5.40, capex: 35000, effDec: 0.130, effPre: 0.40, note: "Google's inference TPU (GA Mar 31, 2026): 4,614 TF FP8 ≈ B200-class, 9,216-chip pods. Anthropic committed up to ~1M TPUs (Oct 2025). Rent = Google's PUBLISHED 3-year committed rate $5.40/chip-hr (the adopted model: the retired $4.20 sat BELOW every public comparator — 3-yr $5.40, DWS Flex $6, on-demand $12 — so it was never a purchasable market rate; this is a low/committed PLANNING rate, and it is labeled as one). 2026-07-15 dive: named-model accelerator-rental anchors exist (Qwen3-Coder-480B, 4 chips, 518.86 tok/s/chip ⇒ $6.42/M output on-demand, $2.89/M 3-yr) — barred from calibration as a RETRO evidence annotation (the design analysis), though the adopted model admits its aggregate-form weight-only efficiency reading (0.528) as one endpoint of this row's platform-native η bridge. The live decode path uses η_dec=0.519, the midpoint of that bridge (0.528 rental anchor / 0.510 Google Ironwood playbook). It read 0.55 with a 0.574 Google endpoint until 2026-09-20, when that endpoint was found to be using Google's COMBINED input-plus-output rate as if it were an output rate; both endpoints are now normalized to one output-only, total-wall-time convention, replacing the joint fleet fit that contained ZERO TPU observations. Google-internal fleet cost still unknown: no public Gemini-SKU→TPU mapping exists — estimates." },
+  trn2:  { name: "Trainium2",       flopsFp8: 1.30, fp4: false, hbm: 96,  bw: 2.90, tdp: 0.50, rent: 2.235, capex: 15000, effDec: 0.055, effPre: 0.30, note: "GA Dec 2024. Project Rainier launched with ~500k Trainium2 for Anthropic (activated ~Nov 2025, confirmed running Claude inference alongside training); Anthropic reported >1M Trainium2 in use across AWS by Apr 2026 — inference/training allocation, utilization and internal rate undisclosed. Rent = AWS Capacity Blocks PUBLISHED $2.235/chip-hr (the adopted model: the retired $1.50 sat below the only public comparator). 2026-07-15 dive: a narrow public ENGINEERING anchor exists (AWS Neuron tutorials, batch=1/concurrency=1: Llama 3.3 70B spec-decode $68.90/M output tokens, Llama 3.1 405B $98.65/M) — not a production-TCO measurement, not fitted into this roofline. the adopted model operating point: the AWS Qwen3-235B recipe on one trn2.48xlarge states replica-global batch 16 online / 64 offline (16 chips, tp_degree 64, attention-DP8, MoE EP32/TP2); the surrogate midpoint 32 replaces the retired b=4, which was an AWS tutorial demo value read as a production point. Throughput remains UNVERIFIED — no matched serving anchor exists — so this leg is scenario-only." },
   trn3:  { name: "Trainium3",       flopsFp8: 2.51, fp4: false, hbm: 144, bw: 4.90, tdp: 0.80, rent: 2.20, capex: 20000, effDec: 0.080, effPre: 0.34, note: "GA Dec 2025: 144-chip UltraServers, 362 PF FP8 ⇒ 2.51 PF/chip, 144GB HBM3e. AWS's aggressive cost-per-token play — pricing estimates. 2026-07-15 dive: AWS has published a GPT-OSS-120B inference recipe but no achieved tok/s and no public Trn3 instance/UltraServer price — neither side of $/token is public; NO public serving anchor of any kind (confirmed negative)." },
   // China-market accelerators — what DeepSeek/GLM/Kimi actually serve on.
   // Rents = annual-commit IDC/private-cloud rates (GPT Pro China-hardware dive, Jul 2026);
   // the same chip can cost 3-10x more on hyperscaler on-demand — use the rent multiplier for that.
-  h800:  { name: "H800 (China)",    flopsFp8: 1.98, fp4: false, hbm: 80,  bw: 3.35, tdp: 0.70, rent: 1.75, capex: 40000, effDec: 0.070, effPre: 0.15, note: "H100 compute with NVLink capped at 400GB/s (export SKU, finite pre-ban stock — capex carries the scarcity premium). THE H800/H100 DIFFERENTIAL, STATED (d-im-h800, owner note aca09d 2026-08-18; grounded on the NVIDIA H800 datasheet 2631447 vs the H100 SXM datasheet, Lenovo Press LP1814, Tencent Cloud HCCPNV5): the export SKU differs from the H100 SXM in NVLink (400 vs 900 GB/s aggregate bidirectional) and FP64 (1 vs 34 TF) ONLY — FP8/BF16 tensor rate, 80 GB HBM3, 3.35 TB/s and 700 W are identical, so nothing else that reaches a serving number differs. CORRECTION to the 2026-08-16 annotation on this row (owner verbatim: 'H800 numbers are clearly broken'), which said the cap is modelled nowhere and that this engine has no fabric term on these rows: it does — HW_ROOFLINE carries 400e9 here and 900e9 on h100, and the live roofline consumes both (decode t_N = b·D/fabric, prefill t_fabric = D/fabric). What is true is that at every expert-parallel operating point this page ships the fabric term is SLACK under the frozen max() form (≈3% of the binding memory term at the page default, ≈13% on kimi), so this row and h100 render identical throughput, and that h100/h200 INHERIT the efficiency FITTED on this row (F1: DeepSeek's production disclosure ran on H800s). This row is therefore the MEASURED part; the borrowing rows are where the assumption lives, and the page's implicit assumption has been that the cap costs nothing. That assumption is now a NAMED, ADJUSTABLE fit-transfer assumption — nvlinkCapMinRatio, default 1.00 = this historical model — the assumed MINIMUM ratio of a borrowing row over its own capped counterfactual, applied per phase to the borrowing rows only, never here, never stacking on an advantage the roofline already renders, with the engine\'s own serial-exposure counterfactual (≈1.005× at the page default) and the sensitivity computed beside it. On the dense tensor-parallel donor the fabric term already BINDS prefill and the H100 renders ≈2.25× this row's prefill throughput with no lever at all. Why this row still renders a HIGHER margin than the H100 at the default: identical throughput at $1.75/hr against $2.40/hr — a rent difference the page states, not a finding about export SKUs. Registered evidence task E-2026-08-16-c (a matched capped-vs-uncapped serving observation) stays open; no such observation is public. THE DeepSeek V3/R1 workhorse. Prefill MFU = FRESH-only reconstruction (~4,026 tok/s/GPU net of the 56.3% disk-cache share; the raw 9,212 aggregate includes cache hits). Annual-commit IDC rate $1.47-2.06/hr mid-2026; DeepSeek's 2025 disclosure assumed $2/hr." },
+  h800:  { name: "H800 (China)",    flopsFp8: 1.98, fp4: false, hbm: 80,  bw: 3.35, tdp: 0.70, rent: 1.75, capex: 40000, effDec: 0.070, effPre: 0.15, note: "H100 compute with NVLink capped at 400GB/s (export SKU, finite pre-ban stock — capex carries the scarcity premium). THE H800/H100 DIFFERENTIAL, STATED (the adopted decision, the author's note 2026-08-18; grounded on the NVIDIA H800 datasheet 2631447 vs the H100 SXM datasheet, Lenovo Press LP1814, Tencent Cloud HCCPNV5): the export SKU differs from the H100 SXM in NVLink (400 vs 900 GB/s aggregate bidirectional) and FP64 (1 vs 34 TF) ONLY — FP8/BF16 tensor rate, 80 GB HBM3, 3.35 TB/s and 700 W are identical, so nothing else that reaches a serving number differs. CORRECTION to the 2026-08-16 annotation on this row ('H800 numbers are clearly broken'), which said the cap is modelled nowhere and that this engine has no fabric term on these rows: it does — HW_ROOFLINE carries 400e9 here and 900e9 on h100, and the live roofline consumes both (decode t_N = b·D/fabric, prefill t_fabric = D/fabric). What is true is that at every expert-parallel operating point this page ships the fabric term is SLACK under the frozen max() form (≈3% of the binding memory term at the page default, ≈13% on kimi), so this row and h100 render identical throughput, and that h100/h200 INHERIT the efficiency FITTED on this row (F1: DeepSeek's production disclosure ran on H800s). This row is therefore the MEASURED part; the borrowing rows are where the assumption lives, and the page's implicit assumption has been that the cap costs nothing. That assumption is now a NAMED, ADJUSTABLE fit-transfer assumption — nvlinkCapMinRatio, default 1.00 = this historical model — the assumed MINIMUM ratio of a borrowing row over its own capped counterfactual, applied per phase to the borrowing rows only, never here, never stacking on an advantage the roofline already renders, with the engine\'s own serial-exposure counterfactual (≈1.005× at the page default) and the sensitivity computed beside it. On the dense tensor-parallel donor the fabric term already BINDS prefill and the H100 renders ≈2.25× this row's prefill throughput with no lever at all. Why this row still renders a HIGHER margin than the H100 at the default: identical throughput at $1.75/hr against $2.40/hr — a rent difference the page states, not a finding about export SKUs. Registered evidence task E-2026-08-16-c (a matched capped-vs-uncapped serving observation) stays open; no such observation is public. THE DeepSeek V3/R1 workhorse. Prefill MFU = FRESH-only reconstruction (~4,026 tok/s/GPU net of the 56.3% disk-cache share; the raw 9,212 aggregate includes cache hits). Annual-commit IDC rate $1.47-2.06/hr mid-2026; DeepSeek's 2025 disclosure assumed $2/hr." },
   h20:   { name: "H20 (China)",     flopsFp8: 0.296, fp4: false, hbm: 96, bw: 4.00, tdp: 0.40, rent: 1.00, capex: 20000, effDec: 0.170, effPre: 0.50, note: "The China-legal NVIDIA SKU: only 296 TF dense FP8 but 4.0 TB/s HBM — decode is bandwidth-bound, so it serves far better than its FLOPS suggest (hence the high effective MFU vs a tiny denominator). This row's executable roofline coefficient is the source-informed-neutral η_dec=0.217022; it maps the legacy effDec=0.170 throughput basis to the hardware dive's ~680 tok/s recommendation and does NOT fit Ant Group's relaxed <70ms production observation (714 tok/s at b=48, L=4,096, one-step/two-draft-token MTP with ~1.8-1.9 accepted tokens). Rental class matters: same chip spans ~$0.76 (IDC annual) to $7+ (hyperscaler on-demand)." },
-  ascend:{ name: "Ascend 910C",     flopsFp8: 1.504, fp4: false, hbm: 128, bw: 3.20, tdp: 0.60, rent: 1.95, capex: 23000, effDec: 0.070, effPre: 0.28, note: "Huawei's dual-die flagship (SMIC 7nm). NO native FP8 — 8-bit here means INT8 (1.504 PF per Huawei's Atlas spec; a widely-quoted 1,054 figure is a typo in the CloudMatrix paper). This row's executable roofline coefficient is the source-informed-neutral η_dec=0.299324; it maps the legacy effDec=0.070 throughput basis to the hardware dive's ~1,420 tok/s recommendation on an R1-class workload and does NOT fit Huawei's optimized source observation (1,943 tok/s at b=96, L=4,096, one speculative token at assumed 70% acceptance, q=2/a=1.7). DeepSeek's internal '60% of H100' eval implies a lower independent efficiency estimate (~5.5-6.5% of peak FLOPs). Rent = Huatai procurement award ($1.71-2.25/hr); CloudMatrix 384 ≈ RMB 60M. 2026-07-15 dive: a full 384-card CloudMatrix system (FlexNPU, arXiv:2606.04415) serves DeepSeek-R1 W8A8 at ≈633,000 generated tok/s system-wide under TTFT≤1s/TPOT≤50ms. CLOSED (owner ruling 2026-07-18, memo §9 'CM384 ruling'): these are EVIDENCE-RECORD ANNOTATIONS — never a selectable scenario, an operating point, or a calibration input — delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged; decode-pool standalone ceiling: 2,885 tok/s/decode-card ⇒ 14.2%, capacity ceiling, prefill hardware excluded. The full-system point brackets (corroborates) this row's deployed 7% default; the decode-pool ceiling does not (a different standalone measurand, ~1.75× above the full-system point) — neither is fitted into this row. No public CM384 hourly rental price exists — throughput anchored, cost unanchored. Cross-source proxy for the OLDER 910B chip (not this row): JD xLLM 709 gen tok/s/card × CTyun RMB 38.45/hr ⇒ ≈$2.09/M output (range $1.61-2.80/M), medium-low confidence. Ascend 920 has no official SKU, benchmark, deployment or price (Huawei's roadmap goes 910C→950PR/950DT→960→970, no 920) — excluded from this model." },
+  ascend:{ name: "Ascend 910C",     flopsFp8: 1.504, fp4: false, hbm: 128, bw: 3.20, tdp: 0.60, rent: 1.95, capex: 23000, effDec: 0.070, effPre: 0.28, note: "Huawei's dual-die flagship (SMIC 7nm). NO native FP8 — 8-bit here means INT8 (1.504 PF per Huawei's Atlas spec; a widely-quoted 1,054 figure is a typo in the CloudMatrix paper). This row's executable roofline coefficient is the source-informed-neutral η_dec=0.299324; it maps the legacy effDec=0.070 throughput basis to the hardware dive's ~1,420 tok/s recommendation on an R1-class workload and does NOT fit Huawei's optimized source observation (1,943 tok/s at b=96, L=4,096, one speculative token at assumed 70% acceptance, q=2/a=1.7). DeepSeek's internal '60% of H100' eval implies a lower independent efficiency estimate (~5.5-6.5% of peak FLOPs). Rent = Huatai procurement award ($1.71-2.25/hr); CloudMatrix 384 ≈ RMB 60M. 2026-07-15 dive: a full 384-card CloudMatrix system (FlexNPU, arXiv:2606.04415) serves DeepSeek-R1 W8A8 at ≈633,000 generated tok/s system-wide under TTFT≤1s/TPOT≤50ms. CLOSED (the adopted decision 2026-07-18, the design analysis 'CM384 ruling'): these are EVIDENCE-RECORD ANNOTATIONS — never a selectable scenario, an operating point, or a calibration input — delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged; decode-pool standalone ceiling: 2,885 tok/s/decode-card ⇒ 14.2%, capacity ceiling, prefill hardware excluded. The full-system point brackets (corroborates) this row's deployed 7% default; the decode-pool ceiling does not (a different standalone measurand, ~1.75× above the full-system point) — neither is fitted into this row. No public CM384 hourly rental price exists — throughput anchored, cost unanchored. Cross-source proxy for the OLDER 910B chip (not this row): JD xLLM 709 gen tok/s/card × CTyun RMB 38.45/hr ⇒ ≈$2.09/M output (range $1.61-2.80/M), medium-low confidence. Ascend 920 has no official SKU, benchmark, deployment or price (Huawei's roadmap goes 910C→950PR/950DT→960→970, no 920) — excluded from this model." },
 };
 const HW_ORDER = ["h100", "h200", "gb200", "gb300", "h800", "h20", "tpu7", "trn2", "trn3", "ascend"];
 // generation timeline for the gen chart (adds a Rubin projection)
 const GEN_TIMELINE = ["h100", "h200", "gb200", "gb300"];
 const RUBIN = { name: "Vera Rubin NVL72 (proj.)", flopsFp8: 17.5, fp4: true, hbm: 288, bw: 22.0, tdp: 1.80, rent: 8.50, capex: 120000, effDec: 0.13, effPre: 0.45, note: "Published NVIDIA hardware shape (verified Jul 2026): 17.5 PF dense FP8/FP6 and 4 PF dense FP16/BF16 per GPU, 288GB HBM4 @ 22 TB/s; the headline ~50 PF figure is SPARSE NVFP4 inference. No serving anchor exists — MFU, rent and capex are projections. At the 2026-07-15 dive there was neither an MLPerf submission nor an InferenceX result (listed 'Coming Soon'), and no public rental/purchase price for Rubin or Rubin Ultra — absolute economics remain unanchored here. InferenceX has since published preview Vera Rubin NVL72 results (DeepSeek V4 Pro, AgentX; seen 2026-10-04) that this row does not yet use. NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, 32K-in/8K-out): up to 10× tok/s/MW and ~1/10 cost per M tokens vs GB200 NVL72 — not an absolute anchor. Current rack-scale product is Vera Rubin NVL72; do not collapse NVL144/Rubin CPX/Rubin NVL8/R100/VR200/Rubin Ultra into one generic 'Rubin' figure." };
 
-// Slice-4 cleanup (memo §13 backlog, packet-recorded): the retired scalar multiplier VALUES are
+// Dependency cleanup: the retired scalar multiplier VALUES are
 // deleted — they never participated in the v2.2 compute path (precision and service regime
 // resolve through the reviewed registries in engine-data-v22.js/engine-roofline-v22.js) and their
 // presence was an attractive accidental-reuse point. Only the enum KEY LISTS survive, for codec/
@@ -41,7 +41,7 @@ const PRECISION_ENUM_KEYS = ["bf16", "fp8", "fp4"];
 const INTERACT_ENUM_KEYS = ["batch", "balanced", "fast"];
 
 /* ---------- traffic-mix profiles (v2.1.2) ----------
-   MOVED to engine-data-v22.js (slice-4 cleanup, memo §13 backlog): this registry used to live
+   MOVED to engine-data-v22.js (slice-4 cleanup,  backlog): this registry used to live
    here, and engine-roofline-v22.js read it back from this file at its own parse time
    (RD_ENGINE.TRAFFIC_PROFILES) — the one reverse (roofline -> engine) dependency that forced the
    data -> engine -> roofline -> app script order. Moving the data to engine-data-v22.js (which
@@ -56,7 +56,7 @@ const ED_TRAFFIC_PROFILES = (typeof module !== "undefined" && module.exports)
   ? require("./engine-data-v22.js").TRAFFIC_PROFILES
   : TRAFFIC_PROFILES; // browser: the global engine-data-v22.js already declared (loaded first)
 
-/* IM4 slice B: fleet registries from the data layer (same idiom as ED_TRAFFIC_PROFILES). */
+/* Fleet data: fleet registries from the data layer (same idiom as ED_TRAFFIC_PROFILES). */
 const ED_FLEET = (typeof module !== "undefined" && module.exports)
   ? (() => { const d = require("./engine-data-v22.js");
       return { FLEETS: d.FLEETS, PRICE_EVIDENCE: d.PRICE_EVIDENCE, CALIBRATION: d.CALIBRATION,
@@ -79,13 +79,13 @@ const ED_CAPACITY = (typeof module !== "undefined" && module.exports)
                WORKER_CANDIDATE_SOURCES: d.WORKER_CANDIDATE_SOURCES }; })()
   : { HW_DOMAINS, OPERATING_POINTS, WEIGHT_PLACEMENT, PRECISION_TIER_MAP, WORKER_CANDIDATE_SOURCES };
 
-/* im-arc T2 (memo research/im-arc-t2-sections-memo.md §6): the generic
+/* : the generic
    electricity default reads the region registry at module parse, so its adopted
    midpoint and the registry cannot drift into two sources of truth. */
 const ED_DC_REGIONS = (typeof module !== "undefined" && module.exports)
   ? require("./engine-data-dc-v1.js").REGIONS : REGIONS;
 
-/* im-arc T4 fold (2026-08-24), memo §4 [F7]: the heterogeneous planning-rent vector is SELECTED
+/*  (2026-08-24),  [F7]: the heterogeneous planning-rent vector is SELECTED
    from the quote registry, never typed into a hardware row. `RENT_POLICY.planningPolicy` states
    what "one" is — the low/committed planning observation for each hardware — and
    `defaultRateId` names the quote that observation lives in. A null selection is the honest
@@ -97,7 +97,7 @@ const ED_DC_RENT_QUOTES = (typeof module !== "undefined" && module.exports)
   ? require("./engine-data-dc-v1.js").RENT_QUOTES : RENT_QUOTES;
 const ED_DC_RENT_POLICY = (typeof module !== "undefined" && module.exports)
   ? require("./engine-data-dc-v1.js").RENT_POLICY : RENT_POLICY;
-/* The ONE closed schema (T2 memo §1.1): UI, engine and MCP read the same enum lists and the
+/* The ONE closed schema (T2 ): UI, engine and MCP read the same enum lists and the
    same class tables. Nothing here re-declares a band the registry already owns. */
 const ED_DC_SCHEMA = (typeof module !== "undefined" && module.exports)
   ? require("./engine-data-dc-v1.js").DC_SCHEMA : DC_SCHEMA;
@@ -108,7 +108,7 @@ for (const key of HW_ORDER) {
 }
 function hardwareRow(hwKey) { return HW[hwKey] || (hwKey === "rubin" ? RUBIN : null); }
 
-/* im-arc T4 fold (2026-08-24), memo §2 [F5]: `capexScope` describes the INPUT SCOPE of the
+/*  (2026-08-24),  [F5]: `capexScope` describes the INPUT SCOPE of the
    observed capex, never the product form. It is the field that closes the double count the TCO
    synthesis named: an installed/all-in observation multiplied by the generic 1.30 rendered the
    $40,000 H800 as $52,000 and the $20,000 H20 as $26,000. A finished-system observation already
@@ -128,7 +128,7 @@ const T4_HARDWARE_CAPEX = Object.freeze({
   h20: { capex: 20000, capexScope: "installed-system",
     prov: "HELD as a provisional point with its scope corrected to installed/all-in, so its overhead is 1.00 and the page no longer renders it as $26.0k (2026-08-23 TCO synthesis, both arms)." },
   tpu7: { capex: 25000, capexScope: "installed-system",
-    prov: "analyst-set dated anchor carried by BOTH arms: SemiAnalysis, 2025-11-28, reports ~400,000 TPU v7 Ironwoods worth ~$10 billion in FINISHED RACKS, i.e. $10bn / 400,000 = $25,000 per chip. That observation is already at installed-system scope, which is exactly what justifies the 1.00 overhead here — and it is registered on THIS capex row and nowhere else (memo §1.3, fold F5.4). It replaces the prior $35,000 point plus a generic 1.30." },
+    prov: "analyst-set dated anchor carried by BOTH arms: SemiAnalysis, 2025-11-28, reports ~400,000 TPU v7 Ironwoods worth ~$10 billion in FINISHED RACKS, i.e. $10bn / 400,000 = $25,000 per chip. That observation is already at installed-system scope, which is exactly what justifies the 1.00 overhead here — and it is registered on THIS capex row and nowhere else (the author's capital-cost analysis). It replaces the prior $35,000 point plus a generic 1.30." },
   trn2: { capex: 15000, capexScope: null,
     prov: "HELD as a provisional point: both arms mark their proposed bands as inference (2026-08-23 TCO synthesis)." },
   trn3: { capex: 20000, capexScope: null,
@@ -144,19 +144,19 @@ for (const key of HW_ORDER) {
 RUBIN.capexScope = null;
 function capexProvenanceFor(hwKey) {
   const row = T4_HARDWARE_CAPEX[hwKey];
-  return row ? row.prov : "no im-arc T4 capex provenance is registered for donor " + hwKey;
+  return row ? row.prov : "no the registry capex provenance is registered for donor " + hwKey;
 }
 /* The overhead a row takes follows its SCOPE. A row with no established scope keeps the
    scenario dial, which is also what a section-level `tco.clusterOh` override still overrides. */
 function clusterOverheadFor(hwKey, s) {
   const state = s || DEFAULTS;
-  /* A historical state may declare the pre-fold semantics explicitly (memo §6 pin bundle). */
+  /* A historical state may declare the previous semantics explicitly (historical contract). */
   if (state.capexScopeMode === "legacy-global") return state.clusterOh;
   const scope = (hardwareRow(hwKey) || {}).capexScope || null;
   if (!scope) return state.clusterOh;
   return ED_DC_SCHEMA.CLUSTER_OH_BY_CAPEX_SCOPE[scope].mid;
 }
-/* im-arc T4 fold round 4 (2026-08-25), memo :41: "...previews the effective clustered capex".
+/* Adopted 2026-08-25: "...previews the effective clustered capex".
    A reader who types a capex is entitled to see what the model will actually spend per chip once
    the scope's overhead is applied — otherwise the scope is a form field whose consequence is
    invisible until it moves a margin. One row per stated capex, with the arithmetic spelled out.
@@ -188,10 +188,10 @@ function readerCapexPreview(customFleet, s) {
   }
   return out;
 }
-/* im-arc T4 fold round 4 (2026-08-25), memo :41/:123. The overhead a CLUSTERED capex takes must
+/* Adopted 2026-08-25. The overhead a CLUSTERED capex takes must
    follow the scope of the observation it is clustering. A registry row uses its own registered
    scope; a capex the READER states uses the scope the reader declared with it — never the row's,
-   which is the "silently assumes bare card" the memo forbids. An explicit section clusterOh still
+   which is the "silently assumes bare card" the contract forbids. An explicit section clusterOh still
    wins over both, because that is a reader stating the overhead directly. */
 function clusterOverheadForLeg(hw, s, cfLeg) {
   if (cfLeg && cfLeg.clusterOh != null) return cfLeg.clusterOh;
@@ -232,7 +232,7 @@ function tcoDefaultBands() {
       asOf: "2026-08-23" },
     costOfCapitalPct: { lo: 6, mid: 8.5, hi: 13, basis: "analyst-set", observationKind: "selected-span",
       costCorners: { bottom: 6, middle: 8.5, top: 13 },
-      source: "Both arms converge on the endpoints and bracket the middle. Consumed ONLY when capitalRecovery is on (memo §2.1).",
+      source: "Both arms converge on the endpoints and bracket the middle. Consumed ONLY when capitalRecovery is on (the design analysis).",
       asOf: "2026-08-23" },
     clusterOhByCapexScope: structuredClone(ED_DC_SCHEMA.CLUSTER_OH_BY_CAPEX_SCOPE),
     pueByFacilityClass: structuredClone(ED_DC_SCHEMA.PUE_CLASS_BANDS),
@@ -288,11 +288,11 @@ function rentQuoteByClass(hwKey, rateClass) {
   return rentQuotesFor(hwKey).find(quote => quote.rateClass === rateClass) || null;
 }
 
-/* b9 M4 (memo §3.1): the custom-fleet runtime source. Script order is data → roofline →
+/* : the custom-fleet runtime source. Script order is data → roofline →
    engine → custom-fleets → app, so this file NEVER references custom-fleets symbols at
    parse time — custom-fleets.js registers its store here at load (browser), and node
    callers self-register on first use through the lazy require below. Resolution is
-   call-time only; definitions live in the side store, never in scenario state (the M3
+   call-time only; definitions live in the side store, never in scenario state (the
    side-registry/state-purity rule). */
 let CUSTOM_FLEET_SOURCE = null;
 function registerCustomFleetSource(src) { CUSTOM_FLEET_SOURCE = src; }
@@ -311,11 +311,11 @@ function isCustomFleetId(id) {
 /* ---------- state ---------- */
 const DEFAULTS = {
   active: 300, total: 2500, precision: "fp8",
-  customDonor: "dsr1", // codec axis (memo §3 R2 contract): only meaningful for model="custom";
+  customDonor: "dsr1", // codec axis (codec contract): only meaningful for model="custom";
   // resolveArch() ignores it for every other model. Kept in sync by test with
   // CUSTOM_DONOR_ENUM.values (engine-data-v22.js) / CUSTOM_DONOR_BOUNDS (engine-roofline-v22.js) —
   // hardcoded here rather than referenced, because SCENARIO_BOUNDS below evaluates at engine.js's
-  // own module-parse time. IM3 exit-gate fix 5 (P2, skeptic + risk-analyst): this comment
+  // own module-parse time. Documentation correction: this comment
   // previously claimed the browser script order was data -> engine -> roofline -> app -- stale
   // since the slice-4 cleanup adopted data -> roofline -> engine -> app (engine.js now loads
   // AFTER engine-data-v22.js, which is what actually matters here: engine-data-v22.js has always
@@ -323,30 +323,30 @@ const DEFAULTS = {
   // the current order and why it is safe).
   ioRatio: 15, cacheHit: 60, /* owned by the TRAFFIC MIX axis since v2.1.2 — resolveTraffic() writes these */ billCacheHit: null, /* billable cached-input share; null = assumed equal to serving reuse (labeled assumption — no provider discloses both) */ cacheCost: 5, interact: "balanced",
   hwMode: "rent", rentMult: 1.0,
-  /* row 499: PER-LEG rent multipliers, applied on top of the global `rentMult` under `hwMode:"rent"`
+  /* the recorded review: PER-LEG rent multipliers, applied on top of the global `rentMult` under `hwMode:"rent"`
      only. null = no per-leg posture, and the multiplication never happens — every pre-row-499 number
      is bit-identical (the `specDec: 1.0` precedent below). It exists because a per-leg procurement
-     posture is a real analyst position this engine could not express: row 492 found that the single
+     posture is a real analyst position this engine could not express: the recorded review found that the single
      global multiplier reproducing one adjudicator's margin (0.7308) would assert a ~27% NVIDIA
      discount that adjudicator explicitly declined to claim, while under-stating the TPU discount
      that was the whole point of the posture. A fit wearing a posture's clothes is the one thing this
      page refuses, so the engine got the capability instead of the preset getting a fudge. Keys are
      HW_ORDER ids; values share `rentMult`'s bounds. */
   rentMultLeg: null,
-  /* row 499 (owner ruling ccb4a1-series, COMPLETENESS DOCTRINE): the FAMILY-WIDE companion to the
+  /* the recorded review (the adopted decision, COMPLETENESS DOCTRINE): the FAMILY-WIDE companion to the
      per-accelerator map. Ruling verbatim in effect: each accelerator individually variable, "and a
      family-wide option for the less sure". Resolution order in hwHourCost is per-leg → family →
      global, so a reader who only knows "TPU is discounted, I don't know how it splits across
      generations" moves one control and every TPU leg follows. null = declared nothing. */
   rentMultFam: null,
-  /* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): an absolute
+  /* Adopted 2026-08-22: an absolute
      reader-stated rent replaces the registered rate rather than multiplying it. The donor-keyed
      map wins over the fleet-wide value; both null defaults are inert and preserve every shipped
      scenario byte-for-byte. Custom-fleet duplicates inherit their donor key, so one declaration
      applies to every leg of that donor even when a leg carries its own rentPerHr override. */
   rentAbsAll: null,
   rentAbsLeg: null,
-  /* im-arc T4 fold (2026-08-24), memo §6 [F10]: the historical PIN BUNDLE needs every arithmetic
+  /*  (2026-08-24),  [F10]: the historical PIN BUNDLE needs every arithmetic
      sink a historical state can reach to be expressible IN THAT STATE. Rent already was
      (`rentAbsLeg`); capex and the cluster-overhead SEMANTICS were not, so an archived reading
      could not reproduce once capex points moved and the overhead became scope-derived. These two
@@ -366,7 +366,7 @@ const DEFAULTS = {
      before the fold — the semantics an archived reading was computed under, and the only reason
      this key exists. It is never offered as a reader control. */
   capexScopeMode: "scoped",
-  /* row 499 step 2 (1/2/3-point sliders): the RANGES a reader or an adjudicator declared, keyed by
+  /* the recorded review step 2 (1/2/3-point sliders): the RANGES a reader or an adjudicator declared, keyed by
      dial id. `null` = every dial is a single point, which is what every scenario before this feature
      was, so the arithmetic is untouched: nothing reads this map except the band derivation.
      Shape: { "<dialId>": { lo, mid, hi } } — `mid` is the reader's stated MEDIAN, not a computed
@@ -376,9 +376,9 @@ const DEFAULTS = {
      it cannot justify. Two-point ranges simply omit `mid`. */
   dialRanges: null,
   util: 50, stackMult: 1.0,
-  specDec: 1.0, /* b9 spec-decode LEVER (memo D-SD-6): 1.00 = NO CREDIT. x * 1.0 === x exactly in
+  specDec: 1.0, /* spec-decode LEVER (the design requirements): 1.00 = NO CREDIT. x * 1.0 === x exactly in
      IEEE-754, so the default path is bit-identical to the pre-leg engine. */
-  /* d-im-h800 (owner note aca09d, 2026-08-18; Pro review folded): the H800/H100 differential as a
+  /* the adopted decision (the author's note, 2026-08-18; Pro review folded): the H800/H100 differential as a
      NAMED, ADJUSTABLE assumption — the FIT-TRANSFER ASSUMPTION. The H800 row is the MEASURED part
      (F1: DeepSeek's production disclosure ran on H800s) and h100/h200 wear its fitted efficiency; the
      fit was obtained on the capped system and MAY include cap-related effects that cannot be
@@ -393,22 +393,22 @@ const DEFAULTS = {
      the disposition says `already-modeled`). Both phases, one ratio, each phase against its own
      counterfactual; disclosed per phase on the leg. */
   nvlinkCapMinRatio: 1.0,
-  /* b9 M5 (memo §8.1/§9.1): the two BROAD-UNSPECIFIED lever groups. `trendMonths`/`trendRate`
+  /* : the two BROAD-UNSPECIFIED lever groups. `trendMonths`/`trendRate`
      are the algorithmic-lead prior (E = trendRate^(trendMonths/12)); applyPresetSettings seeds
-     trendMonths from the selected model's LAB (a default, never a user edit — §10.3), so the
+     trendMonths from the selected model's LAB (a default, never a user edit — ), so the
      global 0 here is only the no-identity floor. `fam*` are the per-hardware-family efficiency
-     multipliers. Both realize as ONE post-roofline throughput multiplier (§8.2, decision D-13). */
+     multipliers. Both realize as ONE post-roofline throughput multiplier (decision D-13). */
   trendMonths: 0, trendRate: 3,
   famNvidia: 1.0, famTpu: 1.0, famTrainium: 1.0, famAscend: 1.0,
   kwh: ED_DC_REGIONS["us-industrial"].usdPerKwh.mid,
-  /* im-arc T4 fold (2026-08-24), memo §2: the generic TCO defaults come onto the dated TCO
+  /*  (2026-08-24), : the generic TCO defaults come onto the dated TCO
      evidence. `dcPerW` moves 12 -> 12.5 (the frontier liquid-ready middle over dated JLL /
      Turner & Townsend / Epoch / Abilene anchors), and the facility life that was a LITERAL 12
      inside the shell term becomes the named default `dcLifeYears` with an audited 10/15/20
      band. `pue` is deliberately HELD at 1.25 — the class bands are analyst-set fallbacks and no
      facility receipt establishes a liquid-AI-hall PUE. `opexPct` is a RELABEL only. */
   pue: 1.25, dcPerW: 12.5, lifeYears: 5, dcLifeYears: 15, clusterOh: 1.30, opexPct: 8,
-  /* im-arc T4 fold (2026-08-24), memo §2.1 [F6]: capital recovery is an explicit NAMED BASIS
+  /*  (2026-08-24),  [F6]: capital recovery is an explicit NAMED BASIS
      with ONE canonical default — off — identical across the basic UI, the advanced UI, the v7
      codec and MCP. The advanced tier EXPOSES the basis and its disclosed delta; opening it does
      not activate it, because a display tier may never mutate arithmetic. `off` is inert: the
@@ -430,7 +430,7 @@ const MODELS = [
        how a stale-loudness alarm fired on schedule demanding a remedy that had been cancelled three
        weeks earlier — is recorded ONCE, in BACKLOG.md section 2, rather than restated across source,
        two test twins, notes and the dossier where the copies can drift apart
-       (GPT Pro pr-20260902T175643Z-034d27 finding 9). The schema below is the durable part: current
+       (GPT Pro a research run on 2026-09-02 finding 9). The schema below is the durable part: current
        / scheduled / verification / history, validated by tests/tariff-contract.mjs, which binds
        current.priceIn/priceOut to what the engine computes with. */
     tariff: {
@@ -487,12 +487,12 @@ const MODELS = [
                       procedure: "the tariff-verification procedure in this project's backlog (BACKLOG.md section 2)",
                       queueId: "Q-AUTO-2026-09-29" },
       knownStaleInputs: [
-        /* CLOSED 2026-09-10 by owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok. The
+        /* CLOSED 2026-09-10 by the adopted decision. The
            adopted value IS the verified value now; the row is kept rather than deleted because the
            history is the point — this is what a known-stale input looks like from the moment it is
            found to the moment it is ruled on, and the next one should be findable the same way. */
         { field: "set.cacheReadMult", computedValue: 15, verifiedValue: 15, resolvedAt: "2026-09-10",
-          resolution: "adopted the verified 15% (owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok)",
+          resolution: "adopted the verified 15% (adjudicated 2026-09-10)",
           verifiedAt: "2026-09-02", source: "https://docs.x.ai/developers/models/grok-4.5",
           basis: "$0.30 cached / $2.00 input = 15%; the 25% the engine computes with is the $0.50/$2.00 rate published at the 2026-07-08 launch",
           why: "Correcting it moves this preset's numbers and cascades into the T4 historical-reproduction receipts; gated as its own data milestone (BACKLOG section 2), with the exhaustiveness proof already derived." },
@@ -504,7 +504,7 @@ const MODELS = [
     },
     set: { active: 200, total: 1500, precision: "fp8", priceIn: 2, priceOut: 6, cacheReadMult: 15, blend: { h100: 45, h200: 5, gb200: 25, gb300: 25 } },
     dive: { rentMult: 0.62, util: 48, stackMult: 1.0, interact: "batch", batchShare: 0, discount: 0, ioRatio: 3, cacheHit: 0 },
-    note: "Total 1.5T DISCLOSED (Musk: '1.5T V9 foundation model'); MoE per Cursor; ~200B active is speculation (range 100–500B). List $2/$6. Cache reads: 15% ($0.30/$2.00), xAI's first-party rate as read 2026-09-02. Until 2026-09-10 this page computed at 25% ($0.50/$2.00, the Jul 8 2026 launch rate) and disclosed that as a known-stale input; the owner-ruled correction of 2026-09-10 moved it to 15%, and this model's numbers moved with it. Blend mirrors the Colossus fleet — owned, which cuts both ways: cheap at cash-marginal cost, but Anthropic pays xAI ~$5.27/GPU-hr for reserved capacity, a real opportunity cost. Dive replay = full-cycle TCO lens, 3:1 uncached workload. Evidence audit: §10. LENS SCENARIO from 2026-09-19 (Polaris gen60 under owner note note-20260919T142116Z-6b5c83): under the shared rented-capacity lens at this page's 50% utilization this row computes −0.7%, while its own §10 replay of xAI's published operating point computes +63.2% — and the §10 xAI card states ~63%. A negative there is the pairing, not xAI: a rented planning rent applied to a fleet this row itself describes as owned. The shared-lens number is therefore labelled a scenario and is NOT a provider claim; the provider claim for this row is the replay. No input was tuned to move it — the only model-row inputs that would (active, \"speculation (range 100–500B)\" and already at the low end; a blend the row calls speculative) are exactly the ones that must not be." },
+    note: "Total 1.5T DISCLOSED (Musk: '1.5T V9 foundation model'); MoE per Cursor; ~200B active is speculation (range 100–500B). List $2/$6. Cache reads: 15% ($0.30/$2.00), xAI's first-party rate as read 2026-09-02. Until 2026-09-10 this page computed at 25% ($0.50/$2.00, the Jul 8 2026 launch rate) and disclosed that as a known-stale input; the adopted correction of 2026-09-10 moved it to 15%, and this model's numbers moved with it. Blend mirrors the Colossus fleet — owned, which cuts both ways: cheap at cash-marginal cost, but Anthropic pays xAI ~$5.27/GPU-hr for reserved capacity, a real opportunity cost. Dive replay = full-cycle TCO lens, 3:1 uncached workload. Evidence audit: §10. LENS SCENARIO from 2026-09-19 (the review under the author's note): under the shared rented-capacity lens at this page's 50% utilization this row computes −0.7%, while its own §10 replay of xAI's published operating point computes +63.2% — and the §10 xAI card states ~63%. A negative there is the pairing, not xAI: a rented planning rent applied to a fleet this row itself describes as owned. The shared-lens number is therefore labelled a scenario and is NOT a provider claim; the provider claim for this row is the replay. No input was tuned to move it — the only model-row inputs that would (active, \"speculation (range 100–500B)\" and already at the low end; a blend the row calls speculative) are exactly the ones that must not be." },
   { id: "kimi", lab: "moonshot", name: "Kimi K2.7 Code (1T/32B)", spec: false, diveMetric: "output", nativeTraffic: "reference",
     set: { active: 32, total: 1000, precision: "fp8", priceIn: 0.95, priceOut: 4.00, cacheReadMult: 20, blend: { h800: 70, h20: 30 } },
     dive: { rentMult: 1.0, util: 60, stackMult: 0.83, interact: "balanced", batchShare: 0, discount: 0, ioRatio: 8, cacheHit: 40 },
@@ -516,23 +516,23 @@ const MODELS = [
   { id: "dsv4", lab: "deepseek", name: "DeepSeek V4 Pro (1.6T/49B)", spec: false, nativeTraffic: "deepseek-disclosure", nativeTrafficWasExplicit: true,
     set: { active: 49, total: 1600, precision: "fp4", priceIn: 0.66, priceOut: 1.98, cacheReadMult: 3.33, blend: { h800: 50, h20: 20, ascend: 30 } },
     dive: { rentMult: 0.857, util: 100, stackMult: 1.05, interact: "batch", batchShare: 0, discount: 0, blend: { h800: 100 } },
-    note: "DISCLOSED: 1.6T total / 49B active, selective FP4 (KV stays BF16/FP8). List $0.66/$1.98 OFF-PEAK, $1.32/$3.96 peak (cache reads at a remarkable 3.33% of input) — read from DeepSeek's own pricing page 2026-09-19. The $0.435/$0.87 this row carried until then was the post-75%-cut tariff and DeepSeek had replaced it; at that stale price this row computed −9.1% under the central lens, and the negative was the stale price and nothing else (leg im-vet-model-estimates, 2026-09-19). The activated dive replay (~$1.50/H800-equivalent-hr, their stack) computes 86.5%; doubling both token tariffs — which is now literally the published peak rate — computes 93.2%. §10." },
+    note: "DISCLOSED: 1.6T total / 49B active, selective FP4 (KV stays BF16/FP8). List $0.66/$1.98 OFF-PEAK, $1.32/$3.96 peak (cache reads at a remarkable 3.33% of input) — read from DeepSeek's own pricing page 2026-09-19. The $0.435/$0.87 this row carried until then was the post-75%-cut tariff and DeepSeek had replaced it; at that stale price this row computed −9.1% under the central lens, and the negative was the stale price and nothing else (reviewed 2026-09-19). The activated dive replay (~$1.50/H800-equivalent-hr, their stack) computes 86.5%; doubling both token tariffs — which is now literally the published peak rate — computes 93.2%. §10." },
   { id: "dsv4f", lab: "deepseek", name: "DeepSeek V4-Flash (284B/13B)", spec: false, nativeTraffic: "deepseek-disclosure", nativeTrafficWasExplicit: true,
     set: { active: 13, total: 284, precision: "fp4", priceIn: 0.15, priceOut: 0.60, cacheReadMult: 2, blend: { h800: 50, h20: 20, ascend: 30 } },
-    note: "DISCLOSED: 284B total / 13B active, same V4 family (selective FP4). List $0.15/$0.60 OFF-PEAK, $0.30/$1.20 peak, cache reads 2% of input — read from DeepSeek's own pricing page 2026-09-19. The $0.14/$0.28 this row carried until then was superseded, and at that stale price the row computed −11.5% under the central lens and −22.2% under the dive replay; both are positive at the current tariff (leg im-vet-model-estimates, 2026-09-19). NAME WARNING: DeepSeek's pricing page now states that `deepseek-v4-flash` is RETIRED and that the name is served by the Flash model at Flash pricing — this row's label denotes the retired model while the tariff above is the live one. Whether the row is relabelled is a release decision, recorded in research/update-queue.md. Concurrency tier 2,500 (vs Pro's 500). §10." },
+    note: "DISCLOSED: 284B total / 13B active, same V4 family (selective FP4). List $0.15/$0.60 OFF-PEAK, $0.30/$1.20 peak, cache reads 2% of input — read from DeepSeek's own pricing page 2026-09-19. The $0.14/$0.28 this row carried until then was superseded, and at that stale price the row computed −11.5% under the central lens and −22.2% under the dive replay; both are positive at the current tariff (reviewed 2026-09-19). NAME WARNING: DeepSeek's pricing page now states that `deepseek-v4-flash` is RETIRED and that the name is served by the Flash model at Flash pricing — this row's label denotes the retired model while the tariff above is the live one. Whether the row is relabelled is a release decision, recorded in research/update-queue.md. Concurrency tier 2,500 (vs Pro's 500). §10." },
   { id: "glm", lab: "zhipu", name: "GLM 5.2 (744B/40B)", spec: false, nativeTraffic: "reference", nativeTrafficWasExplicit: true,
     set: { active: 40, total: 744, precision: "fp8", priceIn: 1.40, priceOut: 4.40, cacheReadMult: 19, blend: { ascend: 40, h800: 40, h20: 20 } },
     dive: { rentMult: 1.9, util: 75, stackMult: 0.60, interact: "balanced", batchShare: 0, discount: 0 },
-    note: "DISCLOSED: 744B total / 40B active, BF16/FP8 open checkpoints (Baseten serves an NVFP4 variant abroad at 280+ tok/s/user). Z.ai list $1.40/$4.40, cache reads 19% of input. TRAFFIC DEFAULT CHANGED 2026-09-19 (leg im-vet-model-estimates, owner note note-20260919T142116Z-6b5c83): this row and GLM-4.7 opened on the ncode-informed profile, whose 81,000-token measured mean INPUT is the only absolute length on the page — every other profile falls back to 1,000 — so those two rows were priced at an 86,062-token decode context while every other row sat near 15,500, and this one rendered −36.5% under the central lens and −153.2% under its replay. Both are a statement about one power user's observed week, not about Zhipu. The default is now the page's Reference 15:1 / 60% convention (+63.0% shared lens, +31.3% replay); the ncode profile is unchanged and still selectable, which is where that week belongs. Zhipu's audited FY2025 cloud/API gross margin: 18.9%. Domestic blend speculative — nine platforms named. The capped replay computes 63.0% under the central lens and 31.3% under the dive at the Reference basis; full-memory fit and SLO remain unverified, so these are policy-unclean scenario outputs. The historical ~35–77% §10 sensitivity is archival external analysis, not reproduced by this engine. §10." },
+    note: "DISCLOSED: 744B total / 40B active, BF16/FP8 open checkpoints (Baseten serves an NVFP4 variant abroad at 280+ tok/s/user). Z.ai list $1.40/$4.40, cache reads 19% of input. TRAFFIC DEFAULT CHANGED 2026-09-19 (reviewed the author's note): this row and GLM-4.7 opened on the ncode-informed profile, whose 81,000-token measured mean INPUT is the only absolute length on the page — every other profile falls back to 1,000 — so those two rows were priced at an 86,062-token decode context while every other row sat near 15,500, and this one rendered −36.5% under the central lens and −153.2% under its replay. Both are a statement about one power user's observed week, not about Zhipu. The default is now the page's Reference 15:1 / 60% convention (+63.0% shared lens, +31.3% replay); the ncode profile is unchanged and still selectable, which is where that week belongs. Zhipu's audited FY2025 cloud/API gross margin: 18.9%. Domestic blend speculative — nine platforms named. The capped replay computes 63.0% under the central lens and 31.3% under the dive at the Reference basis; full-memory fit and SLO remain unverified, so these are policy-unclean scenario outputs. The historical ~35–77% §10 sensitivity is archival external analysis, not reproduced by this engine. §10." },
   { id: "glm47", lab: "zhipu", name: "GLM-4.7 (355B/32B)", spec: false, lensScenario: true, lensScenarioNoReplay: true, nativeTraffic: "reference", nativeTrafficWasExplicit: true,
     set: { active: 32, total: 355, precision: "fp8", priceIn: 0.60, priceOut: 2.20, cacheReadMult: 18, blend: { ascend: 40, h800: 40, h20: 20 } },
-    note: "DISCLOSED: 355B total / 32B active, BF16/FP8 open checkpoints — Z.ai's recommended workhorse (Coding Plan routes routine work here). List $0.60/$2.20: a materially different price floor than GLM-5.2's $1.40/$4.40, which is why it ships as its own preset. Blend speculative as with 5.2. TRAFFIC DEFAULT CHANGED 2026-09-19 with GLM 5.2 (see that row): ncode → Reference, which moves this row from −666.5% to −39.3%. IT IS STILL NEGATIVE AND THAT IS NOT A CLAIM ABOUT Z.AI. Two things drive it. First, this is the only lab row on the page with NO dive block, so its §10 \"replay\" silently falls back to the shared central lens and was never a provider estimate. Second, GLM-4.7 is GQA — 92 layers × 8 KV heads × 128 head-dim = 188,416 bytes of KV per context token at FP8, against DeepSeek's MLA 35,136 — so at any long context it is bandwidth-bound where an MLA model is not. That is a fact about attention design, not about whether Z.ai covers its costs; Zhipu's audited FY2025 cloud/API cloud gross margin is 18.9%. No single sourced input clears zero here (published low-end domestic rents give −22%, utilization 70 gives 0.0%, the two together +13%), and stacking favourable ends to reach a positive number is not something this page does. DISPOSITION 2026-09-19 (Polaris gen60): this row's shared-lens number is labelled a LENS SCENARIO and is NOT adopted as a margin estimate. It has no §10 replay, so unlike grok it has no provider claim at all — scenario only. §10." },
+    note: "DISCLOSED: 355B total / 32B active, BF16/FP8 open checkpoints — Z.ai's recommended workhorse (Coding Plan routes routine work here). List $0.60/$2.20: a materially different price floor than GLM-5.2's $1.40/$4.40, which is why it ships as its own preset. Blend speculative as with 5.2. TRAFFIC DEFAULT CHANGED 2026-09-19 with GLM 5.2 (see that row): ncode → Reference, which moves this row from −666.5% to −39.3%. IT IS STILL NEGATIVE AND THAT IS NOT A CLAIM ABOUT Z.AI. Two things drive it. First, this is the only lab row on the page with NO dive block, so its §10 \"replay\" silently falls back to the shared central lens and was never a provider estimate. Second, GLM-4.7 is GQA — 92 layers × 8 KV heads × 128 head-dim = 188,416 bytes of KV per context token at FP8, against DeepSeek's MLA 35,136 — so at any long context it is bandwidth-bound where an MLA model is not. That is a fact about attention design, not about whether Z.ai covers its costs; Zhipu's audited FY2025 cloud/API cloud gross margin is 18.9%. No single sourced input clears zero here (published low-end domestic rents give −22%, utilization 70 gives 0.0%, the two together +13%), and stacking favourable ends to reach a positive number is not something this page does. DISPOSITION 2026-09-19 (the review): this row's shared-lens number is labelled a LENS SCENARIO and is NOT adopted as a margin estimate. It has no §10 replay, so unlike grok it has no provider claim at all — scenario only. §10." },
   { id: "terra", lab: "openai", name: "GPT-5.6 Terra (tariff scenario)", spec: true, scenario: true, nativeTraffic: "openai-dive", nativeTrafficWasExplicit: true,
     set: { active: 50, total: 1000, precision: "fp8", priceIn: 2, priceOut: 12, cacheReadMult: 10, blend: { h100: 20, h200: 25, gb200: 45, gb300: 10 } },
     note: "TARIFF SCENARIO: the price ($2/$12, read 2026-09-19 — half of Sol's input and 60% of its output; the $2.50/$15 this row carried until then was superseded, and so was the \"exactly half of Sol\" reading of it) is the only identified quantity. Sizes are scenario values from the OpenAI dive's ranges (~1T/50B central; 0.25–5T / 20–110B) — Terra need not be a half-sized Sol, and back-inferring size from price is circular. Excluded from the normalized table. §10." },
   { id: "luna", lab: "openai", name: "GPT-5.6 Luna (tariff scenario)", spec: true, scenario: true, nativeTraffic: "openai-dive", nativeTrafficWasExplicit: true,
     set: { active: 20, total: 250, precision: "fp8", priceIn: 0.20, priceOut: 1.20, cacheReadMult: 10, blend: { h100: 20, h200: 25, gb200: 45, gb300: 10 } },
-    note: "TARIFF SCENARIO: $0.20/$1.20 list (95% below Sol; read from the model's own page 2026-09-19) and ~205–229 measured user-stream tok/s are the identified quantities. The $1/$6 this row carried until then was FIVE TIMES the live tariff and it overstated this row's shared-lens headline by 48 points — 88% at the stale price, 40% at the real one (leg im-vet-model-estimates, 2026-09-19). Sizes are scenario values (~0.25T/20B central; 0.05–1.5T / 8–50B) — Luna could equally be a large model with aggressive distillation or speculative decoding. Excluded from the normalized table. §10." },
+    note: "TARIFF SCENARIO: $0.20/$1.20 list (95% below Sol; read from the model's own page 2026-09-19) and ~205–229 measured user-stream tok/s are the identified quantities. The $1/$6 this row carried until then was FIVE TIMES the live tariff and it overstated this row's shared-lens headline by 48 points — 88% at the stale price, 40% at the real one (reviewed 2026-09-19). Sizes are scenario values (~0.25T/20B central; 0.05–1.5T / 8–50B) — Luna could equally be a large model with aggressive distillation or speculative decoding. Excluded from the normalized table. §10." },
   { id: "gemflash", lab: "google", name: "Gemini 3.5 Flash (tariff scenario)", spec: true, scenario: true, nativeTraffic: "reference", nativeTrafficWasExplicit: true,
     set: { active: 20, total: 600, precision: "fp8", priceIn: 1.50, priceOut: 9, cacheReadMult: 10, blend: { tpu7: 100 } },
     note: "TARIFF SCENARIO: $1.50/$9 list is the identified quantity; a memorization-based preprint puts the PRECEDING Gemini 3 Flash at a 405B-total LOWER BOUND, and speed-based guesses run 250–300B total / 10–16B active — all very low confidence. A fast-tier comparator, not a frontier estimate; excluded from the normalized table. §10." },
@@ -543,17 +543,17 @@ const MODELS = [
     note: "A blank scratch model — no provider, nothing here is sourced. Define every architecture, hardware, traffic and pricing assumption yourself with the sliders. Starting point: 100B active / 1T total / FP8, list $3/$15, Reference 15:1/60% traffic." },
 ];
 
-/* ---------- b9 M5: the algorithmic-lead (trend-line) registry (plan §3, RATIFIED) ----------
-   These numbers are OWNER-RATIFIED scenario priors (ruling im-algo-lead-defaults 2026-07-25T18:19Z,
-   folded into the im-algo-lead REPORT §8/§8a/§8b/§8c). They are never re-derived here and never
+/* ---------- : the algorithmic-lead (trend-line) registry ----------
+   These numbers are adopted scenario priors (adopted decision 2026-07-25T18:19Z,
+   folded into the algorithmic-lead analysis ). They are never re-derived here and never
    re-litigated in code. Rate: 3×/yr (halving 7.57 mo), E = rate^(months/12), cost-out ÷ E.
    REFUSED rates: the price series (9×–900×/yr — Epoch price index, a16z 10×, AI Index 280×)
-   measure TARIFFS, not serving efficiency; the UI carries that refusal permanently (§9.5).
-   Axis discipline (plan §6.7): capability lag (~4 months, Epoch-measured) is a DIFFERENT axis —
+   measure TARIFFS, not serving efficiency; the UI carries that refusal permanently.
+   Axis discipline: capability lag (~4 months, Epoch-measured) is a DIFFERENT axis —
    on the efficiency axis the open Chinese labs DEFINE the published-SOTA zero. */
 const TREND_RATES = Object.freeze([2, 3, 5]);          // ×/yr; 3 is the ratified default
-const TREND_MONTHS_BOUNDS = Object.freeze([-12, 12]);  // below zero permitted (ruling + §8c)
-const TREND_SOFT_WARN_MONTHS = 6;                      // soft warning past ±6 (§8c)
+const TREND_MONTHS_BOUNDS = Object.freeze([-12, 12]);  // below zero permitted (ruling + )
+const TREND_SOFT_WARN_MONTHS = 6;                      // soft warning past ±6
 const TREND_DEFAULTS = Object.freeze({
   anthropic: 3, openai: 3, google: 3, // closed-lab ratified defaults
   deepseek: 1,                        // +1 recommended, +2 documented as a defensible top
@@ -568,12 +568,12 @@ const TREND_GROUP_KEYS = Object.freeze(["trendMonths", "trendRate"]);
 const FAMILY_GROUP_KEYS = Object.freeze(["famNvidia", "famTpu", "famTrainium", "famAscend"]);
 /* Hardware family → state key. A family absent from this map (today only "unclassified", the
    fully-custom leg tag) is EXEMPT from family sliders and discloses the exemption on the leg
-   (D-5 verbatim, memo §8.3). */
+   (baseline-status contract). */
 const FAMILY_STATE_KEY = Object.freeze({ nvidia: "famNvidia", tpu: "famTpu", trainium: "famTrainium", ascend: "famAscend" });
 const FAMILY_BOUNDS = Object.freeze([0.50, 1.50]);
 const INTERLOCK_STATES = Object.freeze(["free", "locked-trend", "locked-family", "unlocked"]);
 /* SPECIFIED levers (Amendment 2): explicitly-modeled controls that the interlock NEVER locks.
-   Overlap with a nonzero trend is surfaced as a non-blocking warning, never a disable (§10.5a). */
+   Overlap with a nonzero trend is surfaced as a non-blocking warning, never a disable. */
 const SPECIFIED_LEVER_KEYS = Object.freeze(["precision", "interact", "cacheHit", "cacheCost", "billCacheHit", "specDec", "nvlinkCapMinRatio"]);
 function trendLabOf(m) { return (m && typeof m.lab === "string") ? m.lab : null; }
 /* The RATIFIED default months for a model's lab. An unmapped lab resolves to 0 — the same
@@ -589,12 +589,12 @@ function trendLabNote(m) {
   if (Object.prototype.hasOwnProperty.call(TREND_LAB_NOTES, lab)) return TREND_LAB_NOTES[lab];
   return Object.prototype.hasOwnProperty.call(TREND_DEFAULTS, lab) ? null : "no ratified prior — unassessed";
 }
-/* The FREE-state trend baseline for an identity (memo §10.2). A replay's baseline is 0: the
+/* The FREE-state trend baseline for an identity. A replay's baseline is 0: the
    lab's actual efficiency is already inside a published operating point, so the prior is inert
-   there (§9.4) and applyPresetSettings seeds 0. */
+   there and applyPresetSettings seeds 0. */
 function trendBaselineFor(m, p) {
   if (p && p.kind === "replay") return 0;
-  /* row 499 (owner ruling 0c8102): a preset that CARRIES an adjudicator's own lead treatment
+  /* the recorded review (the adopted decision): a preset that CARRIES an adjudicator's own lead treatment
      declares it here, typed, instead of inheriting the lab default. This is what lets the page-open
      default sit at zero lead ("Pro doesn't believe there's an algorithmic lead time — that's fine")
      while a preset built from an estimate that DOES endorse the prior seeds its own months. It is a
@@ -602,39 +602,39 @@ function trendBaselineFor(m, p) {
   if (p && typeof p.trendBaseline === "number") return p.trendBaseline;
   return trendDefaultMonths(m);
 }
-/* ---------- b9 M5: the INTERNAL REFERENCE PIN (memo §15, decision D-10) ----------
-   M5 moves the DEFAULT state onto the ratified prior (+3 for the closed labs). Two engine
+/* ---------- : the INTERNAL REFERENCE PIN (public-evidence reference) ----------
+   The lead-prior migration moves the DEFAULT state onto the ratified prior (+3 for the closed labs). Two engine
    derivations build their own reference states internally and would silently re-base onto that
-   prior before M6 ships the labeled two-reading FA surface:
+   prior before the labeled two-reading FA surface ships:
      (1) finalAnswer() — its planning state, lensSpan's per-lens states, every trafficContributors
-         state, and the policy-band / membership evaluations those feed (§15 verbatim);
+         state, and the policy-band / membership evaluations those feed (canonical contract);
      (2) formCorrectionSpanComputed() — the flagship-baseline FORM-swing disclosure, whose own
          prose asserts "BOTH ends fall outside the plan's 55.24-61.25 sanity tripwire". Left
-         unpinned it would conflate the equation-FORM axis with the lab-lead axis (plan §6.7).
+         unpinned it would conflate the equation-FORM axis with the lab-lead axis.
    ONE constructor pins both, applied immediately after EVERY internal applyPresetSettings those
-   computations perform. A pinned reference state carries NO interlock machine state: the §10
+   computations perform. A pinned reference state carries NO interlock machine state: the
    machine governs UI reachability and token validity, and an internal engine derivation is
-   neither saved nor shared, so it sits outside the machine by construction (v2.1 §15 fold —
-   this is why the §10.2 FREE invariant is never contradicted by a trend-0 pin). */
+   neither saved nor shared, so it sits outside the machine by construction (v2.1  fold —
+   this is why the  FREE invariant is never contradicted by a trend-0 pin). */
 const REFERENCE_LEVER_PIN = Object.freeze({ trendMonths: 0, trendRate: 3,
   famNvidia: 1.0, famTpu: 1.0, famTrainium: 1.0, famAscend: 1.0, specDec: 1.0,
-  nvlinkCapMinRatio: 1.0 /* d-im-h800: pinned like specDec — the reference states carry the page's own assumption */ });
+  nvlinkCapMinRatio: 1.0 /* the adopted decision: pinned like specDec — the reference states carry the page's own assumption */ });
 function pinReferenceLevers(s) { Object.assign(s, REFERENCE_LEVER_PIN); return s; }
 
-/* ---------- b9 M5: the INTERLOCK state machine (memo §10, D-5 + Amendment 2) ----------
+/* ---------- : the INTERLOCK state machine (overlap contract) ----------
    Two BROAD-UNSPECIFIED lever groups exist — the family multipliers and the algorithmic-lead
    prior. Both describe "unspecified efficiency we did not otherwise model", so composing them
    silently would double-count the SAME improvement. The machine binds exactly those two groups
    and NEVER the SPECIFIED levers (precision / serving regime / cache controls — Amendment 2):
-   an explicitly-modeled lever is never locked, only overlap-warned (§10.5).
+   an explicitly-modeled lever is never locked, only overlap-warned.
 
-   Per-state invariants (enforced here, in the UI, AND in the codec — memo §6.3):
+   Per-state invariants (enforced here, in the UI, AND in the codec — ):
      FREE          trend == the identity's ratified baseline AND every fam == 1.0
      LOCKED_TREND  trend == 0 (the machine ZEROES it on entry); fams free within bounds
      LOCKED_FAMILY every fam == 1.0; trend free within bounds
      UNLOCKED      unconstrained; persistent stacking banner
 
-   The ZEROING rule (decision D-12) is what makes the M5 acceptance sentence — "no reachable UI
+   The ZEROING rule (decision D-12) is what makes the acceptance sentence — "no reachable UI
    state stacks family × trend silently" — true even though the ratified defaults START nonzero:
    the first family edit REPLACES the broad prior rather than riding on top of it, and says so in
    one attributed line, so every headline move remains attributable. */
@@ -661,7 +661,7 @@ function interlockAfterEdit(current, group, s, baselineMonths) {
   if (!INTERLOCK_STATES.includes(current)) return { next: "free", zeroTrend: false, note: null };
   if (current === "unlocked") return noop;                       // both groups editable; banner persists
   if (current === "locked-trend" || current === "locked-family") return noop; // owning-group edits hold the invariant
-  // FREE: an edit that LANDS ON the baseline changes nothing, so it changes no state (§10.2 row 3).
+  // FREE: an edit that LANDS ON the baseline changes nothing, so it changes no state (the adopted contract).
   if (group === "family") {
     if (famAtBaseline(s)) return noop;
     return { next: "locked-trend", zeroTrend: true,
@@ -699,9 +699,9 @@ const INTERLOCK_WHY = Object.freeze({
   trend: "locked to prevent stacking broad multipliers — a family multiplier is already carrying the unspecified-efficiency assumption",
   family: "locked to prevent stacking broad multipliers — the algorithmic-lead prior is already carrying the unspecified-efficiency assumption",
 });
-/* Overlap warnings (§10.5) — NON-BLOCKING, never disable anything. (a) a nonzero trend beside a
+/* Overlap warnings — NON-BLOCKING, never disable anything. (a) a nonzero trend beside a
    SPECIFIED lever moved off its identity default; (b) trend > 0 beside stackMult > 1.0 (the
-   redefined composition-stress tick, §11.3). `baseState` is applyPresetSettings for the current
+   redefined composition-stress tick). `baseState` is applyPresetSettings for the current
    identity — the honest "its identity default" comparator. */
 function leverOverlapWarnings(s, baseState, baselineMonths) {
   const out = [];
@@ -709,9 +709,9 @@ function leverOverlapWarnings(s, baseState, baselineMonths) {
   /* The hazard Amendment 2 names is a LIVE prior overlapping an explicitly-modeled lever, so the
      trigger is E ≠ 1 (months ≠ 0), not "months ≠ the lab default". Stated refinement, both ways:
      at 0 months there is no prior to double-count (and 0 is a DELIBERATE reachable state since the
-     D-12 zeroing rule, which postdates the memo's phrasing), while a prior sitting at its nonzero
+     D-12 zeroing rule, which postdates the original phrasing), while a prior sitting at its nonzero
      RATIFIED default is fully live — the literal "≠ default" test would have missed the most
-     common case of all. Recorded in the M5 delta manifest. */
+     common case of all. Covered by the interlock tests. */
   const trendMoved = Number(s.trendMonths) !== 0;
   if (trendMoved && baseState) {
     const moved = SPECIFIED_LEVER_KEYS.filter(k => JSON.stringify(s[k]) !== JSON.stringify(baseState[k]));
@@ -723,23 +723,23 @@ function leverOverlapWarnings(s, baseState, baselineMonths) {
     text: "the algorithmic-lead prior is above 0 AND serving-stack efficiency is above 1.0× — both now measure gains relative to the SAME published-open-practice baseline, so part of the improvement may be counted twice" });
   return out;
 }
-/* The ONE interlock/token consistency rule (memo §6.3), shared by the ENCODER — which must never
-   mint a token its own decoder rejects (the M4 P0-1 lesson) — and the DECODER. `resolved` is the
+/* The ONE interlock/token consistency rule, shared by the ENCODER — which must never
+   mint a token its own decoder rejects (encoder/decoder parity) — and the DECODER. `resolved` is the
    post-diff lever vector the token actually restores.
 
    Baseline note (enactment finding, recorded for the gate). A MODIFIED identity has NO identity
    default to compare a trend value against, and the months it carries are INHERITED state, not a
    derivation: the origin perspective's kind is unrecoverable (`_meta.modified.from` is a display
    NAME, not an id — app.js downgradeReplayToModified), and a saved scenario legitimately restores
-   one model's months under a DIFFERENT model (restoreSavedPresetState, snapshots §1). FREE on the
+   one model's months under a DIFFERENT model (restoreSavedPresetState, snapshots ). FREE on the
    modified branch therefore constrains what a machine state can actually assert — every fam at
    1.0 and the rate at its default, i.e. NEITHER group has been user-edited — and leaves the
    inherited months free. The anti-stacking guarantee is untouched: FREE still requires EVERY fam
    == 1.0, so no FREE token can carry a family × trend stack. The CLEAN branch keeps the exact
-   §10.2 invariant, because a clean identity always re-derives its months from applyPresetSettings. */
-/* The ONE closed-domain check for the M5 lever fields (memo §6.3), shared by the DECODER (which
+    invariant, because a clean identity always re-derives its months from applyPresetSettings. */
+/* The ONE closed-domain check for the lever fields, shared by the DECODER (which
    rejects a forged token whole) and the ENCODER (which must never mint a token its own decoder
-   would reject — the M4 P0-1 lesson, extended at gate round 1 P1: the encoder previously validated
+   would reject — encoder/decoder parity: the encoder previously validated
    only the interlock stamp, so a pure-engine consumer holding an out-of-domain lever value could
    mint a link that copied successfully and then silently failed to restore). Returns null when the
    object is in domain, else the offending field's reason. Fields absent from `o` are not checked —
@@ -756,7 +756,7 @@ function leverDomainViolation(o) {
         && o[fk] >= FAMILY_BOUNDS[0] && o[fk] <= FAMILY_BOUNDS[1]))
       return fk + " (finite " + FAMILY_BOUNDS[0] + ".." + FAMILY_BOUNDS[1] + ")";
   }
-  /* b9 spec-decode LEVER (memo §11). The per-field closed domain only — the D-SD-7 gate is a
+  /* spec-decode LEVER. The per-field closed domain only — the D-SD-7 gate is a
      CROSS-FIELD rule between specDec and stackMult and cannot live in a function that sees a diff
      carrying only what differs. It is `specDecTokenConsistent`, which encoder and decoder also
      share. Both checks are needed: this one rejects an out-of-domain value, that one rejects an
@@ -764,7 +764,7 @@ function leverDomainViolation(o) {
   if ("specDec" in o && !(typeof o.specDec === "number" && isFinite(o.specDec)
       && o.specDec >= SPECDEC_BOUNDS[0] && o.specDec <= SPECDEC_BOUNDS[1]))
     return "specDec (finite " + SPECDEC_BOUNDS[0].toFixed(2) + ".." + SPECDEC_BOUNDS[1].toFixed(2) + ")";
-  /* d-im-h800: the fit-transfer assumption's closed domain. Per-field only — it has no cross-field gate. */
+  /* the adopted decision: the fit-transfer assumption's closed domain. Per-field only — it has no cross-field gate. */
   if ("nvlinkCapMinRatio" in o && !(typeof o.nvlinkCapMinRatio === "number" && isFinite(o.nvlinkCapMinRatio)
       && o.nvlinkCapMinRatio >= NVLINKCAP_BOUNDS[0] && o.nvlinkCapMinRatio <= NVLINKCAP_BOUNDS[1]))
     return "nvlinkCapMinRatio (finite " + NVLINKCAP_BOUNDS[0].toFixed(2) + ".." + NVLINKCAP_BOUNDS[1].toFixed(2) + ")";
@@ -782,9 +782,9 @@ function interlockTokenConsistent(interlock, resolved, m, p, isModified) {
 /* A token minted BEFORE the machine existed (any v5 link) carries no `_meta.interlock`, so there
    is no user choice to preserve and the honest move is to RECONSTRUCT the machine state its
    values represent — never to assume FREE, which would let a hand-injected v5 lever vector render
-   a stacked state with no banner. Total by construction: every branch yields a state whose §10.2
+   a stacked state with no banner. Total by construction: every branch yields a state whose
    invariant holds for the values given. (v6 tokens always carry the field and never come here —
-   §10.4: UNLOCKED-at-defaults is reachable and only an explicit field preserves it.) */
+   : UNLOCKED-at-defaults is reachable and only an explicit field preserves it.) */
 function deriveInterlockFor(s, baselineMonths) {
   const famBase = famAtBaseline(s);
   if (trendAtBaseline(s, baselineMonths) && famBase) return "free";
@@ -802,16 +802,16 @@ const PERSPECTIVES = [
     procurementBasis: "model-dive",
     set: {},
     note: "Replays the selected model's §10 provider-dive central assumptions (procurement, utilization, workload) so the calculator reproduces that card's headline within about a point. Models without a §10 card fall back to this page's central scenario." },
-  /* ---- range-exploration configs (v2.1.3 preset redesign, M2; PRUNED per owner clarification
+  /* ---- range-exploration configs (v2.1.3 preset redesign; PRUNED per clarification
      2026-07-11) ----
      Each surviving config REVERSE-ENGINEERS a real popular-discourse position — a page-authored
      reconstruction of ONE route into a margin range the discourse points at. The manufactured
-     v1/v2/v3 filler grid was removed (owner: keep only discourse-tied routes). Explicitly NOT the
-     claimant's own cost model (owner attribution-hygiene point). The 60–80% bucket carries ZERO
+     v1/v2/v3 filler grid was removed (keep only discourse-tied routes). Explicitly NOT the
+     claimant's own cost model (attribution rule). The 60–80% bucket carries ZERO
      configs by design: the central "median" lens is that bucket's own anchor. (Wording updated
      2026-07-12: the evidence pass added claim RECORDS that touch 60–80 — the ~70–75% reported/
      modeled cluster and one low-credibility token-SKU interval — but still no exploration config.)
-     RE-ATTRIBUTED 2026-08-16 (owner notes aa315c + c72950: "doesn't have the scenarios I wanted
+     RE-ATTRIBUTED 2026-08-16 (the author's notes aa315c + c72950: "doesn't have the scenarios I wanted
      anymore… no ~95% margins Teortaxes scenario, or any other analyst scenario — which was a
      large part of why we designed this calculator in the first place"). P0-4 de-named these four
      completely — names lived only on MARGIN_CLAIMS records — and the effect was that the routes
@@ -822,7 +822,7 @@ const PERSPECTIVES = [
        · the VECTOR is still entirely this page's, and every note still says so in terms.
      That distinction is the whole of the fix, and it is why `claimAnchor` is a pointer into
      MARGIN_CLAIMS rather than free text: a route cannot claim an attribution the claims registry
-     does not carry. The public-figure exception (owner ruling 2026-07-12) covers naming analysts
+     does not carry. The public-figure exception (the adopted decision 2026-07-12) covers naming analysts
      on their published positions, which is exactly and only what these fields do.
      Ids and SUBTITLES are unchanged — permalinks and browser assertions both bind to them.
      kind:"exploration" composes like a lens: no traffic keys, no
@@ -852,10 +852,10 @@ const PERSPECTIVES = [
     loadScope: "opus",
     procurementBasis: "owned-strategic-tco",
     authoredRange: { lo: 90, hi: Infinity }, // R3 D-2e: FIXED authorship metadata (never parsed from the name); integrity discloses against THIS, computed bucket = board grouping only
-    /* im-arc T2 (memo §6, 2026-08-22): pinned at the pre-T2 default so the
+    /* : pinned at the pre-T2 default so the
        archived reading reproduces; the generic default moved 2026-08-22. */
     set: { hwMode: "tco", kwh: 0.07,
-      /* im-arc T4 fold (2026-08-24), memo §6 [F10]: the PIN BUNDLE for this ARCHIVED reading. T2
+      /*  (2026-08-24),  [F10]: the PIN BUNDLE for this ARCHIVED reading. T2
          pinned only the electricity default; T4 moves the facility life, the datacenter capex per
          watt, four capex points and the cluster-overhead SEMANTICS, so an archived reading needs
          all of them stated to reproduce. Every value below is the pre-T4 default on merged master
@@ -865,12 +865,12 @@ const PERSPECTIVES = [
         h20: 20000, tpu7: 35000, trn2: 15000, trn3: 20000, ascend: 23000 },
       rentRegistryPin: { h100: 2.40, h200: 2.90, gb200: 4.50, gb300: 6.00, h800: 1.75, h20: 1.00,
         tpu7: 5.40, trn2: 2.235, trn3: 2.20, ascend: 1.95 }, util: 55, stackMult: 1.1, interact: "balanced", batchShare: 15, discount: 5 },
-    /* im-arc T4 fold (2026-08-24), memo §6 [F10]: which of this route's set keys are the
+    /*  (2026-08-24),  [F10]: which of this route's set keys are the
        historical PIN BUNDLE rather than authored levers. Consumed by the exploration ranking so
        a route that must state six migration values to keep reproducing is not thereby ranked as
        a six-lever route. */
     migrationPins: ["kwh", "dcPerW", "dcLifeYears", "capexScopeMode", "capexAbsLeg", "capitalRecovery", "rentRegistryPin"],
-    note: "PAGE-AUTHORED RECONSTRUCTION of one route to a ≥90% modeled unit margin — the ≥90% owned-TCO story in the discourse (a lab that owns/commits its fleet pays build-cost, not rental markup). The fleet is costed as a well-run owned estate (hourly cost from capex, power, datacenter, opex) at 55% occupancy with a 1.1× stack-COMPOSITION stress (b9 M5 §11.4 relabel, value unchanged: measured composition relative to published open practice; what a frontier lab's private stack might add lives on the algorithmic-lead slider, not here). This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
+    note: "PAGE-AUTHORED RECONSTRUCTION of one route to a ≥90% modeled unit margin — the ≥90% owned-TCO story in the discourse (a lab that owns/commits its fleet pays build-cost, not rental markup). The fleet is costed as a well-run owned estate (hourly cost from capex, power, datacenter, opex) at 55% occupancy with a 1.1× stack-COMPOSITION stress (the adopted model relabel, value unchanged: measured composition relative to published open practice; what a frontier lab's private stack might add lives on the algorithmic-lead slider, not here). This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
   { id: "x80-v3", kind: "exploration", name: "[analyst route · TeorTaxes] 80–90% · 1.0× planning-rate vector, aggressive stack, throughput", subtitle: "1.0× planning-rate vector, aggressive stack, throughput",
     claimAnchor: { who: "TeorTaxes (@teortaxesTex)",
       claimIds: ["teortaxes-80-inference-2025", "patel-80-floor"],
@@ -879,7 +879,7 @@ const PERSPECTIVES = [
     procurementBasis: "committed-planning-rent",
     authoredRange: { lo: 80, hi: 90 }, // R3 D-2e
     set: { hwMode: "rent", rentMult: 1.0, util: 70, stackMult: 1.25, interact: "batch", batchShare: 10, discount: 0 },
-    note: "PAGE-AUTHORED RECONSTRUCTION of one route into the 80–90% range the discourse points at (a floor 'north of 80%' for Opus API tokens; an earlier ~80% inference-only read — both verbatim in the claims registry): the page's heterogeneous planning-rate vector at 70% occupancy, an aggressive stack COMPOSITION (a page-set 1.25× on the published-open-practice baseline — a composition stress with no measured distribution behind it, and not a claim about any lab's private stack; b9 M5 §11.4 relabel, value unchanged), throughput-first serving, minimal off-list billing. This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
+    note: "PAGE-AUTHORED RECONSTRUCTION of one route into the 80–90% range the discourse points at (a floor 'north of 80%' for Opus API tokens; an earlier ~80% inference-only read — both verbatim in the claims registry): the page's heterogeneous planning-rate vector at 70% occupancy, an aggressive stack COMPOSITION (a page-set 1.25× on the published-open-practice baseline — a composition stress with no measured distribution behind it, and not a claim about any lab's private stack; the adopted model relabel, value unchanged), throughput-first serving, minimal off-list billing. This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
   { id: "x80-v4", kind: "exploration", name: "[analyst route · Zephyr] 80–90% · 0.9× planning-rate vector, above-baseline stack", subtitle: "0.9× planning-rate vector, above-baseline stack",
     claimAnchor: { who: "Zephyr (@zephyr_z9)", claimIds: ["zephyr-9095-unnamed"],
       mechanism: "sub-market committed rates with a near-top serving stack" },
@@ -887,7 +887,7 @@ const PERSPECTIVES = [
     procurementBasis: "committed-planning-rent",
     authoredRange: { lo: 80, hi: 90 }, // R3 D-2e
     set: { hwMode: "rent", rentMult: 0.9, util: 65, stackMult: 1.15, interact: "batch", batchShare: 10, discount: 0 },
-    note: "PAGE-AUTHORED RECONSTRUCTION of a second route into the 80–90% discourse range: a page-set 0.9× multiplier on the heterogeneous planning-rate vector, 65% occupancy, an above-baseline stack composition (1.15×, page-set — a composition stress against published open practice, and not a claim about any lab's private stack; b9 M5 §11.4 relabel, value unchanged), throughput-first serving. This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
+    note: "PAGE-AUTHORED RECONSTRUCTION of a second route into the 80–90% discourse range: a page-set 0.9× multiplier on the heterogeneous planning-rate vector, 65% occupancy, an above-baseline stack composition (1.15×, page-set — a composition stress against published open practice, and not a claim about any lab's private stack; the adopted model relabel, value unchanged), throughput-first serving. This is this page's own route, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
   { id: "x60-v3", kind: "exploration", name: "[analyst route · FleetingBits] <60% · reported-margin inverse diagnostic", subtitle: "reported-margin inverse diagnostic",
     claimAnchor: { who: "FleetingBits", claimIds: ["fleetingbits-4050-reported"],
       mechanism: "hyperscaler-marked-up compute, low occupancy, real discounting" },
@@ -896,7 +896,7 @@ const PERSPECTIVES = [
     authoredRange: { lo: -Infinity, hi: 60 }, // R3 D-2e (open low end via -Infinity — the shared half-open algebra needs no special case)
     set: { hwMode: "rent", rentMult: 1.6, util: 35, stackMult: 0.85, interact: "balanced", batchShare: 25, discount: 20 },
     note: "PAGE-AUTHORED RECONSTRUCTION tied to the reported/accounting <60% discourse (reported ~40–50% frontier inference margins; a reported ~40% company gross-margin projection — both verbatim/records in the claims registry and §7): it stress-tests whether higher page-set direct-serving cost and a lower effective price can reproduce those figures — a page-set 1.6× multiplier on the heterogeneous planning-rate vector (not hyperscaler list rates), peak-provisioned occupancy (35%), a below-baseline stack (0.85×), a 25% batch mix and 20% discounting. It computes −40.4% at the public-evidence reference (an algorithmic lead of 0 months; the calculator's own default reading carries the ratified prior and reads higher), far below the reported 40–50% band: that distance is a failed unit-margin inversion, not agreement with or falsification of a reported company gross margin. This is this page's own diagnostic, NOT any external party's cost model; no external party selected this vector. Range membership is computed at the flagship scope, never enforced." },
-  /* x90-v2 — THE ~95% ROUTE, added 2026-08-16 (owner notes aa315c + c72950: "no ~95% margins
+  /* x90-v2 — THE ~95% ROUTE, added 2026-08-16 (the author's notes aa315c + c72950: "no ~95% margins
      Teortaxes scenario"). The most-quoted claim on this page names a MECHANISM, not just a
      number: "they'll just increase the batch size, have the same speed, and drive margins from
      90% to 95%" (teortaxes-9095-conditional, 2026-06-27). This calculator has that lever, so it
@@ -920,10 +920,10 @@ const PERSPECTIVES = [
     loadScope: "opus",
     procurementBasis: "owned-strategic-tco",
     authoredRange: { lo: 90, hi: 95 }, // FIXED authorship metadata, as on every route: integrity discloses against THIS; the computed bucket is board grouping only
-    /* im-arc T2 (memo §6, 2026-08-22): pinned at the pre-T2 default so the
+    /* : pinned at the pre-T2 default so the
        vintaged route reproduces; the generic default moved 2026-08-22. */
     set: { hwMode: "tco", kwh: 0.07,
-      /* im-arc T4 fold (2026-08-24), memo §6 [F10]: the PIN BUNDLE for this ARCHIVED reading. T2
+      /*  (2026-08-24),  [F10]: the PIN BUNDLE for this ARCHIVED reading. T2
          pinned only the electricity default; T4 moves the facility life, the datacenter capex per
          watt, four capex points and the cluster-overhead SEMANTICS, so an archived reading needs
          all of them stated to reproduce. Every value below is the pre-T4 default on merged master
@@ -933,14 +933,14 @@ const PERSPECTIVES = [
         h20: 20000, tpu7: 35000, trn2: 15000, trn3: 20000, ascend: 23000 },
       rentRegistryPin: { h100: 2.40, h200: 2.90, gb200: 4.50, gb300: 6.00, h800: 1.75, h20: 1.00,
         tpu7: 5.40, trn2: 2.235, trn3: 2.20, ascend: 1.95 }, util: 55, stackMult: 1.1, interact: "batch", batchShare: 15, discount: 5 },
-    /* im-arc T4 fold (2026-08-24), memo §6 [F10]: which of this route's set keys are the
+    /*  (2026-08-24),  [F10]: which of this route's set keys are the
        historical PIN BUNDLE rather than authored levers. Consumed by the exploration ranking so
        a route that must state six migration values to keep reproducing is not thereby ranked as
        a six-lever route. */
     migrationPins: ["kwh", "dcPerW", "dcLifeYears", "capexScopeMode", "capexAbsLeg", "capitalRecovery", "rentRegistryPin"],
     note: "PAGE-AUTHORED RECONSTRUCTION of the mechanism named in the 90\u219295% claim, and of nothing else: it is the \u2265\u200990% owned-TCO route with ONE field changed \u2014 the serving regime moved to throughput, this engine's reading of \"increase the batch size, have the same speed\". The claim is TeorTaxes's, quoted verbatim with its source in the claims registry; this vector is this page's, and no external party selected it. THE RESULT IS THE POINT: the lever moves this route from 91.7% to 92.9% at the ratified default (89.1% \u2192 90.6% at the public-evidence reference) \u2014 roughly a quarter of the five points the claim asserts. Landing at 92.9% is not the same event as being driven from 90% to 95% by this move, so a 90\u219295% story needs something this route does not contain, most plausibly serving-stack efficiency this calculator credits at zero. Range membership is computed at the flagship scope, never enforced; this route is authored for 90\u201395% and discloses where it actually lands." },
   { id: "gptpro", kind: "lens", name: "[lens] Strategic-partner fleet (GPT-5.6 Pro)",
-    /* Owner annotation nd4f4c7 (2026-08-16): the higher-justification entries become loadable, and
+    /* Adopted 2026-08-16: the higher-justification entries become loadable, and
        the load targets are found by TYPED claim anchor rather than by matching names in prose. This
        lens already declared its relationship to the consult in its own `note` ("Page-authored
        adaptation of GPT-5.6 Pro's independent consult"), and the g3 entry declares the same
@@ -956,17 +956,17 @@ const PERSPECTIVES = [
     procurementBasis: "committed-planning-rent", basisNote: "strategic-contract class rates (0.70x) — committed procurement, not a public rate card",
     set: { hwMode: "rent", rentMult: 0.70, util: 70, stackMult: 1.0, interact: "batch", batchShare: 0, discount: 0, blend: { tpu7: 40, gb300: 25, gb200: 15, trn2: 15, h200: 5 } },
     note: "Page-authored adaptation of GPT-5.6 Pro's independent consult (Jul 2026): Anthropic-scale strategic contracts, 70% utilization, and a 40% TPU-heavy blend. The activated lens computes Opus 74.7% input / 92.2% output and 83.0% blended at the public-evidence reference mix (an algorithmic lead of 0 months); the calculator's own default reading carries the ratified prior and reads higher, at 87.1% blended. The consult's own 90.6% / 93.3% category figures are external scenario outputs, not reproduced by this preset. See report §6." },
-  /* ---- row 499: THE THREE ADJUDICATED PRESETS (owner ruling, voice note 0c8102, 2026-08-06) ----
+  /* ---- the recorded review: THE THREE ADJUDICATED PRESETS (the adopted decision, voice dated note, 2026-08-06) ----
      The page-open default is (a); (b) is the second independent estimate; (c) is the reproducible
      stress case. Each carries ITS OWN author's lead treatment as a typed `trendBaseline`, and none
      of them locks the dial: the visitor moves the lead from any preset, which is the ruling.
      The NUMBERS in these vectors follow the adjudicators (round 2, with the recent findings in
-     hand); the STRUCTURE is the owner's. This page does not adjudicate between (a) and (b). */
+     hand); the STRUCTURE is authored. This page does not adjudicate between (a) and (b). */
   { id: "gptpro-ctx", kind: "lens", name: "[estimate · archived] Strategic/owned expectation (GPT-5.6 Pro, contextual)",
     procurementBasis: "committed-planning-rent", basisNote: "strategic-contract class rates (0.70x) — the page's own registered strategic class, NOT a rate this review pinned",
     trendBaseline: 0,
     set: { hwMode: "rent", rentMult: 1.0,
-           /* row 499 round 2: its OWN per-family fallback midpoints, now expressible per leg —
+           /* the recorded review round 2: its OWN per-family fallback midpoints, now expressible per leg —
               NVIDIA 0.95 (it declined to apply a TPU-sized discount to NVIDIA, whose registered
               prices already mix low/committed, neocloud and analyst-set values), TPU 0.50, Trainium
               0.85 at zero weight. Each is the midpoint of a RANGE it declined to collapse
@@ -997,7 +997,7 @@ const PERSPECTIVES = [
              "rentMultFam.nvidia":   { lo: 0.90, mid: 0.95, hi: 1.00 },  // it declines to apply a TPU-sized discount to NVIDIA
              "rentMultFam.tpu":      { lo: 0.30, mid: 0.50, hi: 0.70 },  // "where the economic-regime disagreement is concentrated"
              "rentMultFam.trainium": { lo: 0.70, mid: 0.85, hi: 1.00 },  // at zero headline weight, excluded from the point
-             /* ITS BLEND DECLARATION, moved out of prose (owner ruling q-sliders-fleet-util-point,
+             /* ITS BLEND DECLARATION, moved out of prose (the adopted decision,
                 2026-08-09). These three numbers were already carried verbatim in this preset's
                 provenance — "declared family constraints of 50-65% NVIDIA, 35-50% TPU, 0-15%
                 Trainium" — and were NOT expressible as ranges, because until this ruling the engine
@@ -1007,7 +1007,7 @@ const PERSPECTIVES = [
                 NO `mid` IS DECLARED, deliberately. A blend block's centre is the preset's own share
                 for those legs, so writing 60/40/0 here a second time would create a copy that can
                 drift from the blend above it. Its author's midpoints ARE 60/40/0 and they sum to
-                100 — which is the owner's fixed case, so the median comes out as the author's own
+                100 — which is the fixed case, so the median comes out as the author's own
                 mix rather than anything this page computed. */
              "blend.fam.nvidia":   { lo: 50, hi: 65 },   // its declared NVIDIA share band; point 60
              "blend.fam.tpu":      { lo: 35, hi: 50 },   // its declared TPU share band; point 40
@@ -1055,13 +1055,13 @@ const PERSPECTIVES = [
       companion: "≈80 % at list, range 74–86 %",
       caveat: "its author is explicit that the algorithmic lead must NOT be switched on to reach it",
     },
-    note: "The second independent estimate, produced without sight of the first: a Fable 5 session derived it from this page's own numbers and hash-committed it before any GPT-Pro output was opened (row 494, re-run for row 499 under the same hygiene). Its posture is PER-LEG and that is the point — TPU at roughly a third of the registered analyst rate, Trainium at 0.70x, and NVIDIA at NO discount, a discount it explicitly declined to claim. Before row 499 this engine could only express one global multiplier, and the single value reproducing that margin (0.7308) would have asserted the NVIDIA discount its author refused while under-stating the TPU move that carries the posture; the engine now carries per-leg multipliers, so the estimate ships faithfully or not at all. THE LEAD IS AT ZERO HERE: an independent public-evidence sweep returned that no such lead is identifiable from public evidence, so this estimate carries a smaller, separately declared serving-stack efficiency credit instead. THE HONEST GAP: on this engine today this vector computes about 74% on the illustrative billing mix (it computed about 75% when this estimate was installed; later calculator changes moved it, the vector did not change), while its author's stated headline figure is about 3 points higher — that credit is bounded by two first-party anchors but has no legal control on this engine (the speculative-decode lever is gate-blocked at this stack setting, by design, to prevent double-crediting). The preset therefore carries the vector and states the gap rather than solving a dial to close it, and its author is explicit that the lead must NOT be switched on to reach that headline: the credit already covers part of the same mechanism. Lead-on is a separate sensitivity. See report §6." },
+    note: "The second independent estimate, produced without sight of the first: a Fable 5 session derived it from this page's own numbers and hash-committed it before any GPT-Pro output was opened (re-run under the same independence protocol). Its posture is PER-LEG and that is the point — TPU at roughly a third of the registered analyst rate, Trainium at 0.70x, and NVIDIA at NO discount, a discount it explicitly declined to claim. Before that estimate was installed this engine could only express one global multiplier, and the single value reproducing that margin (0.7308) would have asserted the NVIDIA discount its author refused while under-stating the TPU move that carries the posture; the engine now carries per-leg multipliers, so the estimate ships faithfully or not at all. THE LEAD IS AT ZERO HERE: an independent public-evidence sweep returned that no such lead is identifiable from public evidence, so this estimate carries a smaller, separately declared serving-stack efficiency credit instead. THE HONEST GAP: on this engine today this vector computes about 74% on the illustrative billing mix (it computed about 75% when this estimate was installed; later calculator changes moved it, the vector did not change), while its author's stated headline figure is about 3 points higher — that credit is bounded by two first-party anchors but has no legal control on this engine (the speculative-decode lever is gate-blocked at this stack setting, by design, to prevent double-crediting). The preset therefore carries the vector and states the gap rather than solving a dial to close it, and its author is explicit that the lead must NOT be switched on to reach that headline: the credit already covers part of the same mechanism. Lead-on is a separate sensitivity. See report §6." },
   { id: "stress-public-rate", kind: "lens", name: "[stress case] Public-data scenario \u2014 no assumed efficiency lead",
     procurementBasis: "committed-planning-rent", basisNote: "the page's registered planning-rate vector with NO judgment dial moved — the public-data scenario, rebuildable from this page's fully declared planning assumptions (three of them provisional planning rents)",
     trendBaseline: 0,
     set: { hwMode: "rent", rentMult: 1.0, util: 50, stackMult: 1.0, interact: "balanced", batchShare: 15, discount: 5 },
     note: "THE STRESS CASE, selectable in one click: every judgment dial at its unmoved value — the registered heterogeneous planning-rate vector at 1.0x, 50% occupancy, open-source-level stack, balanced latency, and NO algorithmic-lead prior. It computes the page's PUBLIC-DATA SCENARIO (about 58% under this page's illustrative billing mix, about 63% at the undiscounted list price). It is a PUBLIC-DATA SCENARIO, NOT AN ESTIMATE: a model result under those assumptions, not a guaranteed minimum for real inference margins, and nothing like a best estimate of them. It is deliberately NOT lead-adjusted: every assumption in it is stated, so any reader can rebuild it, and applying a private prior would destroy that one property. Three of its planning rents (GB200, GB300, Trainium3) are PROVISIONAL, declared judgments rather than published rate-card prices. The external reviewer that re-derived it independently to the decimal also said it is not an estimate of likely actual economics. It is never the page's answer. Keeping it visible matters: it is the reading with every judgment dial left where the registry puts it." },
-  /* ROUND 3 (row 514, owner commission 2026-08-07T19:04:23Z). The adjudicators reviewed their OWN
+  /* Review of 2026-08-07T19:04:23Z. The adjudicators reviewed their OWN
      assumptions with full context and authored them as 1/2/3-point ranges. What separates these from
      the round-2 presets above is not the numbers but the PROVENANCE OF THE RANGES: every three-point
      declaration below is its own author's, returned as numbers, and every value was MEASURED through
@@ -1075,7 +1075,7 @@ const PERSPECTIVES = [
       who: "GPT-5.6 Pro's self-authored review",
       companion: "the lead-only diagnostic across 0-4 months is 78.89-85.37 %",
       caveat: "its author states the full 68-92 % span is its own SELECTED span, deliberately NOT widened to accommodate the lead range, and explicitly NOT a live-engine corner band",
-      /* THE MISSING DESIGNATION, recorded (bq-2192, im-guard-fix 2026-09-10). The provisional GPT
+      /* THE MISSING DESIGNATION, recorded (the input guard correction 2026-09-10). The provisional GPT
          council asked, reviewing the db73816 line audit, whether the lead-only diagnostic was a
          MAINTAINED engine figure or a PRESERVED quotation — the 2026-08-24 sweep moved it and
          nothing said which. The record answers it, and the deciding evidence is what the AUTHOR
@@ -1098,13 +1098,13 @@ const PERSPECTIVES = [
 
          CORRECTED before commit (fallback card review C2): an earlier draft of this comment said
          the string "moved TWICE with the engine". It moved ONCE — introduced at c45c2c3, changed at
-         d1fcaa9 (the registry twin of the db73816 page sweep), never again. bq-2192's phrase "the
+         d1fcaa9 (the registry twin of the db73816 page sweep), never again. 's phrase "the
          sweep's twin commit" describes one sweep across two commits, and reading it as two sweeps
          was an assertion about the record made from memory instead of from the record.
 
-         WHICH MADE THE PUBLISHED VALUE STALE — AND THE OWNER HAS NOW RULED ON IT. Card
-         q-im-r3-lead-diagnostic-designation, answered 2026-09-10T16:09:47Z, option A:
-         d-20260910-im-r3-lead-diagnostic-recompute — "recompute on all three surfaces and keep it
+         WHICH MADE THE PUBLISHED VALUE STALE — AND IT HAS NOW BEEN ADJUDICATED. Card
+         the adopted decision, answered 2026-09-10T16:09:47Z, option A:
+         adjudicated 2026-09-10 — "recompute on all three surfaces and keep it
          recomputed". Enacted in this commit. The companion string above, the card face in
          site/index.html and the served changelog line all now read 78.89-85.37, which is this
          preset's own sweep EXECUTED at these defaults rather than quoted from anywhere:
@@ -1119,7 +1119,7 @@ const PERSPECTIVES = [
          THE FIELD IS RECOMPUTED, NOT THE ROW. Option D — moving this out of statedReading into a
          maintained engine field of its own so the "QUOTED, not computed here" clause stops covering
          a computed number — was NOT chosen. That clause is deliberately left as it stands and
-         bq-2191 stays open for it. The author's own figures on this row are byte-untouched: the
+          stays open for it. The author's own figures on this row are byte-untouched: the
          83.1 central and the 68-92 span are its author's, and the caveat below still designates
          them the opposite way. What is recomputed is the one field the author never wrote.
 
@@ -1130,12 +1130,12 @@ const PERSPECTIVES = [
          Note that the face-vs-registry guard cannot see any of this by construction: the page and
          this registry agree with each other, which is the limit that guard's own header states. */
       companionDesignation: "maintained-engine-diagnostic",
-      /* WHAT THE CALCULATOR READ WHEN THIS WAS STATED (owner note note-20260912T180812Z-c9eaac, his
+      /* WHAT THE CALCULATOR READ WHEN THIS WAS STATED (the author's note of 2026-09-12, his
          question: "where is this small discrepancy coming from"). The author worked 83.0549 by hand
          from the 79.65 % no-lead point it was handed; the engine at c45c2c3 computed 83.0561 for these
          settings. Point settings are byte-identical since (only the declared ranges were regrouped,
          2026-08-09), and c45c2c3's whole set on today's engine reads what today's set does. Executed in the
-         im-default-window-and-mcp-discrepancy record (private workspace). */
+         discrepancy verification of 2026-09-12. */
       authoredAgainst: { date: "2026-08-07", engine: "c45c2c3", computed: 83.0561,
         model: "opus", profileId: "reference", scopeLabel: "Claude Opus 4.x, Reference traffic mix, this estimate's own settings",
         route: "worked by its author from this calculator's 79.65 % no-lead reading, not through the MCP" },
@@ -1153,12 +1153,12 @@ const PERSPECTIVES = [
               MEASURED at lead 0 it reproduces the preset's own round-2 point to four decimals: it
               read 80.4794 when this note was written and reads 78.8931 today, matching gptpro-ctx
               at both. The IDENTITY is what this note asserts and it still holds exactly; the
-              literal was stale from the owner ruling of 2026-09-10 until im-guard-fix re-measured
-              it (bq-2192). A stale literal inside a reproduction claim is how the claim quietly
+              literal was stale from the adjudicated 2026-09-10 until the input guard correction re-measured
+              it. A stale literal inside a reproduction claim is how the claim quietly
               stops being checked, so it is stated as a measurement with its date rather than as a
               constant.
-              REPRESENTATION NOTE (2026-08-09, adjudicated — esc-20260809T001150Z-18a9186a, gate
-              d-opener-enact-20260809): the author's six IDENTICAL 0.90/0.95/1.00 NVIDIA leg ranges
+              REPRESENTATION NOTE (2026-08-09, adjudicated — the dated note, gate
+              adjudicated 2026-08-09): the author's six IDENTICAL 0.90/0.95/1.00 NVIDIA leg ranges
               are CARRIED AS the one family-scoped range the engine already resolves onto exactly
               those legs (`applyDial` group scope — the same representation its round-2 preset uses
               at this width). One posture written once instead of six times: NO authored number
@@ -1181,7 +1181,7 @@ const PERSPECTIVES = [
              /* THE BLEND RANGES ITS AUTHOR DECLARED WHEN ASKED AGAIN (dual consult, 2026-08-10).
                 Round 3 declined to declare these, and said exactly why: "the calculator has no
                 compositional range that preserves a 100 % simplex", logged as a gap rather than
-                faked. The owner's 2026-08-09 ruling built that capability, so the gap was put back
+                faked. The adoption of 2026-08-09 built that capability, so the gap was put back
                 to its author, which answered: it restores its round-2 family bounds unchanged and
                 keeps 60/40/0 as its REFERENCE — declining, in terms worth quoting, to let the
                 projected 55/40/5 replace it, "because I did supply a feasible point and its zero
@@ -1198,7 +1198,7 @@ const PERSPECTIVES = [
              "blend.fam.tpu":      { lo: 35, hi: 50 },
              "blend.fam.trainium": { lo: 0,  hi: 15, split: { trn2: 1, trn3: 0 } },
            } },
-    note: "GPT-5.6 Pro's self-authored reading of this page: a headline of 83.1 %, worked by its author from the calculator's own no-lead reading. These settings compute 82.33 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure \u2014 in its own words, it has 'no independent reason to select 2.6269 months', the lead that would land exactly 84.0 %. The lead is a range, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately below the 2.4374 months a 1.25\u00d7 efficiency multiplier implies; 4 as the ratified upper scenario, explicitly without importing the rejected anonymous >2\u00d7 claim. Procurement is counted once: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. The stated span is 68\u201392 %, and it is the author's selected span, not a live-engine corner band \u2014 the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog." },
+    note: "GPT-5.6 Pro's self-authored reading of this page: a headline of 83.1 %, worked by its author from the calculator's own no-lead reading. These settings compute 82.33 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure \u2014 in its own words, it has 'no independent reason to select 2.6269 months', the lead that would land exactly 84.0 %. The lead is a range, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately below the 2.4374 months a 1.25\u00d7 efficiency multiplier implies; 4 as the ratified upper scenario, explicitly without importing the rejected anonymous >2\u00d7 claim. Procurement is counted once: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. The stated span is 68\u201392 %, and it is the author's selected span, not a live-engine corner band \u2014 the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: reports/the research run-08-08.md; how this reading arrived at its current form is in the changelog." },
   { id: "fable-r3", kind: "lens", name: "[estimate] Per-leg strategic posture (Fable 5, independent)",
     procurementBasis: "committed-planning-rent", basisNote: "PER-LEG strategic rates, now declared as ranges by their own author — TPU 0.30-0.65, Trainium 0.70-0.85, NVIDIA undiscounted and pinned there",
     trendBaseline: 1,
@@ -1245,7 +1245,7 @@ const PERSPECTIVES = [
              "blend.fam.tpu":      { lo: 15, hi: 40 },
              "blend.fam.trainium": { lo: 5,  hi: 35 },
            } },
-    note: "Fable 5's self-authored reading of this page, measured through the calculator before it was declared: every value its author declared reproduced to the decimal. These settings compute 76.33 % here today; the stated \u224877 % is its author's and is not re-tuned toward the engine. The headline was computed rather than computed-and-then-annotated \u2014 the serving-stack credit that supports it is carried in the calculator rather than riding beside the vector as prose: its exact months-equivalence at the ratified 3\u00d7/yr is 0.9159 months, and because the lead dial is integer-only the preset represents it with a one-month midpoint. What the dial carries, which is the double-count question and the author's own answer to it: at mid it carries the credit re-expressed in months, not a lead prior; at hi it carries the OpenAI-anchored lead bound instead of the credit, never on top of it \u2014 stackMult stays 1.0 and speculative decoding stays off at every point, so the mechanism is counted exactly once. The upper bound is anchored to the strongest first-party quantified datapoint (OpenAI 2026-07-29, agent-written kernels, '-20% end-to-end serving costs' = 2.437 months at 3\u00d7/yr) and then integer-floored to 2 rather than rounded, on the author's stated ground that the evidence is OpenAI's while this page's subject is Anthropic, that it is a rate-of-improvement datapoint rather than a standing gap, and that transfer to the serving layer is well under 1. The band is 65\u201382, whose floor prices the rates downside explicitly (64.67 as measured when the band was set, at half-strategic, util 50, lead 0). The author's declared common basis for any cross-arm comparison is lead 0. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog." },
+    note: "Fable 5's self-authored reading of this page, measured through the calculator before it was declared: every value its author declared reproduced to the decimal. These settings compute 76.33 % here today; the stated \u224877 % is its author's and is not re-tuned toward the engine. The headline was computed rather than computed-and-then-annotated \u2014 the serving-stack credit that supports it is carried in the calculator rather than riding beside the vector as prose: its exact months-equivalence at the ratified 3\u00d7/yr is 0.9159 months, and because the lead dial is integer-only the preset represents it with a one-month midpoint. What the dial carries, which is the double-count question and the author's own answer to it: at mid it carries the credit re-expressed in months, not a lead prior; at hi it carries the OpenAI-anchored lead bound instead of the credit, never on top of it \u2014 stackMult stays 1.0 and speculative decoding stays off at every point, so the mechanism is counted exactly once. The upper bound is anchored to the strongest first-party quantified datapoint (OpenAI 2026-07-29, agent-written kernels, '-20% end-to-end serving costs' = 2.437 months at 3\u00d7/yr) and then integer-floored to 2 rather than rounded, on the author's stated ground that the evidence is OpenAI's while this page's subject is Anthropic, that it is a rate-of-improvement datapoint rather than a standing gap, and that transfer to the serving layer is well under 1. The band is 65\u201382, whose floor prices the rates downside explicitly (64.67 as measured when the band was set, at half-strategic, util 50, lead 0). The author's declared common basis for any cross-arm comparison is lead 0. Method and derivation: reports/the research run-08-08.md; how this reading arrived at its current form is in the changelog." },
   { id: "xaicash", kind: "replay", name: "[valuation replay] xAI cash-marginal (dive operating point)",
     procurementBasis: "owned-strategic-tco", basisNote: "cash-marginal VALUATION of an owned fleet — the owned/strategic side, but a valuation replay, not a full TCO build-up",
     set: { hwMode: "rent", rentMult: 0.156, util: 48, stackMult: 1.0, interact: "batch", batchShare: 0, discount: 0, ioRatio: 3, cacheHit: 0 },
@@ -1253,10 +1253,10 @@ const PERSPECTIVES = [
   { id: "xaiopp", kind: "replay", name: "[valuation replay] xAI opportunity-cost (Anthropic contract)",
     procurementBasis: "committed-planning-rent", basisNote: "the ~$5.27 bundled CONTRACT rate the capacity actually fetches — a committed price, applied as an opportunity-cost valuation",
     set: { hwMode: "rent", rentMult: 1.37, util: 48, stackMult: 1.0, interact: "batch", batchShare: 0, discount: 0, ioRatio: 3, cacheHit: 0 },
-    /* OWNER-SOURCED CORRECTION, 2026-08-09 (voice note 7099f9, relayed as the adjudication on
-       commission d-im-range-calculator-20260809). The ~325k NVIDIA GPUs named below are a PRICE
+    /* CORRECTION, 2026-08-09.
+       Adopted 2026-08-09. The ~325k NVIDIA GPUs named below are a PRICE
        ANCHOR for xAI's own capacity — they are NOT a statement about the composition of Anthropic's
-       serving fleet, and this lens must never be read as one. The owner rules explicitly:
+       serving fleet, and this lens must never be read as one. The adopted interpretation states explicitly:
        **NVIDIA is ADDITIVE to Anthropic's fleet, not the total of it** — TPUs are documented in
        Anthropic training and serving, and a headline NVIDIA contract sits alongside that capacity
        rather than replacing it. This page's own Anthropic priors already agree and are unchanged by
@@ -1277,7 +1277,7 @@ const PERSPECTIVES = [
      NVIDIA-by-family (h20: 100), so a reader or a model scanning ids and blends can land on
      "anth20 ⇒ Anthropic ⇒ 100 % NVIDIA" and carry that out as a claim about Anthropic's fleet. It
      is an Ant Group scenario, paired with DeepSeek traffic, and `pairingSeverity` already returns
-     "hard" for it against every non-China model. Owner correction of 2026-08-09 (note 7099f9)
+     "hard" for it against every non-China model. Correction of 2026-08-09
      applies: NVIDIA is additive to Anthropic's fleet, never the total — see the xaiopp note above. */
   { id: "anth20", kind: "replay", name: "[source-informed scenario] Ant Group H20 (NOT Anthropic — Ant Group)",
     procurementBasis: "committed-planning-rent",
@@ -1289,13 +1289,13 @@ const PERSPECTIVES = [
     note: "Replays the Feb 2025 disclosure economics: ~$2/hr H800s (1.14× the mid-2026 IDC rate), their stack. Utilization stays at 100% because the disclosed per-node throughputs are AVERAGES over deployed nodes — they already encode idle time, so a second utilization divisor would double-count it. Pair with the DeepSeek V3/R1 preset → 87.1%, 2.6 points above the disclosed 84.5%; this replay mismatch is not validation." },
 ];
 
-/* row 499 (owner ruling 0c8102): WHICH PRESET THE PAGE OPENS ON. This is the whole mechanism of
+/* the recorded review (the adopted decision): WHICH PRESET THE PAGE OPENS ON. This is the whole mechanism of
    "page-open default = GPT Pro's numbers with no algorithmic lead", and it is deliberately NOT a
    move of the `DEFAULTS` object. Why that distinction is the whole design:
 
    `encodeScenario` diffs a token against the RESOLVED PRESET STATE for the identity the token
    names, and falls back to raw `DEFAULTS` only for `__modified` identities. So moving `DEFAULTS`
-   silently re-interprets every previously shared link that omitted a field — row 492 measured up to
+   silently re-interprets every previously shared link that omitted a field — the recorded review measured up to
    +21.3 points of that, invisibly. Moving the OPENING SELECTION re-interprets nothing: every
    existing token still names its own perspective and still resolves against that perspective's own
    vector. The visitor gets exactly what the ruling asks for; nobody's saved link moves.
@@ -1303,10 +1303,10 @@ const PERSPECTIVES = [
    Consumed ONLY by the page-open selection and the copy that describes it. Every internal
    derivation that anchors on the CENTRAL SCENARIO (finalAnswer, lensSpan, formCorrectionSpan,
    FLAGSHIP_SCOPE) keeps looking `median` up by id, so no published reading changes definition. */
-const LANDING_DEFAULT_PERSP_ID = "gptpro-r3"; // owner voice ruling 2026-08-08T23:03Z (notes 73ae79+edad69): the page opens on the round-3 self-authored Pro estimate; enacted under gate d-opener-enact-20260809
+const LANDING_DEFAULT_PERSP_ID = "gptpro-r3"; // Adopted 2026-08-08T23:03Z: the page opens on the round-3 self-authored Pro estimate; enacted under gate adjudicated 2026-08-09
 
 /* ---------- tooltip registry ---------- */
-/* ---- THE CANONICAL CLAIM CONSTANTS (memo §6.1 SINGLE-SOURCE NORMATIVE BLOCKS) ----
+/* ---- THE CANONICAL CLAIM CONSTANTS (SINGLE-SOURCE NORMATIVE BLOCKS) ----
    These three are the SOLE definitions of their claims. Every shipped surface composes FROM them;
    none restates them as its own literal, and T-21c fails on any second literal occurrence.
 
@@ -1321,7 +1321,7 @@ const SPECDEC_PORTABLE_TICK =
    two tiers cannot drift apart (T-21b asserts the containment; it is a SUBSTRING, not a prefix,
    because this opens with "0.7 is "). Declared by interpolation, so its own source text never
    contains its assembled value — which is why T-21c expects 2 occurrences and not 3. */
-/* J-10 run-1 dive A P0-1: OVERRULED as mechanism, SUSTAINED as copy (Polaris gen-24). Dive A, which
+/* J-10 run-1 dive A P0-1: OVERRULED as mechanism, SUSTAINED as copy (the review). Dive A, which
    sees only the public surface, concluded the gate conflates MTP-free with speculation-free — and it
    is right that an MTP-free preset cannot by itself prove a speculation-free baseline, since EAGLE,
    n-gram and standalone drafters need no MTP. Dive B, holding the contract, ruled Rule 3 passes:
@@ -1346,7 +1346,7 @@ const SPECDEC_CONSERVATISM =
   + "without speculative decoding\" — those fleets are under-credited here rather than risk "
   + "double-counting, which is the direction this page prefers to be wrong in";
 
-/* PINNED SHIPPED BYTES, ratified in the manifest (esc-20260801T042349Z-20c444d8, rows 6, 7, 21).
+/* PINNED SHIPPED BYTES, ratified in the manifest (the note of 2026-08-01, the recorded review).
 
    The why-line claims ONLY what the page types. Two earlier wordings were false: one below the
    tick (the domain runs to 0.4 and sub-tick settings are downside stresses, not MTP-bearing), and
@@ -1357,7 +1357,7 @@ const SPECDEC_WHY_LINE =
   + SPECDEC_PORTABLE_TICK + ".";
 
 /* The reset notice is TRANSIENT and its one job is loud attribution of a value change, mirroring
-   the M5 D-12 zeroing rule. It deliberately carries no portability clause: at the instant it fires
+   the lead-zeroing rule. It deliberately carries no portability clause: at the instant it fires
    the gate has just shut, so the persistent why-line renders simultaneously beside the now-disabled
    control and already has the reason in view. */
 const SPECDEC_RESET_LINE =
@@ -1368,7 +1368,7 @@ const SPECDEC_RESET_LINE =
    on a replay, moving stackMult to the tick would still not enable credit, so naming it would be
    actively false. The replay lock is a different rule from the D-SD-7 gate and T-21e does not reach
    this string. */
-/* J-10 run-1: PROMOTED TO P0 by Polaris gen-24 on CONVERGENCE — dive A (public-only, P1-8) and dive
+/* J-10 run-1: PROMOTED TO P0 by the review on CONVERGENCE — dive A (public-only, P1-8) and dive
    B (everything-in-context, P1-4) reached this independently from opposite sides of an information
    asymmetry, which is the strongest agreement this harness can produce because there was no shared
    context to explain it. Two defects in one clause: "whatever speculative decoding the lab was
@@ -1382,19 +1382,19 @@ const SPECDEC_REPLAY_WHY_LINE =
   + "replayed exactly as published, so any speculative-decoding effect it already carries is "
   + "inside it.";
 
-/* Manifest rows 22 and 23 — the section title and the control label, RATIFIED. The phase scope is
+/* Manifest the recorded review — the section title and the control label, RATIFIED. The phase scope is
    in the LABEL because it is the property most likely to be misread: this credit is decode-only
    (D-P24-1), and a reader who assumes it moves prefill too would misread every number under it. */
 const SPECDEC_SECTION_TITLE = "Speculative-decode credit (scenario lever)";
 const SPECDEC_CONTROL_LABEL = "Speculative-decode credit (decode phase only)";
 
-/* The head of manifest row 8 — everything before the gate clause. Pinned as its own constant so
+/* The head of manifest the recorded review — everything before the gate clause. Pinned as its own constant so
    the tip's composition below names its head rather than eliding it: an oracle with an ellipsis in
    it is not an oracle, and T-21a demands byte equality. It carries NO canonical-constant text, so
    T-21c's occurrence counts are unaffected by it.
 
-   AMENDED BY COURT RECORD — Polaris gen-24 `esc-20260802T115802Z-351e891f`, 2026-08-02T12:27:55Z.
-   Row 8's ratified bytes are amended to STRIP the `**` emphasis pairs on surfaces that render plain
+   AMENDED 2026-08-02T12:27:55Z.
+   The adopted bytes are amended to STRIP the `**` emphasis pairs on surfaces that render plain
    text: *"the span pins the RUNTIME STRING A READER RECEIVES … asterisks printed to a reader were
    never the ratified intent — the ** pairs are authoring-layer notation that leaked into pinned
    text."* The ruling requires per-surface verification first, and it was done rather than assumed:
@@ -1429,7 +1429,7 @@ const SPECDEC_TIP_HEAD =
   + "reports this mechanism at another lab; that report never becomes a parameter of the fleet "
   + "this page models.";
 
-/* d-im-h800 — the NVLink-cap lever's canonical copy constants. Declared ABOVE TIPS for the same
+/* the adopted decision — the NVLink-cap lever's canonical copy constants. Declared ABOVE TIPS for the same
    reason the SPECDEC_* constants are: TIPS.nvlinkCapMinRatio and the SECTIONS entry compose from them,
    and a const cannot be read before its declaration is evaluated. The lever's mechanism (bounds,
    ladder, factor) lives beside the spec-decode lever further down. */
@@ -1469,7 +1469,7 @@ const NVLINKCAP_WHAT_IT_IS_NOT =
   + "already receives this adjustment. Turning it up declares your scenario, not this page's finding.";
 
 const TIPS = {
-  "final-answer": { t: "The public-data scenario", b: "This page's reading at low/committed planning rates: a model result under public-data assumptions, not a guaranteed minimum for actual margins, and not an estimate of them. Lower readings the calculator can produce under other assumptions or model forms are hypothetical sensitivities of the model, not observed margins. It is stated beside labeled spans across declared alternatives — never a confidence statement. The strongest external analyst hypothesis this registry carries (above 80%) is NOT part of this surface: it is ranked separately, outside the answer, because ranking someone else's claim is a statement about the evidence record rather than one of this calculator's readings. It is computed only at the public-data scenario's declared settings (the serve-feasibility-filtered evidence-informed default fleet at the Reference traffic anchor); adjusting any control above never moves these values. Every value is a policy-labeled scenario output — placement for closed models is unverified, so no central/verified identity exists, and the comparison slot stays honestly empty. Expert scrutiny is invited: the rationale annex links each number back to its evidence rows.", s: "Owner requirement (2026-07-22): an obvious final answer, rationale linked to evidence, defensible under expert scrutiny." },
+  "final-answer": { t: "The public-data scenario", b: "This page's reading at low/committed planning rates: a model result under public-data assumptions, not a guaranteed minimum for actual margins, and not an estimate of them. Lower readings the calculator can produce under other assumptions or model forms are hypothetical sensitivities of the model, not observed margins. It is stated beside labeled spans across declared alternatives — never a confidence statement. The strongest external analyst hypothesis this registry carries (above 80%) is NOT part of this surface: it is ranked separately, outside the answer, because ranking someone else's claim is a statement about the evidence record rather than one of this calculator's readings. It is computed only at the public-data scenario's declared settings (the serve-feasibility-filtered evidence-informed default fleet at the Reference traffic anchor); adjusting any control above never moves these values. Every value is a policy-labeled scenario output — placement for closed models is unverified, so no central/verified identity exists, and the comparison slot stays honestly empty. Expert scrutiny is invited: the rationale annex links each number back to its evidence rows.", s: "Adopted requirement (2026-07-22): an obvious final answer, rationale linked to evidence, defensible under expert scrutiny." },
   margin: { t: "Modeled unit direct-serving contribution margin", b: "1 − (modeled direct serving cost ÷ the modeled effective price) for the current traffic mix — a list-price metric only when the batch and discount sliders are 0%. Direct serving cost covers accelerator time, occupancy and the modeled serving stack — NOT support, unbilled retries, idle reservations, R&D or sales. This is not an audited accounting gross margin (see report §7 for the bridge), and 'marginal' here is an economic long-run-incremental lens, not the near-zero cash cost of one extra token on an idle server.", s: "Cited ranges (each with its own scope — see §1): TeorTaxes conditional 90→95%; Dylan Patel >80% (Opus, quoted-secondary); fleetingbits reported ~40-50% (accounting observation — the post did not define this calculator's direct-serving metric)." },
   "blended-cost": { t: "Blended serving cost", b: "Cost per 1M tokens across fresh input, cache reads and output on the declared hardware blend, divided by fleet utilization. Finite and capped legs render; infeasible legs produce no numbers. If only part of a blend renders, weights are renormalized over those legs and the result carries a visible blend-renormalized disclosure.", s: "" },
   "blended-price": { t: "Effective price", b: "What 1M tokens of this mix would bill at the selected list prices after cache-read discounts, batch-API share and negotiated discounts — a modeled figure, not observed provider revenue, and not the sticker price.", s: "SemiAnalysis observed Opus effective ~$0.99/Mtok vs $5/$25 sticker on 300:1 agentic traffic with >90% cache hits." },
@@ -1480,25 +1480,25 @@ const TIPS = {
   ioRatio: { t: "Input : output ratio", b: "Tokens read vs tokens generated. Named observations and conventions vary widely — input pricing and caching dominate real bills at the high end. These are not population ranges for 'chat' or 'agentic coding'.", s: "DeepSeek disclosure ≈4:1 · ncode deployment 8:1 (site-assumed ratio) · calculator Reference convention 15:1 · one Claude Code trace ≈300:1." },
   "kv-state-charge": { t: "KV/state charge per live sequence", b: "Decode performance uses the representative position L = ISL + OSL/2, while capacity reserves the terminal live-cache length LPeak = ISL + OSL. Both derive from the model's architecture registry and traffic profile \u2014 never from a hand-set byte constant. At the Reference mix (representative L = 15,500; peak LPeak = 16,000; FP8 KV), the flagship archetype reserves 0.562176 GB per live sequence for capacity. The earlier 0.5446 GB reconstruction was the representative-position charge and must not size peak residency.", s: "Derived, not assumed: MODEL_ARCH geometry \u00d7 the selected traffic profile's peak live-cache length." },
   cacheHit: { t: "Cache hit rate", b: "Share of input tokens served from prefix cache instead of recomputed. Cached reads bill at ~10% of input price but cost far less than that to serve — caching is a margin machine.", s: "xjdr GLM week: 41% · DeepSeek: 56.3% · SemiAnalysis Claude Code: ~95% (cut their bill 84%)." },
-  cacheCost: { t: "Cache-read serving cost", b: "Cost to serve a cached input token, as % of fresh prefill cost (KV storage + bandwidth, near-zero compute). DISCLOSED DEFAULT (b9 M1, r4 action 3): the 5% default is ANALYST-SET, not observed \u2014 no provider publishes a cache-read serving cost. It is separate from, and much smaller than, the published 10% cache-read PRICE. It is load-bearing: with the reference 15:1 mix at 60% cache hits it makes the executed cost identity C = C_out + 15 \u00d7 (0.40 + 0.60 \u00d7 0.05) \u00d7 C_in = C_out + 6.45 \u00d7 C_in, so the input side carries 72.42% of modeled direct cost at the public-data scenario's settings; the whole chain is reconstructed component by component, with each source and label and the cache-work boundary it assumes, at research/input-cost-reconstruction.html. Sensitivity 0\u201310% is the honest band.", s: "Analyst-set. The r4 adversarial review recovered this value from the cost arithmetic rather than from the stated defaults \u2014 it is now stated." },
+  cacheCost: { t: "Cache-read serving cost", b: "Cost to serve a cached input token, as % of fresh prefill cost (KV storage + bandwidth, near-zero compute). DISCLOSED DEFAULT (the adopted model): the 5% default is ANALYST-SET, not observed \u2014 no provider publishes a cache-read serving cost. It is separate from, and much smaller than, the published 10% cache-read PRICE. It is load-bearing: with the reference 15:1 mix at 60% cache hits it makes the executed cost identity C = C_out + 15 \u00d7 (0.40 + 0.60 \u00d7 0.05) \u00d7 C_in = C_out + 6.45 \u00d7 C_in, so the input side carries 72.42% of modeled direct cost at the public-data scenario's settings; the whole chain is reconstructed component by component, with each source and label and the cache-work boundary it assumes, at research/input-cost-reconstruction.html. Sensitivity 0\u201310% is the honest band.", s: "Analyst-set. The adversarial review of 2026-07-25 recovered this value from the cost arithmetic rather than from the stated defaults \u2014 it is now stated." },
   billCacheHit: { t: "Billable cached-input share", b: "Share of input tokens BILLED at the cache-read tariff. This is a different observable from the serving-side reuse share above it: providers' disk-cache statistics and billing-cache statistics are separate measurements, and no provider publishes both. Default: assumed equal to the serving reuse share (a labeled assumption). Set it separately to test how sensitive the margin is to that assumption — it can move headline provider cases by tens of points.", s: "DeepSeek disclosed a 56.3% disk-cache share; its BILLED cached share is undisclosed." },
   interact: { t: "Serving regime", b: "Selects the reviewed per-hardware declared batch for throughput, balanced or low-latency serving. The declared batch is capped at the topology's feasible batch; a zero feasible batch is explicitly infeasible and produces no throughput or cost. This is an operating-point selector, not a global decode multiplier, and no TTFT/TPOT target is guaranteed.", s: "SGLang GB300: ~11.2k tok/s/GPU at 50 tok/s/user, less at 80. CloudMatrix: 1,943 → 538 tok/s from 50ms → 15ms TPOT." },
-  hwMode: { t: "Cost basis", b: "Two of the three named procurement bases are selectable here (b9 M3, D-3). Rental $/hr = the LOW/COMMITTED PLANNING RENT basis: each hardware row's registered rate, a heterogeneous mix of public and analyst-set low/committed planning values that is not one purchasable market basket. Owned TCO = the OWNED/STRATEGIC TCO basis: build the hourly cost from capex, power, datacenter and opex — closer to what a lab with its own fleet pays. The third basis, PUBLIC-CAPACITY RENT (on-demand rate cards), is carried by the China public-cloud lens. Silently substituting one basis for another inside one computed mix is a suite-enforced error; a fleet declared with some legs rented and some owned is allowed, and says so on the leg.", s: "" },
+  hwMode: { t: "Cost basis", b: "Two of the three named procurement bases are selectable here (the adopted model, D-3). Rental $/hr = the LOW/COMMITTED PLANNING RENT basis: each hardware row's registered rate, a heterogeneous mix of public and analyst-set low/committed planning values that is not one purchasable market basket. Owned TCO = the OWNED/STRATEGIC TCO basis: build the hourly cost from capex, power, datacenter and opex — closer to what a lab with its own fleet pays. The third basis, PUBLIC-CAPACITY RENT (on-demand rate cards), is carried by the China public-cloud lens. Silently substituting one basis for another inside one computed mix is a suite-enforced error; a fleet declared with some legs rented and some owned is allowed, and says so on the leg.", s: "" },
   rentMultLeg: { t: "Procurement discounts by accelerator", b: "What this fleet actually pays per chip-hour, relative to the rate this page registers for each accelerator. 1.00x IS the registered rate — move a leg below it to model a committed or strategic contract, above it to model buying on a market rate card. The FAMILY control moves every accelerator in that family that has no value of its own; a per-accelerator value always wins over its family. These multiply the same registered rows the global multiplier scales, so a posture expressed here is the same kind of claim, just addressed to one leg. Nothing here is a disclosed contract: no lab publishes what it pays, and every value is the reader's or an adjudicator's judgment.", s: "Both round-2 adjudicators priced per accelerator: one at TPU x0.30 / Trainium x0.70 / NVIDIA undiscounted, the other as declared ranges per family (NVIDIA 0.90-1.00, TPU 0.30-0.70, Trainium 0.70-1.00)." },
   rentMult: { t: "GPU-hour cost multiplier", b: "Scales all rental rates. >1 models hyperscaler markup (Anthropic buys via AWS/GCP); <1 models spot/committed pricing. Moving it does not change the lens's declared procurement basis — a 6× stress on the planning vector is still the planning vector, stressed.", s: "TeorTaxes: H100 spot $2.40/hr (Jun 2026) · cloud list ≈ 1.5-1.8× neocloud." },
-  /* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): the absolute
+  /* Adopted 2026-08-22: the absolute
      controls carry the same source discipline at fleet and donor granularity. */
   rentAbsAll: { t: "Rental price, all accelerators", b: "Your stated absolute $/accelerator-hour replaces every registered rental rate. It is not multiplied by the global, family or per-accelerator multipliers. Leave it unset to use the registered rates. No lab publishes what it pays, so setting this is the reader's own claim, not this page's observation.", s: "Reader-stated scenario input; no representative lab contract price is public." },
   rentAbsLeg: { t: "Absolute rental price by accelerator", b: "Your stated absolute $/accelerator-hour for a donor replaces both its registered rate and the fleet-wide absolute price. It is not multiplied. On a custom fleet the donor key governs every leg cloned from that accelerator, including a leg with its own rentPerHr override. No lab publishes what it pays, so each value is the reader's own claim.", s: "Reader-stated scenario input; no representative lab contract price is public." },
   util: { t: "Fleet utilization", b: "Share of paid GPU-hours doing revenue work. Fleets are provisioned for peak; nights/weekends and failover idle the rest. All costs divide by this, so paid slack is allocated to served tokens.", s: "DeepSeek avg/peak nodes ⇒ ~81% (one disclosure). No representative industry distribution is public; the 50% default is an analyst central scenario and 30-60% a speculative sensitivity band." },
   energy: { t: "Serving energy (Wh per M tokens)", b: "Physical serving-energy intensity at the achieved operating point: operating power × PUE ÷ achieved throughput. Operating power is the TDP proxy (no per-accelerator operating-power measurement is public — a labeled analyst convention with a typed override hook). Deliberately NO utilization divisor: the dollar path allocates paid idle to served tokens, while the Wh figure deliberately does not. Idle boards DO draw power; this page does not model that draw, so the Wh figure is an operating-point intensity and not a fleet-average one, and charging full-power idle hours as energy would overstate it. Scope is accelerator × PUE only — full-stack telemetry (accelerators ≈58% of per-prompt energy, 1.72× stack overhead) implies a full-stack figure ≈1.4× above this at the default PUE. Cache reads are charged the same analyst-set 5%-of-prefill fraction the cost side uses, as a proxy.", s: "DeepSeek H800 decode disclosure ⇒ ≈131 Wh/Mtok output-side at 700 W × 1.25 PUE; Google telemetry: ≈0.24 Wh median per text prompt, full stack." },
-  procBasis: { t: "Procurement basis", b: "Every scenario preset is typed to one of three named procurement bases (b9 M3, D-3): PUBLIC-CAPACITY RENT (on-demand rate cards — the China public-cloud lens), LOW/COMMITTED PLANNING RENT (the registered heterogeneous planning vector — this page's default), and OWNED/STRATEGIC TCO (hourly cost from capex, power, datacenter, opex). Silently substituting one basis for another inside one computed mix is a suite-enforced error; a fleet declared with some legs rented and some owned is allowed, and says so on the leg. Electricity dollars are explicit ONLY under owned/strategic TCO; under rent bases they are embedded in the rent and not separately decomposable — decomposing rent without TCO assumptions would be fabrication.", s: "" },
-  stackMult: { t: "Serving-stack efficiency", b: "MEASURED STACK COMPOSITION relative to the published-open-practice baseline (b9 M5, D-5 adjudication): 1.0 is the SAME referent as the algorithmic-lead slider's zero. The old 1.25 \"frontier lab (assumed)\" label is retired — a frontier assumption is exactly what the algorithmic-lead slider now represents defensibly (1.25× ≈ +2.4 months at 3×/yr), and holding the assumption in two places at once double-counts it; setting both above their baselines fires a non-blocking overlap warning. Composes outside the reviewed roofline calibration: eta_eff = per-row eta_dec × this factor for decode, and eta_pre_eff = the universal prefill eta_pre × this factor. It does not change the declared batch, precision tuple or traffic-derived length. Dive-replay values keep their anchored-replay meaning.", s: "InferenceX: software alone took B300 R1 from 1k → 14k tok/s/GPU (14×). Baseline already includes most of that." },
-  trendMonths: { t: "Algorithmic lead (months vs published open practice)", b: "A broad, UNSPECIFIED efficiency prior: how many months of algorithmic progress a lab's private serving stack is ahead of published open practice, in RESIDUAL, non-hardware, accelerator-portable gains that this page does not otherwise model. E = rate^(months/12) and modeled cost-out divides by E, in every serving phase. The per-lab defaults are an OWNER-RATIFIED SCENARIO PRIOR, not a measurement: Anthropic/OpenAI/Google +3 · DeepSeek +1 (+2 defensible) · other frontier Chinese labs 0 (their published open work DEFINES the zero) · labs with no ratified prior 0, labeled unassessed. Below zero is permitted. It is inert under a published-operating-point replay — the lab's actual efficiency is already inside one. VALIDITY: only residual gains count; hardware, quantization, batching and caching are modeled elsewhere, and representing them here too double-counts. AXIS DISCIPLINE: capability lag (~4 months, Epoch-measured) is a DIFFERENT axis and is never this slider. REFUSED: the published PRICE series (9×-900×/yr — Epoch price index, a16z 10×, AI Index 280×) measure tariffs, not serving efficiency; this slider never uses them.", s: "Gundlach et al., arXiv:2511.23455 (MIT FutureTech) + Epoch AI data: ~3×/yr algorithmic efficiency, halving ≈7.57 months." },
+  procBasis: { t: "Procurement basis", b: "Every scenario preset is typed to one of three named procurement bases (the adopted model, D-3): PUBLIC-CAPACITY RENT (on-demand rate cards — the China public-cloud lens), LOW/COMMITTED PLANNING RENT (the registered heterogeneous planning vector — this page's default), and OWNED/STRATEGIC TCO (hourly cost from capex, power, datacenter, opex). Silently substituting one basis for another inside one computed mix is a suite-enforced error; a fleet declared with some legs rented and some owned is allowed, and says so on the leg. Electricity dollars are explicit ONLY under owned/strategic TCO; under rent bases they are embedded in the rent and not separately decomposable — decomposing rent without TCO assumptions would be fabrication.", s: "" },
+  stackMult: { t: "Serving-stack efficiency", b: "MEASURED STACK COMPOSITION relative to the published-open-practice baseline (the adopted model, D-5 adjudication): 1.0 is the SAME referent as the algorithmic-lead slider's zero. The old 1.25 \"frontier lab (assumed)\" label is retired — a frontier assumption is exactly what the algorithmic-lead slider now represents defensibly (1.25× ≈ +2.4 months at 3×/yr), and holding the assumption in two places at once double-counts it; setting both above their baselines fires a non-blocking overlap warning. Composes outside the reviewed roofline calibration: eta_eff = per-row eta_dec × this factor for decode, and eta_pre_eff = the universal prefill eta_pre × this factor. It does not change the declared batch, precision tuple or traffic-derived length. Dive-replay values keep their anchored-replay meaning.", s: "InferenceX: software alone took B300 R1 from 1k → 14k tok/s/GPU (14×). Baseline already includes most of that." },
+  trendMonths: { t: "Algorithmic lead (months vs published open practice)", b: "A broad, UNSPECIFIED efficiency prior: how many months of algorithmic progress a lab's private serving stack is ahead of published open practice, in RESIDUAL, non-hardware, accelerator-portable gains that this page does not otherwise model. E = rate^(months/12) and modeled cost-out divides by E, in every serving phase. The per-lab defaults are an adopted SCENARIO PRIOR, not a measurement: Anthropic/OpenAI/Google +3 · DeepSeek +1 (+2 defensible) · other frontier Chinese labs 0 (their published open work DEFINES the zero) · labs with no ratified prior 0, labeled unassessed. Below zero is permitted. It is inert under a published-operating-point replay — the lab's actual efficiency is already inside one. VALIDITY: only residual gains count; hardware, quantization, batching and caching are modeled elsewhere, and representing them here too double-counts. AXIS DISCIPLINE: capability lag (~4 months, Epoch-measured) is a DIFFERENT axis and is never this slider. REFUSED: the published PRICE series (9×-900×/yr — Epoch price index, a16z 10×, AI Index 280×) measure tariffs, not serving efficiency; this slider never uses them.", s: "Gundlach et al., arXiv:2511.23455 (MIT FutureTech) + Epoch AI data: ~3×/yr algorithmic efficiency, halving ≈7.57 months." },
   trendRate: { t: "Algorithmic-progress rate", b: "The ×/yr rate the months convert through: E = rate^(months/12). 3×/yr is the ratified default (halving ≈7.57 months); 2× and 5× are the pre-registered sensitivity settings. Only these three are selectable — an interpolated rate would be an unratified number wearing a ratified label.", s: "3×/yr central; the 2×/5× brackets are sensitivity, not competing estimates." },
-  /* b9 spec-decode LEVER — manifest row 8, RATIFIED (esc-20260801T042349Z-20c444d8). The lever's
+  /* spec-decode LEVER — manifest the recorded review, RATIFIED (the note of 2026-08-01). The lever's
      PRIMARY disclosure surface, and the second of the two places the Q-A ruling requires the gate's
-     conservatism to appear (the memo is the other). The two claim-bearing stretches are the fully
+     conservatism to appear (the design specification is the other). The two claim-bearing stretches are the fully
      expanded canonical constants, byte-for-byte and in this order — T-21a asserts the composition,
      so the tip cannot drift from the why-line or the methods box the way it did in rounds 6 and 9.
      `s` is deliberately EMPTY: the ratified bytes already carry the evidence, in its two classes
@@ -1509,7 +1509,7 @@ const TIPS = {
     + SPECDEC_GATE_SEMANTICS
     + " What that costs you: " + SPECDEC_CONSERVATISM
     + ". Turning this up declares your scenario, not this page's finding.", s: "" },
-  /* d-im-h800 (owner note aca09d, 2026-08-18) — the lever's PRIMARY disclosure surface. Composed from
+  /* the adopted decision (the author's note, 2026-08-18) — the lever's PRIMARY disclosure surface. Composed from
      the canonical constants below so the tip, the section title, the per-leg copy and the chart note
      cannot drift apart. */
   nvlinkCapMinRatio: { t: NVLINKCAP_CONTROL_LABEL, b: NVLINKCAP_TIP_HEAD + " " + NVLINKCAP_WHAT_IT_DOES + " "
@@ -1524,7 +1524,7 @@ const TIPS = {
   dcPerW: { t: "Datacenter capex", b: "$ per watt of IT capacity to build the shell+power+cooling, amortized over ~12 years here.", s: "SemiAnalysis-style estimates: $9-15/W." },
   lifeYears: { t: "GPU depreciation", b: "Years over which accelerator capex is written off. Shorter = more expensive tokens.", s: "Debated 3-6 years across the discourse; hyperscalers' server accounting uses 5-6. The 5-year default is a page-set scenario value." },
   clusterOh: { t: "Cluster overhead", b: "Multiplier on GPU capex for CPUs, networking, storage, integration.", s: "" },
-  /* im-arc T4 fold (2026-08-24), memo §2: RELABEL only — the numeric semantics and the band are
+  /*  (2026-08-24), : RELABEL only — the numeric semantics and the band are
      HELD, because the two arms' annual bands ({0.5, 1.5, 2.5} vs {4, 7, 12} %/yr) sit on
      different denominators. What was wrong was presenting 8 as an annual figure: it is 8% of the
      straight-line capex-hour line, whose per-year equivalent DEPENDS ON THE LIFE. */
@@ -1561,7 +1561,7 @@ const SECTIONS = [
       ticks: [{ v: 41, l: "xjdr 41%" }, { v: 56, l: "DeepSeek 56%", alt: true }, { v: 95, l: "Claude Code 95%" }] },
     { k: "interact", label: "Serving regime (declared decode batch; prefill is resolved separately)", type: "radio", options: [["batch", "Throughput regime (declared batch; may cap)"], ["balanced", "Balanced regime (declared batch; may cap)"], ["fast", "Low-latency regime (declared batch; may cap)"]], tip: "interact", tier: "advanced" },
   ]},
-  /* row 499 (COMPLETENESS DOCTRINE, owner ruling): its own section, because the ruling is that a
+  /* the recorded review (COMPLETENESS DOCTRINE, the adopted decision): its own section, because the ruling is that a
      reader must be able to compute anything an adjudicator assumes — and both round-2 adjudicators
      assumed PER-ACCELERATOR procurement discounts that this page could only express as one global
      multiplier. One of them wrote its procurement posture into the per-family EFFICIENCY keys for
@@ -1579,13 +1579,13 @@ const SECTIONS = [
       ticks: [{ v: 0.8, l: "0.8× vector" }, { v: 1.0, l: "registered vector" }, { v: 1.6, l: "1.6× stress" }] },
     { k: "util", label: "Fleet utilization", unit: "%", min: 15, max: 95, step: 1, tip: "util", tier: "basic",
       ticks: [{ v: 35, l: "peak-provisioned" }, { v: 50, l: "central scenario", alt: true }, { v: 81, l: "DeepSeek ~81%" }] },
-    /* b9 M5 §11.2 (D-5 adjudication): ticks RELABELED, values/range/step unchanged. 1.0 names the
+    /*   (D-5 adjudication): ticks RELABELED, values/range/step unchanged. 1.0 names the
        same referent as the algorithmic-lead zero; the retired "frontier lab (assumed)" label moves
        to the trend slider, which represents that assumption defensibly. */
     { k: "stackMult", label: "Serving-stack efficiency", unit: "×", min: 0.4, max: 1.6, step: 0.05, tip: "stackMult", tier: "advanced",
       ticks: [{ v: 0.7, l: "no MTP/disagg" }, { v: 1.0, l: "published open practice (SGLang class)" }, { v: 1.25, l: "measured-composition stress (≈ +2.4 mo equivalent at 3×/yr)", alt: true }] },
   ]},
-  /* b9 M5 (memo §8.1): the family multipliers get their OWN section, immediately after the
+  /* : the family multipliers get their OWN section, immediately after the
      hardware blend they act on. `interlockGroup` tells the app which lever group this section
      belongs to — the app renders the lock state, the why-line and the unlock affordance from it;
      the engine stays DOM-free. */
@@ -1599,7 +1599,7 @@ const SECTIONS = [
     { k: "famAscend", label: "Huawei Ascend family", unit: "×", min: 0.50, max: 1.50, step: 0.01, tip: "familySliders", tier: "advanced",
       ticks: [{ v: 0.75, l: "broad stress", alt: true }, { v: 1.0, l: "no family adjustment" }, { v: 1.25, l: "broad stress", alt: true }] },
   ]},
-  /* b9 M5 (memo §9): the algorithmic-lead prior. Its own section so the interlock's lock state,
+  /* : the algorithmic-lead prior. Its own section so the interlock's lock state,
      why-line and unlock affordance attach to exactly one group. */
   { title: "Algorithmic lead (scenario prior)", interlockGroup: "trend", params: [
     { k: "trendMonths", label: "Algorithmic lead (months vs published open practice)", unit: "mo", min: -12, max: 12, step: 1, tip: "trendMonths", tier: "basic",
@@ -1607,7 +1607,7 @@ const SECTIONS = [
     { k: "trendRate", label: "Algorithmic-progress rate", type: "select", numeric: true, tip: "trendRate", tier: "advanced",
       options: [[2, "2×/yr (conservative sensitivity)"], [3, "3×/yr — ratified default (halving ≈7.57 mo)"], [5, "5×/yr (aggressive sensitivity)"]] },
   ]},
-  /* b9 spec-decode LEVER (memo D-SD-6; manifest rows 22-26, RATIFIED) — its OWN section, placed
+  /* spec-decode LEVER (the design requirements; manifest the recorded review-26, RATIFIED) — its OWN section, placed
      immediately after the algorithmic-lead prior, and deliberately carrying NO `interlockGroup`:
      the app renders lock state from that field, and `specDec` is a SPECIFIED lever, which D-5
      Amendment 2 says is never locked by the interlock. A section that named a group would render
@@ -1626,7 +1626,7 @@ const SECTIONS = [
               { v: 1.14, l: "≈14% — production-like batch (SGLang-reported open-stack measurement)" },
               { v: 1.60, l: "≈60% — modest concurrency (SGLang-reported open-stack measurement)", alt: true }] },
   ]},
-  /* d-im-h800 (owner note aca09d): the H800/H100 differential — its OWN section, right after the
+  /* the adopted decision (the author's note): the H800/H100 differential — its OWN section, right after the
      spec-decode lever, no `interlockGroup` (a SPECIFIED lever, never locked). Bounds are literals for
      the same reason as specDec's (NVLINKCAP_BOUNDS is declared further down; the suite asserts the
      two agree). Bounds [1.00, 1.25] (Pro review 2026-08-18 Q3: no value below 1.00 — removing a cap
@@ -1648,7 +1648,7 @@ const SECTIONS = [
               { v: 0.12, l: "constrained grid", alt: true }] },
     { k: "pue", label: "PUE (cooling overhead)", unit: "", min: 1.05, max: 1.5, step: 0.01, tip: "pue", tier: "basic",
       ticks: [{ v: 1.1, l: "liquid-cooled" }, { v: 1.35, l: "legacy air", alt: true }] },
-    /* im-arc T4 fold (2026-08-24), memo §2: the ticks now name their DATED anchors. The prior
+    /*  (2026-08-24), : the ticks now name their DATED anchors. The prior
        "SemiAnalysis-ish" label is withdrawn — neither arm could attribute it to a public
        statement, and the scope (shell + MEP per delivered IT watt, excluding compute and
        scale-out networking) was never stated at all. */
@@ -1660,12 +1660,12 @@ const SECTIONS = [
       ticks: [{ v: 4, l: "4 yr — cost TOP corner (Nebius pre-2026)" }, { v: 5, l: "scenario default" },
               { v: 6, l: "6 yr — cost BOTTOM corner (MSFT/GOOG/ORCL/CRWV)", alt: true }] },
     { k: "dcLifeYears", label: "Facility economic life", unit: "yr", min: 5, max: 30, step: 1, tip: "dcLifeYears", tier: "advanced",
-      ticks: [{ v: 10, l: "10 yr — cost TOP corner" }, { v: 12, l: "12 yr — the pre-fold hard-coded literal" },
+      ticks: [{ v: 10, l: "10 yr — cost TOP corner" }, { v: 12, l: "12 yr — the previous hard-coded literal" },
               { v: 15, l: "scenario default" }, { v: 20, l: "20 yr — cost BOTTOM corner", alt: true }] },
     { k: "clusterOh", label: "Cluster overhead", unit: "×", min: 1.1, max: 1.6, step: 0.05, tip: "clusterOh", tier: "advanced" },
     { k: "opexPct", label: "Operations overhead", unit: "%", min: 2, max: 20, step: 1, tip: "opexPct", tier: "advanced" },
   ]},
-  /* im-arc T4 fold (2026-08-24), memo §2.1 [F6]: the named basis is EXPOSED in the advanced
+  /*  (2026-08-24),  [F6]: the named basis is EXPOSED in the advanced
      tier and OFF by default there, exactly as it is off in the basic tier, in the codec and over
      MCP. A tier is a display filter; it is never an input. */
   { title: "Economic capital recovery (advanced basis — off by default)", showIf: s => s.hwMode === "tco", params: [
@@ -1704,7 +1704,7 @@ function makeScenarioContext(m, tr, customDonor, perspKind, perspId) {
   // customDonor (slice-3 review R7 P1 fix): rooflinePoint()/resolveArch() consult ctx.customDonor
   // for model="custom" only; passing it through unconditionally is harmless for every other model
   // (resolveArch ignores the field unless modelId === "custom").
-  /* b9 M5: perspKind carries the selected perspective's KIND so trendFactor() can force E = 1
+  /* : perspKind carries the selected perspective's KIND so trendFactor() can force E = 1
      under a replay (D-5). Optional and absent-safe: a context without it falls back to the state's
      own trendMonths, which applyPresetSettings already seeds to 0 for every replay. A synthetic
      MODIFIED state has no perspective and correctly reports none — it is no longer a replay. */
@@ -1735,7 +1735,7 @@ function registerScenarioContext(s, ctx) {
 // loadSavedPreset: validate a saved numeric diff against the current schema before merging it over
 // DEFAULTS, then register under the given model/traffic. Epoch equality alone is not authority:
 // localStorage is user-editable, and an older v22 UI could persist active > total.
-/* b9 spec-decode LEVER ([N-CORRECTION-LIFETIME] rule 1): the return contract is now
+/* spec-decode LEVER ([N-CORRECTION-LIFETIME] rule 1): the return contract is now
    `{state, corrections}`. This function DISCARDED its own `validated` result before — it computed a
    sanitize outcome and returned a bare state — so a forced correction had nowhere to go and
    localStorage, which is user-editable, was a state-construction path that could silently rewrite a
@@ -1795,7 +1795,7 @@ function contextLimitSourceFor(ctx) {
 }
 function hwKeyFor(hw) {
   if (hw === RUBIN) return "rubin";
-  /* b9 M4 (memo §2.5/§3.2): a custom-fleet leg's effective row resolves EVERY by-key
+  /* : a custom-fleet leg's effective row resolves EVERY by-key
      registry (roofline, operating points, tuples, rentBasis, PRICE_EVIDENCE) through
      its calibration DONOR — the performance identity is the donor's, disclosed on the
      leg. Own-field check, never prototype. */
@@ -1804,7 +1804,7 @@ function hwKeyFor(hw) {
   if (!key) throw new Error("hardware row is not registered on the v2.2 roofline path");
   return key;
 }
-/* R2 (im4-r2-shipment-plan §1.2; memo §0-bis): the live render path consumes the
+/* Trusted feasibility: the live render path consumes the
    capacity solver's declared-operating-point width — the loaded-bytes policy reaches
    ONLY the width solve (throughput terms stay on the performance tuple sW; the
    calibration-invariant twins pin the firewall). Regime composition:
@@ -1821,7 +1821,7 @@ function hwKeyFor(hw) {
      two-boolean contract; a capacity floor alone never renders).
    - No-domain rows (rubin) keep the registry shape-only path.
    renderOpts.loadedWeightBytesPerParam is the LABELED three-point sensitivity
-   channel (§0-ter) — never encoded, never persisted, never a default. */
+   channel — never encoded, never persisted, never a default. */
 function rooflinePoint(hw, s, activeOverride, supplied, renderOpts) {
   const R = rooflineCore(), ctx = scenarioContext(s, supplied), hwKey = hwKeyFor(hw);
   const arch = R.resolveArch(ctx.modelId, ctx.customDonor);
@@ -1829,7 +1829,7 @@ function rooflinePoint(hw, s, activeOverride, supplied, renderOpts) {
   const lengths = R.resolveTrafficLengths({ profileId: ctx.profileId ?? null, ioRatio: s.ioRatio });
   const contextWindow = R.contextWindowStatus(arch, lengths, contextLimitSource);
   const base = { R, ctx, hwKey, arch };
-  /* b9 M4 (memo §2.9): a custom leg's user-declared HBM capacity rides renderOpts.cfLeg into
+  /* : a custom leg's user-declared HBM capacity rides renderOpts.cfLeg into
      the solver AND every renderPoint below — the solve identity and the render must carry the
      SAME override (the core's trusted-solve check enforces it).
      T5 rec 4: the channel now carries BYTES, the registry's own normative unit, so there is no
@@ -1865,8 +1865,8 @@ function rooflinePoint(hw, s, activeOverride, supplied, renderOpts) {
     : { ctx, loadedWeightBytesPerParam: policyOverride, hbmBytesOverride: hbmOv });
   if (!solved) { // no-domain row (rubin): registry shape-only path, unchanged
     /* A REGIME THE ROW DECLARES NO CELL FOR IS A TYPED NO-RENDER STATE HERE, NOT AN EXCEPTION
-       (bq-2196, 2026-09-10). `resolveOperatingPoint` hard-errors on an absent regime and that is
-       correct for every row with a domain: memo §4/§6 makes absence a defect precisely so nobody
+       (2026-09-10). `resolveOperatingPoint` hard-errors on an absent regime and that is
+       correct for every row with a domain:  makes absence a defect precisely so nobody
        silently substitutes a neighbouring cell. But RUBIN is a projection row that declares ONLY
        `balanced` — OPERATING_POINTS.rubin's own basis field says "RUBIN has no batch/fast regimes
        — fields absent by design" — so on this path the hard error fires on the data being exactly
@@ -1874,16 +1874,15 @@ function rooflinePoint(hw, s, activeOverride, supplied, renderOpts) {
        The cost was not theoretical: renderGenChart() builds its columns inside a .map(), so the
        throw escaped mid-build and the cost-per-generation chart rendered as NOTHING — no SVG, no
        table — on every one of those pairs, with the previous scenario's operating-point note left
-       standing above the hole. Nobody had checked #chart-gen; bq-2196 recorded the DOM as complete
+       standing above the hole. Nobody had checked #chart-gen;  recorded the DOM as complete
        on the strength of the hero, cost, feasibility and leg rows.
-       So the asking side gets the branch the memo's rule always implied: no declared cell on a
+       So the asking side gets the branch the contract always implied: no declared cell on a
        no-domain row means NO NUMBERS, stated as a typed state with its reason, exactly like the
        infeasible and context-window states beside it. The hard error is untouched everywhere it
-       belongs — a row WITH a domain that is missing a regime still throws, which is the case memo
-       §4/§6 was written for. */
+       belongs — a row WITH a domain that is missing a regime still throws, which is the case  was written for. */
     if (!cell) {
       const reason = "operating point absent by design: OPERATING_POINTS." + hwKey + " declares no '"
-        + String(s.interact) + "' regime (memo §4/§6 — this is a projection row with no serving "
+        + String(s.interact) + "' regime (this is a projection row with no serving "
         + "anchor, not a missing figure), so no throughput and no cost are computed for it";
       const op = { infeasible: true, b: null, bDeclared: null, bFeas: null, capped: false,
         regime: s.interact, hwKey, opBasis: "regime-absent-by-design", opCitation: null,
@@ -1937,17 +1936,17 @@ function rooflinePoint(hw, s, activeOverride, supplied, renderOpts) {
     hbmBytesOverride: hbmOv,
   }) };
 }
-/* ================= b9 M3 — energy/electricity dimension (memo research/b9-m3-energy-memo.md) =====
-   The three procurement bases (plan D-3; display names verbatim from the owner-spec decision).
-   Two typed concepts share the enum and must never conflate (memo §3.2):
+/* =================  — energy/electricity dimension (adopted design) =====
+   The three procurement bases (plan D-3; adopted display names).
+   Two typed concepts share the enum and must never conflate:
    - ROW basis (engine-data rentBasis): the evidence class of a registered rent NUMBER —
-     uniformly committed-planning-rent since the b9 M1 repair.
-   - LENS basis (procurementBasis on PERSPECTIVES; for the generic §10-dive replay, the
+     uniformly committed-planning-rent since the  repair.
+   - LENS basis (procurementBasis on PERSPECTIVES; for the generic  replay, the
      DIVE_PROCUREMENT_BASES side registry below — never inside the dive objects themselves,
      whose keys applyPresetSettings copies into scenario state): what the scenario is costing
      in. A declaration — user slider edits produce the existing modified-state disclosures and
      never silently re-derive the basis from a multiplier position. Displayed labels come from
-     the LENS basis via displayedProcurementBasis (M3 gate P1): the row basis is the
+     the LENS basis via displayedProcurementBasis (procurement-basis contract): the row basis is the
      mixing-uniformity enforcement value, not the user-facing lens name. */
 const PROCUREMENT_BASES = Object.freeze(["public-capacity-rent", "committed-planning-rent", "owned-strategic-tco"]);
 const PROCUREMENT_BASIS_NAMES = Object.freeze({
@@ -1963,13 +1962,12 @@ function engineData() {
     : { CALIBRATION, HW_ROOFLINE, OPERATING_POINTS, WEIGHT_PLACEMENT, PRECISION_TIER_MAP, resolveDecodePlacement };
 }
 /* ONE operating-power concept feeds both the energy surface and the owned-TCO power term
-   (memo §7 decision 3): boardPowerW (measured operating watts, engine-data registry) when
-   registered; the analyst TDP proxy otherwise. All registered boardPowerW are null as of M3,
-   so this resolver returns hw.tdp verbatim and the cost path stays byte-identical (memo §1;
-   suite T4/T7). The DC-shell term below deliberately stays on tdp: the shell is sized for
+   (shared resolver): boardPowerW (measured operating watts, engine-data registry) when
+   registered; the analyst TDP proxy otherwise. All registered boardPowerW are null in the current registry,
+   so this resolver returns hw.tdp verbatim and the cost path stays byte-identical (suite T4/T7). The DC-shell term below deliberately stays on tdp: the shell is sized for
    PROVISIONED watts, not operating draw. */
 function opPowerKw(hw, cfLeg) {
-  /* b9 M4 precedence (memo §2.5): leg boardPowerW override > registry boardPowerW >
+  /*  precedence: leg boardPowerW override > registry boardPowerW >
      analyst TDP proxy. The leg channel rides renderOpts.cfLeg (the
      loadedWeightBytesPerParam options-channel precedent), never the HW row object. */
   if (cfLeg && cfLeg.boardPowerW != null) return cfLeg.boardPowerW / 1000;
@@ -1985,7 +1983,7 @@ function sectionBasisMode(basis, s) {
   if (basis === "public-capacity-rent" || basis === "committed-planning-rent") return "rent";
   return s.hwMode;
 }
-/* im-arc T2 fix-2 R1 (2026-08-23): one pure resolver owns the generic
+/* -2 R1 (2026-08-23): one pure resolver owns the generic
    heterogeneous planning-rate vector and every reader dial layered on it.
    Hypothetical section donors call this same function; they may not recreate
    or partially copy the T1 precedence ladder. */
@@ -1999,12 +1997,12 @@ function registryPlanningRentHr(hw, s, cfLeg) {
   const perFam = (s.rentMultFam && s.rentMultFam[familyOf(hw, cfLeg)] != null)
     ? s.rentMultFam[familyOf(hw, cfLeg)] : null;
   const legMult = perLeg != null ? perLeg : (perFam != null ? perFam : 1);
-  /* im-arc T4 fold (2026-08-24), memo §6 [F10]: a historical state may pin the REGISTERED rate
+  /*  (2026-08-24),  [F10]: a historical state may pin the REGISTERED rate
      this row carried before the fold. It is applied here — below every reader control, above the
      registry — so the multiplier ladder a route declares still applies to it. */
   const pinned = (s.rentRegistryPin && s.rentRegistryPin[legKey] != null) ? s.rentRegistryPin[legKey] : null;
   if (pinned != null) return pinned * s.rentMult * legMult;
-  /* im-arc T4 fold (2026-08-24), memo §4: a null registered rent means NO admissible public
+  /*  (2026-08-24), : a null registered rent means NO admissible public
      planning quote exists for this row. It resolves as unavailable — NaN, which the section
      and leg machinery already renders as a dropped leg with a stated reason (T2 fix-2) — and
      it never falls back to the retired point. The reader-stated ladder ABOVE this line is
@@ -2017,7 +2015,7 @@ function registryPlanningRentReceipt(hwKey, s) {
   const hw = HW[hwKey], row = engineData().HW_ROOFLINE[hwKey];
   if (!hw || !row || !row.prov || typeof row.prov.rentBasis !== "string")
     throw new TypeError("registered rent provenance is unavailable for donor " + hwKey);
-  /* im-arc T4 fold (2026-08-24), memo §4: the receipt now carries the SELECTED QUOTE — its id,
+  /*  (2026-08-24), : the receipt now carries the SELECTED QUOTE — its id,
      its actual deal class, its full triple and its date — so a reader or a caller can see which
      observation the planning number is, and an unavailable row says so in words instead of
      returning a bare NaN with no explanation. */
@@ -2044,21 +2042,21 @@ function hwHourCost(hw, s, cfLeg) {
   if (ED_FLEET.PRICE_EVIDENCE[hwKeyFor(hw)] === "unpriced") return NaN;
   const mode = sectionBasisMode(cfLeg && cfLeg.basis, s);
   if (mode === "rent") {
-    /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §1.2): an explicit
+    /* : an explicit
        section rent is the most specific statement and therefore precedes T1's
        global absolute controls. null means this section deliberately inherits. */
     if (cfLeg && Object.prototype.hasOwnProperty.call(cfLeg, "rentHr") && cfLeg.rentHr !== null)
       return cfLeg.rentHr;
-    /* row 499: the per-leg posture rides the SAME rent branch as the global multiplier — owned-TCO
+    /* the recorded review: the per-leg posture rides the SAME rent branch as the global multiplier — owned-TCO
        is untouched (its per-leg channel is `cfLeg.kwhPerKwh`, below). Absent map or absent key = 1,
        so the arithmetic is bit-identical wherever no per-leg posture is declared. */
-    /* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): absolute
+    /* Adopted 2026-08-22: absolute
        reader-stated prices replace the registered/custom row BEFORE the multiplier ladder;
        per-leg specificity precedes the family fallback inside the shared resolver. */
     return registryPlanningRentHr(hw, s, cfLeg);
   }
   const capexUsd = cfLeg && cfLeg.capexUsd != null ? cfLeg.capexUsd : registeredCapexFor(hw, s);
-  /* im-arc T4 fold (2026-08-24), memo §2 [F5]: the overhead follows the capex SCOPE — the row's
+  /*  (2026-08-24),  [F5]: the overhead follows the capex SCOPE — the row's
      registered scope, or the reader's own when the reader stated the capex (round 4). */
   const clusterOh = clusterOverheadForLeg(hw, s, cfLeg);
   const lifeYears = cfLeg && cfLeg.lifeYears != null ? cfLeg.lifeYears : s.lifeYears;
@@ -2069,16 +2067,16 @@ function hwHourCost(hw, s, cfLeg) {
   const capex = capexUsd * clusterOh;
   const capexHr = capex / (lifeYears * 8760);
   const facilityCapital = dcPerW * hw.tdp * 1000;
-  /* im-arc T4 fold (2026-08-24), memo §2: the facility life that was the LITERAL 12 here is now
+  /*  (2026-08-24), : the facility life that was the LITERAL 12 here is now
      the named default `dcLifeYears`. Provisioned watts, never operating draw. */
   const dcHr = facilityCapital / (dcLifeYears * 8760);
-  /* im-arc T4 fold (2026-08-24), memo §2.1 [F6]: two capital-recovery increments, each its own
+  /*  (2026-08-24),  [F6]: two capital-recovery increments, each its own
      disclosed line, each against ITS OWN life. Off (the canonical default) makes the rate zero
      and both increments exactly zero. */
   const recoveryRate = capitalRecoveryRate(s);
   const capitalRecoveryAccelerator = capitalRecoveryIncrementHr(recoveryRate, lifeYears, capex);
   const capitalRecoveryFacility = capitalRecoveryIncrementHr(recoveryRate, dcLifeYears, facilityCapital);
-  /* b9 M4 (memo §2.8): the per-leg $/kWh override is LIVE only here — the owned-TCO
+  /* : the per-leg $/kWh override is LIVE only here — the owned-TCO
      power term. Under rent bases this function returns above and the override prices
      nothing (inert-and-explained in the UI, D-2 verbatim). */
   const kwh = cfLeg && cfLeg.kwhPerKwh != null ? cfLeg.kwhPerKwh : s.kwh;
@@ -2098,9 +2096,9 @@ function hwHourParts(hw, s, cfLeg) { // for the stack chart (TCO mode)
   const opexPct = cfLeg && cfLeg.opexPct != null ? cfLeg.opexPct : s.opexPct;
   const capex = capexUsd * clusterOh;
   const facilityCapital = dcPerW * hw.tdp * 1000;
-  const kwh = cfLeg && cfLeg.kwhPerKwh != null ? cfLeg.kwhPerKwh : s.kwh; // b9 M4: same override as hwHourCost — the chart may never disagree with the mix
+  const kwh = cfLeg && cfLeg.kwhPerKwh != null ? cfLeg.kwhPerKwh : s.kwh; // : same override as hwHourCost — the chart may never disagree with the mix
   const recoveryRate = capitalRecoveryRate(s);
-  /* im-arc T4 fold (2026-08-24): the two capital-recovery increments are DISCLOSED LINES beside
+  /*  (2026-08-24): the two capital-recovery increments are DISCLOSED LINES beside
      the straight-line depreciation, never folded into it — the reader can always see the
      legacy view and the economic view side by side. */
   return {
@@ -2136,7 +2134,7 @@ function capitalRecoveryDisclosure(s, hwKey) {
     note: "Opening the advanced tier does not activate this basis. An `on` state is explicit in the scenario, in the share link and in the MCP argument, so the same state reproduces whatever tier renders it.",
   };
 }
-/* ---------- b9 M5: the two broad-unspecified levers (memo §8.2/§9.3, decision D-13) ----------
+/* ---------- : the two broad-unspecified levers (broad-efficiency contract) ----------
    BOTH compose as ONE multiplier on the roofline's RETURNED effective throughput — never inside
    η. Rationale (design gate round 1, P1-1): `stackMult` enters η BEFORE decode's unscaled
    collective term (tIter = tRoof + tCc), so an η-site factor is not an exact final-throughput
@@ -2144,7 +2142,7 @@ function capitalRecoveryDisclosure(s, hwKey) {
    trend +12, E=3). Post-roofline multiplication is EXACT for the ratified cost-out ÷ E by
    construction (costPerMtok ∝ 1/tokPerS), never violates the η ≤ 1 guard, and leaves
    capacity/batch feasibility untouched (neither consumes tokPerS). It also moves Wh/Mtok
-   coherently — a software-efficiency gain IS more tokens per joule — so the M3 $↔Wh identity
+   coherently — a software-efficiency gain IS more tokens per joule — so the $↔Wh identity
    stays green by construction rather than needing an energy carve-out. */
 function trendFactor(s, ctx) {
   /* Replay lock-at-0 (D-5 verbatim): a dive/SLO/disclosure replay is an atomic PUBLISHED
@@ -2172,17 +2170,17 @@ function familyFactor(hw, s, cfLeg) {
   return isFinite(v) && v > 0 ? v : 1;
 }
 /* The ONE shared lever multiplier consumed at the tokPerS chokepoint. */
-/* ================= b9 spec-decode LEVER — the mutual-exclusion gate (D-SD-7) =================
-   Court: Polaris gen-24 esc-20260731T191830Z-e5b800eb. The lever may leave 1.00 ONLY when
-   stackMult sits at the declared MTP-free tick. Design memo: research/b9-spec-decode-lever-memo.md
-   (frozen v16); the NORMATIVE KERNEL there governs this code. */
+/* ================= spec-decode LEVER — the mutual-exclusion gate (D-SD-7) =================
+   Adopted 2026-07-31. The lever may leave 1.00 ONLY when
+   stackMult sits at the declared MTP-free tick. The adopted design specification
+   governs this code. */
 const SPECDEC_GATE_TICK = 0.7;              // the declared MTP-free tick
 const SPECDEC_BOUNDS = Object.freeze([1.00, 1.60]);
 
 /* THE ONE PREDICATE. Epsilon, never a literal comparison: app.js snaps every slider write with
    Math.round(v/step)*step, which yields 0.7000000000000001 — so `=== 0.7` is FALSE on every drag
    path while the readout still shows "0.70". No coercion: "0.7", [0.7] and a boxed Number must
-   NOT open the gate. THE BAN (memo §6.1): `=== 0.7` may appear nowhere but this declaration. */
+   NOT open the gate. THE BAN: `=== 0.7` may appear nowhere but this declaration. */
 function stackAtMtpFreeTick(v) {
   return typeof v === "number" && Number.isFinite(v)
       && Math.abs(v - SPECDEC_GATE_TICK) < 1e-9;
@@ -2193,7 +2191,7 @@ function specDecGateAllows(s) { return stackAtMtpFreeTick(s && s.stackMult); }
    RESOLVED state (base + diff), never against the diff alone — a diff carries only what differs, so
    a token can raise `specDec` while inheriting a `stackMult` that shuts the gate.
 
-   Both directions matter and the encoder sharing this is the M4 P0-1 lesson: an encoder that can
+   Both directions matter and the encoder sharing this is encoder/decoder parity: an encoder that can
    mint a token its own decoder rejects produces links that copy successfully and then silently fail
    to restore. A token that trips this is rejected WHOLE — never clamped into a plausible-looking
    one, because a clamped token would publish a state its author never chose.
@@ -2219,7 +2217,7 @@ function specDecTokenConsistent(resolved, p) {
 
 /* The row's typed baseline status. `unknown` FAILS CLOSED to exempt; an UNRECOGNISED status is a
    disagreement between the registry and this function, which is a hard error, not a fail-closed
-   case (memo §8.4). The registry field lands with the calibration-row commit; until then only the
+   case. The registry field lands with the calibration-row commit; until then only the
    gate-open + specDec > 1 path can reach this, which the default state never does. */
 function specDecBaselineStatusFor(hwKey) {
   /* ED_FLEET is the house accessor for the calibration registry — a bare `CALIBRATION` is not in
@@ -2231,8 +2229,8 @@ function specDecBaselineStatusFor(hwKey) {
   throw new TypeError("specDec: missing or invalid specDecBaselineStatus on calibration row " + hwKey);
 }
 
-/* ---- THE RESOLUTION LADDER (memo [N-DISPOSITION]) — ORDERED, TOTAL, ONE authority ----
-   v12 of the memo expressed this as a SET of independently-matching rows, and three of them matched
+/* ---- THE RESOLUTION LADDER (baseline-status contract) — ORDERED, TOTAL, ONE authority ----
+   An earlier specification expressed this as a SET of independently-matching rows, and three of them matched
    the same state at once: `anth20` is a shipped replay blended 100% to an `included` leg, and
    `xaicash` is a shipped replay with no blend (so the 7-leg default fleet, carrying `unknown` gb300
    and tpu7) at stackMult 1. A matrix of overlapping predicates is not a function, and the ambiguity
@@ -2263,7 +2261,7 @@ function specDecDisposition(status, perspKind, gateOpen, specDec) {
   return                             { reasonCode: "applied",   factorApplied: specDec };
 }
 
-/* Per-leg disclosure bytes. RATIFIED (Polaris esc-20260801T042349Z-20c444d8, manifest rows 9-14).
+/* Per-leg disclosure bytes. RATIFIED (the review the note of 2026-08-01, manifest the recorded review-14).
    ONE formatter owns these strings; MCP and the Worker return CODES, never prose — a machine caller
    must not receive human copy it might display untranslated. */
 const SPECDEC_REASON_COPY = Object.freeze({
@@ -2274,7 +2272,7 @@ const SPECDEC_REASON_COPY = Object.freeze({
   "gate-closed": () => "· speculative-decode credit: not applied — available only from the \"no MTP/disagg\" stack setting",
   applied: f => "· speculative-decode credit: applied ×" + f.toFixed(2) + " (decode only; your scenario, not this page's finding)",
 });
-/* Manifest row 15 — the state-level correction notice, RATIFIED. ONE engine-owned formatter, the
+/* Manifest the recorded review — the state-level correction notice, RATIFIED. ONE engine-owned formatter, the
    same shape as SPECDEC_REASON_COPY above and for the same reason: one source of bytes for the
    page, MCP and the Worker. The manifest files this row under site/app.js because that is where it
    RENDERS; the bytes live here because that is where the suite can pin them.
@@ -2318,10 +2316,10 @@ function specDecFactor(hw, s, ctx, cfLeg) {
     ctx && ctx.perspKind, specDecGateAllows(s), v).factorApplied;
 }
 
-/* D-SD-2 / D-P24-1 (Polaris gen-24 esc-20260731T191847Z-87e9ba42): the spec-decode credit applies
+/* D-SD-2 / D-P24-1 (the review the note of 2026-07-31): the spec-decode credit applies
    to DECODE ONLY. Prefill consumes the prompt in one compute-bound pass with nothing to speculate
    on, so crediting it would be a modelling error. Family and trend still apply to both phases. */
-/* ================= d-im-h800 — the FIT-TRANSFER ASSUMPTION (owner note aca09d, 2026-08-18) =================
+/* ================= the adopted decision — the FIT-TRANSFER ASSUMPTION (the author's note, 2026-08-18) =================
    THE H800/H100 DIFFERENTIAL AS A NAMED, ADJUSTABLE ASSUMPTION. Grounded (primary sources, captured
    2026-08-18): the H800 SXM differs from the H100 SXM in NVLink (400 vs 900 GB/s aggregate bidirectional)
    and FP64 (1 vs 34 TF) — nothing else that reaches an LLM-serving number. What this engine already does:
@@ -2342,7 +2340,7 @@ function specDecFactor(hw, s, ctx, cfLeg) {
    path. The counterfactual is the frozen form re-evaluated with the fabric swapped: t_N' = t_N ×
    (fabric_row ÷ fabric_anchor); t_iter' = max(t_C, t_H, t_N')/η_eff + t_cc; prefill t' =
    max(t_compute, t_fabric')/η_pre,eff — every term the roofline's own return value, no new literal.
-   Applied as ONE post-roofline factor at the shared chokepoint (family/trend precedent, memo D-13:
+   Applied as ONE post-roofline factor at the shared chokepoint (family/trend precedent, the design requirements:
    exact for cost ∝ 1/tokPerS, never inside η, capacity untouched). */
 const NVLINKCAP_BOUNDS = Object.freeze([1.00, 1.25]);
 const NVLINKCAP_SLOPE_STEP = 0.05;   // the readout's neutral SLOPE unit (per +0.05 on the control) — no setting is privileged
@@ -2454,9 +2452,9 @@ function nvlinkCapFactor(hw, s, ctx, cfLeg, kind, rp, pre) {
 function leverThroughputMult(hw, s, ctx, cfLeg, kind, rp, pre) {
   return familyFactor(hw, s, cfLeg) * trendFactor(s, ctx)
        * (kind === "out" ? specDecFactor(hw, s, ctx, cfLeg) : 1)
-       * nvlinkCapFactor(hw, s, ctx, cfLeg, kind, rp, pre);   // d-im-h800: per phase, against the phase's own capped counterfactual
+       * nvlinkCapFactor(hw, s, ctx, cfLeg, kind, rp, pre);   // the adopted decision: per phase, against the phase's own capped counterfactual
 }
-/* d-im-h800 — THE SENSITIVITY READOUT: COMPUTED, never authored. ONE engine computation feeds the
+/* the adopted decision — THE SENSITIVITY READOUT: COMPUTED, never authored. ONE engine computation feeds the
    control-side readout, the note under the hardware chart and the suite, so no surface can state an
    exposure the engine does not compute. For the three Hopper rows it reports, at the CURRENT operating
    point: the decode fabric term as a share of the binding term (t_N ÷ max(t_C,t_H)), which term binds,
@@ -2518,10 +2516,10 @@ function nvlinkCapReadout(s, supplied, renderOpts) {
 function tokPerS(hw, s, kind, activeOverride, supplied, renderOpts) {
   const rp = rooflinePoint(hw, s, activeOverride, supplied, renderOpts);
   if (rp.point.infeasible) return NaN;
-  /* b9 M5: applied to the RETURNED throughput of BOTH phases (decode + prefill), after
+  /* : applied to the RETURNED throughput of BOTH phases (decode + prefill), after
      feasibility. `rp.point.tokPerS` itself stays the RAW calibrated value — the form-correction
      debt surface reads it directly and renders unscaled, labeled as the calibration diagnostic
-     it is (memo §8.2). */
+     it is. */
   if (kind === "out") {
     const mult = leverThroughputMult(hw, s, scenarioContext(s, supplied), renderOpts && renderOpts.cfLeg, kind, rp, null);
     return rp.point.tokPerS * mult;
@@ -2530,7 +2528,7 @@ function tokPerS(hw, s, kind, activeOverride, supplied, renderOpts) {
   const pre = rp.R.prefillRoofline({ arch: rp.arch, activeB: activeOverride ?? s.active,
     hwKey: rp.hwKey, precision: s.precision, stackMult: s.stackMult, LIn: lengths.LIn,
     declaredOperatingWidth: rp.widthRendered ?? undefined }); // uniform width across roles; published role widths are annotations, while role-split solving is deferred
-  /* d-im-h800: the prefill result is handed to the lever chokepoint so the fit-transfer factor is
+  /* the adopted decision: the prefill result is handed to the lever chokepoint so the fit-transfer factor is
      evaluated against THIS phase's own capped counterfactual, never re-solved. */
   const mult = leverThroughputMult(hw, s, scenarioContext(s, supplied), renderOpts && renderOpts.cfLeg, kind, rp, pre);
   return pre.tokPerS * mult;
@@ -2547,10 +2545,10 @@ function tokPerS(hw, s, kind, activeOverride, supplied, renderOpts) {
    on h100/bf16 at the solved width 16 returned 17,442 tok/s, which is 281.3% of one H100's peak
    BF16 FLOPs and precisely 17.581% (= η_pre_eff) of SIXTEEN H100s' combined peak; input cost
    read $0.0764/Mtok against a true $1.2231 and the margin 96.6473% against 73.0720%.
-   The frozen Φ_pre_dev = Φ_pre/N branch (memo §1a) and its guard are UNTOUCHED, and
+   The frozen Φ_pre_dev = Φ_pre/N branch and its guard are UNTOUCHED, and
    `tokPerS` keeps returning the raw calibrated rate so the parallel-diff prefill identity
    still means what it says. No shipped model/perspective pair renders dense-TP (0 of 288
-   enumerated), so no published §10 headline, provider replay or WIDE-hash state moves; the
+   enumerated), so no published  headline, provider replay or WIDE-hash state moves; the
    path this corrects is the custom-model dense-donor scenario. Guard:
    tests/dense-tp-prefill-basis.test.mjs. */
 function pricedTokPerS(hw, s, kind, activeOverride, supplied, renderOpts) {
@@ -2593,12 +2591,11 @@ function blendWeights(s) {
    absent. PREDECLARED total orders (best → worst) drive the fail-closed fleet
    aggregation — aggregateFleetStatusVector is the ONE aggregate over positive-weight
    legs, replacing the two pre-R3 hardcode sites (the solver's UNVERIFIED literals +
-   fleetStatusFields' binary worst() for these three slots). Order rationale (memo
-   D-10): a known risk finding outranks ignorance, ignorance outranks all-clear —
+   fleetStatusFields' binary worst() for these three slots). Order rationale (the design requirements): a known risk finding outranks ignorance, ignorance outranks all-clear —
    the aggregate never reads all-clear when any leg lacks evidence, and a positive
    risk finding is never hidden behind an UNVERIFIED sibling. */
 const SLO_STATUS_ORDER = Object.freeze(["within-published-latency-preferred-tier", "UNVERIFIED", "SLO-RISK"]);
-// b9 M1 closed-set amendment (memo §5): two members added, each placed conservatively in
+//  closed-set amendment: two members added, each placed conservatively in
 // this best→worst order so no aggregate can read BETTER than before. See evidence-schema.js
 // FIT_CLASSES for the per-class rationale.
 const THROUGHPUT_EVIDENCE_ORDER = Object.freeze(["fitted", "fitted-inherited", "family-transfer",
@@ -2652,9 +2649,9 @@ function aggregateFleetStatusVector(legs) {
         + " throughput · " + worstByOrder(PRICE_EVIDENCE_ORDER, econList.map(e => e.priceClass)) + " price",
   };
 }
-/* R2 (§1.9): the fleet receipt carries the EMITTED five-status vector + two-boolean
+/* R2: the fleet receipt carries the EMITTED five-status vector + two-boolean
    contract + policy identity alongside the renormalization triple. Per-leg solver
-   status rides each leg; the fleet aggregate is FAIL-CLOSED (memo §0-ter): fleet
+   status rides each leg; the fleet aggregate is FAIL-CLOSED: fleet
    placementVerified requires EVERY positive-weight leg individually placement-verified;
    one non-renderable-under-policy leg makes allLegsRenderableUnderPolicy false.
    R3 (D-10): the three populated slots aggregate through aggregateFleetStatusVector. */
@@ -2682,27 +2679,27 @@ function fleetStatusFields(legs) {
       conservativeSubsetNote: l.capacityReceipt ? l.capacityReceipt.conservativeSubsetNote : null })),
   };
 }
-/* ================= b9 M2 family 9 — the FORM-CORRECTION DEBT ==================================
-   Memo §3.5. Every leg still on `active-parameter-surrogate` carries an η calibrated in the legacy
+/* =================  family 9 — the FORM-CORRECTION DEBT ==================================
+    Every leg still on `active-parameter-surrogate` carries an η calibrated in the legacy
    per-device traffic representation. This sizes what re-expressing that leg in the topology-aware
    representation would be worth — WITHOUT re-deriving η, which is exactly why the result is NOT a
-   repaired estimate. The coefficient and the representation are a matched pair (run B §A4); moving
-   one without the other is the error M1's decision M1-D1 rejected. So this number is the size of an
+   repaired estimate. The coefficient and the representation are a matched pair (run B ); moving
+   one without the other is the error the typed basis contract rejected. So this number is the size of an
    OPEN CALIBRATION DEBT, and it is labeled as such at every surface.
 
-   Why it is displayed at all (VISION §3): the un-identified part of the form correction is the most
+   Why it is displayed at all (VISION ): the un-identified part of the form correction is the most
    consequential fact this milestone learned — the headline swings 53.24% ↔ 64.17% on the N_phys
-   declaration alone (memo §2.2). Burying that in a research file while shipping one number would be
+   declaration alone. Burying that in a research file while shipping one number would be
    conclusion-shopping. It renders, sized, labeled, and never as a result.
    ============================================================================================== */
 const FORM_DEBT_NOT_A_RESULT = "not a repaired estimate — the size of an open calibration debt";
 
-/* The per-leg §C4 re-expression that both the debt rows and the identified span consume:
-   coverage under the DISTINCT-SELECTION form (plan §0 Amendment 3 — each token selects topK
+/* The per-leg  re-expression that both the debt rows and the identified span consume:
+   coverage under the DISTINCT-SELECTION form (distinct-selection form — each token selects topK
    distinct experts, p_e = k/E per token; the former with-replacement form p=1/E over B·q·k
    draws UNDERSTATES coverage, (1-1/E)^k > 1-k/E by Bernoulli, most visibly at low replica
    batch), replica traffic divided by the width CHOICE N, η held. Uniform routing is the
-   coverage-MAXIMISING setting (design gate R5), so this counterfactual is an upper bound on
+   coverage-MAXIMISING setting (coverage contract), so this counterfactual is an upper bound on
    modelled traffic. The expression order is the original debt row's — form-equivalence
    asserts against it, and IEEE-754 is not associative. */
 function c4ReexpressedTokPerS(placement, N, b, dec, hwRow) {
@@ -2713,17 +2710,17 @@ function c4ReexpressedTokPerS(placement, N, b, dec, hwRow) {
   const tIter = Math.max(dec.tC, tH, dec.tN) / dec.etaEff + dec.tCc;
   return b / tIter;
 }
-/* Amendment 3 + plan §6 invariant 1 ("no hand-pinned headline numbers"): the identified span is
+/* Amendment 3 +  invariant 1 ("no hand-pinned headline numbers"): the identified span is
    COMPUTED, never pinned. It is deliberately FLAGSHIP-SCOPED (opus × median × native reference
-   traffic): it states the memo §2.2 identification finding — how far the §C4 form swings on the
+   traffic): it states the  identification finding — how far the  form swings on the
    N_phys declaration alone, with η held — not a property of the viewer's current scenario. Both
    endpoints run through the engine's canonical computeMix (design gate R2: the R_eff shorthand
    is a probe cross-check, not the computation); probe8 re-derives them independently. Rounded
-   to the memo's presentation precision (4 dp endpoints, 2 dp span) at this boundary. */
+   to the declared presentation precision (4 dp endpoints, 2 dp span) at this boundary. */
 function formCorrectionSpanComputed(DATA) {
   const R = rooflineCore();
   const fs = pinReferenceLevers(applyPresetSettings(MODELS.find(m => m.id === "opus"),
-    PERSPECTIVES.find(p => p.id === "median"), { mode: "native" })); // b9 M5 §15 reference pin
+    PERSPECTIVES.find(p => p.id === "median"), { mode: "native" })); //   reference pin
 
   const arch = R.resolveArch("opus", undefined);
   if (arch.mode === "dense-tp") return null;
@@ -2733,7 +2730,7 @@ function formCorrectionSpanComputed(DATA) {
   for (const k of HW_ORDER.filter(k => (fs.blend[k] || 0) > 0)) {
     const rp = rooflinePoint(HW[k], fs);
     if (!rp || !rp.point || rp.point.infeasible || !rp.widthRendered) continue;
-    /* im-arc T4 fold (2026-08-24), memo §4: a leg whose planning rent resolves as UNAVAILABLE has
+    /*  (2026-08-24), : a leg whose planning rent resolves as UNAVAILABLE has
        no cost, so it can carry no cost-form debt either. Before the fold every registered row had
        a planning rate and this filter was unreachable; now gb200, gb300 and trn3 have none, and
        admitting them here propagated NaN straight into the published span. The debt is computed
@@ -2765,13 +2762,13 @@ function formCorrectionSpanComputed(DATA) {
   const lo = Math.min(atRendered, atDeclared), hi = Math.max(atRendered, atDeclared);
   return { lo: +lo.toFixed(4), hi: +hi.toFixed(4), spanPp: +(hi - lo).toFixed(2), unpricedLegsExcluded: unpriced,
     scope: "flagship-opus-baseline-at-public-evidence-reference",
-    basis: "computed at the flagship baseline AT THE PUBLIC-EVIDENCE REFERENCE (algorithmic lead 0 months, family multipliers 1.0× — b9 M5 §15 reference pin; the calculator's ratified-prior default reads higher, and this span deliberately excludes that prior because the FORM axis and the lab-lead axis are different questions), solver-rendered vs declared-registry N_phys, distinct-selection coverage per plan §0 Amendment 3, η held — the §C4 form swings this far on the N_phys declaration ALONE, and BOTH ends fall outside the plan's 55.24–61.25 sanity tripwire. The form-corrected headline is not identified by the public evidence (run B §C4)." };
+    basis: "computed at the flagship baseline AT THE PUBLIC-EVIDENCE REFERENCE (algorithmic lead 0 months, family multipliers 1.0× — the adopted model reference pin; the calculator's ratified-prior default reads higher, and this span deliberately excludes that prior because the FORM axis and the lab-lead axis are different questions), solver-rendered vs declared-registry N_phys, distinct-selection coverage per  Amendment 3, η held — the §C4 form swings this far on the N_phys declaration ALONE, and BOTH ends fall outside the plan's 55.24–61.25 sanity tripwire. The form-corrected headline is not identified by the public evidence (the review)." };
 }
-/* Memo §5's replication residual, stated verbatim as the typed disclosure it prescribes for any
+/* 's replication residual, stated verbatim as the typed disclosure it prescribes for any
    row rendering a topology-aware traffic member. Not sized here: sizing it requires the
-   placement-faithful pairing memo §5 declines (−5.2770 pp tpu7 leg / −1.3192 pp blend if
-   adopted alone — recorded in the memo and BACKLOG, not modeled). */
-const C4_REPLICATION_RESIDUAL = "replicated components are charged at the replica's shared rate, per the r4 §C4 minimal form; published placement disciplines replicate attention/dense/shared per rank, which would raise this leg's traffic — an open form residual, not a modeled effect";
+   placement-faithful pairing  declines (−5.2770 pp tpu7 leg / −1.3192 pp blend if
+   adopted alone — recorded in the design specification and BACKLOG, not modeled). */
+const C4_REPLICATION_RESIDUAL = "replicated components are charged at the replica's shared rate, per the minimal form reviewed on 2026-07-25; published placement disciplines replicate attention/dense/shared per rank, which would raise this leg's traffic — an open form residual, not a modeled effect";
 
 function formCorrectionDebt(s, supplied, renderOpts) {
   const R = rooflineCore(), ctx = scenarioContext(s, supplied);
@@ -2812,16 +2809,16 @@ function formCorrectionDebt(s, supplied, renderOpts) {
     };
     if (cal.decodeTrafficBasis === "active-parameter-surrogate" && b > 0 && placement) {
       // Re-express THIS leg in the topology-aware representation at its DECLARED N_phys (never the
-      // solved width — §0-bis firewall), holding η fixed. Coverage form + expression order live in
-      // c4ReexpressedTokPerS (plan §0 Amendment 3).
+      // solved width —  firewall), holding η fixed. Coverage form + expression order live in
+      // c4ReexpressedTokPerS (distinct-selection form).
       row.counterfactualTokPerS = c4ReexpressedTokPerS(placement, cal.nPhysDeclared, b, dec, DATA.HW_ROOFLINE[hwKey]);
       row.ratio = row.counterfactualTokPerS / dec.tokPerS;
       row.note = "η calibrated in the legacy per-device representation; re-expressed topology-aware at the declared N_phys with η held";
     } else if (cal.decodeTrafficBasis === "active-parameter-surrogate" && !placement) {
       row.note = "expert-coverage correction not applicable to a dense-TP donor (no routed experts)";
     }
-    // Memo §5: any leg RENDERING a topology-aware member carries the replication-residual
-    // disclosure — §C4 divides the whole of W_distinct (including W_shared) by N_phys, while
+    // : any leg RENDERING a topology-aware member carries the replication-residual
+    // disclosure —  divides the whole of W_distinct (including W_shared) by N_phys, while
     // published placement disciplines replicate attention/dense/shared per rank.
     if (cal.decodeTrafficBasis === "replica-resident-distinct" || cal.decodeTrafficBasis === "expert-coverage") {
       row.replicationResidual = C4_REPLICATION_RESIDUAL;
@@ -2839,12 +2836,12 @@ function formCorrectionDebt(s, supplied, renderOpts) {
         })(),
       };
       row.crossQuantityExposure.ratio = row.crossQuantityExposure.readAsPerChipTokPerS / row.crossQuantityExposure.readAsReplicaGlobalTokPerS;
-      row.crossQuantityNote = "this leg's batch cell states a REPLICA-GLOBAL value that the engine consumes as PER-CHIP (run B §C1's own prescription, which §A3 contradicts). Reading it the other way would be ~" +
+      row.crossQuantityNote = "this leg's batch cell states a REPLICA-GLOBAL value that the engine consumes as PER-CHIP (the review's own prescription, which its assumptions contradict). Reading it the other way would be ~" +
         row.crossQuantityExposure.ratio.toFixed(1) + "× lower — this leg may be ~" + row.crossQuantityExposure.ratio.toFixed(0) + "× wrong, and no public evidence settles which reading is right.";
     }
-    /* Owner ruling q-im-fp4-gb300-batch-disclosure (2026-08-02, accepted default): "disclose the
+    /* the adopted decision (2026-08-02, accepted default): "disclose the
        gb300 declared batch on the leg via the family-9 debt surface". The audit
-       (reports/im-fp4-precision-audit-2026-08-01 §4) named the defect precisely: GB300's declared
+       (reports/the research run-08-01 ) named the defect precisely: GB300's declared
        batch of 64 is the SOLE cause of a visible cross-generation inversion on the site's most
        prominent hardware chart — set it to 128 and Blackwell Ultra lands at parity with a 2022
        H100 — and the value was honestly labelled SCENARIO-ONLY in the data file and entirely
@@ -2891,17 +2888,17 @@ function formCorrectionDebt(s, supplied, renderOpts) {
   };
 }
 
-/* b9 M4 (memo §3.1–§3.2): ONE leg-list resolver feeding every computed mix.
+/* : ONE leg-list resolver feeding every computed mix.
    - Non-custom-fleet states: the identity refactor of the previous inline
      blendWeights map — byte-identical outputs (T-2 grid + the snapshot suites are the
      proof; reference blend margin must stay 0.5918058739356502 to the last bit).
    - Custom-fleet states (renderOpts.customFleet, the explicit options channel — never
      hidden module state): legs from the fleet definition; DUPLICATES of one donor at
-     different overrides are first-class (the owner's per-datacenter case); weights
+     different overrides are first-class (the per-datacenter case); weights
      normalize over sharePct exactly as blendWeights normalizes shares.
    Each custom leg yields an EFFECTIVE row: donor spread + rent/capex/label overrides
    on the row (HW fields), with power/electricity/HBM overrides riding the
-   renderOpts.cfLeg options channel (memo §3.2 split), and __cfLeg routing hwKeyFor to
+   renderOpts.cfLeg options channel (per-leg channel), and __cfLeg routing hwKeyFor to
    the donor so every by-key registry resolves through the calibration donor. */
 function cfEffectiveRow(leg) {
   const donor = HW[leg.donorKey];
@@ -2935,7 +2932,7 @@ function dcRegistry() {
     ? require("./engine-data-dc-v1.js") : { REGIONS, DATACENTERS, PROGRAMMES, COVERAGE_LEDGER, COVERAGE_WORDING };
 }
 
-/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+/* Adopted 2026-08-22:
    the UI and both MCP tools consume these pure fleet-composition functions. No
    registry value is copied here: rows, coverage and region triples stay owned by
    engine-data-dc-v1.js, and the existing custom-fleet validator remains the ONE
@@ -2967,7 +2964,7 @@ function coverageLedgerForModel(modelId) {
     || ledger[company] || null;
 }
 /* ============================================================================
-   im-arc T4 fold (2026-08-24) [F3] — THE ONE COVERAGE RESOLVER.
+    (2026-08-24) [F3] — THE ONE COVERAGE RESOLVER.
 
    The ledger stores EVIDENCE keyed {company, preset} at the hardware-key level. It stores no
    percentages, because a stored percentage drifts the moment a blend changes — which is exactly
@@ -2982,7 +2979,7 @@ function coverageLedgerForModel(modelId) {
      (3) every remaining key is generic fill;
      (4) separately and NON-ADDITIVELY, the SKU/workload count-backed subset.
    ============================================================================ */
-/* im-vet-six-repairs (2026-09-20), Astra xhigh review finding 2 — BLOCKING. This resolver
+/*  (2026-09-20), Astra xhigh review finding 2 — BLOCKING. This resolver
    returned `fleet.legs`, the DECLARED composition, so after the E1 Trainium withdrawal it kept
    publishing coverage of a seven-leg fleet nobody renders: 38% named-site / 33% programme / 29%
    generic, where the five-leg blend the page actually shows gives 50.7 / 33.3 / 16.0. That is
@@ -3047,7 +3044,7 @@ function coverageForPreset(modelId, override) {
     programmeTypeEvidencePct: programmePct,
     genericFillPct: 100 - namedPct - programmePct,
     /* NON-ADDITIVE by construction and by name: it is a property OF the evidence above, not a
-       fourth slice of the same 100 (memo §1.5, review question 3). */
+       fourth slice of the same 100 (composition contract). */
     skuWorkloadCountBackedPct: pct(countBacked),
     countBackedIsAdditive: false,
     evidenceKeys: { namedSite: [...named], programme: [...programme], countBacked: [...countBacked],
@@ -3078,7 +3075,7 @@ function coverageSentenceParts(row) {
   const wording = String(row.wording || dcRegistry().COVERAGE_WORDING
     || "share of the MODELED fleet resting on DC-specific public evidence — not how much of the real fleet is known")
     .replace(" — ", ", ");
-  /* im-arc T3 FIX-3 (2026-08-23, item C1), CORRECTED by the T4 fold (memo §6.1a): coverage
+  /*  (2026-08-23, item C1), CORRECTED by the : coverage
      percentages are DISPLAY numbers. One decimal is the share doctrine, so this ONE renderer
      rounds every numeric part once and prints a whole number bare — `40%`, `33.3%`, never
      `59.99999999999999%` and never `40.0%`. The parts are rounded INDEPENDENTLY and never nudged
@@ -3086,7 +3083,7 @@ function coverageSentenceParts(row) {
      "four-part rows"; that was wrong twice over — the partition is THREE parts, and the fourth
      number is non-additive and therefore outside the sum entirely. */
   const oneDecimal = number => Number.isFinite(number) ? Math.round(number * 10) / 10 : number;
-  /* im-arc T4 fold (2026-08-24), memo §6.1b (director ruling): a share that is genuinely
+  /*  (2026-08-24),  (director ruling): a share that is genuinely
      non-zero but below 0.05 rounds to a bare `0` and reads as NONE. It renders `<0.1%` instead,
      and the unrounded number travels beside it as `exactPct`, so a sliver of named-site evidence
      is never reported as absent. */
@@ -3105,7 +3102,7 @@ function coverageSentenceParts(row) {
   for (const key of Object.keys(exact)) values[key] = structured(exact[key]);
   const parts = labels.map(([key, label]) => ({ key, label,
     value: values[key], exactPct: exact[key], display: display(exact[key]) }));
-  /* memo §6.1a: the band a consumer may assert is 0.05 x the number of ADDITIVE parts —
+  /* : the band a consumer may assert is 0.05 x the number of ADDITIVE parts —
      computed from the row it is checking, never the literal 0.15 the T3 tests hard-coded. */
   const roundingBand = 0.05 * parts.length;
   const countBacked = typeof row.skuWorkloadCountBackedPct === "number"
@@ -3143,7 +3140,7 @@ function compositionReceiptsFor(sections) {
   return (Array.isArray(sections) && NOT_COMPOSED_RECEIPTS.get(sections)) || [];
 }
 function notComposedReceipt(rowId, row, modelId, s) {
-  /* im-arc T4 fold (2026-08-24): a facility whose inventory is a MIXED AGGREGATE has no per-SKU
+  /*  (2026-08-24): a facility whose inventory is a MIXED AGGREGATE has no per-SKU
      counts to allocate, so it composes nothing by design. The receipt says which keys are
      present at the site and why presence alone cannot become a fleet weight. */
   const hwKeys = [...new Set([...(row.accelerators || []).map(accelerator => accelerator.hwKey),
@@ -3161,7 +3158,7 @@ function notComposedReceipt(rowId, row, modelId, s) {
   return { rowId, classification: "not-composed", hwKeys, reason,
     sentence: "registry row " + rowId + " was selected but composed no section: " + reason };
 }
-/* im-arc T4 fold (2026-08-24) [F3]: a donor's class comes from the STORED EVIDENCE for this
+/*  (2026-08-24) [F3]: a donor's class comes from the STORED EVIDENCE for this
    {company, preset}, not from the mere existence of a registry row that happens to name the key.
    That distinction is the whole xAI 95% correction: Colossus rows prove typed accelerators are
    PRESENT at a site; they do not prove a share of the modeled Grok blend is SERVED there. */
@@ -3228,7 +3225,7 @@ function coverageForFleetSections(sections, modelId) {
       }
     }
   }
-  /* im-arc T3 FIX-3 (2026-08-23, item C1): the accumulator adds raw float shares, so
+  /*  (2026-08-23, item C1): the accumulator adds raw float shares, so
      0.1-scale noise (59.99999999999999) reaches every consumer. Round the three
      numeric parts ONCE, here, at the end — never in a caller. Each part is rounded
      independently; the sum is allowed to land on 99.9 or 100.1 rather than be
@@ -3237,11 +3234,11 @@ function coverageForFleetSections(sections, modelId) {
   out.namedSiteServingEvidencePct = oneDecimal(out.namedSiteServingEvidencePct);
   out.programmeTypeEvidencePct = oneDecimal(out.programmeTypeEvidencePct);
   out.genericFillPct = oneDecimal(out.genericFillPct);
-  /* im-arc T4 fold (2026-08-24): the SKU/workload count-backed share is accumulated over the
+  /*  (2026-08-24): the SKU/workload count-backed share is accumulated over the
      SAME legs and reported beside the partition, never inside it. */
   out.skuWorkloadCountBackedPct = oneDecimal(countBackedPct);
   out.countBackedIsAdditive = false;
-  /* im-arc T3 FIX-3 (2026-08-23, item C2): a registry row the reader SELECTED that
+  /*  (2026-08-23, item C2): a registry row the reader SELECTED that
      received no donor allocation is not in `sections` at all — it composed to nothing.
      composeFleetFromDcRows records that drop against the validated sections array it
      produced (derived data, never caller authority and never on the wire), and this ONE
@@ -3259,7 +3256,7 @@ function fleetModeRenderOptions(mode, fleet) {
 function validateFleetSections(fleet, opts) {
   return cfValidator()(fleet, { requireId: !opts || opts.requireId !== false });
 }
-/* im-arc T3 (plan §1 T3 / §4, owner answer d-20260822-4c26 2026-08-22):
+/* Adopted 2026-08-22:
    discovery publishes the validator's schema rather than a second MCP-only copy.
    custom-fleets.js remains the ONE authority; this function merely serializes its
    exported closed sets for UI/MCP discovery. */
@@ -3297,7 +3294,7 @@ function registryFallbackReceipts(row, s, basis, allocations, section) {
     const values = {}, sources = [], unavailable = [];
     for (const [donorKey] of allocations) {
       const resolved = registryPlanningRentHr(HW[donorKey], s, null);
-      /* im-arc T4 fold (2026-08-24), memo §4: a donor whose planning quote is unavailable has
+      /*  (2026-08-24), : a donor whose planning quote is unavailable has
          no number to put here. The receipt says so IN WORDS rather than carrying a NaN that
          the shared validator would (rightly) refuse — the reader is told which donors have no
          admissible public planning rate, not handed a silent hole. */
@@ -3422,7 +3419,7 @@ function composeFleetFromDcRows(s, opts) {
   const sections = [], notComposed = [];
   for (const id of ids) {
     const section = registrySectionFromRow(id, s, byRow[id], sections.length + 1);
-    /* im-arc T3 FIX-3 (2026-08-23, item C2): the count partition above stands — both
+    /*  (2026-08-23, item C2): the count partition above stands — both
        reviewers accepted it and the plan's "counts propose shares where they exist"
        reads that way. What changes is the SILENCE: a selected row whose accelerators
        intersect no blend donor allocates nothing, registrySectionFromRow returns null,
@@ -3453,7 +3450,7 @@ function composeFleetFromDcRows(s, opts) {
 }
 function sectionElectricity(section, s) {
   if (section && section.electricity) {
-    /* im-arc T2 fix (Sol review 2026-08-23, finding P1-5): an explicit
+    /*  (corrected 2026-08-23): an explicit
        numeric value is the operative override even when regionRef is retained
        as context. A region-only receipt consumes the registered triple. */
     if (Object.prototype.hasOwnProperty.call(section.electricity, "usdPerKwh"))
@@ -3518,9 +3515,9 @@ function cfLegChannel(leg, section, s, hw) {
   const tco = section && section.tco || {};
   const key = leg.donorKey;
   const rent = sectionRent(section, hw, s || DEFAULTS);
-  /* b9 M5: the leg's FAMILY travels the same options channel as its overrides. Without it the
+  /* : the leg's FAMILY travels the same options channel as its overrides. Without it the
      lever resolution falls back to the DONOR row's family, and an "unclassified" leg would
-     silently ride a family multiplier it is exempt from (D-5 verbatim, memo §8.3). */
+     silently ride a family multiplier it is exempt from (baseline-status contract). */
   return { boardPowerW: ov.boardPowerW != null ? sectionPoint(ov.boardPowerW) : null,
            kwhPerKwh: ov.kwhPerKwh != null ? sectionPoint(ov.kwhPerKwh) : electricity.value,
            hbmBytes: ov.hbmBytes != null ? sectionPoint(ov.hbmBytes) : null,
@@ -3574,7 +3571,7 @@ function assertSectionsTyped(sections) {
   return sections;
 }
 function coverageApplicableRowIds(modelId, s) {
-  /* im-arc T4 fold (2026-08-24) [F3]: the ROW-ID lists live on the company entry; the preset
+  /*  (2026-08-24) [F3]: the ROW-ID lists live on the company entry; the preset
      entry carries the key-level evidence. Reading the preset row for `rows`/`programmes` would
      silently return an empty candidate set and compose a fleet with no registry sections at all,
      which is exactly what a stress lens must never do quietly. */
@@ -3624,7 +3621,7 @@ function resolveFleetSections(s, renderOpts) {
       const activeRawLegs = rawLegs.filter(leg => sectionPoint(leg.sharePct) > 0);
       const legTotal = activeRawLegs.reduce((sum, leg) => sum + sectionPoint(leg.sharePct), 0);
       const basis = effectiveSectionBasis(section, s, activeRawLegs);
-      /* im-arc T2 fix (Sol review 2026-08-23, finding P2-1): legacy
+      /*  (corrected 2026-08-23): legacy
          declarations are checked while they still exist. Only the runtime copy
          drops the migration metadata after the contradiction guard passes. */
       assertUniformProcurementBasis(rawLegs.map(leg => ({ k: leg.donorKey, leg })), s,
@@ -3740,7 +3737,7 @@ function blendedCosts(s, activeOverride, supplied, renderOpts) {
   }));
   const renderable = legs.filter(x => x.renderable);
   const renderableWeightShare = renderable.reduce((a, x) => a + x.wt, 0);
-  /* SECTION SHARE: A RENDERED-IN-FULL SECTION RENDERS ITS OWN DECLARED SHARE (bq-2194).
+  /* SECTION SHARE: A RENDERED-IN-FULL SECTION RENDERS ITS OWN DECLARED SHARE.
      A float sum of normalized weights that ought to land exactly on the section's declared share
      lands a single unit in the last place above it — `share: 1, renderableShare:
      1.0000000000000002` on sonnet|median — so a field that is a PROPORTION is published above its
@@ -3754,7 +3751,7 @@ function blendedCosts(s, activeOverride, supplied, renderOpts) {
      being renormalized is what makes the result a weighted average, and it is an input to
      byte-frozen historical receipt reproductions. Its published copy is corrected at the
      publication boundary instead (mcp-server/src/shape.ts, `publishedShare`); the engine-internal
-     half stays open on bq-2194 with its blast radius measured rather than guessed. */
+     half stays open on  with its blast radius measured rather than guessed. */
   const declaredShare = (rows, declared) => {
     /* Sum only the rows that RENDER — that is what this field measures — and replace the sum with
        the declared share only when every row in the section rendered. Summing all the rows and then
@@ -3786,7 +3783,7 @@ function blendedCosts(s, activeOverride, supplied, renderOpts) {
     fleetRenderable, ...(coverage ? { coverage } : {}), ...basisContract,
   };
 }
-/* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): paired
+/* Adopted 2026-08-22: paired
    procurement bases are derived through the existing workload path. Context is captured from the
    caller before cloning because WeakMap scenario identity does not survive structuredClone. */
 function marginOnBasis(s, basis, renderOpts) {
@@ -3794,7 +3791,7 @@ function marginOnBasis(s, basis, renderOpts) {
   const supplied = scenarioContext(s);
   const clone = structuredClone(s);
   clone.hwMode = basis;
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): a counterpart is
+  /*  (corrected 2026-08-23): a counterpart is
      an all-section counterfactual, not a global-lens flip. Resolve first so
      migration-only `inherit` is gone, then retain each section's own receipt
      while replacing its procurement channel on an evaluation-only copy. */
@@ -3827,7 +3824,7 @@ function lessorSpread(hwKey, s, cfLeg) {
     return { rentHr: NaN, tcoHr: NaN, ratio: NaN, impliedShare: NaN };
   return { rentHr, tcoHr, ratio: rentHr / tcoHr, impliedShare: 1 - tcoHr / rentHr };
 }
-/* im-t5 MERGE (2026-08-29), third parameter only — grafted from the `minimal` candidate.
+/* Merged 2026-08-29, third parameter only — grafted from the `minimal` candidate.
    `ratio` and `impliedShare` are derived ENTIRELY from the two hourly() blends below. The two
    marginOnBasis() calls exist solely to fill `rentCostPerMtok` / `tcoCostPerMtok`, and each is a
    structuredClone of the state plus a complete workload() evaluation — together 204 of the 319
@@ -3887,12 +3884,12 @@ function blendedLessorSpread(s, renderOpts, opts) {
     tcoCostPerMtok: tco.costMix,
   };
 }
-/* im-arc T1 fix (Sol review 2026-08-22, finding P1-1): the chart and its accessible
+/*  (corrected 2026-08-22): the chart and its accessible
    table share one pure numeric row model. The signed rent-minus-TCO column is never
    clamped, so four TCO components + that column add back to the rent-basis total. */
 function stackRowsFor(s, showRent, supplied, renderOpts) {
   const context = supplied || scenarioContext(s);
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): the per-accelerator
+  /*  (corrected 2026-08-23): the per-accelerator
      counterfactual keeps the active section mix and its receipts. Each row swaps
      only the accelerator donor, then runs through the same all-section repricer
      as the paired card and lessor-spread readout. */
@@ -3951,7 +3948,7 @@ function stackRowsFor(s, showRent, supplied, renderOpts) {
       rentBelowTco: showRent && rentMinusTco < 0,
       renderable: isFinite(tcoWorkload.costMix) && (!showRent || isFinite(rentWorkload.costMix)),
       result: showRent ? rentWorkload : tcoWorkload,
-      /* im-arc T2 fix (Sol review 2026-08-23, finding P1-1): the adjacent
+      /*  (corrected 2026-08-23): the adjacent
          rent/TCO tables consume these same recomposed row receipts. */
       rentResult: rentWorkload, tcoResult: tcoWorkload,
       rentHr: spread && spread.rentHr, tcoHr: spread && spread.tcoHr,
@@ -3989,11 +3986,11 @@ function stackRowsFor(s, showRent, supplied, renderOpts) {
     };
   });
 }
-/* ================= b9 M3 — energy surface + procurement-basis machinery (memo §§2-3) =========== */
+/* =================  — energy surface + procurement-basis machinery =========== */
 /* Effective basis of one computed mix's leg: owned/strategic TCO whenever the scenario costs
    from the TCO build-up, else the ROW basis of the rent number the leg consumes. */
 function legProcurementBasis(hwKey, s, section) {
-  /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §1.3): section basis is
+  /* : section basis is
      the computation contract. `inherit` is accepted only while migrating a legacy
      one-section fleet; an explicit registered-rate section still resolves through
      the hardware row because the registered rate carries that row's rent class. */
@@ -4006,9 +4003,9 @@ function legProcurementBasis(hwKey, s, section) {
   const row = engineData().HW_ROOFLINE[hwKey];
   return (row && row.rentBasis) || null;
 }
-/* Fail-closed mixing trap (memo §3.2; plan D-3 "mixing bases inside one lens is a suite-enforced
+/* Fail-closed mixing trap (plan D-3 "mixing bases inside one lens is a suite-enforced
    error"): structurally unreachable while hwMode is global and the row vector uniform — it is
-   load-bearing for M4's per-leg overrides, and fails closed on an unknown or missing basis. */
+   load-bearing for per-leg overrides, and fails closed on an unknown or missing basis. */
 function assertUniformProcurementBasis(legs, s, section) {
   if (section && section.basis !== "inherit") {
     const contradiction = legs.find(l => l.leg && l.leg.basisDeclared
@@ -4025,9 +4022,9 @@ function assertUniformProcurementBasis(legs, s, section) {
     throw new Error("unknown procurement basis '" + bases[0] + "' on a computed mix — fail closed");
   return bases[0] || null;
 }
-/* LENS-basis resolution (memo §3.2 classification table): perspectives declare their basis;
-   the generic §10-dive replay carries the sentinel "model-dive" and resolves through this
-   registry; models without a §10 card fall back to the central scenario (the perspective's
+/* LENS-basis resolution (classification table): perspectives declare their basis;
+   the generic  replay carries the sentinel "model-dive" and resolves through this
+   registry; models without a  card fall back to the central scenario (the perspective's
    own documented fallback), whose basis is committed-planning-rent.
    Kept OUTSIDE the model dive objects deliberately: applyPresetSettings copies every m.dive
    key into scenario state verbatim, and a basis label must never become a scenario-state key
@@ -4047,14 +4044,14 @@ function procurementBasisFor(persp, model) {
     return (model && DIVE_PROCUREMENT_BASES[model.id]) || "committed-planning-rent";
   return persp.procurementBasis || null;
 }
-/* M3 gate P1 fix: the basis a SURFACE should display. The LENS declaration wins; the mix's
+/* Procurement basis: the basis a SURFACE should display. The LENS declaration wins; the mix's
    effective row basis is only the fallback for states with no lens declaration in play
    (modified/custom). `declaredDivergesFromMechanism` marks lenses whose declared basis is not
    the mechanism they compute through (chinacloud approximates public-capacity via a multiplier
    on the committed vector; the xaicash/gemini/grok owned-strategic replays are expressed as
    rent scalars) — the display layer words those honestly instead of mislabeling them. */
 function displayedProcurementBasis(persp, model, effectiveBasis) {
-  /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §2.5): a mixed section
+  /* : a mixed section
      composition is itself the effective basis. A lens declaration cannot flatten it
      back into one label; that would reproduce the hidden-fallback failure this tranche
      exists to remove. Scalar callers retain the historical lens-first contract. */
@@ -4073,7 +4070,7 @@ function displayedProcurementBasis(persp, model, effectiveBasis) {
     declaredDivergesFromMechanism: !!(declared && effective && declared !== effective) };
 }
 /* Physical serving-energy intensity, Wh per M tokens, at the achieved operating point
-   (memo §2.1). Deliberately NO utilization divisor: the TCO dollar path allocates paid idle
+  Deliberately NO utilization divisor: the TCO dollar path allocates paid idle
    to served tokens, while this figure deliberately does not. Idle boards DO draw power; this
    page does not model that draw, so the Wh figure is an operating-point intensity and not a
    fleet-average one, and charging full-power idle hours as ENERGY would overstate it. The methods box states the divergence. Inherits the
@@ -4086,7 +4083,7 @@ function energyPerMtok(hw, s, kind, activeOverride, supplied, renderOpts) {
 }
 /* Traffic-mix identity for energy — mirrors computeMix's cost identity with the SAME analyst-set
    cacheCost fraction doing proxy duty for cache-read energy (bandwidth-dominated, near-zero
-   compute; one more disclosed role of an already-disclosed constant — memo §7 decision 2). */
+   compute; one more disclosed role of an already-disclosed constant —  decision 2). */
 function energyMix(eIn, eOut, s) {
   const R = s.ioRatio, h = s.cacheHit / 100;
   const eCache = eIn * (s.cacheCost / 100);
@@ -4095,10 +4092,10 @@ function energyMix(eIn, eOut, s) {
 /* Per-leg + blended energy for the current blend. Shares blendWeights, weight renormalization
    and the mix identity with blendedCosts/computeMix. Energy renders wherever THROUGHPUT
    renders — an unpriced-but-feasible leg would carry energy without dollars (energy is
-   physical); today every HW_ORDER row is priced, so the renderable sets coincide (memo §2.1). */
+   physical); today every HW_ORDER row is priced, so the renderable sets coincide. */
 function fleetEnergy(s, activeOverride, supplied, renderOpts) {
-  /* b9 M4: the SAME leg resolver as blendedCosts — the energy surface and the cost mix
-     may never disagree about what the fleet IS (memo §3.8; per-leg power/electricity
+  /* : the SAME leg resolver as blendedCosts — the energy surface and the cost mix
+     may never disagree about what the fleet IS (per-leg power/electricity
      overrides ride the same cfLeg channel). */
   const sections = resolveFleetSections(s, renderOpts);
   const basisReceipt = composeSections(sections);
@@ -4119,9 +4116,9 @@ function fleetEnergy(s, activeOverride, supplied, renderOpts) {
   return { legs, blended: energyMix(blend("eIn"), blend("eOut"), s),
     procurementBasis, bases, composition };
 }
-/* IM3 exit-gate fix 1 (unanimous, empiricist enumeration) + fix 3 (risk-analyst correlation
-   caveat) + fix 2-verification-round-2 (non-monotonicity disclosure) + fix
-   B1-final-reverify-2026-07-20 (decoupled from primary): every emitter of a numeric result whose
+/* Renormalization and non-monotonicity disclosure verified
+   2026-07-20.
+   Decoupled from primary status: every emitter of a numeric result whose
    fleet was renormalized (renderableWeightShare < 1) must show BOTH the leg count and the
    declared-weight percentage — engine already carries the value; this is presentation-only,
    shared by app.js and the MCP server (mcp-server's `E` is this exact module) so the two never
@@ -4141,7 +4138,7 @@ function fleetEnergy(s, activeOverride, supplied, renderOpts) {
    ever changes which legs survive renormalization). Generic/dynamic emitters (the hero chip, which
    can describe any model/blend the user selects) pass primary=false — hardcoding "Hopper-family"
    there would be false for a non-default scenario; they still get the non-monotonicity clause. */
-/* R3 (design memo D-3c): the ONE membership-exclusion formatter — consumed by the
+/* R3 (the design requirements): the ONE membership-exclusion formatter — consumed by the
    shared clause below AND the hero note (one formatter, every transport; sibling
    receipts never satisfy the weld). The canonical-anchor identity is load-bearing:
    renderableUnderPolicy is traffic-dependent (KV term) and a CLEAN default can exist
@@ -4153,7 +4150,7 @@ function membershipExclusionClause(membership) {
   if (!membership || !membership.excluded || !membership.excluded.length) return "";
   const anchor = "derived at the native " + membership.derivedAt.trafficProfileId
     + " traffic anchor, " + membership.derivedAt.ioRatio + ":1/" + membership.derivedAt.cacheHit + "%";
-  /* im-vet-six-repairs (2026-09-20): a WITHDRAWN leg is not an anchor-dependent capacity
+  /*  (2026-09-20): a WITHDRAWN leg is not an anchor-dependent capacity
      result, so it does not get the anchor parenthetical or the "does not re-derive under
      the selected traffic" tail — both would be false of it. What it does get, and what a
      capacity exclusion also gets, is the renormalization stated out loud. */
@@ -4198,16 +4195,16 @@ function fleetRenderableClause(fleetRenderable, primary, membership) {
   const nonMonotonic = " Crossing a feasibility boundary changes which hardware the number describes, so the estimand can shift discontinuously: the displayed value is not monotonic under parameter perturbation (a harder-to-serve model can show a HIGHER margin by dropping expensive legs)";
   return head + "blend renormalized: " + f.renderableLegs + " of " + f.totalLegs + " legs, " + pct + "% of " + (excludedHere ? "default member weight" : "declared fleet weight") + correlation + nonMonotonic;
 }
-/* R2 (memo §0 P1-7): the legacy replica-width sensitivity machinery
+/* R2 ( P1-7): the legacy replica-width sensitivity machinery
    (replicaWidthSensitivity + its clause + the feasibilityAtNShard/workloadAtNShard
-   case channel + the B′ §1 width-case default-selection contract) is RETIRED — the
+   case channel + the B′  width-case default-selection contract) is RETIRED — the
    render path consumes the capacity solver's declared-operating-point widths, and the
    width story is told by the solver receipts + the shared policy clause
    (policyCapacityClause below). The topologySensitivity registry rows survive in
    engine-data-v22.js as typed evidence annotations (provenance), never as live width
    inputs. */
-/* ---------- IM4 slice B: fleet evidence profiles + gate-6/7 decisions ----------
-   Design memo research/im4-fleet-design-memo.md §2.1-§2.3 (v3.1) + §7 owner ruling.
+/* ---------- Fleet data: fleet evidence profiles + gate-6/7 decisions ----------
+   Design  (v3.1) +  the adopted decision.
    Architecture (slice-B review P1-6): renderability COMPUTATION (feasibility-coupled)
    is separated from the PURE DECISION predicates, which accept only the closed
    evidence-profile DTO — economic fields cannot reach a decision even transitively.
@@ -4229,11 +4226,11 @@ function validateFleetShape(fleetId, fleet) {
 // aggregates; pass the evidenced-baseline state for gate-7 evaluation. Fleets are
 // model-scoped (P1-4): calling for a fleet not defined for the state's model returns null.
 function fleetEvidenceProfile(fleetId, s, supplied) {
-  /* b9 M4 (memo §3.6): user-custom fleets get a TYPED profile with NO evidence-share
+  /* : user-custom fleets get a TYPED profile with NO evidence-share
      or cluster claims — those quantities describe SOURCED constructions; claiming them
      for user input would be fabrication. Evidence fields are present-but-null with the
      reason stated, so no disclosure renderer can ever invent a number for them. Never
-     central-eligible, never a default (class contract, §3.4). */
+     central-eligible, never a default (class contract). */
   if (isCustomFleetId(fleetId)) {
     const def = customFleetSource().resolve(fleetId);
     if (!def) return null;
@@ -4283,10 +4280,10 @@ function fleetEvidenceProfile(fleetId, s, supplied) {
     const ctx = supplied || scenarioContext(s); // context from the ORIGINAL state (clone loses registration)
     const st = Object.assign(structuredClone(s), { blend: Object.fromEntries(HW_ORDER.map(k => [k, fleet.legs[k] || 0])) });
     const feas = feasibility(st, ctx);
-    // R2 two-boolean contract (memo §0-bis NEW-P0): renderability is
+    // R2 two-boolean contract ( NEW-P0): renderability is
     // renderable-UNDER-POLICY (weight-capacity + declared operating point under the
     // named loaded-bytes policy); placement is the SEPARATE boolean, aggregated
-    // FAIL-CLOSED (one policy-path leg poisons the fleet to policy status, §0-ter).
+    // FAIL-CLOSED (one policy-path leg poisons the fleet to policy status).
     const renderableKeys = new Set(feas.legs.filter(l => l.renderableUnderPolicy === true).map(l => l.hwKey));
     const renderableLegs = legs.filter(l => renderableKeys.has(l.hw));
     renderableWeightShare = renderableLegs.reduce((a, l) => a + l.declaredWeight, 0) / totalW;
@@ -4295,7 +4292,7 @@ function fleetEvidenceProfile(fleetId, s, supplied) {
       feas.legs.some(fl => fl.hwKey === l.hw && fl.placementVerified === true));
     renderableIndependentEvidenceClusters = supportedCount(clusterSupport(renderableLegs));
   }
-  /* R3 (design memo D-5): the DERIVED (filtered) view — same field names the pure
+  /* R3 (the design requirements): the DERIVED (filtered) view — same field names the pure
      gate decisions read, computed over the derivation's MEMBERS with the RENORMALIZED
      denominator (the slice-B clusterSupport amendment: support = declared weight /
      member total, the honest default's own weights). One function, two labeled views;
@@ -4333,13 +4330,13 @@ function fleetEvidenceProfile(fleetId, s, supplied) {
 // Gate-7: may this fleet carry a central/default numeric label at the evaluated scenario?
 function centralEligibilityDecision(profile) {
   return !!profile
-    && profile.class !== "counterfactual" && !profile.containsChineseSilicon // owner ruling: categorical
+    && profile.class !== "counterfactual" && !profile.containsChineseSilicon // the adopted decision: categorical
     && profile.allLegsRenderableUnderPolicy === true                         // 100% by leg count (P1-5)
-    && profile.placementVerified === true // R2 (memo §0-bis): ANY central label requires placement — closed models stay central-ineligible on policy alone
+    && profile.placementVerified === true // R2: ANY central label requires placement — closed models stay central-ineligible on policy alone
     && profile.renderableIndependentEvidenceClusters >= 2;                    // weight-supported clusters (P1-3)
 }
-// Gate-6, R3 form (design memo D-3a — SUPERSEDES the R2/§0-bis IFF for the landing
-// default, per the owner's Row-0 ruling): the landing default IS the FILTERED
+// Gate-6, R3 form (the design requirements — SUPERSEDES the R2/ IFF for the landing
+// default, per the adopted default selection): the landing default IS the FILTERED
 // membership, so the pure decision consumes the DERIVATION (D-1 DTO, margin-blind),
 // mode-aware:
 //   "policy-labeled" (shipped default): suppress IFF the derived membership is EMPTY
@@ -4354,8 +4351,8 @@ function heroSuppressionDecision(derivation, mode) {
   return derivation.memberLegCount === 0;
 }
 
-// Gate-7 evaluation + owner-adjudicated landing selection. The landing id is the BANKED
-// constant (owner-answers.jsonl im-fable-b-2026-07-21-fleet-landing-default-v2), never a
+// Gate-7 evaluation + adopted landing selection. The landing id is the BANKED
+// constant (adopted 2026-07-21), never a
 // derivation; for models outside every fleet's scope the landing is null (fail-closed,
 // P1-4) and the model keeps its preset blend.
 function selectDefaultFleet(s, supplied) {
@@ -4367,7 +4364,7 @@ function selectDefaultFleet(s, supplied) {
   return {
     landing: landingDefined ? ED_FLEET.DEFAULT_FLEET_ID : null,
     modelId: ctxModel,
-    // R3 (design memo D-5 view table): gate-7 evaluates the LANDING fleet on its
+    // R3 (the design requirements view table): gate-7 evaluates the LANDING fleet on its
     // DERIVED (filtered) view; every other registry fleet keeps the declared view
     // (their point IS the declared construction; counterfactuals are categorically
     // central-barred anyway). The derived view is shaped exactly like the profile
@@ -4379,12 +4376,12 @@ function selectDefaultFleet(s, supplied) {
   };
 }
 
-/* ---------- R3 Row 0 (design memo im4-r3-design-memo v5, D-1/D-2): the ONE default-
+/* ---------- Default membership: the ONE default-
    membership derivation. Filters the DECLARED fleet legs on renderableUnderPolicy at
    the model's CANONICAL native-traffic anchor. FAIL-CLOSED: any non-affirmative
    renderableUnderPolicy (false, null, missing solve, no registered domain) EXCLUDES
-   the leg; capped and honest-null legs are excluded IDENTICALLY (owner ruling,
-   BACKLOG Row 0 — "capped or infeasible"). Traffic is pinned OUT of the relativity
+   the leg; capped and honest-null legs are excluded IDENTICALLY (the adopted decision,
+   BACKLOG the recorded review — "capped or infeasible"). Traffic is pinned OUT of the relativity
    set by the anchor (D-1): renderableUnderPolicy is traffic-dependent through the KV
    term (h100@5T is live-servable at 5:1/20% but not at the Reference anchor), so the
    derivation pins BOTH the evaluation state's ioRatio/cacheHit AND the solve
@@ -4409,7 +4406,7 @@ function deriveDefaultFleetMembership(fleetId, s, supplied) {
   const canonicalCtx = { modelId: ctx.modelId, profileId: nat.id, customDonor: ctx.customDonor }; // canonical anchor, context channel
   const feas = feasibility(st, canonicalCtx);
   const members = [], excluded = [];
-  /* im-vet-six-repairs (2026-09-20), finding E1: a DECLARED EVIDENCE WITHDRAWAL excludes a
+  /*  (2026-09-20), finding E1: a DECLARED EVIDENCE WITHDRAWAL excludes a
      leg ahead of the capacity read. The two grounds are kept apart on the row (`ground`)
      because they say different things to a reader: a capacity exclusion is a fact about
      this model at this anchor and moves when the model does; a withdrawal is a judgment
@@ -4446,14 +4443,14 @@ function deriveDefaultFleetMembership(fleetId, s, supplied) {
   return {
     fleetId,
     derivedAt: { trafficProfileId: nat.id, ioRatio: nat.ioRatio, cacheHit: nat.cacheHit,
-      basis: "canonical native-traffic anchor (memo D-1): membership never re-derives under the selected traffic" },
+      basis: "canonical native-traffic anchor (the design analysis): membership never re-derives under the selected traffic" },
     members, excluded,
     declaredLegCount: Object.keys(fleet.legs).length, memberLegCount: members.length,
     renormalizationBasis: memberTotal,
   };
 }
 
-/* ---------- Slice C (design memo im4-sliceC-design-memo v9, C-7): the ONE shared
+/* ---------- Fleet identity: the ONE shared
    fleet-conditional blend baseline — consumed by BOTH the encoder (its blend diff
    baseline) and the loader (normative restore step 4), so the wire and the app
    can never disagree about what a fleet identity implies for the blend axis.
@@ -4466,11 +4463,11 @@ function deriveDefaultFleetMembership(fleetId, s, supplied) {
    construction (the R3-round decode-order hazard, closed structurally). */
 function fleetBaselineBlend(fleetId, s, supplied) {
   if (fleetId === "custom" || fleetId === "preset") return null;
-  /* b9 M4 (memo §1.3/§5.5): a custom fleet's baseline blend is the per-donor AGGREGATE
+  /* : a custom fleet's baseline blend is the per-donor AGGREGATE
      of its leg shares — the S.blend mirror seed. State-independent (a user composition
      IS its declared construction, the C-1 non-default rule) and MODEL-AGNOSTIC (custom
      fleets are hardware compositions, not model-attributed constructions — no models
-     scope check, memo D-3). */
+     scope check, the design requirements). */
   if (isCustomFleetId(fleetId)) {
     const def = customFleetSource().resolve(fleetId);
     if (!def) return null;
@@ -4494,39 +4491,39 @@ function fleetBaselineBlend(fleetId, s, supplied) {
   return Object.fromEntries(HW_ORDER.map(k => [k, fleet.legs[k] || 0]));
 }
 
-/* ---------- R3 Row 1 (design memo D-9): THE FINAL ANSWER ----------
-   The owner's standing requirement (BACKLOG Row 1, owner-verbatim 2026-07-22): an
+/* ---------- R3 the recorded review (the design requirements): THE FINAL ANSWER ----------
+   The adopted requirement (2026-07-22): an
    obvious final answer — a planning point plus labeled spans, rationale linked to
    evidence, defensible under expert scrutiny. ONE function computes the block AND
    its emitted token strings; the site block and the MCP emission BOTH consume it
-   (never live user state — the thesis baseline is the clean derived flagship
+   (never live user state — thesis baseline is the clean derived flagship
    default; user edits can never move these values, D-9 binding). Honesty contract:
    every value is policy-labeled (central identity is constructor-refused for closed
    models); spans are SPANS ACROSS DECLARED ALTERNATIVES, never uncertainty
    intervals (the FA-scoped vocabulary probe enforces the grammar); the ratified
    empty comparator stands; the identity rides INSIDE each value token (D-3b crop
    bar). */
-/* ================= b9 M6 (FA memo §5, D-7): the exec-summary row REGISTRY =================
-   TYPED DATA, not renderer strings (memo §5.2 validation): each row declares the ONE control it
+/* =================  (FA ): the exec-summary row REGISTRY =================
+   TYPED DATA, not renderer strings (typed validation): each row declares the ONE control it
    moves from the calculator's own default state, its evidence label, its evidence href, and its
-   low-evidence affordance state (§17.4). The hrefs live here so a node assertion can resolve every
+   low-evidence affordance state. The hrefs live here so a node assertion can resolve every
    one of them — they are rendered by app.js at runtime and would otherwise never appear as literal
-   attributes for `site-links` to see. Row order IS the owner's declared plausibility order and is
+   attributes for `site-links` to see. Row order IS the declared plausibility order and is
    deliberately NOT the margin order (T-5). */
 const EXEC_SUMMARY_ROWS = Object.freeze([
   Object.freeze({ id: "util-70", order: 1, computed: true, override: Object.freeze({ util: 70 }),
     lever: "fleet utilization moved 50% → 70%",
-    evidence: "a declared planning convention; no occupancy telemetry is public (r4 §C3 scenario-only ledger)",
+    evidence: "a declared planning convention; no occupancy telemetry is public (scenario-only ledger reviewed on 2026-07-25)",
     href: "research/final-answer-rationale.html#scenario-only-utilization",
     lowEvidence: Object.freeze({ state: "jump", param: "Fleet utilization", controlKey: "util" }) }),
   Object.freeze({ id: "util-75", order: 2, computed: true, override: Object.freeze({ util: 75 }),
     lever: "fleet utilization moved 50% → 75%",
-    evidence: "the same declared planning convention, pushed further (r4 §C3 scenario-only ledger)",
+    evidence: "the same declared planning convention, pushed further (scenario-only ledger reviewed on 2026-07-25)",
     href: "research/final-answer-rationale.html#scenario-only-utilization",
     lowEvidence: Object.freeze({ state: "jump", param: "Fleet utilization", controlKey: "util" }) }),
-  /* im-arc T2 (memo §6, 2026-08-22): pin this published historical reading at
+  /* : pin this published historical reading at
      $0.07/kWh; only generic expectations adopt the new registry midpoint. */
-  /* im-arc T4 fold (2026-08-24), memo §2 [F8]: the unsourced $0.07/kWh override is withdrawn.
+  /*  (2026-08-24),  [F8]: the unsourced $0.07/kWh override is withdrawn.
      This reading now INHERITS the registered US industrial region BY ID — no literal triple is
      copied here, so the row can never disagree with the registry it cites. The historical pins
      keep 0.07 through the T4 declared-delta manifest, not through this row. */
@@ -4539,10 +4536,10 @@ const EXEC_SUMMARY_ROWS = Object.freeze([
     lever: "speculative decode / MTP credit",
     evidence: "vendor-official at one non-flagship lab, dated; magnitude for this fleet unpublished",
     href: "research/final-answer-rationale.html#scenario-only-mtp",
-    /* b9 spec-decode LEVER — THE AFFORDANCE FLIP (memo §9.2). The M6 contract is that this row's
+    /* spec-decode LEVER — THE AFFORDANCE FLIP. The answer-surface contract is that this row's
        `no-control` affordance flips to `jump` WHEN THE LEVER LANDS, "with no new mechanism": two
        fields on one frozen registry row and nothing else. The lever has landed, so it flips here.
-       `LOW_EVIDENCE_COPY["no-control"]` is retained unedited per §9.2 — it is no longer reached, and
+       `LOW_EVIDENCE_COPY["no-control"]` is retained unedited per  — it is no longer reached, and
        deleting it would be a mechanism change rather than a field change. */
     lowEvidence: Object.freeze({ state: "jump", param: "Speculative decode / MTP credit", controlKey: "specDec" }) }),
   Object.freeze({ id: "trend-6", order: 5, computed: true, override: Object.freeze({ trendMonths: 6 }),
@@ -4550,11 +4547,11 @@ const EXEC_SUMMARY_ROWS = Object.freeze([
     evidence: "aggressive tail: every algorithmic-lead voice this page carries kept +6 OUTSIDE the default",
     href: "#s5", lowEvidence: null }),
 ]);
-/* The §C2 verbatim (r4 run B, 2026-07-25). The ONE vocabulary-scanner exemption (memo §2.7 D-6c)
+/* The  verbatim (review, 2026-07-25). The ONE vocabulary-scanner exemption (node-identity exemption)
    is granted to THIS string under THIS frame and to nothing else. */
 const FA_MUST_NOT_BE_CALLED_FRAME = "That adjudication also states what this reading must not be called. It must not be called: ";
 const FA_MUST_NOT_BE_CALLED_VERBATIM = "verified; actual; central Anthropic margin; a confidence interval; a coherent public-market-rent result.";
-/* §17.4 — the low-evidence affordance ships in two typed states, because the honest state of the
+/*  — the low-evidence affordance ships in two typed states, because the honest state of the
    world has two: a parameter with a control (jump to it) and a lever with no control yet (say so). */
 const LOW_EVIDENCE_COPY = Object.freeze({
   jump: (param) => "Particularly low-evidence parameter — " + param
@@ -4563,8 +4560,8 @@ const LOW_EVIDENCE_COPY = Object.freeze({
     + ". This calculator has no control for it yet, so the default holds the credit at zero rather than"
     + " assuming a positive value. Building the control is scoped work this page names openly instead of folding into another number.",
 });
-/* §17.2 — the re-pinned spec-decode row (owner ruling 2026-07-30 22:57Z, §16.2 A-1; evidence label
-   rewritten by the sweep, §16.6). The four elements the Polaris grant requires survive in-line. */
+/*  — the re-pinned spec-decode row (the adopted decision 2026-07-30 22:57Z,  A-1; evidence label
+   rewritten by the sweep). The four elements the review grant requires survive in-line. */
 const MTP_ROW_COPY =
   "Speculative decode / MTP credit — a lever this page deliberately leaves OUT of its default."
 /* J-10 run-3 dive B (P0): MTP is NOT a second name for speculative decoding — it is a
@@ -4576,7 +4573,7 @@ const MTP_ROW_COPY =
 + " speculative-decoding implementation needs. Speculative decoding proposes candidate tokens for the"
 + " target model to verify; where accepted-token gains exceed draft and verification overhead it raises"
 + " the tokens generated per unit of compute, and therefore lowers modeled cost-out."
-/* b9 spec-decode LEVER, manifest row 1 (§9.3 item 4, disposition SPLIT). The sentence that stood
+/* spec-decode LEVER, manifest the recorded review (split disposition). The sentence that stood
    here — "The effect is conditional on acceptance, draft cost, batching and workload — which is why
    it is carried here as a lever and not as an adjustment" — conflated a DESCRIPTIVE claim about the
    mechanism with an OPERATIVE claim about why this page carries no control. The second half stopped
@@ -4587,7 +4584,7 @@ const MTP_ROW_COPY =
 + " dated: an OpenAI engineering post of 2026-07-29 credits an improved draft/speculator model with"
 + " \"more than 15%\" additional token-generation efficiency, and its pricing post of 2026-07-30 says it is"
 + " \"passing those gains on to customers\". That is a vendor claim — self-reported, single-source, not"
-/* Manifest row 1, occurrence (G) — a TIGHTENING, not a correction. "Separately and independently"
+/* Manifest the recorded review, occurrence (G) — a TIGHTENING, not a correction. "Separately and independently"
    asserts independence OF THE VENDOR CLAIM (a different party, a different stack), which is true;
    it does not assert independent replication, which is not. The neighbouring "not independently
    verified" at the line above is CORRECT AS IT STANDS and is deliberately left byte-untouched:
@@ -4601,7 +4598,7 @@ const MTP_ROW_COPY =
    architectures and implementations". They do not: BOTH case studies use DeepSeek V3 under SGLang
    with the same MTP technique. What differs is cluster scale (16 H200 / 2 decode nodes vs 128 H200
    / 4 prefill + 12 decode), concurrency (2 vs 128 requests per rank), sequence lengths and draft
-   window. Narrowing to what the source supports, per the court's truth-restoring rule — a claim
+   window. Narrowing to what the source supports, per the claim-preservation rule — a claim
    that is false about its own citation was never inside the ratified envelope.
    J-10 run-2 P0 — MINE, AND THE THIRD FALSE CLAIM ABOUT THIS SOURCE IN THE FOLD THAT FIXED THE
    FIRST TWO. Run 1's fold added: "measured against a baseline that also lacks overlap scheduling …
@@ -4610,9 +4607,9 @@ const MTP_ROW_COPY =
    — the cleanest reading available, not a confounded one. 82.0/60.4 = +35.8% compares
    MTP-without-overlap against overlap-without-MTP, and that SGLang version could not run MTP and
    overlap together, so no same-overlap figure exists to compute. Both dives found it independently;
-   dive B also ruled it outside the court's envelope because it changed what the number is offered
-   as evidence FOR. Replacement text adopted VERBATIM from dive B per Polaris gen-25
-   (esc-20260802T201114Z-0e9b3ae3). The lesson is narrower than "check sources": I checked the
+   dive B also ruled it outside the editorial scope because it changed what the number is offered
+   as evidence FOR. Replacement text adopted VERBATIM from dive B per the review
+   (the note of 2026-08-02). The lesson is narrower than "check sources": I checked the
    baseline's conditions and did not check that the TREATMENT ARM shared them. */
 + " Both are the SAME model on the SAME stack — DeepSeek V3 under SGLang — differing in cluster"
 + " scale, concurrency, sequence lengths and draft window, so the spread measures deployment"
@@ -4621,9 +4618,9 @@ const MTP_ROW_COPY =
 + " 82.0 versus 51.0 tokens/s/rank (+60.8%). The post separately reports 60.4 tokens/s/rank for"
 + " overlap scheduling without MTP; because that SGLang version did not support MTP together with"
 + " overlap scheduling, it does not report MTP's incremental gain on top of overlap."
-/* Court note (gen-24): these two figures trace to the design memo's own citation, NOT to a row in
+/* Provenance note: these two figures trace to the design specification's own citation, NOT to a row in
    evidence-instances-v22.json — a provenance gap on a page whose thesis is that numbers carry typed
-   provenance. Declared in-page as cited-not-registered per the court's second option; landing real
+   provenance. Declared in-page as cited-not-registered per the adopted citation convention; landing real
    registry rows is the better fix and is in BACKLOG.md. */
 + " Both figures are cited from that post and are not registered evidence rows of this page: they"
 + " label a scale, and nothing computes from them."
@@ -4637,7 +4634,7 @@ const MTP_ROW_COPY =
 + " has independently verified. Whether it is deployed on the fleet THIS page models, and with what"
 + " effect, is established by nothing this page has found. Acceptance"
 + " rates, average accepted tokens per step, and draft-model size and architecture are not publicly"
-/* Manifest row 1, occurrence (H) — a LIVE HONESTY DEFECT in M6-shipped copy that survived six J-10
+/* Manifest the recorded review, occurrence (H) — a LIVE HONESTY DEFECT in the published copy that survived six J-10
    dive rounds, found by round-6 Sol. "this page has found none for any lab" is FALSE against this
    page's own registry, which records an h20/Ant anchor at about 1.8-1.9 accepted tokens and an
    ascend/CloudMatrix anchor assuming 70% for one speculative token. The true claim is a
@@ -4652,7 +4649,7 @@ const MTP_ROW_COPY =
    occurrence (H) below it — a universal that the page's own record refutes — and the second time in
    this arc that an unbounded "anywhere/any lab" claim has been the defect. */
 + " Its cited evidence set carries four non-fleet acceptance figures and no fleet-specific one: two"
-/* J-10 run-4 dive A P0-1, OWNER-RULED 2026-08-02T22:47Z (card q-im-specdec-dive-gate-run4).
+/* J-10 run-4 dive A P0-1, ADJUDICATED 2026-08-02T22:47Z.
    "about 1.8–1.9 accepted tokens" renamed the SOURCE'S OWN metric: SGLang reports an average
    ACCEPTANCE LENGTH, which counts accepted draft tokens PLUS the bonus token produced per
    verification step. Calling the whole figure "accepted tokens" overstates the accepted-DRAFT count.
@@ -4665,13 +4662,13 @@ const MTP_ROW_COPY =
 + " for a single speculative token — and, in the open-stack post cited above, average acceptance"
 + " lengths of 2.18 and 2.44 at two draft-window settings. None is for the fleet modelled here, and"
 + " these are the figures this page has found, not a claim about every figure that exists."
-/* Manifest row 1, the [why no number] tail — the ratified replacement. The old text argued
+/* Manifest the recorded review, the [why no number] tail — the ratified replacement. The old text argued
    PRESENT-TENSE against the very control this page now ships ("a fleet-wide credit would land on
    legs whose speculative status this page cannot establish"; "Making it a control you can turn is
    scoped work this page has not yet done"), so shipping the lever without this fold would leave the
    page contradicting itself in the row that points at the lever.
 
-   The leg counts are EXECUTED against the typed statuses, not transcribed. im-vet-six-repairs
+   The leg counts are EXECUTED against the typed statuses, not transcribed.
    (2026-09-20): the default fleet is FIVE legs since the two Trainium ones were withdrawn on
    evidence grounds, so h100/h200/gb200 are `excluded` and creditable and gb300/tpu7 are `unknown`
    and therefore exempt. The two withdrawn legs were creditable and are simply not in the fleet
@@ -4683,16 +4680,16 @@ const MTP_ROW_COPY =
 + " not a mechanism this page runs. Of the five legs in the default fleet exactly one documents that"
 + " its anchor carries no speculative credit — and under the typed statuses this lever acts on, three"
 + " legs are creditable and two, gb300 and tpu7, cannot be established and are exempt — so this page"
-+ " applies no fleet-wide credit of its own, and the r4 review's verdict on exactly that question is"
++ " applies no fleet-wide credit of its own, and the adversarial review of 2026-07-25 states on exactly that question"
 + " \"do not apply one universal multiplier\"."
-/* The receipts element is RETAINED. Reported as a precedence call and now AFFIRMED BY COURT RECORD
-   — Polaris gen-24 `esc-20260802T121708Z-66c10f00`, 2026-08-02T12:27:55Z: *"the D-7 grant's [what
-   receipts] requirement outranks a ratified copy change, so the element stays. Row 1's ratified text
+/* The receipts element is RETAINED. Reported as a precedence call and now AFFIRMED
+   2026-08-02T12:27:55Z: *"the D-7 grant's [what
+   receipts] requirement outranks a ratified copy change, so the element stays. The adopted text
    is AMENDED by this affirmation to include the retained element."* The reasoning stands as the
    record of why: the D-7 amendment that authorises this refusal row at all
-   (esc-20260730T220007Z-39615d5c) requires it to state "the lever, its evidence label, why no
+   (the note of 2026-07-30) requires it to state "the lever, its evidence label, why no
    number, and what receipts would have to exist", and that grant sits at precedence tier 2 while the
-   design memo sits at tier 7. A ratified replacement for one element cannot silently delete an
+   design specification sits at tier 7. A ratified replacement for one element cannot silently delete an
    element a higher authority requires. */
 + " [what receipts would have to exist] Per-leg workload-weighted acceptance and draft-overhead receipts."
 + " What this page ships instead is a control you turn: off by default, never applied to a leg whose"
@@ -4700,26 +4697,26 @@ const MTP_ROW_COPY =
 + " disclosed on every leg it does reach, and never used to select a reading of this page's own."
 + " The credit stays at zero in this page's default — a no-credit convention, which cannot inflate"
 + " this page's margin, and not a finding that the credit is zero.";
-/* The six declared Owned-TCO inputs row 3 pulls in (D-6t). READ FROM THE LIVE STATE, never restated:
+/* The six declared Owned-TCO inputs the recorded review pulls in (D-6t). READ FROM THE LIVE STATE, never restated:
    "one control" is true of the control count and false of the parameter count, and the block says so. */
 function tcoAssumptionVector(st) {
   return "cluster overhead " + st.clusterOh + "×, GPU depreciation " + st.lifeYears
     + " yr, datacenter capex $" + st.dcPerW + "/W, electricity $" + st.kwh + "/kWh, PUE " + st.pue
     + ", operations overhead " + st.opexPct + "%";
 }
-/* b9 M6 (FA memo §5): the exec-summary rows, RENDERED. Each computed row re-derives its own margin
+/*  (FA ): the exec-summary rows, RENDERED. Each computed row re-derives its own margin
    from its own one-control state and carries the fleet weld the site's ONE shared clause formatter
    produces from THAT row's own `fleetRenderable` (D-6u-bis: "the existing fleet-renderability
-   clause"). The refusal row emits no value token and therefore carries no weld (§8.2). */
+   clause"). The refusal row emits no value token and therefore carries no weld. */
 /* `baseOverride` exists so the SUITE can perturb an engine input and observe the RENDERED rows
    move through this exact formatter (T-4's mutation check). Comparing two `workload()` calls to
    each other would prove only that `workload()` responds to its inputs — it would say nothing about
    whether these tokens are computed or hard-coded, which is the property T-4 names. finalAnswer()
    never passes it. */
-/* im-arc T4 fold (2026-08-24), memo §2 [F8]: an exec-summary row that names a region takes that
+/*  (2026-08-24),  [F8]: an exec-summary row that names a region takes that
    region's registered middle BY ID. No literal triple is copied into the row, so the reading and
    the registry cannot drift apart — which is exactly how the stale {0.060, 0.0871, 0.120} got
-   printed in the memo's own v1. */
+   printed in the original specification. */
 function execSummaryRowElectricity(row) {
   if (!row || !row.electricityRegionRef) return {};
   const region = dcRegistry().REGIONS[row.electricityRegionRef];
@@ -4748,7 +4745,7 @@ function execSummaryRowTokens(m, median, pct, baseOverride) {
         ? " This row moves one reader control — the procurement basis — and takes its electricity"
           + " from the registered " + row.electricityRegionRef + " region row by id ($"
           + dcRegistry().REGIONS[row.electricityRegionRef].usdPerKwh.mid + "/kWh), replacing the"
-          + " unsourced $0.07/kWh override this reading carried before the im-arc T4 fold of"
+          + " unsourced $0.07/kWh override this reading carried before the registry revision of"
           + " 2026-08-24. It changes no other scenario control — it is NOT the"
           + " multi-setting owned-TCO exploration route the justification entries discuss, which also"
           + " moves utilization, the stack multiplier, the serving regime and the billing mix and"
@@ -4764,20 +4761,20 @@ function execSummaryRowTokens(m, median, pct, baseOverride) {
 function finalAnswer() {
   const m = MODELS.find(x => x.id === FLAGSHIP_SCOPE.modelId);
   const median = PERSPECTIVES.find(p => p.id === "median");
-  /* b9 M5 (memo §15, D-10): the FA interim pin. Under M5 defaults the derived flagship default
-     carries the ratified +3 prior; the FA surface must not ship that number UNLABELED before M6
+  /* : the FA interim pin. Under the adopted defaults the derived flagship default
+     carries the ratified +3 prior; the FA surface must not ship that number UNLABELED before the full answer surface
      builds the two-reading surface. ONE constructor pins the planning state — and, below, every
      nested state the FA computation derives (lensSpan's per-lens states, trafficContributors) —
      back to the public-evidence reference at trend 0 / family 1.0. `band` and `membSens` are
      evaluated FROM this pinned `s`, so they inherit the pin. */
   const s = pinReferenceLevers(applyPresetSettings(m, median, FLAGSHIP_SCOPE.traffic));
-  /* b9 M6 (memo §4.1, D-6p): the reference-pinned derivation above is RETAINED UNCHANGED — every
-     field computed from `s` keeps its pre-M6 value (T-9's freeze stays load-bearing). M6 ADDS this
+  /* : the reference-pinned derivation above is RETAINED UNCHANGED — every
+     field computed from `s` keeps its earlier value (T-9's freeze stays load-bearing). The answer surface ADDS this
      sibling, computed from the UNPINNED default state, and retires the single-reading PRESENTATION.
      ONE new numeric leaf on the object (`priorReading.marginPct`) — T-9's whitelist is exactly it. */
   const sPrior = applyPresetSettings(m, median, FLAGSHIP_SCOPE.traffic);
   const wlPrior = workload(sPrior, undefined, scenarioContext(sPrior));
-  /* row 499 (owner ruling: "the FINAL ANSWER BLOCK carries the hero numbers — make sure that change
+  /* the recorded review (the adopted decision: "the FINAL ANSWER BLOCK carries the hero numbers — make sure that change
      goes through"). The page opens on a named estimate preset, so the state a reader sees FIRST had
      no reading of its own in this block: they landed on a number the answer block did not name.
      Computed exactly like the two above — same model, same flagship traffic, the preset's own
@@ -4802,7 +4799,7 @@ function finalAnswer() {
   const pct = v => "≈" + Math.round(v) + "%";
   const fa = {
     subject: "serving margin — Claude Opus 4.x at the published list-price schedule under the reference cache/batch/discount mix, on the serve-feasibility-filtered evidence-informed default fleet (na-blend), Reference traffic 15:1/60%",
-    /* OWNER ANNOTATION nbc7fc1 (2026-08-16, verbatim: "title is rambling, a few words max"). The
+    /* Adopted 2026-08-16: "title is rambling, a few words max"). The
        long subject above is a SCOPE DECLARATION and is not being shortened — dropping the tariff
        basis, the cache/batch/discount mix, the fleet filter or the traffic anchor from a margin
        figure is the conclusion-shopping this page's invariants exist to prevent. What the tile
@@ -4820,10 +4817,10 @@ function finalAnswer() {
     },
     membership,
     priorReading: { marginPct: wlPrior.margin * 100 },
-    /* row 499: the hero the page actually opens on. `perspId`/`leadMonths` travel with it because a
+    /* the recorded review: the hero the page actually opens on. `perspId`/`leadMonths` travel with it because a
        number whose basis is invisible is exactly what this block exists to prevent. */
     landingReading: { marginPct: wlLanding.margin * 100, perspId: landing.id, leadMonths: sLanding.trendMonths },
-    /* T5 rec 1 (GPT Pro 2026-07-29 §6 rank 1, BLOCKER; finding SV-1), verbatim: "Have
+    /* T5 rec 1 (GPT Pro 2026-07-29  rank 1, BLOCKER; finding SV-1), verbatim: "Have
        `finalAnswer()` return an explicit immutable `referenceState` or reference-state
        fingerprint. Make `refreshFinalAnswerDiffers()` compare the current canonical state/claim
        identity against that fingerprint—not `isCentralClean()`."
@@ -4831,7 +4828,7 @@ function finalAnswer() {
        This IS that fingerprint, and it is derived from the readings this block actually prints
        rather than restated beside them — so a future reading added to or removed from the surface
        moves the notice's trigger with it, instead of leaving the two to drift. Drift is the whole
-       defect: `refreshFinalAnswerDiffers()` consulted `isCentralClean()`, and when row 499 split
+       defect: `refreshFinalAnswerDiffers()` consulted `isCentralClean()`, and when the recorded review split
        that predicate in two (the page stopped opening on `median`), the notice was not migrated
        with the other callers. The result was the mirror image of SV-1 — on a completely untouched
        page the block announced "The scenario currently selected above DIFFERS", naming an edit the
@@ -4892,7 +4889,7 @@ function finalAnswer() {
            the FA's numeric leaf surface, and it is right to: every number on this object is a
            claim a reader can read, and a fingerprint is not one — it is a comparison key that
            exists only so the divergence notice can ask "same anchor?". Carrying it as a string
-           keeps the numeric surface exactly the M6 whitelist, so the guard stays sharp instead of
+           keeps the numeric surface exactly the numeric whitelist, so the guard stays sharp instead of
            being widened to admit two non-claims. The ratio and cache are still IN the key, so an
            edited traffic mix still falls outside the fingerprint. */
         trafficFingerprint: rt.profileId + "|" + rt.ioRatio + ":1|" + rt.cacheHit + "%",
@@ -4911,15 +4908,15 @@ function finalAnswer() {
       n: trafficContributors.length, contributors: trafficContributors,
       label: "span across " + trafficContributors.length + " declared traffic-mix profiles at the central lens" } : null,
     whatWouldChangeIt: "a provider disclosure of fleet composition, measured loaded checkpoint bytes, a placement map for a closed model, or billable-cache share would materially move or narrow these numbers; only a direct same-scope margin disclosure, or matched disclosures of serving cost and realized billings, could verify actual margin — expert scrutiny is invited",
-    /* b9 M6 (memo §4.1, D-6p-bis): M5's interim pin (`leverReference` / `leverReferenceLine`) is
+    /* : The interim pin (`leverReference` / `leverReferenceLine`) is
        RETIRED here — its own text promised "the ratified-prior reading arrives with the final-answer
        rework", and this is that rework. The basis it used to carry for the whole block now rides
        INSIDE each token (D-6p-ter), which is what a second visible reading requires. */
     evidenceAnnexId: "final-answer-rationale",
   };
-  /* FA higher-justifications block (memo im4-fa-justifications v7, J-1..J-3/J-5):
+  /* FA higher-justifications block (shared engine tokens):
      typed GROUP records — every quoted claim reads its registry row (single source of
-     bytes); the explanation strings are the memo's pinned J-5 content (static, with a
+     bytes); the explanation strings are the pinned explanation content (static, with a
      stale-loud fixture re-deriving every ≈ value they cite); wouldFlip is REQUIRED on
      every record (R5 N1). Groups 1–3 render full; the four remaining ≥80 rows render
      compact; the nine-id enumeration fixture closes over exactly these claims. */
@@ -4932,7 +4929,7 @@ function finalAnswer() {
     claimedFigures: c.numeric ? (c.numeric.hi == null ? ("above " + c.numeric.lo + "%")
       : c.numeric.lo === c.numeric.hi ? (c.numeric.lo + "%")
       : (c.numeric.lo + "\u2013" + c.numeric.hi + "%")) : null });
-  /* OWNER ANNOTATION nd4f4c7 (2026-08-16, verbatim: "These are the analyst scenarios I'd like to
+  /* Adopted 2026-08-16: "These are the analyst scenarios I'd like to
      see in the area that's missing analyst scenarios. Need to be able to load them into the
      calculator with clear indication of their publicly stated positions vs our inferences about
      their positions").
@@ -4984,7 +4981,7 @@ function finalAnswer() {
       { groupId: "g1-teortaxes-9095", claims: [hjClaim(tt1), hjClaim(tt2)],
         whatItClaims: "The conditional post (2026-06-27, conditional transition, names no lab): \"" + tt1.verbatim + "\". The floor post (2026-06-28, possibility floor; the wrapping straight quotes are the record's own): " + tt2.verbatim,
         whatItDoesNotClaim: "the conditional post — not an unconditional Anthropic point value; not any parameter of this calculator. The floor post — not a statement of where the figure tops out; not any named lab's audited figure.",
-        bridge: "Moving 90 \u2192 95 means halving all-in cost per billed unit (cost falls from 10% to 5% of billings) — if only a fraction of cost is batch-sensitive, the move shrinks proportionally. The claim also presupposes the ~90 starting point, which no public disclosure establishes. A batching/throughput lever genuinely exists in this model: applied alone to the \u224858 public-evidence reference the throughput regime is worth \u22485 points, while inside the strategic-partner ladder — where partner rates and higher utilization have already moved the result to \u224879 — it adds about 2 more, to \u224882. Within the strategic-partner ladder, partner rates and higher utilization first move the result to \u224879; list-only billing is a later step from \u224882 to \u224884, not a prerequisite for entering the 80s in that ladder. Other constructions get there differently — the owned-TCO route substitutes a procurement basis rather than adopting partner rates. At the public-evidence reference no page-authored route reaches 90: the strongest, the owned-TCO route, computes \u224889.2 there and is disclosed as landing outside the \u226590 band it was authored for. Under the calculator's own ratified-prior default that same route computes \u224891.8 and does land inside it — the prior, not the evidence, is what carries it across. Naming the most plausible closer, as this page's own inference and not the claimant's stated method: a route into the 90s most plausibly assumes serving-stack efficiency this calculator does not credit at all in this reference reading, and in every other reading this page authors — speculative decoding first among them, which a frontier lab has now confirmed it runs in production and credits with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). A speculative-decode credit is available as a scenario lever a reader can turn, from the \"no MTP/disagg\" stack setting only; no reading this page selects applies it. That is a different lab and a mechanism, never an Anthropic fleet parameter here. Although the conditional post names batching for 90 \u2192 95, neither TeorTaxes post states how the presupposed ~90 starting point is reached; this page applies no speculative-decode credit in any reading it authors — a no-credit convention, not a finding about Anthropic's actual deployment or benefit. A reader may apply one as their own scenario, from the \"no MTP/disagg\" stack setting only. The two aggressive planning-vector routes now compute \u224880.6/\u224879.5: the first INSIDE the 80\u201390 band it was authored for, the second just BELOW it. Neither vector has been re-authored — what moves them is the engine underneath. They first crossed into the band when the b9 defaults were repaired (before that they read \u224879.6/\u224878.5); the vetting repairs of 2026-09-20 moved them back down, by withdrawing the two Trainium legs from the default fleet and correcting the TPU decode coefficient onto a decode-only numerator, and that carried the second route back out. Band membership is computed and disclosed here, never enforced. The strategic-partner lens computes \u224883.0. Applying the xAI cash-basis settings to the Opus flagship scope computes \u224896; applying the DeepSeek disclosure settings to that same Opus scope computes \u224886. Those are cross-model setting transfers, not actual xAI or DeepSeek operating-point replays, and they say nothing about Anthropic's own margins.",
+        bridge: "Moving 90 \u2192 95 means halving all-in cost per billed unit (cost falls from 10% to 5% of billings) — if only a fraction of cost is batch-sensitive, the move shrinks proportionally. The claim also presupposes the ~90 starting point, which no public disclosure establishes. A batching/throughput lever genuinely exists in this model: applied alone to the \u224858 public-evidence reference the throughput regime is worth \u22485 points, while inside the strategic-partner ladder — where partner rates and higher utilization have already moved the result to \u224879 — it adds about 2 more, to \u224882. Within the strategic-partner ladder, partner rates and higher utilization first move the result to \u224879; list-only billing is a later step from \u224882 to \u224884, not a prerequisite for entering the 80s in that ladder. Other constructions get there differently — the owned-TCO route substitutes a procurement basis rather than adopting partner rates. At the public-evidence reference no page-authored route reaches 90: the strongest, the owned-TCO route, computes \u224889.2 there and is disclosed as landing outside the \u226590 band it was authored for. Under the calculator's own ratified-prior default that same route computes \u224891.8 and does land inside it — the prior, not the evidence, is what carries it across. Naming the most plausible closer, as this page's own inference and not the claimant's stated method: a route into the 90s most plausibly assumes serving-stack efficiency this calculator does not credit at all in this reference reading, and in every other reading this page authors — speculative decoding first among them, which a frontier lab has now confirmed it runs in production and credits with more than 15% additional token-generation efficiency (OpenAI engineering post, 2026-07-29; its pricing post of 2026-07-30 says it is passing those gains on, and never uses the term itself — the link is a first-party cross-reference across those two documents). A speculative-decode credit is available as a scenario lever a reader can turn, from the \"no MTP/disagg\" stack setting only; no reading this page selects applies it. That is a different lab and a mechanism, never an Anthropic fleet parameter here. Although the conditional post names batching for 90 \u2192 95, neither TeorTaxes post states how the presupposed ~90 starting point is reached; this page applies no speculative-decode credit in any reading it authors — a no-credit convention, not a finding about Anthropic's actual deployment or benefit. A reader may apply one as their own scenario, from the \"no MTP/disagg\" stack setting only. The two aggressive planning-vector routes now compute \u224880.6/\u224879.5: the first INSIDE the 80\u201390 band it was authored for, the second just BELOW it. Neither vector has been re-authored — what moves them is the engine underneath. They first crossed into the band when the defaults were repaired (before that they read \u224879.6/\u224878.5); the vetting repairs of 2026-09-20 moved them back down, by withdrawing the two Trainium legs from the default fleet and correcting the TPU decode coefficient onto a decode-only numerator, and that carried the second route back out. Band membership is computed and disclosed here, never enforced. The strategic-partner lens computes \u224883.0. Applying the xAI cash-basis settings to the Opus flagship scope computes \u224896; applying the DeepSeek disclosure settings to that same Opus scope computes \u224886. Those are cross-model setting transfers, not actual xAI or DeepSeek operating-point replays, and they say nothing about Anthropic's own margins.",
         wouldFlip: "a disclosed Anthropic (or peer) production operating point showing sustained ~90% unit margins at published list prices — or evidence reducing the \u224883.0 construction's cost share from \u224817.0% to \u224810% of billings (roughly a further 41% cut in cost per billed unit).",
         links: [tt1.url, tt2.url], loadOps: hjLoadOps(["teortaxes-9095-conditional", "teortaxes-90plus-floor"]) },
       { groupId: "g2-patel-semianalysis-80", claims: [hjClaim(pat), hjClaim(sa80)],
@@ -5054,11 +5051,11 @@ function finalAnswer() {
 
     exclusionLine: membership && membership.excluded.length ? membershipExclusionClause(membership) : null,
     invitationLine: fa.whatWouldChangeIt + "; the rationale annex links every evidence row (" + fa.evidenceAnnexId + ").",
-    /* FA higher-justifications tokens (memo v7 J-2): minted HERE — site, MCP and Worker
+    /* FA higher-justifications tokens (shared engine tokens): minted HERE — site, MCP and Worker
        render these bytes; the FA vocabulary sweep and the MCP twin byte-inclusion list
        extend over exactly these keys (higherJustificationEntries is an ordered ARRAY of
        rendered strings, one per group — the sweep flattens string arrays). */
-    /* T5 rec 5 (GPT Pro 2026-07-29 §6, finding SV-2). Two things were wrong with the retired
+    /* T5 rec 5 (GPT Pro 2026-07-29 , finding SV-2). Two things were wrong with the retired
        opening and both are fixed here. (a) it asserted a posterior judgment about REALITY; the
        reviewer's bar is that such a phrase is only licensed when the source exposes the same
        estimand, accounting boundary, period, fleet and billing basis — a paywalled report and a
@@ -5074,7 +5071,7 @@ function finalAnswer() {
        exactly what the first relocation got wrong. The source claim itself is preserved
        verbatim, which is the half of the rec that says "Preserve the source claim".
        The KEY is deliberately still `mostPlausibleLine`: it is an internal token id anchored
-       to the byte-pinned pre-M6 fixture (tests/fixtures-fa-pre-m6.json), and renaming it
+       to the byte-pinned original fixture (the answer-surface fixture), and renaming it
        would rewrite a historical stale-loud baseline to cosmetic effect. */
     mostPlausibleLine: "The strongest external analyst hypothesis carried by this registry: above 80% — the strongest analyst tier this page carries (SemiAnalysis: Dylan Patel's transcript statement \"north of 80 percent for the API price\" on an Opus token, a direct source for his own words; and a coverage-described above-80% API-business gross-margin estimate from its paywalled 3Q26 report), ranked strongest by this page's adjudication of source reliability — an adopted analyst judgment, not a calculator output or provider disclosure, and not this page's estimate of any actual margin; the analyst's underlying calculations are unpublished. The public-data scenario does not reach that neighborhood; separately labeled constructions that DO reach it include, among others, the strategic-partner lens (\u224883.0 at the public-evidence reference), the strategic-partner ladder (\u224882 after the throughput switch and \u224884 after list-only billing, at the public-evidence reference), the two aggressive planning-vector routes (\u224880.6/\u224879.5 at the public-evidence reference), and the separate multi-setting owned-TCO route (\u224889.2 at the public-evidence reference).",
     higherJustificationsHeader: "This page's public-data scenario — priced at low/committed planning rates, NOT at market rents — computes to " + pct(fa.planningPoint.marginPct) + " at the public-evidence reference — a policy-labeled scenario output at the page-adopted flagship size (a 2\u20133 T planning band, scalar 2.5 T; the result now VARIES monotonically across the three sampled totals 2.0/2.5/3.0 T, because total parameter count reaches decode weight traffic on the replica-resident leg — the former identical-at-all-three behaviour was a symptom of the equation omitting total/resident geometry, not evidence of size robustness). The claims examined below include an above-80% tier (SemiAnalysis — Dylan Patel's transcript statement \"north of 80 percent for the API price\" on an Opus token, and the coverage-described above-80% API-business gross-margin estimate), whose underlying calculations are unpublished. How this page RANKS that tier against the others it carries is stated separately, outside this answer, because ranking other people's claims is a statement about the evidence record rather than one of this calculator's readings. Other public claims point higher still (90\u201395); separately, a model-generated scenario — zero claimant weight, shown only as a labeled stress case — gives 92\u201394 for Opus. Most of the remaining differences come from different scopes, cost bases, commercial mixes, and operating points — the full entries below identify the calculator changes that move toward each higher claim and quantify any remaining unreproduced gap (only where the calculator actually reaches a claim's neighborhood does the entry say so), and the compact entries say honestly where no bridge is constructed. Where a claim targets the same quantity this page models, the entry examines why its stated margin exceeds the public-data scenario; exceeding a scenario is not a disagreement with it. This page's own inputs are as assumption-dependent as the claims it examines: the flagship's total size is a page-adopted planning band informed by community estimates (which include lower 1.5\u20132 T readings), the active size is a working estimate, four of the five member rents are analyst-set (only the fifth names a public rate, and every default rent still sits at or below its public comparator — this is a low/committed planning vector, not a purchasable market one), utilization is a declared convention, the 15:1/60% traffic anchor is a page-declared convention, several throughput legs are transferred, joint-fit or representation-bridged rather than provider-validated — the two Trainium legs in particular carry NO matched serving anchor, and their unresolved batch form is why they are WITHDRAWN from this default rather than merely caveated inside it — and the fleet shares are inferred — the same standard cuts both ways. " + pct(fa.planningPoint.marginPct) + " at the public-evidence reference is a public-data scenario — a reproducible model result, not a guaranteed minimum, and not an estimate of any provider's actual margin; above-80 is an adopted analyst reading, not a disclosure.",
@@ -5093,11 +5090,11 @@ function finalAnswer() {
         + " \u00b7 What would flip it: " + g.wouldFlip;
     }),
     decompositionLine: fa.decompositionLine,
-    /* ================= b9 M6 (FA memo §2.9 + §17): the D-6 five-part surface =================
-       These bytes ARE the memo's pinned templates; `{}` holes resolve through ONE formatter each
+    /* =================  (FA  + ): the D-6 five-part surface =================
+       These bytes ARE the pinned templates; `{}` holes resolve through ONE formatter each
        (`pct` for both readings, so the two can never drift into different rounding conventions).
        Minted HERE so site, MCP and Worker render byte-identical text. */
-    /* row 499 (owner ruling): THE HERO THE PAGE OPENS ON, named in the answer block. It states its
+    /* the recorded review (the adopted decision): THE HERO THE PAGE OPENS ON, named in the answer block. It states its
        own basis inside itself — whose estimate, at what lead — for the same reason the two readings
        below do, and it says plainly that the preset does not reproduce its author's stated figure,
        because a reader comparing the two would otherwise assume this page had rounded one of them. */
@@ -5113,7 +5110,7 @@ function finalAnswer() {
     referenceReadingLine: pct(fa.planningPoint.marginPct)
       + " — public-data scenario, policy-labeled: a model result under public-data assumptions, not a guaranteed minimum or an estimate. Computed at an algorithmic"
       + " lead of 0 months with family multipliers at 1.0×.",
-    c2LabelLine: "Quoted from the r4 adversarial adjudication (run B §C2, 2026-07-25), describing"
+    c2LabelLine: "Quoted from the adversarial review of 2026-07-25, describing"
       + " the scenario this public-data scenario is built on, as it stood then: \"Transitional public-evidence repair scenario:"
       + " approximately 55–61%, midpoint 59%, under 50% paid-capacity occupancy, the reference"
       + " 15:1/cache/commercial mix, declared fleet weights, low/committed planning rents, and"
@@ -5127,13 +5124,13 @@ function finalAnswer() {
       + " And the quoted \"midpoint\" is that adjudication's word for the reference point it selected,"
       + " not an arithmetic centre: the rounded 55–61 span centres on 58, and the 55.2–61.3 public-only"
       + " reconstruction reported below centres on 58.25.)"
-      /* im-arc T4 fold (2026-08-24), memo §4: the live reference reading had moved BELOW the zone
+      /*  (2026-08-24), : the live reference reading had moved BELOW the zone
          this adjudication quoted. The quoted bytes are not edited — they are someone else's words
          about a dated reading — so the divergence is DISCLOSED beside them instead, with the
          reason. A page that silently let a quotation drift out of agreement with its own live
          arithmetic would be making the adjudication say something it did not say.
 
-         im-release-edit-r2 (2026-09-10), owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok:
+          (2026-09-10), the adopted decision:
          and this is why the RELATION is now derived rather than asserted. The sentence said "sits
          BELOW" as a literal. Adopting planning rents for GB200, GB300 and Trainium3 moved the live
          reference from ≈51% to ≈58% — back INSIDE the quoted zone — and a hardcoded "below" would
@@ -5143,36 +5140,36 @@ function finalAnswer() {
          moves, and it moves because it is computed. */
       + (fa.planningPoint.marginPct < 55
           ? " Since 2026-08-24 the live reference reading sits BELOW that quoted zone, at "
-            + pct(fa.planningPoint.marginPct) + ": the im-arc T4 fold found no admissible public"
+            + pct(fa.planningPoint.marginPct) + ": the registry revision found no admissible public"
             + " planning rate for GB200, GB300 or Trainium3, so those legs no longer price and the"
             + " reference is computed over the four that do."
           : fa.planningPoint.marginPct > 61
           ? " The live reference reading now sits ABOVE that quoted zone, at "
             + pct(fa.planningPoint.marginPct) + "."
           : " Between 2026-08-24 and 2026-09-10 the live reference reading sat BELOW that quoted"
-            + " zone, because the im-arc T4 fold found no admissible public planning rate for"
+            + " zone, because the registry revision found no admissible public planning rate for"
             + " GB200, GB300 or Trainium3 and the reference was computed over the four legs that"
-            + " priced. Since the owner adopted provisional planning rents for those three legs on"
+            + " priced. Since provisional planning rents were adopted for those three legs on"
             + " 2026-09-10, all seven price and the live reference reading sits INSIDE the quoted"
             + " zone again, at " + pct(fa.planningPoint.marginPct) + ". Agreement recovered by"
             + " adopting an assumption is not the same evidence as agreement that was there all"
             + " along, and this sentence is not claiming it is.")
       + " The quoted zone is left exactly as it was written.",
-    /* The ONE vocabulary-scanner exemption (memo §2.7 D-6c): a byte-pinned §C2 verbatim under a
+    /* The ONE vocabulary-scanner exemption (node-identity exemption): a byte-pinned  verbatim under a
        scanner-visible negation frame. Every other token stays swept. */
     mustNotBeCalledLine: FA_MUST_NOT_BE_CALLED_FRAME + FA_MUST_NOT_BE_CALLED_VERBATIM,
-    convergenceLine: "Three DIFFERENT METHODS inside one adjudication overlap on this zone. The r4"
+    convergenceLine: "Three DIFFERENT METHODS inside one adjudication overlap on this zone. The"
       /* J-10 run-3 dive A (P1): "internal-documents" read as if it could mean NONPUBLIC ANTHROPIC
          documents, which would materially overstate this page's evidentiary access in the very block
-         that defines the PUBLIC-evidence reading. The r4 run-B pack was this project's own registries. */
-      + " adversarial review ran a public-only reconstruction, a reconstruction from this project's own"
+         that defines the PUBLIC-evidence reading. The review used this project's own registries. */
+      + " adversarial review of 2026-07-25 ran a public-only reconstruction, a reconstruction from this project's own"
       + " internal research record and"
       + " a physics-only bound, landing at 55.2–61.3, 58–64 and 55–70 respectively; they overlap between"
       + " 58 and 61.3. That is agreement across METHODS WITHIN ONE REVIEW — not independent"
       + " corroboration, not a statistical result, and no distribution is implied.",
     priorReadingLine: pct(fa.priorReading.marginPct)
       + " — the calculator's own default reading, policy-labeled scenario. Until 2026-08-06 this was"
-      /* M8 exit-gate council F1 (2026-08-13): this clause was minted 2026-08-06 when the landing
+      /* Corrected 2026-08-13: this clause was minted 2026-08-06 when the landing
          preset carried no lead, and went stale two days later when the opener flipped to gptpro-r3
          (+2 months) — the FA then contradicted its own landingReading in one render. DERIVED now
          from the landing's own leadMonths; T-3b asserts the two tokens agree. */
@@ -5182,7 +5179,7 @@ function finalAnswer() {
           : "no algorithmic lead")
       + ", and this reading is one selection away in the same control."
       + " It is the reference reading plus exactly one declared assumption: the"
-      + " owner-ratified " + (sPrior.trendMonths >= 0 ? "+" : "") + sPrior.trendMonths
+      + " adopted " + (sPrior.trendMonths >= 0 ? "+" : "") + sPrior.trendMonths
       + "-month algorithmic-lead prior for closed frontier labs, which at the ratified "
       + sPrior.trendRate + "×/yr rate divides modeled cost-out by E ≈ " + trendFactor(sPrior).toFixed(3)
       + ". It is a scenario prior, not a measurement — this page identifies no public"
@@ -5193,7 +5190,7 @@ function finalAnswer() {
       + " low/committed planning-rent perimeter. Those are what make THIS page's number what it is;"
       + " because the analyst's own calculations are unpublished, this page does not claim they"
       + " explain the gap. The calculator's own default sits above the reference by exactly one declared"
-      + " assumption — the owner-ratified " + (sPrior.trendMonths >= 0 ? "+" : "") + sPrior.trendMonths
+      + " assumption — the adopted " + (sPrior.trendMonths >= 0 ? "+" : "") + sPrior.trendMonths
       + "-month algorithmic lead, which divides modeled cost-out by E ≈ " + trendFactor(sPrior).toFixed(3)
       + " — and by nothing else: the two readings share every other input. Neither calculator reading is"
       + " evidence that any provider's real margin is any particular number. At the public-evidence reference — algorithmic lead 0 months,"
@@ -5205,7 +5202,7 @@ function finalAnswer() {
       + " \u224880 after adopting partner rates and higher occupancy, \u224883 after then switching to the"
       + " throughput serving regime, and \u224885 after additionally taking a list-only billing mix"
       + " — alternative scenarios, not findings."
-      /* v2.2.0 (row 441, owner ruling q-row441-ref-and-bridge, 2026-08-06): the LEGACY bridge —
+      /* v2.2.0 (the recorded review, the adopted decision, 2026-08-06): the LEGACY bridge —
          FA-arc acceptance rows G1A-1 (name the older public figure and explain how it became this
          one) and G1A-3 (separate what the size revision moved from what the margin-evidence
          adjudication moved). It lives in THIS token rather than a new node because it is the job the
@@ -5227,7 +5224,7 @@ function finalAnswer() {
       + " serve-feasibility-filtered fleet membership, 2026-07-19..23) moved it by far the most; a"
       + " model-size revision moved it slightly back; and the margin-evidence adjudication of"
       + " 2026-07-26 raised it to the " + pct(fa.planningPoint.marginPct) + " public-data scenario above. The"
-      + " owner-ratified algorithmic-lead prior accounts for the rest of the way to the"
+      + " adopted algorithmic-lead prior accounts for the rest of the way to the"
       + " calculator's own default reading. All of these are differences between scenario readings"
       + " of this calculator, not measured changes in anyone's economics.",
     basisDeclarationLine: "Every calculator figure in the explanations below is at the public-data"
@@ -5239,7 +5236,7 @@ function finalAnswer() {
       + pct(fa.priorReading.marginPct) + ") and show what the engine then computes — each is a state you"
       + " can reproduce by moving that one control. One row names a lever this page cannot price on"
       + " public evidence and says so instead of showing a number; it states what receipts would have to"
-      + " exist. The rows are ordered by declared plausibility — the order this page's owner set — and"
+      + " exist. The rows are ordered by declared plausibility — the order this page declares — and"
       + " are deliberately NOT sorted by result. These are estimates of what would have to be true, not"
       + " claims that any of it is true.",
     executiveSummaryRows: execSummaryRowTokens(m, median, pct),
@@ -5247,7 +5244,7 @@ function finalAnswer() {
   return fa;
 }
 
-/* R3 (design memo D-6): the TYPED membership-sensitivity record. The three-point
+/* R3 (the design requirements): the TYPED membership-sensitivity record. The three-point
    policy band re-evaluates VALUES on the FIXED central-policy membership (pointwise
    algebra — comparable points); THIS record separately discloses at which sampled
    points the membership itself would differ. Contract: (i) it never alters the value
@@ -5267,7 +5264,7 @@ function membershipSensitivity(fleetId, s, supplied) {
   });
   const canonicalCtx = { modelId: ctx.modelId, profileId: nat.id, customDonor: ctx.customDonor };
   const centralMembers = new Set(central.members.map(l => l.hwKey));
-  /* im-vet-six-repairs (2026-09-20), finding E1. This record answers ONE question — would the
+  /*  (2026-09-20), finding E1. This record answers ONE question — would the
      loaded-bytes POLICY change the default's membership — so a leg excluded on EVIDENCE grounds
      must not appear in it. A withdrawal is a judgment about the row's own evidence and does not
      move with the policy at any point, so reporting it as "would enter" at every sampled point
@@ -5297,7 +5294,7 @@ function enumerateLegalWidths(shapes) {
     default: throw new Error("unknown hardwareLegalShapes kind '" + String(shapes.kind) + "'");
   }
 }
-const CAPACITY_BYTES_POLICY = Object.freeze({ // memo §0-bis: capacity-only planning defaults (dive §B); NEVER touches sW
+const CAPACITY_BYTES_POLICY = Object.freeze({ // : capacity-only planning defaults (dive ); NEVER touches sW
   fp8: 1.0, fp4: 0.65, bf16: 2.0,
 });
 function placementEngagement(data, ctx, s, policyOverride) {
@@ -5328,7 +5325,7 @@ function solveCapacityWidth(hwKey, s, opts) {
     : CAPACITY_BYTES_POLICY[s.precision];
   const widths = enumerateLegalWidths(domain.scaleUp.hardwareLegalShapes);
   if (!widths.length) return null;
-  /* R2 §1.5 (placement registry; assembly-notes R-8): the ENGAGEMENT contract. A solve
+  /* R2  (placement registry; assembly-notes R-8): the ENGAGEMENT contract. A solve
      uses the published component-placement residency IFF every condition holds — model
      has a registry row; the total slider sits at the row's published value (an edited
      total is no longer the published model); the scenario precision maps to the row's
@@ -5357,7 +5354,7 @@ function solveCapacityWidth(hwKey, s, opts) {
     }
   }
   const solved = R.capacityWidthSolve({ arch, totalB: s.total, hwKey, precision: s.precision,
-    hbmBytesOverride: opts.hbmBytesOverride, // b9 M4 (memo §2.9): joins the solve identity
+    hbmBytesOverride: opts.hbmBytesOverride, // : joins the solve identity
     LPeak: peakKvTokens, widths, loadedWeightBytesPerParam: placementEngaged ? undefined : policy,
     bDeclared, placementModelId: placementEngaged ? ctx.modelId : undefined });
   const shapesKind = domain.scaleUp.hardwareLegalShapes.kind;
@@ -5380,9 +5377,9 @@ function solveCapacityWidth(hwKey, s, opts) {
     // never masquerade as a policy-feasible hero leg.
     renderableUnderPolicy: solved.capacityMinimumUnderUniformPolicy != null
       && solved.declaredOperatingPointSatisfiable === true,
-    // R2 §1.5: TRUE iff the published component-placement residency drove THIS solve
+    // R2 : TRUE iff the published component-placement residency drove THIS solve
     // (registry row engaged per the contract above). Closed models and every disengaged
-    // state stay false (memo §0-ter) — the boolean is now non-vacuous for registry models.
+    // state stay false — the boolean is now non-vacuous for registry models.
     placementVerified: solved.placementApplied === true,
     receipt: {
       capacityMinimumUnderUniformPolicy: solved.capacityMinimumUnderUniformPolicy,
@@ -5449,7 +5446,7 @@ function solveCapacityWidth(hwKey, s, opts) {
         const i = widths.indexOf(cap);
         return i > 0 ? ("width " + widths[i - 1] + ": bFeas < 1 under the " + (placementEngaged ? "published component placement" : "policy")) : "capacity min = smallest legal width";
       })(),
-      observedVsAnalyst: "solver output — never an observed deployment (memo §0-bis naming rule)",
+      observedVsAnalyst: "solver output — never an observed deployment (the design analysis naming rule)",
     },
   });
 }
@@ -5462,7 +5459,7 @@ function landingHeroSuppressed(s, supplied, mode) {
   return heroSuppressionDecision(deriveDefaultFleetMembership(ED_FLEET.DEFAULT_FLEET_ID, s, supplied), mode);
 }
 
-/* R2 (§1.10; memo §0-ter): the shared POLICY clause — the width story every surface
+/* R2: the shared POLICY clause — the width story every surface
    welds alongside the renormalization clause. Names the loaded-bytes policy identity,
    every leg not renderable under it (with its typed reason), and the per-leg receipt
    welds (legal-set provenance / conservative-subset limitations) where present.
@@ -5471,7 +5468,7 @@ function policyCapacityClause(fleetRenderable) {
   const f = fleetRenderable;
   if (!f || !f.policy) return "";
   const failing = (f.legStatuses || []).filter(l => !l.renderableUnderPolicy);
-  // R2 §1.5: a placement-engaged fleet's width story names the published component
+  // R2 : a placement-engaged fleet's width story names the published component
   // placement, not the uniform policy scalar (which did not drive the solve).
   const parts = [f.policy.residencyBasis === "placement-registry"
     ? "capacity widths solved per leg from the published component-placement registry — routed experts EP-sharded; attention/dense/shared expert/embeddings replicated per rank ("
@@ -5487,7 +5484,7 @@ function policyCapacityClause(fleetRenderable) {
   }
   return parts.concat(welds).join(". ") + ".";
 }
-/* R3 (design memo D-11): the ONE role-width evidence formatter — tooltip + MCP text
+/* R3 (the design requirements): the ONE role-width evidence formatter — tooltip + MCP text
    render published prefill/decode role widths from the receipt's typed annotations.
    Absent where nothing is published (never inferred from fabric class). */
 function roleWidthEvidenceClause(roleWidthEvidence) {
@@ -5527,7 +5524,7 @@ function workload(s, activeOverride, supplied, renderOpts) {
     composition: costs.composition, ...(costs.coverage ? { coverage: costs.coverage } : {}),
     procurementBasis: costs.procurementBasis, bases: costs.bases };
 }
-/* R2 (§0-ter/§0-quater): the generic emitter-layer policy-sensitivity wrapper —
+/* R2: the generic emitter-layer policy-sensitivity wrapper —
    re-computes the calling SURFACE'S OWN metric at the three SAMPLED policy points
    {0.55, 0.65, 1.05}, in that surface's own units. argMin/argMax are COMPUTED, never
    assumed; nothing may imply continuity; the policy value is an engine constant under
@@ -5566,7 +5563,7 @@ function marginOnHw(hwKey, s, activeOverride, supplied, renderOpts) {
   return workloadOnHw(HW[hwKey], s, activeOverride, supplied, renderOpts);
 }
 function feasibility(s, supplied, renderOpts) {
-  /* b9 M4 impl-gate P0-2: feasibility resolves through the SAME leg resolver as
+  /*  impl-gate P0-2: feasibility resolves through the SAME leg resolver as
      blendedCosts — a custom fleet's legs (and their hbm/power override channels) are
      what the tile must describe, never the bare S.blend registry rows. Identity
      refactor for non-custom states (resolver equivalence, T-2). */
@@ -5581,20 +5578,20 @@ function feasibility(s, supplied, renderOpts) {
       bDeclared: p.op.bDeclared, bFeas: p.op.bFeas,
       ...(p.reason ? { reason: p.reason } : {}),
       ...(p.contextWindow ? { contextWindow: p.contextWindow } : {}),
-      // R2 (§1.9): the two-boolean contract + five-status vector + solver receipt ride
+      // R2: the two-boolean contract + five-status vector + solver receipt ride
       // every leg — the surfaces render FROM these, never from a side channel.
       renderableUnderPolicy: rp.solved ? rp.solved.renderableUnderPolicy === true : !p.infeasible,
       placementVerified: rp.solved ? rp.solved.placementVerified === true : false,
       statusVector: rp.solved ? rp.solved.statusVector : null,
       capacityReceipt: rp.solved ? rp.solved.receipt : null,
-      /* b9 spec-decode LEVER (§8.4/§9.5): the ONE canonical per-leg DTO, attached to the ONE
+      /* spec-decode LEVER: the ONE canonical per-leg DTO, attached to the ONE
          canonical object and propagated UNCHANGED to every renderer and transport. It carries
          CODES ONLY — {status, factorApplied, reasonCode} — and never prose: a machine caller must
          not receive human copy it might display untranslated, and the codes are the stable
          contract. Human copy is browser-rendered by calling specDecReasonText at the render site.
          `factorApplied` is the spec-decode factor ALONE, never the composed lever product. */
       specDec: specDecLegDisclosure(hw, s, supplied || scenarioContext(s), cfLeg),
-      /* d-im-h800: the NVLink-cap lineage + disposition, CODES ONLY, same contract as specDec. */
+      /* the adopted decision: the NVLink-cap lineage + disposition, CODES ONLY, same contract as specDec. */
       nvlinkCap: nvlinkCapLegDisclosure(hw, s, supplied || scenarioContext(s), cfLeg, rp),
       widthRendered: rp.widthRendered };
   });
@@ -5605,7 +5602,7 @@ function feasibility(s, supplied, renderOpts) {
 }
 
 /* ---------- formatting ---------- */
-/* im-arc T4 fold (2026-08-24), memo §4: a value that does not exist is not a dollar amount. Three
+/*  (2026-08-24), : a value that does not exist is not a dollar amount. Three
    registered rows now carry no admissible public planning rate, and every surface that formats a
    registry value reaches this one formatter — so the absence is rendered here, once, in words,
    rather than throwing at a dozen call sites or printing a fabricated zero. */
@@ -5620,7 +5617,7 @@ const fmtNum = v => v >= 1e6 ? (v / 1e6).toFixed(1) + "M" : v >= 1e3 ? (v / 1e3)
 // PROCURED and RUN (cost basis, utilization, stack, latency, discounts).
 // A perspective may pin a model-owned field only where the model is silent
 // (e.g. the disclosure replay's H800 fleet applied to Opus). Dive replays
-// deliberately override everything with the §10 dive's own assumptions.
+// deliberately override everything with the  dive's own assumptions.
 const MODEL_OWNED_KEYS = ["active", "total", "precision", "priceIn", "priceOut", "cacheReadMult", "blend"]; // ioRatio/cacheHit moved to the TRAFFIC MIX axis (v2.1.2)
 /* Traffic resolution (v2.1.2). sel = { mode: "native" | "explicit" | "custom" | "legacy-custom", profileId?, ioRatio?, cacheHit? }.
    Contract (plan-review P0, 2026-07-11):
@@ -5676,13 +5673,13 @@ function applyPresetSettings(m, p, sel = { mode: "native" }) {
   if (p.id === "dive" && m.dive) for (const [k, v] of Object.entries(m.dive)) s[k] = clonePresetValue(v);
   const tr = resolveTraffic(m, p, sel);
   s.ioRatio = tr.ioRatio; s.cacheHit = tr.cacheHit;
-  /* b9 M5 (memo §9.2/§10.3): the trend prior is seeded from the selected model's LAB here — the
+  /* : the trend prior is seeded from the selected model's LAB here — the
      ONE default chokepoint, exactly like the R3 fleet-membership seed above. This is a DEFAULT,
-     never a user edit: the interlock machine does not transition on it (§10.3). Replays seed 0
-     (§9.4). Perspective `set` blocks never carry trend/family keys, so the merges above cannot
+     never a user edit: the interlock machine does not transition on it. Replays seed 0
+    Perspective `set` blocks never carry trend/family keys, so the merges above cannot
      touch them and this assignment is the whole rule. */
   s.trendMonths = trendBaselineFor(m, p);
-  /* b9 spec-decode LEVER (D-SD-5), the SECOND of the replay lock's three places — the engine
+  /* spec-decode LEVER (D-SD-5), the SECOND of the replay lock's three places — the engine
      backstop is the first and the codec is the third. No shipped perspective `set` carries
      `specDec` today, so this assignment is a no-op at this HEAD and the suite asserts that it is.
      It is written anyway, because the trend lock's history is the argument: a rule enforced in one
@@ -5690,7 +5687,7 @@ function applyPresetSettings(m, p, sel = { mode: "native" }) {
      cleanliness, codec, MCP and Worker consumer flows through. */
   if (p && p.kind === "replay") s.specDec = DEFAULTS.specDec;
   SCENARIO_CONTEXT.set(s, makeScenarioContext(m, tr, s.customDonor, p && p.kind, p && p.id));
-  /* R3 (design memo D-2): the ONE default-membership seed chokepoint. Every
+  /* R3 (the design requirements): the ONE default-membership seed chokepoint. Every
      cleanliness/codec/MCP/worker consumer flows through this function, so binding
      here — and ONLY here — is what keeps site and MCP from ever disagreeing about
      what the default is. Binds IFF the model is in the landing fleet's scope AND
@@ -5724,13 +5721,13 @@ function pairingWarning(m, p) {
     return "China public-cloud rates applied to a non-China fleet blend — exploratory";
   if (p.id === "anth20" && !chinaModels.includes(m.id))
     return "Ant's H20 deployment replayed under a non-China model — exploratory";
-  /* row 499: the three adjudicated presets are ANTHROPIC-SCOPED by construction — each is an
+  /* the recorded review: the three adjudicated presets are ANTHROPIC-SCOPED by construction — each is an
      external estimate of Anthropic's own serving economics (procurement posture, occupancy, fleet),
      or this page's own public-data floor for the same subject. Applying one to another lab's
      model is exactly the attribution laundering the xAI and China rules above exist to prevent, and
      it would also let a non-Anthropic model's scenario-preset span quietly widen on Anthropic-specific
      judgments. Warned, not blocked — the reader may still explore it, labeled. */
-  /* row 514: the two SELF-AUTHORED round-3 presets inherit this scope for exactly the same reason,
+  /* the recorded review: the two SELF-AUTHORED round-3 presets inherit this scope for exactly the same reason,
      and the omission was caught by the browser suite rather than by inspection — a replay whose
      span should have read "only one scenario preset is compatible" silently gained two. That is the
      second clause of the note above happening in practice, so the list is the one place this scope
@@ -5739,7 +5736,7 @@ function pairingWarning(m, p) {
     return "this preset is an estimate of ANTHROPIC's serving economics (or this page's public-data scenario for it); applying it to " + m.name + " is exploratory at best";
   // Western-procurement exploration configs (Q8): shipped-parity scope — exactly the four
   // vectors migrated from retired presets keep their pairing warning (identical numbers AND
-  // identical warnings under migration). Whether the other explorations warn is an M3 wording call.
+  // identical warnings under migration). Whether the other explorations warn is a wording decision.
   const westernNarratives = ["x80-v3", "x80-v4", "x90-v1", "x60-v3"];
   if (p.id === "gptpro" && !["opus", "sonnet", "haiku"].includes(m.id))
     return "the 'GPT-5.6 Pro fleet model' describes ANTHROPIC's procurement; its multipliers may not fit " + m.name;
@@ -5761,7 +5758,7 @@ function pairingSeverity(m, p) {
 // and therefore different renormalized fleet subsets (the flagship Opus span's low endpoint is
 // median @ H100+H200, 2/7 legs, 25% weight; the high endpoint is gptpro @ H200 alone, 1/5 legs,
 // 5% weight -- a silently different estimand behind two endpoints presented as one interval).
-/* ---------- MARGIN BANDS FROM RANGE-VALUED DIALS (row 499, owner note 507081) ----------
+/* ---------- MARGIN BANDS FROM RANGE-VALUED DIALS (the recorded review, the author's note) ----------
    The feature this serves: a slider that carries 2 or 3 points instead of 1, so that what an
    adjudicator actually stated — a RANGE — can be represented instead of flattened to a midpoint.
 
@@ -5871,7 +5868,7 @@ function dialsFromRanges(ranges) {
   for (const [id, r] of Object.entries(ranges || {})) {
     if (!r || !isFinite(r.lo) || !isFinite(r.hi) || r.hi <= r.lo) continue;
     /* MIX RANGES ARE NOT BOX DIALS and must never reach `marginBand`. Blend shares are coupled by
-       Σ = 100; corner-enumerating them independently would band over mixes the owner's ruling
+       Σ = 100; corner-enumerating them independently would band over mixes the composition rule
        excludes by construction. They leave through `mixRangesFromRanges` instead. */
     if (id.startsWith("blend.")) continue;
     const dial = id.startsWith("rentMultLeg.") ? { leg: id.slice(12) }
@@ -5881,7 +5878,7 @@ function dialsFromRanges(ranges) {
   }
   return out;
 }
-/* WHERE THE EXTRA HANDLES APPEAR WHEN A READER CHANGES MODE (owner ruling, 2026-08-07 18:55Z).
+/* WHERE THE EXTRA HANDLES APPEAR WHEN A READER CHANGES MODE (the adopted decision, 2026-08-07 18:55Z).
    The rule is that a mode change must never move a handle the reader already placed:
 
      1 -> 2 points  the second handle appears STACKED on the first, at the same value. His words:
@@ -5959,7 +5956,7 @@ function marginBand(m, p, sel, dials, opts) {
   /* 1. Probe each dial for monotonicity over its own range, holding the others at the point. */
   const nonMonotone = [];
   const dirs = new Map();
-  const probeSamples = [];   // every value the monotonicity probe already computed, kept for §3
+  const probeSamples = [];   // every value the monotonicity probe already computed, kept for
   for (const d of live) {
     const ys = [];
     for (let i = 0; i < BAND_MONOTONE_PROBES; i++) {
@@ -6022,7 +6019,7 @@ function marginBand(m, p, sel, dials, opts) {
     return { point, lo: NaN, hi: NaN, exact: false, nonMonotone, corners, unevaluable,
              refused: "every corner of this box describes a scenario the engine refuses (a cross-field constraint, not a dial bound) — there is no attainable range to report" };
 
-  /* 3. EXHAUSTIVENESS, AND WHAT THIS BAND IS ENTITLED TO CLAIM (Polaris ruling 2026-09-19 on
+  /* 3. EXHAUSTIVENESS, AND WHAT THIS BAND IS ENTITLED TO CLAIM (the review's decision 2026-09-19 on
         Astra pack A P0-2: change the LABEL, not the extrema search).
         The old condition was "the monotonicity probe saw no reversal and no corner was refused",
         and it set a label asserting that no setting reaches outside the band. That is a claim of
@@ -6103,7 +6100,7 @@ function marginBandsPerDial(m, p, sel, dials, opts) {
   return live.map(d => Object.assign({ id: dialId(d) }, marginBand(m, p, sel, [d], opts)));
 }
 
-/* im-arc T2 (memo research/im-arc-t2-sections-memo.md §5): exact section
+/* : exact section
    assumption bands. These inputs enter the hourly-cost identity monotonically;
    evaluating every vertex therefore returns the attainable range without inventing
    a probability distribution. Section/leg share triples are deliberately excluded:
@@ -6140,7 +6137,7 @@ function sectionBand(s, renderOpts, opts) {
       lo: null, hi: null, exact: false, evaluatedCorners: 0, dials, compositionalRanges,
       refused: true, reason: "more than " + BAND_MAX_CORNER_DIALS + " range-valued section inputs — refusing exponential corner evaluation" };
 
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-2): ranged shares are
+  /*  (corrected 2026-08-23): ranged shares are
      coupled coordinates. Build one feasible vertex set for the fleet's section
      simplex and one for each section's leg simplex, holding scalar shares fixed. */
   const shareGroups = new Map();
@@ -6214,7 +6211,7 @@ function sectionBand(s, renderOpts, opts) {
   for (let mask = 0; mask < Math.pow(2, dials.length); mask++)
     for (const shares of shareAssignments)
       corners.push(evaluate(dials.map((dial, index) => mask & (1 << index) ? dial.hi : dial.lo), shares));
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-3): exact means every
+  /*  (corrected 2026-08-23): exact means every
      required evaluation exists. A NaN is a refusal, never an exact null band. */
   const required = [mid, ...corners, ...perDial.flatMap(dial => [dial.loMargin, dial.midMargin, dial.hiMargin])];
   if (!required.every(isFinite)) return { perDial: [], compounded: { lo: null, hi: null },
@@ -6229,7 +6226,7 @@ function sectionBand(s, renderOpts, opts) {
     const dialHi = Math.max(dial.loMargin, dial.hiMargin);
     return { id: dial.id, lo: dialLo, hi: dialHi, width: dialHi - dialLo };
   });
-  /* THE MIDPOINT MUST BELONG TO THE SAME FEASIBLE SET AS THE ENDPOINTS (Polaris ruling
+  /* THE MIDPOINT MUST BELONG TO THE SAME FEASIBLE SET AS THE ENDPOINTS (the review's decision
      2026-09-19 on Astra pack A P0-3). The endpoints are evaluated over share assignments
      constrained to sum to 100; the midpoint is evaluated from the declared `mid` values, which
      are normalised independently and therefore need not lie in that polytope. Astra built a
@@ -6253,7 +6250,7 @@ function sectionBand(s, renderOpts, opts) {
 }
 
 /* ---------- THE FEASIBLE-MIX BAND: max / min / median over provider distributions that sum to 100
-   (owner ruling `q-sliders-fleet-util-point`, 2026-08-09T14:57:56Z) ----------
+   (the adopted decision `the adopted decision`, 2026-08-09T14:57:56Z) ----------
 
    His words, and the whole specification is in them: "if there's a range for providers, then there
    should just be an algorithm to sample the max and min based on those ranges ... anything that
@@ -6326,7 +6323,7 @@ function boundedSumVertices(bounds, total) {
 
 /* A BLOCK is a set of legs whose TOTAL share carries one declared range: one leg (`blend.<hwKey>`)
    or one provider (`blend.fam.<family>`, every registered leg of that family). The provider unit is
-   the one the owner named — "provider distributions" — and it is the unit the adjudicators actually
+   named "provider distributions" and it is the unit the adjudicators actually
    wrote in: GPT Pro's round-2 declaration is "50-65% NVIDIA, 35-50% TPU, 0-15% Trainium".
 
    INSIDE a provider block the split across its generations is held at the scenario's own point
@@ -6344,7 +6341,7 @@ function boundedSumVertices(bounds, total) {
    exists, it does not invent one. Taking (lo+hi)/2 instead would have put GPT Pro's centre at
    NVIDIA 57.5 / TPU 42.5 / Trainium 7.5, asserting 5 % Trainium as this page's median after that
    author explicitly EXCLUDED Trainium from its point pending the form-correction debt. With the
-   declared shares it is 60 / 40 / 0 = 100, and the owner's own fixed case lands by construction:
+   declared shares it is 60 / 40 / 0 = 100, and the fixed case lands by construction:
    three points that sum to 100 ARE the median. */
 function blendBlocksFromRanges(pointBlend, ranges) {
   const blocks = [], covered = new Set(), errors = [];
@@ -6393,7 +6390,7 @@ function blendBlocksFromRanges(pointBlend, ranges) {
    λ and continuous, so Σ b_j(λ) is monotone and one bisection lands on the λ where it equals T. The
    reading is NEAREST-FEASIBLE-TO-DECLARED: the declared centres are the author's intent, Σ = 100 is
    a correction applied to that intent, and the smallest correction preserves the most of it. It
-   also degrades into the owner's fixed case by construction — when the centres already sum to T the
+   also degrades into the fixed case by construction — when the centres already sum to T the
    projection is the identity, so the median IS the author's own point rather than something this
    page computed that happens to be close.
 
@@ -6414,11 +6411,10 @@ function projectCentresOntoSum(blocks, T) {
 }
 
 /* ================= THE MEAN MIX: exact centroid of P = box ∩ {Σ = T} =================
-   Owner MEAN ruling (2026-08-11, both notes; decision memo
-   research/three-point-middle-point-decision-2026-08-11.md §2-§3). Lifted VERBATIM from the
+   Mean construction adopted 2026-08-11. Lifted VERBATIM from the
    reviewed reference implementation tests/mix-centroid-reference.mjs (built+verified at
    6b1c71c: six cases, three hand-provable, Monte-Carlo agreement ≤ 0.0085) — the
-   inclusion–exclusion route, because the two tempting shortcuts are the memo's measured trap:
+   inclusion–exclusion route, because the two tempting shortcuts are the measured trap:
    midpoint-projection agrees on the symmetric reference case and is off by 0.18–5 pp on
    Fable-r3/skewed declarations, and an unweighted vertex average is not the centroid at all.
    y_i = x_i − lo_i ∈ [0, w_i], Σy = S; the shared geometric constant cancels in the
@@ -6582,7 +6578,7 @@ function mixBand(m, p, sel, ranges, opts) {
   /* THE TOTAL THE BOUNDED PROVIDERS MUST KEEP. Legs outside every declared range are held at their
      point — silence is not permission to move a share — so the bounded ones must between them keep
      exactly the total they have now. On every preset this page ships the shares total 100, so this
-     IS "sums to 100 %" in the owner's words; `declaredTotal` carries the scenario's own total so a
+     IS "sums to 100 %"; `declaredTotal` carries the scenario's own total so a
      reader who has dragged the sliders to some other total (they are relative weights, and the
      engine normalizes) gets a band on their own composition budget rather than a refusal, with the
      label saying so.
@@ -6634,13 +6630,13 @@ function mixBand(m, p, sel, ranges, opts) {
   const med = projectCentresOntoSum(blocks, T);
   const midY = evalMix(med.vals);
 
-  /* THE MEAN MIX (owner MEAN ruling; M8 wiring of the 6b1c71c construction). The derived-fleets
+  /* THE MEAN MIX (mean construction adopted 2026-08-11). The derived-fleets
      stat is THE MARGIN AT THE MEAN MIX — the exact centroid of the feasible set under the
      non-informative uniform reading of the declared ranges, which adds no claim beyond what the
      author bounded. Exactly computable in EVERY regime. Where the survivor-set regime is constant
      across the envelope it is ALSO the expected margin (per-regime both sums are affine, so
      E[f(s)] = f(E[s]) holds there); where the regime varies, that stronger claim is NOT made — the
-     regime signature gates it, never MIX_AFFINE_EPS (§2 amendment, dual consult 2026-08-10). */
+     regime signature gates it, never MIX_AFFINE_EPS (amended 2026-08-10). */
   const meanVals = centroidOnSum(blocks.map(b => b.lo), blocks.map(b => b.hi), T);
   const meanY = meanVals ? evalMix(meanVals) : NaN;
   const meanMix = meanVals ? blendFrom(meanVals) : null;
@@ -6731,7 +6727,7 @@ function mixBand(m, p, sel, ranges, opts) {
 
   /* ONE BOUNDED PROVIDER CANNOT MOVE ANYTHING, and the readout has to say why rather than show a
      zero-width range. If exactly one block is free, Σ = 100 fixes it: the other shares are held at
-     their declared points and the total forces the last one. That is the owner's own rule biting,
+     their declared points and the total forces the last one. That is the composition rule in effect,
      not a defect — but a reader who bounds one provider and sees nothing happen will read it as
      broken, so the mechanism is named. Freedom needs two. */
   const singleBlockPinned = blocks.length === 1;
@@ -6798,7 +6794,7 @@ function mixBand(m, p, sel, ranges, opts) {
    sentence entirely — that is `claimLabel`, and the page uses it because it prints the median's
    provenance on its own line. Every other caller takes the whole thing. */
 function mixLabelParts(o) {
-  /* M8 exit-gate council F2 (2026-08-13): four branches hardcoded "100 %" while the band
+  /* Corrected 2026-08-13: four branches hardcoded "100 %" while the band
      explicitly supports totals ≠ 100 — at T=120 one label said both "sum to 100 %" and "your
      shares total 120". Every clause now speaks the BOUNDED BLOCKS' own total (o.T); the final
      your-shares-total clause keeps whole-fleet declaredTotal, which is a different noun. */
@@ -6874,14 +6870,14 @@ function mixRangesFromRanges(ranges) {
    When the reader has bounded the lead dial ITSELF the band is not on one basis at all, and that is
    said in different words rather than folded into the same sentence — a range whose width is partly
    the lead assumption moving carries that assumption inside it, so nothing adds the prior a second
-   time. The COMPARABILITY framing that once sat here is dropped (owner, 2026-08-08). */
+   time. The COMPARABILITY framing that once sat here is dropped (adopted 2026-08-08). */
 /* The prefix is a named constant because it is claim-governing COPY, which this codebase keeps
    addressable rather than inline: a reader, a test and the MCP all have to be able to point at the
    same bytes and say "that is the basis declaration". */
 const BAND_LEAD_BASIS = "Lead basis: ";
 function bandLeadBasisClause(state, dials) {
   const bounded = (dials || []).find(d => d.key === "trendMonths");
-  /* OWNER RULING 2026-08-08: the lead range reads the obvious way, and the framing that these
+  /* the adopted decision 2026-08-08: the lead range reads the obvious way, and the framing that these
      readings "cannot be compared" is DROPPED. The headline compares the calculators' end results —
      that is the comparison the page exists to support, and telling a reader the numbers are
      incomparable was both discouraging and wrong: two calculators run to their ends ARE comparable,
@@ -6895,7 +6891,7 @@ function bandLeadBasisClause(state, dials) {
       + "well as the cost picture. The prior is already inside it \u2014 it is not applied again on top.";
   const months = Number(state && state.trendMonths) || 0;
   return BAND_LEAD_BASIS + (months === 0
-    /* im-vet-six-repairs (2026-09-20), vetting finding E4: "the basis both estimate presets carry"
+    /*  (2026-09-20), vetting finding E4: "the basis both estimate presets carry"
        stopped being true when both round-3 revisions moved their dials off zero (0/2/4 midpoint 2,
        and 0/1/2 midpoint 1). Zero is still the COMMON basis their authors declare for a cross-arm
        comparison, which is the useful thing this sentence was reaching for; what it may not say is
@@ -6916,7 +6912,7 @@ function bandLeadBasisClause(state, dials) {
 
    Returns null where a preset states nothing — the reproducibility floor is a point, not an
    estimate with a band, and inventing one for it would be the exact error this whole arc is about. */
-/* WHAT THE CALCULATOR READS AT A STATED READING'S AUTHORED SCOPE (owner note note-20260912T180812Z-c9eaac;
+/* WHAT THE CALCULATOR READS AT A STATED READING'S AUTHORED SCOPE (the author's note of 2026-09-12;
    Astra review round 1, finding F1). The dated comparison is true only at the scope the figure was stated
    on, so it is computed THERE — the model, traffic profile and preset settings recorded in `authoredAgainst`
    — and never from whatever the reader has on screen. Switching to another model, another traffic mix or an
@@ -6983,15 +6979,15 @@ function lensSpan(m, sel = { mode: "native" }, opts) {
   const compat = PERSPECTIVES.filter(p => p.kind === "lens" && pairingWarning(m, p) === "");
   const contributors = compat.map(p => {
     const s = applyPresetSettings(m, p, sel);
-    /* b9 M5 (memo §15): the FA computation pins its per-lens states to the trend-0 reference;
+    /* : the FA computation pins its per-lens states to the trend-0 reference;
        every OTHER caller (the app's hero note, the MCP server) gets the live ratified defaults,
        which move uniformly across contributors because the prior is lab-bound, not lens-bound. */
     if (opts && opts.referencePin) pinReferenceLevers(s);
-    /* row 499: byte-identical LEAD TREATMENT for every contributor, for exactly the reason the line
+    /* the recorded review: byte-identical LEAD TREATMENT for every contributor, for exactly the reason the line
        below holds traffic identical. This span answers ONE question — how far does the choice of
        COST LENS move the number — so a contributor may not enter it carrying a different
        algorithmic-lead prior; that would report a lead-axis difference as a procurement-axis span,
-       the axis conflation this engine's interlock exists to prevent. Before row 499 the property
+       the axis conflation this engine's interlock exists to prevent. Before the recorded review the property
        held by accident (every lens inherited the same lab-seeded prior); the typed `trendBaseline`
        that lets a preset carry its author's own lead treatment would have broken it silently —
        the stress case would have dragged the published span's low end from ~69% to ~59% on a lead
@@ -7038,14 +7034,14 @@ function lensSpanMembershipNote(spanRes) {
 const SCENARIO_BOUNDS = { // hard schema for shared-link overlays: [min, max] or enum list
   active: [1, 5000], total: [10, 50000], ioRatio: [1, 1000], cacheHit: [0, 95], billCacheHit: [0, 95],
   cacheCost: [0, 100], rentMult: [0.02, 20], rentAbsAll: [0.05, 50], rentAbsLeg: [0.05, 50], util: [1, 100], stackMult: [0.1, 1.6],
-  specDec: SPECDEC_BOUNDS, // b9 spec-decode LEVER (memo D-SD-6)
-  nvlinkCapMinRatio: NVLINKCAP_BOUNDS, // d-im-h800: the H800/H100 differential lever
-  // b9 M5 (memo §6.3): the lever keys. trendRate additionally carries a CLOSED numeric enum
+  specDec: SPECDEC_BOUNDS, // spec-decode LEVER (the design requirements)
+  nvlinkCapMinRatio: NVLINKCAP_BOUNDS, // the adopted decision: the H800/H100 differential lever
+  // : the lever keys. trendRate additionally carries a CLOSED numeric enum
   // (a [min,max] row alone would silently admit 4×/yr), trendMonths an integer constraint.
   trendMonths: TREND_MONTHS_BOUNDS, trendRate: [TREND_RATES[0], TREND_RATES[TREND_RATES.length - 1]],
   famNvidia: FAMILY_BOUNDS, famTpu: FAMILY_BOUNDS, famTrainium: FAMILY_BOUNDS, famAscend: FAMILY_BOUNDS,
   kwh: [0.01, 1], pue: [1, 3], dcPerW: [1, 50], lifeYears: [1, 15], clusterOh: [1, 3], opexPct: [0, 50],
-  /* im-arc T4 fold (2026-08-24): the facility life becomes a bounded, shareable dial (the
+  /*  (2026-08-24): the facility life becomes a bounded, shareable dial (the
      historical literal 12 sits inside these bounds so a pinned historical state still loads),
      and the capital-recovery basis travels as a closed enum plus its rate. */
   dcLifeYears: [1, 40], costOfCapitalPct: [0, 40], capitalRecovery: ["off", "on"],
@@ -7057,8 +7053,8 @@ const SCENARIO_BOUNDS = { // hard schema for shared-link overlays: [min, max] or
   precision: PRECISION_ENUM_KEYS, interact: INTERACT_ENUM_KEYS, hwMode: ["rent", "tco"],
   customDonor: ["dsr1", "qwen3c", "llama70"], // must match CUSTOM_DONOR_ENUM.values / CUSTOM_DONOR_BOUNDS — cross-checked by test
 };
-const NUMERIC_ENUMS = Object.freeze({ trendRate: TREND_RATES }); // closed numeric domains (b9 M5)
-const INTEGER_STATE_KEYS = Object.freeze(["trendMonths"]);       // integer-only numeric state (b9 M5)
+const NUMERIC_ENUMS = Object.freeze({ trendRate: TREND_RATES }); // closed numeric domains
+const INTEGER_STATE_KEYS = Object.freeze(["trendMonths"]);       // integer-only numeric state
 function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
   const clean = {}, rejected = [];
   for (const [k, v] of Object.entries(diff || {})) {
@@ -7073,7 +7069,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
       clean[k] = v;
       continue;
     } else if (k === "rentAbsLeg" || k === "capexAbsLeg" || k === "rentRegistryPin") {
-      /* im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): closed
+      /* Adopted 2026-08-22: closed
          donor-keyed absolute-rent map. One invalid member rejects the whole claim. */
       if (typeof v !== "object" || v === null || Array.isArray(v)) { rejected.push(k + " (bad object)"); continue; }
       const rbAbs = SCENARIO_BOUNDS[k];
@@ -7083,7 +7079,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
     } else if (typeof dv === "number" || (dv === null && Array.isArray(b) && typeof b[0] === "number")) {
       if (typeof v !== "number" || !isFinite(v)) { rejected.push(k + " (non-numeric)"); continue; }
       if (Array.isArray(b) && (v < b[0] || v > b[1])) { rejected.push(k + " (out of range " + b[0] + ".." + b[1] + ")"); continue; }
-      /* b9 M5: two constraints a [min,max] row cannot express. A CLOSED numeric enum (trendRate
+      /* : two constraints a [min,max] row cannot express. A CLOSED numeric enum (trendRate
          ∈ {2,3,5} — an interpolated 4×/yr is not a ratified rate) and an INTEGER domain
          (trendMonths, step 1). Both fail the same way every other bad value does. */
       if (Object.prototype.hasOwnProperty.call(NUMERIC_ENUMS, k) && !NUMERIC_ENUMS[k].includes(v)) { rejected.push(k + " (invalid value)"); continue; }
@@ -7092,7 +7088,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
       if (typeof v !== "string") { rejected.push(k + " (bad string)"); continue; }
       if (Array.isArray(b) && !b.includes(v)) { rejected.push(k + " (invalid value)"); continue; }
     } else if (k === "dialRanges") {
-      /* row 499: typed map of declared ranges. Every id must name a dial this engine actually has,
+      /* the recorded review: typed map of declared ranges. Every id must name a dial this engine actually has,
          every end must sit inside that dial's own legal domain, and lo <= mid <= hi. A malformed
          entry rejects the KEY whole rather than being repaired into something plausible — a range
          is a claim about how uncertain someone is, and quietly widening or narrowing one would
@@ -7121,7 +7117,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
       });
       if (!okRanges) { rejected.push("dialRanges (invalid ids/ends)"); continue; }
     } else if (k === "rentMultFam") {
-      /* row 499: typed map over HARDWARE FAMILIES (the same closed set FAMILY_STATE_KEY names),
+      /* the recorded review: typed map over HARDWARE FAMILIES (the same closed set FAMILY_STATE_KEY names),
          values inside the global multiplier's bounds. Same fail-closed posture as rentMultLeg. */
       if (typeof v !== "object" || v === null || Array.isArray(v)) { rejected.push("rentMultFam (bad object)"); continue; }
       const rbF = SCENARIO_BOUNDS.rentMult;
@@ -7130,7 +7126,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
         && typeof mul === "number" && isFinite(mul) && mul >= rbF[0] && mul <= rbF[1]);
       if (!okFam) { rejected.push("rentMultFam (invalid families/multipliers)"); continue; }
     } else if (k === "rentMultLeg") {
-      /* row 499: typed map — known hardware ids only, values inside the same bounds as the global
+      /* the recorded review: typed map — known hardware ids only, values inside the same bounds as the global
          multiplier. An unknown leg id or an out-of-range value rejects the KEY whole (fail closed),
          exactly like a forged blend; a `null` (no per-leg posture) is handled by the null branch
          above. Own-property enumeration only — a leg id arriving from a URL never resolves through
@@ -7160,7 +7156,7 @@ function sanitizeScenarioDiff(diff, traffic, base = DEFAULTS) {
     if (Object.prototype.hasOwnProperty.call(clean, "total")) delete clean.total;
     rejected.push("active/total (active exceeds total)");
   }
-  /* b9 spec-decode LEVER — THE CORRECTION CHANNEL (memo [N-CORRECTION-LIFETIME]).
+  /* spec-decode LEVER — THE CORRECTION CHANNEL (correction-lifetime contract).
      A sanitize/restore/overlay path that forces `specDec` to 1.00 must SAY SO. Showing "none
      selected" after a silent force LIES ABOUT USER INTENT, and that is the defect this third
      return field exists to prevent — the function returned {diff, rejected} only, so there was no
@@ -7195,7 +7191,7 @@ function overlayDivergesFromReplay(m, p, cleanDiff) {
     JSON.stringify(cleanDiff[k]) !== JSON.stringify(base[k]));
 }
 
-/* TRAFFIC STATE-CONSISTENCY INVARIANT (v2.1.3 M4; plan P0-B). Three traffic surfaces exist:
+/* TRAFFIC STATE-CONSISTENCY INVARIANT (v2.1.3 shared traffic contract). Three traffic surfaces exist:
    (1) the identity the traffic selector DISPLAYS, (2) the values resolveTraffic() RESOLVES,
    and (3) the ioRatio/cacheHit the margin computation actually READS from the working state.
    They must ALWAYS be the same numbers — a share-link must never leave traffic values in the
@@ -7219,23 +7215,23 @@ function reconcileLinkTraffic(declared, cleanDiff) {
 }
 
 /* ---------- permalink codec (v4 since the v2.1.3 preset redesign; decodes v3/v2 — pure) ---------- */
-const ENGINE_REVISION = "v3.0.0-2026-08-13"; // v3.0.0 — the M8 release (badge ruled v3.0 by Polaris per plan D-10, esc-20260813T014805Z-1df204c8): the unified b9 arc goes public — UX-C claim-bearing tails + M7 citation repairs (previously dev-only), the provider-range calculator (owner ruling q-sliders-fleet-util-point) with the exact mean-mix stat (owner MEAN ruling; exact BigInt centroid), three user-reachable Share-crash classes fixed (modified-blend, preset-total, scope-crossing switch), bq-290..294 hardening, FA landing-lead clause derived (was stale-hardcoded), denominator-aware mix labels, dated changelog correction on the band exactness argument. HEADLINE INVARIANT vs v2.2.0: 255/255 states byte-identical, evidence research/m8-headline-invariance-evidence.md. // v2.2.0 — PRODUCTION RELEASE of the b9 arc (owner ruling q-row441-ref-and-bridge, 2026-08-06; merge source v22-reengineer @ 5325791). First publication of the repaired defaults, the b9 M6 two-reading FINAL-ANSWER surface, the spec-decode lever and the UX-A/UX-B legs. The public landing headline moves from the previously published ≈77% to ≈69% at the landing default (opus/median), with ≈59% carried as the second, labeled public-evidence reference reading; the legacy bridge on the FINAL-ANSWER surface names the ≈77% predecessor and separates what the total-size revision moved from what the margin-evidence adjudication moved (FA-arc acceptance rows G1A-1 and G1A-3). v2.1.12's two owner-APPROVED RAISE Summit podcast claims are carried forward unchanged. // 2026-07-27 external review: live rendering now consumes the trusted capacity solve's selected residency row; placement and sampled-policy batches, receipts, and published derived values re-minted. // v2.2.0-dev: activate the reviewed IM3 roofline display path — per-regime operating points, fixed-OSL traffic lengths, per-row precision tuples and calibration, finite/capped/infeasible feasibility states, and interim structurally disclosed mixed-fleet renormalization. Billing/procurement/traffic-resolution/codec math remains unchanged. // v2.1.11: cold-review-v2110 follow-up (labeling/hygiene only, NO engine numbers changed) — Gemini "Why the interval" para dropped its 89–98% floor claim to match the "not publicly identifiable" headline (cold #3); stripped ChatGPT conversation URLs/IDs from the published annex, making §9's "removed" claim true (cold #22); footer SHA relabeled a private build commit with a public-mirror note (cold #23); README TPU/Trainium anchor status corrected (cold #24); LOAO methods note renamed a single-anchor cross-platform transfer test (cold #25); per-card "Why the interval is"→"Why the scenario range is" (cold #19); annex "complete/as-produced" language softened to "selected public artifacts" (cold #22). Verdict remains NOT SOUND-as-estimator / sound-as-scenario-workbench; structural remedies escalated. // v2.1.10: cold-review-2026-07-15 epistemics/labeling pass (adjudicated GO-WITH-FIXES) — §5 blinded run relabeled as a model-generated cross-check, not an independent replication/corroboration (P0-1); Gemini card headline reframed to "not publicly identifiable" with ~96% demoted to a labeled internal-cost scenario (P0-2 / cold B4); hero unanchored-share warning corrected (TPU/Trainium anchors exist unfitted) and the GB300 $6/hr analyst-price leg named (P1-1 / cold B3); persistent "selected scenario, not an identified estimate/interval" identity chip (P1-6); GB300 clarity, AMD unverified figures excluded + aggregate labeling, Trainium 405B precision, TPU v7 saturation, NVIDIA perimeter, FP4 upper-bound caveats (P1-2/3/7); Rubin $/margin bar suppressed to shape-only (cold #17); "reproduces"→headline-matched, "realized"→effective, "full unedited"→public+hygiene-disclosed, version identity aligned. NO preset/parameter/engine numbers changed — labeling and disclosure only
-const DATA_AS_OF = "2026-10-01"; // bq-4610: the newest data on the page (the GPT-6.1 Sol estimate, 2026-10-01); it had stayed at 2026-07-26 through the September tariff corrections
+const ENGINE_REVISION = "v3.0.0-2026-08-13"; // v3.0.0 — the release (badge ruled v3.0 by the review per plan D-10, the dated note): the unified development goes public — typed claim-bearing tails and citation repairs (previously dev-only), the provider-range calculator (the adopted decision) with the exact mean-mix stat (exact BigInt centroid), three user-reachable Share-crash classes fixed (modified-blend, preset-total, scope-crossing switch), ..294 hardening, FA landing-lead clause derived (was stale-hardcoded), denominator-aware mix labels, dated changelog correction on the band exactness argument. HEADLINE INVARIANT vs v2.2.0: 255/255 states byte-identical, evidence research/m8-headline-invariance-evidence.md. // v2.2.0 — PRODUCTION RELEASE of the development (the adopted decision, 2026-08-06; merge source v22-reengineer @ 5325791). First publication of the repaired defaults, the  two-reading FINAL-ANSWER surface, the spec-decode lever and the UX-A/UX-B legs. The public landing headline moves from the previously published ≈77% to ≈69% at the landing default (opus/median), with ≈59% carried as the second, labeled public-evidence reference reading; the legacy bridge on the FINAL-ANSWER surface names the ≈77% predecessor and separates what the total-size revision moved from what the margin-evidence adjudication moved (FA-arc acceptance rows G1A-1 and G1A-3). v2.1.12's two approved RAISE Summit podcast claims are carried forward unchanged. // 2026-07-27 external review: live rendering now consumes the trusted capacity solve's selected residency row; placement and sampled-policy batches, receipts, and published derived values re-minted. // v2.2.0-dev: activate the reviewed roofline display path — per-regime operating points, fixed-OSL traffic lengths, per-row precision tuples and calibration, finite/capped/infeasible feasibility states, and interim structurally disclosed mixed-fleet renormalization. Billing/procurement/traffic-resolution/codec math remains unchanged. // v2.1.11: cold-review-v2110 follow-up (labeling/hygiene only, NO engine numbers changed) — Gemini "Why the interval" para dropped its 89–98% floor claim to match the "not publicly identifiable" headline (cold #3); stripped ChatGPT conversation URLs/IDs from the published annex, making the "removed" claim true (cold #22); footer SHA relabeled a private build commit with a public-mirror note (cold #23); README TPU/Trainium anchor status corrected (cold #24); LOAO methods note renamed a single-anchor cross-platform transfer test (cold #25); per-card "Why the interval is"→"Why the scenario range is" (cold #19); annex "complete/as-produced" language softened to "selected public artifacts" (cold #22). Verdict remains NOT SOUND-as-estimator / sound-as-scenario-workbench; structural remedies escalated. // v2.1.10: cold-review-2026-07-15 epistemics/labeling pass (adjudicated GO-WITH-FIXES) —  blinded run relabeled as a model-generated cross-check, not an independent replication/corroboration (P0-1); Gemini card headline reframed to "not publicly identifiable" with ~96% demoted to a labeled internal-cost scenario (P0-2 / cold B4); hero unanchored-share warning corrected (TPU/Trainium anchors exist unfitted) and the GB300 $6/hr analyst-price leg named (P1-1 / cold B3); persistent "selected scenario, not an identified estimate/interval" identity chip (P1-6); GB300 clarity, AMD unverified figures excluded + aggregate labeling, Trainium 405B precision, TPU v7 saturation, NVIDIA perimeter, FP4 upper-bound caveats (P1-2/3/7); Rubin $/margin bar suppressed to shape-only (cold #17); "reproduces"→headline-matched, "realized"→effective, "full unedited"→public+hygiene-disclosed, version identity aligned. NO preset/parameter/engine numbers changed — labeling and disclosure only
+const DATA_AS_OF = "2026-10-01"; // : the newest data on the page (the GPT-6.1 Sol estimate, 2026-10-01); it had stayed at 2026-07-26 through the September tariff corrections
 /* Defaults epoch (IM1 / v2.2). Independent of ENGINE_REVISION: it names the era of the defaults/tables
    a share-link or saved preset was minted against. The v5 encoder stamps it into every token and every
    saved preset; a decode/read under a DIFFERENT epoch is deprecated LOUDLY (never silently resolved).
    v2.2 opens epoch "v22"; pre-v5 tokens have no epoch and are deprecated wholesale. */
-// R3 (design memo D-2/D-8): the epoch bumps because the DEFAULT BLEND semantics
+// R3 (the design requirements): the epoch bumps because the DEFAULT BLEND semantics
 // changed (the flagship landing seed is now the serve-feasibility-FILTERED na-blend
 // derivation, not the static declared-topology DEFAULTS.blend). Pre-R3 saved presets
 // and clean links deprecate/drift LOUDLY through the existing IM1 non-destructive
 // machinery — a pre-R3 clean link re-evaluates to the R3 derived default with the
 // standard defaults-drift note (the displayed ≈47 → re-evaluated ≈35 fixture).
-/* row 499 BUMP (owner ruling on card `q-row499-epoch-deviation`, 2026-08-07 01:06Z: "Bump it,
+/* the recorded review BUMP (the adopted decision on card `the adopted decision`, 2026-08-07 01:06Z: "Bump it,
    effectively no current users"). I had recommended NOT bumping — this implementation moves the
    page-open SELECTION rather than the `DEFAULTS` object, so no token is silently re-interpreted and
    the measured drift is zero (tests/permalink-defaults-move.test.mjs). The external reviewer
-   recommended bumping anyway, and the owner ruled with it on a ground neither of us had weighed:
+   recommended bumping anyway, and the adopted decision agreed with it on a ground neither of us had weighed:
    with effectively no current users, the invalidation cost is ~zero NOW and never gets cheaper.
 
    What the bump costs, stated plainly because it is the whole cost: every scenario a reader has
@@ -7246,14 +7242,14 @@ const DATA_AS_OF = "2026-10-01"; // bq-4610: the newest data on the page (the GP
 
    What the new era NAMES: the three adjudicated presets, per-accelerator procurement multipliers,
    and a page-open default that is no longer the central scenario. */
-/* im-arc T4 fold (2026-08-24), memo §6: the generic defaults MOVED (dcPerW, the newly named
+/*  (2026-08-24), : the generic defaults MOVED (dcPerW, the newly named
    dcLifeYears, four capex points, the scope-derived cluster overhead, three planning rents to
    the unavailable path, and three region endpoint sets), so the epoch bumps. A link minted under
    the T2 epoch must not silently reproduce different numbers under T4 arithmetic — that is the
    entire job of this stamp. The migration it names is enumerated, sink by sink, in
    tests/fixtures-t4-declared-delta.json. */
 const DEFAULTS_EPOCH = "v25-im-arc-t4-fold-20260824";
-/* ---------- TITLED SHARE LINKS (row 499, owner ruling on q-row499-titled-links-v2, option B) ----
+/* ---------- TITLED SHARE LINKS (the recorded review, the adopted decision on the adopted decision, option B) ----
    A reader can name a scenario and have the name travel INSIDE the link. Chosen over a server-side
    store deliberately: the store would have been this project's first collected data, requiring a
    disclaimer on save/share and a privacy posture, and the usage-data instrument it would have
@@ -7286,7 +7282,7 @@ function normalizePerspId(id) {
   return (typeof id === "string" && Object.prototype.hasOwnProperty.call(RETIRED_PERSPECTIVES, id))
     ? RETIRED_PERSPECTIVES[id] : id;
 }
-/* b9 M4: the ONE custom-fleet schema validator, resolved at call time (custom-fleets.js
+/* : the ONE custom-fleet schema validator, resolved at call time (custom-fleets.js
    loads after engine in the browser; node requires lazily — same idiom as rooflineCore). */
 function cfValidator() {
   if (typeof module !== "undefined" && module.exports) return require("./custom-fleets.js").validateCustomFleet;
@@ -7295,11 +7291,11 @@ function cfValidator() {
 /* Supported traffic-identity modes — the closed enum a link's _meta.traffic.mode must belong to.
    Anything else is a forged/garbage identity and the token is rejected whole (fail closed). */
 const TRAFFIC_MODES = ["native", "explicit", "custom", "legacy-custom", "replay-locked"];
-/* b9 M5 (fix-verify round): the "never mint a token this engine's own decoder rejects" invariant,
+/*  (fix-verify round): the "never mint a token this engine's own decoder rejects" invariant,
    expressed DIRECTLY instead of by duplicating the decoder's rules. The fix-verify reviewer found
    the field-by-field version was still open over the IDENTITY metadata — an unknown fleet id, an
    unknown totalCase, a forged traffic mode or a non-string modified origin all encoded fine and
-   then decoded to null. Those gaps predate M5, but the claim was M5's, so it is now structural:
+   then decoded to null. Those gaps predate the lead-prior migration, but the claim was made by that migration, so it is now structural:
    the encoder round-trips its own output through decodeScenario (pure validation — no engine
    computation) and refuses to hand back a token that fails. This closes the class permanently and
    for every field added later, with no rule duplication to drift. */
@@ -7310,7 +7306,7 @@ function assertSelfDecodable(token) {
       + "passed to encodeScenario against the decode contract.");
   return token;
 }
-/* M8 exit-gate council F3 (2026-08-13): the ONE staleness rule for modified-state identity
+/* Corrected 2026-08-13: the ONE staleness rule for modified-state identity
    labels, shared by the encoder (mint-time normalization, gate-R2 fold) and the sender UI
    (refreshModifiedState — before this, the sender kept rendering a NAMED FLEET label after a
    scope-crossing model switch while the minted token honestly said "custom", so sender and
@@ -7325,7 +7321,7 @@ function normalizeModifiedIdentities(fleet, totalCase, modelId) {
            changed: flStale || tcStale };
 }
 
-/* im-arc T2 fix (Sol review 2026-08-23, finding P1-4): wire provenance is
+/*  (corrected 2026-08-23): wire provenance is
    permission to preserve v6 only while the normalized section remains
    semantically representable by v6. Section additions or explicit receipts
    must promote to v7 rather than being truncated to the first leg list. */
@@ -7352,13 +7348,13 @@ function legacyCompatibleNormalizedFleet(fleet, state) {
 }
 
 function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, opts) {
-  /* Slice C (memo C-7/C-8): the STORED fleet/totalCase identities are REQUIRED
+  /* Fleet identity: the STORED fleet/totalCase identities are REQUIRED
      call-site parameters (the slice-3 R7 authority rule extended) — encode never
      derives an identity, and a call site that cannot say what the identities are
      has no business minting a token (fail loud, never guess). */
   if (!identities || typeof identities !== "object"
       || typeof identities.fleet !== "string" || typeof identities.totalCase !== "string")
-    throw new Error("encodeScenario: identities { fleet, totalCase } is a REQUIRED parameter (slice C, memo C-7/C-8)");
+    throw new Error("encodeScenario: identities { fleet, totalCase } is a REQUIRED parameter (fleet identity contract)");
   /* Round-trip baseline (P0 fix, 2026-07-15): the decoder restores a CLEAN identity as
      applyPresetSettings(model, persp, declared traffic) + diff, so the encoder must diff
      against that SAME baseline. Diffing against global DEFAULTS silently dropped any field
@@ -7367,7 +7363,7 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
      reproduced different numbers. MODIFIED-identity links restore from global DEFAULTS
      (see the loader), so those keep the DEFAULTS baseline.  */
   const isModified = perspId === "__modified" || perspId === "__modified-exploration";
-  /* Stale-label normalization at the MODIFIED mint (M8 gate-R2 fold, finding M8-R2-01,
+  /* Stale-label normalization at the MODIFIED mint (corrected
      2026-08-12). A model switch while modified freezes S's values (refreshModifiedState /
      applyModelSwitchWhileModified — model-owned fields stay frozen) but carries FLEET_ID and
      TOTAL_CASE_ID unchanged, so the mint can receive identity LABELS that no longer apply to
@@ -7400,11 +7396,11 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
   }
   const diff = {};
   // customDonor is excluded from the generic per-field diff and encoded separately below: the
-  // generic loop only knows "does this field differ from baseline", but the memo §3 codec contract
+  // generic loop only knows "does this field differ from baseline", but the  codec contract
   // is model-CONDITIONAL ("encoded ONLY when model=custom AND value != default") — a rule the
   // generic loop cannot express. rooflineCore().encodeCustomDonor() is the slice-1b-reviewed
   // single source of truth for that condition (slice-3 review R7 P1 fix).
-  /* Slice C (memo C-7): the BLEND field diffs against the fleet-conditional
+  /* Fleet identity: the BLEND field diffs against the fleet-conditional
      baseline (ONE shared function, also the loader's restore seed) — a pure
      named-fleet selection therefore emits NO blend key, which is what makes the
      decoder's named-id+blend contradiction row a consistency rule rather than a
@@ -7415,7 +7411,7 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
   const blendBase = (fbb !== null) ? fbb : base.blend;
   for (const [k, v] of Object.entries(S)) {
     if (k === "customDonor") continue;
-    /* im-arc T3 FIX-2 B1 (2026-08-23): a by-value cf: definition is the
+    /*  B1 (2026-08-23): a by-value cf: definition is the
        blend authority. S.blend is only its UI mirror and never rides beside
        sections — the decoder correctly treats that pair as contradictory.
        This also makes harmless floating aggregation differences irrelevant. */
@@ -7440,7 +7436,7 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
      three are exactly the cases where the WeakMap can be stale or absent. */
   const encM = MODELS.find(x => x.id === modelId);
   if (!encM) throw new Error("encodeScenario: modelId '" + modelId + "' does not resolve to a registered model");
-  /* b9 M4 (memo §6.1): the live codec is v6. A cf: identity's margin computation needs
+  /* : the live codec is v6. A cf: identity's margin computation needs
      the leg list — the encoder resolves it through the source and passes the explicit
      renderOpts.customFleet channel, exactly as the app's render path does. */
   const suppliedCf = opts && opts.customFleet;
@@ -7458,11 +7454,11 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
                          encPerspectiveForContext && encPerspectiveForContext.id),
                        encCf ? { customFleet: encCf } : undefined);
   const displayedMargin = (_wl && isFinite(_wl.margin)) ? Math.round(_wl.margin * 100 * 1000) / 1000 : null;
-  /* im-arc T2 (memo research/im-arc-t2-sections-memo.md §2): v7 carries
+  /* : v7 carries
      sections by value. A genuinely legacy-compatible one-section definition retains
      the v6 wire shape so semantically unchanged links remain byte-stable. Explicit
      sections carry their EFFECTIVE basis — `inherit` never leaves the resolver. */
-  /* im-arc T2 fix (Sol review 2026-08-23, finding P1-4): semantic identity
+  /*  (corrected 2026-08-23): semantic identity
      wins the wire-version conflict. Validation normalizes v6 legs into the
      canonical section runtime shape but retains wireVersion; an unchanged
      legacy fleet therefore mints the same v6 bytes instead of drifting to v7. */
@@ -7495,12 +7491,12 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
             sharePct: structuredClone(l.sharePct), overrides: structuredClone(l.overrides), family: l.family })) })) } };
     }
   }
-  /* b9 M5 (memo §6.2/§10.4): the interlock rides EXPLICITLY because UNLOCKED is a user CHOICE,
+  /* : the interlock rides EXPLICITLY because UNLOCKED is a user CHOICE,
      not derivable from values (unlock-then-hand-reset is reachable and must round-trip). The
-     encoder validates its own stamp against the §6.3 consistency rule and fails LOUD rather than
-     minting a token its own decoder would reject — the M4 P0-1 failure mode, closed structurally. */
+     encoder validates its own stamp against the  consistency rule and fails LOUD rather than
+     minting a token its own decoder would reject — the encoder/decoder parity failure mode, closed structurally. */
   const encP = isModified ? null : (PERSPECTIVES.find(x => x.id === normalizePerspId(perspId)) || null);
-  /* b9 M5 (gate round 1, P1): the outgoing lever state runs through the SAME closed-domain rules
+  /*  (gate round 1, P1): the outgoing lever state runs through the SAME closed-domain rules
      the decoder enforces. Without this the encoder happily minted tokens carrying rate 4, a
      fractional months or an out-of-bounds family — links that copy successfully and then silently
      fail to restore. The UI cannot produce those values; a pure-engine consumer or a future
@@ -7509,7 +7505,7 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
     if (bad !== null)
       throw new Error("encodeScenario: lever field out of its closed domain — " + bad
         + " — refusing to mint a token this engine's own decoder would reject"); }
-  /* b9 spec-decode LEVER (D-SD-5 / D-SD-7): the cross-field rules, through the SAME shared
+  /* spec-decode LEVER (D-SD-5 / D-SD-7): the cross-field rules, through the SAME shared
      predicate the decoder runs. The encoder has the resolved state in hand, so it checks it
      directly. Same reason as the block above — fail LOUD at the mint, not silently at the load. */
   if (!specDecTokenConsistent(S, encP))
@@ -7528,7 +7524,7 @@ function encodeScenario(S, modelId, perspId, traffic, modifiedFrom, identities, 
     throw new Error("encodeScenario: interlock '" + encInterlock + "' contradicts the lever state (trend "
       + S.trendMonths + " @ rate " + S.trendRate + ", fams " + FAMILY_GROUP_KEYS.map(k => S[k]).join("/")
       + ") — refusing to mint a self-rejecting token");
-  /* row 499: the title rides in _meta beside the other provenance fields, and only when there IS
+  /* the recorded review: the title rides in _meta beside the other provenance fields, and only when there IS
      one — an untitled link is byte-identical to what this codec minted before the feature. */
   const encTitle = normalizeLinkTitle(opts && opts.title);
   diff._meta = { dataAsOf: DATA_AS_OF, schema: wireSchema, engine: ENGINE_REVISION, epoch: DEFAULTS_EPOCH,
@@ -7582,10 +7578,10 @@ function decodeScenario(str) {
      a fresh object — the raw token is discarded here.) */
   if (str.startsWith("v4.") || str.startsWith("v3.") || str.startsWith("v2."))
     return { __epochDeprecated: true, schema: str.slice(0, 2) };
-  /* b9 M4 (memo §6.1, D-4): v6 is the live codec; v5 tokens are NOT deprecated — they
+  /* : v6 is the live codec; v5 tokens are NOT deprecated — they
      stay fully interpretable and load under the established epoch/displayed-margin
-     drift machinery (plan D-8 governs over the §5 bullet's deprecation phrasing —
-     plan-internal conflict resolved by §0 precedence, gate-adjudicated CORRECT). */
+     drift machinery (plan D-8 governs over the  bullet's deprecation phrasing —
+     plan-internal conflict resolved by  precedence, gate-adjudicated CORRECT). */
   if (!str.startsWith("v5.") && !str.startsWith("v6.") && !str.startsWith("v7.")) return null; // unknown/unversioned format: ignored, never guessed (default renders, no notice)
   try {
     const d = JSON.parse(_fromB64(str.slice(3)));
@@ -7601,7 +7597,7 @@ function decodeScenario(str) {
        so an absent/mistyped field is a forged/malformed token → reject whole (fail-closed, consistent
        with the identity gates). They are annotations for the drift display, NEVER applied to state. */
     if (typeof d._meta.epoch !== "string") return null;
-    /* row 499: an optional title. Absent is fine; present-but-wrong is a forged token and rejects
+    /* the recorded review: an optional title. Absent is fine; present-but-wrong is a forged token and rejects
        whole, consistent with every other identity gate here. Over-length is a rejection rather than
        a silent truncation: a link that renders something other than what it carries is the class of
        defect this codec refuses on principle. */
@@ -7638,9 +7634,9 @@ function decodeScenario(str) {
          NEVER substitute a default identity under the link's numbers. (Pre-v5 tokens never reach
          this path — they are deprecated at the prefix check above.) */
       if (!MODELS.some(x => x.id === d._meta.model)) return null;
-      /* Slice C (memo C-7/C-8): the REQUIRED identity fields — fail-closed with
+      /* Fleet identity: the REQUIRED identity fields — fail-closed with
          the exact epoch/displayedMargin pattern above. The decode tables in the
-         memo are the authority; every row below is fixtured. NOTE the loader —
+         specification are the authority; every row below is fixtured. NOTE the loader —
          not this validator — implements the NORMATIVE restore order (identity →
          per-branch base → NON-BLEND diff → fleetBaselineBlend at the post-diff
          state); this validator guarantees a named/preset token can never carry a
@@ -7648,7 +7644,7 @@ function decodeScenario(str) {
       const fl = d._meta.fleet;
       if (typeof fl !== "object" || fl === null || Array.isArray(fl) || typeof fl.id !== "string") return null;
       const flNamed = Object.prototype.hasOwnProperty.call(ED_FLEET.FLEETS, fl.id);
-      /* b9 M4 (memo §6.2/§6.3): v6 admits cf: identities BY VALUE, with token-level
+      /* : v6 admits cf: identities BY VALUE, with token-level
          CLOSED key sets — _meta.fleet is exactly {id} (named/"custom"/"preset") or
          exactly {id, custom} (cf:); the custom block is exactly {name, clonedFrom,
          legs}; the assembled fleet (id from the outer field, epoch from _meta.epoch —
@@ -7680,7 +7676,7 @@ function decodeScenario(str) {
         if (!ED_FLEET.FLEETS[fl.id].models.includes(d._meta.model)) return null; // out-of-scope named id
         if ("blend" in d) return null; // fleet-vs-blend contradiction (named selection's blend is derivable)
       } else if (fl.id === "preset" && "blend" in d && !d._meta.modified) return null;
-      /* ^ preset + blend contradiction — CLEAN identities only (M8 reconciliation fix,
+      /* ^ preset + blend contradiction — CLEAN identities only (reconciliation fix,
          2026-08-12). For a CLEAN token the perspective's preset fleet makes the blend
          derivable, and a user blend edit forks FLEET_ID to "custom" (app.js C-2/C-3), so
          clean preset+blend is unreachable except by tampering — reject whole. A MODIFIED
@@ -7694,14 +7690,14 @@ function decodeScenario(str) {
          loader's modified branch already restores the blend diff verbatim
          (restoreModifiedLinkState; the named/cf-only reseed never touches "preset"). */
       if (prefixSchema === "v6" || prefixSchema === "v7") {
-        /* b9 M4 (memo §6.2): _meta.interlock — closed enum, required (the encoder always stamps
-           it). b9 M5 TIGHTENS it to the full memo §6.3 row, now that the lever keys exist. */
+        /* : _meta.interlock — closed enum, required (the encoder always stamps
+           it).  TIGHTENS it to the full  row, now that the lever keys exist. */
         if (!INTERLOCK_STATES.includes(d._meta.interlock)) return null;
-        /* b9 M5 lever rows (§6.3), fail-closed reject-whole, through the ONE shared closed-domain
+        /*  lever rows, fail-closed reject-whole, through the ONE shared closed-domain
            validator the encoder also runs: a token carrying a garbage lever is forged — never
            clamped into a plausible-looking one. */
         if (leverDomainViolation(d) !== null) return null;
-        /* BASELINE-AWARE interlock consistency (§6.3 + §10.2 per-state invariants) plus the
+        /* BASELINE-AWARE interlock consistency (per-state invariants) plus the
            replay lock-at-0 token rule. The resolved lever vector is the branch base overridden by
            the diff — the same shape the totalCase row uses. The clean branch's trend base is
            trendBaselineFor() BY CONSTRUCTION (applyPresetSettings assigns exactly that value, and
@@ -7715,7 +7711,7 @@ function decodeScenario(str) {
                              trendRate: ("trendRate" in d) ? d.trendRate : DEFAULTS.trendRate };
         for (const fk of FAMILY_GROUP_KEYS) ilResolved[fk] = (fk in d) ? d[fk] : DEFAULTS[fk];
         if (!interlockTokenConsistent(d._meta.interlock, ilResolved, ilM, ilP, ilMod)) return null;
-        /* b9 spec-decode LEVER (D-SD-5 / D-SD-7), reject-whole through the SAME shared predicate
+        /* spec-decode LEVER (D-SD-5 / D-SD-7), reject-whole through the SAME shared predicate
            the encoder runs. Unlike the trend rows above, `stackMult`'s branch base CANNOT be read
            off a constant: perspective `set` blocks DO carry it (the shipped replays sit at 0.55,
            0.6, 0.75, 0.83, 1.0, 1.05), so resolving it needs the preset. The re-derivation is
@@ -7732,7 +7728,7 @@ function decodeScenario(str) {
       }
       let tc = d._meta.totalCase;
       if (typeof tc !== "string") return null;
-      /* J-9 epoch transition (FA memo v7, R6 P1): the page default flagship size moved
+      /* J-9 epoch transition (size-move migration): the page default flagship size moved
          5.0T → 2.5T on 2026-07-24 (epoch bump). A pre-bump CLEAN token — totalCase =
          the OLD default id with NO total key — is the default-following shape (a clean
          link means "the page default"); under the new default its label would fail
@@ -7755,8 +7751,8 @@ function decodeScenario(str) {
       if (tc === "preset") {
         if (tcInScope) return null;               // in-scope "preset" = unreachable second clean encoding
         if ("total" in d && !d._meta.modified) return null;
-        /* ^ preset + explicit total contradiction — CLEAN identities only (M8 gate-R1 fold,
-           finding M8-R1-01, 2026-08-12; same class as the preset+blend row above). For a CLEAN
+        /* ^ preset + explicit total contradiction — CLEAN identities only (corrected
+           2026-08-12; same class as the preset+blend row above). For a CLEAN
            token the model's preset total is derivable from _meta.model, so preset+total is
            tampering — reject whole. A MODIFIED identity restores from DEFAULTS + diff, where
            every model outside TOTAL_CASE_SCOPE carries totalCase "preset" and a preset total
@@ -7878,13 +7874,13 @@ if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     HW, HW_ORDER, GEN_TIMELINE, RUBIN, PRECISION_ENUM_KEYS, INTERACT_ENUM_KEYS, DEFAULTS,
     MODELS, PERSPECTIVES, MODEL_OWNED_KEYS, TIPS, SECTIONS, TRAFFIC_PROFILES: ED_TRAFFIC_PROFILES,
-    LANDING_DEFAULT_PERSP_ID, // row 499: the page-open selection (NOT a DEFAULTS move — see its declaration)
+    LANDING_DEFAULT_PERSP_ID, // the recorded review: the page-open selection (NOT a DEFAULTS move — see its declaration)
     applyPresetSettings, resolveTraffic, lensSpan, lensSpanMembershipNote, pairingWarning, pairingSeverity,
     marginBand, marginBandsPerDial, sectionBand, bandLeadBasisClause, BAND_LEAD_BASIS, bandHandleDefaults,
     statedReadingClause,
     applyDial, dialId, dialBounds, dialsFromRanges,
-    legsInFamily, familyGroupOverrides, BAND_MAX_CORNER_DIALS,   // row 499: range-valued dials → attainable band
-    /* owner ruling q-sliders-fleet-util-point (2026-08-09): max/min/median over the provider
+    legsInFamily, familyGroupOverrides, BAND_MAX_CORNER_DIALS,   // the recorded review: range-valued dials → attainable band
+    /* the adopted decision (2026-08-09): max/min/median over the provider
        distributions that sum to 100. A polytope, not a box — see `mixBand`. */
     mixBand, mixRangesFromRanges, blendBlocksFromRanges, projectCentresOntoSum, centroidOnSum,
     normalizeModifiedIdentities,
@@ -7893,7 +7889,7 @@ if (typeof module !== "undefined" && module.exports) {
     encodeScenario, decodeScenario, migrateV2Traffic, sanitizeScenarioDiff, matchTrafficProfile, overlayDivergesFromReplay, SCENARIO_BOUNDS, TRAFFIC_MODES, ENGINE_REVISION, DATA_AS_OF,
     fleetBaselineBlend, TOTAL_CASE_SCOPE: ED_FLEET.TOTAL_CASE_SCOPE,
     DEFAULTS_EPOCH, marginDriftNote,
-    normalizeLinkTitle, TITLE_MAX_CHARS,   // row 499: titled share links (stateless, title-in-token)
+    normalizeLinkTitle, TITLE_MAX_CHARS,   // the recorded review: titled share links (stateless, title-in-token)
     normalizePerspId, reconcileLinkTraffic,
     hwHourCost, hwHourParts, tokPerS, costPerMtok,
     makeScenarioContext, scenarioContext, registerScenarioContext, restoreSavedPresetState, restoreModifiedLinkState, applyModelSwitchWhileModified, blendWeights, blendedCost, blendedCosts,
@@ -7909,13 +7905,13 @@ if (typeof module !== "undefined" && module.exports) {
     TOTAL_CASES: ED_FLEET.TOTAL_CASES, PRECISION_TIER_MAP: ED_FLEET.PRECISION_TIER_MAP,
     solveCapacityWidth, enumerateLegalWidths, CAPACITY_BYTES_POLICY,
     formCorrectionDebt, FORM_DEBT_NOT_A_RESULT,
-    // b9 M3 (memo §3.3): the energy surface + procurement-basis machinery. Pin re-minted in
-    // capacity-solver-r1.test.mjs (both copies) under the M3 delta manifest.
+    // : the energy surface + procurement-basis machinery. Pin re-minted in
+    // capacity-solver-r1.test.mjs (both copies) under the typed contract.
     PROCUREMENT_BASES, PROCUREMENT_BASIS_NAMES, DIVE_PROCUREMENT_BASES,
     procurementBasisFor, legProcurementBasis, assertUniformProcurementBasis,
-    displayedProcurementBasis, // M3 gate P1 fix-round addition (pin re-minted again)
+    displayedProcurementBasis, // Procurement-basis contract addition (pin re-minted again)
     opPowerKw, energyPerMtok, energyMix, fleetEnergy,
-    // b9 M4 (memo §3.1): the custom-fleet leg path + source registration (tests inject
+    // : the custom-fleet leg path + source registration (tests inject
     // stores through registerCustomFleetSource; the browser registration comes from
     // custom-fleets.js at load).
     resolveFleetSections, resolveFleetLegs, composeSections, mixProcurementBasis,
@@ -7927,10 +7923,10 @@ if (typeof module !== "undefined" && module.exports) {
     coverageForPreset,
     fleetModeRenderOptions, validateFleetSections, fleetSectionsSchema, bandSchema, dcRegions,
     registrySectionFromRow, composeFleetFromDcRows,
-    /* b9 M5 (memo §§8–11, §15): the lever registries, the post-roofline multiplier, the pure
-       interlock machine (walked with no DOM by tests/trendline-interlock-b9.test.mjs and by the
+    /* : the lever registries, the post-roofline multiplier, the pure
+       interlock machine (walked with no DOM by the trendline interlock tests and by the
        gate reviewer), and the reference pin. Pin re-minted in capacity-solver-r1.test.mjs (both
-       copies) under the M5 delta manifest. */
+       copies) under the interlock contract. */
     TREND_RATES, TREND_MONTHS_BOUNDS, TREND_SOFT_WARN_MONTHS, TREND_DEFAULTS, TREND_LAB_NOTES,
     TREND_GROUP_KEYS, FAMILY_GROUP_KEYS, FAMILY_STATE_KEY, FAMILY_BOUNDS,
     INTERLOCK_STATES, INTERLOCK_WHY, INTERLOCK_UNLOCK_WARNING, SPECIFIED_LEVER_KEYS,
@@ -7939,7 +7935,7 @@ if (typeof module !== "undefined" && module.exports) {
     SPECDEC_GATE_TICK, SPECDEC_BOUNDS, stackAtMtpFreeTick, specDecGateAllows,
     specDecBaselineStatusFor, specDecFactor, specDecDisposition,
     SPECDEC_REASON_COPY, specDecReasonText, specDecLegDisclosure, specDecCorrectionNotice,
-    /* d-im-h800: the NVLink-cap lever — bounds, ladder, factor, per-leg DTO, pinned copy, readout. */
+    /* the adopted decision: the NVLink-cap lever — bounds, ladder, factor, per-leg DTO, pinned copy, readout. */
     NVLINKCAP_BOUNDS, NVLINKCAP_SLOPE_STEP, NVLINKCAP_ANCHOR_KEY, NVLINKCAP_ELIGIBLE, NVLINKCAP_SECTION_TITLE, NVLINKCAP_CONTROL_LABEL,
     NVLINKCAP_TIP_HEAD, NVLINKCAP_WHAT_IT_DOES, NVLINKCAP_WHAT_THE_ENGINE_SAYS, NVLINKCAP_WHAT_IT_IS_NOT,
     NVLINKCAP_REASON_COPY, nvlinkCapLineageFor, nvlinkCapCounterfactual, nvlinkCapPhaseDisposition, nvlinkCapLegCode, nvlinkCapReasonText,
@@ -7954,7 +7950,7 @@ if (typeof module !== "undefined" && module.exports) {
     interlockInvariantHolds, interlockAfterEdit, interlockAfterEditChecked, interlockGroupOf, interlockLockedGroup,
     interlockTokenConsistent, deriveInterlockFor, leverDomainViolation,
     REFERENCE_LEVER_PIN, pinReferenceLevers,
-    /* b9 M6 (FA memo §5, §2.9, §17): the exec-summary registry + the pinned copy constants —
+    /*  (FA ): the exec-summary registry + the pinned copy constants —
        exported so the suite pins the SAME bytes the page renders (one source of bytes). */
     EXEC_SUMMARY_ROWS, MTP_ROW_COPY, LOW_EVIDENCE_COPY, tcoAssumptionVector, execSummaryRowTokens,
     execSummaryRowState, tcoDefaultBands, pueBandForClass, clusterOverheadFor, capexProvenanceFor,
@@ -7991,7 +7987,7 @@ const DOSSIERS = {
          August 31, 2026; $3/$15 thereafter" against a LIVE url that had said the opposite since
          2026-08-10: a stale quotation in a structured evidence field, with a mutable source presented
          as supporting it. That is the machine-consumer surface prose edits do not reach (GPT Pro
-         pr-20260902T175643Z-034d27). The superseded wording is kept as history, dated on both ends,
+         a research run on 2026-09-02). The superseded wording is kept as history, dated on both ends,
          rather than deleted. */
       anchor: { quote: "The $2/$10 per million input/output token pricing for Claude Sonnet 5, announced at launch as introductory pricing through August 31, 2026, is now the standard price. The previously scheduled increase to $3/$15 per million input/output tokens on September 1, 2026 will not occur.",
                 url: "https://platform.claude.com/docs/en/about-claude/pricing", observedAt: "2026-09-02",
@@ -8124,7 +8120,7 @@ const DOSSIERS = {
       assumes: ["The heterogeneous per-chip rates can be blended as one planning vector", "No free traffic"],
       falsifiers: ["Evidence of Anthropic's actual blended $/chip-hour (e.g. the xAI contract at $5.27 bundled suggests the truth is messier than either pole)"],
     },
-    /* Range-exploration dossiers (v2.1.3 M2; PRUNED 2026-07-11 to discourse-tied routes only).
+    /* Range-exploration dossiers (v2.1.3; PRUNED 2026-07-11 to discourse-tied routes only).
        Attribution is calculator-synthesis on every entry: these are this page's own reconstructed
        ROUTES into a range the discourse points at — explicitly NOT the claimant's own cost model.
        P0-4: no external party's name appears in any field below — the claim records (MARGIN_CLAIMS)
@@ -8133,18 +8129,18 @@ const DOSSIERS = {
       attribution: "calculator-synthesis",
       who: "PAGE-AUTHORED RECONSTRUCTION of one route into the ≥90% range the discourse points at (the owned-TCO story: a lab that owns/commits its fleet pays build-cost, not rental markup). This page's own route, NOT any external party's cost model — no external party selected this vector.",
       anchor: { quote: "What would have to be true for a ≥90% modeled serving margin at the flagship scope?", url: "#s5" },
-      params: { hwMode: { src: "Page-chosen owned-TCO basis — hourly cost built from capex, power, datacenter and opex", label: "SPECULATION" }, kwh: { src: "Historical $0.07/kWh pin retained when the generic default moved to the EIA US-industrial midpoint on 2026-08-22", label: "SPECULATION" },       dcPerW: { src: "im-arc T4 fold historical pin: the pre-fold $12/W datacenter capex, retained so this archived reading reproduces after the generic default moved to $12.5/W on 2026-08-24", label: "SPECULATION" },
-      dcLifeYears: { src: "im-arc T4 fold historical pin: the pre-fold 12-year facility life, retained after that literal became the named default dcLifeYears at 15 years on 2026-08-24", label: "SPECULATION" },
-      capexScopeMode: { src: "im-arc T4 fold historical pin: the pre-fold global cluster-overhead semantics (1.30 on every row), retained after the overhead became capex-scope-derived on 2026-08-24", label: "SPECULATION" },
-      capitalRecovery: { src: "im-arc T4 fold historical pin: capital recovery was absent from the engine when this reading was archived; it is stated off so the reading cannot drift if the canonical default ever moves", label: "SPECULATION" },
-      capexAbsLeg: { src: "im-arc T4 fold historical pin: the pre-fold registered capex points for all ten donors, retained after four of them moved onto dated analyst spans on 2026-08-24", label: "SPECULATION" },
-      rentRegistryPin: { src: "im-arc T4 fold historical pin: the pre-fold REGISTERED planning-rent vector for all ten donors — pinned below the reader controls so this route\u2019s own multipliers still apply — retained after two middles moved and three rows lost their default to the unavailable-rate path on 2026-08-24", label: "SPECULATION" },
-      dcPerW: { src: "im-arc T4 fold historical pin: the pre-fold $12/W datacenter capex, retained so this archived reading reproduces after the generic default moved to $12.5/W on 2026-08-24", label: "SPECULATION" },
-      dcLifeYears: { src: "im-arc T4 fold historical pin: the pre-fold 12-year facility life, retained after that literal became the named default dcLifeYears at 15 years on 2026-08-24", label: "SPECULATION" },
-      capexScopeMode: { src: "im-arc T4 fold historical pin: the pre-fold global cluster-overhead semantics (1.30 on every row), retained after the overhead became capex-scope-derived on 2026-08-24", label: "SPECULATION" },
-      capitalRecovery: { src: "im-arc T4 fold historical pin: capital recovery was absent from the engine when this reading was archived; it is stated off so the reading cannot drift if the canonical default ever moves", label: "SPECULATION" },
-      capexAbsLeg: { src: "im-arc T4 fold historical pin: the pre-fold registered capex points for all ten donors, retained after four of them moved onto dated analyst spans on 2026-08-24", label: "SPECULATION" },
-      rentRegistryPin: { src: "im-arc T4 fold historical pin: the pre-fold REGISTERED planning-rent vector for all ten donors — pinned below the reader controls so this route\u2019s own multipliers still apply — retained after two middles moved and three rows lost their default to the unavailable-rate path on 2026-08-24", label: "SPECULATION" },
+      params: { hwMode: { src: "Page-chosen owned-TCO basis — hourly cost built from capex, power, datacenter and opex", label: "SPECULATION" }, kwh: { src: "Historical $0.07/kWh pin retained when the generic default moved to the EIA US-industrial midpoint on 2026-08-22", label: "SPECULATION" },       dcPerW: { src: "the registry revision historical pin: the previous $12/W datacenter capex, retained so this archived reading reproduces after the generic default moved to $12.5/W on 2026-08-24", label: "SPECULATION" },
+      dcLifeYears: { src: "the registry revision historical pin: the previous 12-year facility life, retained after that literal became the named default dcLifeYears at 15 years on 2026-08-24", label: "SPECULATION" },
+      capexScopeMode: { src: "the registry revision historical pin: the previous global cluster-overhead semantics (1.30 on every row), retained after the overhead became capex-scope-derived on 2026-08-24", label: "SPECULATION" },
+      capitalRecovery: { src: "the registry revision historical pin: capital recovery was absent from the engine when this reading was archived; it is stated off so the reading cannot drift if the canonical default ever moves", label: "SPECULATION" },
+      capexAbsLeg: { src: "the registry revision historical pin: the previous registered capex points for all ten donors, retained after four of them moved onto dated analyst spans on 2026-08-24", label: "SPECULATION" },
+      rentRegistryPin: { src: "the registry revision historical pin: the previous REGISTERED planning-rent vector for all ten donors — pinned below the reader controls so this route\u2019s own multipliers still apply — retained after two middles moved and three rows lost their default to the unavailable-rate path on 2026-08-24", label: "SPECULATION" },
+      dcPerW: { src: "the registry revision historical pin: the previous $12/W datacenter capex, retained so this archived reading reproduces after the generic default moved to $12.5/W on 2026-08-24", label: "SPECULATION" },
+      dcLifeYears: { src: "the registry revision historical pin: the previous 12-year facility life, retained after that literal became the named default dcLifeYears at 15 years on 2026-08-24", label: "SPECULATION" },
+      capexScopeMode: { src: "the registry revision historical pin: the previous global cluster-overhead semantics (1.30 on every row), retained after the overhead became capex-scope-derived on 2026-08-24", label: "SPECULATION" },
+      capitalRecovery: { src: "the registry revision historical pin: capital recovery was absent from the engine when this reading was archived; it is stated off so the reading cannot drift if the canonical default ever moves", label: "SPECULATION" },
+      capexAbsLeg: { src: "the registry revision historical pin: the previous registered capex points for all ten donors, retained after four of them moved onto dated analyst spans on 2026-08-24", label: "SPECULATION" },
+      rentRegistryPin: { src: "the registry revision historical pin: the previous REGISTERED planning-rent vector for all ten donors — pinned below the reader controls so this route\u2019s own multipliers still apply — retained after two middles moved and three rows lost their default to the unavailable-rate path on 2026-08-24", label: "SPECULATION" },
 util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, stackMult: { src: "Page-set 1.1× serving-stack scenario value", label: "SPECULATION" }, interact: { src: "Central-scenario balanced latency", label: "SPECULATION" }, batchShare: { src: "Central-scenario 15% batch-tier share", label: "SPECULATION" }, discount: { src: "Central-scenario 5% blended discount", label: "SPECULATION" } },
       assumes: ["A lab's fleet behaves like a well-run owned estate (depreciation schedule choices dominate)"],
       falsifiers: ["Evidence of actual procurement costs far from owned-TCO equivalence"],
@@ -8157,12 +8153,12 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
       who: "PAGE-AUTHORED RECONSTRUCTION of the MECHANISM named in the 90\u219295% claim, applied alone: the \u226590% owned-TCO route with one field changed \u2014 the serving regime moved to throughput. This page's own route, NOT any external party's cost model \u2014 no external party selected this vector; what is attributed is the claim it answers, not the parameters.",
       anchor: { quote: "No, they'll just increase the batch size, have the same speed, and drive margins from 90% to 95%. You're welcome", url: "https://x.com/teortaxesTex/status/2070786814097440805" },
       params: { hwMode: { src: "Page-chosen owned-TCO basis, inherited unchanged from the \u226590% route", label: "SPECULATION" }, kwh: { src: "Historical $0.07/kWh pin inherited from the \u226590% route when the generic default moved on 2026-08-22", label: "SPECULATION" },
-        dcPerW: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: the pre-fold $12/W datacenter capex", label: "SPECULATION" },
-        dcLifeYears: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: the pre-fold 12-year facility life", label: "SPECULATION" },
-        capexScopeMode: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: the pre-fold global cluster-overhead semantics (1.30 on every row)", label: "SPECULATION" },
-        capitalRecovery: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: capital recovery was absent when this reading was archived and is stated off", label: "SPECULATION" },
-        capexAbsLeg: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: the pre-fold registered capex points for all ten donors", label: "SPECULATION" },
-        rentRegistryPin: { src: "im-arc T4 fold historical pin inherited from the ≥90% route: the pre-fold REGISTERED planning-rent vector for all ten donors", label: "SPECULATION" }, util: { src: "Page-set 55% occupancy, inherited unchanged \u2014 deliberately NOT raised, so the batch lever is measured alone", label: "SPECULATION" }, stackMult: { src: "Page-set 1.1\u00d7 serving-stack value, inherited unchanged", label: "SPECULATION" }, interact: { src: "THE CLAIM'S OWN LEVER: the throughput serving regime \u2014 this engine's reading of 'increase the batch size, have the same speed'", label: "SPECULATION" }, batchShare: { src: "Central-scenario 15% batch-tier share, inherited unchanged", label: "SPECULATION" }, discount: { src: "Central-scenario 5% blended discount, inherited unchanged", label: "SPECULATION" } },
+        dcPerW: { src: "the registry revision historical pin inherited from the ≥90% route: the previous $12/W datacenter capex", label: "SPECULATION" },
+        dcLifeYears: { src: "the registry revision historical pin inherited from the ≥90% route: the previous 12-year facility life", label: "SPECULATION" },
+        capexScopeMode: { src: "the registry revision historical pin inherited from the ≥90% route: the previous global cluster-overhead semantics (1.30 on every row)", label: "SPECULATION" },
+        capitalRecovery: { src: "the registry revision historical pin inherited from the ≥90% route: capital recovery was absent when this reading was archived and is stated off", label: "SPECULATION" },
+        capexAbsLeg: { src: "the registry revision historical pin inherited from the ≥90% route: the previous registered capex points for all ten donors", label: "SPECULATION" },
+        rentRegistryPin: { src: "the registry revision historical pin inherited from the ≥90% route: the previous REGISTERED planning-rent vector for all ten donors", label: "SPECULATION" }, util: { src: "Page-set 55% occupancy, inherited unchanged \u2014 deliberately NOT raised, so the batch lever is measured alone", label: "SPECULATION" }, stackMult: { src: "Page-set 1.1\u00d7 serving-stack value, inherited unchanged", label: "SPECULATION" }, interact: { src: "THE CLAIM'S OWN LEVER: the throughput serving regime \u2014 this engine's reading of 'increase the batch size, have the same speed'", label: "SPECULATION" }, batchShare: { src: "Central-scenario 15% batch-tier share, inherited unchanged", label: "SPECULATION" }, discount: { src: "Central-scenario 5% blended discount, inherited unchanged", label: "SPECULATION" } },
       assumes: ["That raising the declared batch at held speed is what the claim's 'increase the batch size' means in this roofline", "The owned-TCO estate basis of the route it modifies"],
       falsifiers: ["A disclosed serving curve showing the batch lever is worth materially more than the ~1.2 points computed here", "Evidence that the presupposed ~90% starting point is reached by some other mechanism this route does not model"],
     },
@@ -8198,7 +8194,7 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
       assumes: ["Anthropic pays partner rates fleet-wide (the xAI contract at $5.27 bundled is evidence the blended truth may sit higher)"],
       falsifiers: ["Disclosed Anthropic compute invoices", "TPU strategic-rate revisions"],
     },
-    /* row 499: the three adjudicated presets. Every parameter carries its source and evidence
+    /* the recorded review: the three adjudicated presets. Every parameter carries its source and evidence
        label like any other preset — a preset that carries an outside estimate is held to the same
        provenance discipline as one built from the page's own registry, and the labels say plainly
        which values are the estimate's own and which are this page's stand-ins. */
@@ -8212,7 +8208,7 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     },
     "fable-ctx": {
       attribution: "reconstruction",
-      who: "Fable 5's independent estimate, derived from this page's own numbers and hash-committed before any GPT-Pro output was opened (rows 494 and 499).",
+      who: "Fable 5's independent estimate, derived from this page's own numbers and hash-committed before any GPT-Pro output was opened (the recorded review).",
       anchor: { quote: "which lets me price PER-LEG rate postures the UI's global multiplier cannot express", url: "research/anthropic-gptpro.html" },
       params: { hwMode: { src: "Rental frame at per-leg strategic rates", label: "SPECULATION" }, rentMult: { src: "1.0 global — the posture is carried per leg, not by a fleet-wide scalar", label: "SPECULATION" }, rentMultLeg: { src: "Its declared per-leg posture: TPU x0.30 (the strategic TPU rate this page already registers, applied to that leg alone), Trainium x0.70, and every NVIDIA leg left explicitly UNDISCOUNTED at 1.0 — a discount it declined to claim", label: "SPECULATION derived from CREDIBLY REPORTED" }, util: { src: "Its declared 60% utilization (band 50-70), held deliberately unmoved rather than raised to preserve altitude where the lead is withdrawn", label: "SPECULATION" }, stackMult: { src: "Open-source-best baseline; its declared efficiency credit rides beside the vector, not inside a dial", label: "SPECULATION" }, interact: { src: "Balanced latency", label: "SPECULATION" }, batchShare: { src: "This page's illustrative billing mix, kept deliberately so its number is comparable to the published reading", label: "SPECULATION" }, discount: { src: "This page's illustrative billing mix (5%)", label: "SPECULATION" }, dialRanges: { src: "The ONE axis of its band assembly its author stated in numbers: utilization 50-70 around a stated 60. Its other two band axes are deliberately NOT rendered — 'rates half-to-full-strategic' is a qualitative phrase this page will not convert into an adjudicator's numbers on their behalf, and the lead axis ('0-to-+3-not-stacked') is one this author explicitly instructs must not be switched on to reach its headline, because the serving-stack credit it took instead already covers part of the same mechanism. The band a reader sees here is therefore narrower than its author's stated 70-84, and the preset note says so rather than letting the narrower band pass as the whole claim", label: "DECLARED RANGE (one axis; the other two are stated qualitatively and left unrendered)" } },
       assumes: ["A per-leg strategic procurement regime, with the discount concentrated where the public evidence is strongest", "NO algorithmic-lead prior — withdrawn after the public-evidence sweep returned that no lead is identifiable, and replaced by a smaller, separately declared serving-stack credit that this engine has no legal control for"],
@@ -8220,10 +8216,10 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     },
     "gptpro-r3": {
       attribution: "quoted-position",
-      who: "GPT-5.6 Pro's contextual review, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers (row 514, 2026-08-08).",
+      who: "GPT-5.6 Pro's contextual review, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers (the recorded review-08-08).",
       anchor: { quote: "+2 months maps the supplied 79.65-percent point to 83.0549 percent; 84.0 would require a target-backsolved +2.6269 months" },
       /* The anchor carries no url: its author's returned reading is quoted verbatim but is not
-         published as a page, so there is no public copy to link (bq-4610). */
+         published as a page, so there is no public copy to link. */
       /* Same attribution reasoning as fable-r3: nothing here was reconstructed from prose, so no
          param is SPECULATION. Where a value is this page's framing rather than its author's number,
          the entry says which. */
@@ -8233,7 +8229,7 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     },
     "fable-r3": {
       attribution: "quoted-position",
-      who: "Fable 5's independent estimate, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers, measuring each through the calculator before declaring it (row 514, 2026-08-08).",
+      who: "Fable 5's independent estimate, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers, measuring each through the calculator before declaring it (the recorded review-08-08).",
       anchor: { quote: "No dial was tuned to land a target margin: every value above was authored first and then measured; the band moved where the measurements said it moved (floor down, ceiling in)" },
       /* No url, for the same reason as gptpro-r3: the returned reading is quoted, not published. */
       /* ATTRIBUTION NOTE, and it is the reason this dossier carries no SPECULATION label anywhere.
@@ -8307,10 +8303,10 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     },
   },
 };
-/* ---------- MARGIN_CLAIMS: typed margin-claim registry (v2.1.3 preset redesign, M1) ----------
+/* ---------- MARGIN_CLAIMS: typed margin-claim registry (v2.1.3 preset redesign) ----------
    Bins CLAIMS, not people — one person can hold several dated claims with different scopes.
    Verbatim strings are EXACT as archived (research/grok-sweep-margin-claims.md incl. its
-   2026-07-11 ERRATUM, plus this page's §7 citations); numbers are never paraphrased.
+   2026-07-11 ERRATUM, plus this page's  citations); numbers are never paraphrased.
    Fields: id, who, verbatim, url, date, sourceClass, metricScope, boundType, numeric{lo,hi},
    subjectScope, notClaimed, binnable, relation (+ reason on binnable:false records),
    scopeLayer, provenanceTier (+ optional tierSource/tierNote/sweep — 2026-07-12 evidence pass).
@@ -8479,7 +8475,7 @@ const MARGIN_CLAIMS = [
   { id: "theinformation-40-projection", who: "The Information (reporting)",
     // No verbatim exists in this page's cited corpus (the primary article is paywalled); quoting
     // the relay post under The Information's name would be a mis-attribution. Figure as reported
-    // in §7: 2025 gross-margin projection lowered to 40%; inference costs 23% higher than
+    // in : 2025 gross-margin projection lowered to 40%; inference costs 23% higher than
     // anticipated. Paraphrase is banned from the verbatim field, so it stays null.
     verbatim: null,
     reportedFigure: "2025 gross-margin projection lowered to 40% (inference costs on Google/Amazon servers ran 23% higher than anticipated)",
@@ -8492,7 +8488,7 @@ const MARGIN_CLAIMS = [
     notClaimed: "the calculator's unit direct-serving metric",
     binnable: true, relation: "different-metric" },
   { id: "pitchbook-44-estimate", who: "PitchBook/Morningstar (estimate)",
-    // Same rule as above: no in-corpus verbatim; the §7-cited figures are carried as reported.
+    // Same rule as above: no in-corpus verbatim; the  figures are carried as reported.
     verbatim: null,
     reportedFigure: "gross margin ≈ 44%; compute spend $0.71 per revenue dollar in Q1 2026 (projected $0.56 in Q2)",
     url: "https://pitchbook.com/news/articles/anthropics-gross-margin-ipo", date: "2026-06",
@@ -8513,7 +8509,7 @@ const MARGIN_CLAIMS = [
     subjectScope: "DeepSeek's OWN 2025 V3/R1 serving, theoretical at R1 list prices — 84.5% is the margin arithmetic of the disclosed 545% cost-profit ratio",
     notClaimed: "anything about Anthropic or western providers",
     binnable: true, relation: "anchor" },
-  /* ==== 2026-07-12 evidence pass: curated ADD set (owner-approved spec) ====================
+  /* ==== 2026-07-12 evidence pass: curated ADD set (adopted specification) ====================
      Six non-X reported figures (verbatim:null + reportedFigure — figures reported in articles/
      filings, not archived quotes) and eight X records transcribed character-for-character from
      the archived 2026-07-12 X sweep (grok-x-results2). Every row carries scopeLayer +
@@ -8590,29 +8586,29 @@ const MARGIN_CLAIMS = [
     binnable: true, relation: "different-metric" },
   // --- RAISE Summit 2026 (Paris, recorded 2026-07-09, published 2026-07-16) podcast-transcript
   //     records — the first claims sourced through this project's podcast-mining pipeline.
-  //     Owner ruling 2026-07-27 (q-im-podcast-candidates): APPROVED with the ANALYST-CHARACTERIZATION
+  //     the adopted decision 2026-07-27 (the adopted decision): APPROVED with the ANALYST-CHARACTERIZATION
   //     provenanceTier — Patel is characterizing pre-IPO/private financials he says he has reviewed,
   //     not a company disclosure or filing. ---
   { id: "patel-anthropic-first-gp-2626", who: "Dylan Patel (SemiAnalysis) — RAISE Summit 2026 stage remarks",
     verbatim: "Anthropic turned their first gross profit in Q2, in June. And then in Q3 they will be turning a billion dollars of operating profit, slightly over. This is their financials that they're going to be putting out in their IPO — this is real figures, that they've already been able to turn a profit.",
     url: "https://www.youtube.com/watch?v=DJ29xr83sKE&t=53s", date: "2026-07-09",
     sourceClass: "primary-post", scopeLayer: "company-GM", provenanceTier: "analyst-characterization",
-    tierNote: "Patel characterizing pre-IPO financials he says he has seen, not a company disclosure — checkable once Anthropic's actual IPO/S-1-equivalent financials are public (owner ruling 2026-07-27, q-im-podcast-candidates)",
+    tierNote: "Patel characterizing pre-IPO financials he says he has seen, not a company disclosure — checkable once Anthropic's actual IPO/S-1-equivalent financials are public (the adopted decision 2026-07-27, the adopted decision)",
     tierSource: "RAISE Summit 2026 (Master Stage, Paris), recorded 2026-07-09; transcribed via this project's podcast-mining pipeline (local faster-whisper large-v3, speaker attribution verified against video framegrabs)", sweep: "2026-07-26",
     metricScope: "company-profit-milestone", boundType: null, numeric: null,
     subjectScope: "Anthropic first GROSS PROFIT in Q2/June 2026, and Q3 2026 OPERATING PROFIT of slightly over $1B — both per pre-IPO financials Patel says will appear in Anthropic's IPO filing",
     notClaimed: "a company disclosure, filing, or the calculator's own unit direct-serving metric; a percentage margin figure",
     binnable: false, relation: null,
-    reason: "a profit-milestone / dollar-amount claim (first gross profit; ~$1B Q3 operating profit), not a percentage margin — cannot be placed on a margin-% axis. Upgrades the existing Anthropic reported-margin narrative (§7) from projected/estimated figures (40% projection, 44% PitchBook estimate, ~70% Zephyr read) to a claimed REALIZED-profit data point, carrying the ANALYST-CHARACTERIZATION caveat the owner ruling required." },
+    reason: "a profit-milestone / dollar-amount claim (first gross profit; ~$1B Q3 operating profit), not a percentage margin — cannot be placed on a margin-% axis. Upgrades the existing Anthropic reported-margin narrative (§7) from projected/estimated figures (40% projection, 44% PitchBook estimate, ~70% Zephyr read) to a claimed REALIZED-profit data point, carrying the ANALYST-CHARACTERIZATION caveat the adopted decision required." },
   { id: "patel-openai-margin-trajectory-2626", who: "Dylan Patel (SemiAnalysis) — RAISE Summit 2026 stage remarks",
     verbatim: "You look at OpenAI, late last year their margins were roughly 30% gross margin, but if you stripped away the free users they were at 50%. Now their total company gross margin is closer to 55%, and if you strip away the free users they're at about 65%.",
     url: "https://www.youtube.com/watch?v=DJ29xr83sKE&t=99s", date: "2026-07-09",
     sourceClass: "primary-post", scopeLayer: "company-GM", provenanceTier: "analyst-characterization",
-    tierNote: "Patel characterizing pre-IPO/private financials he says he has seen, not a company disclosure (owner ruling 2026-07-27, q-im-podcast-candidates)",
+    tierNote: "Patel characterizing pre-IPO/private financials he says he has seen, not a company disclosure (the adopted decision 2026-07-27, the adopted decision)",
     tierSource: "RAISE Summit 2026 (Master Stage, Paris), recorded 2026-07-09; transcribed via this project's podcast-mining pipeline (local faster-whisper large-v3, speaker attribution verified against video framegrabs)", sweep: "2026-07-26",
     metricScope: "company-GM", boundType: "point",
     numeric: { lo: 55, hi: 55 },
-    subjectScope: "OpenAI company-wide gross margin trajectory: ~30% (late 2025) -> ~55% (as of this Jul 9 2026 remark); ex-free-user cut ~50% (late 2025) -> ~65% (current). numeric carries the current company-wide point (55); the ex-free-user 65% and the historical 30%/50% starting points are context in subjectScope, not separately binned.",
+    subjectScope: "OpenAI company-wide gross margin trajectory: ~30% (late 2025) -> ~55% (as of this Jul 9 2026 remark); ex-free-user cut ~50% (late 2025) -> ~65% (current). The numeric field carries the current company-wide point (55); the ex-free-user 65% and the historical 30%/50% starting points are context in subjectScope, not separately binned.",
     notClaimed: "a company disclosure or filing; the calculator's own unit direct-serving metric; identity with the existing openai-33-company-gm record (a different, later, analyst-characterized cut, not a restatement of it)",
     binnable: true, relation: "different-metric" },
   // --- X records: verbatim + URL + date transcribed exactly from the archived 2026-07-12 sweep ---
@@ -8757,7 +8753,7 @@ const MARGIN_CLAIMS = [
     notClaimed: "human endorsement — model-generated analysis with zero claimant weight; identity with this page's own metric or numbers (independent construction, different model basket and workload; disclosed at the end that it never encountered or opened margins.ashitaorbis.com or its repository in its search results)",
     binnable: true, relation: "locates-within" },
   // --- binnable:false records: present PRECISELY so tests can assert they never render as
-  //     claimants in any margin range (P0-8; recon §2). ---
+  //     claimants in any margin range (P0-8; recon ). ---
   { id: "xjdr-deployment", who: "@_xjdr (ncode/Noumena)",
     verbatim: "final GLM 5.2 served stats: ~12000 unique api keys served ~300B tokens total 232 tok/s/gpu output average 431 tok/s/gpu output max sustained 2.1 sec TTFT overage [sic] (1M ctx) 61 sec p95 TTFT (1M ctx) 81k tok average input size 41% cache hit rate 0 chat logs kept (dont be evil)",
     url: "https://x.com/_xjdr/status/2071835604095300079", date: "2026-06-30",
@@ -8783,7 +8779,7 @@ const MARGIN_CLAIMS = [
     subjectScope: "GPU/memory/cluster economics and compute-leasing posts only",
     notClaimed: "any frontier-lab inference-margin figure",
     binnable: false, relation: null,
-    reason: "NO VERBATIM SOURCE — the 2026-07-09 sweep found no @jukan05 post claiming Anthropic or frontier-lab inference margins; deliberately removed from §1 in v2.1.1 (owner call); do not bin, ever" },
+    reason: "NO VERBATIM SOURCE — the 2026-07-09 sweep found no @jukan05 post claiming Anthropic or frontier-lab inference margins; deliberately removed from §1 in v2.1.1 (adopted decision); do not bin, ever" },
   { id: "musk-sizes", who: "Elon Musk (@elonmusk)",
     verbatim: "0.5T total. Current Grok is half the size of Sonnet and 1/10th the size of Opus. Very strong model for its size.",
     url: "https://x.com/elonmusk/status/2042123561666855235", date: "2026-04-09",
@@ -8791,14 +8787,14 @@ const MARGIN_CLAIMS = [
     metricScope: "architecture", boundType: null, numeric: null,
     subjectScope: "model sizes (Grok vs Sonnet vs Opus)", notClaimed: "any margin figure; any cost-to-serve figure",
     binnable: false, relation: null,
-    reason: "model-size statement only — never a margin claimant; read as LIKELY referring to the 4.6-era lineup (owner-adjudicated planning interpretation 2026-07-24; the referent is unverified — 4.6 is believed larger than 4.7/4.8)" },
+    reason: "model-size statement only — never a margin claimant; read as LIKELY referring to the 4.6-era lineup (planning interpretation adopted 2026-07-24; the referent is unverified — 4.6 is believed larger than 4.7/4.8)" },
 ];
 
 /* Interval algebra (P0-7): buckets are half-open [lo, hi); a claim's numeric interval is closed
    [lo, hi] as stated by its source. Membership = nonempty intersection, EXCEPT floors (hi null /
    boundType "floor"), which relate to every bucket at/above their lo as "compatible-with" and
    NEVER as interval membership (P0-2). Returns [{ bucketId, relation }]. */
-/* R3 (design memo D-2e): the ONE half-open membership algebra — extracted so the
+/* R3 (the design requirements): the ONE half-open membership algebra — extracted so the
    authored-range integrity predicate SHARES it with bucketForMargin (family 35's
    shared-predicate rule: one algebra, never a reimplementation; ±Infinity open ends
    make the single comparison correct for floor/ceiling/interval classes alike). */
@@ -8839,7 +8835,7 @@ function claimsForBucket(bucketId) {
    Rendered on every claim row so no reader mistakes a relayed/assumed/clip-mediated figure for a
    measured primary. Templates follow the curated-spec labeling rules verbatim; rows carrying a
    sweep date that are not audited/primary-post additionally carry the
-   not-independently-re-verified disclaimer, dated from the row's OWN c.sweep (bq-3150: the date
+   not-independently-re-verified disclaimer, dated from the row's OWN c.sweep (the date
    was hard-coded to 2026-07-12, mislabelling the 2026-07-26 sweep rows). SWEEP_DISCLAIMER stays
    exported as the 2026-07-12 wording. */
 function sweepDisclaimer(date) {
@@ -8875,13 +8871,13 @@ function provenanceTierLabel(c) {
    NOT as claim rows (an absence is not a claim record). Text per the curated spec. */
 const NEGATIVE_FINDINGS_STATEMENT = "No credible public NUMERIC unit-serving margin was found for Google/Gemini, xAI/Grok, or Moonshot/Kimi in the 2026-07-12 sweeps (X + reputable non-X). This absence appears real, not a search failure — these labs disclose prices, architecture, or cost-reductions, but no realized serving margin.";
 
-/* ---------- exploration-config ranking + flagship-scope membership (M2) ---------- */
-/* row 499: `rentMultLeg` is a PROCUREMENT-POSTURE key like `rentMult`, so it belongs to
+/* ---------- exploration-config ranking + flagship-scope membership (membership contract) ---------- */
+/* the recorded review: `rentMultLeg` is a PROCUREMENT-POSTURE key like `rentMult`, so it belongs to
    perspective space — moving it must exit a config's identity exactly as moving the global
    multiplier does (P0-5), and a preset that carries one must declare it. */
-/* im-arc T2 (memo §6, 2026-08-22): kwh joins perspective space only so an
+/* : kwh joins perspective space only so an
    archived owned-TCO route can state its historical electricity pin explicitly. */
-/* im-arc T4 fold (2026-08-24), memo §6 [F10]: the four keys an archived reading needs to state
+/*  (2026-08-24),  [F10]: the four keys an archived reading needs to state
    its pre-fold bundle join the space so a route can DECLARE them at all — the same reason T2 had
    to add `kwh`. They are migration metadata, and `changedFieldsFromCentral` excludes every one of
    them from the route ranking below for exactly that reason. */
@@ -8890,9 +8886,9 @@ const PERSPECTIVE_SPACE_KEYS = ["hwMode", "kwh", "dcPerW", "dcLifeYears", "capex
 const EXPLORATION_ORDER_BASIS = "fewest changed registry fields from the central configuration";
 function changedFieldsFromCentral(p) {
   const central = PERSPECTIVES.find(x => x.id === "median").set;
-  /* im-arc T2 (memo §6): the historical electricity pin preserves the route; it is migration
+  /* : the historical electricity pin preserves the route; it is migration
      metadata, not another authored lever in the route ranking.
-     im-arc T4 fold (2026-08-24, memo §6 [F10]): the same is true of the four further pin keys the
+      (2026-08-24,  [F10]): the same is true of the four further pin keys the
      T4 bundle needs. A route that had to state six migration values to keep reproducing must not
      thereby rank as a six-lever route — the ranking is about what its AUTHOR changed. */
   /* Which of a route's own `set` keys are migration metadata is DECLARED BY THE ROUTE, in
@@ -8910,25 +8906,25 @@ function rankExplorations(list) {
     (changedFieldsFromCentral(a) - changedFieldsFromCentral(b)) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
 }
 /* Range membership is DEFINED at the flagship scope — Claude Opus 4.x at the explicit
-   Reference 15:1/60% traffic profile — and computed, never hand-set (M2). At any other
+   Reference 15:1/60% traffic profile — and computed, never hand-set (membership contract). At any other
    model/traffic the UI recomputes live and shows drift; configs are never hidden on drift. */
 const FLAGSHIP_SCOPE = { modelId: "opus", traffic: { mode: "explicit", profileId: "reference" } };
-// IM3 exit-gate fix 1 (unanimous, empiricist enumeration): every flagship-scope numeric emitter
+// Renormalization disclosure: every flagship-scope numeric emitter
 // needs the fleetRenderable condition welded alongside the margin, not just the margin. Exposed
 // as a separate function (explorationFlagshipMargin's own signature — a bare number — stays
 // unchanged; it is pinned in tests/snapshots.test.mjs and mcp-server/test/parity.test.mjs) so
 // every caller that needs the weld computes the workload once and reads both off it.
 function explorationFlagshipWorkload(p) {
   const m = MODELS.find(x => x.id === FLAGSHIP_SCOPE.modelId);
-  /* b9 M5 (§15 reference pin, third site): a range-exploration route's AUTHORED-range membership
+  /*  (public-evidence reference): a range-exploration route's AUTHORED-range membership
      is a property of its procurement/utilization/stack construction, defined at the flagship
-     scope. The lab-lead prior is an orthogonal axis (plan §6.7) and would silently re-bucket every
+     scope. The lab-lead prior is an orthogonal axis and would silently re-bucket every
      authored route — and these margins are quoted inside the FA's higher-justifications copy,
-     which is M6's surface. Pinned at the trend-0 reference; live divergence from the authored
+     which is the answer surface. Pinned at the trend-0 reference; live divergence from the authored
      range is already first-class and loud (withinAuthoredRange / authoredRangeLabel drift). */
   const st = pinReferenceLevers(applyPresetSettings(m, p, FLAGSHIP_SCOPE.traffic));
   const out = workload(st);
-  /* im-vet-six-repairs (2026-09-20), Astra xhigh review finding 1 — BLOCKING. Every exploration
+  /*  (2026-09-20), Astra xhigh review finding 1 — BLOCKING. Every exploration
      route card, and the connector's route objects beside them, rendered the renderability
      disclosure with NO membership, which is the one input that makes the clause say a fleet was
      reduced. After the E1 withdrawal each card read "all 5 of 5 declared fleet legs" while seven
@@ -8961,7 +8957,7 @@ function explorationComputedBucket(p) {
 
 /* Retired analyst-reconstruction presets (v2.1.3 preset redesign, P0-4 de-naming).
    DECISION: new ids + migration map (NOT transform-in-place). Rationale: the permalink-v4
-   loader (M4) normalizes retired ids through this map BEFORE PERSPECTIVES.find() (P0-6), so
+   loader normalizes retired ids through this map BEFORE PERSPECTIVES.find() (P0-6), so
    every shipped v3 link resolves to the numeric-identical successor vector below with zero
    numeric breakage — while no person-named id remains addressable as a live config. The keys
    are permalink tokens already minted into shipped links: they must stay byte-matchable; they
@@ -8970,7 +8966,7 @@ function explorationComputedBucket(p) {
    migrated pair reproduces its shipped margin exactly. */
 const RETIRED_PERSPECTIVES = { teortaxes: "x80-v3", zephyr: "x80-v4", semi: "x90-v1", skeptic: "x60-v3" };
 
-/* im-arc T3 (plan §4.1, owner answer d-20260822-4c26 2026-08-22): derive
+/* Adopted 2026-08-22: derive
    provider membership from MODELS.lab and the flagship ordering from the existing
    dossier registry. This is a projection, not a duplicate registry: adding or moving
    a preset cannot silently leave the MCP company's model list stale. */

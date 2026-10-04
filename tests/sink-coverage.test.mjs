@@ -18,6 +18,8 @@ const assert = (name, cond, detail = "") => {
   if (!cond) failures++;
 };
 
+// Registry re-minted 2026-10-04: editorial comments and neutral provenance changed sink snippets;
+// the same 612 claim sinks remain classified, with no unmatched sink and no number moved.
 const REGISTRY = JSON.parse(readFileSync(join(HERE, "sink-registry-v22.json"), "utf8"));
 
 /* ---------- (a) pinned scanned-file manifest ---------- */

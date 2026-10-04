@@ -92,7 +92,7 @@ All four agents independently reached the same headline verdict — **do not imp
 
 **Confidence:**
 - *High* (all four converge, ~85–90% self-reported) that the **direction — revise before implement — is correct**, and high on the specific B/E/C/D adjudications, because the load-bearing ones rest on reproduced arithmetic (the xAI 26.95%/36.52% conflict) and primary-source checks, not reasoning-by-proxy.
-- *Medium* on **version ambition (D2)** and **whether the human test blocks ship (D3)** — both depend on a deadline and a resourcing decision that none of the four agents had, so they are owner inputs, not analysis gaps.
+- *Medium* on **version ambition (D2)** and **whether the human test blocks ship (D3)** — both depend on a deadline and a resourcing decision that none of the four agents had, so they are authorial inputs, not analysis gaps.
 - The confidence is downgraded on exactly one class of claim the Empiricist grounded and others asserted: treat the persona phase as an *idea generator with no established error rate*, not validation.
 
 **The seven P0-before-implementation conditions** (consolidated from all four P0 lists):
@@ -107,7 +107,7 @@ All four agents independently reached the same headline verdict — **do not imp
 
 **Two live defects to fix regardless of the plan** (Empiricist-found, currently shipped): the `_xjdr` blockquote alters "2.1 sec TTFT overage" → "average" and drops his 61-second p95 without marking the omission; both are attribution-fidelity errors the *next* review will flag independently of anything in v2.2. These are near-free and should ride along with the §0 deploy.
 
-**Gaps where Risk Analyst's failure modes are not addressed by Architect's design:** the git/rollback boundary, the v3-permalink private-rate exposure, and the reproduced v2-default-equality lossy-migration bug. Fold these into the B contract (P0 #1) and the rollback step (P0 #6).
+**Gaps where Risk Analyst's failure modes are not addressed by Architect's design:** the git/rollback boundary, the v3-permalink private-rate exposure, and the reproduced v2-default-equality lossy-migration bug. Include these in the B contract (P0 #1) and the rollback step (P0 #6).
 
 **Conditions that would change the recommendation:**
 - *Hard near-term deadline* → ship the scoped Traffic-Mix version as **v2.1.2** (Architect's Alternative 2) — same seven P0s, lower version ambition, full ontology stays OUT. The P0s don't relax; only the badge does.

@@ -613,7 +613,7 @@ What does exist is:
 | **Conversation URL** | archived privately |
 | **Request ID** | `req_1784158091135_t995vc` |
 | **Completion** | `complete` at elapsed `45m43s`; `completion_path: dom_fallback`; project `Ashitaorbis` confirmed |
-| **Commissioned** | by owner 2026-07-15, round 2 (follow-on to the "Targeted 4") |
+| **Commissioned** | on 2026-07-15, round 2 (follow-on to the "Targeted 4") |
 
 ## Provenance
 
@@ -622,7 +622,7 @@ What does exist is:
 - **Citation normalization:** the response was read from ChatGPT's backend/DOM and citation anchors
   are already rendered as readable markdown links (`[source+N](url)`) — there were **no**
   private-use-unicode (`U+E200/E201/E202`) anchors to normalize. Report text is otherwise verbatim.
-- **Provenance routing:** any site change this dive justifies enters through `research/update-queue.md`
+- **Provenance routing:** any site change this dive justifies enters through the recorded update queue
   (Q-AUTO items), never via direct edits to the site/engine/annex/tracked numbers.
 
 <details><summary>Dispatched prompt (verbatim)</summary>

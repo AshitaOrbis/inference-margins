@@ -13,38 +13,38 @@ ceiling, a milestone and a region fill are single values by construction.
 
 | id | registered content | basis | observation | source | class |
 |---|---|---|---|---|---|
-| `us-industrial` | $0.0617 / $0.0871 / $0.1053 per kWh | analyst-set | selected-span | `research/dives/im-arc/electricity-gptpro-2026-08-23.md` *(private working note, not published)* | analyst-set |
-| `cn-coastal` | $0.0890 / $0.0980 / $0.1100 per kWh | measured/credibly-reported | tariff-derived-delivered | `research/dives/im-arc/electricity-fable-2026-08-23.md` *(private working note, not published)* | measured/credibly-reported |
-| `cn-western` | $0.0600 / $0.0710 / $0.0870 per kWh | measured/credibly-reported | tariff-derived-delivered | `research/dives/im-arc/electricity-gptpro-2026-08-23.md` *(private working note, not published)* | measured/credibly-reported |
+| `us-industrial` | $0.0617 / $0.0871 / $0.1053 per kWh | analyst-set | selected-span | electricity study of 2026-08-23 *(not published separately)* | analyst-set |
+| `cn-coastal` | $0.0890 / $0.0980 / $0.1100 per kWh | measured/credibly-reported | tariff-derived-delivered | electricity study of 2026-08-23 *(not published separately)* | measured/credibly-reported |
+| `cn-western` | $0.0600 / $0.0710 / $0.0870 per kWh | measured/credibly-reported | tariff-derived-delivered | electricity study of 2026-08-23 *(not published separately)* | measured/credibly-reported |
 
 ## Named facilities
 
 | id | registered content | basis | observation | source | class |
 |---|---|---|---|---|---|
-| `xai-colossus-c1` | Colossus C1, Memphis, Tennessee; mixed installed aggregate 220,000 / 225,000 / 230,000 across h100, h200, gb200 — no public per-SKU split (allocation: unsplit); milestone 100,000 h100 (2026-06-05) | per observation | per observation | `research/dives/im-arc/electricity-fable-2026-08-23.md` *(private working note, not published)* | partial / purpose-built-ai |
-| `xai-colossus-ii` | Colossus 2, South Memphis/Whitehaven, Tennessee; 110,000 gb200 (point); 110,000 gb300 (point) | per observation | per observation | `research/dives/im-arc/electricity-subagent-named-facilities-2026-08-23.md` *(private working note, not published)* | partial / purpose-built-ai |
+| `xai-colossus-c1` | Colossus C1, Memphis, Tennessee; mixed installed aggregate 220,000 / 225,000 / 230,000 across h100, h200, gb200 — no public per-SKU split (allocation: unsplit); milestone 100,000 h100 (2026-06-05) | per observation | per observation | electricity study of 2026-08-23 *(not published separately)* | partial / purpose-built-ai |
+| `xai-colossus-ii` | Colossus 2, South Memphis/Whitehaven, Tennessee; 110,000 gb200 (point); 110,000 gb300 (point) | per observation | per observation | named-facility study of 2026-08-23 *(not published separately)* | partial / purpose-built-ai |
 
 ## Programmes (not facilities)
 
 | id | registered content | basis | observation | source | class |
 |---|---|---|---|---|---|
-| `deepseek-h800-serving-2025` | Disclosed V3/R1 production serving trace; average 1,814 / peak 2,224 h800 | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-rainier-trainium` | Project Rainier completed Trainium2 milestone; 500,000 trn2 (milestone) | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-trn2-in-use-2026` | Anthropic-wide Trainium2 in-use floor; 1,000,000 trn2 (floor) | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-tpu-commitment` | TPU v7 capacity commitment; 1,000,000 tpu7 (ceiling) | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-tpu7-direct-purchase-estimate` | Estimated direct-purchase component of the TPU v7 commitment; 400,000 tpu7 (point) | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-tpu7-gcp-rented-estimate` | Estimated GCP-rented component of the TPU v7 commitment; 600,000 tpu7 (point) | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-colossus-c1-capacity` | Claude capacity at Colossus C1; no public count | per observation | per observation | `research/dives/im-arc/electricity-fable-2026-08-23.md` *(private working note, not published)* | programme |
-| `anthropic-spacexai-capacity-contract` | Colossus mixed-NVIDIA reserved-capacity contract; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `google-spacexai-capacity-contract` | Future mixed-NVIDIA reserved-capacity contract; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `google-ironwood-ga` | Ironwood / TPU v7 Gemini serving platform; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
+| `deepseek-h800-serving-2025` | Disclosed V3/R1 production serving trace; average 1,814 / peak 2,224 h800 | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-rainier-trainium` | Project Rainier completed Trainium2 milestone; 500,000 trn2 (milestone) | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-trn2-in-use-2026` | Anthropic-wide Trainium2 in-use floor; 1,000,000 trn2 (floor) | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-tpu-commitment` | TPU v7 capacity commitment; 1,000,000 tpu7 (ceiling) | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-tpu7-direct-purchase-estimate` | Estimated direct-purchase component of the TPU v7 commitment; 400,000 tpu7 (point) | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-tpu7-gcp-rented-estimate` | Estimated GCP-rented component of the TPU v7 commitment; 600,000 tpu7 (point) | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-colossus-c1-capacity` | Claude capacity at Colossus C1; no public count | per observation | per observation | electricity study of 2026-08-23 *(not published separately)* | programme |
+| `anthropic-spacexai-capacity-contract` | Colossus mixed-NVIDIA reserved-capacity contract; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `google-spacexai-capacity-contract` | Future mixed-NVIDIA reserved-capacity contract; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `google-ironwood-ga` | Ironwood / TPU v7 Gemini serving platform; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
 | `ant-h20-production-node` | SGLang/Ant DeepSeek-R1 production node; 16 h20 (point) | per observation | per observation | `site/engine-data-v22.js` | programme |
 | `huawei-cloudmatrix-384` | CloudMatrix 384 DeepSeek-R1 demonstration; 384 ascend (point) | per observation | per observation | `research/provider-dives/deepseek-gptpro.md` | programme |
-| `deepseek-v4-ascend950-serving` | DeepSeek V4 support on Ascend 950-series supernodes; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `zai-third-party-cloud-inference` | Cloud-hosted GLM training, hosting, and inference; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `moonshot-kimi-k2-h800-training` | Kimi K2 H800 training topology; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `moonshot-alibaba-hopper-2026` | Reported Alibaba Hopper-generation compute arrangement; no public count | per observation | per observation | `research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md` *(private working note, not published)* | programme |
-| `alibaba-ulanqab-m890` | Kimi K3 production service on Ulanqab M890 instances; no public count | per observation | per observation | `research/dives/im-arc/electricity-subagent-china-tariffs-2026-08-23.md` *(private working note, not published)* | programme |
+| `deepseek-v4-ascend950-serving` | DeepSeek V4 support on Ascend 950-series supernodes; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `zai-third-party-cloud-inference` | Cloud-hosted GLM training, hosting, and inference; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `moonshot-kimi-k2-h800-training` | Kimi K2 H800 training topology; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `moonshot-alibaba-hopper-2026` | Reported Alibaba Hopper-generation compute arrangement; no public count | per observation | per observation | fleet-composition study of 2026-08-23 *(not published separately)* | programme |
+| `alibaba-ulanqab-m890` | Kimi K3 production service on Ulanqab M890 instances; no public count | per observation | per observation | China electricity-tariff study of 2026-08-23 *(not published separately)* | programme |
 
 ## Planning-rent quotes and the selection policy
 

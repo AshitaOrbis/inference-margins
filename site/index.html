@@ -71,7 +71,7 @@
       <a class="ghost-btn" href="#report">Full report ↓</a>
       <a class="ghost-btn" href="glossary.html">Glossary</a>
       <a class="ghost-btn" href="research/index.html">Research annex</a>
-      <!-- bq-1141 M13 (2026-09-25): the two appearance toggles took half the masthead's slots; they now
+      <!-- Adopted 2026-09-25: the two appearance toggles took half the masthead's slots; they now
            sit behind ONE control. Same ids, same handlers — containment only. -->
       <details class="appearance-menu">
         <summary class="ghost-btn appearance-toggle">Appearance</summary>
@@ -90,7 +90,7 @@
      Populated by showEpochDeprecationNotice() in app.js; stays hidden otherwise. -->
 <div id="epoch-deprecation-notice" class="epoch-deprecation-notice" role="alert" hidden></div>
 
-<!-- SHARED-LINK BANNER (row 499, owner ruling ccb4a1 2026-08-06): whenever a ?s= token resolves,
+<!-- SHARED-LINK BANNER (the recorded review, the adopted decision 2026-08-06): whenever a ?s= token resolves,
      the reader is looking at SOMEBODY ELSE'S saved parameters, not this page's own assumptions.
      That distinction was previously carried only by a sentence inside the scenario note, well
      below the hero — a reader could quote the headline without ever learning whose numbers it
@@ -104,15 +104,15 @@
   <summary><strong>Methods, assumptions and limitations</strong> — what this calculator does and deliberately does not model; read before quoting numbers</summary>
   <ul>
   <li><strong>The metric.</strong> Serving margin = 1 − <a href="glossary.html#serving-cost">serving cost</a> ÷ <a href="glossary.html#effective-price">effective price</a>, for the selected <a href="glossary.html#traffic-mix">traffic mix</a>. Its full technical name, said here once, is <em>unit direct-serving contribution margin</em>. Effective price is the <a href="glossary.html#list-price">list price</a> after the selected cache-read price, batch share and negotiated discount — a modeled figure, not observed provider revenue. With batch share and discount at 0% it is simply list price; the provider cards' replays are computed that way and the public-data scenario is not. Serving cost counts accelerator time — rented or owned, at the selected <a href="glossary.html#cost-basis">cost basis</a> — the serving software's throughput, and paid idle capacity, which is charged to the tokens served by dividing by <a href="glossary.html#utilization">utilization</a>. It does not separately model support, research and development, sales, revenue shares, free traffic, or unbilled retries and storage. It is neither a company's cost of revenue (COGS) nor a company gross margin.</li>
-    <!-- bq-1141 M4/M8 (2026-09-25): the standfirst's second and third paragraphs moved HERE, after the
+    <!-- Adopted 2026-09-25: the standfirst's second and third paragraphs moved HERE, after the
          metric, so the page opens on one sentence and the methods box opens on what is measured. The
-         pre-repair "Superseded readings" item moved verbatim to the changelog (owner standing rule
+         pre-repair "Superseded readings" item moved verbatim to the changelog (the adopted history rule
          nd94bbc: version history belongs in a changelog). -->
     <li><strong>How the page's numbers relate, for Claude Opus.</strong> The calculator opens on the GPT-5.6 Pro estimate's own settings unless you choose another default: its author states <strong>83.1% at list price</strong>, and the calculator reads <strong>about 82%</strong> at the same settings today — its card explains the gap. This page's <a href="glossary.html#public-data-scenario">public-data scenario</a> — planning rents, 50% utilization, the Reference mix, no assumed efficiency lead — reads <strong>about 58%</strong> at effective price: a model result under public-data assumptions, not a guaranteed minimum for actual margins, and not an estimate of them. The same settings with the page's adopted 3-month <a href="glossary.html#algorithmic-lead">algorithmic lead</a> read <strong>about 68%</strong>. A second estimate, Fable 5's, reads <strong>≈77%</strong> at effective price. The <strong>90–95%</strong> figure repeated in the discourse needs assumptions beyond this page's public-data scenario. Every number here is a modeled <a href="glossary.html#reading">reading</a> from public sources and labeled assumptions; nothing is any provider's actual ledger.</li>
     <li><strong>Data dates and how each accelerator's speed was set.</strong> The newest material on this page is dated <strong>October 1, 2026</strong> (the GPT-6.1 Sol estimate), and five token prices were corrected to what their vendors charge on September 20, 2026 (<a href="research/changelog.html">changelog</a>); a price or input that shows no effective date of its own is as of July 15, 2026. Each accelerator's speed was set its own way and says so on its row (its <a href="glossary.html#calibration-class">calibration class</a>): TPU v7 is an analyst-set bridge from the same platform; Trainium 2/3 carry a joint coefficient fitted across other hardware families, with no matched serving measurement of their own; Rubin is a projection from its announced shape only. Where the model does not fit an accelerator's memory at the assumed batch, the row shows a smaller batch or no number. Every slider documents its sources.</li>
     <li><strong>Which kind of price you assume moves the answer by tens of points.</strong> It is not the widest lever on this page: on the xAI card below, sweeping <a href="glossary.html#utilization">utilization</a> across the range this page offers moves the same reading further still — <strong>99 points</strong> against the valuation choice's <strong>72</strong>. It is simply the lever most often left unstated when a margin figure is quoted. On the same Grok 4.5 fleet and the same workload, the calculator reads <strong>~91%</strong> if the accelerator-hour is valued at short-run cash cost, <strong>~63%</strong> at full-cycle owned cost, and <strong>~19%</strong> at what a customer pays for that hour. Those are three answers to three different questions, not a disagreement — which is why a figure from one <a href="glossary.html#cost-basis">cost basis</a> cannot be set beside a figure from another.</li>
     <li><strong>Each accelerator's speed was set its own way, and no one number transfers between them.</strong> Fitted rows reproduce their declared calibration points; H100/H200 use an explicit H800-family transfer; TPU v7 is an analyst-set same-platform bridge; Trainium uses an out-of-family joint coefficient without a matched serving anchor; GB300 is analyst-set at an assumed operating point; Rubin is projection-only. The live roofline then resolves compute, high-bandwidth memory (HBM) and interconnect terms at the selected operating point. A single cross-platform scalar previously failed (mean error 47% across three measured platforms), and the physically informed follow-up also failed its whole-platform gate (<a href="research/methods-loao.html">methods note</a>).</li>
-    <li><strong>Three kinds of price, and where electricity is counted.</strong> every price on this page is typed to one of exactly three cost bases — <strong>on-demand rent</strong> (published rate cards; the China public-cloud preset), <strong>planning rent</strong> (the registered low- and committed-term rates this page plans on, and its default), and <strong>owned cost</strong>, also called total cost of ownership (TCO), built from purchase price, power, the datacenter and operations. The page never silently substitutes one basis for another inside one number, and the suite fails the build if it does; a fleet declared with some legs rented and some owned is allowed, and says so on the leg. The three valuation replays on the xAI card (cash cost, owned cost, opportunity cost) are a separate axis layered on a rent basis, not a fourth basis. <strong>Electricity dollars are explicit only under owned cost</strong>; under rent bases they are embedded in the rent — decomposing rent without TCO assumptions would be fabrication, so rent lenses show only the implied physical energy (info-only). <strong>Serving energy (Wh per M tokens)</strong> is computed for every leg and every lens as operating power × power usage effectiveness (PUE) ÷ achieved throughput at the engine's own operating point. Three declared conventions: (1) operating power is the <em>thermal design power (TDP) proxy</em> — no per-accelerator operating-power measurement is public (a typed <code>boardPowerW</code> override hook exists, currently null everywhere); (2) <em>no utilization divisor</em> — the dollar path allocates paid idle to served tokens, while the Wh figure deliberately does not: it is the physical intensity at the operating point, so it diverges from the electricity-$ path, which does divide by utilization. Idle boards do draw power; this page does not model that draw, so the Wh figure is an operating-point intensity and not a fleet-average one; (3) cache reads are charged the same analyst-set 5%-of-prefill fraction the cost side uses, as a proxy. Scope is <em>accelerator × PUE</em> only: the one full-stack telemetry anchor in this corpus (accelerators ≈58% of per-prompt energy, a 1.72× stack overhead) implies a full-stack figure ≈1.4× above this page's number at the default PUE 1.25.</li>
+    <li><strong>Three kinds of price, and where electricity is counted.</strong> Every price on this page is typed to one of exactly three cost bases — <strong>on-demand rent</strong> (published rate cards; the China public-cloud preset), <strong>planning rent</strong> (the registered low- and committed-term rates this page plans on, and its default), and <strong>owned cost</strong>, also called total cost of ownership (TCO), built from purchase price, power, the datacenter and operations. The page never silently substitutes one basis for another inside one number, and the suite fails the build if it does; a fleet declared with some legs rented and some owned is allowed, and says so on the leg. The three valuation replays on the xAI card (cash cost, owned cost, opportunity cost) are a separate axis layered on a rent basis, not a fourth basis. <strong>Electricity dollars are explicit only under owned cost</strong>; under rent bases they are embedded in the rent — decomposing rent without TCO assumptions would be fabrication, so rent lenses show only the implied physical energy (info-only). <strong>Serving energy (Wh per M tokens)</strong> is computed for every leg and every lens as operating power × power usage effectiveness (PUE) ÷ achieved throughput at the engine's own operating point. Three declared conventions: (1) operating power is the <em>thermal design power (TDP) proxy</em> — no per-accelerator operating-power measurement is public (a typed <code>boardPowerW</code> override hook exists, currently null everywhere); (2) <em>no utilization divisor</em> — the dollar path allocates paid idle to served tokens, while the Wh figure deliberately does not: it is the physical intensity at the operating point, so it diverges from the electricity-$ path, which does divide by utilization. Idle boards do draw power; this page does not model that draw, so the Wh figure is an operating-point intensity and not a fleet-average one; (3) cache reads are charged the same analyst-set 5%-of-prefill fraction the cost side uses, as a proxy. Scope is <em>accelerator × PUE</em> only: the one full-stack telemetry anchor in this corpus (accelerators ≈58% of per-prompt energy, a 1.72× stack overhead) implies a full-stack figure ≈1.4× above this page's number at the default PUE 1.25.</li>
     <li><strong>Cache writes:</strong> billable write premiums (OpenAI 1.25×; Anthropic 1.25×/2× by TTL) are modeled revenue-side via the cache-write sliders, default off; the serving-cost side is unchanged because prefill produces the keys and values (KV) regardless. Cache storage, transfer, retention, replication and reads-per-write are unmodeled and may be material.</li>
     <li><strong>Context length is now modeled, not free-form:</strong> the traffic-mix profile's fixed input/output lengths feed the decode and prefill roofline directly (KV footprint, fabric traffic, HBM/compute binding terms, feasibility capping) — it is not a slider you set independently, but it is no longer ignored. <strong>Still not modeled:</strong> time-to-first-token and time-per-output-token (TTFT/TPOT) latency targets, KV-cache lifecycle and storage billing, speculative-decoding acceptance, unbilled retries/safety reruns (a served-vs-billed overhead you can approximate with the stack-efficiency slider), and free traffic.</li>
     <li><strong>Traffic-mix axis (v2.1.2):</strong> the Traffic mix selector owns the I/O ratio and cache-hit share only — profiles carry provenance-honest names (a disclosure, a named deployment, a stated convention; no generic "chat/coding" archetypes). SLA/interactivity, service class and cache lifecycle remain modeled elsewhere; the full workload ontology is future work. The serving-side reuse share and the billable cached-input share are DIFFERENT observables; by default the calculator assumes them equal (a labeled assumption you can now break with the "Billable cached-input share" slider). The assumption is material: on the Opus flagship scenario at the public-evidence reference (algorithmic lead 0 months), billable cached share 0% / =serving / 95% spans 75.3% / 58.4% / 31.0% margin — a billing sensitivity starting from the public-data scenario's settings, so these are hypothetical calculator readings, not observed margins; the lead-adjusted baseline carries the adopted 3-month algorithmic lead, so its levels sit higher while the spread stays the same shape. Replay presets lock their traffic (it is part of the published operating point); the hero's scenario-preset span holds the selected traffic fixed and therefore excludes traffic-mix uncertainty.</li>
@@ -122,7 +122,7 @@
     <li><strong>Algorithmic lead — a labeled scenario prior, not a measurement.</strong> the "Algorithmic lead" slider asks how many months a lab's private serving stack is ahead of <em>published open practice</em>, in <em>residual</em>, non-hardware, accelerator-portable efficiency this page does not otherwise model. It converts through <code>E = rate^(months/12)</code> at a ratified 3×/yr (applying that cross-model progress rate to RESIDUAL SERVING efficiency at fixed model geometry is an additional, unvalidated modeling assumption, separate from any uncertainty about the number of months; halving ≈7.57 months — Gundlach et al., <a href="https://arxiv.org/abs/2511.23455">arXiv:2511.23455</a>, MIT FutureTech, with Epoch AI data), and modeled cost-out divides by E in every serving phase. The per-lab defaults are an <strong>adopted scenario prior</strong>: Anthropic / OpenAI / Google +3 months, DeepSeek +1, the other frontier Chinese labs 0, and any lab with no adopted prior 0 and labeled unassessed. <strong>Validity conditions:</strong> only residual gains belong here — hardware, quantization, batching and caching are modeled by their own controls, and representing them here as well counts them twice. <strong>Axes never conflate:</strong> capability lag (~4 months, Epoch-measured) is a different axis and is never this slider; on the <em>efficiency</em> axis the open Chinese labs define the published-practice zero, which is why their prior is 0 rather than negative. <strong>Refused rates:</strong> the published token-<em>price</em> series (9×–900×/yr — Epoch's price index, a16z's 10×, the AI Index's 280×) measure published prices, not serving efficiency; this slider never uses them. Under a published-operating-point replay the slider is inert and locked at 0 — the lab's actual efficiency is already inside the replay, so months on top would double-count.</li>
     <li><strong>Family multipliers — a broad stress lever, sourced by nothing.</strong> one ±% efficiency multiplier per hardware family (NVIDIA / TPU / Trainium / Ascend) multiplies achieved throughput for every card in that family, in every serving phase, in any fleet. It answers "suppose this family's real serving efficiency is N% off our calibration" and is a declared stress, never a measurement. It does not change declared batch, precision tuples, capacity or feasibility. A custom-fleet leg rides its donor's family; a renamed leg tagged <em>unclassified</em> is exempt and says so on the leg.</li>
     <li><strong>The interlock, and why the stack multiplier was redefined.</strong> the family multipliers and the algorithmic-lead prior are both <em>broad, unspecified</em> efficiency assumptions, so composing them silently would count the same improvement twice. Editing either group locks the other with the reason stated inline; because the ratified lead defaults start nonzero, the first family edit <em>replaces</em> the prior — the lead is set to 0 and locked, loudly, so every headline move stays attributable. Unlocking is always available, always deliberate, and leaves a persistent stacking banner. Explicitly-modeled levers — serving precision, serving regime, the cache controls — are never locked by this machinery; where they overlap the prior you get a non-blocking warning instead. In the same spirit, <em>serving-stack efficiency</em> is now defined as measured stack <em>composition</em> relative to published open practice: its 1.0 tick names the same referent as the lead slider's zero, and the old "frontier lab (assumed)" label is retired, because a frontier assumption is precisely what the lead slider now represents defensibly (1.25× ≈ +2.4 months at 3×/yr). Setting both above their baselines fires an overlap warning; the §10 dive replays keep their anchored stack values unchanged.</li>
-    <!-- b9 spec-decode LEVER — manifest row 16, span (8), RATIFIED (esc-20260801T042349Z-20c444d8).
+    <!-- spec-decode LEVER — manifest the recorded review, span (8), RATIFIED (the note of 2026-08-01).
        PINNED INSERTION BOUNDARIES: T-21a extracts the bytes between these two markers and asserts
        byte-equality with the composition evaluated from site/engine.js's canonical constants. The
        methods box is STATIC HTML, so nothing composes this at runtime — this is the one shipped
@@ -130,7 +130,7 @@
        the why-line and the tip drifted apart in rounds 6 and 9. Edit the constant and this file
        together or the suite fails. -->
     <li><strong>Speculative-decode credit.</strong> A scenario lever, off by default, that multiplies modelled decode throughput only — prefill has no autoregression to speculate on. It models no acceptance rate, draft cost or verification overhead: it is a credit you declare, not a mechanism this page runs. It is available only from the "no MTP/disagg" stack setting (0.7). 0.7 is the only point on this scale whose MTP-free meaning is portable to any scenario. Other settings carry no portable claim either way — a published replay may document its own stack in detail, but that documents that operating point, not the scale. Crediting speculative decoding from any other setting could therefore count part of the same improvement twice, and this page refuses rather than guess. The stack setting is not what proves a leg speculation-free, and an MTP-free setting would not prove it — speculative decoding does not require MTP. That work is done per leg: every leg carries a typed baseline status, and only legs whose own baseline is documented to exclude speculative uplift are creditable at all. The setting gates the scale; the per-leg status gates the leg. What that costs you: the 0.7 setting also removes disaggregation, so this page cannot express "disaggregation without speculative decoding" — those fleets are under-credited here rather than risk double-counting, which is the direction this page prefers to be wrong in. Energy follows the throughput multiplier by construction of this model — speculative decoding also burns draft-and-verify energy this page does not measure. Legs whose deployed efficiency absorbs speculation, and legs whose status this page cannot establish, are exempt and say so.</li>
-    <!-- b9 spec-decode LEVER — span (8) END -->
+    <!-- spec-decode LEVER — span (8) END -->
     <li><strong>Implementation &amp; regression consistency — not empirical validation:</strong> every §10 card's headline regenerates from the "§10 dive replay" perspective, and a deterministic release suite (several hundred assertions, published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the <a href="tests/roofline-diagnostic.mjs">roofline diagnostic</a>) gates every deploy. These tests prove the <em>code</em> is stable and reproduces its own authored targets — they do <strong>not</strong> validate the economic inputs: out-of-sample flagship validations, calibrated coverage tests, and per-provider production-telemetry matches are all zero, and the single cross-platform transfer test that was run failed (§3).</li>
   </ul>
 </details>
@@ -138,9 +138,9 @@
 <!-- Position dossier: PERSPECTIVE position + all loaded-link IDENTITY warnings (RANGE
      EXPLORATION counterfactual, [modified scenario/range exploration], drift/off-scope, migration
      notes). Stays near the hero. The MODEL block moved down under the Model selector (below). -->
-<!-- q-im-desktop-followups (2026-08-18), item 1: the dossier offered BOTH routes — the injected
+<!-- the adopted decision (2026-08-18), item 1: the dossier offered BOTH routes — the injected
      #explain-trigger-dossier popup AND the inline <summary> — at both viewports and both pointer
-     types (measured: dossierRoutesVisible = 2). It is the same duplication owner annotation
+     types (measured: dossierRoutesVisible = 2). It is the same duplication an adopted change
      n0556ef marked on the methods box one element higher, and it now takes the same ruled
      treatment: coarse pointer → popup only, fine pointer → disclosure only.
      WHY THE NOTE MOVED OUT OF THE SUMMARY. #preset-note is not part of the route: it is the
@@ -160,10 +160,10 @@
   </details>
 </div>
 
-<!-- ===== PROJECTIONS BAND — full page width, above the calculator (owner note 11b102) ===== -->
+<!-- ===== PROJECTIONS BAND — full page width, above the calculator (the author's note) ===== -->
 <section class="projections" id="projections" aria-label="Projections">
-    <!-- THE HEADLINE RESULT TILE — HOISTED INTO THE TOP BLOCK, 2026-08-18 (owner ruling
-         q-im-tile-position, verbatim: "The 83% tile should be at the top, alongside fable estimate,
+    <!-- THE HEADLINE RESULT TILE — HOISTED INTO THE TOP BLOCK, 2026-08-18 (the adopted decision
+         the adopted decision, verbatim: "The 83% tile should be at the top, alongside fable estimate,
          as I described in note 11"). That answers the POSITION half of annotation nad7e98 ("This
          should be at the top, not way down here, and collapsed, not fully expanded and rambling") —
          the one item of the eleven nobody could decide for him. The tile now LEADS the projections
@@ -186,10 +186,10 @@
          names, and none of it a qualifier of the number above it. -->
     <section class="hero-lead" aria-label="Headline result">
       <div class="tile tile-hero">
-        <!-- THE ONE WINDOW (owner voice note note-20260912T180812Z-c9eaac, 2026-09-12): this tile names the
+        <!-- THE ONE WINDOW (the author's note, 2026-09-12): this tile names the
              scenario it shows, marks it when it is the default, swaps scenario in place, and offers "set as
              default" on every scenario. Filled by renderScenarioWindow() in app.js.
-             bq-3550 (2026-09-27, GPT Pro internal review R1/R2): the window is three real containers in
+              (2026-09-27, GPT Pro internal review R1/R2): the window is three real containers in
              reading order — its identity above the number (#win-identity), the scenario's assumptions under
              the gross-margin line (#win-facts), and its controls (#win-head) after every sentence that
              qualifies the number — so source, keyboard and visual order agree. -->
@@ -199,10 +199,10 @@
         <div class="tile-status" id="out-margin-status"></div>
         <div class="tile-delta tile-gm"><strong>Not a company gross margin.</strong> Serving margin only — see the methods box.</div>
         <div class="win-facts-slot" id="win-facts"></div>
-        <!-- bq-2345: the two operands and the division, on the face, from the same state as the result.
+        <!-- : the two operands and the division, on the face, from the same state as the result.
              Filled by renderHeroCalc() in app.js; empty whenever no result is computed. -->
         <div id="out-calc" hidden></div>
-        <!-- im-arc T1 (plan §1 T1, owner answer d-20260822-4c26 2026-08-22): rent is
+        <!-- Adopted 2026-08-22: rent is
              visible on the result face, never left implicit in a hidden decomposition. -->
         <div class="tile-delta rent-segment" id="out-rent-segment"></div>
         <div class="tile-delta" id="out-margin-unanchored"></div>
@@ -211,30 +211,30 @@
              page does not keep (the same content-dependent rule syncTailTrigger() follows). -->
         <details class="hero-full" id="hero-full" hidden>
           <summary class="hero-full-summary">The stated reading, the bounded dial ranges and the mix envelope</summary>
-          <!-- The preset author's OWN stated median over their OWN stated range, quoted (owner ruling
+          <!-- The preset author's OWN stated median over their OWN stated range, quoted (the adopted decision
                2026-08-07 19:02Z, adjudicated 2026-08-08 as the quoted-adjudicator reading). NOT the
                computed compounded range, which stays behind its opt-in in #out-margin-band. Absent on
                any preset that states nothing. Filled by renderStatedReading() in app.js. -->
           <div class="tile-stated" id="out-stated-reading" hidden></div>
-          <!-- row 499 (owner note 507081): the band the reader's own declared ranges imply. Hidden
+          <!-- the recorded review (the author's note): the band the reader's own declared ranges imply. Hidden
                until something is bounded — a page that always shows a range teaches readers to
                ignore it. Filled by renderMarginBand() in app.js. -->
           <div class="tile-delta" id="out-margin-band" hidden></div>
-          <!-- owner ruling q-sliders-fleet-util-point (2026-08-09): the min / median / max the fleet
+          <!-- the adopted decision (2026-08-09): the min / median / max the fleet
                mix reaches over the provider distributions that sum to 100 %. A separate element from
                #out-margin-band on purpose — that one compounds INDEPENDENT dials over a box, this one
                solves a COUPLED axis over a polytope, and merging them would let a reader read one
                method into the other. Hidden until a provider share is bounded. Filled by
                renderMixBand() in app.js. -->
           <div class="tile-delta" id="out-mix-band" hidden></div>
-        </details><!-- /hero-full (owner ruling q-im-tile-position) -->
+        </details><!-- /hero-full (the adopted decision) -->
         <div class="tile-delta" id="out-margin-note"></div>
         <div class="win-head" id="win-head"></div>
       </div>
-      <!-- im-arc T1: the same traffic/fleet/model on the other procurement basis. A sibling,
+      <!-- : the same traffic/fleet/model on the other procurement basis. A sibling,
            not a tooltip or alternate tab, so both bases exist together on first paint. -->
       <div class="tile tile-owned" id="tile-owned">
-        <!-- im-arc T2 fix (Sol review 2026-08-23, finding P1-1): first paint
+        <!--  (corrected 2026-08-23): first paint
              uses the same all-section contract as the live counterpart renderer. -->
         <div class="tile-label" id="out-owned-label">If ALL sections were owned (TCO basis)</div>
         <div class="tile-value" id="out-margin-owned">—</div>
@@ -244,7 +244,7 @@
       </div>
     </section>
     <!-- HOISTED TO THE TOP, 2026-08-16; MOVED OUT OF THE 390 px CONTROLS RAIL AND UN-COLLAPSED,
-         2026-08-18 (owner notes 11b102 + bb3f19, verbatim: "The Fable display still isnt there
+         2026-08-18 (the author's notes , verbatim: "The Fable display still isnt there
          either way… point 11 was a spot where you had exactly what I wanted displayed at the start
          much lower in the page, and now you cant figure out how to do it" · "you have to actually
          understand it as being laid out on a desktop screen, not mobile, and anchored to where that
@@ -263,31 +263,31 @@
          beside it is 792 px — the block he judged on a desktop screen was being squeezed into a
          sidebar, which is why single-viewport verification at a 1400 px window still missed it.
          This block is therefore a FULL-WIDTH band above the calculator: the 83% tile and the two
-         estimates side by side (owner ruling q-im-tile-position, "The 83% tile should be at the
+         estimates side by side (the adopted decision, "The 83% tile should be at the
          top, alongside fable estimate, as I described in note 11"), stacking below 980 px where the
          layout collapses anyway. Section 5 keeps its heading and its expander and points here, so
          the report still reads in order and every #s5 link still resolves. -->
-    <!-- HOISTED TO THE TOP, 2026-08-16 (owner annotations, verbatim: "This should be at the top,
+    <!-- HOISTED TO THE TOP, 2026-08-16 (adopted requirement: "This should be at the top,
          how did it end up down here, this is almost exactly what I wanted" · "This should be at the
          top, not way down here, and collapsed, not fully expanded and rambling"). The two estimate
          cards and the stress test are the page's PROJECTIONS, so they sit with the answer tile
-         rather than 51% of the way down inside §5. Collapsed by default for the same reason: it is
-         a summary you open, not a wall you scroll past. §5 keeps its heading and its expander and
+         rather than 51% of the way down inside  Collapsed by default for the same reason: it is
+         a summary you open, not a wall you scroll past.  keeps its heading and its expander and
          points here, so the report still reads in order and every #s5 link still resolves. -->
     <div class="est-top" id="estimates-top">
       <h2 class="est-top-head"><strong>The two independent estimates</strong> — and the stress test under them</h2>
-    <!-- ESTIMATE CARDS — owner ruling q-margins-estimates-legibility-rebuild = A (2026-08-13):
+    <!-- ESTIMATE CARDS — the adopted decision = A (2026-08-13):
          the two cards REPLACE the verdict block that stood in this position; every word of that
          block is preserved verbatim inside the section expander below, demoted rather than
-         deleted. Owner ruling q-margins-estimates-headline-basis = A (same day): the card FACE
+         deleted. The adopted decision = A (same day): the card FACE
          carries the effective-billings basis, the list basis lives inside the expander. Build
-         spec: the estimates-cards spec of 2026-08-13 (private workspace record).
-         Owner ruling q-margins-cards-vintage = B (2026-08-16): the faces carry each adjudicator's
+         Specification adopted 2026-08-13.
+         Adopted 2026-08-16: the faces carry each adjudicator's
          ROUND-3 self-authored reading, so the headline and the calculator's opening state agree.
          The Pro round-3 reading is stated by its author at LIST basis only, so that face's basis
          line says so — quoting it at the effective price would fabricate a number its author never
          stated. The ROUND-2 readings these expanders used to narrate moved to the changelog on
-         2026-08-17 (owner standing rule nd94bbc: version history belongs in a changelog, not on
+         2026-08-17 (history rule: version history belongs in a changelog, not on
          the page) — verbatim, both pairs, nothing dropped. What stays here is provenance: which
          authored statement each face quotes, and which contextual review the analysis under it
          came from. That is citation; the rule is about narrating changes between versions.
@@ -344,12 +344,12 @@
       </details>
     </div>
     </div><!-- /estimates-top -->
-    <!-- MOVED INTO THE BAND, 2026-08-18 (d-im-desktop). Annotation nbc7fc1 says the answer tile
+    <!-- MOVED INTO THE BAND, 2026-08-18 (the adopted decision). Annotation nbc7fc1 says the answer tile
          "needs to be top with other projections". When the headline result tile and the estimates left
          .controls-col for this band, leaving the answer tile behind put it BELOW the evidence
          board while its own projections sat above it — a regression against nbc7fc1 introduced by
-         the fix for n95f678. It travels with them. Still collapsed by default, unchanged. -->
-    <!-- R3 Row 1 (design memo D-9): THE FINAL ANSWER — the owner's standing result
+         the scenario-identity fix. It travels with them. Still collapsed by default, unchanged. -->
+    <!-- R3 the recorded review (the design requirements): THE FINAL ANSWER — the adopted result
          surface. Populated by renderFinalAnswer() from engine finalAnswer() ONLY (the
          clean derived thesis baseline; live slider state can never move these values —
          a differs-note appears when the current scenario deviates). Visible under BOTH
@@ -360,11 +360,11 @@
       <div class="tile tile-final-answer">
         <div class="tile-label">Public-data scenario <button class="info" data-tip="final-answer" aria-haspopup="dialog" aria-label="Explanation: Public-data scenario">ⓘ</button></div>
         <div class="tile-value" id="fa-planning-point">—</div>
-        <!-- bq-1141 M2 (P1 finding 1, accepted 2026-09-12): the identity is the tile's normal-sized status
+        <!-- Adopted 2026-09-12: the identity is the tile's normal-sized status
              label, directly under the number, instead of a 7-word qualifier typeset at 34 px. Split from
              the ONE engine token by renderFinalAnswer(), so the two can never disagree. -->
         <div class="tile-status" id="fa-planning-status"></div>
-        <!-- OWNER ANNOTATION nbc7fc1 (2026-08-16): "Same issue with this needing to be collapsed by
+        <!-- Adopted 2026-08-16: "Same issue with this needing to be collapsed by
              default, also title is rambling, a few words max, and needs to be top with other
              projections." Above the fold now: the label, the number, a title-length subject, and
              the reading the page opens on. Everything below moves inside #fa-full, collapsed.
@@ -374,22 +374,22 @@
              containment change; the vocabulary sweeps, the sink registry and the MCP twin all
              read the same nodes with the same bytes. -->
         <div class="tile-delta" id="fa-subject-short"></div>
-        <!-- b9 M6 (FA memo §2.1, D-6): the FIVE-PART surface, IN THE MEMO'S ORDER —
+        <!--  (FA ): the FIVE-PART surface, IN THE REQUIRED ORDER —
              1 public-evidence repaired reference · 2 ratified-prior default · 3 adopted analyst
              reading · 4 no verified central comparator · 5 the bridge. The order is normative, not
              incidental: the bridge explains how the four above it relate, so it can only come last,
-             and the no-comparator statement qualifies the analyst reading it follows. M5's single
+             and the no-comparator statement qualifies the analyst reading it follows. The single
              interim-pin line (#fa-lever-reference) is RETIRED — its own text promised this rework.
              The must-not-be-called node is its OWN element because it is the one vocabulary-exempt
-             span, and node identity is the exemption unit (§2.7 D-6c). -->
-        <!-- row 499 (owner ruling: the FINAL ANSWER block carries the hero numbers). FIRST, because
+             span, and node identity is the exemption unit (node identity). -->
+        <!-- the recorded review (the adopted decision: the FINAL ANSWER block carries the hero numbers). FIRST, because
              it is the reading the visitor is actually looking at when they arrive; the two readings
              below it are the page's own published constructions and keep their order. -->
-        <!-- b9 M6 (§20 R-2/R-3): trigger 1 — the hyperlink-styled "Deeper explanation" affordance
+        <!--  (explanation affordance): trigger 1 — the hyperlink-styled "Deeper explanation" affordance
              beneath the numbers, opening the near-fullscreen, non-grayed popup. Present on BOTH
              pointer classes (R-3 invites the duplication); on coarse pointers it REPLACES the inline
              expansion, so there is exactly one way in and it is the legible one.
-             MOVED ABOVE #fa-full, 2026-08-18 (q-im-desktop-followups): it STAYS ON THE FACE because
+             MOVED ABOVE #fa-full, 2026-08-18 (the adopted decision): it STAYS ON THE FACE because
              it is the route that must not require opening the disclosure it replaces, and it now
              sits BEFORE that disclosure for design gate P0-1's stated reason — "the trigger sits
              BEFORE its disclosure so its position is stable whether the section is open or closed".
@@ -400,9 +400,9 @@
                 data-fa-explain="answer">Read the public-data scenario in full</button>
         <details class="fa-full" id="fa-full">
         <summary class="fa-full-summary">The full reading — scope, bases, bands and spans</summary>
-        <!-- bq-1141 M3 builder half / owner annotation #9 (2026-08-16, "collapsed"): the opening-state reading
-             moved inside the collapse, still FIRST. Which number the page opens on is the owner's fork
-             (q-margins-opening-number-2026-09-25); this move changes no order between the tiles. -->
+        <!-- Collapsed 2026-08-16: the opening-state reading
+             moved inside the collapse, still FIRST. Which number the page opens on is the adopted selection
+             (the adopted decision); this move changes no order between the tiles. -->
         <div class="explain-body fa-block" id="fa-landing-reading"></div><!-- 0 -->
         <div class="tile-delta" id="fa-subject"></div>
         <div class="explain-body fa-block" id="fa-reference-reading"></div><!-- 1 -->
@@ -410,11 +410,11 @@
         <div class="explain-body fa-block" id="fa-must-not-be-called"></div>
         <div class="explain-body fa-block" id="fa-convergence"></div>
         <div class="explain-body fa-block" id="fa-prior-reading"></div><!-- 2 -->
-        <!-- T5 rec 5 (GPT Pro 2026-07-29 §6, finding SV-2): #fa-most-plausible USED TO SIT HERE,
+        <!-- T5 rec 5 (GPT Pro 2026-07-29 , finding SV-2): #fa-most-plausible USED TO SIT HERE,
              as block 3 of THE ANSWER. The reviewer required that it move out of THE ANSWER and
              be renamed, and that evidence ranking be separated from the calculator's answer
              hierarchy; the retired wording is quoted in full in the review itself
-             (research/reviews-2026-07-29-gptpro-github-v22.md §6 rank 5) and pinned in
+             (the review of 2026-07-29) and pinned in
              tests/fa-justifications.test.mjs, and is deliberately NOT reproduced here — the
              shipped page must not carry it in any form, comments included. The node now lives in
              #fa-analyst-hypothesis, a sibling of this section. THE ANSWER's hierarchy is
@@ -426,8 +426,8 @@
         <div class="tile-delta" id="fa-lens-span"></div>
         <div class="tile-delta" id="fa-traffic-span"></div>
         <div class="tile-delta" id="fa-exclusion"></div>
-        <!-- MOVED INSIDE #fa-full, 2026-08-18 (q-im-desktop-followups, item 2). Owner annotation
-             nbc7fc1 asked for a short title and a COLLAPSED tile; measured on the shipped page the
+        <!-- MOVED INSIDE #fa-full, 2026-08-18 (the adopted decision, item 2). The adopted requirement
+             called for a short title and a COLLAPSED tile; measured on the shipped page the
              tile was still 1,444 px tall on desktop and 3,512 px on mobile with #fa-full closed,
              and #fa-higher alone was 837 px / 2,548 px of it — the justification stack was never
              collapsed, only the full reading was. It moves into the tile's own expander.
@@ -439,8 +439,8 @@
              NOTHING IS DELETED, no node loses its id, no emitter writes anywhere new, and no
              computed value moves — the WIDE 270-state parity hash is the executed proof. -->
         <div class="explain-body fa-block" id="fa-basis-declaration"></div>
-        <!-- FA higher-justifications subsection (memo im4-fa-justifications v7, J-2):
-             owner-ruled first-class explanations. Header + one collapsible entry per
+        <!-- FA higher-justifications subsection (shared engine tokens):
+             First-class explanations. Header + one collapsible entry per
              group; every rendered string IS the engine token (byte-identical across
              transports); links come from the typed group records. -->
         <div class="fa-higher" id="fa-higher">
@@ -456,10 +456,10 @@
           <div class="tile-delta" id="fa-higher-header"></div>
           <div id="fa-higher-entries"></div>
         </div>
-        <!-- b9 M6 (FA memo §5, D-7): the analyst-gap executive summary. Collapsed by default
+        <!--  (FA ): the analyst-gap executive summary. Collapsed by default
              (R-4). FOUR of the five rows are engine-computed from the calculator's own default
              state with exactly ONE control moved; the fifth names the spec-decode lever and shows
-             no number, by design. Ordered by the owner's declared plausibility order and never by
+             no number, by design. Ordered by the declared plausibility order and never by
              margin. Emitter class `executive-summary` (weld-required — the four value-bearing rows
              carry the fleet weld; the refusal row emits no value token and carries none). -->
         <section class="fa-exec" id="fa-exec-summary" aria-label="What would have to be true">
@@ -476,16 +476,16 @@
           <span id="fa-invitation"></span>
           <a id="fa-annex-link" href="research/final-answer-rationale.html">Read the rationale and evidence chain →</a>
         </div>
-        </details><!-- /fa-full (owner annotation nbc7fc1) -->
+        </details><!-- /fa-full (collapsed by default) -->
         <div class="tile-delta" id="fa-differs" hidden></div>
       </div>
     </section>
 
-    <!-- T5 rec 5 (GPT Pro 2026-07-29 §6, finding SV-2). This section is OUTSIDE the
+    <!-- T5 rec 5 (GPT Pro 2026-07-29 , finding SV-2). This section is OUTSIDE the
          final-answer section — not merely below something inside it, which is what a first cut
          did and what the independent review caught — so the external analyst hypothesis is no
          longer any part of the calculator's answer hierarchy, in the DOM or in the accessibility
-         tree. Ancestry is asserted in tests/fa-m6-b9.test.mjs, not merely document order. It sits
+         tree. Ancestry is asserted in the final-answer tests, not merely document order. It sits
          immediately before the evidence board, where ranked external claims belong. The claim
          itself is unchanged; only its rank in the page's hierarchy is. -->
     <section class="fa-analyst-hypothesis" id="fa-analyst-hypothesis"
@@ -531,7 +531,7 @@
     <!-- Selector dissolve (layout feedback 2026-07-12): the standalone selector row is gone. The
          Model selector is injected by buildControls() into the "Model architecture" section; the
          Traffic-mix selector into the "Traffic mix (I/O + cache)" section; the Perspective select is
-         a HIDDEN state carrier (set only programmatically — routes, replays, saved scenarios, §10
+         a HIDDEN state carrier (set only programmatically — routes, replays, saved scenarios,
          links, the permalink codec). These elements are PARKED here between rebuilds; buildControls
          moves them into their sections (and rescues them back here before wiping #controls). Do NOT
          remove ids — the codec (encode/decode) and ~15 call sites read #persp-preset/#model-preset. -->
@@ -578,8 +578,7 @@
     <aside id="form-debt-disclosure" class="form-debt-disclosure" role="note" aria-live="polite"></aside>
 
 
-    <!-- The SUPPORTING output tiles. The headline margin tile left this row on 2026-08-18 (owner
-         ruling q-im-tile-position) and now leads the projections block above; these four stay in
+    <!-- The SUPPORTING output tiles. The headline margin tile left this row on 2026-08-18 (the adopted decision) and now leads the projections block above; these four stay in
          causal order, after the inputs that drive them. #out-feas-note is still the second source
          of the tails popup whose first source lives in the hoisted tile — the popup is what pairs
          them, not adjacency. -->
@@ -634,7 +633,7 @@
         <span class="chart-sub" id="chart-hw-sub"></span>
       </figcaption>
       <div id="chart-hw" class="chart"></div>
-      <!-- im-arc T1: point-valued side-by-side basis tables; ranged rows arrive in T3. -->
+      <!-- : point-valued side-by-side basis tables; ranged rows arrive in T3. -->
       <div id="hw-two-tables" class="hw-two-tables"></div>
       <p class="chart-note" id="chart-hw-nvlink-note" hidden></p>
     </figure>
@@ -1074,9 +1073,9 @@
 
   </div>
 
-  <!-- ASTRA PRO ESTIMATES (bq-3351; owner ruling d-20260925-im-astra-pro-estimates-category-and-drop-same-assumption-section).
-       This category REPLACES the one-lens normalized comparison table that stood here: the owner
-       judged it screenshottable speculation that read as a side-by-side ranking (note 4c71cb); its anchor #s10-normalized is
+  <!-- ASTRA PRO ESTIMATES (adjudicated 2026-09-25).
+       This category REPLACES the one-lens normalized comparison table that stood here: it was
+       judged screenshottable speculation that read as a side-by-side ranking (dated note); its anchor #s10-normalized is
        noted in the changelog. The card faces below are GENERATED from site/astra-pro-estimates.js by
        scripts/build-astra-pro-estimates.mjs — every number on them is the engine's result on a recorded operating point —
        and the chart is drawn from the same function at page load. -->
@@ -1095,7 +1094,7 @@
   <details class="prov ape-card" id="ape-claude-fable-5-1" data-ape-key="claude-fable-5-1">
     <summary><strong>Anthropic — Claude Fable 5.1</strong> <span class="prov-margin">serving margin <span class="ape-mid">~84%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">68%–90%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T060752Z-f9b29c</code>. Its own stated reading: 84.3% (68.4–90.3%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/claude-fable-5-1-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 84.3% (68.4–90.3%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive assumption is 400B active parameters; Anthropic has not published that number.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (claude-fable-5-1) · <strong>traffic:</strong> 50:1 input:output, 92% cache hits · <strong>fleet:</strong> GB200 NVL72 30% at $5.00/h · GB300 NVL72 20% at $6.50/h · TPU v7 Ironwood 50% at $1.50/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 400B active / 8000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~89%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1107,7 +1106,7 @@
   <details class="prov ape-card" id="ape-claude-opus-5-5" data-ape-key="claude-opus-5-5">
     <summary><strong>Anthropic — Claude Opus 5.5</strong> <span class="prov-margin">serving margin <span class="ape-mid">~78%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">68%–84%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T060752Z-19c6fb</code>. Its own stated reading: 78.5% (67.9–84.0%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/claude-opus-5-5-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 78.5% (67.9–84.0%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The estimate turns on an assumed 200B active parameters—not a disclosed Opus 5.5 size.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (claude-opus-5-5) · <strong>traffic:</strong> 30:1 input:output, 85% cache hits · <strong>fleet:</strong> H200 10% at $3.50/h · GB200 NVL72 35% at $5.00/h · GB300 NVL72 20% at $6.00/h · TPU v7 Ironwood 35% at $2.70/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 200B active / 2500B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~80%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1119,7 +1118,7 @@
   <details class="prov ape-card" id="ape-claude-sonnet-5" data-ape-key="claude-sonnet-5">
     <summary><strong>Anthropic — Claude Sonnet 5</strong> <span class="prov-margin">serving margin <span class="ape-mid">~84%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">74%–89%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T063700Z-19b839</code>. Its own stated reading: 83.5% (74.0–88.8%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/claude-sonnet-5-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 83.5% (74.0–88.8%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The deciding assumption is 100B active parameters, putting modeled serving cost near $0.23 per million mixed tokens.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (claude-sonnet-5) · <strong>traffic:</strong> 12:1 input:output, 75% cache hits · <strong>fleet:</strong> H100 SXM 5% at $2.50/h · H200 15% at $3.80/h · GB200 NVL72 25% at $5.00/h · GB300 NVL72 5% at $6.50/h · TPU v7 Ironwood 50% at $2.70/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 100B active / 1000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~81%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1131,7 +1130,7 @@
   <details class="prov ape-card" id="ape-claude-sonnet-5-5" data-ape-key="claude-sonnet-5-5">
     <summary><strong>Anthropic — Claude Sonnet 5.5</strong> <span class="prov-margin">serving margin <span class="ape-mid">~84%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">62%–90%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-28, research run <code>pr-20260928T182812Z-e802e3</code>. Its own stated reading: 83.9% (62.4–89.9%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/claude-sonnet-5-5-astra-pro.html">one research run on 2026-09-28</a>. Its own stated reading: 83.9% (62.4–89.9%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The deciding assumption is 100B active parameters, giving modeled serving cost of about $0.225 per million mixed tokens.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (claude-sonnet-5-5) · <strong>traffic:</strong> 12:1 input:output, 75% cache hits · <strong>fleet:</strong> H100 SXM 5% at $2.50/h · H200 15% at $3.80/h · GB200 NVL72 25% at $5.00/h · GB300 NVL72 5% at $6.50/h · TPU v7 Ironwood 50% at $2.70/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 100B active / 1000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~81%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1143,7 +1142,7 @@
   <details class="prov ape-card" id="ape-claude-haiku-4-5" data-ape-key="claude-haiku-4-5">
     <summary><strong>Anthropic — Claude Haiku 4.5</strong> <span class="prov-margin">serving margin <span class="ape-mid">~73%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">54%–85%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T064303Z-3cdb62</code>. Its own stated reading: 73.4% (54.4–84.5%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/claude-haiku-4-5-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 73.4% (54.4–84.5%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> Latency-oriented serving (<code>interact: &quot;fast&quot;</code>) limits batch amortization; balanced serving would add about 16 margin points.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (claude-haiku-4-5-20251001) · <strong>traffic:</strong> 8:1 input:output, 50% cache hits · <strong>fleet:</strong> H200 40% at $3.25/h · GB200 NVL72 20% at $5.00/h · TPU v7 Ironwood 40% at $2.40/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 20B active / 200B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~72%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1155,7 +1154,7 @@
   <details class="prov ape-card" id="ape-gpt-6-astra" data-ape-key="gpt-6-astra">
     <summary><strong>OpenAI — GPT-6 Astra</strong> <span class="prov-margin">serving margin <span class="ape-mid">~95%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">89%–97%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T060752Z-64acdf</code>. Its own stated reading: 94.6% (89.5–96.7%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gpt-6-astra-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 94.6% (89.5–96.7%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The deciding assumption is 200B active parameters, which puts modeled output serving cost near $1.85/M against the $50/M output tariff.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gpt-6-astra, current alias read 2026-09-25 UTC) · <strong>traffic:</strong> 12:1 input:output, 80% cache hits · <strong>fleet:</strong> H200 30% at $3.50/h · GB200 NVL72 50% at $4.50/h · GB300 NVL72 20% at $6.00/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 200B active / 6000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~93%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1167,7 +1166,7 @@
   <details class="prov ape-card" id="ape-gpt-6-sol" data-ape-key="gpt-6-sol">
     <summary><strong>OpenAI — GPT-6 Sol</strong> <span class="prov-margin">serving margin <span class="ape-mid">~85%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">58%–92%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-28, research run <code>pr-20260928T182812Z-844f4e</code>. Its own stated reading: 85.0% (57.8–91.6%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gpt-6-sol-astra-pro.html">one research run on 2026-09-28</a>. Its own stated reading: 85.0% (57.8–91.6%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The unmeasured 100B-active assumption puts modeled output cost near $1.08/M against the $10/M output tariff.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gpt-6-sol, current alias read 2026-09-28) · <strong>traffic:</strong> 12:1 input:output, 80% cache hits · <strong>fleet:</strong> H200 30% at $3.50/h · GB200 NVL72 50% at $4.50/h · GB300 NVL72 20% at $6.00/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 100B active / 5000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~82%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1179,7 +1178,7 @@
   <details class="prov ape-card" id="ape-gpt-6-1-sol" data-ape-key="gpt-6-1-sol">
     <summary><strong>OpenAI — GPT-6.1 Sol</strong> <span class="prov-margin">serving margin <span class="ape-mid">~84%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">42%–91%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-10-01, research run <code>pr-20261001T142917Z-7bb1e4</code>. Its own stated reading: 84.1% (41.9–91.1%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gpt-6-1-sol-astra-pro.html">one research run on 2026-10-01</a>. Its own stated reading: 84.1% (41.9–91.1%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The carried, unmeasured 100B-active assumption keeps modeled output cost near $1.08/M against the $10/M output tariff.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gpt-6.1-sol, current API alias as read 2026-10-01) · <strong>traffic:</strong> 12:1 input:output, 80% cache hits · <strong>fleet:</strong> H200 30% at $3.50/h · GB200 NVL72 50% at $4.50/h · GB300 NVL72 20% at $6.00/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 100B active / 5000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~81%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1191,7 +1190,7 @@
   <details class="prov ape-card" id="ape-gpt-5-6-terra" data-ape-key="gpt-5-6-terra">
     <summary><strong>OpenAI — GPT-5.6 Terra</strong> <span class="prov-margin">serving margin <span class="ape-mid">~91%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">81%–94%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T070104Z-bfdf05</code>. Its own stated reading: 90.8% (80.6–94.5%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gpt-5-6-terra-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 90.8% (80.6–94.5%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive assumption is 60B active parameters: a moderately sparse workhorse, not a price-derived fraction of Sol.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gpt-5.6-terra API alias as served 2026-09-25) · <strong>traffic:</strong> 8:1 input:output, 65% cache hits · <strong>fleet:</strong> H100 SXM 5% at $2.60/h · H200 25% at $3.40/h · GB200 NVL72 50% at $4.50/h · GB300 NVL72 20% at $6.00/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 60B active / 1200B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~88%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1203,7 +1202,7 @@
   <details class="prov ape-card" id="ape-gpt-5-6-luna" data-ape-key="gpt-5-6-luna">
     <summary><strong>OpenAI — GPT-5.6 Luna</strong> <span class="prov-margin">serving margin <span class="ape-mid">~66%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">36%–76%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T070104Z-7304c2</code>. Its own stated reading: 65.7% (36.1–76.5%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gpt-5-6-luna-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 65.7% (36.1–76.5%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The assumed <code>dsr1</code> attention/KV geometry sets a substantial decode-cost floor, even at 12B active parameters.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gpt-5.6-luna) · <strong>traffic:</strong> 8:1 input:output, 60% cache hits · <strong>fleet:</strong> H100 SXM 20% at $2.60/h · H200 30% at $3.25/h · GB200 NVL72 50% at $4.50/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 12B active / 160B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~45%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1215,7 +1214,7 @@
   <details class="prov ape-card" id="ape-gemini-3-8-flash" data-ape-key="gemini-3-8-flash">
     <summary><strong>Google — Gemini 3.8 Flash</strong> <span class="prov-margin">serving margin <span class="ape-mid">~92%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">72%–94%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T110805Z-8276b2</code>. Its own stated reading: 92.2% (72.4–94.3%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gemini-3-8-flash-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 92.2% (72.4–94.3%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive cost assumption is $1.20 per all-in owned-TPU-equivalent chip-hour, rather than Google Cloud’s retail rental rate.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gemini-3.8-flash) · <strong>traffic:</strong> 8:1 input:output, 50% cache hits · <strong>fleet:</strong> TPU v7 Ironwood 100% at $1.20/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 30B active / 600B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~91%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>qwen3c</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1227,7 +1226,7 @@
   <details class="prov ape-card" id="ape-gemini-3-1-pro" data-ape-key="gemini-3-1-pro">
     <summary><strong>Google — Gemini 3.1 Pro</strong> <span class="prov-margin">serving margin <span class="ape-mid">~92%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">84%–94%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T064303Z-45d766</code>. Its own stated reading: 91.6% (83.8–93.9%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/gemini-3-1-pro-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 91.6% (83.8–93.9%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> An inferred $1.36 all-in owned-TPU chip-hour—not Google Cloud’s $5.40 resale tariff—carries the result.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (gemini-3.1-pro-preview) · <strong>traffic:</strong> 8:1 input:output, 40% cache hits · <strong>fleet:</strong> TPU v7 Ironwood 100% at $1.36/h · <strong>utilization:</strong> 70% · <strong>model:</strong> 100B active / 2000B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~91%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1239,7 +1238,7 @@
   <details class="prov ape-card" id="ape-grok-4-6" data-ape-key="grok-4-6">
     <summary><strong>xAI — Grok 4.6</strong> <span class="prov-margin">serving margin <span class="ape-mid">~81%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">66%–89%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T063700Z-042437</code>. Its own stated reading: 80.9% (65.9–89.2%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/grok-4-6-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 80.9% (65.9–89.2%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive assumption is owned Blackwell capacity costing $2.10–$2.50 per accelerator-hour, all-in—not public-cloud rental prices.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (grok-4.6) · <strong>traffic:</strong> 8:1 input:output, 60% cache hits · <strong>fleet:</strong> GB200 NVL72 50% at $2.10/h · GB300 NVL72 50% at $2.50/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 200B active / 1500B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~80%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is not published).</p>
@@ -1251,7 +1250,7 @@
   <details class="prov ape-card" id="ape-deepseek-v4-1-flash" data-ape-key="deepseek-v4-1-flash">
     <summary><strong>DeepSeek — DeepSeek V4.1-Flash</strong> <span class="prov-margin">serving margin <span class="ape-mid">~59%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">36%–67%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T064303Z-706503</code>. Its own stated reading: 58.8% (35.6–66.5%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/deepseek-v4-1-flash-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 58.8% (35.6–66.5%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive input is $1.60 per all-in H800-equivalent hour, not a hyperscaler rental rate.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (deepseek-flash -&gt; DeepSeek-V4.1-Flash, released 2026-09-10) · <strong>traffic:</strong> 8:1 input:output, 60% cache hits · <strong>fleet:</strong> H800 (China) 100% at $1.60/h · <strong>utilization:</strong> 100% · <strong>model:</strong> 16B active / 763B total, fp4. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~45%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is published but matches no stated row).</p>
@@ -1263,7 +1262,7 @@
   <details class="prov ape-card" id="ape-qwen3-8-max" data-ape-key="qwen3-8-max">
     <summary><strong>Alibaba — Qwen3.8-Max</strong> <span class="prov-margin">serving margin <span class="ape-mid">~79%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">72%–88%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T070105Z-4d5c81</code>. Its own stated reading: 79.2% (71.8–88.3%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/qwen3-8-max-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 79.2% (71.8–88.3%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> An assumed $3.26 all-in GB300-equivalent GPU-hour is the decisive input.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (qwen3.8-max-0902 (alias qwen3.8-max-2026-09-02), released 2026-09-02) · <strong>traffic:</strong> 8:1 input:output, 60% cache hits · <strong>fleet:</strong> GB300 NVL72 100% at $3.26/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 95B active / 2400B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~78%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>qwen3c</code> attention geometry (a declared approximation — this model's architecture is published but matches no stated row).</p>
@@ -1275,7 +1274,7 @@
   <details class="prov ape-card" id="ape-kimi-k3" data-ape-key="kimi-k3">
     <summary><strong>Moonshot AI — Kimi K3</strong> <span class="prov-margin">serving margin <span class="ape-mid">~88%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">77%–92%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T060752Z-9a9c6e</code>. Its own stated reading: 87.8% (76.6–91.9%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/kimi-k3-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 87.8% (76.6–91.9%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The decisive assumption is $2.20 per all-in H800-equivalent accelerator-hour, not a disclosed Moonshot procurement rate.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (kimi-k3) · <strong>traffic:</strong> 12:1 input:output, 70% cache hits · <strong>fleet:</strong> H800 (China) 100% at $2.20/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 104B active / 2800B total, fp4. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~85%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the calculator's blank <code>custom</code> row on the <code>dsr1</code> attention geometry (a declared approximation — this model's architecture is published but matches no stated row).</p>
@@ -1287,7 +1286,7 @@
   <details class="prov ape-card" id="ape-glm-5-3" data-ape-key="glm-5-3">
     <summary><strong>Zhipu — GLM-5.3</strong> <span class="prov-margin">serving margin <span class="ape-mid">~74%</span> <span class="prov-ci">(this calculator on Astra Pro's central inputs, at list price; its low- and high-margin scenarios: <span class="ape-span">36%–82%</span>)</span></span></summary>
     <div class="prov-body">
-      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, 2026-09-25, research run <code>pr-20260925T063701Z-31c65b</code>. Its own stated reading: 74.5% (35.6–81.9%).</p>
+      <p class="ape-prov"><strong>Estimated by GPT-6 Astra Pro</strong>, <a href="research/glm-5-3-astra-pro.html">one research run on 2026-09-25</a>. Its own stated reading: 74.5% (35.6–81.9%).</p>
       <p class="ape-lines"><strong>What decides it, in its own words:</strong> The deciding input is <code>interact: &quot;balanced&quot;</code>: the calculator’s shared-batch throughput, rather than its low-batch <code>fast</code> posture, carries the headline.</p>
       <p class="cardmeta"><strong>Metric:</strong> blended serving margin at list price (glm-5.3, first-party metered text API, reasoning_effort=max) · <strong>traffic:</strong> 10:1 input:output, 60% cache hits · <strong>fleet:</strong> Ascend 910C 100% at $2.20/h · <strong>utilization:</strong> 65% · <strong>model:</strong> 40B active / 753B total, fp8. <em>Its own operating point — not cross-model comparable.</em> At the page's Reference traffic (15:1, 60% cache) and list price, the same inputs compute ~70%.</p>
       <p class="cardmeta"><strong>Carrier:</strong> the stated geometry of the site's <code>glm</code> row (GLM 5.2 (744B/40B)), with every magnitude, price, fleet and traffic input from this run.</p>
@@ -1381,7 +1380,7 @@
     var form = document.getElementById("feedback-form");
     if (!form || !window.fetch) return;
     var statusEl = form.querySelector(".fb-status");
-    /* LOADER STATE MACHINE (GPT Pro review pr-20260902T153840Z-bce1bb, finding 2).
+    /* LOADER STATE MACHINE (GPT Pro review a research run on 2026-09-02, finding 2).
          idle -> loading -> ready
                        \-> failed  -> idle      (definitive error: ONE retry permitted)
                        \-> slow                 (warning only — the request is NOT cancelled)
@@ -1492,18 +1491,18 @@
 
 <footer class="footer">
   <p>Built July 9, 2026 from public sources, with a deep dive per provider (§10) a <a href="research/index.html">research annex</a> and a <a href="research/changelog.html">changelog</a>. Analysis: Claude (Fable 5) + GPT-5.6 Pro; X sweep: Grok 4.5; source discovery: Exa + Parallel. An open scenario model, not financial disclosure; all figures are estimates unless linked to a primary source.</p>
-  <!-- bq-1141 M20 (2026-09-25): the build, manifest and connector mechanics were the last ~230 words of
+  <!-- Adopted 2026-09-25: the build, manifest and connector mechanics were the last ~230 words of
        the page, in the reader's path. Same words, same links, same #release-commit span — behind one
        summary line. -->
   <details class="footer-build">
     <summary>Build, verification and machine access</summary>
-    <p>Release manifest: methodology v3.0 · engine v3.0.0-2026-08-13 · data as of 2026-10-01 · private build commit <span id="release-commit">7253059a</span> (the public repo <a href="https://github.com/AshitaOrbis/inference-margins">github.com/AshitaOrbis/inference-margins</a> is an allow-list mirror with its own commit history — this SHA is private-source build provenance and will not resolve there; match the deployment-input bytes via the asset manifest below, not this SHA) · release gates published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the traffic contract and application browser suite. The local browser suite does not activate the feedback challenge; the live submission flow requires a separate end-to-end check. Deployment-input integrity: <a href="asset-manifest.sha256">/asset-manifest.sha256</a> (a sha256sum manifest of every <code>site/</code> input except the manifest itself; <code>_headers</code> is deployment configuration parsed by Pages and is not fetchable as a static asset; byte-exact vs the release-stamp commit). Machine access: the same engine and claims registry are served as a read-only <strong>MCP connector</strong> at <code>https://margins-mcp.ashitaorbis.com/mcp</code> (add as a custom connector in a Claude client, no auth; responses carry the same honest-labeling contract — status-fused margins with selection receipts, never a bare number). Revision history: see the review + changelog pages in the <a href="research/index.html">annex</a>.</p>
+    <p>Release manifest: methodology v3.0 · engine v3.0.0-2026-08-13 · data as of 2026-10-01 · private build commit <span id="release-commit">87647f78</span> (the public repo <a href="https://github.com/AshitaOrbis/inference-margins">github.com/AshitaOrbis/inference-margins</a> is an allow-list mirror with its own commit history — this SHA is private-source build provenance and will not resolve there; match the deployment-input bytes via the asset manifest below, not this SHA) · release gates published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the traffic contract and application browser suite. The local browser suite does not activate the feedback challenge; the live submission flow requires a separate end-to-end check. Deployment-input integrity: <a href="asset-manifest.sha256">/asset-manifest.sha256</a> (a sha256sum manifest of every <code>site/</code> input except the manifest itself; <code>_headers</code> is deployment configuration parsed by Pages and is not fetchable as a static asset; byte-exact vs the release-stamp commit). Machine access: the same engine and claims registry are served as a read-only <strong>MCP connector</strong> at <code>https://margins-mcp.ashitaorbis.com/mcp</code> (add as a custom connector in a Claude client, no auth; responses carry the same honest-labeling contract — status-fused margins with selection receipts, never a bare number). Revision history: see the review + changelog pages in the <a href="research/index.html">annex</a>.</p>
   </details>
 </footer>
 
 </div>
 <div id="tooltip" class="tooltip" role="tooltip" hidden></div>
-<!-- Script order (im-arc T2, memo research/im-arc-t2-sections-memo.md §4): hardware data
+<!-- Script order: hardware data
      -> region/DC data -> roofline -> engine -> custom-fleet schema -> app.
      Slice-3 (R7 Task 4) shipped data -> engine -> roofline -> app because
      engine-roofline-v22.js used to bind RD_TRAFFIC_PROFILES at its own PARSE TIME from
@@ -1516,7 +1515,7 @@
      TRAFFIC_PROFILES reference (renamed ED_TRAFFIC_PROFILES internally) from the
      already-loaded engine-data-v22.js global, so engine.js only needs to load after the data
      file too — its position relative to engine-roofline-v22.js no longer matters for
-     correctness, but this order matches the target the memo names. Reorder verified directly:
+     correctness, but this order matches the required load order. Reorder verified directly:
      both browser application suites (tests/run-app-tests.sh, site/tests/run-app-tests.sh) pass
      against this exact tag order (95/95 each). -->
 <script src="engine-data-v22.js"></script>

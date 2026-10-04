@@ -75,7 +75,7 @@ function logToolErrorSafely(where: string, err: unknown): void {
 export function wrapToolHandler(name: string, handler: (args: any) => any) {
   return async (args: any) => {
     try {
-      /* AWAITED (GPT Pro pr-20260902T173936Z-a81123, finding 2). Returning the handler's promise
+      /* AWAITED (corrected 2026-09-02). Returning the handler's promise
          un-awaited meant a REJECTION after the synchronous return escaped this try/catch entirely —
          so the sanitizer below covered only synchronous throws, while the Worker deliberately
          substitutes an ASYNC get_report. Awaiting is what makes the guarantee real rather than

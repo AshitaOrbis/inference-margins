@@ -7,7 +7,7 @@
    never summarized. htmlToText / decodeEntities / titleOf / ARCHIVE_NOTE are byte-identical
    copies of ../src/reports.ts (parity-checked by scripts/build.mjs — the build fails on drift).
 
-   RELEASE-BOUND (Pro review 2026-07-29 rec 6 / finding C-6; re-found 2026-08-16 as bq-1253).
+   RELEASE-BOUND (identified 2026-07-29; confirmed 2026-08-16).
    Until 2026-08-21 this module fetched document content from https://margins.ashitaorbis.com/
    at call time, so a Worker built at one release served another release's prose under the words
    "archived verbatim" — measured live that day: the deployed Worker's own bundled engine
@@ -26,7 +26,7 @@ export { RELEASE };
 export interface ReportEntry {
   id: string;
   title: string;
-  /* T5 rec 5, round 4b: "analyst-hypothesis" is a kind of its own — see the entry below and
+  /* Report identity: "analyst-hypothesis" is a kind of its own — see the entry below and
      mcp-server/src/reports.ts for why neither existing branch could describe it honestly. */
   kind: "annex-doc" | "report-section" | "front-page" | "final-answer" | "analyst-hypothesis";
   source_url: string;
@@ -53,7 +53,7 @@ export function htmlToText(html: string): string {
     .replace(/<script[\s\S]*?<\/script>/gi, "")
     .replace(/<style[\s\S]*?<\/style>/gi, "")
     .replace(/<!--[\s\S]*?-->/g, "");
-  /* b9 UX-B: the ten #report sections are now collapsed <details class="report-section"> wrappers,
+  /* Report sections: the ten #report sections are now collapsed <details class="report-section"> wrappers,
      whose <summary> carries a UI-only expand/collapse label. That label is CHROME, not document
      text, so it must not enter the MCP transport — without this strip `front-page` alone gains ~420
      characters and all eleven ids move. The rule is CLASS-SCOPED and anchored to the wrapper's own
@@ -71,7 +71,7 @@ export function htmlToText(html: string): string {
 }
 
 /* ---------- release archive read (no network; bytes are bundled, nothing is logged) ----------
-   rec 6 / C-6: the document this returns is the one baked into THIS Worker at build time, so a
+   Release provenance: the document this returns is the one baked into THIS Worker at build time, so a
    get_report answer and a run_scenario answer from the same Worker are always the same release.
    Fails closed on an id whose bytes are missing — which scripts/build.mjs already makes
    unreachable by gating catalog/archive coupling at build time; this is the runtime backstop. */
@@ -116,7 +116,7 @@ let catalog: Map<string, CatalogEntry> | null = null;
 export function reportCatalog(): Map<string, CatalogEntry> {
   if (!catalog) {
     catalog = new Map(CATALOG.map((item) => [item.id, makeEntry(item)]));
-    /* R3 Row 1 (design memo D-9): the FINAL ANSWER — the ONE live, engine-derived
+    /* Final-answer report: the FINAL ANSWER — the ONE live, engine-derived
        entry, rendered from THIS Worker's own bundled engine finalAnswer() token
        strings (one formatter — byte-identical to the site block and the Node
        transport; never fetched, never archived). */
@@ -128,14 +128,14 @@ export function reportCatalog(): Map<string, CatalogEntry> {
       sha256: null, // live engine render, not an archived document — release-bound by construction
       read: async () => {
         const fa = (E as any).finalAnswer();
-        // b9 M6: the worker twin renders the SAME token list as the Node transport (build-gated).
-        /* T5 rec 5 (GPT Pro 2026-07-29 §6, SV-2). `mostPlausibleLine` is NOT in this list any
+        // The worker twin renders the SAME token list as the Node transport (build-gated).
+        /* The finding of 2026-07-29. `mostPlausibleLine` is NOT in this list any
              more. The site moved that claim out of THE ANSWER into its own section; leaving it
              inside the report titled "THE FINAL ANSWER" would have left the connector contradicting
              the website and the annex — a third review caught exactly that, and it is the sharper
              version of the defect, because an MCP consumer cannot see the page to notice. The claim
-             is preserved, in its own catalog entry below, which is what the rec's "preserve the
-             source claim, but separate evidence ranking" asks for.
+             is preserved, in its own catalog entry below, which preserves the
+             source claim while separating evidence ranking.
              Everything else keeps its place: on the site #fa-higher ("why not the higher numbers")
              is still inside the answer tile, so the decomposition, header and entries stay here too.
              The connector mirrors the page's hierarchy exactly rather than inventing its own. */
@@ -149,11 +149,11 @@ export function reportCatalog(): Map<string, CatalogEntry> {
           ...fa.tokens.executiveSummaryRows].filter(Boolean).join("\n\n");
       },
     });
-    /* T5 rec 5: the relocated claim, as its own entry — the Worker twin of the Node catalog. */
+    /* Report identity: the relocated claim, as its own entry — the Worker twin of the Node catalog. */
     catalog.set("analyst-hypothesis", {
       id: "analyst-hypothesis",
       title: "STRONGEST EXTERNAL ANALYST HYPOTHESIS carried by this registry (adopted judgment, not a calculator output)",
-      /* T5 rec 5, round 4b — see mcp-server/src/reports.ts for the reason: the envelope is
+      /* Report identity — see mcp-server/src/reports.ts for the reason: the envelope is
          keyed off this tag, so "final-answer" here made get_report call an adopted analyst
          judgment a LIVE engine-derived result surface, in the same reply as a title saying
          it is not a calculator output. Mirrors the Node source exactly. */

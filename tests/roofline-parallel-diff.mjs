@@ -1,11 +1,11 @@
-// IM3 slice-3 identity harness — switched live engine vs reviewed roofline path.
+// Roofline identity harness — switched live engine vs reviewed roofline path.
 // Run: node tests/roofline-parallel-diff.mjs
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const E = require("../site/engine.js");
-/* b9 M5 fixture scope (M5 delta manifest) — REFERENCE-CLASS harness. This is the 496-point
+/* REFERENCE-CLASS harness. This is the 496-point
    PARALLEL-ROOFLINE identity check: it asserts the engine's live throughput path reproduces the
-   reviewed roofline core point-for-point. M5 multiplies the engine's RETURNED throughput by the
+   reviewed roofline core point-for-point. The scenario-prior revision multiplies the engine's RETURNED throughput by the
    ratified per-lab scenario prior (E = 1.3161 for Anthropic at +3 months), which is deliberately
    absent from the core — so every state here is pinned to the trend-0 / family-1.0 REFERENCE
    through the same constructor the final-answer surface uses. Every compared value is
@@ -176,7 +176,7 @@ const expectedRows = 496;
 // Post-review adjudication 2026-07-27: Trainium3 capacity reverts to the Neuron docs'
 // unit-explicit 144 GiB (review's SI re-read overturned); exactly one row returns
 // capped→finite (the Kimi/trn3 declared b=128 now fits at bFeas 140). 398/95/3 → 399/94/3.
-/* im-vet-model-estimates (2026-09-19), with the "explicit reviewed delta manifest" the comment
+/* tariff revision (2026-09-19), with the "explicit reviewed delta manifest" the comment
    above requires — 399/94/3 → 419/74/3, twenty rows capped → finite, and the manifest is that
    EVERY ONE of the twenty is a Zhipu row:
      glm47 (9): ascend|fast, gb300|balanced, h100|fast, h200|fast, h20|fast, h800|fast,

@@ -30,7 +30,7 @@ export const config = {
   annotations: { readOnlyHint: true, openWorldHint: false },
 };
 
-/* b9 M5: the route's flagship number is the reference-anchored membership value (the engine's
+/* Reference anchoring: the route's flagship number is the reference-anchored membership value (the engine's
    explorationFlagshipMargin, pinned to the public-evidence reference), while run_scenario
    reports what the calculator's ratified-prior default actually computes. This clause names the
    basis so the two can never read as a contradiction. MCP-only copy — it has no app.js twin, so
@@ -74,7 +74,7 @@ export function handler(args: Args): ToolResult {
     if (atModel) {
       const s2 = E.applyPresetSettings(atModel, p, { mode: "native" });
       const pct2 = E.workload(s2).margin * 100;
-      /* b9 M5: the verdict evaluates the SAME construction at the public-evidence reference —
+      /* Reference anchoring: the verdict evaluates the SAME construction at the public-evidence reference —
          welded to app.js's route note through APPJS_MIRROR. */
       const ref2 = E.workload(E.pinReferenceLevers(E.applyPresetSettings(atModel, p, { mode: "native" }))).margin * 100;
       const leversLive = Math.abs(ref2 - pct2) > 1e-9;
@@ -136,7 +136,7 @@ export function handler(args: Args): ToolResult {
         routes.map((r) => `${r.subtitle} — ${r.conditional}`).join(" · ") +
         (central_anchor ? ` ${central_anchor}` : "")
       : `${no_route_statement}${central_anchor ? " " + central_anchor : ""}`) +
-    // IM3 exit-gate fix 1/2/3 + R2 §1.4: the baseline fragment gates noun/token/weld on
+    // Baseline identity: the baseline fragment gates noun/token/weld on
     // the same central-eligibility decision as the receipt.
     ` The calculator's ${flagshipBaselineFragment()}. ${claims_in_range_hint}`;
 

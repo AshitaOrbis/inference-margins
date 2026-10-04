@@ -1,4 +1,4 @@
-/* Node runtime bridge for the R2 claim contracts (im4-r2-shipment-plan §1.1).
+/* Node runtime bridge for the claim contracts.
    Resolved relative to the compiled file (mcp-server/dist/claims.js → ../../site/…) —
    the same bridge pattern as engine.ts; this package NEVER re-implements a contract.
    The Worker build swaps in overrides/claims.ts (bundler import) — interface identical. */
