@@ -4010,7 +4010,8 @@ function dossierBlock(title, d, values) {
   if (d.anchor) {
     const bq = document.createElement("blockquote");
     bq.append(`“${d.anchor.quote}” `);
-    const a = document.createElement("a"); a.href = d.anchor.url; a.textContent = "[source]"; bq.append(a);
+    if (d.anchor.url) { const a = document.createElement("a"); a.href = d.anchor.url; a.textContent = "[source]"; bq.append(a); }
+    else { const s = document.createElement("span"); s.className = "anchor-unpublished"; s.textContent = "[quoted from its author\u2019s returned reading; not published separately]"; bq.append(s); }
     frag.append(bq);
   }
   const keys = Object.keys(d.params || {});

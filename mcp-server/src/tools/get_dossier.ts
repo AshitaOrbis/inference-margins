@@ -58,7 +58,7 @@ export function handler(args: Args): ToolResult {
     const labels = [...new Set(params.map((p) => p.evidence_label))].join(", ");
     const sentence =
       `Provenance dossier for ${m.name} (model preset, attribution: ${d.attribution}). ${d.who} ` +
-      (d.anchor ? `Anchor: "${d.anchor.quote}" (${d.anchor.url}). ` : "No anchor — nothing is sourced. ") +
+      (d.anchor ? `Anchor: "${d.anchor.quote}" (${d.anchor.url ? d.anchor.url : "quoted from its author's returned reading; not published separately"}). ` : "No anchor — nothing is sourced. ") +
       `${params.length} pinned parameters with evidence labels {${labels}}; values compose live from the preset registry — the dossier stores none. ` +
       `This is provenance, not an estimate; run_scenario derives estimates. ` +
       `Registry status: ${EVIDENCE_REGISTRY_STATUS_NOTE}.`;
@@ -89,7 +89,7 @@ export function handler(args: Args): ToolResult {
   const migrated = pid !== args.id ? ` (requested id "${args.id}" is retired; normalized to "${pid}" — numbers unchanged, the parameter vector was always page-authored and is now labeled as such)` : "";
   const sentence =
     `Provenance dossier for ${p.name} (${p.kind} perspective, attribution: ${d.attribution})${migrated}. ${d.who} ` +
-    (d.anchor ? `Anchor: "${d.anchor.quote}" (${d.anchor.url}). ` : "") +
+    (d.anchor ? `Anchor: "${d.anchor.quote}" (${d.anchor.url ? d.anchor.url : "quoted from its author's returned reading; not published separately"}). ` : "") +
     (params.length
       ? `${params.length} pinned parameters; values compose live from the preset registry — the dossier stores none. `
       : `This entry pins no parameters of its own (per-model replay). `) +

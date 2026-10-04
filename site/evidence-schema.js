@@ -16,7 +16,7 @@
    Pure data-contract module: no DOM, no engine, node-importable for tests. Follows the engine.js
    idiom (plain functions; module.exports guard + browser-global fallback at the bottom).
 
-   Governing plan: orchestration/plans/im-reengineer-defaults-2026-07-16.md — §3 WS-B ("contract
+   Governing plan: im-reengineer-defaults-2026-07-16 (private workspace plan) — §3 WS-B ("contract
    first"), council P0-3 (contracts before D2 so D2 inherits an evidence ontology instead of
    inventing one). Source findings welded to fields below:
      - cold-review #2  -> REQUIRED phase separation (prefill / decode); undecomposed "total" excluded.

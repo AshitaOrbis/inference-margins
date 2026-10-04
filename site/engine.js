@@ -30,7 +30,7 @@ const HW = {
 const HW_ORDER = ["h100", "h200", "gb200", "gb300", "h800", "h20", "tpu7", "trn2", "trn3", "ascend"];
 // generation timeline for the gen chart (adds a Rubin projection)
 const GEN_TIMELINE = ["h100", "h200", "gb200", "gb300"];
-const RUBIN = { name: "Vera Rubin NVL72 (proj.)", flopsFp8: 17.5, fp4: true, hbm: 288, bw: 22.0, tdp: 1.80, rent: 8.50, capex: 120000, effDec: 0.13, effPre: 0.45, note: "Published NVIDIA hardware shape (verified Jul 2026): 17.5 PF dense FP8/FP6 and 4 PF dense FP16/BF16 per GPU, 288GB HBM4 @ 22 TB/s; the headline ~50 PF figure is SPARSE NVFP4 inference. No serving anchor exists — MFU, rent and capex are projections. 2026-07-15 dive confirms: no MLPerf submission, no InferenceX result (listed 'Coming Soon'), no public rental/purchase price for Rubin or Rubin Ultra — absolute economics remain fully unanchored. NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, 32K-in/8K-out): up to 10× tok/s/MW and ~1/10 cost per M tokens vs GB200 NVL72 — not an absolute anchor. Current rack-scale product is Vera Rubin NVL72; do not collapse NVL144/Rubin CPX/Rubin NVL8/R100/VR200/Rubin Ultra into one generic 'Rubin' figure." };
+const RUBIN = { name: "Vera Rubin NVL72 (proj.)", flopsFp8: 17.5, fp4: true, hbm: 288, bw: 22.0, tdp: 1.80, rent: 8.50, capex: 120000, effDec: 0.13, effPre: 0.45, note: "Published NVIDIA hardware shape (verified Jul 2026): 17.5 PF dense FP8/FP6 and 4 PF dense FP16/BF16 per GPU, 288GB HBM4 @ 22 TB/s; the headline ~50 PF figure is SPARSE NVFP4 inference. No serving anchor exists — MFU, rent and capex are projections. At the 2026-07-15 dive there was neither an MLPerf submission nor an InferenceX result (listed 'Coming Soon'), and no public rental/purchase price for Rubin or Rubin Ultra — absolute economics remain unanchored here. InferenceX has since published preview Vera Rubin NVL72 results (DeepSeek V4 Pro, AgentX; seen 2026-10-04) that this row does not yet use. NVIDIA's only public claim is RELATIVE (Kimi-K2-Thinking, 32K-in/8K-out): up to 10× tok/s/MW and ~1/10 cost per M tokens vs GB200 NVL72 — not an absolute anchor. Current rack-scale product is Vera Rubin NVL72; do not collapse NVL144/Rubin CPX/Rubin NVL8/R100/VR200/Rubin Ultra into one generic 'Rubin' figure." };
 
 // Slice-4 cleanup (memo §13 backlog, packet-recorded): the retired scalar multiplier VALUES are
 // deleted — they never participated in the v2.2 compute path (precision and service regime
@@ -447,7 +447,7 @@ const MODELS = [
                  ] },
       scheduled: [],
       verification: { verifiedAt: "2026-09-29", reverifyBy: "2026-10-29", owner: "inference-margins",
-                      procedure: "research/inference-margins/BACKLOG.md section 2 — tariff verification",
+                      procedure: "the tariff-verification procedure in this project's backlog (BACKLOG.md section 2)",
                       queueId: "Q-AUTO-2026-09-29" },
       history: [
         { kind: "cancelled-transition", announcedEffectiveFrom: "2026-09-01", priceIn: 3, priceOut: 15,
@@ -484,7 +484,7 @@ const MODELS = [
                  ] },
       scheduled: [],
       verification: { verifiedAt: "2026-09-29", reverifyBy: "2026-10-29", owner: "inference-margins",
-                      procedure: "research/inference-margins/BACKLOG.md section 2 — tariff verification",
+                      procedure: "the tariff-verification procedure in this project's backlog (BACKLOG.md section 2)",
                       queueId: "Q-AUTO-2026-09-29" },
       knownStaleInputs: [
         /* CLOSED 2026-09-10 by owner ruling d-20260910-im-adopt-fleet-rents-and-correct-grok. The
@@ -1134,8 +1134,8 @@ const PERSPECTIVES = [
          question: "where is this small discrepancy coming from"). The author worked 83.0549 by hand
          from the 79.65 % no-lead point it was handed; the engine at c45c2c3 computed 83.0561 for these
          settings. Point settings are byte-identical since (only the declared ranges were regrouped,
-         2026-08-09), and c45c2c3's whole set on today's engine reads what today's set does. Executed:
-         orchestration/backlog-recovery/day-2026-07-28/status/im-default-window-and-mcp-discrepancy.md. */
+         2026-08-09), and c45c2c3's whole set on today's engine reads what today's set does. Executed in the
+         im-default-window-and-mcp-discrepancy record (private workspace). */
       authoredAgainst: { date: "2026-08-07", engine: "c45c2c3", computed: 83.0561,
         model: "opus", profileId: "reference", scopeLabel: "Claude Opus 4.x, Reference traffic mix, this estimate's own settings",
         route: "worked by its author from this calculator's 79.65 % no-lead reading, not through the MCP" },
@@ -1198,7 +1198,7 @@ const PERSPECTIVES = [
              "blend.fam.tpu":      { lo: 35, hi: 50 },
              "blend.fam.trainium": { lo: 0,  hi: 15, split: { trn2: 1, trn3: 0 } },
            } },
-    note: "GPT-5.6 Pro's self-authored reading of this page: a headline of 83.1 %, worked by its author from the calculator's own no-lead reading. These settings compute 82.33 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure \u2014 in its own words, it has 'no independent reason to select 2.6269 months; choosing it would be precisely the target tuning this commission prohibits.' The lead is a range, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately below the 2.4374 months a 1.25\u00d7 efficiency multiplier implies; 4 as the ratified upper scenario, explicitly without importing the rejected anonymous >2\u00d7 claim. Procurement is counted once: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. The stated span is 68\u201392 %, and it is the author's selected span, not a live-engine corner band \u2014 the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog." },
+    note: "GPT-5.6 Pro's self-authored reading of this page: a headline of 83.1 %, worked by its author from the calculator's own no-lead reading. These settings compute 82.33 % here today; the stated 83.1 % is its author's and is not re-tuned toward the engine. The author declines to pin its headline, letting the median fall where the arithmetic puts it rather than to a chosen figure \u2014 in its own words, it has 'no independent reason to select 2.6269 months', the lead that would land exactly 84.0 %. The lead is a range, not a point, because a point would have to assert something the evidence does not: 0 because published open practice may already absorb the portable advantage; 2 as a discounted, not one-for-one, transfer sitting deliberately below the 2.4374 months a 1.25\u00d7 efficiency multiplier implies; 4 as the ratified upper scenario, explicitly without importing the rejected anonymous >2\u00d7 claim. Procurement is counted once: family-level and leg-level discounts describe one claim and multiplying them would count it twice, so every family multiplier is pinned at 1.0 and the widths live on the legs, margin-neutral at the medians. The stated span is 68\u201392 %, and it is the author's selected span, not a live-engine corner band \u2014 the engine's own compounded band over these ranges is a different object and is derived, never quoted. Method and derivation: reports/im-round3-2026-08-08.md; how this reading arrived at its current form is in the changelog." },
   { id: "fable-r3", kind: "lens", name: "[estimate] Per-leg strategic posture (Fable 5, independent)",
     procurementBasis: "committed-planning-rent", basisNote: "PER-LEG strategic rates, now declared as ranges by their own author — TPU 0.30-0.65, Trainium 0.70-0.85, NVIDIA undiscounted and pinned there",
     trendBaseline: 1,
@@ -7220,7 +7220,7 @@ function reconcileLinkTraffic(declared, cleanDiff) {
 
 /* ---------- permalink codec (v4 since the v2.1.3 preset redesign; decodes v3/v2 — pure) ---------- */
 const ENGINE_REVISION = "v3.0.0-2026-08-13"; // v3.0.0 — the M8 release (badge ruled v3.0 by Polaris per plan D-10, esc-20260813T014805Z-1df204c8): the unified b9 arc goes public — UX-C claim-bearing tails + M7 citation repairs (previously dev-only), the provider-range calculator (owner ruling q-sliders-fleet-util-point) with the exact mean-mix stat (owner MEAN ruling; exact BigInt centroid), three user-reachable Share-crash classes fixed (modified-blend, preset-total, scope-crossing switch), bq-290..294 hardening, FA landing-lead clause derived (was stale-hardcoded), denominator-aware mix labels, dated changelog correction on the band exactness argument. HEADLINE INVARIANT vs v2.2.0: 255/255 states byte-identical, evidence research/m8-headline-invariance-evidence.md. // v2.2.0 — PRODUCTION RELEASE of the b9 arc (owner ruling q-row441-ref-and-bridge, 2026-08-06; merge source v22-reengineer @ 5325791). First publication of the repaired defaults, the b9 M6 two-reading FINAL-ANSWER surface, the spec-decode lever and the UX-A/UX-B legs. The public landing headline moves from the previously published ≈77% to ≈69% at the landing default (opus/median), with ≈59% carried as the second, labeled public-evidence reference reading; the legacy bridge on the FINAL-ANSWER surface names the ≈77% predecessor and separates what the total-size revision moved from what the margin-evidence adjudication moved (FA-arc acceptance rows G1A-1 and G1A-3). v2.1.12's two owner-APPROVED RAISE Summit podcast claims are carried forward unchanged. // 2026-07-27 external review: live rendering now consumes the trusted capacity solve's selected residency row; placement and sampled-policy batches, receipts, and published derived values re-minted. // v2.2.0-dev: activate the reviewed IM3 roofline display path — per-regime operating points, fixed-OSL traffic lengths, per-row precision tuples and calibration, finite/capped/infeasible feasibility states, and interim structurally disclosed mixed-fleet renormalization. Billing/procurement/traffic-resolution/codec math remains unchanged. // v2.1.11: cold-review-v2110 follow-up (labeling/hygiene only, NO engine numbers changed) — Gemini "Why the interval" para dropped its 89–98% floor claim to match the "not publicly identifiable" headline (cold #3); stripped ChatGPT conversation URLs/IDs from the published annex, making §9's "removed" claim true (cold #22); footer SHA relabeled a private build commit with a public-mirror note (cold #23); README TPU/Trainium anchor status corrected (cold #24); LOAO methods note renamed a single-anchor cross-platform transfer test (cold #25); per-card "Why the interval is"→"Why the scenario range is" (cold #19); annex "complete/as-produced" language softened to "selected public artifacts" (cold #22). Verdict remains NOT SOUND-as-estimator / sound-as-scenario-workbench; structural remedies escalated. // v2.1.10: cold-review-2026-07-15 epistemics/labeling pass (adjudicated GO-WITH-FIXES) — §5 blinded run relabeled as a model-generated cross-check, not an independent replication/corroboration (P0-1); Gemini card headline reframed to "not publicly identifiable" with ~96% demoted to a labeled internal-cost scenario (P0-2 / cold B4); hero unanchored-share warning corrected (TPU/Trainium anchors exist unfitted) and the GB300 $6/hr analyst-price leg named (P1-1 / cold B3); persistent "selected scenario, not an identified estimate/interval" identity chip (P1-6); GB300 clarity, AMD unverified figures excluded + aggregate labeling, Trainium 405B precision, TPU v7 saturation, NVIDIA perimeter, FP4 upper-bound caveats (P1-2/3/7); Rubin $/margin bar suppressed to shape-only (cold #17); "reproduces"→headline-matched, "realized"→effective, "full unedited"→public+hygiene-disclosed, version identity aligned. NO preset/parameter/engine numbers changed — labeling and disclosure only
-const DATA_AS_OF = "2026-07-26";
+const DATA_AS_OF = "2026-10-01"; // bq-4610: the newest data on the page (the GPT-6.1 Sol estimate, 2026-10-01); it had stayed at 2026-07-26 through the September tariff corrections
 /* Defaults epoch (IM1 / v2.2). Independent of ENGINE_REVISION: it names the era of the defaults/tables
    a share-link or saved preset was minted against. The v5 encoder stamps it into every token and every
    saved preset; a decode/read under a DIFFERENT epoch is deprecated LOUDLY (never silently resolved).
@@ -8221,7 +8221,9 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     "gptpro-r3": {
       attribution: "quoted-position",
       who: "GPT-5.6 Pro's contextual review, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers (row 514, 2026-08-08).",
-      anchor: { quote: "I have no independent reason to select 2.6269 months; choosing it would be precisely the target tuning this commission prohibits", url: "orchestration/backlog-recovery/day-2026-07-28/row514-round3/gptpro-authored.json" },
+      anchor: { quote: "+2 months maps the supplied 79.65-percent point to 83.0549 percent; 84.0 would require a target-backsolved +2.6269 months" },
+      /* The anchor carries no url: its author's returned reading is quoted verbatim but is not
+         published as a page, so there is no public copy to link (bq-4610). */
       /* Same attribution reasoning as fable-r3: nothing here was reconstructed from prose, so no
          param is SPECULATION. Where a value is this page's framing rather than its author's number,
          the entry says which. */
@@ -8232,7 +8234,8 @@ util: { src: "Page-set 55% occupancy scenario value", label: "SPECULATION" }, st
     "fable-r3": {
       attribution: "quoted-position",
       who: "Fable 5's independent estimate, self-authored: it reviewed its own assumptions with full context and returned every one of them as numbers, measuring each through the calculator before declaring it (row 514, 2026-08-08).",
-      anchor: { quote: "No dial was tuned to land a target margin: every value above was authored first and then measured; the band moved where the measurements said it moved (floor down, ceiling in)", url: "orchestration/backlog-recovery/day-2026-07-28/row514-round3/fable-authored.json" },
+      anchor: { quote: "No dial was tuned to land a target margin: every value above was authored first and then measured; the band moved where the measurements said it moved (floor down, ceiling in)" },
+      /* No url, for the same reason as gptpro-r3: the returned reading is quoted, not published. */
       /* ATTRIBUTION NOTE, and it is the reason this dossier carries no SPECULATION label anywhere.
          The round-2 presets are `reconstruction`: this page read an adjudicator's prose and built a
          vector from it, so labelling those params SPECULATION was the honest thing to do. Round 3 is

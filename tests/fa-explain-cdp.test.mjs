@@ -446,7 +446,7 @@ const ANSWER_DIGITS_PIN = "d07f0b5fb1f8bf4b426a8c8c416acb249a886d058d3d04634c144
    default in their own browser)" and the prior-reading line "by default it now opens on". A reader can now choose
    their own default, so the unqualified claim became false for that reader. Read for a RANKING of an external
    claim, as the failure message asks: none; the words qualify which default the answer's fixed readings describe.
-   Evidence: orchestration/backlog-recovery/day-2026-07-28/reports/im-default-window-2026-09-12/evidence/answer-surface-diff.txt */
+   Evidence: answer-surface-diff.txt in the im-default-window-2026-09-12 work folder (private workspace) */
 /* im-vet-six-repairs RE-PIN (2026-09-20): the WORDING moves too, and it was read for what this pin
    exists to catch — a RANKING of an external claim — and contains none. What changed inside THE
    ANSWER: the rent-class sentence (four of the FIVE member rents are analyst-set), the Trainium

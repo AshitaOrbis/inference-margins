@@ -1,5 +1,5 @@
 // EPOCH DEPRECATION contract (IM1 / v2.2) — governing plan
-// `orchestration/plans/im-reengineer-defaults-2026-07-16.md` §4 risk 1 (owner-RULED: DEPRECATION),
+// the private plan im-reengineer-defaults-2026-07-16 §4 risk 1 (owner-RULED: DEPRECATION),
 // memo `research/im1-permalink-epoch-memo.md`, fixture README `tests/fixtures-minted-tokens-README.md`.
 // Run: node tests/epoch-deprecation.test.mjs
 //

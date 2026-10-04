@@ -246,7 +246,7 @@ export interface MarginClaim {
 export interface DossierEntry {
   attribution: string;
   who: string;
-  anchor: { quote: string; url: string } | null;
+  anchor: { quote: string; url?: string } | null;  // url absent = quoted from a reading with no public copy (bq-4610)
   params: Record<string, { src: string; label: string }>;
   assumes: string[];
   falsifiers: string[];

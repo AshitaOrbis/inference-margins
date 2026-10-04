@@ -1,5 +1,5 @@
 // EVIDENCE-SCHEMA contract (IM2 / v2.2) — governing plan
-// `orchestration/plans/im-reengineer-defaults-2026-07-16.md` §3 WS-B/WS-C, IM2 row, council P0-3.
+// the private plan im-reengineer-defaults-2026-07-16 §3 WS-B/WS-C, IM2 row, council P0-3.
 // Run: node site/tests/evidence-schema.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.

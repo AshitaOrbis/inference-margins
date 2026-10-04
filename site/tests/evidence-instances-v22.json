@@ -1,7 +1,7 @@
 {
  "_meta": {
   "title": "Evidence instances (IM2) — current anchors expressed through the WS-B phase-evidence schema + WS-C uncertainty contract",
-  "governingPlan": "orchestration/plans/im-reengineer-defaults-2026-07-16.md (IM2: contracts before D2)",
+  "governingPlan": "im-reengineer-defaults-2026-07-16, a private workspace plan (IM2: contracts before D2)",
   "schema": "site/evidence-schema.js (WS-B) + site/uncertainty-contract.js (WS-C)",
   "sources": [
    "research/validation-ledger.md (anchor registry; three-status; primary-source verification)",

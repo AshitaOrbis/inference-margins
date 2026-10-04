@@ -2,7 +2,7 @@
 
 > **What this is:** every parameter the calculator's presets pin, with value, source and evidence label, generated directly from the deployed preset registry (`engine.js` v3.0.0-2026-08-13), the live roofline/data registry (`engine-data-v22.js`), and their dossier annotations — so this page cannot drift from what the calculator actually computes.
 > **What this is not:** the original "192-row preset grounding pack" consultation artifact. That pack's full row set lived in conversation-sandbox files that expired; its adopted decisions are summarized in the [consultation page](https://margins.ashitaorbis.com/research/consult-preset-pack.html), and a dated author-model re-emission with delta notes is published as the [preset-pack re-audit](https://margins.ashitaorbis.com/research/consult-preset-pack-reaudit.html). Where any re-emission differs from this ledger, **this ledger (the adopted values) wins.**
-> Generated 2026-07-26 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMATE / SPECULATION (from the on-page dossiers).
+> Generated 2026-10-01 · labels: DISCLOSED / CREDIBLY REPORTED / COMMUNITY ESTIMATE / SPECULATION (from the on-page dossiers).
 
 
 ## How to read this page

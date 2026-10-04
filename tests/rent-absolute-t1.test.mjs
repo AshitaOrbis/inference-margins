@@ -77,8 +77,12 @@ assert("T1 rentAbsLeg bounds equal CF_BOUNDS.rentPerHr", JSON.stringify(E.SCENAR
      im-vet-six-repairs (2026-09-20, vetting finding E1): re-minted a fourth time, and the property
      is unchanged for the fourth time. The Trainium withdrawal changes the BLEND a clean mint
      encodes — five member legs instead of seven — which is a fleet-membership fact, not an
-     absolute-rent key; the assertions above are still what prove no such key appeared. */
-  assert("T1 permalink minted without absolute-rent keys matches the vetting-repairs epoch", cleanHash === "b214eacd95f672f538a8933cb1792727b9fd3e10e4bcd3ad5fee105dadc00a21", cleanHash);
+     absolute-rent key; the assertions above are still what prove no such key appeared.
+     inference-margins-lane-1004 (2026-10-04, bq-4610 item 6): re-minted a fifth time, and the property
+     is unchanged for the fifth time. Every token carries the engine's DATA_AS_OF in its _meta, and that
+     date moved from 2026-07-26 to 2026-10-01 (the newest data on the page); the decoder only displays it.
+     No blend, rent or absolute-rent key changed. */
+  assert("T1 permalink minted without absolute-rent keys matches the vetting-repairs epoch", cleanHash === "9ffe201b81306a6f019f3ce622b86676dfd6d3a25826c39ffd801a43b48cbd18", cleanHash);
 }
 
 {

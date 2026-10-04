@@ -425,6 +425,40 @@ test("get_dossier — verbatim ledger, live values composed at call time, retire
   }
 });
 
+test("get_dossier — every anchor is a web url, a served site file, or says it is unpublished (bq-4610)", async () => {
+  /* bq-4610: two perspective anchors carried workspace paths as their url, so the connector
+     handed callers a file no one outside the workspace can open (and the page rendered it as a
+     [source] link that answered 404). An anchor's url must be http(s) or name a file that exists
+     under site/; an anchor with no public copy carries no url and the sentence says so. */
+  const siteDir = path.resolve(__dirname, "../../site");
+  const { existsSync, statSync } = await import("node:fs");
+  let checked = 0, unpublished = 0;
+  for (const [type, table] of [["model", engine.DOSSIERS.models], ["perspective", engine.DOSSIERS.perspectives]]) {
+    for (const id of Object.keys(table)) {
+      const d = table[id];
+      if (!d || !d.anchor) continue;
+      const r = await h.call("get_dossier", { type, id });
+      assert.notEqual(r.isError, true, `${type} ${id} answers`);
+      const sentence = text(r);
+      assert.ok(!sentence.includes("(undefined)"), `${type} ${id}: no 'undefined' anchor source`);
+      const url = d.anchor.url;
+      if (url === undefined) {
+        unpublished++;
+        assert.ok(sentence.includes("not published separately"), `${type} ${id}: a url-less anchor says it is unpublished`);
+      } else if (!/^https?:\/\//.test(url) && !url.startsWith("#")) {
+        // Review fold (round 1): existence alone let "../package.json" or a directory pass, so the
+        // url must resolve INSIDE site/ and name a regular file.
+        const abs = path.resolve(siteDir, url.split("#")[0]);
+        assert.ok(abs.startsWith(siteDir + path.sep), `${type} ${id}: anchor url ${url} stays inside site/`);
+        assert.ok(existsSync(abs) && statSync(abs).isFile(), `${type} ${id}: anchor url ${url} is a served site file`);
+      }
+      checked++;
+    }
+  }
+  assert.ok(checked >= 20, `checked ${checked} anchors`);
+  assert.ok(unpublished >= 2, "gptpro-r3 and fable-r3 are quoted without a link");
+});
+
 test("list_scenario_space — enum source with honest flags; metric definition verbatim from TIPS", () => {
   const s = sc(battery.list);
   assert.equal(s.models.length, engine.MODELS.length);

@@ -1492,8 +1492,8 @@ const FLEETS = {
       + "topology (no public within-family generation split exists). No Chinese-silicon "
       + "leg by construction (owner ruling).",
     /* DECLARED EVIDENCE WITHDRAWAL (im-vet-six-repairs, 2026-09-20; vetting finding E1 —
-       dive E on the served page, `pr-20260919T143649Z-9b63e7`, and the report
-       orchestration/backlog-recovery/day-2026-07-28/reports/inference-margins-vetting-2026-09-19.md).
+       dive E on the served page, `pr-20260919T143649Z-9b63e7`, and the vetting report
+       of 2026-09-19, a private workspace record).
        A withdrawn leg stays DECLARED here at its evidence-informed weight — the family
        structure above is sourced and is NOT edited — and is excluded from the DEFAULT
        fleet's membership, so no preferred blended reading carries it. Its declared weight

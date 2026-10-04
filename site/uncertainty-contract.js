@@ -2,7 +2,7 @@
    Pure data-contract module: no DOM, no engine, node-importable for tests. Follows the engine.js
    idiom (plain functions; module.exports guard + browser-global fallback at the bottom).
 
-   Governing plan: orchestration/plans/im-reengineer-defaults-2026-07-16.md — §3 WS-C ("contract
+   Governing plan: im-reengineer-defaults-2026-07-16 (private workspace plan) — §3 WS-C ("contract
    first"), §2 design principle 2 (uncertainty decomposed by component, each basis labeled; NO
    fit-residual-as-uncertainty). Council packet P0-1 (the ten components, each with a basis label).
    Owner ruling 1 (2026-07-16): the displayed output is a BAND + a labeled central SCENARIO.

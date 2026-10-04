@@ -1,5 +1,29 @@
 # Changelog
 
+## Corrections — 2026-10-04 (no number changed)
+
+**Two source links removed.** The GPT-5.6 Pro and Fable 5 self-authored scenario cards linked their quotes to
+working files that were never published, so the links led nowhere. Neither reading has a public copy, so each card
+now shows its author's sentence verbatim and says it is not published separately; the GPT-5.6 Pro card quotes a
+different sentence from the same reading. The page's build now fails if a shipped file points into the author's
+private working files.
+
+**A withdrawn figure restored.** On 2026-08-23 the OpenAI passage lost its ~30% and ~50% starting points (Dylan
+Patel, RAISE Summit 2026) because two research arms found them in no source. They had only the published session
+summary. The recording carries them beside the ~55% and ~65% endpoints, at about 1:32–1:43 of the session video
+(this project's machine transcript of it), so they are back, with a dated note. The note on Patel's "first gross
+profit" remark rested on the same missing transcript and now says the phrase is his on the recording (about
+1:14–1:27); its other point, the conflict with SemiAnalysis's own written record, stands.
+
+**Dates and a stale claim.** The methods box and the release line now give the newest data date (2026-10-01, the
+GPT-6.1 Sol estimate) instead of July. The Rubin row and its §4 paragraph no longer say InferenceX has no Rubin
+result: it has since published preview Vera Rubin NVL72 results, which this page has not yet used, so the Rubin row
+stays a projection. The explorer's note no longer says the headline sits at the central scenario; it is computed
+from whatever scenario the calculator holds, which on page open is the GPT-5.6 Pro estimate's.
+
+**Phone layout.** The scenario cards' parameter tables and the named-fleet selector no longer run past the edge
+of a phone screen, and the selector is no longer clipped on desktop.
+
 ## Astra Pro estimates — 2026-10-01 (GPT-6.1 Sol added)
 
 **Added — one card in §10 "Astra Pro estimates".** GPT-6.1 Sol (OpenAI, `gpt-6.1-sol`, released 2026-09-29 as

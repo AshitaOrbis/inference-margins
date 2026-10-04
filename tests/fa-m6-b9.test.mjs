@@ -954,7 +954,15 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
                rent/TCO multiple (3.43x -> 3.55x) and implied lessor margin (71% -> 72%), both
                recomputed from the live stress and owned readings rather than transcribed. */
             "site/research/final-answer-rationale.html": "e8033bae3eb4ce33c5f44a30cee51880b0704e2eb3739b12d57d5e0cec7be249",
-            "site/research/analyst-divergence.html": "e86f16b192c97286d2f59d425449a41f621d3f3d3128dc99d552ee357da8fb2d",
+            /* inference-margins-lane-1004 (2026-10-04, bq-4610 item 5): analyst-divergence re-pinned for
+               prose only. Its rows on the RAISE session said the transcript was unretrievable; the
+               project's own transcript of the session video carries both the "first gross profit"
+               phrase and the ~30%/~50% starting points, so those rows and §5 items 2-3 now carry dated
+               corrections. RE-DERIVED in the sense the message below asks: a multiset diff of every
+               numeric token in the rendered text, old against new, removes nothing and adds only dates
+               (2026-10-04, 2026-08-23, 2026-07-26), the two recording timestamps (1:14-1:27,
+               1:32-1:43) and the &#39; apostrophe entity, so no engine figure on the page moved. */
+            "site/research/analyst-divergence.html": "1e2dc57a1482c8ba19a400535fccdb7b14f791d80af12f4dfb2b41092964bb59",
           };
           for (const [rel, expected] of Object.entries(CLAIM_ANNEXES)) {
             const abs = join(ROOT, rel);
