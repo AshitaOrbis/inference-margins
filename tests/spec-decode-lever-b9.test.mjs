@@ -30,6 +30,10 @@ const assert = (name, cond, detail = "") => {
    exist. The private tree is hard-guarded to carry all of them — see provenance-inputs.mjs. */
 const P = provenance("spec-decode-lever-b9", assert);
 const privatePaths = new Set(PRIVATE_INPUTS.map(i => i.path));
+/* The served registry names an unpublished document by a descriptor, never by its path (the public-field
+   scanner's pointer rule); this unserved test maps each descriptor back to the private file it reads. */
+const UNPUBLISHED_SOURCES = { "(unpublished) integration design document": "research/im3-integration-design.md" };
+const fileOf = source => UNPUBLISHED_SOURCES[source] ?? source;
 
 const opus = E.MODELS.find(m => m.id === "opus");
 const median = E.PERSPECTIVES.find(p => p.id === "median");
@@ -305,7 +309,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
       { kind: "probe", script: "tests/probes/specdec-eta-consistency.mjs",
         expect: "h200:0.313491;h800:0.313491;equal=true", stdout: "trim" }] },
     h20:    { status: "included", evidence: [
-      { kind: "quote", source: "research/im3-integration-design.md", line: 134,
+      { kind: "quote", source: "(unpublished) integration design document", line: 134,
         text: "Where an anchor's throughput embeds spec-decode (h20, gb300, ascend" }] },
     gb200:  { status: "excluded", evidence: [
       { kind: "quote", source: "site/engine-data-v22.js", line: 1102, text: "obsQ: 1, obsA: 1" }] },
@@ -313,7 +317,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
       { kind: "quote", source: "site/engine-data-v22.js", line: 1135,
         text: "UNKNOWN — measured:null and no reconstructable q/a" }] },
     ascend: { status: "included", evidence: [
-      { kind: "quote", source: "research/im3-integration-design.md", line: 135,
+      { kind: "quote", source: "(unpublished) integration design document", line: 135,
         text: "absorbed INTO the deployed" }] },
     tpu7:   { status: "unknown", evidence: [
       { kind: "quote", source: "site/engine-data-v22.js", line: 1212,
@@ -323,17 +327,17 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
          line-anchored citation is fragile exactly this way — it is kept because this gate's point
          is that the cited bytes are REALLY THERE, and the check re-reads them rather than trusting
          the number. The record it belongs to is `tpu7-analyst-set-dec`, unchanged. */
-      { kind: "quote", source: "research/evidence-instances-v22.json", line: 1750,
+      { kind: "quote", source: "site/tests/evidence-instances-v22.json", line: 1750,
         text: '"mtpAcceptance": "unknown"' }] },
     trn2:   { status: "excluded", evidence: [
       { kind: "probe", script: "tests/probes/specdec-eta.mjs", expect: "trn2:0.36142", stdout: "trim" },
-      { kind: "quote", source: "research/im3-integration-design.md", line: 57,
+      { kind: "quote", source: "(unpublished) integration design document", line: 57,
         text: "Out-of-family ANALYST_SET rows — tpu7, trn2, trn3: joint fleet fit" },
       { kind: "probe", script: "tests/probes/specdec-jointfit.mjs",
         expect: "trn2:etaDec=0.36142;jointEtaDec=0.36142;matchesJointFit=true;calObs=null", stdout: "trim" }] },
     trn3:   { status: "excluded", evidence: [
       { kind: "probe", script: "tests/probes/specdec-eta.mjs", expect: "trn3:0.36142", stdout: "trim" },
-      { kind: "quote", source: "research/im3-integration-design.md", line: 57, text: "joint fleet fit" },
+      { kind: "quote", source: "(unpublished) integration design document", line: 57, text: "joint fleet fit" },
       { kind: "probe", script: "tests/probes/specdec-jointfit.mjs",
         expect: "trn3:etaDec=0.36142;jointEtaDec=0.36142;matchesJointFit=true;calObs=null", stdout: "trim" }] },
     rubin:  { status: "unknown", evidence: [
@@ -370,9 +374,10 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
         /* A citation into a PRIVATE design memo cannot be executed where that memo does not
            exist. It self-skips there and is counted as skipped; everywhere the memo IS present
            it runs, and the hard guard makes "present for some, absent for others" a failure. */
-        const isPrivate = privatePaths.has(e.source);
-        if (isPrivate && !P.has(e.source)) { P.skip(1, e.source); continue; }
-        const src = (isPrivate ? P.read(e.source) : readFileSync(root + e.source, "utf8")).split("\n");
+        const file = fileOf(e.source);
+        const isPrivate = privatePaths.has(file);
+        if (isPrivate && !P.has(file)) { P.skip(1, file); continue; }
+        const src = (isPrivate ? P.read(file) : readFileSync(root + file, "utf8")).split("\n");
         const line = src[e.line - 1];
         const name = `T-13 ${row}: ${e.source}:${e.line} CONTAINS its cited bytes`;
         const cond = typeof line === "string" && line.includes(e.text);
@@ -395,7 +400,7 @@ const REFERENCE = () => E.pinReferenceLevers(DEFAULT_STATE());
   /* EXECUTABLE, not simply "all": a quote into an absent private memo is not executable here,
      and the count must follow the manifest and the tree rather than a written-down number. */
   const executable = want.filter(e =>
-    e.kind !== "quote" || !privatePaths.has(e.source) || P.has(e.source));
+    e.kind !== "quote" || !privatePaths.has(fileOf(e.source)) || P.has(fileOf(e.source)));
   assert("T-13 every EXECUTABLE manifest entry was executed, not inspected",
     quotes === executable.filter(e => e.kind === "quote").length
     && probes === executable.filter(e => e.kind === "probe").length,

@@ -316,7 +316,7 @@
       "old": "95 / 0 / 5",
       "new": "0 / 0 / 100 + a separate physical-inventory sentence",
       "cluster": "fleet-composition",
-      "evidence": "The Colossus rows answer 'do typed accelerator keys appear at a facility?', not 'what share of the modeled Grok blend rests on site-specific SERVING evidence?'. No current site/SKU Grok serving allocation is disclosed. Physical inventory is reported separately and is not coverage."
+      "evidence": "The Colossus rows answer 'do typed accelerator keys appear at a facility?', not 'what share of the modeled Grok blend rests on site-specific SERVING evidence?'. No current site- or SKU-level Grok serving allocation is disclosed. Physical inventory is reported separately and is not coverage."
     },
     {
       "sink": "coverage(anthropic/opus)",

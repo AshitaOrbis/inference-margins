@@ -1,0 +1,175 @@
+{
+  "about": "Public namespaces and enumerated vocabularies declared for served provenance strings (a declaration: nothing in this release scans served values against it). Every id here is one the served page itself defines (tests/public-fields.test.mjs proves each id is served); a pointer field resolves only into the namespace or vocabulary inventory.json names for it, and a prose token that is one of these ids is public. notation: whole-segment patterns for public technical notation (parallelism degrees, number formats). compoundWords: the ordinary words and units that may join a number, a declared name or notation in a hyphenated compound (72-GPU, H100-class, round-4); a compound that carries a digit and a word outside this list is not a public form (a row or record label is not one).",
+  "describe": {
+    "caseIds": "width and topology case ids the engine registers (engine-data-v22.js WORKER_CANDIDATE_SOURCES and every *_TOPOLOGY_SENSITIVITY case); sourceCaseId resolves here",
+    "calibrationRefs": "references into the engine's calibration registries (CALIBRATION.<hardware>, HW.<hardware>, PREFILL_CAL); calibrationRef resolves here",
+    "blendRefs": "a DC coverage row's blend: state:blend (the state's own blend, the engine's default branch) or fleet:<id> of a registered fleet; blendRef resolves here",
+    "dcRefs": "shared DC registry-row references; no served row carries a literal dcRef today, so the list is empty and any literal fails",
+    "registryRefs": "an engine registry entry cited in prose (PRICE_EVIDENCE.<hardware>)",
+    "perspectiveIds": "exploration perspective ids the page offers and permalinks carry (engine.js PERSPECTIVES)",
+    "evidenceKeys": "anchor ids of the served evidence fixture (tests/evidence-instances-v22.json anchors[].id)",
+    "evidenceFamilies": "a family prefix shared by two or more served anchor ids, used to cite the family (gb300-mlperf-v6-offline, trn2-neuron-llama70b, …)",
+    "calibrationObservations": "fitted operating points the engine names after a fit label (\"F1 h800-prod-dec\")",
+    "dcIds": "DC registry row ids (REGIONS, DATACENTERS, PROGRAMMES)",
+    "evidenceTasks": "open evidence tasks the published changelog names",
+    "methodLabels": "labels of the page's own method shown in its served text: the frozen derivation's joint-decode fits (F1-F6, F6-informed), the anchor score-set eligibility label (E1-ineligible), and the Trainium platform-constant carry (trn2-carry)"
+  },
+  "namespaces": {
+    "caseIds": [
+      "kimi-k2-thinking-b200-prod-8",
+      "v4-pro-vllm-dp8-8",
+      "lmsys-gb200-decode-ep48",
+      "mlperf-v6-gb300-prefill-2",
+      "mlperf-v6-gb300-decode-16",
+      "nvidia-v4-pro-nvfp4-tp4",
+      "mimo-tpu-v7x-16",
+      "deepseek-day6-h800-decode-144",
+      "deepseek-day6-h800-prefill-32",
+      "h800-decode-transfer-analyst-144",
+      "cloudmatrix-frozen-coloc-128",
+      "cloudmatrix-frozen-6p2d-decode-144",
+      "ant-h20-decode-16",
+      "deepgemm-ep8-benchmark-8"
+    ],
+    "calibrationRefs": [
+      "CALIBRATION.h800",
+      "CALIBRATION.h20",
+      "CALIBRATION.h200",
+      "CALIBRATION.gb200",
+      "CALIBRATION.gb300",
+      "CALIBRATION.rubin",
+      "CALIBRATION.tpu7",
+      "CALIBRATION.trn2",
+      "CALIBRATION.trn3",
+      "CALIBRATION.ascend",
+      "HW.h800",
+      "PREFILL_CAL"
+    ],
+    "blendRefs": [
+      "state:blend",
+      "fleet:na-blend"
+    ],
+    "dcRefs": [],
+    "registryRefs": [
+      "PRICE_EVIDENCE.gb300"
+    ],
+    "evidenceKeys": [
+      "trn2-neuron-llama70b",
+      "trn2-neuron-llama405b",
+      "cm384-flexnpu",
+      "gb300-sglang-v4",
+      "tpu7-ironwood-qwen3",
+      "gb300-analyst-set-dec",
+      "h20-neutral-live-dec"
+    ],
+    "dcIds": [
+      "xai-colossus-c1"
+    ],
+    "evidenceTasks": [
+      "E-2026-08-16-c"
+    ],
+    "methodLabels": [
+      "E1-ineligible",
+      "F1-F6",
+      "F6-informed",
+      "trn2-carry"
+    ],
+    "calibrationObservations": [
+      "h800-prod-dec",
+      "h20-base",
+      "gb200-vllm",
+      "ascend-50ms",
+      "ascend-15ms"
+    ],
+    "perspectiveIds": [
+      "x60-v3",
+      "x80-v3",
+      "x80-v4",
+      "x90-v1",
+      "x90-v2"
+    ],
+    "evidenceFamilies": [
+      "gb300-mlperf-v6",
+      "trn2-neuron-llama"
+    ]
+  },
+  "vocabularies": {
+    "sourceClass": [
+      "primary-post",
+      "quoted-secondary",
+      "reporting",
+      "model-generated",
+      "disclosure-anchor",
+      "sweep-non-finding"
+    ],
+    "provenanceTier": [
+      "audited",
+      "reported-unverified",
+      "clip-mediated",
+      "analyst-assumption",
+      "aggregator",
+      "primary-post",
+      "model-generated",
+      "analyst-characterization",
+      "show-primary-clip",
+      "first-party-transcript",
+      "first-party-report-paywalled"
+    ],
+    "evidenceClass": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "ANALYST"
+    ]
+  },
+  "notation": [
+    "(?:TP|EP|DP|PP|SP|CP)\\d+",
+    "(?:FP|BF|INT|MXFP|NVFP)\\d+"
+  ],
+  "compoundWords": [
+    "active",
+    "attention",
+    "basis",
+    "bit",
+    "card",
+    "chip",
+    "class",
+    "concurrency",
+    "cut",
+    "cycle",
+    "day",
+    "derived",
+    "eight",
+    "equivalent",
+    "era",
+    "family",
+    "fixed",
+    "focused",
+    "gpu",
+    "hour",
+    "hr",
+    "in",
+    "ineligible",
+    "informed",
+    "mid",
+    "moe",
+    "npu",
+    "out",
+    "parameter",
+    "percent",
+    "post",
+    "refit",
+    "round",
+    "series",
+    "sum",
+    "to",
+    "token",
+    "total",
+    "way",
+    "year",
+    "yr"
+  ]
+}

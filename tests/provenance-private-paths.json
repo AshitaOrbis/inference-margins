@@ -1,0 +1,18 @@
+{
+  "about": "UNSERVED (scripts/sync-site-tests.mjs does not copy it). The repository paths of the private inputs that tests/provenance-inputs.mjs registers by key. They live here, not in that module, because its served twin ships under site/tests and must name no private path.",
+  "paths": {
+    "final-answer-design-memo": "research/b9-m6-fa-memo.md",
+    "spec-decode-design-memo": "research/b9-spec-decode-lever-memo.md",
+    "integration-design-document": "research/im3-integration-design.md",
+    "dc-electricity-study-a": "research/dives/im-arc/electricity-gptpro-2026-08-23.md",
+    "dc-electricity-study-b": "research/dives/im-arc/electricity-fable-2026-08-23.md",
+    "dc-china-tariff-study": "research/dives/im-arc/electricity-subagent-china-tariffs-2026-08-23.md",
+    "dc-named-facility-study": "research/dives/im-arc/electricity-subagent-named-facilities-2026-08-23.md",
+    "dc-fleet-composition-study": "research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md",
+    "dc-fleet-composition-synthesis": "research/dives/im-arc/fleet-composition-synthesis-2026-08-23.md",
+    "dc-tco-inputs-study": "research/dives/im-arc/tco-inputs-gptpro-2026-08-23.md",
+    "dc-rental-rates-synthesis": "research/dives/im-arc/rental-rates-synthesis-2026-08-23.md",
+    "dc-rental-rates-study-a": "research/dives/im-arc/rental-rates-gptpro-2026-08-23.md",
+    "dc-rental-rates-study-b": "research/dives/im-arc/rental-rates-fable-2026-08-23.md"
+  }
+}

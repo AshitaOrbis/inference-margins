@@ -214,7 +214,7 @@
     "retrievedDate": null,
     "verbatimValue": "vLLM ~10.1k decode tok/s/GPU on R1",
     "verifier": "grounding-ledger",
-    "verifierRef": "research/grounding-ledger",
+    "verifierRef": "research/grounding-ledger.md",
     "note": "inherited from the grounding ledger"
    },
    "engineFit": {
@@ -246,7 +246,7 @@
     "recoveryPath": "Locate and archive the primary vLLM/GB200 DeepSeek-R1 decode disclosure behind '~10.1k decode tok/s/GPU'. Unlike the two h800-deepseek rows recovered on 2026-09-02, this one is NOT recoverable by transcription: the figure appears across the repository (d2-equation-set F4 10,108 tok/s/GPU; d2-receipt-pack) always marked 'vLLM R1 (inherited)', with no URL anywhere. It needs real source recovery, and attaching a plausible-looking URL without verifying it would be worse than the null this records.",
     "recordedOn": "2026-09-02",
     "recordedBy": "GPT Pro 2026-07-29 rec 8, enforced after a research review on 2026-09-02",
-    "note": "This row is DEPLOYED (engineFit.deployed=true) and eligible=true, which is exactly what makes the debt material rather than cosmetic. Forcing eligibility=false would drop the GB200 decode anchor and MOVE THE MODEL — an authorial decision, not a provenance repair, so it is recorded in BACKLOG.md instead of being made here."
+    "note": "This row is DEPLOYED (engineFit.deployed=true) and eligible=true, which is exactly what makes the debt material rather than cosmetic. Forcing eligibility=false would drop the GB200 decode anchor and MOVE THE MODEL — an authorial decision, not a provenance repair, so it is recorded as an open item instead of being made here."
    }
   },
   {
@@ -301,7 +301,7 @@
     "retrievedDate": null,
     "verbatimValue": "SGLang >12k tok/s/GPU on V4 Pro (FP4+MTP)",
     "verifier": "grounding-ledger",
-    "verifierRef": "research/grounding-ledger",
+    "verifierRef": "research/grounding-ledger.md",
     "note": "inherited from the grounding ledger"
    },
    "engineFit": null,

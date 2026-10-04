@@ -265,7 +265,7 @@ for (const m of E.MODELS) {
      it is just a new set of numbers, which is what this block refuses.
 
      The shape, asserted key-for-key against tests/fixtures-baseline-v22-pre-tariff-correction.json
-     (the live fixture archived at master b64d52c, immediately before the correction):
+     (the live fixture archived immediately before the correction):
        72 of 180 pairs differ; 108 are byte-identical.
        60 of them are the FIVE corrected rows on all 12 fixture perspectives, and on those the fields
          that differ are priceIn, priceOut, margin and (dsv4 only) cacheReadMult — nothing else.

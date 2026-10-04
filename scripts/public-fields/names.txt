@@ -1,0 +1,35 @@
+# Model and product names that may appear in served provenance prose. One per line, matched whole and
+# case-insensitively, as a token or as one segment of a hyphenated compound ("H100-class"). Every entry is
+# a name the served page itself shows (tests/public-fields.test.mjs). A bare round or review label is never
+# a name here: "R1" alone is absent on purpose, so "R1-impl" stays identifier-like and "R1-class" is listed whole.
+#
+# Models
+GPT-5
+GPT-5.6
+GPT-OSS-120B
+DeepSeek-R1
+deepseek-v4-flash
+V4-Pro
+V4-Flash
+R1-class
+GLM-4.7
+GLM-5.2
+Qwen3-235B
+Qwen3.8-Max
+Qwen3-Coder-480B
+Qwen3-Coder-480B-A35B
+Qwen3-Coder-480B-A35B-Instruct-FP8
+Kimi-K2-Thinking
+Llama-3.2-1B
+Ling-2.5-1T
+Yuan3.0-Ultra
+MiMo-V2.5-Pro
+large-v3
+# Accelerators and systems
+H100
+H800
+H20
+B200
+Trn2
+CM384
+GB300-NVL72_GB300-288GB_aarch64x72_TRT

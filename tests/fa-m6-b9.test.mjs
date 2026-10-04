@@ -1208,7 +1208,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
      independent methods converged" and still carried the causal "because it holds …" bridge that
      run 1 removed as an overclaim. Nothing could catch that, because the provenance lived in a
      comment. It lives here now: §2.9 is parsed and compared to the pinned templates. */
-  P.gate("research/b9-m6-fa-memo.md", 10, (memoSrc) => {
+  P.gate("final-answer-design-memo", 10, (memoSrc) => {
     const NAMES = { referenceReadingFrame: "referenceReadingLine", c2Label: "c2LabelLine",
       mustNotBeCalled: "mustNotBeCalledLine", convergenceNote: "convergenceLine",
       priorReadingFrame: "priorReadingLine", bridge: "bridgeLine",
@@ -1275,7 +1275,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
      claim was already false when run 3 read it. A prose claim about where bytes came from cannot
      fail; this can. The specification blockquote is parsed and compared, so a future fold that edits one and
      not the other breaks the suite instead of quietly restoring the drift. */
-  P.gate("research/b9-m6-fa-memo.md", 2, (memoSrc) => {
+  P.gate("final-answer-design-memo", 2, (memoSrc) => {
     const at = memoSrc.indexOf("**`mtpRowCopy`** (normative bytes");
     const lines = memoSrc.slice(memoSrc.indexOf("\n", at) + 1).split("\n");
     const quoted = [];

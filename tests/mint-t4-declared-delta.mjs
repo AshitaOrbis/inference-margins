@@ -104,7 +104,7 @@ const SINKS = [
     evidence: "Both arms contradict the 200,000-H100 point: it was a historical H100-focused marketing snapshot, and later public statements describe a mixed site. No per-SKU split is public, so none is fabricated — which also means the row allocates NO fleet weights and composes no section." },
   { sink: "coverage(xai/grok)", old: "95 / 0 / 5", new: "0 / 0 / 100 + a separate physical-inventory sentence",
     cluster: "fleet-composition",
-    evidence: "The Colossus rows answer 'do typed accelerator keys appear at a facility?', not 'what share of the modeled Grok blend rests on site-specific SERVING evidence?'. No current site/SKU Grok serving allocation is disclosed. Physical inventory is reported separately and is not coverage." },
+    evidence: "The Colossus rows answer 'do typed accelerator keys appear at a facility?', not 'what share of the modeled Grok blend rests on site-specific SERVING evidence?'. No current site- or SKU-level Grok serving allocation is disclosed. Physical inventory is reported separately and is not coverage." },
   { sink: "coverage(anthropic/opus)", old: "0 / 33 / 67 (company-keyed)", new: "38 / 33 / 29, count-backed 0 (preset-keyed, derived)",
     cluster: "fleet-composition",
     evidence: "Named-site serving evidence at Colossus C1 covers h100+h200+gb200 of the na-blend; Rainier and the TPU commitment stay PROGRAMME evidence (a multi-data-center milestone is not a named site). Percentages are derived, never stored." },

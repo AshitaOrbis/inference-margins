@@ -23,9 +23,15 @@
    absence of EVERY registered input — which is exactly what a reconstructed public stage is,
    and is not a state any private checkout can be talked into.
 
-   WHAT MAY LIVE HERE: paths, reasons, counts. NOT the bytes being skipped. A skip must never
-   embed what it skips, or the mechanism that keeps the specifications private becomes the mechanism
-   that publishes them.
+   WHAT MAY LIVE HERE: keys, reasons, counts, and the paths of inputs whose names are public. NOT the
+   bytes being skipped. A skip must never embed what it skips, or the mechanism that keeps the
+   specifications private becomes the mechanism that publishes them. This module's served twin ships
+   under site/tests, so a private memo, design document or research dive is registered here by a KEY:
+   its path lives in provenance-private-paths.json beside the source module, which the site sync does
+   not copy, and is attached to its row at load. The map ships with tests/, so every tree that can run
+   these gates carries it, a reconstructed public stage included. Its ABSENCE therefore forces private
+   mode in any tree: a keyed row then has no path and counts as missing, and the hard guard below fails.
+   Losing the map is never a way into reduced mode.
 
    REGISTRY MEMBERSHIP IS EMPIRICAL. This is the set of tracked, non-allow-listed files that
    an fs-level trace of the FULL gate chain (npm test · test:served-node · test:browser ·
@@ -53,12 +59,17 @@ const ROOT = (() => {
   return d;
 })();
 
-export const PRIVATE_INPUTS = [
-  { path: "research/b9-m6-fa-memo.md",
+/* The private paths, by key (see WHAT MAY LIVE HERE above). Read from the repository root, so the source module
+   and its served twin attach the same paths. */
+const PRIVATE_PATHS_FILE = join(ROOT, "tests", "provenance-private-paths.json");
+const PRIVATE_PATHS = existsSync(PRIVATE_PATHS_FILE) ? JSON.parse(readFileSync(PRIVATE_PATHS_FILE, "utf8")).paths : null;
+
+const REGISTERED_INPUTS = [
+  { key: "final-answer-design-memo",
     why: "M6 §2.9 / §17.2 / §17.4 hold the normative bytes of the FINAL-ANSWER copy the page ships" },
-  { path: "research/b9-spec-decode-lever-memo.md",
+  { key: "spec-decode-design-memo",
     why: "the two narrative exceptions registered in [N-BASIS] carry their oracles in the specification itself" },
-  { path: "research/im3-integration-design.md",
+  { key: "integration-design-document",
     why: "T-13 basis-manifest quote citations for the h20 / ascend / trn2 / trn3 rows" },
   { path: "deploy.sh",
     why: "release-entrypoint ordering gates; the master-only deploy path is private by design" },
@@ -76,27 +87,30 @@ export const PRIVATE_INPUTS = [
      which DO ship — cite these paths, so a public reader follows them to nothing. Whether the
      dives should become public, or the citations should name something else, is a
      publication-scope question for the author, not a test-wiring one. */
-  { path: "research/dives/im-arc/electricity-gptpro-2026-08-23.md",
+  { key: "dc-electricity-study-a",
     why: "registry cited source for the us-industrial and cn-western electricity rows" },
-  { path: "research/dives/im-arc/electricity-fable-2026-08-23.md",
+  { key: "dc-electricity-study-b",
     why: "registry cited source for the cn-coastal electricity row and two named-facility rows" },
-  { path: "research/dives/im-arc/electricity-subagent-china-tariffs-2026-08-23.md",
+  { key: "dc-china-tariff-study",
     why: "registry cited source for the China provincial tariff observations" },
-  { path: "research/dives/im-arc/electricity-subagent-named-facilities-2026-08-23.md",
+  { key: "dc-named-facility-study",
     why: "registry cited source for the named-facility electricity rows" },
-  { path: "research/dives/im-arc/fleet-composition-gptpro-2026-08-23.md",
+  { key: "dc-fleet-composition-study",
     why: "registry cited source for thirteen facility and programme fleet-composition rows" },
-  { path: "research/dives/im-arc/fleet-composition-synthesis-2026-08-23.md",
+  { key: "dc-fleet-composition-synthesis",
     why: "registry cited source for the xai-colossus-c1 mixed-aggregate row" },
-  { path: "research/dives/im-arc/tco-inputs-gptpro-2026-08-23.md",
+  { key: "dc-tco-inputs-study",
     why: "registry cited source for the xai-colossus-c1 milestone rows" },
-  { path: "research/dives/im-arc/rental-rates-synthesis-2026-08-23.md",
+  { key: "dc-rental-rates-synthesis",
     why: "registry cited source for nine RENT_QUOTES planning bands" },
-  { path: "research/dives/im-arc/rental-rates-gptpro-2026-08-23.md",
+  { key: "dc-rental-rates-study-a",
     why: "registry cited source for the h200 reserved-neocloud quote" },
-  { path: "research/dives/im-arc/rental-rates-fable-2026-08-23.md",
+  { key: "dc-rental-rates-study-b",
     why: "registry cited source for the tpu7 Anthropic strategic-estimate quote" },
 ];
+export const PRIVATE_INPUTS = REGISTERED_INPUTS.map((input) => (input.key
+  ? { ...input, path: PRIVATE_PATHS && typeof PRIVATE_PATHS[input.key] === "string" ? PRIVATE_PATHS[input.key] : undefined }
+  : input));
 
 /* Paths cited BY SHIPPED DATA rather than named in a test source. The DC registry's rows carry
    a `sourceFile`, and T2-DC-5 opens each one looking for that row's exact needle — so a
@@ -131,20 +145,29 @@ export const CITED_PRIVATE_SOURCES = (() => {
    served twin — callers never count "..". */
 export const repoPath = (rel) => join(ROOT, rel);
 const abs = (path) => join(ROOT, path);
-const registered = (path) => {
-  const row = PRIVATE_INPUTS.find((input) => input.path === path);
+/* A registered input is named by its path or, for a keyed row, by its key. */
+const registered = (name) => {
+  const row = typeof name === "string"
+    && PRIVATE_INPUTS.find((input) => input.path === name || (input.key && input.key === name));
+  if (!row && PRIVATE_PATHS === null) {
+    throw new Error(`provenance: "${name}" cannot be resolved because the private path map `
+      + "tests/provenance-private-paths.json is absent; it ships with tests/, so this tree is incomplete");
+  }
   if (!row) {
-    throw new Error(`provenance: "${path}" is not a registered private input — `
+    throw new Error(`provenance: "${name}" is not a registered private input — `
       + "add it to PRIVATE_INPUTS in the provenance-inputs module before any gate reads it");
   }
   return row;
 };
+const isPresent = (input) => typeof input.path === "string" && existsSync(abs(input.path));
+const label = (input) => input.path ?? input.key;
 
-export const presentInputs = () => PRIVATE_INPUTS.filter((input) => existsSync(abs(input.path)));
-export const missingInputs = () => PRIVATE_INPUTS.filter((input) => !existsSync(abs(input.path)));
+export const presentInputs = () => PRIVATE_INPUTS.filter(isPresent);
+export const missingInputs = () => PRIVATE_INPUTS.filter((input) => !isPresent(input));
 
-/* Tighten-only: forcing PRIVATE makes the guard demand every input. There is no inverse. */
-export const MODE = (process.env.IM_PRIVATE_TREE === "1" || presentInputs().length > 0)
+/* Tighten-only: forcing PRIVATE makes the guard demand every input. There is no inverse. An absent
+   private path map forces it too (see WHAT MAY LIVE HERE). */
+export const MODE = (process.env.IM_PRIVATE_TREE === "1" || PRIVATE_PATHS === null || presentInputs().length > 0)
   ? "private"
   : "reduced";
 
@@ -159,11 +182,21 @@ export function assertNoOrphanRegistrations(assert) {
     .filter((name) => name.endsWith(".mjs") && name !== "provenance-inputs.mjs")
     .map((name) => readFileSync(join(dir, name), "utf8"))
     .join("\n");
+  const named = (input) => (typeof input.path === "string" && sources.includes(`"${input.path}"`))
+    || (input.key && sources.includes(`"${input.key}"`));
   const orphans = PRIVATE_INPUTS
-    .filter((input) => !sources.includes(`"${input.path}"`) && !CITED_PRIVATE_SOURCES.has(input.path))
-    .map((input) => input.path);
+    .filter((input) => !named(input) && !CITED_PRIVATE_SOURCES.has(input.path))
+    .map(label);
   assert("provenance registry: every registered private input is consumed by a gate — no orphan rows",
     orphans.length === 0, `orphans: ${orphans.join(", ")}`);
+  /* The key map and the keyed rows agree exactly, wherever the map is present. */
+  if (PRIVATE_PATHS) {
+    const keys = REGISTERED_INPUTS.filter((input) => input.key).map((input) => input.key).sort();
+    assert("provenance registry: the private path map holds exactly the keyed rows, each with a path",
+      JSON.stringify(Object.keys(PRIVATE_PATHS).sort()) === JSON.stringify(keys)
+        && keys.every((key) => typeof PRIVATE_PATHS[key] === "string"),
+      `map keys ${Object.keys(PRIVATE_PATHS).length}, keyed rows ${keys.length}`);
+  }
 }
 
 /* One provenance ledger per suite. `assert` is the suite's own assert, so every guard failure
@@ -175,7 +208,7 @@ export function provenance(suite, assert) {
 
   /* THE HARD GUARD — fires at construction, so a suite cannot use this module without it. */
   if (MODE === "private") {
-    const missing = missingInputs().map((input) => input.path);
+    const missing = missingInputs().map(label);
     assert(`provenance HARD GUARD [${suite}]: the PRIVATE tree carries every registered provenance `
       + "input — a missing one is a FAILURE, never a skip",
       missing.length === 0, `missing ${missing.length}: ${missing.join(", ")}`);
@@ -184,8 +217,12 @@ export function provenance(suite, assert) {
   const api = {
     mode: MODE,
     /* Registry-checked existence, for gates that decide entry-by-entry inside a loop. */
-    has(path) { registered(path); return existsSync(abs(path)); },
-    read(path) { registered(path); return readFileSync(abs(path), "utf8"); },
+    has(name) { return isPresent(registered(name)); },
+    read(name) {
+      const row = registered(name);
+      if (typeof row.path !== "string") throw new Error(`provenance: "${name}" has no path (the private path map is absent)`);
+      return readFileSync(abs(row.path), "utf8");
+    },
     /* A provenance assertion: counted, then delegated to the suite's own assert. */
     assert(name, cond, detail) { executed += 1; assert(name, cond, detail); },
     /* n assertions could not run because their input is absent. `note` names the input, never
@@ -198,15 +235,15 @@ export function provenance(suite, assert) {
        public skip. */
     gate(paths, assertions, fn) {
       const list = Array.isArray(paths) ? paths : [paths];
-      list.forEach(registered);
-      const missing = list.filter((path) => !existsSync(abs(path)));
+      const rows = list.map(registered);
+      const missing = list.filter((name, i) => !isPresent(rows[i]));
       if (missing.length) {
         skipped += assertions;
-        missing.forEach((path) => skippedInputs.add(path));
+        missing.forEach((name) => skippedInputs.add(name));
         return;
       }
       const before = executed;
-      fn(...list.map((path) => api.read(path)));
+      fn(...list.map((name) => api.read(name)));
       const ran = executed - before;
       assert(`provenance [${suite}]: the declared skip count for ${list.join(" + ")} equals the `
         + "assertions that actually ran", ran === assertions, `declared ${assertions}, ran ${ran}`);

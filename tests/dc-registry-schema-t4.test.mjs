@@ -9,7 +9,8 @@
    is not evidence (redaction-gate doctrine).
    Run: node tests/dc-registry-schema-t4.test.mjs */
 import { existsSync, readFileSync } from "node:fs";
-import { provenance, CITED_PRIVATE_SOURCES } from "./provenance-inputs.mjs";
+import { provenance } from "./provenance-inputs.mjs";
+import { PRIVATE_SOURCE_FILES, sourceFileOf } from "./dc-private-sources.mjs";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 const D = require("../site/engine-data-dc-v1.js");
@@ -176,7 +177,7 @@ assert("T4-SCHEMA-3 the four PUE class bands exist and include the purpose-built
   const walk = (node, path) => {
     if (!node || typeof node !== "object") return;
     if (typeof node.sourceFile === "string" && typeof node.sourceNeedle === "string")
-      seen.push({ path, file: node.sourceFile, needle: node.sourceNeedle });
+      seen.push({ path, file: sourceFileOf(node.sourceFile, node.sourceNeedle), needle: node.sourceNeedle });
     for (const [key, value] of Object.entries(node))
       if (value && typeof value === "object") walk(value, path + "." + key);
   };
@@ -194,7 +195,7 @@ assert("T4-SCHEMA-3 the four PUE class bands exist and include the purpose-built
      IS published must still resolve in either tree, which is where the non-vacuity checks
      below get their teeth. */
   const provNeedles = provenance("dc-registry-schema-t4", assert);
-  const checkable = seen.filter((row) => !CITED_PRIVATE_SOURCES.has(row.file) || provNeedles.has(row.file));
+  const checkable = seen.filter((row) => !PRIVATE_SOURCE_FILES.has(row.file) || provNeedles.has(row.file));
   provNeedles.skip(seen.length - checkable.length, "research/dives/im-arc (registered private sources)");
   const unresolved = checkable.filter((row) => !resolves(row));
   provNeedles.assert("T4-SCHEMA-NEEDLE every sourced object in the registry — at ANY depth — resolves its needle",

@@ -2654,7 +2654,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>GB200 NVL72</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>active-parameter-surrogate</td>
-<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=8; sources=research/evidence-instances-v22.json#gb200-vllm-r1; the frozen roofline derivation F4 (vLLM R1 decode observation); the original coefficient de-embedding derivation (the de-embedding; its &#39;FP8 bridge value&#39; label is RETIRED per the adopted decision — see deployedBasis)</td>
+<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=8; sources=site/tests/evidence-instances-v22.json#gb200-vllm-r1; the frozen roofline derivation F4 (vLLM R1 decode observation); the original coefficient de-embedding derivation (the de-embedding; its &#39;FP8 bridge value&#39; label is RETIRED per the adopted decision — see deployedBasis)</td>
 </tr>
 <tr>
 <td>GB200 NVL72</td>
@@ -2738,7 +2738,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>GB300 NVL72</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>active-parameter-surrogate</td>
-<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=8; sources=research/evidence-instances-v22.json#gb300-analyst-set-dec; research/evidence-instances-v22.json#gb300-sglang-v4 (RETRO observation; excluded from fit set); declared assumed operating point (source batch not reconstructable; excluded from fit set); the original assumed-operating-point derivation</td>
+<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=8; sources=site/tests/evidence-instances-v22.json#gb300-analyst-set-dec; site/tests/evidence-instances-v22.json#gb300-sglang-v4 (RETRO observation; excluded from fit set); declared assumed operating point (source batch not reconstructable; excluded from fit set); the original assumed-operating-point derivation</td>
 </tr>
 <tr>
 <td>GB300 NVL72</td>
@@ -2816,7 +2816,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>H800 (China)</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>active-parameter-surrogate</td>
-<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=144; sources=research/evidence-instances-v22.json#h800-deepseek-prod-dec; the frozen roofline derivation F1 (DeepSeek Feb 2025 production disclosure)</td>
+<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=144; sources=site/tests/evidence-instances-v22.json#h800-deepseek-prod-dec; the frozen roofline derivation F1 (DeepSeek Feb 2025 production disclosure)</td>
 </tr>
 <tr>
 <td>H800 (China)</td>
@@ -2894,7 +2894,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>H20 (China)</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>active-parameter-surrogate</td>
-<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=16; sources=research/evidence-instances-v22.json#h20-ant-sglang-pro (F2 input observation); research/evidence-instances-v22.json#h20-ant-sglang (F3 input observation); research/evidence-instances-v22.json#h20-neutral-live-dec (live analyst-set identity); the frozen roofline derivation F2/F3</td>
+<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=16; sources=site/tests/evidence-instances-v22.json#h20-ant-sglang-pro (F2 input observation); site/tests/evidence-instances-v22.json#h20-ant-sglang (F3 input observation); site/tests/evidence-instances-v22.json#h20-neutral-live-dec (live analyst-set identity); the frozen roofline derivation F2/F3</td>
 </tr>
 <tr>
 <td>H20 (China)</td>
@@ -2972,7 +2972,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>TPU v7 Ironwood</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>replica-resident-distinct</td>
-<td>paired eta representation=replica-resident-distinct; nPhysDeclared=16; sources=the aggregate-throughput derivation; Google Ironwood Qwen 3.5 serving playbook 2026-07-14 (677 tok/s/chip COMBINED input-plus-output under 1K-in/8K-out — Google&#39;s own reporting convention; concurrency 64, 4 chips, 400 GB replica footprint). Its OUTPUT-ONLY equivalent on the same wall clock is 677 × 8/9 = 601.8 t/s/chip, because 8 of every 9 tokens in a 1K-in/8K-out workload are output — this is the form used in the bridge, and it is on the SAME timing convention as the rental anchor beside it. Its DECODE-STAGE equivalent is a different number, 606 output t/s/chip, from this project&#39;s own two-workload solve in the blinded replication of 2026-07-15 (&quot;Google proxy&quot;: 8000/T_i + 1000/T_o = 9000/3707 and 1000/T_i + 8000/T_o = 9000/677 give T_i = 10,279, T_o = 606), published as site/research/dive-replication-blinded.html. 606 is NOT used in the bridge, because the rental anchor has no decode-stage equivalent published and pairing one with the other is what put two clocks in one mean; TPU v7 Qwen3-Coder-480B rental anchor (518.86 OUTPUT tok/s/chip, stated concurrency 64 over 4 chips — research/evidence-instances-v22.json anchor 16, verbatim &quot;518.86 output tok/s/chip (1K/8K workload)&quot;, <a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B</a>)</td>
+<td>paired eta representation=replica-resident-distinct; nPhysDeclared=16; sources=the aggregate-throughput derivation; Google Ironwood Qwen 3.5 serving playbook 2026-07-14 (677 tok/s/chip COMBINED input-plus-output under 1K-in/8K-out — Google&#39;s own reporting convention; concurrency 64, 4 chips, 400 GB replica footprint). Its OUTPUT-ONLY equivalent on the same wall clock is 677 × 8/9 = 601.8 t/s/chip, because 8 of every 9 tokens in a 1K-in/8K-out workload are output — this is the form used in the bridge, and it is on the SAME timing convention as the rental anchor beside it. Its DECODE-STAGE equivalent is a different number, 606 output t/s/chip, from this project&#39;s own two-workload solve in the blinded replication of 2026-07-15 (&quot;Google proxy&quot;: 8000/T_i + 1000/T_o = 9000/3707 and 1000/T_i + 8000/T_o = 9000/677 give T_i = 10,279, T_o = 606), published as site/research/dive-replication-blinded.html. 606 is NOT used in the bridge, because the rental anchor has no decode-stage equivalent published and pairing one with the other is what put two clocks in one mean; TPU v7 Qwen3-Coder-480B rental anchor (518.86 OUTPUT tok/s/chip, stated concurrency 64 over 4 chips — site/tests/evidence-instances-v22.json anchor 16, verbatim &quot;518.86 output tok/s/chip (1K/8K workload)&quot;, <a href="https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B">https://github.com/AI-Hypercomputer/tpu-recipes/tree/main/inference/ironwood/vLLM/Qwen3-Coder-480B-A35B</a>)</td>
 </tr>
 <tr>
 <td>TPU v7 Ironwood</td>
@@ -3206,7 +3206,7 @@ page&#39;s declared guess, and the calculator exists so you can disagree with it
 <td>Ascend 910C</td>
 <td><code>decodeTrafficBasis</code></td>
 <td>active-parameter-surrogate</td>
-<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=128; sources=research/evidence-instances-v22.json#ascend-cminfer-decode (F5 input observation); research/evidence-instances-v22.json#ascend-cminfer-15ms (F6 input observation); research/evidence-instances-v22.json#ascend-neutral-live-dec (live analyst-set identity); the frozen roofline derivation F5/F6</td>
+<td>paired eta representation=active-parameter-surrogate; nPhysDeclared=128; sources=site/tests/evidence-instances-v22.json#ascend-cminfer-decode (F5 input observation); site/tests/evidence-instances-v22.json#ascend-cminfer-15ms (F6 input observation); site/tests/evidence-instances-v22.json#ascend-neutral-live-dec (live analyst-set identity); the frozen roofline derivation F5/F6</td>
 </tr>
 <tr>
 <td>Ascend 910C</td>

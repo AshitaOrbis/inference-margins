@@ -12,7 +12,8 @@
        tests/dc-coverage-resolver-t4.test.mjs. */
 import { createRequire } from "node:module";
 import { existsSync, readFileSync } from "node:fs";
-import { provenance, CITED_PRIVATE_SOURCES } from "./provenance-inputs.mjs";
+import { provenance } from "./provenance-inputs.mjs";
+import { PRIVATE_SOURCE_FILES, sourceFileOf } from "./dc-private-sources.mjs";
 const require = createRequire(import.meta.url);
 const E = require("../site/engine.js");
 const ED = require("../site/engine-data-v22.js");
@@ -140,15 +141,17 @@ if (D) {
   for (const [kind, rows] of [["region", D.REGIONS], ["facility", D.DATACENTERS], ["programme", D.PROGRAMMES]]) {
     for (const [id, row] of Object.entries(rows)) {
       const name = `T2-DC-5 ${kind} ${id} source file + exact needle exist`;
-      if (CITED_PRIVATE_SOURCES.has(row.sourceFile)) {
-        provSources.gate(row.sourceFile, 1, (text) => {
-          provSources.assert(name, text.includes(row.sourceNeedle), `${row.sourceFile} :: ${row.sourceNeedle}`);
+      // An unpublished dive is named in the served row by a descriptor; the unserved map gives its file.
+      const file = sourceFileOf(row.sourceFile, row.sourceNeedle);
+      if (PRIVATE_SOURCE_FILES.has(file)) {
+        provSources.gate(file, 1, (text) => {
+          provSources.assert(name, text.includes(row.sourceNeedle), `${file} :: ${row.sourceNeedle}`);
         });
         continue;
       }
-      const sourcePath = new URL(`../${row.sourceFile}`, import.meta.url);
+      const sourcePath = new URL(`../${file}`, import.meta.url);
       const text = existsSync(sourcePath) ? readFileSync(sourcePath, "utf8") : "";
-      assert(name, !!text && text.includes(row.sourceNeedle), `${row.sourceFile} :: ${row.sourceNeedle}`);
+      assert(name, !!text && text.includes(row.sourceNeedle), `${file} :: ${row.sourceNeedle}`);
     }
   }
   provSources.summary();
