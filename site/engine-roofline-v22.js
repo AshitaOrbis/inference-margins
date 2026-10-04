@@ -11,7 +11,7 @@
    Implements the cycle-2 decode/prefill roofline under the adopted roofline design
    (core equations, operating points, feasibility, stackMult, prefill, traffic
    fixed-OSL rule + customDonor codec delta), transcribed from the FROZEN
-   research/d2-equation-set-v2.md  (read-only; this file edits nothing frozen).
+   D2 equation set v2, unpublished (read-only; this file edits nothing frozen).
 
    DATA SOURCES (hard rule): every model-defining value comes from the slice-1a reviewed
    registries in engine-data-v22.js (as amended by the slice-1b review R5 fix pass: nShard

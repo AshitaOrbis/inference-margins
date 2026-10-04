@@ -1,6 +1,6 @@
 # v2.2 plan review — GPT-5.6 Pro, 2026-07-11
 
-> Pre-implementation adversarial review of PLAN-v22.md (run 12m39s, `gpt-5-6-pro`, Pro-verified, `completion_path: api`, Ashitaorbis project; conversation archived privately). Verbatim except ChatGPT-internal citation tokens, which are stripped. Verdict: **proceed only after three P0 plan corrections** — B state/precedence contract before code; no regenerated pack presented as original; no named-person role-play/approval in E.
+> Pre-implementation adversarial review of the v2.2 plan (unpublished; run 12m39s, `gpt-5-6-pro`, Pro-verified, `completion_path: api`, Ashitaorbis project; conversation archived privately). Verbatim except ChatGPT-internal citation tokens, which are stripped. Verdict: **proceed only after three P0 plan corrections** — B state/precedence contract before code; no regenerated pack presented as original; no named-person role-play/approval in E.
 
 I’m verifying the live v2.1.1 calculator, research materials, state/permalink semantics, and test claims before adjudicating each proposal and distinguishing implementation-blocking P0s.
 

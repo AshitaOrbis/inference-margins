@@ -307,7 +307,7 @@ render "" > "$TMP/s1.html"
 check "state landing: NOT the clean-central identity (the page opens on the estimate preset)" "$TMP/s1.html" mustnot 'class="identity-strip id-central"'
 check "state landing: strip names Opus"                 "$TMP/s1.html" must "Claude Opus 4.x"
 check "state landing: the opening preset is labeled the page-open default" "$TMP/s1.html" must "page-open default"
-# row-514 opener (2026-08-09, gate adjudicated 2026-08-09): the page now opens on the round-3
+# Round-3 opener (2026-08-09, gate adjudicated 2026-08-09): the page now opens on the round-3
 # self-authored Pro preset, whose author MOVED the lead off zero (0/2/4 declared range, median 2).
 # The landing therefore states the author's own lead instead of the old NO-PRIOR chip.
 check "state landing: the opening preset states its author's own lead (2 months)" "$TMP/s1.html" must "at an algorithmic lead of 2 months"
@@ -453,7 +453,7 @@ check "stated: it says QUOTED, not computed here"               "$TMP/s1.html" m
 check "stated: it names whose figures they are"                 "$TMP/s1.html" must "Stated by GPT-5.6 Pro"
 check "stated: it names the basis they were stated on"          "$TMP/s1.html" must "at the undiscounted list price"
 check "stated: it states the gap against what this page computes" "$TMP/s1.html" must "0.8 points below what they state"
-# 2026-08-16 a-im-legibility: the assertion kept its meaning and dropped its version narration.
+# 2026-08-16 legibility pass: the assertion kept its meaning and dropped its version narration.
 # It exists to prove the span is disclosed as the AUTHOR'S SELECTED span rather than a live-engine
 # corner band; "carried over from round 2" was the page telling the reader about a previous
 # version, which the adopted annotation rule of 2026-08-16 removes from every surface.
@@ -580,7 +580,7 @@ check "annex: app/dark default without params"             "$TMP/annex-default.h
 # from their defaults — hero and the h200 bar must now report the same margin. Pre-fix, the
 # The activated roofline re-derives this fixture to 72.64%; hero and chart must remain identical.
 # ignored billCacheHit/cacheWriteShare) — reproduced and recorded in
-# logs/weekly/2026-07-15-expedited4.md via a direct engine.js node script before this fix
+# the weekly log of 2026-07-15 via a direct engine.js node script before this fix
 # landed. This DOM check is the end-to-end proof the browser-rendered chart agrees, since
 # renderGenChart only runs in a browser (SVG/DOM), never under plain node.
 TCHART=$(b64 '{"blend":{"h200":100},"billCacheHit":20,"cacheWriteShare":30,"cacheWriteMult":150,"_meta":{"schema":"v5","epoch":"v22","displayedMargin":null,"fleet":{"id":"custom"},"totalCase":"custom","model":"opus","persp":"median","traffic":{"mode":"native","profileId":"reference","ioRatio":15,"cacheHit":60}}}')
@@ -617,13 +617,13 @@ check "sliceC switcher: span value renders from the derivation" "$TMP/default.ht
 # case 499: these are DEFAULT-FLEET disclosure surfaces. The page now opens on a preset that carries its
 # own declared blend (its author excluded Trainium by name), so the na-blend attribution chain belongs to
 # the central scenario, one click away — showing it over a different fleet would be the wrong claim.
-# FLAGGED as a follow-up in the row-499 delta manifest: the landing surface loses this disclosure until
+# FLAGGED as a follow-up in the preset-structure delta manifest: the landing surface loses this disclosure until
 # the reader selects the central scenario.
 #check "sliceC switcher: na-blend attribution chain renders verbatim (C-5)" "$TMP/default.html" must "TWO-LEVEL ESTIMATE"
 # case 499: these are DEFAULT-FLEET disclosure surfaces. The page now opens on a preset that carries its
 # own declared blend (its author excluded Trainium by name), so the na-blend attribution chain belongs to
 # the central scenario, one click away — showing it over a different fleet would be the wrong claim.
-# FLAGGED as a follow-up in the row-499 delta manifest: the landing surface loses this disclosure until
+# FLAGGED as a follow-up in the preset-structure delta manifest: the landing surface loses this disclosure until
 # the reader selects the central scenario.
 #check "sliceC switcher: two-quantity live readout (render vs policy-clean)" "$TMP/default.html" must "the two are different quantities (two-boolean contract)"
 check "sliceC bookmarks: labeled total cases render in scope (C-10)" "$TMP/default.html" must "Labeled total-parameter cases"
@@ -635,7 +635,7 @@ render "?s=$(urlenc "v5.$FTDT")" > "$TMP/ftdt.html"
 check "sliceC declared-topology token: loads as a shared scenario" "$TMP/ftdt.html" must "Loaded a shared scenario"
 checkhero "sliceC declared-topology token: DECLARED construction renders (≈68%, the rent adoption moved the default state 62.90 -> 68.00)" "$TMP/ftdt.html" is "≈68% — policy-labeled scenario"  # hero token recomposed from value and identity
 check "sliceC declared-topology token: named-fleet identity leads the note (C-4)" "$TMP/ftdt.html" must "NAMED FLEET SCENARIO"
-# C-1 NEGATIVE — RE-POINTED at 5 T (im-share-finalization, 2026-09-02). At 2.5 T this
+# C-1 NEGATIVE — RE-POINTED at 5 T (the share finalization, 2026-09-02). At 2.5 T this
 # assertion could not discriminate: declared-topology's serve-feasibility-FILTERED variant
 # EQUALS its AS-IS variant there (both 63.1377% today — all seven declared legs are feasible
 # at 2.5 T once the Trainium operating points are repaired), so there was no distinct

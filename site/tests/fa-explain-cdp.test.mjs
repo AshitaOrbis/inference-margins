@@ -437,7 +437,7 @@ const ANSWER_IDS_PIN = [
    added. The DIGITS pin moves by exactly ONE added number: the stream gains a leading "58" — block B's tile body repeats
    "≈58%" under the ≈58% value; no published figure moved (c3714685… -> d07f0b5f…). */
 const ANSWER_DIGITS_PIN = "031e299a154d1a6d03a1400ce8b0e3e92cd7b9cffab5defd473ea5c3c866ad02"; /* RE-MINTED 2026-10-04: against the pre-cleanup answer, the digit stream lost only digits of internal labels (round, section and phase numbers) and gained 2026-07-25 four times, the date the same review states elsewhere on the page; a sequence diff of the dumped streams shows no other change, so no published figure moved. Previous: 42ac1199a50ae0e0… */ // previous c3714685e9652c15…
-/* RE-PINNED 2026-09-12 (im-default-window-and-mcp-discrepancy; Astra review round 3 F9), THE WORDING ONLY. The
+/* RE-PINNED 2026-09-12 (the default-window fix; Astra review round 3 F9), THE WORDING ONLY. The
    digits pin above did not move: the rendered digit stream is byte-identical. Read with DUMP_ANSWER_SURFACE=1 on
    both sides (the pre-change tree 9dcb54e reproduces the previous pin 9a69431e... exactly, so the dump measures
    what this pin measures), and the rendered answer differs in exactly two insertions: the landing line now reads
@@ -445,7 +445,7 @@ const ANSWER_DIGITS_PIN = "031e299a154d1a6d03a1400ce8b0e3e92cd7b9cffab5defd473ea
    default in their own browser)" and the prior-reading line "by default it now opens on". A reader can now choose
    their own default, so the unqualified claim became false for that reader. Read for a RANKING of an external
    claim, as the failure message asks: none; the words qualify which default the answer's fixed readings describe.
-   Evidence: answer-surface-diff.txt in the release-09-12 work folder (private workspace) */
+   Evidence kept with the 2026-09-12 release records (unpublished). */
 /*  RE-PIN (2026-09-20): the WORDING moves too, and it was read for what this pin
    exists to catch — a RANKING of an external claim — and contains none. What changed inside THE
    ANSWER: the rent-class sentence (four of the FIVE member rents are analyst-set), the Trainium

@@ -48,7 +48,7 @@ const workerSrc = readFileSync(join(ROOT, "mcp-server/worker/overrides/reports.t
 const nodeSrc = readFileSync(join(ROOT, "mcp-server/src/reports.ts"), "utf8");
 const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.indexOf("\n}", i); return src.slice(i, j + 2); };
 
-/* v2.2.0 PRODUCTION RELEASE — DECLARED TEXT DELTAS (row 441, owner ruling q-row441-ref-and-bridge,
+/* v2.2.0 PRODUCTION RELEASE — DECLARED TEXT DELTAS (an adjudication of
    2026-08-06). The bedcc23 capture below stays BYTE-FROZEN: its whole value is predating the
    markup, so it is never re-captured. What moved here is CONTENT, not markup — merging the b9 arc
    to master carried v2.1.12's two owner-APPROVED RAISE Summit paragraphs into §7 (Anthropic's
@@ -65,14 +65,14 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    value is predating the markup. Verified by extraction diff against the previous commit: the
    front-page transport text differs on EXACTLY ONE line, and on that line by exactly "2.9" -> "2.4".
    No report-sN slice moves, because the bullet lives outside them. */
-/* 2026-08-13 V3.0.0 ALIGNMENT — ONE FURTHER AUTHORIZED DELTA, front-page only (Polaris ruling
-   esc-20260813T014805Z-1df204c8 per plan D-10: badge v3.0, machine identity 3.0.0 on all four
+/* 2026-08-13 V3.0.0 ALIGNMENT — ONE FURTHER AUTHORIZED DELTA, front-page only (adjudicated
+   2026-08-13 per plan D-10: badge v3.0, machine identity 3.0.0 on all four
    surfaces). Verified by extraction diff old-vs-new through the COMPILED runtime extractor:
    the transport text differs on EXACTLY TWO lines — the subtitle ("live v2.2 path" → "live v3.0
    path") and the footer release-manifest line (methodology v3.0 · engine v3.0.0-2026-08-13).
    No report-sN slice moves. The bedcc23 capture stays BYTE-FROZEN as designed. */
 /* 2026-08-13 V3.0.1 VERSION-STRING SWEEP — ONE FURTHER AUTHORIZED DELTA, front-page only
-   (owner note 0b76be: current-identity strings neutral/v3.0; historical boundaries dated).
+   (the author's rule: current-identity strings neutral/v3.0; historical boundaries dated).
    Extraction diff through the compiled runtime extractor: EXACTLY THREE lines move — the
    deprecation prose ("before v2.2 (2026-08-06)"), the roofline sentence (version-neutral),
    and the byline (current-methodology anchor). report-s3 moves by EXACTLY the roofline sentence
@@ -80,7 +80,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
 /* 2026-08-16 ESTIMATES-CARDS REBUILD — TWO FURTHER AUTHORIZED DELTAS, report-s5 and the
    front-page slice that contains it (owner rulings q-margins-estimates-legibility-rebuild = A and
    q-margins-estimates-headline-basis = A, both 2026-08-13; build spec
-   orchestration/backlog-recovery/day-2026-07-28/reports/estimates-cards-SPEC-2026-08-13.md).
+   the estimates-cards specification of 2026-08-13, unpublished).
    §5 is where the ruling landed: the two QUOTED adjudicator cards replace the verdict block as the
    visible surface, and that block's prose is preserved verbatim inside the section expander. This
    IS a content delta and is declared as one — transport text SHOULD move, because the two estimates
@@ -109,27 +109,27 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    expanders. A content delta, declared as such. Verified by extraction diff at
    DUMP_PARITY_HASHES=1: EXACTLY front-page moves; report-s1..s10 — including s5, which the cards
    left in the legibility hoist — are byte-identical to their prior expectations. */
-/* 2026-08-17 d-im-annotations — ONE FURTHER AUTHORIZED DELTA, front-page only (owner note 514e03;
+/* 2026-08-17 annotations — ONE FURTHER AUTHORIZED DELTA, front-page only (the author's direction;
    the eleven markup annotations of 2026-08-16 are the instruction set). Three content changes land
    in this slice. (1) The answer tile COLLAPSES: label, number, a title-length subject and the
    landing reading stay above the fold; the full scope declaration and every band/span line move
    inside #fa-full. Nothing is deleted and no node changes id — the transport sees a containment
    change as a text change because it extracts the slice, which is exactly what a declared delta is
    for. (2) The two estimate expanders lose their round-over-round narration under his standing
-   rule nd94bbc, and both round-2 pairs move VERBATIM to research/changelog.md; the provenance
+   changelog rule, and both round-2 pairs move VERBATIM to research/changelog.md; the provenance
    lines naming which authored statement each face quotes are kept. (3) The cost chart's subtitle
    gains one clause saying its bars are clickable. Content deltas, declared as such. Verified by
    extraction diff through the compiled runtime extractor at DUMP_PARITY_HASHES=1: EXACTLY
    front-page moves; report-s1..s10 are byte-identical to their prior expectations, including all
    four earlier declared deltas. The bedcc23 capture stays BYTE-FROZEN as designed. */
-/* 2026-08-18 d-im-tile — ONE FURTHER AUTHORIZED DELTA, front-page only (owner ruling
-   q-im-tile-position, verbatim: "The 83% tile should be at the top, alongside fable estimate, as I
-   described in note 11"). It answers the POSITION half of annotation nad7e98, which the 2026-08-17
-   annotations leg left needing a ruling rather than moving the wrong tile on a guess. The ≈83%
+/* 2026-08-18 tile position — ONE FURTHER AUTHORIZED DELTA, front-page only (the adopted
+   decision, verbatim: "The 83% tile should be at the top, alongside fable estimate, as I
+   described in note 11"). It answers the POSITION half of the author's tile annotation, which the 2026-08-17
+   annotation work left needing a ruling rather than moving the wrong tile on a guess. The ≈83%
    headline tile leaves .hero-row and becomes the head of the projections block — tile, then the two
    hoisted estimate cards and the stress test, then the answer tile — and the four supporting output
    tiles (blended cost, effective price, cost per 1M output, serving feasibility) follow below it.
-   Its tail collapses behind one summary line, the treatment #fa-full already got for nbc7fc1; the
+   Its tail collapses behind one summary line, the treatment #fa-full already got for the answer tile; the
    mandatory disclosure surfaces stay on the face, uncollapsed, because a number may never be
    readable without the sentence that qualifies it. A layout delta, declared as one — no computed
    value moves, and the WIDE 270-state render-parity hash is unchanged as the executed proof.
@@ -140,15 +140,15 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    envelope"). Nothing else in the slice moves. report-s1..s10 are byte-identical to their prior
    expectations, including all five earlier declared deltas. The bedcc23 capture stays BYTE-FROZEN
    as designed. */
-/* 2026-08-18 d-im-desktop — ONE FURTHER AUTHORIZED DELTA, front-page only (owner notes 11b102 and
-   bb3f19). It repairs a miss that shipped green twice: "The Fable display still isnt there either
+/* 2026-08-18 desktop layout — ONE FURTHER AUTHORIZED DELTA, front-page only (two notes from the
+   author). It repairs a miss that shipped green twice: "The Fable display still isnt there either
    way… point 11 was a spot where you had exactly what I wanted displayed at the start much lower in
    the page, and now you cant figure out how to do it", under the interpretive rule "you have to
    actually understand it as being laid out on a desktop screen, not mobile".
    What moved: the ≈83% tile and the two estimate cards leave .controls-col for a new full-width
    #projections band placed above the evidence board, and #estimates-top stops being a <details>
    closed at first paint — measured live, the Fable card was NOT DISPLAYED on either viewport, and
-   annotation n95f678 approved the pair as it RENDERED in §5, not as a summary line you click.
+   the author's annotation approved the pair as it RENDERED in §5, not as a summary line you click.
    A PURE REORDER, and that is an executed claim, not a characterization: the extraction diff
    old-vs-new through the COMPILED runtime extractor at DUMP_PARITY_HASHES=1 has 689 lines before
    and 689 after, ZERO lines added, ZERO removed, and the two line MULTISETS ARE IDENTICAL. The
@@ -159,7 +159,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    report-s1..s10 are byte-identical to their prior expectations, including all six earlier declared
    deltas — §5's slice does not move because the cards were already hoisted out of it on 2026-08-16.
    SECOND MOVE, SAME LEG, folded into this one delta: #final-answer joins the band, because
-   nbc7fc1 says the answer tile "needs to be top with other projections" and lifting the tile and
+   the answer-tile annotation says the answer tile "needs to be top with other projections" and lifting the tile and
    the estimates out of .controls-col without it left it below the evidence board while its own
    projections sat above — a regression this leg introduced and repaired rather than shipped. The
    pure-reorder property is re-verified against the PRE-LEG tree (acb7674~1), not merely against the
@@ -188,7 +188,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    position is stable whether the section is open or closed — which matters more, not less, now
    that an expanded #fa-full carries the justification stack). No sentence gained, lost or changed
    a word.
-   WHY: nbc7fc1 asked for a short title and a COLLAPSED tile, and the shipped tile was still
+   WHY: the answer-tile annotation asked for a short title and a COLLAPSED tile, and the shipped tile was still
    1,444 px tall on desktop and 3,512 px on mobile with #fa-full closed — #fa-higher alone was
    837 px / 2,548 px of that. After: 429 px and 693 px. No computed value moves and the WIDE
    270-state render-parity hash is unchanged as the executed proof. report-s1..s10 are
@@ -254,7 +254,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    asserts the very transition the correction says never happened. It now reads as an explicit
    counterfactual sensitivity with the cancellation stated, so report-s5 and front-page move once
    more for the same reason and no other slice does.
-   (original delta, owner note d85f73) — report-s5 and
+   (original delta, the author's note) — report-s5 and
    the front-page slice that carries it. The Sonnet-class line stopped promising readers a September
    price increase that was cancelled: Anthropic made the $2/$10 rate PERMANENT on 2026-08-10 and the
    2026-09-01 step to $3/$15 never took effect, verified at the primary source (the pricing docs say
@@ -265,9 +265,9 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    DUMP_PARITY_HASHES=1: EXACTLY report-s5 and front-page move (norm and raw); the other nine ids
    are byte-identical to their prior expectations. The bedcc23 capture stays BYTE-FROZEN. */
 /* 2026-09-09 im-release-edit — THE LANGUAGE EDITION. EIGHT AUTHORIZED DELTAS: report-s1, s2, s3,
-   s5, s6, s7, s10 and front-page (owner voice note a0b244, 2026-09-09; DECISIONS
-   d-20260909-im-release-edit-approved-push-deploy; work order
-   im-language-rationalize-2026-09-08.md §9; burn-queue bq-2120).
+   s5, s6, s7, s10 and front-page (the author's approval of 2026-09-09; an
+   unpublished release decision; an unpublished work order
+   of 2026-09-08, its section 9).
    This is the largest declared delta this gate has carried, and it SHOULD be: the release edit
    rewrites the site under one canonical vocabulary and settles seven result-identity conflicts in
    the source, so transport text moves wherever reader-facing text moved. What did NOT move is the
@@ -280,8 +280,8 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    Verified through the COMPILED runtime extractor at DUMP_PARITY_HASHES=1 after a fresh MCP build.
    The bedcc23 capture stays BYTE-FROZEN as designed — its whole value is predating the markup. */
 /* 2026-09-10 im-release-edit-r2 — ONE FURTHER AUTHORIZED DELTA, front-page only, and it is a
-   RESTORATION (court answer to esc-20260910T033916Z-99df24ac, court-intake, intake-no-card;
-   burn-queue bq-2189). The Fable 5 round-3 estimate card's companion figure goes back to "≈80% at
+   RESTORATION (an adjudication of a research review on 2026-09-10, taken without a separate
+   decision step). The Fable 5 round-3 estimate card's companion figure goes back to "≈80% at
    list" from the "≈76% at list" that db73816 wrote into it on 2026-08-24 — six days AFTER the
    deploy that still serves 80. It is a QUOTED estimator reading, not an engine output, and all
    three witnesses say 80: the deployed bytes at faf6bec, research/changelog.md:135 where the face
@@ -312,7 +312,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    else. Ten unmoved ids against one moved one is the proof this round touched a single figure.
    The registry moved in the same commit and the face-vs-registry gate proves they moved TOGETHER;
    research/changelog.md carries the entry. The bedcc23 capture stays BYTE-FROZEN. */
-/* 2026-09-12 im-release-contradiction-fix (bq-2315, P1) — FOUR AUTHORIZED DELTAS: report-s5,
+/* 2026-09-12 release contradiction fix (P1) — FOUR AUTHORIZED DELTAS: report-s5,
    report-s6, report-s10 and the front-page slice that contains them. Release 3f89d63 published two
    readings of ONE comparison — 63-vs-93 in the §6 lead-in and 57-vs-93 in the procurement row three
    paragraphs below — and seven rounds of Astra xhigh review found that owner ruling
@@ -438,7 +438,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
        bound to the live engine by tests/snapshots.test.mjs.
      * front-page: the one-sentence standfirst (M4) with the rest of it moved into the methods box, the
        methods box renamed and opening on the metric with the "Superseded readings" item moved VERBATIM to
-       the changelog (M8, owner rule nd94bbc), the estimate expanders' round-2 history moved verbatim to the
+       the changelog (the author's standing changelog rule), the estimate expanders' round-2 history moved verbatim to the
        changelog (M7), "stated range" / "estimators" (M12), the "Planning baseline" tile title and stress
        line (M3), static trigger labels (M10), the masthead links (M13), the footer split (M20), plus the two
        slices above.
@@ -478,7 +478,7 @@ const bodyOf = (src, marker) => { const i = src.indexOf(marker); const j = src.i
    Confirmed by the COMPILED runtime extractor at DUMP_PARITY_HASHES=1 after a fresh MCP build, id by id: EXACTLY
    report-s5, report-s6 and front-page move (norm and raw); report-s1..s4 and s7..s10 are byte-identical to their
    declared expectations. The bedcc23 capture stays BYTE-FROZEN as designed. */
-/* 2026-09-28 im-sol-sonnet55-estimates-0928 (bq-3800, owner note 9ae06a) — TWO AUTHORIZED DELTAS, report-s10 and the
+/* 2026-09-28 Sonnet 5.5 and Sol estimates (the author's note) — TWO AUTHORIZED DELTAS, report-s10 and the
    front-page slice that contains it. §10's Astra Pro estimates category gains two generated cards (Claude Sonnet 5.5 and
    GPT-6 Sol, each the calculator's result on its GPT-6 Astra Pro run's recorded inputs) and one byline sentence naming
    them. Confirmed by the compiled runtime extractor at DUMP_PARITY_HASHES=1 after a fresh MCP build: EXACTLY report-s10

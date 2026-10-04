@@ -58,7 +58,7 @@ export function handler(args: Args): ToolResult {
   const mine = ranked.filter((p) => (E.explorationComputedBucket(p) || { id: null }).id === bucket.id);
 
   const routes = mine.map((p) => {
-    /* im-vet-six-repairs (2026-09-20), Astra xhigh finding 1 — BLOCKING. Each route object is
+    /* The 2026-09-20 vetting repairs, Astra xhigh finding 1 — BLOCKING. Each route object is
        independently quotable: a consumer can lift one route out of this response and show it on
        its own, so the enclosing envelope's baseline disclosure does not make the route's own
        fleet statement true. Every route now carries the disclosure for ITS OWN computation,

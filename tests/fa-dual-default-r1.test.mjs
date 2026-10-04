@@ -14,7 +14,7 @@
    WHAT THIS REPO DOES, STATED PLAINLY. The recommendation contains two remedies and BOTH are
    now in place.
 
-     (1) The presentation remedy — "shipping both readings together". Under final-answer revision/row-499 the block
+     (1) The presentation remedy — "shipping both readings together". Under the final-answer and preset-structure revisions the block
          renders every default reading at once instead of one, which is the branch the final-answer revision rework
          chose and the reason SV-1's specific harm is gone.
      (2) The mechanism remedy — the `referenceState` fingerprint. `finalAnswer()` returns one
@@ -35,7 +35,7 @@
    was never the warning element as such; it was that a reader saw ONE default answer while a
    materially different default answer was suppressed — "the live hero as the project's default
    answer; and the block literally titled THE ANSWER as the project's default answer", with the
-   divergence notice hidden on the clean landing state. Under final-answer revision/row-499 the block now renders
+   divergence notice hidden on the clean landing state. Under the final-answer and preset-structure revisions the block now renders
    EVERY default reading at once — the landing preset the page opens on, the calculator's own
    ratified-prior default, and the trend-zero public-evidence reference — each carrying its own
    basis inside its own token, plus a bridge line relating them. There is no suppressed second

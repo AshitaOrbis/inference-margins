@@ -83,6 +83,33 @@ try {
     ["worker session name", "im-legibility-merge-enact-0925"],
     ["worker session name", "inference-margins-lane-1004"],
     ["worker session name", "inference-margins-visual-polish-0927"],
+    // Residue kinds the first sweep missed: row labels, note and annotation ids, private records, undated labels.
+    ["internal row label", "the row-499 null convention"],
+    ["internal row label", "row514-round3"],
+    ["note or annotation id", "the author’s note + c72950"],
+    ["note or annotation id", "notes aa315c + c72950"],
+    ["note or annotation id", "annotation nad7e98"],
+    ["annotation id", "nbc7fc1 says the answer tile"],
+    ["private record citation", "closing burn-queue the release"],
+    ["private record citation", "the private plan of that release"],
+    ["private record citation", "in the release work folder (private workspace)"],
+    ["private record citation", "court answer to a research review"],
+    ["private record citation", "court-intake"],
+    ["worker label", "im-release-edit"],
+    ["worker label", "a-im-legibility"],
+    ["worker label", "by leg im-vet-six-repairs"],
+    ["worker label", "im-default-window-and-mcp-discrepancy"],
+    // Kinds the second sweep missed: private files, run ids, labelled runs, one-word work labels.
+    ["annotation id", "NBC7FC1 says the answer tile"],
+    ["private file citation", "a review of PLAN-v22.md"],
+    ["private file citation", "merged in the leg's VISUAL-REVIEW.md"],
+    ["private file citation", "Full persona outputs: workspace run"],
+    ["private file citation", "reports/codex-council/2026-07-16-plan/persona.md"],
+    ["private file citation", "logs/weekly/2026-07-15-expedited4.md"],
+    ["run identifier", "gate verdict 20260912T212606Z requeued it"],
+    ["labelled run id", "IM2-anchor-verification-2026-07-16"],
+    ["worker label", "im-finalize (transcribed from the record)"],
+    ["worker label", "archived at im-desktop/dual-viewport-probe.mjs"],
   ];
   for (const [i, [shape, value]] of red.entries()) {
     expect(shape, tree(`red-${i}`, { "nested/a.bin": Buffer.from(`\0ok\n${value}\n`, "utf8") }), 1, `nested/a.bin:2: ${shape}`, value);
@@ -117,6 +144,20 @@ try {
     ["editorial process label", "r4 §C3"],
     ["editorial process label", "design analysis§6"],
     ["editorial process label", "b9 spec-decode"],
+    // Ordinary formatting: a slug ending a sentence, and labels wrapped in inline markup.
+    ["internal program label", "See im4-fa-justifications."],
+    ["internal program label", "<code>im4-fa-justifications</code>."],
+    ["internal phase label", "The <code>b9</code> defaults"],
+    ["owner provenance", "owner <strong>ruling</strong>"],
+    ["owner provenance", "owner <em>note</em>"],
+    ["owner provenance", '<a href="#x">owner</a> <code>ruling</code>'],
+    // A reference inside an attribute of a formatting tag is still decoded and seen.
+    ["backlog row id", '<a title="bq&#45;4078">link</a>'],
+    ["owner provenance", '<code title="owner&nbsp;ruling">x</code>'],
+    // A line break between two formatted words still separates them.
+    ["owner provenance", "owner<br><strong>ruling</strong>"],
+    ["owner provenance", "<code>owner</code><br><em>ruling</em>"],
+    ["annotation id", "NAD7E98 asked for it"],
   ];
   for (const [i, [shape, value]] of bypasses.entries()) {
     n++;
@@ -132,9 +173,18 @@ try {
     if (findInternalRefs(value).length) failures.push(`direct clean ${value}: unexpected match`);
     expect(`clean ${value}`, tree(`clean-${value}`, { "a.txt": value }), 0);
   }
-  const clean = "row rows polar polarization d- inside words adopted-im-h800 D-1 D-SD-3 Q-001 p-value p-values q-factor q-factors 3-D H800 GB200 FP4 research/changelog.html re-mint im-research-2026-10-01 im-research-2026 DeepSeek-R1-0528 qwen3.8-max-0902 GPT-6.1 Sol GPT-6 Astra Pro fleet legs leg fold Ulanqab M890 owner-operator owner TCO model owner's actual gross margin shared memo about public pricing gb200-owner-adopted-scenario-2026-09 v25-im-arc-t4-fold-20260824 research/dives/im-arc/entry.md tests/im4-fleet-policy-harness.mjs tests/spec-decode-lever-b9.test.mjs M22 14 H16 m2 MTP";
+  const clean = "row rows polar polarization d- inside words adopted-im-h800 D-1 D-SD-3 Q-001 p-value p-values q-factor q-factors 3-D H800 GB200 FP4 research/changelog.html re-mint im-research-2026-10-01 im-research-2026 DeepSeek-R1-0528 qwen3.8-max-0902 GPT-6.1 Sol GPT-6 Astra Pro fleet legs leg fold Ulanqab M890 owner-operator owner TCO model owner's actual gross margin shared memo about public pricing gb200-owner-adopted-scenario-2026-09 v25-im-arc-t4-fold-20260824 \"research/dives/im-arc/entry.md\" tests/im4-fleet-policy-harness.mjs tests/spec-decode-lever-b9.test.mjs M22 14 H16 m2 MTP";
   expect("public vocabulary", tree("clean", { "index.html": clean, "a.bin": Buffer.from([0, 0xff]) }), 0, "scanned 2 files");
-  for (const [i, lookalike] of ["GPT-6.1 Sol", "GPT-6 Astra Pro", "fleet legs", "leg", "fold", "Ulanqab M890 instances", "owner-operator", "Internal memo reportedly put training MFU at ~11%", "anonymous market memo", "a federal court ruling", "IM5 deferral", 'd="M22 14 H16 V50 H22"'].entries())
+  for (const [i, lookalike] of ["GPT-6.1 Sol", "GPT-6 Astra Pro", "fleet legs", "leg", "fold", "Ulanqab M890 instances", "owner-operator", "Internal memo reportedly put training MFU at ~11%", "anonymous market memo", "a federal court ruling", "IM5 deferral", 'd="M22 14 H16 V50 H22"',
+    "im4-fleet-policy-harness.mjs", "<code>im4-fleet-policy-harness.mjs</code>.", "<code>b9.json</code>",
+    "<strong>owner</strong>-operator", "the owner <em>TCO</em> model",
+    "<code>b9</code><em>.json</em>", "grid-row-1234", "row-major order", "a 3-row table", "annotations: { readOnlyHint: true }",
+    "note 202609 is a number", "a court answered the motion", "work folders", "v25-im-arc-t4-fold-20260824",
+    "im-research-2026-10-01", "\"research/dives/im-arc/entry.md\"", "#nabc123", "sha-nab12cd",
+    "SECURITY.md", "CONTRIBUTING.md and README.md", "PLANNING.md", 'class="im-claim"', "2026-07-11T02:11:18Z",
+    "\"research/reception/meta/notes.md\"", "the browser logs it"].entries())
+    // The two research paths are quoted values: an unquoted unpublished research path is a citation (see the
+    // unpublished-research cases below); a quoted one is a functional pointer, which is what these two test.
     expect(`public look-alike ${i}`, tree(`lookalike-${i}`, { "a.txt": lookalike }), 0);
   const heldText = "The design gate was closed in three Sol rounds at 28d4b25.";
   const heldSha = createHash("sha256").update(heldText).digest("hex");
@@ -175,6 +225,19 @@ try {
   const linkedRoot = join(scratch, "linked-root");
   symlinkSync(outside, linkedRoot);
   expect("a symlink root is never followed", linkedRoot, 2);
+  for (const [i, text] of ["(research/gptpro-reports/x-dive-2026-07-15.md, not part of the annex)",
+    "// fetched and archived (research/notes/y-2026-05-01.md), so the", "\"verifierRef\": \"research/z-ledger.md (row a)\"",
+    "see `research/notes/w.md` for the derivation", "(research/../research/v.md)"].entries())
+    expect("a research document named in prose or a comment, unpublished", tree(`unpublished-${i}`, { "a.js": `ok\n${text}\n` }), 1,
+      "a.js:2: unpublished research citation");
+  for (const [i, text] of ["sourceFile: \"research/dives/x/y-2026-08-23.md\"", "{ path: 'research/b.md' }", "<a href=\"research/c.md\">c</a>",
+    "see research/gptpro-reports/dive-tpu-2026-07-15.md for the dive"].entries())
+    expect("a quoted pointer or a published research document stays clean", tree(`pointer-${i}`, { "a.js": `ok\n${text}\n` }), 0, "scanned 1 files");
+  const gen = tree("gen-root", { "mcp-server/worker/src/gen/a.gen.ts": "/* bq-1253 */\n", "mcp-server/worker/src/index.ts": "ok\n",
+    "site/gen/a.js": "/* bq-1253 */\n" });
+  expect("the Worker's generated build output is skipped", join(gen, "mcp-server/worker/src"), 0, "scanned 1 files", undefined,
+    { pathRoot: gen, heldLines: [] });
+  expect("...and no other directory named gen", join(gen, "site"), 1, "gen/a.js:1: backlog row id", undefined, { pathRoot: gen, heldLines: [] });
   expect("empty", tree("empty"), 2);
   expect("missing", join(scratch, "missing"), 2);
 } finally {

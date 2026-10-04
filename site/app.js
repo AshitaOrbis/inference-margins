@@ -702,7 +702,7 @@ function buildParam(p) {
     lockNote.textContent = lockWhy;
     wrap.appendChild(input); wrap.appendChild(lockNote);
     /* Adopted 2026-08-16: "This needs to jump you to the setting to
-       allow it, or include a toggle for it, as it is I'd have no idea how to activate it").
+       allow it, or include a toggle for it, as it is I'd have no idea how to activate it".
 
        The why-line already NAMES the stack setting; what it could not do is take him there, so a
        reader who accepted the explanation still had nowhere to click. This is the affordance, and
@@ -1998,7 +1998,7 @@ function rangeHandlesFor(id, label, min, max, step, point) {
   };
   /* Adopted 2026-08-16: "not what I envisioned, 3 stacked dots should
      be on a single line, then have them be able to move on that line, we don't want 4 separate
-     lines, that's confusing and clunky").
+     lines, that's confusing and clunky".
 
      ONE track, three dots. The three inputs are still native <input type="range"> — overlaid on a
      single line rather than replaced by hand-rolled drag handles — and that is the load-bearing
@@ -2203,7 +2203,7 @@ function buildRentDiscounts(wrap, p) {
 
   const FAMS = [["nvidia", "NVIDIA"], ["tpu", "TPU"], ["trainium", "Trainium"], ["ascend", "Ascend"]];
   const fmt = v => (v == null ? "registered rate (1.00×)*" : v.toFixed(2) + "×");
-  /* The asterisk is the row-499 NULL CONVENTION (the adopted decision): a dial nobody declared still shows
+  /* The asterisk is the preset-structure NULL CONVENTION (the adopted decision): a dial nobody declared still shows
      a value, and the value is marked as the page's default rather than presented as a choice. */
 
   const famBox = mkEl("div", "disc-fam");
@@ -5229,7 +5229,7 @@ const BOARD_BOUND_LABEL = { point: "point", interval: "interval", floor: "floor"
 const BOARD_SRC_LABEL = { "primary-post": "primary post", "quoted-secondary": "quoted-secondary", reporting: "reporting", "model-generated": "model-generated", "disclosure-anchor": "provider disclosure", "sweep-non-finding": "sweep non-finding" };
 /* F11 (review): this map MUST cover PERSPECTIVE_SPACE_KEYS — boardChangedSummary maps over that
    list, so a key present there and missing here renders "undefined [object Object]" on a route card.
-   The three row-499 keys are here for that reason, not because any config sets them yet. */
+   The three preset-structure keys are here for that reason, not because any config sets them yet. */
 const BOARD_FIELD_LABEL = { hwMode: "cost basis", kwh: "electricity price", dcPerW: "datacenter capex per watt", dcLifeYears: "datacenter life", capexScopeMode: "capex scope", capexAbsLeg: "absolute capex by accelerator", rentRegistryPin: "pinned rent registry", capitalRecovery: "capital recovery", rentMult: "GPU-hour multiplier", rentMultLeg: "per-accelerator discount", rentMultFam: "per-family discount", rentAbsAll: "absolute rental price", rentAbsLeg: "absolute rental price by accelerator", dialRanges: "declared ranges", util: "fleet utilization", stackMult: "serving-stack efficiency", interact: "interactivity", batchShare: "batch-API share", discount: "average discount", blend: "hardware blend" };
 function mkEl(tag, cls, text) {
   const e = document.createElement(tag);
@@ -5887,7 +5887,7 @@ function setReaderDefault(modelId, perspId) {
   const p = PERSPECTIVES.find(x => x.id === perspId);
   if (!p) return;
   /* Every scenario the window offers can be a reader's default on every model the selector offers, the Custom model
-     included (the note of 2026-09-12: "a button on every assumption"; gate verdict 20260912T212606Z requeued the
+     included (the note of 2026-09-12: "a button on every assumption"; a gate verdict of 2026-09-12 requeued the
      round-2 refusal that left Custom's scenarios without one). A default is a model id and a scenario id, and the page
      rebuilds that scenario's own settings from them. Custom's starting settings are page code like any named model's
      (MODELS "custom".set), so nothing about an unedited Custom scenario lives only in this visit. What no default carries

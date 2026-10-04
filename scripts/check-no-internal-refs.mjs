@@ -2,7 +2,7 @@
 // Every regular served file is scanned as bytes, including comments and binary metadata.
 // Symlinks are never followed. Diagnostics name shapes, never their private values.
 // Exit 0 clean, 1 references found, 2 nothing could be scanned.
-import { lstatSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, lstatSync, readdirSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -19,17 +19,32 @@ export const SHAPES = [
   ["owner example provenance", /\bowner\s+(?:case|pick)\b|\bpage['’]s\s+owner\s+set\b/gi],
   ["private memo citation", /\b(?:(?:design|decision|feasibility-redesign)\s+memo|the\s+memo(?:['’]s)?|memo\s*(?:§+|:\d|\[N-|v\d+|im[34]-|[DCFGJ]-\d+|the\s+design\s+analysis|revised\s+to)|memo[- ](?:measured|replication)|shared\s+memo\s+(?:<code>)?research\/(?:b9|im[34])[-/][a-z0-9.-]+)\b/gi],
   ["internal court reference", /\b(?:the\s+court(?:['’]s)?|court\s*(?::\s*the\s+review|\s+(?:record|note|for\s+the\s+bytes)))\b/gi],
-  // Keep functional paths and longer protocol identities out of prose-label matches.
-  ["internal program label", /(?<![\w/-])(?:im-arc|im[34]-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w/.-])/gi],
+  // Keep functional paths and longer protocol identities out of prose-label matches; a label that
+  // ends a sentence ("im4-x.") still matches, a file name ("im4-x.mjs") does not.
+  ["internal program label", /(?<![\w/-])(?:im-arc|im[34]-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w/-]|\.[\w/-])/gi],
   ["internal program phase", /\bIM[345](?=\s+(?:program(?:me)?|phase|design|integration|revision|roofline|exit-gate|slice)\b)/gi],
-  ["internal phase label", /(?<![^\s("'`])b9(?=$|[\s.,:;)"'`])/gi],
+  ["internal phase label", /(?<![^\s("'`])b9(?=$|[\s,:;)"'`]|\.(?![\w/-]))/gi],
   ["internal milestone label", /\b(?:M\d+(?:['’]s|\s+(?:phase|gate|wiring|contract|rule|defaults|release|delta|side-registry|registry|family|shipped|whitelist|wording|surface|reconciliation|decision|fix|moved|moves|fixes|replaces|let|ADDS))|(?:pre-|post-)M\d+|(?:phase|milestone)\s+M\d+|M\d+[–-]M\d+\s+milestones)\b/g],
   ["internal fold label", /\bT\d+\s+fold\b/gi],
   ["review-process jargon", /\b(?:toss-back|fold\s+round|Sol\s+rounds|lens-runs)\b/gi],
   ["editorial process label", /(?<![\w/-])(?:ruling\s+im-[a-z0-9-]+|r\d+\s+run\s+[a-z]|im-arc(?![/-])|memo\s*§+\s*[0-9]+|T\d+\s+fold|r\d+\s*§+\s*[a-z]?\d+|design\s+analysis\s*§+\s*\d+|b\d+\s+(?:M\d+|UX-[ABC]|spec-decode|arc))\b/gi],
   ["internal row number", /\brows?\s+\d+(?:\s*(?:,|and|&)\s*\d+)*/gi],
+  ["internal row label", /(?<![\w-])rows?[-_]\d{3,4}\b|(?<![\w-])row\d{3,4}-[a-z]/gi],
+  ["note or annotation id", /\b(?:notes?|annotations?)\b(?:\s+n?(?=[0-9]*[a-f])[0-9a-f]{6}\b|[^\n.;]{0,24}?[+&]\s*n?(?=[0-9]*[a-f])[0-9a-f]{6}\b)/gi],
+  ["annotation id", /(?<![\w/#.+=-])n(?=[0-9]*[a-f])[0-9a-f]{6}(?![\w-])/gi],
+  ["private record citation", /\bburn[- ]queue\b|\bprivate\s+plan\b|\bwork\s+folder\b|\(private\s+workspace\)|\bcourt[- ](?:answer|intake)\b/gi],
+  ["private file citation", /(?<![\w/.-])(?:PLAN|VISUAL-REVIEW|FOLD|HANDOFF|ORCHESTRATION-BRIEF|REVIEW-FINDINGS)(?:-[\w.-]+)?\.md\b|\bworkspace\s+run\b|(?<![\w.-])(?:reports|logs)\/[\w.-]+\//g],
+  ["run identifier", /\b20\d{6}T\d{6}Z\b/g],
+  ["labelled run id", /\bIM\d(?:\.\d)?-[a-z0-9]+(?:-[a-z0-9]+)+/g],
   ["orchestrator name", /\bPolaris\b(?:\s+gen\d+)?/gi],
   ["worker session name", /(?<![\w-])(?:im|inference-margins)-(?:[a-zA-Z0-9]+-)+(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])(?![\w-])/gi],
+  // An undated work label ("im-release-edit", "a-im-legibility"); the dated research ids and paths stay clean.
+  ["worker label", /(?<![\w/.#-])(?:a-im-[a-z]+(?:-[a-z0-9]+)*|im-(?!research-\d)[a-z]+(?:-[a-z0-9]+)+|im-(?:finalize|desktop|annotations|legibility|tile))(?![\w-]|\.[\w/-])/gi],
+  // A research document named in prose or a comment where the release does not publish it. A path that is
+  // the whole value of a quoted string ("sourceFile": "research/x.md") is a functional pointer and stays
+  // clean; a backtick span is markup, not a string value, so it does not exempt a path. A path the annex
+  // publishes, or a file the site itself serves, is not a leak (see isPublishedResearch below).
+  ["unpublished research citation", /(?<!["'\w./-])research\/[\w./-]+\.md(?![\w./-])|(?<![\w./-])research\/[\w./-]+\.md(?![\w./"'-])/g],
 ];
 
 export function decodeSlashes(s) {
@@ -38,8 +53,12 @@ export function decodeSlashes(s) {
     .replace(/%2[fF]/g, "/");
 }
 // Every decoded character retains its offset in the raw file, including decoded newlines.
-// Strip only inline markup; block boundaries cannot join an identifier across paragraphs.
-function decodedView(raw, inlineSpace = false) {
+// Strip only inline markup; block boundaries cannot join an identifier across paragraphs. The phrasing
+// view also removes formatting tags (<code>, <strong>, <a> …) WITHOUT inserting spaces, so <code>b9</code>
+// or owner <strong>ruling</strong> reads as text while <code>b9</code><em>.json</em> stays a file name; the
+// other views keep those tags, so a reference inside one of their attributes is still decoded and seen.
+// The phrasing view runs twice, like the others: a <br> between two formatted words still separates them.
+function decodedView(raw, inlineSpace = false, phrasing = false) {
   let text = raw, offsets = Array.from({ length: raw.length }, (_, i) => i);
   const replace = (pattern, decode) => {
     let next = "", map = [], end = 0;
@@ -62,17 +81,20 @@ function decodedView(raw, inlineSpace = false) {
     return n <= 0x10ffff ? String.fromCodePoint(n) : m[0];
   });
   replace(/<\/?(?:br|wbr|span)\b(?:[^>"\']|"[^"]*"|\'[^\']*\')*>/gi, () => inlineSpace ? " " : "");
+  if (phrasing) replace(/<\/?(?:code|strong|em|b|i|u|s|a|abbr|cite|dfn|kbd|mark|q|samp|small|sub|sup|time|var|data)\b(?:[^>"\']|"[^"]*"|\'[^\']*\')*>/gi, () => "");
   replace(/%2f/gi, () => "/");
   replace(/[\u00a0\u2010\u2013]/g, m => m[0] === "\u00a0" ? " " : "-");
   return { text, offsets };
 }
 export function findInternalRefs(bytes) {
   const raw = Buffer.isBuffer(bytes) ? bytes.toString("utf8") : bytes;
-  const views = [{ text: raw, offsets: null }, decodedView(raw), decodedView(raw, true)];
+  const views = [{ text: raw, offsets: null }, decodedView(raw), decodedView(raw, true),
+    decodedView(raw, false, true), decodedView(raw, true, true)];
   const hits = [], seen = new Set();
   for (const { text, offsets } of views) for (const [shape, pattern] of SHAPES) {
     for (const match of text.matchAll(pattern)) {
       if (shape === "decision or card id" && /^(?:p-values?|q-factors?|q-learning|p-type|d-wave|d-sd-\d+)$/i.test(match[0])) continue;
+      if (shape === "unpublished research citation" && isPublishedResearch(match[0])) continue;
       const index = offsets ? offsets[match.index] : match.index;
       const key = `${shape}:${index}`;
       if (seen.has(key)) continue;
@@ -86,6 +108,23 @@ export function findInternalRefs(bytes) {
 }
 
 const PROJECT_ROOT = fileURLToPath(new URL("../", import.meta.url));
+// Generated build output, skipped by the walk: mcp-server/worker/scripts/build.mjs regenerates this directory on
+// every build, it is gitignored (mcp-server/worker/.gitignore), and so it is never a source and never ships.
+const BUILD_OUTPUT = new Set(["mcp-server/worker/src/gen"]);
+// The research documents the release publishes: every `md:` entry of the annex build's publish list, and every
+// file the site serves. With no publish list beside the guard, nothing counts as published (fail closed).
+let publishedResearch;
+function isPublishedResearch(path) {
+  if (path.split("/").includes("..")) return false;
+  if (!publishedResearch) {
+    publishedResearch = new Set();
+    try {
+      for (const m of readFileSync(join(PROJECT_ROOT, "build-research-html.mjs"), "utf8").matchAll(/\bmd:\s*"([^"]+)"/g))
+        publishedResearch.add(m[1]);
+    } catch (error) { if (error.code !== "ENOENT") throw error; }
+  }
+  return publishedResearch.has(path) || existsSync(join(PROJECT_ROOT, "site", path));
+}
 function loadHeldLines() {
   try { return JSON.parse(readFileSync(join(PROJECT_ROOT, "scripts/internal-refs-held.json"), "utf8")); }
   catch (error) { if (error.code === "ENOENT") return []; throw error; }
@@ -123,7 +162,10 @@ export function scanInternalRefTree(directory, options = {}) {
       const path = join(dir, entry.name);
       const st = lstatSync(path);
       if (st.isSymbolicLink()) continue;
-      if (st.isDirectory()) { walk(path); continue; }
+      if (st.isDirectory()) {
+        if (BUILD_OUTPUT.has(relative(pathRoot, path).split("\\").join("/"))) continue;
+        walk(path); continue;
+      }
       if (!st.isFile()) continue;
       scanned++;
       const bytes = readFileSync(path), hashes = hashLineBytes(bytes), raw = bytes.toString("utf8");

@@ -1077,11 +1077,11 @@ const digitsOnlyStripped = (s) => s.replace(/[\d.,]+/g, "#");
       { token: "g1-teortaxes-9095", lit: "10%", sentence: 7, why: "claim arithmetic — the cost share implied BY the 90→95 claim, whose claimant is named in the same entry's `What it claims` segment" },
       { token: "g1-teortaxes-9095", lit: "5%",  sentence: 7, why: "claim arithmetic — the other endpoint of that same implied cost share" },
       { token: "g1-teortaxes-9095", lit: "90%", sentence: 26, why: "a `What would flip it` counterfactual — the DISCLOSURE that would have to appear, not a figure this page computes" },
-      { token: "g1-teortaxes-9095", lit: "41%", sentence: 26, why: "claim arithmetic inside that same counterfactual — the further cut in cost per billed unit the evidence would have to demonstrate (im-vet-six-repairs 2026-09-20: 40% -> 41% with the lens, and the sentence index moves because the band-membership sentence grew)" },
+      { token: "g1-teortaxes-9095", lit: "41%", sentence: 26, why: "claim arithmetic inside that same counterfactual — the further cut in cost per billed unit the evidence would have to demonstrate (the 2026-09-20 vetting repairs: 40% -> 41% with the lens, and the sentence index moves because the band-membership sentence grew)" },
       { token: "g5-baker-85", lit: "85%", sentence: 2, why: "the Baker claim's own value, restated in the arithmetic sentence following its attributed introduction" },
-      { token: "g5-baker-85", lit: "40%", sentence: 2, why: "claim arithmetic — the cost increase the owned-TCO construction could tolerate to reach that claim (im-vet-six-repairs 2026-09-20: 37% -> 40% with the owned-TCO route)" },
+      { token: "g5-baker-85", lit: "40%", sentence: 2, why: "claim arithmetic — the cost increase the owned-TCO construction could tolerate to reach that claim (the 2026-09-20 vetting repairs: 37% -> 40% with the owned-TCO route)" },
       { token: "g5-huatai-80", lit: "80%", sentence: 3, why: "the Huatai claim's own floor value, inside its `What would flip it` counterfactual; the claimant is named in the same entry's `What it claims` segment" },
-      { token: "g5-alderson-90", lit: "7.0%", sentence: 4, why: "claim arithmetic inside a `What would flip it` counterfactual — the further cost cut the owned-TCO construction would need (im-vet-six-repairs 2026-09-20: 8.5% -> 7.0% with the owned-TCO route)" },
+      { token: "g5-alderson-90", lit: "7.0%", sentence: 4, why: "claim arithmetic inside a `What would flip it` counterfactual — the further cost cut the owned-TCO construction would need (the 2026-09-20 vetting repairs: 8.5% -> 7.0% with the owned-TCO route)" },
     ];
     const key = (tok, lit, si) => tok + "|" + lit + "|" + si;
     const allowed = new Set(ATTRIBUTION_EXCEPTIONS.map(e => key(e.token, e.lit, e.sentence)));

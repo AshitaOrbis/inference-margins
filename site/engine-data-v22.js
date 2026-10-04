@@ -1,7 +1,7 @@
 /* Normative data registries — DATA ONLY (no functions beyond export plumbing).
    Authored 2026-07-18 against the adopted roofline design,
    verified architecture constants, and the FROZEN
-   research/d2-equation-set-v2.md (equations , conventions , recipes  — read-only).
+   D2 equation set v2, unpublished (equations , conventions , recipes  — read-only).
    Deployed-η arithmetic follows the frozen derivations (every η shown and reproduced there).
 
    BINDING CONVENTIONS (verified conventions):
@@ -42,8 +42,8 @@
    an explicitly declared analyst default and share a dimension-aware `topologySensitivity.cases`
    list. Only N_shard cases can reach a divisor; N_domain/N_world/N_role/N_replicas values are
    documentation-only and hard-rejected by the roofline path. Sources and adjudication:
-   research/gptpro-reports/2026-07-20-replica-width-consult.md (sibling primary repository),
-   research/primary-sources/nvl72-replica-widths-2026-07-20/capture.md, and
+   the GPT-5.6 Pro replica-width consult of 2026-07-20 (unpublished),
+   the NVL72 replica-width primary-source capture of 2026-07-20 (unpublished), and
    the frozen roofline derivations. */
 
 "use strict";
@@ -1581,7 +1581,7 @@ const DEFAULT_FLEET_ID = "na-blend";
    carries placement-derived residency and placementVerified: true. Closed models keep
    the uniform+policy form; donor transfer NEVER carries placement
    (labeled analyst sensitivity only). Config captures with sha256 pins:
-   research/primary-sources/hf-configs-placement-2026-07-22/capture.md.
+   the Hugging Face config-placement capture of 2026-07-22 (unpublished).
    Placement contract adopted 2026-07-22.
    ===================================================================================== */
 const WEIGHT_PLACEMENT = Object.freeze({

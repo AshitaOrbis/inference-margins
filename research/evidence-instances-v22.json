@@ -1,11 +1,11 @@
 {
  "_meta": {
   "title": "Evidence instances (IM2) — current anchors expressed through the WS-B phase-evidence schema + WS-C uncertainty contract",
-  "governingPlan": "the release-07-16, a private workspace plan (IM2: contracts before D2)",
+  "governingPlan": "the 2026-07-16 release plan (unpublished): contracts before D2",
   "schema": "site/evidence-schema.js (WS-B) + site/uncertainty-contract.js (WS-C)",
   "sources": [
-   "research/validation-ledger.md (anchor registry; three-status; primary-source verification)",
-   "research/d2-validation-protocol.md (§2 eligibility, §3 status, §8 reporting invariants)",
+   "the validation ledger, unpublished (anchor registry; three-status; primary-source verification)",
+   "the D2 validation protocol, unpublished (§2 eligibility, §3 status, §8 reporting invariants)",
    "site/engine.js (HW rows; existing analyst estimates)"
   ],
   "note": "IM2 is data-structures-and-docs only. No engine numbers changed. Every figure below is transcribed verbatim from the ledger/engine (no new claims, no re-derivation). Uncertainty bands are left unfilled (low/high null, derived:false): IM2 defines the composition algebra; the propagation that fills a band is D2/IM5.",
@@ -63,7 +63,7 @@
     "url": "https://x.com/deepseek_ai/status/1895688300574462431",
     "retrievedDate": "2026-09-02",
     "verbatimValue": "14.8k out tok/s per 8xH800 node => 1,850/GPU",
-    "verifier": "im-finalize (transcribed from this repository's own sourced record)",
+    "verifier": "the release finalization pass (transcribed from this repository's own sourced record)",
     "verifierRef": "research/grok-sweep-margin-claims.md:38 — the same @deepseek_ai post, quoted verbatim with its date",
     "note": "RECOVERED 2026-09-02 (GPT Pro 2026-07-29 rec 8). This was 'inherited from the grounding ledger' with a null URL. The source was never actually missing: the project already carried the primary post verbatim — Day 6 of #OpenSourceWeek, '73.7k/14.8k input/output tokens per second per H800 node', dated 2025-03-01 — in research/grok-sweep-margin-claims.md. Transcribed, not guessed."
    },
@@ -138,7 +138,7 @@
     "url": "https://x.com/deepseek_ai/status/1895688300574462431",
     "retrievedDate": "2026-09-02",
     "verbatimValue": "~4,026 tok/s/GPU (raw 9,212 aggregate incl. 56.3% disk-cache share)",
-    "verifier": "im-finalize (transcribed from this repository's own sourced record)",
+    "verifier": "the release finalization pass (transcribed from this repository's own sourced record)",
     "verifierRef": "research/grok-sweep-margin-claims.md:38 — the same @deepseek_ai post, quoted verbatim with its date",
     "note": "RECOVERED 2026-09-02 (GPT Pro 2026-07-29 rec 8). This was 'inherited from the grounding ledger' with a null URL. The source was never actually missing: the project already carried the primary post verbatim — Day 6 of #OpenSourceWeek, '73.7k/14.8k input/output tokens per second per H800 node', dated 2025-03-01 — in research/grok-sweep-margin-claims.md. Transcribed, not guessed."
    },
@@ -804,8 +804,8 @@
     "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Interactive/performance/run_1/mlperf_log_summary.txt",
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Interactive 250,633.67 tok/s (Result is: VALID)",
-    "verifier": "IM0-retro-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "verifier": "retro verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (gb300-mlperf-v6 row)",
     "note": "Interactive additionally on NVIDIA's results page. Site's rounded 250,634 is an exact rounding of the log value."
    },
    "engineFit": null,
@@ -866,8 +866,8 @@
     "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Server/performance/run_1/mlperf_log_summary.txt",
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Server 400,436.77 tok/s (Result is: VALID)",
-    "verifier": "IM0-retro-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "verifier": "retro verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (gb300-mlperf-v6 row)",
     "note": "Site's rounded 400,437 is an exact rounding of the log value."
    },
    "engineFit": null,
@@ -927,8 +927,8 @@
     "url": "https://raw.githubusercontent.com/mlcommons/inference_results_v6.0/main/closed/NVIDIA/results/GB300-NVL72_GB300-288GB_aarch64x72_TRT/deepseek-r1/Offline/performance/run_1/mlperf_log_summary.txt",
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Offline 647,076 tok/s (Result is: VALID)",
-    "verifier": "IM0-retro-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (gb300-mlperf-v6 row)",
+    "verifier": "retro verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (gb300-mlperf-v6 row)",
     "note": "Site's rounded 647,076 matches the log value."
    },
    "engineFit": null,
@@ -989,14 +989,14 @@
     "retrievedDate": "2026-07-16",
     "verbatimValue": "~633,000 generated tok/s system-wide (~1,646/card) at TTFT<=1s, TPOT<=50ms",
     "verifier": "council-empiricist",
-    "verifierRef": "reports/codex-council/2026-07-16-im-reengineer-plan-20260716T141016Z/persona-empiricist.md",
+    "verifierRef": "the 2026-07-16 design review's empiricist report (unpublished)",
     "note": "confirmed at primaries by the council empiricist (2026-07-16)"
    },
    "engineFit": null,
    "uncertainty": null,
    "e1Eligible": true,
    "provenance": "FlexNPU full-system SLO-constrained: ~=633,000 gen tok/s system / ~=1,646 per card at TTFT<=1s, TPOT<=50ms (arrived 2026-07-15, additive).",
-   "notes": "RETRO; a DIFFERENT measurement basis from the FITTED isolated-decode point (ascend-cminfer-decode) -- the CM384-REFIT question (Q-AUTO-2026-07-15-CM384-REFIT). No public CM384 hourly rental price exists -- throughput anchored, cost unanchored. CLOSED (the adopted decision 2026-07-18, memo research/im3-integration-design.md §9 'CM384 ruling'): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point (§4 registry), or calibration input. Closure label (verbatim, §9): 'delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged'. Corroboration: this and sibling full-system bases (6.43/8.11/8.57%) bracket the deployed ascend row's 7% default -- supportive context, not a fit input."
+   "notes": "RETRO; a DIFFERENT measurement basis from the FITTED isolated-decode point (ascend-cminfer-decode) -- the CM384 refit question of 2026-07-15. No public CM384 hourly rental price exists -- throughput anchored, cost unanchored. CLOSED (the adopted decision 2026-07-18, an unpublished integration design, its section 9 on CM384): NO fit change, NO WS-E upgrade -- EVIDENCE-RECORD ANNOTATION only, never a selectable scenario, operating point (§4 registry), or calibration input. Closure label (verbatim, §9): 'delivered full-system SLO point: 1,648 tok/s/card ⇒ 8.1%, mixed prefill+decode, all 384 cards charged'. Corroboration: this and sibling full-system bases (6.43/8.11/8.57%) bracket the deployed ascend row's 7% default -- supportive context, not a fit input."
   },
   {
    "id": "cm384-flexnpu-6p2d-decode",
@@ -1050,8 +1050,8 @@
     "url": "https://arxiv.org/abs/2606.04415",
     "retrievedDate": "2026-07-17",
     "verbatimValue": "Table 3 (6P2D, P16-D144, 1024/1024): Decode throughput 811.52 req/s (standalone decode-pool capacity); Total 489.84 req/s (prefill-bound)",
-    "verifier": "IM2-cm384-6p2d-verification-2026-07-17",
-    "verifierRef": "research/cycle2-evidence/cm384-flexnpu-operating-point.md (§3 Table 3, §7a); research/validation-ledger.md (cm384-flexnpu row, second operating point)",
+    "verifier": "CM384 6P2D verification of 2026-07-17",
+    "verifierRef": "the cycle-2 CM384 FlexNPU operating-point evidence, unpublished (§3 Table 3, §7a); the validation ledger, unpublished (cm384-flexnpu row, second operating point)",
     "note": "STANDALONE decode-pool capacity from Table 3, re-confirmed at the primary PDF in the cycle2 dive (2026-07-17). Value corrected round-2 pre-freeze: the first-registered 489.84 req/s was the prefill-BOTTLENECKED system rate (wrong target for a decode observation); the decode observation is 811.52 x 1,024 / 288 = 2,885.4 tok/s/decode-card. Decode-pool per-card batch UNKNOWN (only DP288-EP288 stated)."
    },
    "engineFit": null,
@@ -1111,7 +1111,7 @@
     "retrievedDate": null,
     "verbatimValue": "6,688 tok/s prefill (projection)",
     "verifier": null,
-    "verifierRef": "research/d2-validation-protocol.md (§5 G2 note)",
+    "verifierRef": "the D2 validation protocol, unpublished (§5 G2 note)",
     "note": "a projection, not a measurement -- nothing to verify as an anchor; excluded under §2"
    },
    "engineFit": null,
@@ -1184,13 +1184,13 @@
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Qwen3-Coder-480B-A35B FP8 on 4 chips -> 518.86 out tok/s/chip; $6.42/M on-demand, $2.89/M 3-yr",
     "verifier": "council-empiricist",
-    "verifierRef": "reports/codex-council/2026-07-16-im-reengineer-plan-20260716T141016Z/persona-empiricist.md",
+    "verifierRef": "the 2026-07-16 design review's empiricist report (unpublished)",
     "note": "verified at primary sources (Google TPU recipe + Google TPU pricing) via the council empiricist (2026-07-16); price arithmetic reproduces $6.42/M and $2.89/M"
    },
    "engineFit": null,
    "uncertainty": null,
    "provenance": "Qwen3-Coder-480B-A35B FP8 on 4 chips -> 518.86 out tok/s/chip (1K/8K workload); $6.42/M on-demand, $2.89/M 3-yr (arrived 2026-07-15, additive). first usable TPU $/token anchors; unfitted. Operating point re-confirmed at primary 2026-07-17 (cycle2 tpu7 dive): --max-concurrency=64 (~16/chip), --request-rate=inf, NO SLO; achieved TTFT/TPOT measured by the InferenceX harness but left as placeholders (not disclosed).",
-   "notes": "RETRO; the first usable TPU $/token anchors. Unfitted -- the engine's tpu7 effDec/effPre stay analyst estimates until WS-E scores this as a prediction first (plan WS-A). Operating-point correction (cycle2 dive, research/cycle2-evidence/tpu7-ironwood-operating-point.md): concurrency IS stated at source (--max-concurrency=64, ~16/chip) -- the ledger/receipt-pack 'UNKNOWN' was wrong for concurrency. Genuinely unavailable are the achieved latency (harness placeholders) and any SLO/goodput target (none applied): a fixed-concurrency-64, request-rate=inf, no-SLO throughput point."
+   "notes": "RETRO; the first usable TPU $/token anchors. Unfitted -- the engine's tpu7 effDec/effPre stay analyst estimates until WS-E scores this as a prediction first (plan WS-A). Operating-point correction (cycle2 dive, its TPU7 Ironwood operating-point evidence, unpublished): concurrency IS stated at source (--max-concurrency=64, ~16/chip) -- the ledger/receipt-pack 'UNKNOWN' was wrong for concurrency. Genuinely unavailable are the achieved latency (harness placeholders) and any SLO/goodput target (none applied): a fixed-concurrency-64, request-rate=inf, no-SLO throughput point."
   },
   {
    "id": "trn2-neuron-llama70b",
@@ -1255,8 +1255,8 @@
     ],
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Overall Output Throughput: 144.17136914316023 (Llama 3.3 70B spec-decode) -> $68.90/M",
-    "verifier": "IM2-anchor-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row)",
+    "verifier": "anchor verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (trn2-neuron-llama row)",
     "note": "throughput verified verbatim at the AWS Neuron 70B tutorial; price at aws.amazon.com/ec2/capacityblocks/pricing; arithmetic re-derived exactly"
    },
    "engineFit": null,
@@ -1329,8 +1329,8 @@
     ],
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Overall Output Throughput: 100.69986490153724 (Llama 3.1 405B FP8+spec) -> $98.65/M; the 405B table also shows a per-request P50 102.41 -- cite the aggregate",
-    "verifier": "IM2-anchor-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row)",
+    "verifier": "anchor verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (trn2-neuron-llama row)",
     "note": "throughput verified verbatim at the AWS Neuron 405B tutorial; price at aws.amazon.com/ec2/capacityblocks/pricing; arithmetic re-derived exactly"
    },
    "engineFit": null,
@@ -1392,8 +1392,8 @@
     "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.3-70b-tutorial.html",
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Overall Output Throughput: 36.55567822866449 (Llama 3.3 70B, no speculative decoding, BF16); conclusion table No-spec TTFT P50 814.2ms / TPOT P50 19.6ms / 36 tok/s",
-    "verifier": "IM2-anchor-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row, no-spec baselines); research/cycle2-evidence/trn2-low-batch-overhead-evidence.md §A.1",
+    "verifier": "anchor verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (trn2-neuron-llama row, no-spec baselines); the cycle-2 Trn2 low-batch overhead evidence, unpublished, §A.1",
     "note": "no-spec baseline re-verified verbatim on the same AWS Neuron 70B tutorial page (receipt pack 2026-07-16; cycle2 dive §A.1). The E1 score-set observation for the 70B family; the fused-spec row (trn2-neuron-llama70b) is E1-ineligible and carries the $-leg."
    },
    "engineFit": null,
@@ -1453,8 +1453,8 @@
     "url": "https://awsdocs-neuron.readthedocs-hosted.com/en/latest/libraries/nxd-inference/tutorials/trn2-llama3.1-405b-speculative-tutorial.html",
     "retrievedDate": "2026-07-16",
     "verbatimValue": "Overall Output Throughput: 24.421011092151268 (Llama 3.1 405B bf16, no speculative decoding); conclusion table No-spec TTFT P50 2442ms / TPOT P50 37.9ms / 25.46 tok/s -- cite the 24.42101 aggregate, not the rounded 25.46",
-    "verifier": "IM2-anchor-verification-2026-07-16",
-    "verifierRef": "research/validation-ledger.md (trn2-neuron-llama row, no-spec baselines); research/cycle2-evidence/trn2-low-batch-overhead-evidence.md §A.2",
+    "verifier": "anchor verification of 2026-07-16",
+    "verifierRef": "the validation ledger, unpublished (trn2-neuron-llama row, no-spec baselines); the cycle-2 Trn2 low-batch overhead evidence, unpublished, §A.2",
     "note": "bf16 no-spec baseline re-verified verbatim on the same AWS Neuron 405B tutorial page (receipt pack 2026-07-16; cycle2 dive §A.2). E1 score-set observation for the 405B family; the fused-spec row (trn2-neuron-llama405b) is E1-ineligible and carries the $-leg."
    },
    "engineFit": null,
@@ -1551,7 +1551,7 @@
        "note": "downside stress for the unreconstructable batch and operating point; not an identified interval"
       },
       "basis": "stress-envelope",
-      "sourceRef": "research/reviews/im-adv-r4-runB-internal-raw.md §B1/§B4/§B12-2"
+      "sourceRef": "an internal adversarial review's raw output, unpublished, §B1/§B4/§B12-2"
      },
      {
       "component": "precision",
@@ -1562,7 +1562,7 @@
        "note": "the observed FP4+MTP path cannot identify the engine's de-embedded precision coefficient"
       },
       "basis": "analyst-set",
-      "sourceRef": "research/d2-equation-set-v2.md §C3"
+      "sourceRef": "D2 equation set v2, unpublished, §C3"
      },
      {
       "component": "price",

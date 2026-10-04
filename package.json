@@ -25,7 +25,7 @@
     "gate:site": "npm test && npm run test:served-node && npm run test:browser && npm run test:served-browser",
     "gate:mcp": "npm --prefix mcp-server test",
     "gate:worker": "npm --prefix mcp-server/worker run typecheck && npm --prefix mcp-server/worker test",
-    "gate:artifacts": "npm run build && node scripts/check-no-workspace-paths.mjs site && node scripts/check-no-internal-refs.mjs site && npm run manifest:check && git diff --exit-code",
+    "gate:artifacts": "npm run build && node scripts/check-no-workspace-paths.mjs site && node scripts/check-no-internal-refs.mjs site && node scripts/check-no-internal-refs.mjs mcp-server/src && node scripts/check-no-internal-refs.mjs mcp-server/worker/src && node scripts/check-no-internal-refs.mjs mcp-server/worker/overrides && npm run manifest:check && git diff --exit-code",
     "gate": "npm run gate:site && npm run gate:mcp && npm run gate:worker && npm run test:feedback && npm run gate:artifacts",
     "test:all": "npm test && npm --prefix mcp-server test && npm run test:browser",
     "build": "node build-grounding-ledger.mjs && node build-dc-ledger.mjs && node scripts/build-astra-pro-estimates.mjs && node build-research-html.mjs",

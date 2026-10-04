@@ -280,7 +280,7 @@ export function flagshipCentralPct(): number {
 export function flagshipCentralFleetRenderable() {
   return flagshipWorkload().fleetRenderable;
 }
-/* im-vet-six-repairs (2026-09-20), Astra xhigh finding 1 — BLOCKING. The disclosure above was
+/* The 2026-09-20 vetting repairs, Astra xhigh finding 1 — BLOCKING. The disclosure above was
    emitted with NO membership, so after the E1 withdrawal the connector's central_anchor told a
    reader the flagship fleet was whole while its margin had moved with two legs removed. The
    membership now travels with the workload it describes. */

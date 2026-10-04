@@ -1,10 +1,10 @@
 # v2.2 plan review — four-persona council (GPT-5.6 Sol xhigh ×4, Opus synthesis), 2026-07-11
 
-> Pre-implementation adversarial review of PLAN-v22.md. Four personas (skeptic / architect / risk-analyst / empiricist) ran independently with full source access; synthesis below is verbatim. Full persona outputs: workspace run `2026-07-11-inference-margins-v22-plan-20260711T021118Z`. Verdict: **do not implement as written; revise against seven P0 conditions, then proceed.**
+> Pre-implementation adversarial review of the v2.2 plan (unpublished). Four personas (skeptic / architect / risk-analyst / empiricist) ran independently with full source access; synthesis below is verbatim, except that the plan's file name reads "the v2.2 plan". Full persona outputs are unpublished. Verdict: **do not implement as written; revise against seven P0 conditions, then proceed.**
 
-# Synthesis: PLAN-v22.md Pre-Implementation Review
+# Synthesis: Pre-Implementation Review of the v2.2 Plan
 
-All four agents independently reached the same headline verdict — **do not implement PLAN-v22 as written; revise first** — and, more tellingly, converged on the *same* two structural failure modes (false orthogonality in B, provenance laundering in C/E) as the ones that would recreate exactly what v2.1.1 was built to repair. That convergence, reached without cross-talk, is the strongest signal in this packet. The disagreements that remain are about ambition level, current deployment state, and one scope-gate call — not about direction.
+All four agents independently reached the same headline verdict — **do not implement the v2.2 plan as written; revise first** — and, more tellingly, converged on the *same* two structural failure modes (false orthogonality in B, provenance laundering in C/E) as the ones that would recreate exactly what v2.1.1 was built to repair. That convergence, reached without cross-talk, is the strongest signal in this packet. The disagreements that remain are about ambition level, current deployment state, and one scope-gate call — not about direction.
 
 ---
 
@@ -88,7 +88,7 @@ All four agents independently reached the same headline verdict — **do not imp
 
 ## 4. Final recommendation
 
-**Do not implement PLAN-v22 as written. Revise it against the seven P0 conditions below, then proceed with mitigation.** A/C can proceed after provenance cleanup; B needs a written state contract before any code; E needs redesign; D is deferred.
+**Do not implement the v2.2 plan as written. Revise it against the seven P0 conditions below, then proceed with mitigation.** A/C can proceed after provenance cleanup; B needs a written state contract before any code; E needs redesign; D is deferred.
 
 **Confidence:**
 - *High* (all four converge, ~85–90% self-reported) that the **direction — revise before implement — is correct**, and high on the specific B/E/C/D adjudications, because the load-bearing ones rest on reproduced arithmetic (the xAI 26.95%/36.52% conflict) and primary-source checks, not reasoning-by-proxy.

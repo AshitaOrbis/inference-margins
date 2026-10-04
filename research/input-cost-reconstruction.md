@@ -2,7 +2,7 @@
 
 **Provenance class: RECONSTRUCTION, executed.** Every figure below is computed from the deployed
 engine at the public-evidence reference reading and is reproducible with the snippet at the end.
-Written 2026-09-20 by leg `im-vet-six-repairs` in answer to the expert reading of 2026-09-19
+Written 2026-09-20, during the vetting repairs, in answer to the expert reading of 2026-09-19
 (vetting report, finding E3): *"the dominant cost is not reconstructible in one place ... and the
 reconstruction boundary is unstated."* It was right. This page is the boundary, stated.
 

@@ -54,10 +54,10 @@
 <section class="report">
 <div class="raw-note"><strong>In today's words</strong> — This is an archived research artifact. Where it says <em>marginal serving gross margin</em>, <em>unit CM</em> or <em>serving contribution margin</em>, the site now says <strong>serving margin</strong>; where it states a confidence interval, the site treats it as a judgment range, not a calibrated one. What the site adopted from any artifact is stated in the <a href="../index.html#report">main report</a>, which is authoritative where the two differ.</div><div class="raw-note"><strong>Research artifact</strong> — each page states its own provenance class in its header: verbatim originals carry SHA-256 stamps; adopted-findings summaries and reconstructions say so explicitly. Conclusions are synthesized (and where needed corrected) in the <a href="../index.html#report">main report</a>; each page carries its own run date.</div><h1>v2.2 plan review — four-persona council (GPT-5.6 Sol xhigh ×4, Opus synthesis), 2026-07-11</h1>
 <blockquote>
-<p>Pre-implementation adversarial review of PLAN-v22.md. Four personas (skeptic / architect / risk-analyst / empiricist) ran independently with full source access; synthesis below is verbatim. Full persona outputs: workspace run <code>2026-07-11-inference-margins-v22-plan-20260711T021118Z</code>. Verdict: <strong>do not implement as written; revise against seven P0 conditions, then proceed.</strong></p>
+<p>Pre-implementation adversarial review of the v2.2 plan (unpublished). Four personas (skeptic / architect / risk-analyst / empiricist) ran independently with full source access; synthesis below is verbatim, except that the plan&#39;s file name reads &quot;the v2.2 plan&quot;. Full persona outputs are unpublished. Verdict: <strong>do not implement as written; revise against seven P0 conditions, then proceed.</strong></p>
 </blockquote>
-<h1>Synthesis: PLAN-v22.md Pre-Implementation Review</h1>
-<p>All four agents independently reached the same headline verdict — <strong>do not implement PLAN-v22 as written; revise first</strong> — and, more tellingly, converged on the <em>same</em> two structural failure modes (false orthogonality in B, provenance laundering in C/E) as the ones that would recreate exactly what v2.1.1 was built to repair. That convergence, reached without cross-talk, is the strongest signal in this packet. The disagreements that remain are about ambition level, current deployment state, and one scope-gate call — not about direction.</p>
+<h1>Synthesis: Pre-Implementation Review of the v2.2 Plan</h1>
+<p>All four agents independently reached the same headline verdict — <strong>do not implement the v2.2 plan as written; revise first</strong> — and, more tellingly, converged on the <em>same</em> two structural failure modes (false orthogonality in B, provenance laundering in C/E) as the ones that would recreate exactly what v2.1.1 was built to repair. That convergence, reached without cross-talk, is the strongest signal in this packet. The disagreements that remain are about ambition level, current deployment state, and one scope-gate call — not about direction.</p>
 <hr>
 <h2>1. Consensus</h2>
 <ul>
@@ -125,7 +125,7 @@
 </ul>
 <hr>
 <h2>4. Final recommendation</h2>
-<p><strong>Do not implement PLAN-v22 as written. Revise it against the seven P0 conditions below, then proceed with mitigation.</strong> A/C can proceed after provenance cleanup; B needs a written state contract before any code; E needs redesign; D is deferred.</p>
+<p><strong>Do not implement the v2.2 plan as written. Revise it against the seven P0 conditions below, then proceed with mitigation.</strong> A/C can proceed after provenance cleanup; B needs a written state contract before any code; E needs redesign; D is deferred.</p>
 <p><strong>Confidence:</strong></p>
 <ul>
 <li><em>High</em> (all four converge, ~85–90% self-reported) that the <strong>direction — revise before implement — is correct</strong>, and high on the specific B/E/C/D adjudications, because the load-bearing ones rest on reproduced arithmetic (the xAI 26.95%/36.52% conflict) and primary-source checks, not reasoning-by-proxy.</li>

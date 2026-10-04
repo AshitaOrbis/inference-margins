@@ -1,6 +1,6 @@
 /* Streaming body-cap helper — pulled out of index.ts (Pro review 2026-07-29 rec 2 /
-   finding C-4, Worker-side companion to the Node http.ts fix; re-found as bq-1014, bq-1251,
-   bq-1196, bq-1252) so it is a PURE function with no "agents/mcp" / Workers-runtime imports
+   finding C-4, Worker-side companion to the Node http.ts fix; re-found by four later
+   reviews) so it is a PURE function with no "agents/mcp" / Workers-runtime imports
    and can be unit-tested directly under plain Node (worker/test/body-cap.test.mjs) — the
    rest of this module pulls in `cloudflare:`-scheme imports that only resolve under wrangler.
 

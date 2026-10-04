@@ -520,7 +520,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              that was there all along." Read for what this pin exists to catch — a RANKING of an
              external claim — and it contains none: it is a caveat about this page's own reading,
              and it ranks nothing. Approved on that reading. */
-          /* RE-PINNED 2026-09-12 (im-default-window-and-mcp-discrepancy; Astra review round 3 F9). Wording inside the
+          /* RE-PINNED 2026-09-12 (the default-window fix; Astra review round 3 F9). Wording inside the
              answer changed in exactly two places, both about this page's own opening behaviour: the landing line now
              says the page OPENS on the preset "by default, its built-in opening state (a reader can make another
              scenario the default in their own browser)", and the prior-reading line says "by default it now opens
@@ -644,7 +644,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
               for the same quantity. Every occurrence must now agree with the engine. */
         const ratified = runNative("median");
         const ratifiedPct = `~${Math.round(ratified)}%`;
-        /* im-release-edit 2026-09-09: the three sites are unchanged in NUMBER and in duty — each
+        /* The 2026-09-09 release edit: the three sites are unchanged in NUMBER and in duty — each
            still has to publish the engine's own computed value — but two of them are worded under
            the canonical vocabulary now. "The calculator's own default state" was retired because
            it named a state the calculator does not have: the engine's DEFAULTS carry lead 0 and
@@ -838,7 +838,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
            this pin to them would produce a guard everyone learns to re-pin without reading, which
            is worse than no guard. */
         {
-          /* RE-PINNED 2026-09-09 (im-release-edit), and here is the check that was actually run
+          /* RE-PINNED 2026-09-09 (the release edit), and here is the check that was actually run
              rather than a claim that one was. Both pages were rendered before and after, their
              reader-visible text extracted, and EVERY numeric token compared:
                analyst-divergence — 104 numeric tokens, all identical. Only the label ladder moved,
@@ -875,7 +875,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
              markup → 243%. NOTHING ENTERED AND NOTHING LEFT in either file, which is the evidence
              the edit is a recompute and not a rewrite.
              RE-PINNED A FIFTH TIME 2026-09-12 (final-answer-rationale ONLY; analyst-divergence is
-             byte-untouched and its pin is unchanged), by leg im-release-contradiction-fix under the
+             byte-untouched and its pin is unchanged), by the release contradiction fix under the
              SAME ruling adjudicated 2026-09-10, across five rounds of Astra
              xhigh review that found five separate defects in this annex and THREE in this note.
 
@@ -1185,7 +1185,7 @@ const pctOf = (st) => E.workload(st, undefined, E.scenarioContext(st)).margin * 
        {landingLeadClause} hole, derived from landingReading through one named formatter below.
        Everything else in the template, including every number and the whole prior-basis clause,
        is byte-unchanged.
-       2026-09-12 im-default-window-and-mcp-discrepancy (Astra review round 3 F9): TWO WORDS added, "by default",
+       2026-09-12, the default-window fix (Astra review round 3 F9): TWO WORDS added, "by default",
        because a reader can now make another scenario the default in their own browser and the unqualified
        "it now opens on" became false for that reader. No number, hole or other clause moved;  carries the
        same two words, so the provenance gate below still compares like with like. */

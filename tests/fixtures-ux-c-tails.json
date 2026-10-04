@@ -606,7 +606,7 @@
   "remintLog": [
     {
       "at": "2026-09-19",
-      "by": "im-vet-model-estimates",
+      "by": "the 2026-09-19 model-estimates repair",
       "tool": "UX_C_MINT=1 (the fixture's own mint aid, through the same drive module the replay uses)",
       "movedStates": 5,
       "mine": {
@@ -622,7 +622,7 @@
           "incompatible",
           "forced-warn"
         ],
-        "cause": "driveError 'RooflineDataError: row rubin declares no batch regime' -> null on the opus/xaicash pair. NOT this leg's change: neither this leg's commits nor the sibling's mention rubin, and no price or traffic input reaches that pair. It is the behaviour im-vet-code shipped in 3a0a38f, 'Price dense-TP prefill per accelerator, and stop four ways of rendering nothing' - the pair now CLEARS as a pair, which is what this fixture's own declaredDelta entry for 'incompatible' says it should do, instead of throwing. The fixture was left stale by that round and surfaces here at the first re-mint. Declared rather than absorbed."
+        "cause": "driveError 'RooflineDataError: row rubin declares no batch regime' -> null on the opus/xaicash pair. NOT this leg's change: neither this leg's commits nor the sibling's mention rubin, and no price or traffic input reaches that pair. It is the behaviour the code vetting shipped in 3a0a38f, 'Price dense-TP prefill per accelerator, and stop four ways of rendering nothing' - the pair now CLEARS as a pair, which is what this fixture's own declaredDelta entry for 'incompatible' says it should do, instead of throwing. The fixture was left stale by that round and surfaces here at the first re-mint. Declared rather than absorbed."
       },
       "note": "Recorded because a blind re-mint would have buried a delta belonging to another leg inside this one's commit."
     }

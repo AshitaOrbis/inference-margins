@@ -8,7 +8,7 @@
    caller's private negotiated rates.
 
    Body-cap enforcement (Pro review 2026-07-29 rec 2 / finding C-4, the Worker-side companion
-   to the Node http.ts fix — re-found as bq-1014, bq-1251, bq-1196, bq-1252): the cap used to
+   to the Node http.ts fix — re-found by four later reviews): the cap used to
    be checked only AFTER `request.arrayBuffer()` had already materialised the whole body, so
    an oversized request was fully buffered before being rejected. readBodyCapped (now in
    ./body-cap.ts, a dependency-free module so it can be unit-tested under plain Node) checks
@@ -21,7 +21,7 @@ import { EMBEDDED_RELEASE } from "./gen/dcmap/release.gen.js";
 import { readBodyCapped, overLongBatch } from "./body-cap.js";
 
 const BODY_CAP = 64 * 1024;
-/* JSON-RPC BATCH CAP (Polaris ruling 2026-09-19, Astra pack C P1-1). The body cap bounds BYTES,
+/* JSON-RPC BATCH CAP (adjudicated 2026-09-19, Astra pack C P1-1). The body cap bounds BYTES,
    not WORK, and a JSON-RPC array multiplies one by the other: 128 `adjust_rental_rate` calls fit
    in 18,579 bytes and returned 128 results, ~10.7 s of local CPU and ~6 MB of response, against
    a configured Worker CPU limit of 5,000 ms; 449 such calls fit inside the 64 KB cap with

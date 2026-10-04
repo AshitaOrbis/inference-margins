@@ -1238,7 +1238,7 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 @media (max-width: 980px) { .projections { grid-template-columns: 1fr; } }
 .projections .hero-lead { margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .projections .tile-hero { height: auto; }
-/* The answer tile joins its own projections (annotation nbc7fc1, "needs to be top with other
+/* The answer tile joins its own projections (the answer-tile annotation, "needs to be top with other
    projections"). It goes in the RIGHT column under the estimates rather than taking a second row
    under the tile: the tile is the tall element, so auto-placement would drop the answer into a new
    row and leave the estimates column half empty. Below 980 px the single column carries all three
@@ -1266,10 +1266,10 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
   }
 }
 
-/* The estimates are DISPLAYED, never behind a summary line. Annotation n95f678 approved this pair
+/* The estimates are DISPLAYED, never behind a summary line. The author's annotation approved this pair
    as it RENDERED in section 5 ("this is almost exactly what I wanted"); the 2026-08-16 hoist put it
    behind a closed <details> and the Fable card stopped being on the page at all. The "collapsed,
-   not rambling" instruction it borrowed is nbc7fc1's, and nbc7fc1 is the ANSWER TILE. */
+   not rambling" instruction it borrowed is the answer-tile annotation's, about the ANSWER TILE. */
 .est-top { margin: 0; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-2, transparent); padding: 0 14px; }
 .est-top-head { margin: 12px 0 0; font-family: var(--font-head); font-size: 15px; font-weight: 500; line-height: 1.4; color: var(--ink-2); }
 .est-top-head strong { color: var(--ink-1); font-weight: 700; }
@@ -1290,7 +1290,7 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
 .fa-full > .fa-full-summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 2px 0; list-style: revert; }
 .fa-full[open] > .fa-full-summary { margin-bottom: 6px; }
 /* The hoisted headline tile's own tail collapse (the adopted decision, 2026-08-18) —
-   deliberately the SAME treatment .fa-full got for annotation nbc7fc1, so the two collapsed
+   deliberately the SAME treatment .fa-full got for the answer-tile annotation, so the two collapsed
    projections at the top of the column read as one pattern rather than two inventions. */
 .hero-full { margin-top: 8px; border-top: 1px solid var(--line); padding-top: 6px; }
 .hero-full > .hero-full-summary { cursor: pointer; font-size: 12.5px; color: var(--ink-2); padding: 2px 0; list-style: revert; }
@@ -1359,7 +1359,7 @@ dialog[data-explain-dialog] .tile-receipts { display: block; }
    The adopted visual polish changes presentation only. A VISUAL pass: no word and no number on the page moves
    (the leg's numbers-diff test walks every text node before and after). Everything below is
    appended so the history above stays readable; it wins by source order at equal specificity.
-   Review of record: Astra xhigh + Opus visual reviews, merged in the leg's VISUAL-REVIEW.md
+   Review of record: Astra xhigh + Opus visual reviews, merged in one visual review (unpublished)
    (V-numbers below refer to it).
    ====================================================================================== */
 

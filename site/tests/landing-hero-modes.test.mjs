@@ -117,7 +117,7 @@ const PROBE_A = `(() => {
      explicitly — the same state a visitor reaches by picking the default fleet in its selector.
      The rule itself is PRE-EXISTING (it behaves identically on master when a reader selects the
      strategic-partner lens and then returns to the central scenario) and is flagged to the review
-     path in the row-499 delta manifest rather than changed here. */
+     path in the preset-structure delta manifest rather than changed here. */
   FLEET_ID = DEFAULT_FLEET_ID;
   S.util = S.util + 1; renderAll();
   r.afterEditMargin = document.getElementById('out-margin').textContent;

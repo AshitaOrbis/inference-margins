@@ -1,5 +1,5 @@
 // EVIDENCE-SCHEMA contract (v2.2) — governing plan
-// the private plan the release-07-16  WS-B/WS-C, evidence-schema contract, council P0-3.
+// the 2026-07-16 release plan (unpublished): the evidence-schema and uncertainty contracts, review P0-3.
 // Run: node site/tests/evidence-schema.test.mjs
 // Twin rule: the ONLY sanctioned differences between this file and its twin are the `// Run:`
 // comment line and require(...) path strings; all other bytes must remain identical.

@@ -865,7 +865,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       && /Complete the anti-abuse challenge before submitting/.test(src)
       && !/<script[^>]+src=["']https:\/\/challenges\.cloudflare\.com\/turnstile/i.test(src))
       && !/plain form POST still works/.test(feedbackForm));
-  /* im-release-edit 2026-09-10 (session 1 round 2, H3): the share check is unchanged and still
+  /* The release edit, 2026-09-10 (session 1 round 2, H3): the share check is unchanged and still
      reads the live registry, but the sentence around it was saying the calculator "prices GB300
      from" that $6 scenario — and GB300 carries no registered accelerator-hour price, so the engine
      renormalizes it out of the blended cost rather than pricing it at $6. The assertion now also
@@ -924,7 +924,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
         && index.includes("$" + live.costMix.toFixed(5))
         && index.includes((live.margin * 100).toFixed(2) + "%")
         && index.includes((lowUtilLive.margin * 100).toFixed(2) + "%")
-        /* im-release-edit 2026-09-09: this used to require the literal "all 7 declared fleet legs",
+        /* The 2026-09-09 release edit: this used to require the literal "all 7 declared fleet legs",
            and the page said it about a DOLLAR COST that is not computed over all seven — GB200,
            GB300 and Trainium3 carry no registered price, so the engine renormalizes them out and
            the figure covers about 52% of declared fleet weight. The guard's actual job is to prove
@@ -937,7 +937,7 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
         && /carry no registered|carries no registered|carry a registered/.test(index),
       `${live.costMix} / ${live.margin * 100} / ${lowUtilLive.margin * 100}`);
   }
-  /* DERIVED RELATIONSHIPS, pinned to the engine (im-release-edit 2026-09-09, declared exceptions
+  /* DERIVED RELATIONSHIPS, pinned to the engine (the 2026-09-09 release edit, declared exceptions
      8–11). Four printed statements ABOUT the engine's output had gone stale and nothing caught
      them: a point drop that did not equal its own endpoints, an output-token margin computed on a
      different billing basis from the price beside it, a cost numerator that implied 68.98% where
@@ -1495,7 +1495,7 @@ for (const p of E.PERSPECTIVES) {
 // 9. Preset redesign (v2.1.3 preset revision): exploration configs, claims registry, interval algebra, ranking.
 {
   const EXPL = E.PERSPECTIVES.filter(p => p.kind === "exploration");
-  // 2026-08-16 (the author’s note + c72950): FIVE. x90-v2 ships the mechanism named in the
+  // 2026-08-16 (the author’s two notes): FIVE. x90-v2 ships the mechanism named in the
   // 90→95% claim — the batch lever applied alone to the ≥90% route — which v2.1.3 dropped for
   // landing short of its authored range. The four originals keep their ids (permalink anchors).
   assert("exactly the 5 discourse-tied exploration routes ship",

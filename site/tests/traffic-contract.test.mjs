@@ -48,7 +48,7 @@ assert("xaiopp is a replay", P("xaiopp").kind === "replay");
 
 // ---------- 1b. Exploration routes (v2.1.3): perspective-space only, resolve like a lens ----------
 const EXPLORATIONS = E.PERSPECTIVES.filter(p => p.kind === "exploration");
-// 2026-08-16 (the author’s note + c72950): FIVE routes now. x90-v2 adds the mechanism named in
+// 2026-08-16 (the author’s two notes): FIVE routes now. x90-v2 adds the mechanism named in
 // the 90→95% claim — the batch lever applied alone to the ≥90% route — which the v2.1.3 redesign
 // dropped for falling short of the range it was authored for. The count moved because the
 // registry moved; the four originals keep their ids, since permalinks bind to them.

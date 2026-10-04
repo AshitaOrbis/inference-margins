@@ -106,8 +106,8 @@
   <li><strong>The metric.</strong> Serving margin = 1 − <a href="glossary.html#serving-cost">serving cost</a> ÷ <a href="glossary.html#effective-price">effective price</a>, for the selected <a href="glossary.html#traffic-mix">traffic mix</a>. Its full technical name, said here once, is <em>unit direct-serving contribution margin</em>. Effective price is the <a href="glossary.html#list-price">list price</a> after the selected cache-read price, batch share and negotiated discount — a modeled figure, not observed provider revenue. With batch share and discount at 0% it is simply list price; the provider cards' replays are computed that way and the public-data scenario is not. Serving cost counts accelerator time — rented or owned, at the selected <a href="glossary.html#cost-basis">cost basis</a> — the serving software's throughput, and paid idle capacity, which is charged to the tokens served by dividing by <a href="glossary.html#utilization">utilization</a>. It does not separately model support, research and development, sales, revenue shares, free traffic, or unbilled retries and storage. It is neither a company's cost of revenue (COGS) nor a company gross margin.</li>
     <!-- Adopted 2026-09-25: the standfirst's second and third paragraphs moved HERE, after the
          metric, so the page opens on one sentence and the methods box opens on what is measured. The
-         pre-repair "Superseded readings" item moved verbatim to the changelog (the adopted history rule
-         nd94bbc: version history belongs in a changelog). -->
+         pre-repair "Superseded readings" item moved verbatim to the changelog (the author's standing history rule
+         (2026-08-16): version history belongs in a changelog). -->
     <li><strong>How the page's numbers relate, for Claude Opus.</strong> The calculator opens on the GPT-5.6 Pro estimate's own settings unless you choose another default: its author states <strong>83.1% at list price</strong>, and the calculator reads <strong>about 82%</strong> at the same settings today — its card explains the gap. This page's <a href="glossary.html#public-data-scenario">public-data scenario</a> — planning rents, 50% utilization, the Reference mix, no assumed efficiency lead — reads <strong>about 58%</strong> at effective price: a model result under public-data assumptions, not a guaranteed minimum for actual margins, and not an estimate of them. The same settings with the page's adopted 3-month <a href="glossary.html#algorithmic-lead">algorithmic lead</a> read <strong>about 68%</strong>. A second estimate, Fable 5's, reads <strong>≈77%</strong> at effective price. The <strong>90–95%</strong> figure repeated in the discourse needs assumptions beyond this page's public-data scenario. Every number here is a modeled <a href="glossary.html#reading">reading</a> from public sources and labeled assumptions; nothing is any provider's actual ledger.</li>
     <li><strong>Data dates and how each accelerator's speed was set.</strong> The newest material on this page is dated <strong>October 1, 2026</strong> (the GPT-6.1 Sol estimate), and five token prices were corrected to what their vendors charge on September 20, 2026 (<a href="research/changelog.html">changelog</a>); a price or input that shows no effective date of its own is as of July 15, 2026. Each accelerator's speed was set its own way and says so on its row (its <a href="glossary.html#calibration-class">calibration class</a>): TPU v7 is an analyst-set bridge from the same platform; Trainium 2/3 carry a joint coefficient fitted across other hardware families, with no matched serving measurement of their own; Rubin is a projection from its announced shape only. Where the model does not fit an accelerator's memory at the assumed batch, the row shows a smaller batch or no number. Every slider documents its sources.</li>
     <li><strong>Which kind of price you assume moves the answer by tens of points.</strong> It is not the widest lever on this page: on the xAI card below, sweeping <a href="glossary.html#utilization">utilization</a> across the range this page offers moves the same reading further still — <strong>99 points</strong> against the valuation choice's <strong>72</strong>. It is simply the lever most often left unstated when a margin figure is quoted. On the same Grok 4.5 fleet and the same workload, the calculator reads <strong>~91%</strong> if the accelerator-hour is valued at short-run cash cost, <strong>~63%</strong> at full-cycle owned cost, and <strong>~19%</strong> at what a customer pays for that hour. Those are three answers to three different questions, not a disagreement — which is why a figure from one <a href="glossary.html#cost-basis">cost basis</a> cannot be set beside a figure from another.</li>
@@ -140,8 +140,8 @@
      notes). Stays near the hero. The MODEL block moved down under the Model selector (below). -->
 <!-- the adopted decision (2026-08-18), item 1: the dossier offered BOTH routes — the injected
      #explain-trigger-dossier popup AND the inline <summary> — at both viewports and both pointer
-     types (measured: dossierRoutesVisible = 2). It is the same duplication an adopted change
-     n0556ef marked on the methods box one element higher, and it now takes the same ruled
+     types (measured: dossierRoutesVisible = 2). It is the same duplication an adopted annotation
+     marked on the methods box one element higher, and it now takes the same ruled
      treatment: coarse pointer → popup only, fine pointer → disclosure only.
      WHY THE NOTE MOVED OUT OF THE SUMMARY. #preset-note is not part of the route: it is the
      scenario-IDENTITY line, and it carries the loaded-link warnings ("MODIFIED RANGE EXPLORATION
@@ -164,14 +164,14 @@
 <section class="projections" id="projections" aria-label="Projections">
     <!-- THE HEADLINE RESULT TILE — HOISTED INTO THE TOP BLOCK, 2026-08-18 (the adopted decision
          the adopted decision, verbatim: "The 83% tile should be at the top, alongside fable estimate,
-         as I described in note 11"). That answers the POSITION half of annotation nad7e98 ("This
+         as I described in note 11"). That answers the POSITION half of the author's tile annotation ("This
          should be at the top, not way down here, and collapsed, not fully expanded and rambling") —
          the one item of the eleven nobody could decide for him. The tile now LEADS the projections
          block: this calculator's live headline first, then the two quoted adjudicator estimates and
          the stress test beside it, then the answer tile; the four supporting output tiles follow
          below. Measured cause of "way down here": the tail rendered 5,055 px tall in the 189 px tile
          column, which is what pushed the hoisted estimate cards down to y≈8,900 on a 1400 px page.
-         COLLAPSED, the same treatment #fa-full got for annotation nbc7fc1. NOTHING IS DELETED and no
+         COLLAPSED, the same treatment #fa-full got for the answer-tile annotation. NOTHING IS DELETED and no
          node loses its id — every emitter still writes into the same element by the same id, so the
          vocabulary sweeps, the sink registry and the MCP twin read the same nodes with the same
          bytes. Collapsing is a containment change, and no computed value moves.
@@ -251,9 +251,9 @@
          desktop screen shows things").
          WHAT THE 2026-08-16 HOIST GOT WRONG, MEASURED: (1) it wrapped the pair in a <details>
          CLOSED at first paint, so the Fable card was not DISPLAYED on either viewport — and what
-         annotation n95f678 approved ("this is almost exactly what I wanted") was the pair AS
+         the author's annotation approved ("this is almost exactly what I wanted") was the pair AS
          RENDERED in section 5, open, not a summary line you click; the "collapsed, not rambling"
-         phrase the old comment quoted belongs to nbc7fc1, which is about the ANSWER TILE, not these
+         phrase the old comment quoted belongs to the answer-tile annotation, which is about the ANSWER TILE, not these
          cards. (2) It moved the markup into .controls-col, which is OUTSIDE #report — and every one
          of these cards' styles was written as `.report .est-*`, so the pair lost its grid and the
          cards lost their borders, padding and 44 px numerals (measured live: est-pair display
@@ -344,10 +344,10 @@
       </details>
     </div>
     </div><!-- /estimates-top -->
-    <!-- MOVED INTO THE BAND, 2026-08-18 (the adopted decision). Annotation nbc7fc1 says the answer tile
+    <!-- MOVED INTO THE BAND, 2026-08-18 (the adopted decision). The answer-tile annotation says the answer tile
          "needs to be top with other projections". When the headline result tile and the estimates left
          .controls-col for this band, leaving the answer tile behind put it BELOW the evidence
-         board while its own projections sat above it — a regression against nbc7fc1 introduced by
+         board while its own projections sat above it — a regression against that annotation introduced by
          the scenario-identity fix. It travels with them. Still collapsed by default, unchanged. -->
     <!-- R3 the recorded review (the design requirements): THE FINAL ANSWER — the adopted result
          surface. Populated by renderFinalAnswer() from engine finalAnswer() ONLY (the
@@ -1496,7 +1496,7 @@
        summary line. -->
   <details class="footer-build">
     <summary>Build, verification and machine access</summary>
-    <p>Release manifest: methodology v3.0 · engine v3.0.0-2026-08-13 · data as of 2026-10-01 · private build commit <span id="release-commit">87647f78</span> (the public repo <a href="https://github.com/AshitaOrbis/inference-margins">github.com/AshitaOrbis/inference-margins</a> is an allow-list mirror with its own commit history — this SHA is private-source build provenance and will not resolve there; match the deployment-input bytes via the asset manifest below, not this SHA) · release gates published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the traffic contract and application browser suite. The local browser suite does not activate the feedback challenge; the live submission flow requires a separate end-to-end check. Deployment-input integrity: <a href="asset-manifest.sha256">/asset-manifest.sha256</a> (a sha256sum manifest of every <code>site/</code> input except the manifest itself; <code>_headers</code> is deployment configuration parsed by Pages and is not fetchable as a static asset; byte-exact vs the release-stamp commit). Machine access: the same engine and claims registry are served as a read-only <strong>MCP connector</strong> at <code>https://margins-mcp.ashitaorbis.com/mcp</code> (add as a custom connector in a Claude client, no auth; responses carry the same honest-labeling contract — status-fused margins with selection receipts, never a bare number). Revision history: see the review + changelog pages in the <a href="research/index.html">annex</a>.</p>
+    <p>Release manifest: methodology v3.0 · engine v3.0.0-2026-08-13 · data as of 2026-10-01 · private build commit <span id="release-commit">32643199</span> (the public repo <a href="https://github.com/AshitaOrbis/inference-margins">github.com/AshitaOrbis/inference-margins</a> is an allow-list mirror with its own commit history — this SHA is private-source build provenance and will not resolve there; match the deployment-input bytes via the asset manifest below, not this SHA) · release gates published at <a href="tests/snapshots.test.mjs">/tests/</a> together with the traffic contract and application browser suite. The local browser suite does not activate the feedback challenge; the live submission flow requires a separate end-to-end check. Deployment-input integrity: <a href="asset-manifest.sha256">/asset-manifest.sha256</a> (a sha256sum manifest of every <code>site/</code> input except the manifest itself; <code>_headers</code> is deployment configuration parsed by Pages and is not fetchable as a static asset; byte-exact vs the release-stamp commit). Machine access: the same engine and claims registry are served as a read-only <strong>MCP connector</strong> at <code>https://margins-mcp.ashitaorbis.com/mcp</code> (add as a custom connector in a Claude client, no auth; responses carry the same honest-labeling contract — status-fused margins with selection receipts, never a bare number). Revision history: see the review + changelog pages in the <a href="research/index.html">annex</a>.</p>
   </details>
 </footer>
 
