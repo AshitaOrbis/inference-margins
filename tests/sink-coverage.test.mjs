@@ -25,6 +25,11 @@ const assert = (name, cond, detail = "") => {
 // canonical central as data-central, so its snippet hash moved 996a927eae3ada87 -> 4de040968777f7b0.
 // classifiedCount 1131 -> 1136: five static aria-labels on the new hub links in index.html,
 // classified non-claim (index-html-static). Still 612 claim sinks, 0 unmatched; digest 3693dae3 -> 6448c6fa.
+// Re-minted 2026-10-06 (second; a reader's pass on §10): ONE claim sink re-identified, none added or removed —
+// attachMarkTip's focus handler now calls showTipBeside (the tooltip placed clear of its row), so the chart
+// tooltip-call's snippet hash moved 39ce882be8affbce -> 794e467f51b7ef8f. classifiedCount 1136 -> 1140: the
+// label strings for an Astra Pro estimate's own Reproduce link and its lapsed-state note, classified non-claim.
+// Still 612 claim sinks, 0 unmatched; digest 6448c6fa -> 56a9e681.
 const REGISTRY = JSON.parse(readFileSync(join(HERE, "sink-registry-v22.json"), "utf8"));
 
 /* ---------- (a) pinned scanned-file manifest ---------- */

@@ -196,7 +196,7 @@ function hubHtml(key) {
     for (const d of A.assumptionDiffs(key, E)) L.push(`      <li>${esc(`${d.input}: July ${d.july} · now ${d.current}`)}</li>`);
     L.push(`    </ul>`);
   }
-  L.push(`    <p class="s10-hub-dossier" id="s10-dossier-${key}"><strong>July 2026 dossier</strong> — ${esc(jo.model)}, one ${esc(jo.author)} deep dive (${esc(jo.date)}). The dive's own reading: ${esc(julyReadingText(jo))}. The card below shows this calculator's replay of that dive today; its evidence profile describes the July model.${prov.julyTextNote ? ` Since ${esc(prov.julyTextNote.since)} this replay reads ~${pct(A.julyReplay(key, E).value)}, so the July text below ${esc(prov.julyTextNote.claim)} no longer holds.` : ""}${A.julyReplay(key, E).outsideBand ? " The dive's band is historical and is not an interval around either number." : ""}</p>`);
+  L.push(`    <p class="s10-hub-dossier" id="s10-dossier-${key}"><strong>July 2026 dossier</strong> — ${esc(jo.model)}, one ${esc(jo.author)} deep dive (${esc(jo.date)}). The dive's own reading: ${esc(julyReadingText(jo))}. The card below shows this calculator's replay of that dive today; its evidence profile describes the July model.${prov.julyTextNote ? ` Since ${esc(prov.julyTextNote.since)} this replay reads ~${pct(A.julyReplay(key, E).value)}, so the July text below ${esc(prov.julyTextNote.claim)} no longer holds.` : ""}${A.julyReplay(key, E).outsideBand ? " The dive's band is historical and is not an interval around either number." : ""}${prov.julyCorrectionNote ? " " + esc(prov.julyCorrectionNote) : ""}</p>`);
   L.push(`  </div>`);
   return L.join("\n");
 }

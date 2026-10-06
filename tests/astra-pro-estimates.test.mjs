@@ -426,5 +426,33 @@ ok(chartFn.length > 0 && !/\.sort\(/.test(chartFn), "R7 the chart draws in regis
   }
 }
 
+// DOTA — a reader's pass over §10 on Chrome (2026-10-06, Dot A, at 1405 and 400 CSS px) found presentation
+// defects with every number agreeing. The text half of the repairs is held here; the browser half (the
+// Reproduce identity, the chart tooltip, the review pages' width) is tests/s10-dota-cdp.test.mjs.
+{
+  const reading = key => (recs.find(r => r.key === key) || {}).reading || "";
+  const SIGN = "a negative figure is part of why the July card reads lower";
+  for (const key of ["gemini-3-1-pro", "grok-4-6", "glm-5-3"])
+    ok(reading(key).split("\n\n").slice(1).join(" ").includes(SIGN), `DOTA (c) ${key}: the attribution paragraph says which way its signed figures run`);
+  const cl = readFileSync(join(ROOT, "research", "changelog.md"), "utf8");
+  const oct6 = cl.slice(cl.indexOf("## §10: each provider now opens"), cl.indexOf("## Corrections — 2026-10-04")).replace(/\s+/g, " ");
+  ok(oct6.length > 0 && oct6.includes(SIGN), "DOTA (c) the 2026-10-06 changelog entry says which way its signed figures run");
+  const glm = reading("glm-5-3");
+  ok(!/differ mainly in rent/.test(glm) && /serving-stack efficiency moves the margin most/.test(glm), "DOTA (d) the GLM-5.3 reading names one ranking of what differs, not two");
+  const grok = reading("grok-4-6");
+  ok(!/owning its Colossus fleet/.test(grok) && /finance-leased/.test(grok) && /not a claim of legal ownership/.test(grok), "DOTA (e) the Grok 4.6 reading keeps the owner's-cost assumption apart from legal ownership");
+  const body10 = html.slice(html.indexOf('id="rs-body-10"'), html.indexOf('<div id="provider-cards">'));
+  const para = (body10.match(/<p>[^]*?<\/p>/g) || []).find(p => p.includes("output-token margin only")) || "";
+  ok(para && para.indexOf("July 2026") >= 0 && para.indexOf("July 2026") < para.indexOf("Moonshot"), "DOTA (g) the §10 intro puts the July scope before Moonshot's output-token sentence");
+  const zb = html.indexOf("<!-- BEGIN s10-hub:zhipu"), ze = html.indexOf("<!-- END s10-hub:zhipu -->");
+  const zhub = zb >= 0 && ze > zb ? html.slice(zb, ze) : "";
+  ok(/did not change/.test(zhub) && /traffic profile/.test(zhub) && /corrected 2026-10-06/i.test(zhub), "DOTA (h) the Zhipu hub flags the card's corrected tariff sentence before a reader reaches it");
+  for (const page of ["gemini-3-1-pro", "grok-4-6", "glm-5-3"]) {
+    const f = join(ROOT, "site", "research", `${page}-astra-pro.html`);
+    const t = existsSync(f) ? readFileSync(f, "utf8") : "";
+    ok(/\.report pre \{[^}]*overflow-x: auto/.test(t), `DOTA (b) ${page} review page gives its code blocks their own horizontal scroll`);
+  }
+}
+
 console.log(`astra-pro-estimates: ${checks - failures}/${checks} checks, ${recs.length} estimate(s)`);
 if (failures) process.exit(1);

@@ -3282,10 +3282,18 @@ function renderMarginBand() {
    -range is now gone from the markup too. The header-framing note is escalated as an
    unresolved conflict rather than half-built. */
 
-function showSharedLinkBanner(detail, title) {
+function showSharedLinkBanner(detail, title, settling) {
   const el = $("shared-link-banner"); if (!el) return;
   el.textContent = "";
-  const lead = mkEl("strong", "slb-lead", SHARED_LINK_BANNER_LEAD);
+  /* The page's OWN Reproduce link for an Astra Pro estimate is not someone else's link: it says whose
+     inputs it carries instead (a reader's pass, 2026-10-06). Any edit ends it — see astraLinkActive(). */
+  const astra = astraLinkActive(), lapsed = !astra && ASTRA_LINK ? ASTRA_LINK.rec : null;
+  ASTRA_LINK_LABELLED = !!astra;
+  if (astra && !settling) ASTRA_LINK_NOTE = ($("preset-note") || {}).textContent || null;   // at load only: both load call sites write the note first
+  const lead = mkEl("strong", "slb-lead", astra
+    ? "You are looking at this page's REPRODUCE LINK for the GPT-6 Astra Pro estimate of " + astra.name + " — that research run's recorded inputs, not this page's default scenario."
+    : lapsed ? "You followed this page's REPRODUCE LINK for the GPT-6 Astra Pro estimate of " + lapsed.name + ", and the state has since changed: the numbers below are no longer that estimate."
+    : SHARED_LINK_BANNER_LEAD);
   el.appendChild(lead);   // F3 (review): the WARNING first — see the note on the title below
   /* the recorded review: a titled link says what its sharer called it. mkEl sets textContent, so a title
      containing markup renders as the characters the sharer typed and nothing else — the title is
@@ -3298,7 +3306,9 @@ function showSharedLinkBanner(detail, title) {
      banner built to deny them it. Found in review — the append order had put it first. */
   if (title) el.appendChild(mkEl("span", "slb-title", "Shared as: \u201c" + title + "\u201d"));
   const body = mkEl("span", "slb-detail",
-    "Every number below was computed from the assumptions frozen into this link by whoever shared it"
+    (astra ? "Every number below was computed from the inputs that research run recorded (see its review page)"
+      : lapsed ? "Every number below is computed from the state on screen"
+      : "Every number below was computed from the assumptions frozen into this link by whoever shared it")
     + (detail ? " — " + detail : "")
     + ". " + (readReaderDefault() ? "Your default scenario" : "The page's own default scenario") + " is one click away, and the sliders are yours to move: nothing "
     + "here is this page's published answer until you reset it.");
@@ -3378,9 +3388,60 @@ function showRejectedLinkNotice(reason) {
    rendered a margin (Astra pack B P1-1). Generous next to the sharer's own cap, and far below
    anything that makes the main thread work for an attacker-chosen time. */
 const MAX_SHARED_TOKEN_CHARS = 16384;
+/* AN ASTRA PRO ESTIMATE'S OWN REPRODUCE LINK (a reader's pass on §10, 2026-10-06). A hub's or a card's
+   "Reproduce" link is an ordinary ?s= token, minted by astraProShareToken(), on the row that carries the
+   estimate: the blank Custom row for most, the GLM 5.2 row for GLM-5.3. The identity below was computed
+   from that row alone, so the page called its own recorded estimate "USER-DEFINED, UNSOURCED" (or
+   "GLM 5.2 … MODIFIED") under a banner calling it someone else's link. A token byte-equal to one record's
+   share token is recognised here; the estimate's name is shown only while the state on screen still IS
+   its recorded central point (astraLinkActive), so one edit returns the row's own label. Labels only:
+   nothing here touches a number, the state or the codec. */
+let ASTRA_LINK = null;
+function astraLinkFor(raw) {
+  if (typeof raw !== "string" || !raw || typeof ASTRA_PRO_REGISTRY === "undefined" || typeof astraProShareToken !== "function") return null;
+  for (const rec of ASTRA_PRO_REGISTRY.estimates) {
+    try {
+      if (astraProShareToken(rec) !== raw) continue;
+      const r = astraProReplay(rec, "central");
+      return { rec, modelId: r.model.id, state: r.state, ioRatio: r.tr.ioRatio, cacheHit: r.tr.cacheHit };
+    } catch { /* a record this engine cannot replay mints no link to recognise */ }
+  }
+  return null;
+}
+function astraLinkActive() {
+  const L = ASTRA_LINK; if (!L || MODIFIED_FROM || EXPLORATION_ORIGIN) return null;
+  const m = currentModel(), tr = resolvedTraffic();
+  if (!m || m.id !== L.modelId || !tr || tr.ioRatio !== L.ioRatio || tr.cacheHit !== L.cacheHit) return null;
+  for (const k of Object.keys(L.state)) if (s10StableJson(S[k]) !== s10StableJson(L.state[k])) return null;
+  return L.rec;
+}
+/* The shared-link banner and the loaded-scenario note are written once, at load. When the state stops (or
+   starts again) being the estimate's recorded point — an edit, a saved scenario, a preset — they follow it, so
+   neither goes on attributing edited numbers to the run (review r1 of these fixes). Run on every render. */
+/* The note is this flow's only while it is one of the two texts this flow wrote: the load note (captured at load,
+   never on a later re-render) or the lapsed note below. Any other text belongs to another flow and is left alone,
+   and a round trip back to the recorded point restores the load note (review r2). */
+let ASTRA_LINK_LABELLED = false, ASTRA_LINK_NOTE = null;
+function astraLapsedNote(rec) {
+  return "Loaded this page's Reproduce link for the GPT-6 Astra Pro estimate of " + rec.name
+    + "; the state has since changed, so the numbers below are no longer that estimate. Use “Return to central scenario” to reset.";
+}
+function settleAstraLink() {
+  if (!ASTRA_LINK) return;
+  const active = !!astraLinkActive();
+  if (active === ASTRA_LINK_LABELLED) return;
+  const b = $("shared-link-banner");
+  if (b && !b.hidden) showSharedLinkBanner(identitySummary(), null, true);   // Astra tokens carry no title
+  ASTRA_LINK_LABELLED = active;
+  if (ASTRA_LINK_NOTE === null || !$("preset-note")) return;
+  const lapsedNote = astraLapsedNote(ASTRA_LINK.rec);
+  if (!active && $("preset-note").textContent === ASTRA_LINK_NOTE) $("preset-note").textContent = lapsedNote;
+  else if (active && $("preset-note").textContent === lapsedNote) $("preset-note").textContent = ASTRA_LINK_NOTE;
+}
 function loadScenarioFromURL() {
   clearPendingDowngrade();  /* §18.13 C-1 */
   const raw = new URLSearchParams(location.search).get("s");
+  ASTRA_LINK = astraLinkFor(raw); ASTRA_LINK_NOTE = null;
   if (typeof raw === "string" && raw.length > MAX_SHARED_TOKEN_CHARS) {
     applyPreset();
     showRejectedLinkNotice("it is " + raw.length.toLocaleString() + " characters long; the limit is "
@@ -4155,6 +4216,10 @@ const tipEl = $("tooltip");
 const TIP_GUTTER = 8;
 function showTip(html, x, y) {
   tipEl.textContent = ""; tipEl.append(html); tipEl.hidden = false;
+  /* Measure at the origin. A fixed box with no set width shrinks to the room right of wherever the LAST
+     tooltip was placed, so measuring in place gave a 135 × 313 px column after a tooltip near the right
+     edge (a reader's pass at 400 px, 2026-10-06), covering the rows below. */
+  tipEl.style.left = "0px"; tipEl.style.top = "0px";
   const r = tipEl.getBoundingClientRect();
   const maxLeft = Math.max(TIP_GUTTER, window.innerWidth - r.width - TIP_GUTTER);
   const maxTop = Math.max(TIP_GUTTER, window.innerHeight - r.height - TIP_GUTTER);
@@ -4162,6 +4227,16 @@ function showTip(html, x, y) {
   tipEl.style.top = Math.max(TIP_GUTTER, Math.min(y + 14, maxTop)) + "px";
 }
 function hideTip() { tipEl.hidden = true; }
+/* Keyboard focus puts the tooltip clear of the row it describes: below the row, or above it when the
+   viewport has no room below. Anchored at the row's top, it covered the row's own dot (2026-10-06). */
+function showTipBeside(html, rect) {
+  showTip(html, rect.right, rect.bottom);
+  const t = tipEl.getBoundingClientRect();
+  if (t.top < rect.bottom && rect.top - t.height - 4 >= TIP_GUTTER) tipEl.style.top = (rect.top - t.height - 4) + "px";
+}
+/* Escape dismisses the tooltip and leaves focus where it is (WCAG 1.4.13): before this, a keyboard reader
+   on a chart mark could clear a box covering the rows only by leaving the chart. */
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !tipEl.hidden) hideTip(); });
 function tipContent(key) {
   const t = TIPS[key]; if (!t) return null;
   const frag = document.createDocumentFragment();
@@ -4227,7 +4302,7 @@ function attachMarkTip(el, buildFrag, ariaLabel) {
   el.setAttribute("aria-label", ariaLabel);
   el.addEventListener("pointermove", e => showTip(buildFrag(), e.clientX, e.clientY));
   el.addEventListener("pointerleave", hideTip);
-  el.addEventListener("focus", () => { const r = el.getBoundingClientRect(); showTip(buildFrag(), r.right, r.top); });
+  el.addEventListener("focus", () => showTipBeside(buildFrag(), el.getBoundingClientRect()));
   el.addEventListener("blur", hideTip);
 }
 function ttRows(title, rows) {
@@ -5583,6 +5658,7 @@ function renderFrontDoorDetail() {
 function boardStateLabel() {
   const id = computeIdentity();
   if (id.isCentral) return "derived from the central scenario (Claude) — the clean Model / Traffic-mix default";
+  if (id.astra) return "derived from the GPT-6 Astra Pro estimate for " + id.astra.name + " (its recorded central inputs), not the central scenario";
   if (id.isCustom) return "derived from a USER-DEFINED Custom scenario (unsourced), not the central scenario";
   if (id.isCounterfactual) return "loaded from the page-authored “" + id.lensName + "” counterfactual route" + (id.isModified ? " (since edited — MODIFIED)" : "");
   if (id.isModified) return "derived from a MODIFIED scenario (" + id.modelName + " · " + id.stateLabel.replace(/^MODIFIED[^—]*— /, "").replace(/^MODIFIED\s*/, "") + "), not the central scenario";
@@ -5707,7 +5783,7 @@ function isLandingClean() {
 function computeIdentity() {
   const m = currentModel(), p = currentPersp(), tr = resolvedTraffic();
   const isCustom = !!(m && m.id === "custom");
-  const modelName = m ? m.name.replace(" (define with sliders)", "") : "—";
+  let modelName = m ? m.name.replace(" (define with sliders)", "") : "—";
   const trafficTxt = tr ? tr.ioRatio + ":1 / " + tr.cacheHit + "%" + (tr.locked ? " (locked)" : "") : "—";
   const clean = presetIsClean(), oob = craftedFields();
   const lensBare = pn => (pn || "").replace(/^\[[^\]]*\]\s*/, "");
@@ -5742,7 +5818,16 @@ function computeIdentity() {
   }
   if (isCustom) { cls = isModified ? "id-modified" : "id-custom";
     stateLabel = "USER-DEFINED, UNSOURCED — not a provider estimate" + (isModified ? " · edited" : "; inherits the " + lensName + " lens + model-default hardware"); }
-  return { modelName, isCustom, trafficTxt, lensName, stateLabel, cls, isModified, isCounterfactual, isCentral, clean, oob };
+  /* An Astra Pro estimate's own Reproduce state is named as that estimate while it is untouched; the flags
+     above (isCustom, isModified) are left as computed, so every path that reads them behaves as before. */
+  const astra = astraLinkActive();
+  if (astra) {
+    modelName = astra.name + " — GPT-6 Astra Pro estimate, carried on the " + modelName + " row";
+    lensName = "GPT-6 Astra Pro's central inputs";
+    stateLabel = "the run's recorded central operating point (one research run, " + astra.dive.date + "; see its review) — a research run's estimate, not a provider-published figure";
+    cls = "id-lens";
+  }
+  return { modelName, isCustom, trafficTxt, lensName, stateLabel, cls, isModified, isCounterfactual, isCentral, clean, oob, astra };
 }
 function identitySummary() { const id = computeIdentity(); return id.modelName + " · " + id.trafficTxt + " · " + id.lensName + " · " + id.stateLabel; }
 /* ================= THE ONE WINDOW, AND THE READER'S DEFAULT =================
@@ -6092,12 +6177,13 @@ function wireSetDefaultButtons() {
 }
 function renderIdentityStrip() {
   const el = $("identity-strip"); if (!el) return;
+  settleAstraLink();
   const id = computeIdentity();
   el.className = "identity-strip " + id.cls;
   el.textContent = "";
   const chip = (txt, c) => { const s = document.createElement("span"); s.className = "id-chip" + (c ? " " + c : ""); s.textContent = txt; return s; };
   el.append(chip("This result: ", "id-lead"));
-  el.append(chip(id.modelName + (id.isCustom ? " — user-defined, unsourced" : ""), "id-model"));
+  el.append(chip(id.modelName + (id.isCustom && !id.astra ? " — user-defined, unsourced" : ""), "id-model"));
   el.append(chip("traffic " + id.trafficTxt, "id-traffic"));
   el.append(chip(id.lensName, "id-lensname"));
   el.append(chip(id.stateLabel, "id-state"));
@@ -6291,7 +6377,8 @@ function updateTiles() {
   // model — replace it with a persistent unsourced marker naming the inherited lens/fleet.
   if (curM && curM.id === "custom") {
     const idc = computeIdentity();
-    TAIL.mandatory = "USER-DEFINED SCENARIO — Custom is a scratch model with no provider and no sourced parameters; this ≈" + Math.round(wl.margin * 100) + "% is not a provider estimate and is not compared to any cited claim range. It " + (idc.isModified ? "is edited" : "inherits the " + idc.lensName + " scenario preset + the model-default hardware blend") + ".";
+    if (idc.astra) TAIL.mandatory = "GPT-6 ASTRA PRO ESTIMATE — " + idc.astra.name + "'s recorded central inputs from one research run (" + idc.astra.dive.date + "), carried on the calculator's Custom row; this ≈" + Math.round(wl.margin * 100) + "% is a research run's estimate, not a provider-published figure, and is not compared to any cited claim range.";
+    else TAIL.mandatory = "USER-DEFINED SCENARIO — Custom is a scratch model with no provider and no sourced parameters; this ≈" + Math.round(wl.margin * 100) + "% is not a provider estimate and is not compared to any cited claim range. It " + (idc.isModified ? "is edited" : "inherits the " + idc.lensName + " scenario preset + the model-default hardware blend") + ".";
   }
   // R3 (the design requirements — replaces the R2 Option-B suppression-coupled block, closing the
   // latent regression: once the filtered default is policy-clean, heroSuppressedNow

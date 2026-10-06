@@ -1081,9 +1081,11 @@ assert("dsv4's own blend beats replay's under 'deepseek'", settings("dsv4", "dee
       "sha256-w2Cf7l3VXuSHM/egSfa+rwViFlX92oxucarggJ7RF9o=",
       "sha256-7NW1hIlfPvY8ueqVe3DUVV1izwLmUWp75OCNx76JlEA=",
     ]);
+    // 2026-10-06: the research pages' style block gains two rules (code blocks scroll inside themselves, inline
+    // digests wrap), so its hash moves here and in site/_headers together; previous bTXKiV1l0FgQPGB4M31V….
     const expectedStyleHashes = new Set([
       "sha256-5EP55QxCCERsCRddWDR8ZCz7UB70i3bTmFgpm/GeulM=",
-      "sha256-bTXKiV1l0FgQPGB4M31VKDNuiIBs1IehEMwAerC4RQk=",
+      "sha256-lbVrMZSpSHuUt7opJekxKLsM3QHux4J2gnqZCl5dD7c=",
     ]);
     const sameSet = (actual, expected) =>
       actual.size === expected.size && [...expected].every(value => actual.has(value));

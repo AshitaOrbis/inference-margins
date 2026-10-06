@@ -1,5 +1,34 @@
 # Changelog
 
+## §10: presentation fixes after a read-through — 2026-10-06 (no number changed)
+
+A read-through of the new §10 on Chrome, at a desktop width and a phone width, found every number agreeing between
+each provider section, its model card and the chart. It found eight things that read badly, and they are fixed here.
+No number, input or July card changed.
+
+- **Reproduce keeps the estimate's name.** A section's "Reproduce this estimate" link loads the estimate's recorded
+  inputs on the calculator row that carries them: the blank Custom row for most estimates, the GLM 5.2 row for GLM-5.3.
+  The calculator labelled what it loaded by that row ("USER-DEFINED, UNSOURCED", or "GLM 5.2 … MODIFIED") under a
+  banner calling it someone else's shared link. While the state on screen is still the estimate's recorded operating
+  point, it is now labelled as that GPT-6 Astra Pro estimate, with its run date; one edit returns the row's own label.
+  This applies to every Astra Pro card's Reproduce link.
+- **Review pages fit the screen.** On the research run pages, code blocks (the run's inputs, its equations) scroll
+  inside themselves, and long digests wrap, so the page no longer stretches to two or three thousand pixels.
+- **Which way the signed figures run.** The three readings that attribute a gap to inputs (Gemini 3.1 Pro, Grok 4.6,
+  GLM-5.3), and the entry below, now say that each figure runs from the current estimate toward the July replay, so a
+  negative figure is part of why the July card reads lower.
+- **GLM-5.3's reading** no longer says the two estimates differ "mainly in rent" a paragraph before naming
+  serving-stack efficiency as the larger input; it names the inputs once and ranks them once.
+- **Grok 4.6's reading** separates the cost assumption from ownership: the run prices an hour at an owner's all-in
+  cost, while what is disclosed is xAI's operational control of a fleet much of which is finance-leased, as the July
+  xAI card says.
+- **The chart's tooltip** keeps its full width wherever the last one was shown, opens below the row it describes, and
+  closes with Escape.
+- **The §10 introduction** says that its paragraph on provider-native case studies describes the July 2026 dossiers
+  before it says that Moonshot's is an output-token margin.
+- **The Zhipu section** says, above its July card, that the card's sentence on the −153% move names a tariff change
+  that did not happen, before a reader reaches that sentence; the card itself is unchanged.
+
 ## §10: each provider now opens with its current model's estimate — 2026-10-06
 
 **What changed.** Each of the six provider sections in §10 now opens with a short block above its July card,
@@ -34,7 +63,9 @@ inputs their account of the gap to the July card left out, without withdrawing t
 offsetting pair (the July replay's 0.55× stack, about −7 points, against its throughput regime, about +4); for Grok,
 utilization (48% against 65%, about −8); for GLM, serving-stack efficiency (0.60× against 1.0×, about −22, slightly
 more than the rent and fleet difference it named). Each is labelled as a diagnostic attribution on this calculator,
-averaged over every order of swapping the inputs, not a causal split.
+averaged over every order of swapping the inputs, not a causal split. The figures run from the current estimate toward
+the July replay: each is how far one input, set to its July value, moves the current margin, so a negative figure is
+part of why the July card reads lower.
 
 **A correction: GLM's move was not a tariff correction.** The 2026-09-20 release entry below lists GLM under "Five
 presets were priced on tariffs their vendors no longer charge". The GLM 5.2 row's tariff ($1.40/$4.40, cached input

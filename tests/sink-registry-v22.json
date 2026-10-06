@@ -55,7 +55,7 @@
     "site/uncertainty-contract.js"
   ],
   "unmatched": [],
-  "classifiedCount": 1136,
+  "classifiedCount": 1140,
   "claimSinks": [
     {
       "id": "mcp-server/src/dcmap/layer.ts|mcp-build|50d2579283ff6c1f|0",
@@ -5413,15 +5413,6 @@
       "rule": "chart-tooltip-values"
     },
     {
-      "id": "site/app.js|tooltip-call|39ce882be8affbce|0",
-      "file": "site/app.js",
-      "kind": "tooltip-call",
-      "hash16": "39ce882be8affbce",
-      "occ": 0,
-      "class": "hardware-lens-tile",
-      "rule": "chart-tooltip-values"
-    },
-    {
       "id": "site/app.js|tooltip-call|3dbbc0132685dc75|0",
       "file": "site/app.js",
       "kind": "tooltip-call",
@@ -5471,6 +5462,15 @@
       "file": "site/app.js",
       "kind": "tooltip-call",
       "hash16": "7274248517134848",
+      "occ": 0,
+      "class": "hardware-lens-tile",
+      "rule": "chart-tooltip-values"
+    },
+    {
+      "id": "site/app.js|tooltip-call|794e467f51b7ef8f|0",
+      "file": "site/app.js",
+      "kind": "tooltip-call",
+      "hash16": "794e467f51b7ef8f",
       "occ": 0,
       "class": "hardware-lens-tile",
       "rule": "chart-tooltip-values"
@@ -5578,5 +5578,5 @@
     "report-dossier",
     "share-string"
   ],
-  "digest": "6448c6fa10846130"
+  "digest": "56a9e681250f54f6"
 }
