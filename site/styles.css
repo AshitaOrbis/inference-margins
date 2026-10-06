@@ -773,6 +773,16 @@ h1 { font-size: 28px; margin: 0 0 4px; letter-spacing: -0.02em; }
 .report .prov .kk { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
 @media (max-width: 700px) { .report .prov .kk { grid-template-columns: 1fr; } }
 .report .prov .kk h5 { margin: 8px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); }
+/* §10 provider hubs (2026-10-06): the current estimate, what differs, and the July dossier label,
+   above each July card. Theme tokens only, so every skin and theme resolves its own colours. */
+.report .s10-hub { margin: 22px 0 4px; padding: 2px 0 2px 12px; border-left: 3px solid var(--series-1); }
+.report .s10-hub p, .report .s10-hub li { font-size: 15px; line-height: 1.65; max-width: 68ch; color: var(--ink-2); margin: 6px 0; }
+.report .s10-hub .s10-hub-current { color: var(--ink-1); }
+.report .s10-hub .s10-hub-mid { font-variant-numeric: tabular-nums; font-weight: 700; }
+.report .s10-hub .s10-hub-span { font-variant-numeric: tabular-nums; }
+.report .s10-hub .s10-hub-notice { padding: 6px 10px; border: 1px solid var(--grid); border-radius: 8px; background: var(--tile); }
+.report .s10-hub .s10-hub-diffs { margin: 4px 0 8px; padding-left: 20px; }
+.report .s10-hub .s10-hub-dossier { margin-top: 10px; padding-top: 6px; border-top: 1px dashed var(--grid); }
 .badge { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 11px; font-weight: 600; letter-spacing: 0.03em; border: 1px solid; white-space: nowrap; }
 .badge-high { color: var(--good); border-color: var(--good); }
 .badge-med { color: var(--warn); border-color: var(--warn); }

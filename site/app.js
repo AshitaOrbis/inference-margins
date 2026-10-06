@@ -5130,7 +5130,10 @@ function renderSubChart() {
    astra-pro-estimates.js, computed HERE by the engine at page load (astraProReplay — the same
    pipeline the build uses for the card faces and the MCP uses for run_scenario). Rows keep the
    registry's fixed provider order; nothing is sorted by value. The series label sits on the chart
-   itself so a screenshot of it carries whose estimates these are. */
+   itself so a screenshot of it carries whose estimates these are.
+   §10 provider hubs (2026-10-06): the readings come from canonicalReplay(rec) — the one function
+   the hubs' faces are generated from — and each mark carries its unrounded central as data-central,
+   so a test can hold every dot to its record without parsing geometry. */
 let ASTRA_PRO_CHART_NARROW = null;
 function renderAstraProChart() {
   const el = document.getElementById("astra-pro-chart"); if (!el) return;
@@ -5138,7 +5141,7 @@ function renderAstraProChart() {
   const recs = (typeof ASTRA_PRO_REGISTRY !== "undefined" && ASTRA_PRO_REGISTRY.estimates) || [];
   if (!recs.length) return;
   const rows = recs.map(rec => {
-    try { const r = astraProReadings(rec); return { rec, ok: true, mid: r.central / 100, lo: r.low_margin / 100, hi: r.high_margin / 100 }; }
+    try { const c = canonicalReplay(rec); return { rec, ok: true, c, mid: c.central / 100, lo: c.low / 100, hi: c.high / 100 }; }
     catch { return { rec, ok: false }; }
   });
   /* Two layouts: below about 760 px the labels move above their bars and the viewBox narrows, so the
@@ -5161,7 +5164,7 @@ function renderAstraProChart() {
   }
   rows.forEach((r, i) => {
     const y = padT + i * rowH, cy = narrow ? y + 28 : y + rowH / 2;
-    const g = svgEl("g", { "data-ape-mark": r.rec.key });
+    const g = svgEl("g", r.ok ? { "data-ape-mark": r.rec.key, "data-central": r.c.central.toFixed(4) } : { "data-ape-mark": r.rec.key });
     const name = r.rec.provider + " · " + r.rec.name;
     g.append(narrow ? chartText(x0, y + 13, name, { size: fs }) : chartText(padL - 8, cy + 4, name, { anchor: "end", size: fs }));
     if (!r.ok) {

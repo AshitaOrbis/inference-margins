@@ -1730,7 +1730,7 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
    ],
    "context_length_assumed": "Short-context tariff, prompts <=200000 tokens; representative 8000 input and 1000 billed output tokens including thinking; mean decode context 8500, peak 9000; assumed, not measured.",
    "confidence": "low: tariffs are verified, but architecture, traffic, occupancy and production throughput are not identified; the span is three conditional judgments, not a probability interval.",
-   "reading": "The site's existing Gemini 3.1 Pro card (a July GPT-5.6 Pro dive, replayed on this engine at about 84%) and this run agree on the thing that matters most: Google serves Gemini on its own TPUs, so the cost of an hour is not what Google Cloud charges a customer for one. This run makes that conversion explicit and lands lower on the hour — $1.36 all-in per Ironwood chip-hour, owned, against the $5.40 committed retail tariff and against the July card's ≈$1.62 — which, with a somewhat smaller assumed model (100B active, 2T total), is most of why it reads about eight points higher. Its card line names that hour as the input that \"carries the result\". The span (84–94%) moves the model size (80B–160B active) and utilization, and in the low case the hour to $1.61, close to the July card's figure. The run checked for a newer Pro model and found Gemini 3.5 Pro still marked \"coming soon\" by Google, so 3.1 Pro remains the priced Pro tier. The traffic (8:1, 40% from cache) is moderate, and at the page's Reference traffic the same inputs compute {{REF}}. The run could not reach the connector and transcribed the equations; the engine reproduces its figures to a tenth of a point.",
+   "reading": "The site's existing Gemini 3.1 Pro card (a July GPT-5.6 Pro dive, replayed on this engine at about 84%) and this run agree on the thing that matters most: Google serves Gemini on its own TPUs, so the cost of an hour is not what Google Cloud charges a customer for one. This run makes that conversion explicit and lands lower on the hour — $1.36 all-in per Ironwood chip-hour, owned, against the $5.40 committed retail tariff and against the July card's ≈$1.62 — which, with a somewhat smaller assumed model (100B active, 2T total), is most of why it reads about eight points higher. Its card line names that hour as the input that \"carries the result\". The span (84–94%) moves the model size (80B–160B active) and utilization, and in the low case the hour to $1.61, close to the July card's figure. The run checked for a newer Pro model and found Gemini 3.5 Pro still marked \"coming soon\" by Google, so 3.1 Pro remains the priced Pro tier. The traffic (8:1, 40% from cache) is moderate, and at the page's Reference traffic the same inputs compute {{REF}}. The run could not reach the connector and transcribed the equations; the engine reproduces its figures to a tenth of a point.\n\nTwo further inputs differ and largely cancel: the July replay runs its stack at 0.55× of open practice (a value with no recorded source) where this run uses 1.0×, worth about −7 points, and it serves in the throughput regime where this run uses balanced, worth about +4. Averaged over every order of swapping the inputs, model size and the hour account for about −5.6 of the −8-point gap, as above. (Diagnostic attribution on this calculator, not a causal split.)",
    "dive": {
     "id": "one research run on 2026-09-25",
     "date": "2026-09-25",
@@ -1866,7 +1866,7 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
    ],
    "context_length_assumed": "All prompts below 200,000 tokens. Representative input/output lengths: central 8,000/1,000, low-margin 6,000/1,000, high-margin 10,000/1,000; output includes billed reasoning. Absolute lengths are assumptions, not a supported override.",
    "confidence": "low: this is a conditional engineering estimate, not provider telemetry; stated margins come from a local transcription of public calculator equations, not a successful live MCP run.",
-   "reading": "xAI's price is $2/$6 with cached input at 25% of the input price, so a margin near 80% needs cheap hardware, and that is exactly the input the run names as decisive: owned Blackwell capacity at $2.10 (GB200) and $2.50 (GB300) per accelerator-hour all-in, built up from capital recovery, facility, power and operating allowances rather than taken from any rental price. That is well under the page's planning rents ($4.50 and $6.00) and under anything a cloud customer pays, and it rests on xAI owning its Colossus fleet — which is disclosed — while the per-hour figures are the run's construction. The fleet split (half GB200, half GB300 by served tokens) is assumed; the page's own xAI card, a July dive on Grok 4.5 on a fleet half Hopper and half Blackwell at a full-cycle cost lens, reads about 63%, and most of the distance between the two is that fleet and its cost basis rather than the one-point-release model. The size (1.5T total, 200B active) carries over from the Grok 4.5 disclosure and remains speculation for the active count; the span (66–89%) comes from 120B–300B active, utilization and traffic. At the page's Reference traffic the same inputs compute {{REF}}, close to the headline. The run could not reach the connector and transcribed the equations; the engine reproduces its figures to a tenth of a point.",
+   "reading": "xAI's price is $2/$6 with cached input at 25% of the input price, so a margin near 80% needs cheap hardware, and that is exactly the input the run names as decisive: owned Blackwell capacity at $2.10 (GB200) and $2.50 (GB300) per accelerator-hour all-in, built up from capital recovery, facility, power and operating allowances rather than taken from any rental price. That is well under the page's planning rents ($4.50 and $6.00) and under anything a cloud customer pays, and it rests on xAI owning its Colossus fleet — which is disclosed — while the per-hour figures are the run's construction. The fleet split (half GB200, half GB300 by served tokens) is assumed; the page's own xAI card, a July dive on Grok 4.5 on a fleet half Hopper and half Blackwell at a full-cycle cost lens, reads about 63%, and most of the distance between the two is that fleet and its cost basis rather than the one-point-release model. The size (1.5T total, 200B active) carries over from the Grok 4.5 disclosure and remains speculation for the active count; the span (66–89%) comes from 120B–300B active, utilization and traffic. At the page's Reference traffic the same inputs compute {{REF}}, close to the headline. The run could not reach the connector and transcribed the equations; the engine reproduces its figures to a tenth of a point.\n\nUtilization differs too: the July replay runs the fleet at 48%, this run at 65%, worth about −8 points of the gap, close to the fleet and its cost basis (about −10). About −4 points remain unreconciled after every input is swapped — the carrier geometry and anything not swapped. (Diagnostic attribution, not a causal split.)",
    "dive": {
     "id": "one research run on 2026-09-25",
     "date": "2026-09-25",
@@ -2383,7 +2383,7 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
    ],
    "context_length_assumed": "Short-to-medium agent/text calls: representative 10,000 input plus 1,000 billed output tokens, including reasoning; decode context 10,500 and peak KV 11,000. These are assumptions, not production means; 1M is the supported ceiling, not the modeled average.",
    "confidence": "low: identity, tariff and geometry are well grounded, but fleet allocation, all-in procurement, occupancy, representative context and the throughput-versus-latency tradeoff are not measured; the span is three coherent scenarios, not a confidence interval.",
-   "reading": "This card carries a wide span (36–82%), and the run is candid about why: the single decisive input is the calculator's latency posture. At `balanced` — shared batches, which the run takes as its proxy for a busy flagship API — the model computes about 74%; switching only the posture to `fast` (small, low-latency batches) costs about 39 points, and the low scenario is exactly that switch, nothing else. Nothing public says which posture Z.ai serves at, so the span is honest rather than wide by carelessness. The rest is unusually well anchored: GLM-5.3's weights are open (753B, held on the site's own GLM-5 row geometry, which the run matched field by field), the tariff is the provider's ($1.40/$4.40, cached input at $0.26 — 18.6%, not the rounded 19% the site's GLM row carries), and the fleet is priced entirely on Huawei Ascend at $2.20 per accelerator-hour. The page's own GLM 5.2 card reads about 31% on its July dive replay; the two differ mainly in rent (that replay uses the dive's 1.9× domestic rate multiplier) and in fleet mix, not in the model. For scale against the books: Zhipu's FY2025 results (HKEX filing) report an 18.9% cloud/API gross margin, and a reported H1 2026 figure 24.6% — company-level numbers on a wider perimeter than this unit serving margin. At the page's Reference traffic the same inputs compute {{REF}}.",
+   "reading": "This card carries a wide span (36–82%), and the run is candid about why: the single decisive input is the calculator's latency posture. At `balanced` — shared batches, which the run takes as its proxy for a busy flagship API — the model computes about 74%; switching only the posture to `fast` (small, low-latency batches) costs about 39 points, and the low scenario is exactly that switch, nothing else. Nothing public says which posture Z.ai serves at, so the span is honest rather than wide by carelessness. The rest is unusually well anchored: GLM-5.3's weights are open (753B, held on the site's own GLM-5 row geometry, which the run matched field by field), the tariff is the provider's ($1.40/$4.40, cached input at $0.26 — 18.6%, not the rounded 19% the site's GLM row carries), and the fleet is priced entirely on Huawei Ascend at $2.20 per accelerator-hour. The page's own GLM 5.2 card reads about 31% on its July dive replay; the two differ mainly in rent (that replay uses the dive's 1.9× domestic rate multiplier) and in fleet mix, not in the model. For scale against the books: Zhipu's FY2025 results (HKEX filing) report an 18.9% cloud/API gross margin, and a reported H1 2026 figure 24.6% — company-level numbers on a wider perimeter than this unit serving margin. At the page's Reference traffic the same inputs compute {{REF}}.\n\nServing-stack efficiency differs most: the July replay runs at 0.60× of open practice (a value with no recorded source; the July dive's text does not state it), this run at 1.0×, worth about −22 points — slightly more than the rent and fleet difference (about −20). Traffic accounts for about −8 more. (Diagnostic attribution averaged over every order of swapping the inputs, not a causal split.)",
    "dive": {
     "id": "one research run on 2026-09-25",
     "date": "2026-09-25",
@@ -2404,9 +2404,11 @@ const ASTRA_PRO_SCENARIOS = Object.freeze(["central", "low_margin", "high_margin
 function astraProEngine(E) {
   if (E) return E;
   /* global MODELS, PERSPECTIVES, resolveTraffic, applyPresetSettings, sanitizeScenarioDiff,
-     makeScenarioContext, workload, encodeScenario, FLEETS, DEFAULT_FLEET_ID, TOTAL_CASE_SCOPE, TOTAL_CASES, SCENARIO_BOUNDS */
+     makeScenarioContext, workload, encodeScenario, FLEETS, DEFAULT_FLEET_ID, TOTAL_CASE_SCOPE, TOTAL_CASES, SCENARIO_BOUNDS,
+     HW, pinReferenceLevers, ENGINE_REVISION */
   return { MODELS, PERSPECTIVES, resolveTraffic, applyPresetSettings, sanitizeScenarioDiff,
-    makeScenarioContext, workload, encodeScenario, FLEETS, DEFAULT_FLEET_ID, TOTAL_CASE_SCOPE, TOTAL_CASES, SCENARIO_BOUNDS };
+    makeScenarioContext, workload, encodeScenario, FLEETS, DEFAULT_FLEET_ID, TOTAL_CASE_SCOPE, TOTAL_CASES, SCENARIO_BOUNDS,
+    HW, pinReferenceLevers, ENGINE_REVISION };
 }
 
 /* One operating point → the engine's state and result. Mirrors mcp-server/src/tools/run_scenario.ts
@@ -2469,6 +2471,146 @@ function astraProShareToken(rec, E) {
     null, { fleet, totalCase });
 }
 
+/* ---------- §10 provider hubs (2026-10-06) ----------
+   Each §10 provider section opens with its current model's estimate from this category, then the
+   inputs that estimate and the July 2026 dive replay set differently, then the July dive as a dated
+   dossier. Which estimate leads each provider is one field here (`estimateKey`); a provider with no
+   current-model estimate of the tier its July dive covered leads with none (`headlineSource:
+   "none"`) and says so, rather than borrowing another tier's number. `julyOriginal` stores each
+   dive's OWN stated central and band, as the dive wrote them on 2026-07-09: immutable fields, never
+   stood in for by this engine's replay of the dive (which the July card below shows). */
+function s10DeepFreeze(v) {
+  if (v && typeof v === "object" && !Object.isFrozen(v)) { Object.values(v).forEach(s10DeepFreeze); Object.freeze(v); }
+  return v;
+}
+const S10_JULY = (provider, model, central, band, metric) => ({
+  model, central, band, metric, author: "GPT-5.6 Pro", date: "2026-07-09", source: "research/provider-dives/" + provider + "-gptpro.md",
+});
+const SECTION10_PROVIDERS = s10DeepFreeze({
+  openai: { label: "OpenAI", headlineSource: "astra_estimate", estimateKey: "gpt-6-1-sol", julyModelId: "gpt", julyMetric: "blended",
+    julyOriginal: S10_JULY("openai", "GPT-5.6 Sol", 94, [86, 97], "blended") },
+  google: { label: "Google", headlineSource: "astra_estimate", estimateKey: "gemini-3-1-pro", julyModelId: "gemini", julyMetric: "blended",
+    julyOriginal: S10_JULY("google", "Gemini 3.1 Pro", 95.7, [89, 98], "blended"),
+    /* The July replay's 0.55 serving-stack efficiency carries no provenance in the engine, the
+       changelog or the dive itself (traced 2026-10-06); the hub says so beside the value. */
+    julyStackNote: "no recorded source" },
+  xai: { label: "xAI", headlineSource: "astra_estimate", estimateKey: "grok-4-6", julyModelId: "grok", julyMetric: "blended",
+    julyOriginal: S10_JULY("xai", "Grok 4.5", 67, [10, 85], "blended, full-cycle TCO lens") },
+  deepseek: { label: "DeepSeek", headlineSource: "none", estimateKey: null, julyModelId: "dsv4", julyMetric: "blended",
+    julyOriginal: S10_JULY("deepseek", "V4 Pro", 69, [45, 83], "blended, on the 2026-07-09 tariff ($0.435/$0.87)"),
+    /* A claim in the July card's own text that today's replay contradicts. The card is not edited; the
+       dossier label says so, with the replay's current reading computed by julyReplay. */
+    julyTextNote: { since: "the 2026-09-19 tariff correction", claim: "describing it as one of the lower estimates" },
+    tierNote: "No current-model estimate covers DeepSeek's Pro tier. The chart's DeepSeek dot is V4.1-Flash, a different, cheaper tier, so it is not this provider's headline." },
+  zhipu: { label: "Zhipu / Z.ai", headlineSource: "astra_estimate", estimateKey: "glm-5-3", julyModelId: "glm", julyMetric: "blended",
+    julyOriginal: S10_JULY("zhipu", "GLM 5.2", 60, [35, 77], "blended"),
+    /* as for Google: the July replay's 0.60 is not in the Zhipu dive's text and has no recorded origin */
+    julyStackNote: "no recorded source" },
+  moonshot: { label: "Moonshot", headlineSource: "astra_estimate", estimateKey: "kimi-k3", julyModelId: "kimi", julyMetric: "output-token",
+    julyOriginal: S10_JULY("moonshot", "Kimi K2.7 Code", 81, [55, 91], "output-token") },
+});
+
+/* A small deterministic fingerprint: FNV-1a (32-bit) over a stable, sorted-key JSON. Identical in
+   node and the browser (UTF-16 code units, Math.imul). Not a security hash — it names an input set
+   so a page attribute, a chart datum and a test can say they describe the same one. */
+function s10StableJson(v) {
+  if (v === null || typeof v !== "object") return JSON.stringify(v === undefined ? null : v);
+  if (Array.isArray(v)) return "[" + v.map(s10StableJson).join(",") + "]";
+  return "{" + Object.keys(v).filter(k => v[k] !== undefined && typeof v[k] !== "function").sort()
+    .map(k => JSON.stringify(k) + ":" + s10StableJson(v[k])).join(",") + "}";
+}
+function s10Fnv1a(str) {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h.toString(16).padStart(8, "0");
+}
+
+/* THE canonical reading of one record: what the chart draws, what a §10 hub prints and what its
+   Reproduce link loads — one path. central/low/high are astraProReplay margins in percent, UNROUNDED
+   (rounding is the face's job). A record that declares a metric other than the blended serving
+   margin this replay computes is refused, never relabelled: a metric is part of a number's identity. */
+function canonicalReplay(rec, E) {
+  const eng = astraProEngine(E);
+  if (rec && rec.metric !== undefined && rec.metric !== "blended")
+    throw new Error("astra-pro: " + rec.key + " declares metric " + JSON.stringify(rec.metric) + "; this replay computes the blended serving margin only");
+  const v = {};
+  ASTRA_PRO_SCENARIOS.forEach(k => { v[k] = astraProReplay(rec, k, eng).margin * 100; });
+  const c = rec.scenarios.central;
+  return {
+    key: rec.key, metric: "blended", central: v.central, low: v.low_margin, high: v.high_margin,
+    resolvedInputsHash: s10Fnv1a(s10StableJson({ carrier: rec.carrier, overrides: c.overrides, traffic: c.traffic })),
+    registryHash: s10Fnv1a(s10StableJson(rec)),
+    engineHash: s10Fnv1a(s10StableJson({ engineRevision: eng.ENGINE_REVISION })),
+  };
+}
+
+/* Today's engine replay of a provider's July dive, on the metric its July card shows (Moonshot's
+   card is an output-token margin, 1 − cOut/priceOut; the others are the blended margin), and whether
+   it falls OUTSIDE the dive's own stated band. Where it does, the band brackets neither the replay
+   nor the current estimate, and the hub says the band is historical. Computed, never listed. */
+function julyReplay(providerKey, E) {
+  const eng = astraProEngine(E);
+  const prov = SECTION10_PROVIDERS[providerKey];
+  if (!prov) throw new Error("section10: unknown provider " + providerKey);
+  const m = eng.MODELS.find(x => x.id === prov.julyModelId);
+  const p = eng.PERSPECTIVES.find(x => x.id === "dive");
+  if (!m || !p) throw new Error("section10: " + providerKey + " cannot resolve its July replay");
+  const s = eng.pinReferenceLevers(eng.applyPresetSettings(m, p));
+  const wl = eng.workload(s);
+  const metric = prov.julyMetric;
+  const value = (metric === "output-token" ? 1 - wl.cOut / s.priceOut : wl.margin) * 100;
+  const [lo, hi] = prov.julyOriginal.band;
+  return { metric, value, blended: wl.margin * 100, ioRatio: s.ioRatio, cacheHit: s.cacheHit, outsideBand: !(value >= lo && value <= hi) };
+}
+
+/* The inputs a provider's current estimate and its July dive replay set DIFFERENTLY, as reader
+   strings: { input, july, current }. July = the engine's dive replay settings (the dive scenario
+   preset, reference levers pinned — the same state the July card's face is computed from);
+   current = the estimate's central operating point as the engine resolves it. Inputs that agree are
+   omitted. A provider with no current estimate has no list. */
+function assumptionDiffs(providerKey, E) {
+  const eng = astraProEngine(E);
+  const prov = SECTION10_PROVIDERS[providerKey];
+  if (!prov) throw new Error("section10: unknown provider " + providerKey);
+  if (prov.headlineSource !== "astra_estimate") return [];
+  const rec = ASTRA_PRO_REGISTRY.estimates.find(r => r.key === prov.estimateKey);
+  const m = eng.MODELS.find(x => x.id === prov.julyModelId);
+  const p = eng.PERSPECTIVES.find(x => x.id === "dive");
+  if (!rec || !m || !p) throw new Error("section10: " + providerKey + " cannot resolve its estimate or July replay");
+  const j = eng.pinReferenceLevers(eng.applyPresetSettings(m, p));
+  const r = astraProReplay(rec, "central", eng), c = r.state;
+  const num = (v, d) => String(Number(Number(v).toFixed(d)));
+  /* a price pair is written alike on both sides: "$2/$10", "$0.95/$4.00", never "$0.95/$4" */
+  const usdPair = (a, b) => {
+    const cents = v => Number.isInteger(Math.round(v * 1e6) / 1e4);
+    const f = Number.isInteger(a) && Number.isInteger(b) ? String : v => (cents(v) ? v.toFixed(2) : String(v));
+    return "$" + f(a) + "/$" + f(b);
+  };
+  const hwName = k => (eng.HW[k] && eng.HW[k].name) || k;
+  const fleet = (blend, rate) => Object.entries(blend || {}).filter(([, w]) => w > 0)
+    .map(([k, w]) => `${hwName(k)} ${w}% at $${Number(rate(k)).toFixed(2)}/h`).join(" · ");
+  const POSTURE = { batch: "throughput", balanced: "balanced", fast: "low-latency" };
+  const stack = v => (Number.isInteger(v) ? v.toFixed(1) : v.toFixed(2)) + "×";
+  const rows = [
+    ["model size", s => `${s.active}B active / ${s.total}B total, ${s.precision}`],
+    ["list price", s => `${usdPair(s.priceIn, s.priceOut)} per million tokens, cached input ${num(s.cacheReadMult, 1)}%`],
+    ["fleet and hour cost", (s, side) => fleet(s.blend, k => side === "july" ? eng.HW[k].rent * (s.rentMult == null ? 1 : s.rentMult) : s.rentAbsLeg[k])],
+    ["utilization", s => `${num(s.util, 1)}%`],
+    ["serving-stack efficiency", s => stack(s.stackMult)],
+    ["serving posture", s => POSTURE[s.interact] || String(s.interact)],
+    ["traffic", (s, side) => side === "july" ? `${num(s.ioRatio, 2)}:1 input:output, ${num(s.cacheHit, 1)}% cache hits`
+      : `${num(r.tr.ioRatio, 2)}:1 input:output, ${num(r.tr.cacheHit, 1)}% cache hits`],
+  ];
+  const out = [];
+  for (const [input, fmt] of rows) {
+    const july = fmt(j, "july"), current = fmt(c, "current");
+    if (july === current) continue;
+    out.push({ input, july: input === "serving-stack efficiency" && prov.julyStackNote ? july + " — " + prov.julyStackNote : july, current });
+  }
+  return out;
+}
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { ASTRA_PRO_REGISTRY, ASTRA_PRO_SCENARIOS, astraProReplay, astraProReadings, astraProShareToken };
+  module.exports = { ASTRA_PRO_REGISTRY, ASTRA_PRO_SCENARIOS, astraProReplay, astraProReadings, astraProShareToken,
+    SECTION10_PROVIDERS, canonicalReplay, assumptionDiffs, julyReplay };
 }

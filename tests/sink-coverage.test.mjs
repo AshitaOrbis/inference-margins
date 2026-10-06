@@ -20,6 +20,11 @@ const assert = (name, cond, detail = "") => {
 
 // Registry re-minted 2026-10-04: editorial comments and neutral provenance changed sink snippets;
 // the same 612 claim sinks remain classified, with no unmatched sink and no number moved.
+// Re-minted 2026-10-06 (§10 provider hubs): ONE claim sink re-identified, none added or removed —
+// renderAstraProChart's mark group (svg-geometry, class hardware-lens-tile) now also carries the
+// canonical central as data-central, so its snippet hash moved 996a927eae3ada87 -> 4de040968777f7b0.
+// classifiedCount 1131 -> 1136: five static aria-labels on the new hub links in index.html,
+// classified non-claim (index-html-static). Still 612 claim sinks, 0 unmatched; digest 3693dae3 -> 6448c6fa.
 const REGISTRY = JSON.parse(readFileSync(join(HERE, "sink-registry-v22.json"), "utf8"));
 
 /* ---------- (a) pinned scanned-file manifest ---------- */

@@ -16,9 +16,13 @@ assumptions and are labeled as such. Nothing here is any provider's actual ledge
 
 ## Reproduce one result
 
-Every §10 provider headline reproduces from a named preset within 1pp, enforced by the test
-suite in this repo — run by CI on this exact public tree, and by the release gate before
-every deploy. The DeepSeek V4 Pro card, traced end to end:
+Every §10 provider headline reproduces, enforced by the test suite in this repo — run by CI
+on this exact public tree, and by the release gate before every deploy. Each provider hub's
+headline reproduces from its Astra Pro estimate's recorded operating point (the hub's
+Reproduce link loads that state, and the suite holds the hub, the chart dot and the
+estimate's card to one canonical replay of it), and each July dossier's face reproduces
+from its dive-replay preset within 1pp.
+The DeepSeek V4 Pro dossier card, traced end to end:
 
 ```bash
 node -e '

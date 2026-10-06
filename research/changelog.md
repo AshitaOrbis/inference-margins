@@ -1,5 +1,49 @@
 # Changelog
 
+## §10: each provider now opens with its current model's estimate — 2026-10-06
+
+**What changed.** Each of the six provider sections in §10 now opens with a short block above its July card,
+generated from the same records as the Astra Pro chart:
+
+- **The current estimate.** The selected current model's Astra Pro estimate — OpenAI GPT-6.1 Sol, Google Gemini 3.1
+  Pro, xAI Grok 4.6, Zhipu GLM-5.3, Moonshot Kimi K3 — at the same number as that model's dot in the chart, with its
+  span, its run date, a link that loads its operating point in the calculator, and links to its card and its review
+  page. It is labelled as the selected model's margin, not a provider-wide margin. Every number in it is this
+  calculator's result on the run's recorded inputs, computed by the same function the chart uses.
+- **What differs.** The inputs the July replay and the current estimate set differently — model size, list price,
+  fleet and hour cost, utilization, serving-stack efficiency, serving posture and traffic — each with its July value
+  and its current value, under the warning that the two numbers are not a like-for-like comparison. Two July values are
+  marked as having no recorded source: the 0.55× serving-stack efficiency in the Google replay and the 0.60× in the
+  Zhipu replay. Neither appears in its dive's text, and neither carries a source in the calculator or in this
+  changelog. They are shown as they are and were not changed.
+- **The July dossier.** Each July card stays below, unchanged, under a label that dates it (one GPT-5.6 Pro deep dive,
+  2026-07-09), quotes the dive's own reading, and says that the card's face is this calculator's replay of that dive
+  today and that its evidence profile describes the July model.
+
+**DeepSeek.** No current-model estimate covers DeepSeek's Pro tier. The chart's DeepSeek dot is V4.1-Flash, a
+different, cheaper tier, so the section says so and takes no headline from it; the July V4 Pro card stays as the
+dossier.
+
+**Moonshot.** The section's headline metric changes. The July card keeps its output-token margin for Kimi K2.7 Code;
+the section now leads with Kimi K3's blended margin. A notice gives the July replay's own blended figure at the dive's
+assumed traffic, so that the two headlines are not read as a change in Moonshot's margin: they are different metrics
+on different models.
+
+**Three review pages.** The "Our reading" sections of the Gemini 3.1 Pro, Grok 4.6 and GLM-5.3 estimates add the
+inputs their account of the gap to the July card left out, without withdrawing the account they gave: for Gemini, an
+offsetting pair (the July replay's 0.55× stack, about −7 points, against its throughput regime, about +4); for Grok,
+utilization (48% against 65%, about −8); for GLM, serving-stack efficiency (0.60× against 1.0×, about −22, slightly
+more than the rent and fleet difference it named). Each is labelled as a diagnostic attribution on this calculator,
+averaged over every order of swapping the inputs, not a causal split.
+
+**A correction: GLM's move was not a tariff correction.** The 2026-09-20 release entry below lists GLM under "Five
+presets were priced on tariffs their vendors no longer charge". The GLM 5.2 row's tariff ($1.40/$4.40, cached input
+19%) did not change on 2026-09-19. Both GLM moves listed there — including the Zhipu card's −153% → +31.3% — came
+from the traffic profile alone: the row stopped opening on an 81,000-token average-input profile belonging to a
+different deployment. The Zhipu card now carries a dated correction after the sentence that attributed part of the
+move to a replaced tariff, and that entry carries a marker pointing here. Nothing was deleted, and no July input
+changed.
+
 ## Corrections — 2026-10-04 (no number changed)
 
 **Two source links removed.** The GPT-5.6 Pro and Fable 5 self-authored scenario cards linked their quotes to
@@ -150,7 +194,7 @@ that showed a **negative** serving margin are positive once the price is right: 
 −9.1 % → **+43.8 %**; **DeepSeek V4-Flash**, which is a different model and not a replay of
 the first, −11.5 % → **+31.8 %**, with its own provider-card replay −22.2 % → **+25.3 %**; and
 GLM −36.5 % → **+63.0 %**, which moves the Zhipu card in §10
-off **−153 %** to **+31.3 %**. One row ran the other way: OpenAI's cheapest tier was carrying five
+off **−153 %** to **+31.3 %** (corrected 2026-10-06 — see that entry). One row ran the other way: OpenAI's cheapest tier was carrying five
 times the live tariff and overstated its headline by **48 points**. The §10 OpenAI card's own
 "known knowns" list was still quoting the superseded $5/$30, $2.50/$15 and $1/$6; it now quotes
 $4/$20, $2/$12 and $0.20/$1.20 and says what it used to say.

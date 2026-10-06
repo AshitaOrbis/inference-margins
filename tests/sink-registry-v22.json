@@ -55,7 +55,7 @@
     "site/uncertainty-contract.js"
   ],
   "unmatched": [],
-  "classifiedCount": 1131,
+  "classifiedCount": 1136,
   "claimSinks": [
     {
       "id": "mcp-server/src/dcmap/layer.ts|mcp-build|50d2579283ff6c1f|0",
@@ -5179,6 +5179,15 @@
       "rule": "svg-chart-geometry"
     },
     {
+      "id": "site/app.js|svg-geometry|4de040968777f7b0|0",
+      "file": "site/app.js",
+      "kind": "svg-geometry",
+      "hash16": "4de040968777f7b0",
+      "occ": 0,
+      "class": "hardware-lens-tile",
+      "rule": "svg-chart-geometry"
+    },
+    {
       "id": "site/app.js|svg-geometry|51d779c3a50d9373|0",
       "file": "site/app.js",
       "kind": "svg-geometry",
@@ -5219,15 +5228,6 @@
       "file": "site/app.js",
       "kind": "svg-geometry",
       "hash16": "96d98172ff4be576",
-      "occ": 0,
-      "class": "hardware-lens-tile",
-      "rule": "svg-chart-geometry"
-    },
-    {
-      "id": "site/app.js|svg-geometry|996a927eae3ada87|0",
-      "file": "site/app.js",
-      "kind": "svg-geometry",
-      "hash16": "996a927eae3ada87",
       "occ": 0,
       "class": "hardware-lens-tile",
       "rule": "svg-chart-geometry"
@@ -5578,5 +5578,5 @@
     "report-dossier",
     "share-string"
   ],
-  "digest": "3693dae3b38b65f8"
+  "digest": "6448c6fa10846130"
 }

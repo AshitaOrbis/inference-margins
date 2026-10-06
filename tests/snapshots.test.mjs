@@ -392,6 +392,34 @@ for (const [mid, target] of Object.entries(DIVE_TARGETS)) {
   const got = marginPct(settings(mid, "dive"));
   assert(`dive replay ${mid} = ${target}±1pp`, Math.abs(got - target) <= 1, `got ${got.toFixed(1)}`);
 }
+/* §10 provider hubs (2026-10-06). An unchanged DIVE_TARGETS value does not prove the July replay
+   inputs are unchanged: two inputs can move in opposite directions and land inside the 1pp
+   tolerance. So each of the six July replays' RESOLVED settings — everything workload() reads for
+   that dive, after the dive preset and the reference-lever pin — is pinned here as a SHA-256 of
+   its stable (sorted-key) JSON. The hubs placed above the six cards print what differs between a
+   July replay and the current estimate; they change no input of either, and these pins are the
+   proof. A pin that moves means a July input moved: re-pin only with a declared delta naming it. */
+{
+  const { createHash } = require("node:crypto");
+  const stableJson = v => {
+    if (v === null || typeof v !== "object") return JSON.stringify(v === undefined ? null : v);
+    if (Array.isArray(v)) return "[" + v.map(stableJson).join(",") + "]";
+    return "{" + Object.keys(v).filter(k => v[k] !== undefined && typeof v[k] !== "function").sort()
+      .map(k => JSON.stringify(k) + ":" + stableJson(v[k])).join(",") + "}";
+  };
+  const RESOLVED_DIVE_SETTINGS_SHA256 = {
+    gpt:    "434989f07c2d28cfd4e9ec1118cc642c672978c834ffc7ba13a24b0ec7fc6d90",
+    gemini: "910a47c57d10eab8d9060327ed28bebfa4c0a131da39a0527df52a5a584d9be9",
+    grok:   "d5236fa02b7e9c825d7e82470fe85e758eb761a24ed2f55542f9bf98092dbe8c",
+    dsv4:   "5141414b114a6705057444cb47124864c7f044e38fbee03e925b5262e2c5dcff",
+    glm:    "98012b5d8f9b90b93c916c621c0dc41433e0673c28ad9026ffe452731226f4d5",
+    kimi:   "a21a9b239f52dc03618582c018b9393fd55e71960a90d93b649e3b5d43c0ccbb",
+  };
+  for (const [mid, pin] of Object.entries(RESOLVED_DIVE_SETTINGS_SHA256)) {
+    const got = createHash("sha256").update(stableJson(settings(mid, "dive"))).digest("hex");
+    assert(`resolved-settings hash ${mid}`, got === pin, `got ${got}`);
+  }
+}
 {
   const wl = E.workload(settings("gemini", "dive"));
   // R2 re-mint (manifest row; the reported FALSE NEGATIVE fixed): tpu7 solves at a
