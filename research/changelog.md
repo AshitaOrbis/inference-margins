@@ -1,5 +1,18 @@
 # Changelog
 
+## §8: SemiAnalysis subscription estimates — 2026-10-07 (no number changed)
+
+- **§8 gains a dated paragraph** on SemiAnalysis's 5 October subscription estimates (the public portion of a
+  Tokenomics Model piece; its tables are paywalled): subscriptions about 10% of Anthropic's revenue but able to take
+  over 40% of its inference compute; for agentic usage (its own September token mix) and an assumed 92% API gross
+  margin, plans maxed out on Opus 5.5 and Fable 5.1 at −369% and 1% at 100% utilization, 6% and 80% at an assumed
+  20%; for the same workload, Anthropic's plans about 5× the API-equivalent value of OpenAI's for the mid-tier models,
+  after OpenAI halved its $200 plan's value. They are labelled as one analyst's model outputs at the subscription layer.
+- **The claims registry gains one record**, `semianalysis-92-api-assumption`: the analyst's API-margin
+  assumption of 92% in that piece. It is kept off the margin axis:
+  it is a modeling input used to back out subscription margins, not an estimate of Anthropic's API margin, so it
+  is not counted as another public reading at or above 80%. No preset, parameter or computed number changed.
+
 ## §10: presentation fixes after a read-through — 2026-10-06 (no number changed)
 
 A read-through of the new §10 on Chrome, at a desktop width and a phone width, found every number agreeing between
