@@ -20,7 +20,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0",
     "agents": "^0.17.3",
-    "zod": "^3.25.1",
+    "zod": "^4.6.7",
     "zod-to-json-schema": "^3.24.6"
   },
   "devDependencies": {
