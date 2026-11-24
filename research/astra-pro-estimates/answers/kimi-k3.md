@@ -5,7 +5,7 @@ The decisive assumption is $2.20 per all-in H800-equivalent accelerator-hour, no
 
 ## 1 — PUBLIC FACTS.
 
-**Author: GPT-6 Astra Pro. Research date: September 25, 2026 UTC, September 24 in America/Dawson_Creek.** This estimates unit direct-serving contribution margin, not company gross margin. Dates below distinguish publication or event dates from retrieval dates; an access date does not establish when a tariff changed.
+**Author: GPT-6 Astra Pro. Research date: September 25, 2026 UTC, September 24 in [local time zone withheld].** This estimates unit direct-serving contribution margin, not company gross margin. Dates below distinguish publication or event dates from retrieval dates; an access date does not establish when a tariff changed.
 
 **File receipt.** All three uploaded files opened and were read: `03-calculator-contract-live-2026-09-25.json` — first line, truncated: `{"result":{"content":[{"type":"text","text":"The scenario space of the Frontier Inference Margins ca`; `04-opus-4x-reference-dive-verbatim-2026-08-08.md` — first line: `` ```json ``; `06-moonshot-gptpro.md` — first heading: `# Moonshot AI (Kimi) — GPT-5.6 Pro deep dive`. The first is the supplied calculator contract, not empirical evidence of Moonshot’s economics. The other two are attributed prior estimates, not provider disclosures.   
 

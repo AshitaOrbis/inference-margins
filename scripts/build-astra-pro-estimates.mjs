@@ -125,9 +125,15 @@ function reviewPage(rec, r, answer) {
   const st = rec.stated || {};
   const presented = presentAnswer(answer);
   const publishedDigest = sha(presented);
+  /* 2026-11-24: an answer that named the local time zone of the machine its run used has that name
+     withheld in the stored text itself, so its as-received hash is of the withheld text; the page says
+     so. The original capture's hash is unchanged. */
+  const zoneNote = answer.includes("[local time zone withheld]")
+    ? " The stored answer withholds one detail the run added: the local time zone of the machine it ran on, so the as-received SHA-256 is of that text and the original capture's is not."
+    : "";
   return `# ${rec.name} — GPT-6 Astra Pro estimate (${rec.dive.date})
 
-**Provenance.** one research run on ${rec.dive.date} by GPT-6 Astra Pro (ChatGPT, model \`${rec.dive.model_slug}\`), answered ${rec.dive.answered_at}. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for ${rec.name} from public evidence. The answer is reproduced below verbatim except for four presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; and where the answer repeats the run's own request identifier, an internal queue entry, it is withheld; its sources are cited by URL in the text (as-received answer SHA-256 \`${rec.dive.answer_sha256}\`; published text SHA-256 \`${publishedDigest}\`; original capture SHA-256 \`${rec.dive.raw_answer_sha256}\`).
+**Provenance.** one research run on ${rec.dive.date} by GPT-6 Astra Pro (ChatGPT, model \`${rec.dive.model_slug}\`), answered ${rec.dive.answered_at}. It was given this calculator's input contract, the Claude Opus 4.x reference estimate and the live connector's scenario space, and asked to set every input for ${rec.name} from public evidence. The answer is reproduced below verbatim except for four presentation changes: ChatGPT's interface citation markers are removed, as on every page of this annex; links into the research run's own sandbox (files no reader can open) keep their text and lose the dead target; equations are set as preformatted text, with a space between a bracket and a parenthesis inside them so the renderer does not read a product as a link; and where the answer repeats the run's own request identifier, an internal queue entry, it is withheld; its sources are cited by URL in the text (as-received answer SHA-256 \`${rec.dive.answer_sha256}\`; published text SHA-256 \`${publishedDigest}\`; original capture SHA-256 \`${rec.dive.raw_answer_sha256}\`).${zoneNote}
 
 ## What the site shows
 

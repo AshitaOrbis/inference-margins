@@ -4,7 +4,7 @@ c42bba798dce5edaa95b23c5da1b2d515218e58b97b2f636bb89dcd97ae66586  ./404.html
 3b871e3f751986048edf07924d677eadc9ecaa03f1a6bef45eb7a16cd71d3944  ./app.js
 474107e4a0d4deda27d958d3f1112e15292f5e342a1216730f80affbbe235ced  ./appear-1440.png
 0d0028bbc601b0d67022d661f191ed336122199ba51a0802bf720491a6a3bdc0  ./appear-390.png
-fc47a83473dcdab1767ac63174019e0314ab21292ab740b312b5a13923526506  ./astra-pro-estimates.js
+79f0a275b9bda4627a9ade8253c799a992e0c92e14cae610d857d8f3f6ffc25c  ./astra-pro-estimates.js
 6acaf2e02aad79fe9779247a8439fd9a99f4f652e560481019b7c6afee6680f7  ./custom-fleets.js
 27cdc2b0cb647c400a49da2a80cc9832be31427f273985e6a361ad7555b5c010  ./engine-contracts-v22.js
 9403a7385fb090644caa822bd60abf0b1a7faccf812be0a8b7eedb3b1fc23c44  ./engine-data-dc-v1.js
@@ -21,13 +21,13 @@ c1df4596be5029233ed2afbb8b2f6ea20784b3fb1aa5d6b5c6519ccd85eb3dfb  ./fonts/source
 0640890476fc1198ab4de571fb658de443c4d85b66466ec09534a8737ab1ce9d  ./fonts/space-grotesk-latin-var.woff2
 e41ed13f2aa52bc89575a251fd8ba5e6ae61dc436a35ccb2d35207fb12c4018c  ./glossary.html
 89265118447306ea8c078d3b0d9fc6f5c083b88c6e5f5250119aecbd1594b27f  ./index.html
-a548c772bef1415be32bed4da6be84e153e23510cddf62ee0da1628ceec5e568  ./research/analyst-divergence.html
+a133653aedb9e0d80f129c028ebc0c68fc9242c56328ff59ceccd87bd06f051a  ./research/analyst-divergence.html
 8a9dd811a390aee4953786e40fcab33957da75a0725c391b7080c9212d4a87af  ./research/anthropic-gptpro.html
 b51a8d8cf932415f5c386085660ccf6007eb7a2f325866b567ea462051d92b05  ./research/changelog.html
 d3dbd9ecfd0b54f5c746925cec276a125cf69ee06cf55cbbe494971909712904  ./research/chinese-accel-ascend-websweep.html
 fdab556b9df219069862e9333efa355c9826232b82c332f18dbe400d4b3f558c  ./research/chinese-accel-gptpro.html
 e7d7f369c2ae8c7f87535b988625dd7181c88a1b5afcec1115ee3c28e6790d9a  ./research/chinese-accel-h800-h20-websweep.html
-91a8145c009f0ccd946d8093cc64ad99a9fca4bff1560ad7226aba3f1cac5fe2  ./research/claude-fable-5-1-astra-pro.html
+f52309f97b19c20c8fe0c421eb37471a7a7f21c2bfb2c0d9558a9c1dfe7b6a03  ./research/claude-fable-5-1-astra-pro.html
 b8d82580d98e4c197bcaf4ebfadb40f401ee2333ddccf2e08aa3a997eca44faf  ./research/claude-haiku-4-5-astra-pro.html
 87be5a8407614614b826490cd18666f79f6d6d17d5a7d6384e040b4c56f4dfa9  ./research/claude-opus-5-5-astra-pro.html
 c84f9647fdb4ddfdd0f6943e55cedead6713186e739f0a497c55baac11d07ceb  ./research/claude-sonnet-5-5-astra-pro.html
@@ -63,7 +63,7 @@ ae6196e30bbf83a6317e4af76716cf578d5cb5737401cb515273d4af0a48a756  ./research/gpt
 b26d9d481e2c6db066aa2f9d8d0c52ef751cf264e63b9776d34fbb2be1930168  ./research/grounding-ledger.html
 776178c9c493b910b161286ee73923b4c66a5bc2696b790f2565f0c97b92452e  ./research/index.html
 7550a207dc763bed3ec941a0060aba5c2fdcf8675c1fa0c0bfcc45f99ac9fead  ./research/input-cost-reconstruction.html
-18b6eb18111443980d478576f21257b61282c19765ad53eae08dc9ad283ae029  ./research/kimi-k3-astra-pro.html
+34443fee1a33f907adc1226b7f4c441d7dbf9367447dd87d7fc43f800aaa0062  ./research/kimi-k3-astra-pro.html
 bcf0b09cfa1b9189c5ab0cdcb686e0ad98c8be2a834720d6c7b40fdfedea8a92  ./research/methods-loao.html
 0a0bc68aaa025e61038255477ac07d14925a8f4ff3ee073ae5cffead593369a4  ./research/moonshot-gptpro.html
 ba221201a545eab5f08ccc28f71a5269437cd2d200127469f0e12bf287bbd26c  ./research/openai-gptpro.html
@@ -112,7 +112,7 @@ dc44a1781fe367bae2536be8c3c79faa402377c075885d446e7036f855cc08d8  ./tests/eviden
 6e2faedafb3de603d8cedecdecca30f76625c76821023fedb1f9b64a2455efc2  ./tests/fa-dual-default-r1.test.mjs
 dafab91fc2855dcd2ca1f77c7e633807e8922df3f3ce36d728c7fcd98cc33f67  ./tests/fa-explain-cdp.test.mjs
 8b5b7ff759802b46e0509caf81f8807a403f08d264d3b30842f3acdbd3a18b68  ./tests/fa-justifications.test.mjs
-5eca5e463b514d954a7fded2499f5dad64148af953c92d5e2516ed30893e1b18  ./tests/fa-m6-b9.test.mjs
+6f745c336b3623290ad7090b1faa0597ba4054d52d6c929f7ba53f2f1fc7e800  ./tests/fa-m6-b9.test.mjs
 9ff9636afbcddc7b6cda353818c174c7f3c793bafa8599905bcaa69e11c7d353  ./tests/fixtures-baseline-v22-pre-rent-adoption.json
 686aa330550a47e089ad128652af1d7a2a026056d0fe5f0a2a2f0e01dd0bcdf6  ./tests/fixtures-baseline-v22-pre-tariff-correction.json
 e5c471e3835afa5f7721e24d189649d206d63f8a4652d12ca5c32976a060f69b  ./tests/fixtures-baseline-v22-pre-vetting-repairs.json

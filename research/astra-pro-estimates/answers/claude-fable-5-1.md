@@ -5,7 +5,7 @@ The decisive assumption is 400B active parameters; Anthropic has not published t
 
 ## 1 — PUBLIC FACTS.
 
-**Estimator: GPT-6 Astra Pro. Research cutoff: September 24, 2026, America/Dawson_Creek; commission/file identifier dated September 25, 2026.** Dates below are publication dates unless identified as retrieval dates. “Unknown” means not established by this research, not proof that no disclosure exists anywhere.
+**Estimator: GPT-6 Astra Pro. Research cutoff: September 24, 2026, [local time zone withheld]; commission/file identifier dated September 25, 2026.** Dates below are publication dates unless identified as retrieval dates. “Unknown” means not established by this research, not proof that no disclosure exists anywhere.
 
 **File receipt.** Both uploaded files opened and were read: `03-calculator-contract-live-2026-09-25.json`, first-line prefix `{"result":{"content":[{"type":"text","text":"The scenario space of the Frontier Inference Margins ca`; and `04-opus-4x-reference-dive-verbatim-2026-08-08.md`, first line ` ```json `. Inline attachments 01, 02, 05 and 06 were also readable. The uploaded contract is calculator evidence, not independent evidence of Anthropic’s economics.  
 

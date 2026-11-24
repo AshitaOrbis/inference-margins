@@ -24,7 +24,7 @@ set -uo pipefail
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJ="$(dirname "$HERE")"
-BANNER="You've hit your weekly limit · resets Aug 26, 8am (America/Dawson_Creek)"
+BANNER="You've hit your weekly limit · resets Aug 26, 8am (Etc/UTC)"
 
 PASS=0; FAIL=0
 ok() { echo "PASS  $1"; PASS=$((PASS+1)); }

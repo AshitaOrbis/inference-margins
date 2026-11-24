@@ -164,7 +164,7 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
     "date": "2026-09-25",
     "model_slug": "gpt-6-pro",
     "answered_at": "2026-09-25T07:07:16Z",
-    "answer_sha256": "454e2637016ff9cc203a5471a5d3b5ce6efe61d34aa46f33065916f22136e959",
+    "answer_sha256": "b482f14e7dc6f26e2c56f239de75e0955ebe897bacc8dbb0bda1720270e2008e",
     "raw_answer_sha256": "2efe52ece8c6b833a9f361889d61c14b66f148a538ae679e64b7be5eafeda4e5"
    },
    "review_page": "research/claude-fable-5-1-astra-pro.html"
@@ -2262,7 +2262,7 @@ const ASTRA_PRO_REGISTRY = /*BEGIN-REGISTRY-JSON*/{
     "date": "2026-09-25",
     "model_slug": "gpt-6-pro",
     "answered_at": "2026-09-25T06:59:23Z",
-    "answer_sha256": "7452559cc8201f6a34776cc696e29c0c87370d4fecb596fad7614a3f4e40188b",
+    "answer_sha256": "b60c863009e7b1b7cf7b639517d514c7ef95c3082a712153428d79bd1d60ac04",
     "raw_answer_sha256": "35ce5320136a8b4d32f5fefb49e7f31bae6d0fe55fb89533a33428a4a0213836"
    },
    "review_page": "research/kimi-k3-astra-pro.html"
